@@ -1,0 +1,17 @@
+*.py[cod]
+*.swp
+*.prb
+*.db
+*.log
+*.xml
+.coverage
+config.env
+build_libs
+tags
+*secret.yaml
+registry.crt
+sandbox
+sandbox/*
+.pytest_cache
+notes/.obsidian
+minty_backups
