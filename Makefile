@@ -2,10 +2,6 @@ SHELL := /bin/bash
 
 all: test
 
-clean:
-	@echo "Cleaning up"
-	rm -rf .venv
-
 setup:
 	@echo "Running setup"
 	poetry update
@@ -16,9 +12,9 @@ lint:
 
 test:
 	@echo "Running Tests"
-	poetry run pytest -vv --asyncio-mode=strict --cov=hexital
+	poetry run pytest -vv --cov=hexital --durations=0
 
 test-all:
 	@echo "Running Tests"
-	poetry run coverage run --omit="tests/*" -m pytest -vv --asyncio-mode=strict
+	poetry run coverage run --omit="tests/*" -m pytest -vv --durations=0
 	poetry run coverage report -m
