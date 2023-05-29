@@ -24,7 +24,7 @@ class Candle:
         )
 
     @staticmethod
-    def from_dicts(values: List[Dict[str, float]]) -> Candle:
+    def from_dicts(values: List[Dict[str, float]]) -> List[Candle]:
         return [
             Candle(
                 value.get("open", 0.0),

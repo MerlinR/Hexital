@@ -16,6 +16,10 @@ class Indicator(ABC):
         self.calculate()
 
     @property
+    def name(self):
+        return self._output_indicator_name
+
+    @property
     def round_by(self):
         return self._round_value
 
@@ -41,10 +45,13 @@ class Indicator(ABC):
 
                 self.candles[index].hex_ta[self._output_indicator_name] = value
 
-    def get_prev_indicator(self, index: int, name: str = None) -> float:
-        if not name:
-            name = self._output_indicator_name
-        return self.get_indicator(self.candles[index - 1], name)
+    def get_newest(self) -> float:
+        return self.candles[-1].ta.get(self._output_indicator_name, None)
+
+    def get_prev(self, index: int = None) -> float:
+        if index is None:
+            index = len(self.candles) - 1
+        return self.get_indicator(self.candles[index - 1], self._output_indicator_name)
 
     def get_indicator(self, candle: Candle, name: str = None, default=None) -> float:
         if not name:
@@ -53,6 +60,12 @@ class Indicator(ABC):
             return getattr(candle, name)
         except AttributeError:
             return candle.hex_ta.get(name, default)
+
+    def get_as_list(self):
+        return [candle.hex_ta.get(self._output_indicator_name) for candle in self.candles]
+
+    def has_output_value(self) -> bool:
+        return self.candles[-1].hex_ta.get(self._output_indicator_name) is not None
 
     def _find_starting_index(self) -> int:
         if self._output_indicator_name not in self.candles[0].hex_ta:

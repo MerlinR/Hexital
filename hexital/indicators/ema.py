@@ -8,10 +8,10 @@ class EMA(Indicator):
     period: int
     input_value: str
     multiplier: float = 2.0
-    name: str = "EMA"
+    _name: str = "EMA"
 
     def _gen_name(self) -> str:
-        return f"{self.name}_{self.period}"
+        return f"{self._name}_{self.period}"
 
     def _calculate_new_value(self, index: int = -1) -> float | None:
         if index < self.period - 1:
@@ -31,5 +31,5 @@ class EMA(Indicator):
 
         return float(
             mult * self.get_indicator(self.candles[index], self.input_value)
-            + (1.0 - mult) * self.get_prev_indicator(index)
+            + (1.0 - mult) * self.get_prev(index)
         )
