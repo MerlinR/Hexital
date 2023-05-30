@@ -5,13 +5,13 @@ from hexital.types import Indicator
 
 @dataclass(kw_only=True)
 class EMA(Indicator):
+    indicator_name: str = "EMA"
     period: int
     input_value: str
     multiplier: float = 2.0
-    _name: str = "EMA"
 
-    def _gen_name(self) -> str:
-        return f"{self._name}_{self.period}"
+    def _generate_name(self) -> str:
+        return f"{self.indicator_name}_{self.period}"
 
     def _calculate_new_value(self, index: int = -1) -> float | None:
         if index < self.period - 1:
