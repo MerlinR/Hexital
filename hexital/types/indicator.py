@@ -19,7 +19,7 @@ class Indicator(ABC):
         self._output_name = (
             self.override_name if self.override_name else self._generate_name()
         )
-        self.calculate()
+        self._initialise()
 
     def _initialise(self):
         pass

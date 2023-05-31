@@ -48,5 +48,5 @@ def test_indicator(nasdaq_candles_30):
     ]
 
     test = EMA(candles=nasdaq_candles_30, period=20, input_value="close")
-
+    test.calculate()
     assert test.get_as_list() == expected

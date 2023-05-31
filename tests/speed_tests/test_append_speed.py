@@ -40,6 +40,7 @@ def test_data_timed(nasdaq_candles_large):
             period=20,
             input_value="close",
         )
+        test.calculate()
 
     full_calc = min(
         timeit.repeat(
@@ -54,6 +55,7 @@ def test_data_timed(nasdaq_candles_large):
 def test_data_append_timed(nasdaq_candles_large, nasdaq_candles_31st):
     test_count = 5
     test = EMA(candles=nasdaq_candles_large, period=20, input_value="close")
+    test.calculate()
 
     def time_append(candles, appender):
         candles.append(copy.deepcopy(appender))

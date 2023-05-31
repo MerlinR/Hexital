@@ -53,6 +53,7 @@ def test_data(nasdaq_candles_30):
     ]
 
     test = EMA(candles=nasdaq_candles_30, period=20, input_value="close")
+    test.calculate()
 
     assert test.get_as_list() == expected
 
@@ -93,6 +94,7 @@ def test_data_append(nasdaq_candles_30, nasdaq_candles_31st):
     ]
 
     test = EMA(candles=nasdaq_candles_30, period=20, input_value="close")
+    test.calculate()
     nasdaq_candles_30.append(nasdaq_candles_31st)
     test.calculate()
 
