@@ -84,6 +84,32 @@ class Indicator(ABC):
         except AttributeError:
             return candle.hex_ta.get(name, default)
 
+    def get_indicator_count(self, name: str = None) -> int:
+        """Returns how many instance of the given indicator exist"""
+        if not name:
+            name = self._output_name
+        count = 0
+        for candle in self.candles:
+            if self.get_indicator(candle, name):
+                count += 1
+
+        return count
+
+    def indicator_period_equals(
+        self, amount: int, index: int = None, name: str = None
+    ) -> bool:
+        """Will return True if the given indicator goes back as far as amount,
+        It's true if exactly or more than"""
+        if index is None:
+            index = len(self.candles) - 1
+        if name is None:
+            name = self._output_name
+
+        if (index - amount) < 0:
+            return False
+
+        return bool(self.get_indicator(self.candles[index - amount], name))
+
     def get_as_list(self) -> List[float | dict]:
         """Gathers the indicator for all candles as a list"""
         return [candle.hex_ta.get(self._output_name) for candle in self.candles]
