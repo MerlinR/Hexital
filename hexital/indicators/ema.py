@@ -5,9 +5,23 @@ from hexital.types import Indicator
 
 @dataclass(kw_only=True)
 class EMA(Indicator):
+    """Exponential Moving Average (EMA)
+
+    The Exponential Moving Average is more responsive moving average compared to the
+    Simple Moving Average (SMA).  The weights are determined by alpha which is
+    proportional to it's length.
+
+    Sources:
+        https://www.investopedia.com/ask/answers/122314/what-exponential-moving-average-ema-formula-and-how-ema-calculated.asp
+
+    Args:
+        period (int) Default: 10
+        Input value (str): Default Close
+    """
+
     indicator_name: str = "EMA"
-    period: int
-    input_value: str
+    period: int = 10
+    input_value: str = "close"
     multiplier: float = 2.0
 
     def _generate_name(self) -> str:

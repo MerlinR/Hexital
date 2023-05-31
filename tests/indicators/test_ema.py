@@ -13,7 +13,7 @@ def fixture_nasdaq_data_31st(candles):
     return candles[0:30]
 
 
-def test_data(nasdaq_candles_30):
+def test_indicator(nasdaq_candles_30):
     expected = [
         None,
         None,

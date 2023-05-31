@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Dict, List
 
 from hexital.types.ohlcv import Candle
 
@@ -41,15 +41,15 @@ class Indicator(ABC):
         """Calculate the TA values, will calculate for all the Candles,
         where this indicator is missing"""
         for index in range(self._find_starting_index(), len(self.candles)):
-            if self._output_name not in self.candles[index].hex_ta:
-                value = self._calculate_new_value(index=index)
-                if value:
-                    value = round(value, self.round_value)
+            if self.get_indicator(self.candles[index], self._output_name) is None:
+                value = self._round_values(self._calculate_new_value(index=index))
 
                 self.candles[index].hex_ta[self._output_name] = value
 
     def _find_starting_index(self) -> int:
-        """Optimisation method, to find where to start calculating the indicator from"""
+        """Optimisation method, to find where to start calculating the indicator from
+        Searches from newest to oldest to find the first candle without the indicator
+        """
         if self._output_name not in self.candles[0].hex_ta:
             return 0
 
@@ -91,4 +91,16 @@ class Indicator(ABC):
     @property
     def has_output_value(self) -> bool:
         """Simple boolean to state if values are being generated yet in the candles"""
-        return self.candles[-1].hex_ta.get(self._output_name) is not None
+        if len(self.candles) == 0:
+            return False
+        return self.get_indicator(self.candles[-1]) is not None
+
+    def _round_values(self, values: float | Dict[str, float]) -> float | Dict[str, float]:
+        if isinstance(values, dict):
+            for key, val in values.items():
+                if val is not None:
+                    values[key] = round(val, self.round_value)
+        elif isinstance(values, float):
+            values = round(values, self.round_value)
+
+        return values
