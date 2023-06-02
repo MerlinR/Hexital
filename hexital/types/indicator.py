@@ -115,14 +115,12 @@ class Indicator(ABC):
 
         # Checks 3 points along period to values to exist
         return all(
-            [
-                self.get_indicator(self.candles[index - int(x)], name)
-                for x in [
-                    index - amount,
-                    (index - (amount / 2)),
-                    index,
-                ]
-            ],
+            self.get_indicator(self.candles[index - int(x)], name)
+            for x in [
+                amount,
+                amount / 2,
+                0,
+            ]
         )
 
     def get_as_list(self) -> List[float | dict]:

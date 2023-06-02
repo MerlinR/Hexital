@@ -11,7 +11,7 @@ class Candle:
     low: float = 0.0
     close: float = 0.0
     volume: int = 0
-    hex_ta: Dict[str, float] = field(default_factory=dict)
+    hex_ta: Dict[str, float | dict] = field(default_factory=dict)
 
     @classmethod
     def from_dict(cls, value: Dict[str, float]) -> Candle:
