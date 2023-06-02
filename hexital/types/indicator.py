@@ -33,8 +33,13 @@ class Indicator(ABC):
         """The indicator name that will be saved into the Candles"""
         return self._output_name
 
+    @property
+    def value(self) -> float | dict:
+        """Get's this newest value of this indicator"""
+        return self.candles[-1][self._output_name]
+
     @abstractmethod
-    def _calculate_new_value(self, index: int = -1) -> float | None:
+    def _calculate_new_value(self, index: int = -1) -> float | dict | None:
         pass
 
     def calculate(self):
@@ -123,7 +128,7 @@ class Indicator(ABC):
         return [candle.hex_ta.get(self._output_name) for candle in self.candles]
 
     @property
-    def has_output_value(self) -> bool:
+    def has_value(self) -> bool:
         """Simple boolean to state if values are being generated yet in the candles"""
         if len(self.candles) == 0:
             return False

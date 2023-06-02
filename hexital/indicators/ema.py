@@ -27,7 +27,7 @@ class EMA(Indicator):
     def _generate_name(self) -> str:
         return f"{self.indicator_name}_{self.period}"
 
-    def _calculate_new_value(self, index: int = -1) -> float | None:
+    def _calculate_new_value(self, index: int = -1) -> float | dict | None:
         if self.get_prev(index):
             mult = self.multiplier / (self.period + 1.0)
             return float(
