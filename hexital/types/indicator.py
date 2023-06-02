@@ -113,12 +113,16 @@ class Indicator(ABC):
         if (index - amount) < 0:
             return False
 
-        # Checks 4 points along period to values to exist
+        # Checks 3 points along period to values to exist
         return all(
             [
                 [
                     self.get_indicator(self.candles[index - int(x)], name)
-                    for x in [amount, amount / 1.5, amount / 2, amount / 3]
+                    for x in [
+                        index - amount,
+                        (index - (amount / 2)),
+                        index,
+                    ]
                 ]
             ],
         )

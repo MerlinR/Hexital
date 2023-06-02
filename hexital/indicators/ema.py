@@ -42,7 +42,7 @@ class EMA(Indicator):
             sum(
                 [
                     self.get_indicator(value, self.input_value)
-                    for value in self.candles[0 : index + 1]
+                    for value in self.candles[index - (self.period - 1) : index + 1]
                 ]
             )
             / self.period
