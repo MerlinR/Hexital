@@ -95,7 +95,7 @@ class Indicator(ABC):
 
         return count
 
-    def indicator_period_equals(
+    def indicator_period_steps(
         self, amount: int, index: int = None, name: str = None
     ) -> bool:
         """Will return True if the given indicator goes back as far as amount,
@@ -108,7 +108,15 @@ class Indicator(ABC):
         if (index - amount) < 0:
             return False
 
-        return bool(self.get_indicator(self.candles[index - amount], name))
+        # Checks 4 points along period to values to exist
+        return all(
+            [
+                [
+                    self.get_indicator(self.candles[index - int(x)], name)
+                    for x in [amount, amount / 1.5, amount / 2, amount / 3]
+                ]
+            ],
+        )
 
     def get_as_list(self) -> List[float | dict]:
         """Gathers the indicator for all candles as a list"""
