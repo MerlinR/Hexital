@@ -60,7 +60,7 @@ class MACD(Indicator):
                 self.candles[index], f"{self.indicator_name}_EMA_fast"
             ) - self.get_indicator(self.candles[index], f"{self.indicator_name}_EMA_slow")
 
-            self.candles[index].hex_ta[self.name] = {"MACD": macd}
+            self.candles[index].indicators[self.name] = {"MACD": macd}
             self.get_managed_indictor("signal_line").calculate_index(index)
 
             signal = self.get_indicator(self.candles[index], "signal_line")

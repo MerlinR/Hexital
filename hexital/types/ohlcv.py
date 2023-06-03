@@ -11,7 +11,7 @@ class Candle:
     low: float = 0.0
     close: float = 0.0
     volume: int = 0
-    hex_ta: Dict[str, float | dict] = field(default_factory=dict)
+    indicators: Dict[str, float | dict] = field(default_factory=dict)
     sub_indicators: Dict[str, float | dict] = field(default_factory=dict)
 
     @classmethod

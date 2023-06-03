@@ -67,7 +67,7 @@ class Indicator(ABC):
                 if self.sub_indicator:
                     self.candles[index].sub_indicators[self.name] = value
                 else:
-                    self.candles[index].hex_ta[self.name] = value
+                    self.candles[index].indicators[self.name] = value
 
     def calculate_index(self, index: int, to_index: int = None):
         """Calculate the TA values, will calculate a index range the Candles,
@@ -81,17 +81,17 @@ class Indicator(ABC):
         """Optimisation method, to find where to start calculating the indicator from
         Searches from newest to oldest to find the first candle without the indicator
         """
-        if self.name not in self.candles[0].hex_ta:
+        if self.name not in self.candles[0].indicators:
             return 0
 
         for index in range(len(self.candles) - 1, 0, -1):
-            if self.name in self.candles[index].hex_ta:
+            if self.name in self.candles[index].indicators:
                 return index + 1
         return 0
 
     def purge(self):
         for candle in self.candles:
-            candle.hex_ta = {}
+            candle.indicators = {}
 
     def add_sub_indicator(self, indicator: Indicator):
         indicator.sub_indicator = True
@@ -118,7 +118,7 @@ class Indicator(ABC):
         if getattr(candle, name, None) is not None:
             return getattr(candle, name)
 
-        for key, value in chain(candle.hex_ta.items(), candle.sub_indicators.items()):
+        for key, value in chain(candle.indicators.items(), candle.sub_indicators.items()):
             if name in key:
                 return value
 
@@ -127,7 +127,7 @@ class Indicator(ABC):
     def _get_nested_indicator(
         self, candle: Candle, name: str, nested_name: str
     ) -> float | None:
-        for key, value in chain(candle.hex_ta.items(), candle.sub_indicators.items()):
+        for key, value in chain(candle.indicators.items(), candle.sub_indicators.items()):
             if name in key:
                 if isinstance(value, dict):
                     return value.get(nested_name)
@@ -178,7 +178,7 @@ class Indicator(ABC):
 
     def get_as_list(self) -> List[float | dict]:
         """Gathers the indicator for all candles as a list"""
-        return [candle.hex_ta.get(self.name) for candle in self.candles]
+        return [candle.indicators.get(self.name) for candle in self.candles]
 
     @property
     def has_value(self) -> bool:
