@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
+from itertools import chain
 from typing import Dict, List
 
 from hexital.types.ohlcv import Candle
@@ -14,6 +15,9 @@ class Indicator(ABC):
     override_name: str = None
     round_value: int = 4
     _output_name: str = ""
+    _sub_indicators: List[Indicator] = field(default_factory=list)
+    _managed_indicators: Dict[str, Indicator] = field(default_factory=dict)
+    _sub_indicator: bool = False
 
     def __post_init__(self):
         self._output_name = (
@@ -38,6 +42,14 @@ class Indicator(ABC):
         """Get's this newest value of this indicator"""
         return self.candles[-1][self._output_name]
 
+    @property
+    def sub_indicator(self):
+        return self._sub_indicator
+
+    @sub_indicator.setter
+    def sub_indicator(self, value: bool):
+        self._sub_indicator = value
+
     @abstractmethod
     def _calculate_new_value(self, index: int = -1) -> float | dict | None:
         pass
@@ -45,30 +57,82 @@ class Indicator(ABC):
     def calculate(self):
         """Calculate the TA values, will calculate for all the Candles,
         where this indicator is missing"""
+        for indicator in self._sub_indicators:
+            indicator.calculate()
+
         for index in range(self._find_starting_index(), len(self.candles)):
-            if self.get_indicator(self.candles[index], self._output_name) is None:
+            if self.get_indicator(self.candles[index]) is None:
                 value = self._round_values(self._calculate_new_value(index=index))
 
-                self.candles[index].hex_ta[self._output_name] = value
+                if self.sub_indicator:
+                    self.candles[index].sub_indicators[self.name] = value
+                else:
+                    self.candles[index].hex_ta[self.name] = value
+
+    def calculate_index(self, index: int, to_index: int = None):
+        """Calculate the TA values, will calculate a index range the Candles,
+        where this indicator is missing"""
+        for i in range(index, to_index if to_index else index + 1):
+            if self.get_indicator(self.candles[i]) is None:
+                value = self._round_values(self._calculate_new_value(index=i))
+                self.candles[i].sub_indicators[self.name] = value
 
     def _find_starting_index(self) -> int:
         """Optimisation method, to find where to start calculating the indicator from
         Searches from newest to oldest to find the first candle without the indicator
         """
-        if self._output_name not in self.candles[0].hex_ta:
+        if self.name not in self.candles[0].hex_ta:
             return 0
 
         for index in range(len(self.candles) - 1, 0, -1):
-            if self._output_name in self.candles[index].hex_ta:
+            if self.name in self.candles[index].hex_ta:
                 return index + 1
         return 0
 
-    # def add_sub_indicator(self, indicator: Indicator) -> None:
-    #     self._sub_indicators.append(indicator)
+    def purge(self):
+        for candle in self.candles:
+            candle.hex_ta = {}
 
-    def get_newest(self) -> float | dict:
-        """Get's this newest value of this indicator"""
-        return self.candles[-1].ta.get(self._output_name, None)
+    def add_sub_indicator(self, indicator: Indicator):
+        indicator.sub_indicator = True
+        self._sub_indicators.append(indicator)
+
+    def add_managed_indicator(self, name: str, indicator: Indicator):
+        indicator.sub_indicator = True
+        self._managed_indicators[name] = indicator
+
+    def get_managed_indictor(self, name: str) -> Indicator:
+        return self._managed_indicators.get(name)
+
+    def get_indicator(self, candle: Candle, name: str = None) -> float | dict | None:
+        """Simple method to an indicator from a candle, regardless of it's location"""
+        if not name:
+            name = self.name
+
+        if "." in name:
+            main_name, nested_name = name.split(".")
+            value = self._get_nested_indicator(candle, main_name, nested_name)
+            if value:
+                return value
+
+        if getattr(candle, name, None) is not None:
+            return getattr(candle, name)
+
+        for key, value in chain(candle.hex_ta.items(), candle.sub_indicators.items()):
+            if name in key:
+                return value
+
+        return None
+
+    def _get_nested_indicator(
+        self, candle: Candle, name: str, nested_name: str
+    ) -> float | None:
+        for key, value in chain(candle.hex_ta.items(), candle.sub_indicators.items()):
+            if name in key:
+                if isinstance(value, dict):
+                    return value.get(nested_name)
+                return value
+        return None
 
     def get_prev(self, index: int = None) -> float | dict:
         """Get's this Prev value of this indicator.
@@ -76,23 +140,12 @@ class Indicator(ABC):
         if index is None:
             index = len(self.candles) - 1
 
-        return self.get_indicator(self.candles[index - 1], self._output_name)
-
-    def get_indicator(
-        self, candle: Candle, name: str = None, default=None
-    ) -> float | dict:
-        """Simple method to an indicator from a candle, regardless of it's location"""
-        if not name:
-            name = self._output_name
-        try:
-            return getattr(candle, name)
-        except AttributeError:
-            return candle.hex_ta.get(name, default)
+        return self.get_indicator(self.candles[index - 1])
 
     def get_indicator_count(self, name: str = None) -> int:
         """Returns how many instance of the given indicator exist"""
         if not name:
-            name = self._output_name
+            name = self.name
         count = 0
         for candle in self.candles:
             if self.get_indicator(candle, name):
@@ -108,7 +161,7 @@ class Indicator(ABC):
         if index is None:
             index = len(self.candles) - 1
         if name is None:
-            name = self._output_name
+            name = self.name
 
         if (index - amount) < 0:
             return False
@@ -125,7 +178,7 @@ class Indicator(ABC):
 
     def get_as_list(self) -> List[float | dict]:
         """Gathers the indicator for all candles as a list"""
-        return [candle.hex_ta.get(self._output_name) for candle in self.candles]
+        return [candle.hex_ta.get(self.name) for candle in self.candles]
 
     @property
     def has_value(self) -> bool:
