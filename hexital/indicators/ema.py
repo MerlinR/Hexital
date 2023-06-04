@@ -28,20 +28,20 @@ class EMA(Indicator):
         return f"{self.indicator_name}_{self.period}"
 
     def _calculate_new_value(self, index: int = -1) -> float | dict | None:
-        if self.get_prev(index) is not None:
+        if self.get_indicator_by_index(index - 1) is not None:
             mult = self.multiplier / (self.period + 1.0)
             return float(
-                mult * self.get_indicator(self.candles[index], self.input_value)
-                + (1.0 - mult) * self.get_prev(index)
+                mult * self.get_indicator_by_index(index, self.input_value)
+                + (1.0 - mult) * self.get_indicator_by_index(index - 1)
             )
 
-        if not self.get_indicator_period(self.period - 1, index, self.input_value):
-            return None
-
-        return (
-            sum(
-                self.get_indicator(value, self.input_value)
-                for value in self.candles[index - (self.period - 1) : index + 1]
+        if self.get_indicator_period(self.period - 1, index, self.input_value):
+            return (
+                sum(
+                    self.get_indicator_by_candle(value, self.input_value)
+                    for value in self.candles[index - (self.period - 1) : index + 1]
+                )
+                / self.period
             )
-            / self.period
-        )
+
+        return None

@@ -3,12 +3,6 @@ from dataclasses import dataclass
 from hexital.indicators.ema import EMA
 from hexital.types import Indicator
 
-# Issues
-#
-# 1: get_indicator does not work with nested dict indicators
-#
-# 2: sub_indicators that require part of current indicator
-
 
 @dataclass(kw_only=True)
 class MACD(Indicator):
@@ -52,18 +46,18 @@ class MACD(Indicator):
     def _calculate_new_value(self, index: int = -1) -> float | dict | None:
         if all(
             [
-                self.get_indicator(self.candles[index], sub_indicator)
+                self.get_indicator_by_index(index, sub_indicator)
                 for sub_indicator in ["EMA_slow", "EMA_fast"]
             ]
         ):
-            macd = self.get_indicator(
-                self.candles[index], f"{self.indicator_name}_EMA_fast"
-            ) - self.get_indicator(self.candles[index], f"{self.indicator_name}_EMA_slow")
+            macd = self.get_indicator_by_index(
+                index, f"{self.indicator_name}_EMA_fast"
+            ) - self.get_indicator_by_index(index, f"{self.indicator_name}_EMA_slow")
 
             self.candles[index].indicators[self.name] = {"MACD": macd}
             self.get_managed_indictor("signal_line").calculate_index(index)
 
-            signal = self.get_indicator(self.candles[index], "signal_line")
+            signal = self.get_indicator_by_index(index, "signal_line")
 
             histogram = None
             if macd is not None and signal is not None:

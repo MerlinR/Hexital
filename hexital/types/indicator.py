@@ -60,7 +60,7 @@ class Indicator(ABC):
         """Simple boolean to state if values are being generated yet in the candles"""
         if len(self.candles) == 0:
             return False
-        return self.get_indicator(self.candles[-1]) is not None
+        return self.get_indicator_by_index(-1) is not None
 
     @abstractmethod
     def _calculate_new_value(self, index: int = -1) -> float | dict | None:
@@ -73,7 +73,7 @@ class Indicator(ABC):
             indicator.calculate()
 
         for index in range(self._find_starting_index(), len(self.candles)):
-            if self.get_indicator(self.candles[index]) is None:
+            if self.get_indicator_by_index(index) is None:
                 value = self._round_values(self._calculate_new_value(index=index))
 
                 if self.sub_indicator:
@@ -85,7 +85,7 @@ class Indicator(ABC):
         """Calculate the TA values, will calculate a index range the Candles,
         where this indicator is missing"""
         for i in range(index, to_index if to_index else index + 1):
-            if self.get_indicator(self.candles[i]) is None:
+            if self.get_indicator_by_index(i) is None:
                 value = self._round_values(self._calculate_new_value(index=i))
                 self.candles[i].sub_indicators[self.name] = value
 
@@ -124,8 +124,23 @@ class Indicator(ABC):
     def get_managed_indictor(self, name: str) -> Indicator:
         return self._managed_indicators.get(name)
 
-    def get_indicator(self, candle: Candle, name: str = None) -> float | dict | None:
-        """Simple method to an indicator from a candle, regardless of it's location"""
+    def get_indicator_by_index(
+        self, index: int = None, name: str = None
+    ) -> float | dict | None:
+        """Simple method to get an indicator value from it's index,
+        regardless of it's location"""
+        if index is None:
+            index = len(self.candles) - 1
+        if not name:
+            name = self.name
+
+        return self.get_indicator_by_candle(self.candles[index], name)
+
+    def get_indicator_by_candle(
+        self, candle: Candle, name: str = None
+    ) -> float | dict | None:
+        """Simple method to get an indicator value from a candle,
+        regardless of it's location"""
         if not name:
             name = self.name
 
@@ -154,21 +169,13 @@ class Indicator(ABC):
                 return value
         return None
 
-    def get_prev(self, index: int = None) -> float | dict:
-        """Get's this Prev value of this indicator.
-        if no index is specified gets prev latest"""
-        if index is None:
-            index = len(self.candles) - 1
-
-        return self.get_indicator(self.candles[index - 1])
-
     def get_indicator_count(self, name: str = None) -> int:
         """Returns how many instance of the given indicator exist"""
         if not name:
             name = self.name
         count = 0
         for candle in self.candles:
-            if self.get_indicator(candle, name):
+            if self.get_indicator_by_candle(candle, name):
                 count += 1
 
         return count
@@ -176,6 +183,10 @@ class Indicator(ABC):
     def get_as_list(self) -> List[float | dict]:
         """Gathers the indicator for all candles as a list"""
         return [candle.indicators.get(self.name) for candle in self.candles]
+
+    # def get_range_list(self, index: int, index_to: int) -> List[float | dict]:
+    #     """Gathers the indicator for all candles as a list"""
+    #     return [candle.indicators.get(self.name) for candle in self.candles]
 
     def get_indicator_period(
         self, amount: int, index: int = None, name: str = None
@@ -192,7 +203,7 @@ class Indicator(ABC):
 
         # Checks 3 points along period to values to exist
         return all(
-            self.get_indicator(self.candles[index - int(x)], name)
+            self.get_indicator_by_index(index - int(x), name)
             for x in [
                 amount,
                 amount / 2,
