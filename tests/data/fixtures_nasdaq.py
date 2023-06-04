@@ -1,8 +1,11 @@
+import copy
+
 import pytest
+from hexital import Candle
 
 
-@pytest.fixture(name="nasdaq_candles")
-def nasdaq_candles():
+@pytest.fixture(name="nasdaq_minimal_candles")
+def fixture_nasdaq_candles():
     return [
         {
             "open": 12331.69043,
@@ -1755,3 +1758,21 @@ def nasdaq_candles():
             "volume": 5331380000,
         },
     ]
+
+
+@pytest.fixture(name="nasdaq_candles")
+def fixture_nasdaq_minute_candles(nasdaq_minimal_candles):
+    """Sets the amount as being around 12 hours of 1 second candles"""
+
+    def duplicate(candles, number=2):
+        out_candles = []
+        for _ in range(number):
+            out_candles = out_candles + copy.deepcopy(candles)
+        return out_candles
+
+    return duplicate(nasdaq_minimal_candles, 2)
+
+
+@pytest.fixture(name="candles")
+def fixture_nasdaq_data(nasdaq_candles):
+    return Candle.from_dicts(nasdaq_candles)

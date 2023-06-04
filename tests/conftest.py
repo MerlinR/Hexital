@@ -1,5 +1,6 @@
 CANDLE_DATA = [
-    "tests.data.nasdaq",
+    "tests.data.fixtures_nasdaq",
+    "tests.data.fixtures_source_of_truth",
 ]
 
 

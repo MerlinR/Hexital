@@ -26,13 +26,4 @@ class Candle:
 
     @staticmethod
     def from_dicts(values: List[Dict[str, float]]) -> List[Candle]:
-        return [
-            Candle(
-                value.get("open", 0.0),
-                value.get("high", 0.0),
-                value.get("low", 0.0),
-                value.get("close", 0.0),
-                value.get("volume", 0.0),
-            )
-            for value in values
-        ]
+        return [Candle.from_dict(value) for value in values]

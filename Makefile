@@ -9,6 +9,10 @@ setup:
 lint:
 	pylint --disable=C0116,C0114,C0115,E0401 --max-line-length=90 ./hexital
 
+truth:
+	@echo "Generating source of truth"
+	poetry install --with truth
+	poetry run python tests/data/generate_source_of_truth.py 
 
 test:
 	@echo "Running Tests"

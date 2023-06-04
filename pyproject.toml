@@ -15,6 +15,13 @@ python = "^3.11"
 coverage = "*"
 pytest = "*"
 pytest-cov = "*"
+deepdiff = "*"
+
+[tool.poetry.group.truth.dependencies]
+pandas = "*"
+numpy = "*"
+ta-lib = "*"
+pandas-ta = {git = "https://github.com/twopirllc/pandas-ta.git"}
 
 [build-system]
 requires = ["setuptools", "poetry-core>=1.0.0"]

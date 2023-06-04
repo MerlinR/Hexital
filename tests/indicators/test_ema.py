@@ -1,52 +1,10 @@
 import pytest
-from hexital import EMA, Candle
+from hexital import EMA
 
 
-@pytest.fixture(name="candles")
-@pytest.mark.usefixtures("nasdaq_candles")
-def fixture_nasdaq_data(nasdaq_candles):
-    return Candle.from_dicts(nasdaq_candles)
-
-
-@pytest.fixture(name="nasdaq_candles_30")
-def fixture_nasdaq_data_31st(candles):
-    return candles[0:30]
-
-
-def test_indicator(nasdaq_candles_30):
-    expected = [
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        11817.1465,
-        11842.3125,
-        11856.8027,
-        11900.6215,
-        11911.2985,
-        11925.591,
-        11949.3662,
-        11962.4046,
-        11942.5785,
-        11885.1919,
-        11782.7194,
-    ]
-
-    test = EMA(candles=nasdaq_candles_30, period=20, input_value="close")
+@pytest.mark.usefixtures("candles", "expected_EMA")
+def test_indicator(candles, expected_EMA):
+    test = EMA(candles=candles)
     test.calculate()
-    assert test.get_as_list() == expected
+    print(test.get_as_list())
+    assert pytest.approx(test.get_as_list()) == expected_EMA

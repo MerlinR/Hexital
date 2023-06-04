@@ -2,18 +2,14 @@ import pytest
 from hexital import EMA, Candle
 
 
-@pytest.fixture(name="candles")
-@pytest.mark.usefixtures("nasdaq_candles")
-def fixture_nasdaq_data(nasdaq_candles):
-    return Candle.from_dicts(nasdaq_candles)
-
-
 @pytest.fixture(name="nasdaq_candles_30")
+@pytest.mark.usefixtures("candles")
 def fixture_nasdaq_data_30(candles):
     return candles[0:30]
 
 
 @pytest.fixture(name="nasdaq_candles_31st")
+@pytest.mark.usefixtures("candles")
 def fixture_nasdaq_data_31st(candles):
     return candles[30]
 
