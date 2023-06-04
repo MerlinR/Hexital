@@ -50,6 +50,18 @@ class Indicator(ABC):
     def sub_indicator(self, value: bool):
         self._sub_indicator = value
 
+    @property
+    def purge(self):
+        for candle in self.candles:
+            candle.indicators = {}
+
+    @property
+    def has_value(self) -> bool:
+        """Simple boolean to state if values are being generated yet in the candles"""
+        if len(self.candles) == 0:
+            return False
+        return self.get_indicator(self.candles[-1]) is not None
+
     @abstractmethod
     def _calculate_new_value(self, index: int = -1) -> float | dict | None:
         pass
@@ -77,6 +89,16 @@ class Indicator(ABC):
                 value = self._round_values(self._calculate_new_value(index=i))
                 self.candles[i].sub_indicators[self.name] = value
 
+    def _round_values(self, values: float | Dict[str, float]) -> float | Dict[str, float]:
+        if isinstance(values, dict):
+            for key, val in values.items():
+                if val is not None:
+                    values[key] = round(val, self.round_value)
+        elif isinstance(values, float):
+            values = round(values, self.round_value)
+
+        return values
+
     def _find_starting_index(self) -> int:
         """Optimisation method, to find where to start calculating the indicator from
         Searches from newest to oldest to find the first candle without the indicator
@@ -89,15 +111,13 @@ class Indicator(ABC):
                 return index + 1
         return 0
 
-    def purge(self):
-        for candle in self.candles:
-            candle.indicators = {}
-
     def add_sub_indicator(self, indicator: Indicator):
+        """Adds sub indicator, this will auto calculate with indicator"""
         indicator.sub_indicator = True
         self._sub_indicators.append(indicator)
 
     def add_managed_indicator(self, name: str, indicator: Indicator):
+        """Adds managed sub indicator, this will not auto calculate with indicator"""
         indicator.sub_indicator = True
         self._managed_indicators[name] = indicator
 
@@ -153,7 +173,11 @@ class Indicator(ABC):
 
         return count
 
-    def indicator_period_steps(
+    def get_as_list(self) -> List[float | dict]:
+        """Gathers the indicator for all candles as a list"""
+        return [candle.indicators.get(self.name) for candle in self.candles]
+
+    def get_indicator_period(
         self, amount: int, index: int = None, name: str = None
     ) -> bool:
         """Will return True if the given indicator goes back as far as amount,
@@ -175,24 +199,3 @@ class Indicator(ABC):
                 0,
             ]
         )
-
-    def get_as_list(self) -> List[float | dict]:
-        """Gathers the indicator for all candles as a list"""
-        return [candle.indicators.get(self.name) for candle in self.candles]
-
-    @property
-    def has_value(self) -> bool:
-        """Simple boolean to state if values are being generated yet in the candles"""
-        if len(self.candles) == 0:
-            return False
-        return self.get_indicator(self.candles[-1]) is not None
-
-    def _round_values(self, values: float | Dict[str, float]) -> float | Dict[str, float]:
-        if isinstance(values, dict):
-            for key, val in values.items():
-                if val is not None:
-                    values[key] = round(val, self.round_value)
-        elif isinstance(values, float):
-            values = round(values, self.round_value)
-
-        return values

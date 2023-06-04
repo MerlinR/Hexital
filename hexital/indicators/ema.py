@@ -35,7 +35,7 @@ class EMA(Indicator):
                 + (1.0 - mult) * self.get_prev(index)
             )
 
-        if not self.indicator_period_steps(self.period - 1, index, self.input_value):
+        if not self.get_indicator_period(self.period - 1, index, self.input_value):
             return None
 
         return (
