@@ -16,6 +16,7 @@ class ATR(Indicator):
 
     Args:
         period (int) Default: 14
+        percentage (bool) Default: False
 
     """
 
@@ -38,11 +39,9 @@ class ATR(Indicator):
 
         if self.get_indicator_period(self.period, index, "close"):
             return (
-                float(
-                    sum(
-                        self.get_indicator_by_index(index, "TR")
-                        for i in range(index - (self.period - 1), index + 1)
-                    )
+                sum(
+                    self.get_indicator_by_index(index, "TR")
+                    for i in range(index - (self.period - 1), index + 1)
                 )
                 / self.period
             )

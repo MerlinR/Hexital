@@ -39,11 +39,9 @@ class RMA(Indicator):
             )
         if self.get_indicator_period(self.period, index, self.input_value):
             return (
-                float(
-                    sum(
-                        self.get_indicator_by_index(i, self.input_value)
-                        for i in range(index - (self.period - 1), index + 1)
-                    )
+                sum(
+                    self.get_indicator_by_candle(value, self.input_value)
+                    for value in self.candles[index - (self.period - 1) : index + 1]
                 )
                 / self.period
             )
