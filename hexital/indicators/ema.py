@@ -36,7 +36,7 @@ class EMA(Indicator):
                 + (1.0 - mult) * self.get_indicator_by_index(index - 1)
             )
 
-        if self.get_indicator_period(self.period - 1, index, self.input_value):
+        if self.get_indicator_period(self.period, index, self.input_value):
             return (
                 sum(
                     self.get_indicator_by_candle(value, self.input_value)

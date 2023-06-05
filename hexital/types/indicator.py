@@ -213,24 +213,25 @@ class Indicator(ABC):
         return [candle.indicators.get(name) for candle in self.candles]
 
     def get_indicator_period(
-        self, amount: int, index: int = None, name: str = None
+        self, period: int, index: int = None, name: str = None
     ) -> bool:
         """Will return True if the given indicator goes back as far as amount,
-        It's true if exactly or more than"""
+        It's true if exactly or more than. Period will be period -1"""
         if index is None:
             index = len(self.candles) - 1
         if name is None:
             name = self.name
+        period -= 1
 
-        if (index - amount) < 0:
+        if (index - period) < 0:
             return False
 
         # Checks 3 points along period to verify values exist
         return all(
             self.get_indicator_by_index(index - int(x), name)
             for x in [
-                amount,
-                amount / 2,
+                period,
+                period / 2,
                 0,
             ]
         )
