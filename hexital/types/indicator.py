@@ -163,6 +163,12 @@ class Indicator(ABC):
         if getattr(candle, name, None) is not None:
             return getattr(candle, name)
 
+        if name in candle.indicators:
+            return candle.indicators[name]
+
+        if name in candle.sub_indicators:
+            return candle.sub_indicators[name]
+
         for key, value in chain(candle.indicators.items(), candle.sub_indicators.items()):
             if name in key:
                 return value
@@ -172,6 +178,16 @@ class Indicator(ABC):
     def _get_nested_indicator(
         self, candle: Candle, name: str, nested_name: str
     ) -> float | None:
+        if name in candle.indicators:
+            if isinstance(candle.indicators[name], dict):
+                return candle.indicators[name].get(nested_name)
+            return candle.indicators[name]
+
+        if name in candle.sub_indicators:
+            if isinstance(candle.sub_indicators[name], dict):
+                return candle.sub_indicators[name].get(nested_name)
+            return candle.sub_indicators[name]
+
         for key, value in chain(candle.indicators.items(), candle.sub_indicators.items()):
             if name in key:
                 if isinstance(value, dict):
