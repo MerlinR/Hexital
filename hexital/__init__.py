@@ -1,2 +1,2 @@
-from .indicators import EMA, MACD, SMA, TR
+from .indicators import ATR, EMA, MACD, SMA, TR
 from .types.ohlcv import Candle

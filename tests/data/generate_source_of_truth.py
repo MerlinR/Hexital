@@ -1817,7 +1817,7 @@ def generate():
             {"kind": "ema"},
             {"kind": "macd"},
             {"kind": "rsi"},
-            {"kind": "atr"},
+            {"kind": "atr", "mamode": "sma"},
             {"kind": "stoch"},
         ],
     )
@@ -1831,7 +1831,7 @@ def generate():
     generate_json([round_values(value) for value in df["EMA_10"].tolist()], "EMA")
     generate_json([round_values(value) for value in df["SMA_10"].tolist()], "SMA")
     generate_json([round_values(value) for value in df["RSI_14"].tolist()], "RSI")
-    generate_json([round_values(value) for value in df["ATRr_14"].tolist()], "ATR")
+    generate_json([round_values(value) for value in df["ATRs_14"].tolist()], "ATR")
     # print(ema)
     stochk = [round_values(value) for value in df["STOCHk_14_3_3"].tolist()]
     stochd = [round_values(value) for value in df["STOCHd_14_3_3"].tolist()]

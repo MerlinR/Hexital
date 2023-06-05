@@ -35,3 +35,11 @@ def fixture_expected_tr():
 
     data = json.load(csv_files)
     return data
+
+
+@pytest.fixture(name="expected_ATR")
+def fixture_expected_atr():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/ATR.json")
+
+    data = json.load(csv_files)
+    return data
