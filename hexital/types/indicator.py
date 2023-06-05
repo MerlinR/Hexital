@@ -3,7 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from itertools import chain
-from typing import Dict, List
+from typing import Dict, List, Union
 
 from hexital.types.ohlcv import Candle
 
@@ -66,6 +66,12 @@ class Indicator(ABC):
             return False
         return self.get_indicator_by_index(-1) is not None
 
+    def _set_value(self, index: int, value: Union[float, dict]):
+        if self.sub_indicator:
+            self.candles[index].sub_indicators[self.name] = value
+        else:
+            self.candles[index].indicators[self.name] = value
+
     @abstractmethod
     def _calculate_new_value(self, index: int = -1) -> float | dict | None:
         pass
@@ -79,19 +85,14 @@ class Indicator(ABC):
         for index in range(self._find_starting_index(), len(self.candles)):
             if self.get_indicator_by_index(index) is None:
                 value = self._round_values(self._calculate_new_value(index=index))
-
-                if self.sub_indicator:
-                    self.candles[index].sub_indicators[self.name] = value
-                else:
-                    self.candles[index].indicators[self.name] = value
+                self._set_value(index, value)
 
     def calculate_index(self, index: int, to_index: int = None):
         """Calculate the TA values, will calculate a index range the Candles,
         where this indicator is missing"""
         for i in range(index, to_index if to_index else index + 1):
-            if self.get_indicator_by_index(i) is None:
-                value = self._round_values(self._calculate_new_value(index=i))
-                self.candles[i].sub_indicators[self.name] = value
+            value = self._round_values(self._calculate_new_value(index=i))
+            self._set_value(i, value)
 
     def _round_values(self, values: float | Dict[str, float]) -> float | Dict[str, float]:
         if isinstance(values, dict):
@@ -188,10 +189,6 @@ class Indicator(ABC):
         """Gathers the indicator for all candles as a list"""
         return [candle.indicators.get(self.name) for candle in self.candles]
 
-    # def get_range_list(self, index: int, index_to: int) -> List[float | dict]:
-    #     """Gathers the indicator for all candles as a list"""
-    #     return [candle.indicators.get(self.name) for candle in self.candles]
-
     def get_indicator_period(
         self, amount: int, index: int = None, name: str = None
     ) -> bool:
@@ -205,7 +202,7 @@ class Indicator(ABC):
         if (index - amount) < 0:
             return False
 
-        # Checks 3 points along period to values to exist
+        # Checks 3 points along period to verify values exist
         return all(
             self.get_indicator_by_index(index - int(x), name)
             for x in [
