@@ -129,6 +129,11 @@ class Indicator(ABC):
     def get_managed_indictor(self, name: str) -> Indicator:
         return self._managed_indicators.get(name)
 
+    def prev_exists(self, index: int = None) -> bool:
+        if index == 0:
+            return False
+        return self.get_indicator_by_index(index - 1) is not None
+
     def get_indicator_by_index(
         self, index: int = None, name: str = None
     ) -> float | dict | None:
@@ -185,9 +190,11 @@ class Indicator(ABC):
 
         return count
 
-    def get_as_list(self) -> List[float | dict]:
+    def get_as_list(self, name: str = None) -> List[float | dict]:
         """Gathers the indicator for all candles as a list"""
-        return [candle.indicators.get(self.name) for candle in self.candles]
+        if not name:
+            name = self.name
+        return [candle.indicators.get(name) for candle in self.candles]
 
     def get_indicator_period(
         self, amount: int, index: int = None, name: str = None

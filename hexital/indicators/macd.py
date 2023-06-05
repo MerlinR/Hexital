@@ -6,11 +6,29 @@ from hexital.types import Indicator
 
 @dataclass(kw_only=True)
 class MACD(Indicator):
+    """Moving Average Convergence Divergence (MACD)
+
+    The MACD is a popular indicator to that is used to identify a security's trend.
+    While APO and MACD are the same calculation, MACD also returns two more series
+    called Signal and Histogram. The Signal is an EMA of MACD and the Histogram is
+    the difference of MACD and Signal.
+
+    Sources:
+        https://www.investopedia.com/ask/answers/122314/what-exponential-moving-average-ema-formula-and-how-ema-calculated.asp
+
+    Args:
+        Input value (str): Default Close
+        fast_period (int) Default: 12
+        slow_period (int) Default: 26
+        signal_period (int) Default: 19
+
+    """
+
     indicator_name: str = "MACD"
+    input_value: str = "close"
     fast_period: int = 12
     slow_period: int = 26
     signal_period: int = 9
-    input_value: str = "close"
 
     def _generate_name(self) -> str:
         return "{}_{}_{}_{}".format(

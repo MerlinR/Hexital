@@ -27,3 +27,11 @@ def fixture_expected_macd():
 
     data = json.load(csv_files)
     return data
+
+
+@pytest.fixture(name="expected_TR")
+def fixture_expected_tr():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/TR.json")
+
+    data = json.load(csv_files)
+    return data

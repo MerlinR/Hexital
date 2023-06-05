@@ -14,14 +14,15 @@ class SMA(Indicator):
         https://www.investopedia.com/terms/s/sma.asp
 
     Args:
-        period (int) Default: 10
         Input value (str): Default Close
+        period (int) Default: 10
+
 
     """
 
     indicator_name: str = "SMA"
-    period: int = 10
     input_value: str = "close"
+    period: int = 10
 
     def _generate_name(self) -> str:
         return f"{self.indicator_name}_{self.period}"

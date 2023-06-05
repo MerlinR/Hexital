@@ -15,13 +15,14 @@ class EMA(Indicator):
         https://www.investopedia.com/ask/answers/122314/what-exponential-moving-average-ema-formula-and-how-ema-calculated.asp
 
     Args:
-        period (int) Default: 10
         Input value (str): Default Close
+        period (int) Default: 10
+
     """
 
     indicator_name: str = "EMA"
-    period: int = 10
     input_value: str = "close"
+    period: int = 10
     multiplier: float = 2.0
 
     def _generate_name(self) -> str:
