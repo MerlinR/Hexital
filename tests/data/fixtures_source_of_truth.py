@@ -35,6 +35,12 @@ def fixture_expected_atr():
     return json.load(csv_files)
 
 
+@pytest.fixture(name="expected_RSI")
+def fixture_expected_rsi():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/RSI.json")
+    return json.load(csv_files)
+
+
 @pytest.fixture(name="expected_RMA")
 def fixture_expected_rma():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/RMA.json")
