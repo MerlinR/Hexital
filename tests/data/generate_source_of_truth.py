@@ -1813,6 +1813,7 @@ def generate():
         name="ALLs",
         ta=[
             {"kind": "true_range"},
+            {"kind": "rma"},
             {"kind": "sma"},
             {"kind": "ema"},
             {"kind": "macd"},
@@ -1827,6 +1828,7 @@ def generate():
     for col in df.columns:
         print(col)
 
+    generate_json([round_values(value) for value in df["RMA_10"].tolist()], "RMA")
     generate_json([round_values(value) for value in df["TRUERANGE_1"].tolist()], "TR")
     generate_json([round_values(value) for value in df["EMA_10"].tolist()], "EMA")
     generate_json([round_values(value) for value in df["SMA_10"].tolist()], "SMA")
