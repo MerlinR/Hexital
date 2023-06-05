@@ -29,7 +29,7 @@ class EMA(Indicator):
         return f"{self.indicator_name}_{self.period}"
 
     def _calculate_new_value(self, index: int = -1) -> float | dict | None:
-        if self.get_indicator_by_index(index - 1) is not None:
+        if self.prev_exists(index):
             mult = self.multiplier / (self.period + 1.0)
             return float(
                 mult * self.get_indicator_by_index(index, self.input_value)

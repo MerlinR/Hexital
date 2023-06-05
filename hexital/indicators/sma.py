@@ -28,7 +28,7 @@ class SMA(Indicator):
         return f"{self.indicator_name}_{self.period}"
 
     def _calculate_new_value(self, index: int = -1) -> float | dict | None:
-        if self.get_indicator_by_index(index - 1) is not None:
+        if self.prev_exists(index):
             return self.get_indicator_by_index(index - 1) - (
                 self.get_indicator_by_index(index - self.period, self.input_value)
                 - self.get_indicator_by_index(index, self.input_value)
