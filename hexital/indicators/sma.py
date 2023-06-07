@@ -34,7 +34,7 @@ class SMA(Indicator):
                 - self.get_indicator_by_index(index, self.input_value)
             ) / float(self.period)
 
-        if self.get_indicator_period(self.period, index, self.input_value):
+        if self.get_indicator_period(self.period, index=index, name=self.input_value):
             return (
                 float(
                     sum(

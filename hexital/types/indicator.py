@@ -2,10 +2,16 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from itertools import chain
 from typing import Dict, List, Union
 
 from hexital.types.ohlcv import OHLCV
+from hexital.utilities.candles import (
+    indicator_as_list,
+    indicator_by_candle,
+    indicator_count,
+    indicator_period,
+    round_values,
+)
 
 
 @dataclass(kw_only=True)
@@ -84,25 +90,19 @@ class Indicator(ABC):
 
         for index in range(self._find_starting_index(), len(self.candles)):
             if self.get_indicator_by_index(index) is None:
-                value = self._round_values(self._calculate_new_value(index=index))
+                value = round_values(
+                    self._calculate_new_value(index=index), round_by=self.round_value
+                )
                 self._set_value(index, value)
 
     def calculate_index(self, index: int, to_index: int = None):
         """Calculate the TA values, will calculate a index range the Candles,
         where this indicator is missing"""
         for i in range(index, to_index if to_index else index + 1):
-            value = self._round_values(self._calculate_new_value(index=i))
+            value = round_values(
+                self._calculate_new_value(index=i), round_by=self.round_value
+            )
             self._set_value(i, value)
-
-    def _round_values(self, values: float | Dict[str, float]) -> float | Dict[str, float]:
-        if isinstance(values, dict):
-            for key, val in values.items():
-                if val is not None:
-                    values[key] = round(val, self.round_value)
-        elif isinstance(values, float):
-            values = round(values, self.round_value)
-
-        return values
 
     def _find_starting_index(self) -> int:
         """Optimisation method, to find where to start calculating the indicator from
@@ -134,104 +134,46 @@ class Indicator(ABC):
             return False
         return self.get_indicator_by_index(index - 1) is not None
 
-    def get_indicator_by_index(
-        self, index: int = None, name: str = None
-    ) -> float | dict | None:
+    def get_indicator_by_index(self, index: int, name: str = None) -> float | dict | None:
         """Simple method to get an indicator value from it's index,
         regardless of it's location"""
-        if index is None:
-            index = len(self.candles) - 1
-        if not name:
-            name = self.name
-
-        return self.get_indicator_by_candle(self.candles[index], name)
+        return indicator_by_candle(
+            self.candles[index],
+            name if name else self.name,
+        )
 
     def get_indicator_by_candle(
         self, candle: OHLCV, name: str = None
     ) -> float | dict | None:
         """Simple method to get an indicator value from a candle,
         regardless of it's location"""
-        if not name:
-            name = self.name
-
-        if "." in name:
-            main_name, nested_name = name.split(".")
-            value = self._get_nested_indicator(candle, main_name, nested_name)
-            if value:
-                return value
-
-        if getattr(candle, name, None) is not None:
-            return getattr(candle, name)
-
-        if name in candle.indicators:
-            return candle.indicators[name]
-
-        if name in candle.sub_indicators:
-            return candle.sub_indicators[name]
-
-        for key, value in chain(candle.indicators.items(), candle.sub_indicators.items()):
-            if name in key:
-                return value
-
-        return None
-
-    def _get_nested_indicator(
-        self, candle: OHLCV, name: str, nested_name: str
-    ) -> float | None:
-        if name in candle.indicators:
-            if isinstance(candle.indicators[name], dict):
-                return candle.indicators[name].get(nested_name)
-            return candle.indicators[name]
-
-        if name in candle.sub_indicators:
-            if isinstance(candle.sub_indicators[name], dict):
-                return candle.sub_indicators[name].get(nested_name)
-            return candle.sub_indicators[name]
-
-        for key, value in chain(candle.indicators.items(), candle.sub_indicators.items()):
-            if name in key:
-                if isinstance(value, dict):
-                    return value.get(nested_name)
-                return value
-        return None
+        return indicator_by_candle(
+            candle,
+            name if name else self.name,
+        )
 
     def get_indicator_count(self, name: str = None) -> int:
         """Returns how many instance of the given indicator exist"""
-        if not name:
-            name = self.name
-        count = 0
-        for candle in self.candles:
-            if self.get_indicator_by_candle(candle, name):
-                count += 1
-
-        return count
+        return indicator_count(
+            self.candles,
+            name if name else self.name,
+        )
 
     def get_as_list(self, name: str = None) -> List[float | dict]:
         """Gathers the indicator for all candles as a list"""
-        if not name:
-            name = self.name
-        return [candle.indicators.get(name) for candle in self.candles]
+        return indicator_as_list(
+            self.candles,
+            name if name else self.name,
+        )
 
     def get_indicator_period(
         self, period: int, index: int = None, name: str = None
     ) -> bool:
         """Will return True if the given indicator goes back as far as amount,
         It's true if exactly or more than. Period will be period -1"""
-        if index is None:
-            index = len(self.candles) - 1
-        if name is None:
-            name = self.name
-        period -= 1
-
-        if (index - period) < 0:
-            return False
-
-        # Checks 3 points along period to verify values exist
-        return all(
-            self.get_indicator_by_index(index - int(x), name)
-            for x in [
-                period,
-                period / 2,
-                0,
-            ]
+        return indicator_period(
+            self.candles,
+            period,
+            name if name else self.name,
+            index=index,
         )

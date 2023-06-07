@@ -37,7 +37,7 @@ class RMA(Indicator):
                 )
                 / self.period
             )
-        if self.get_indicator_period(self.period, index, self.input_value):
+        if self.get_indicator_period(self.period, index=index, name=self.input_value):
             return (
                 sum(
                     self.get_indicator_by_candle(value, self.input_value)

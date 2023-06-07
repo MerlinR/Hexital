@@ -75,7 +75,7 @@ class RSI(Indicator):
 
             return rsi
 
-        if self.get_indicator_period(self.period, index, self.input_value):
+        if self.get_indicator_period(self.period, index=index, name=self.input_value):
             diffs = [
                 self.get_indicator_by_index(i - 1, self.input_value)
                 - self.get_indicator_by_index(i, self.input_value)

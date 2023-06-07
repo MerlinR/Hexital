@@ -37,7 +37,7 @@ class ATR(Indicator):
                 + self.get_indicator_by_index(index, "TR")
             ) / self.period
 
-        if self.get_indicator_period(self.period, index, "close"):
+        if self.get_indicator_period(self.period, index=index, name="close"):
             return (
                 sum(
                     self.get_indicator_by_index(index, "TR")
