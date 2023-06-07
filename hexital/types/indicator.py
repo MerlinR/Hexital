@@ -13,7 +13,7 @@ class Indicator(ABC):
     candles: List[OHLCV] = field(default_factory=list)
     indicator_name: str = None
     override_name: str = None
-    name_postix: str = None
+    name_postfix: str = None
     round_value: int = 4
     _output_name: str = ""
     _sub_indicators: List[Indicator] = field(default_factory=list)
@@ -23,8 +23,8 @@ class Indicator(ABC):
     def __post_init__(self):
         if self.override_name:
             self._output_name = self.override_name
-        elif self.name_postix:
-            self._output_name = f"{self._generate_name()}_{self.name_postix}"
+        elif self.name_postfix:
+            self._output_name = f"{self._generate_name()}_{self.name_postfix}"
         else:
             self._output_name = self._generate_name()
         self._initialise()

@@ -30,10 +30,10 @@ class RSI(Indicator):
 
     def _initialise(self):
         self.add_managed_indicator(
-            "RSI_avg_gain", Managed(candles=self.candles, name_postix="RSI_avg_gain")
+            "RSI_avg_gain", Managed(candles=self.candles, name_postfix="RSI_avg_gain")
         )
         self.add_managed_indicator(
-            "RSI_avg_loss", Managed(candles=self.candles, name_postix="RSI_avg_loss")
+            "RSI_avg_loss", Managed(candles=self.candles, name_postfix="RSI_avg_loss")
         )
 
     def _calculate_new_value(self, index: int = -1) -> float | dict | None:
