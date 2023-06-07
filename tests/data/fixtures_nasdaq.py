@@ -1,7 +1,7 @@
 import copy
 
 import pytest
-from hexital import Candle
+from hexital import OHLCV
 
 
 @pytest.fixture(name="nasdaq_minimal_candles")
@@ -1775,4 +1775,4 @@ def fixture_nasdaq_minute_candles(nasdaq_minimal_candles):
 
 @pytest.fixture(name="candles")
 def fixture_nasdaq_data(nasdaq_candles):
-    return Candle.from_dicts(nasdaq_candles)
+    return OHLCV.from_dicts(nasdaq_candles)

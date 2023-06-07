@@ -5,12 +5,12 @@ from dataclasses import dataclass, field
 from itertools import chain
 from typing import Dict, List, Union
 
-from hexital.types.ohlcv import Candle
+from hexital.types.ohlcv import OHLCV
 
 
 @dataclass(kw_only=True)
 class Indicator(ABC):
-    candles: List[Candle] = field(default_factory=list)
+    candles: List[OHLCV] = field(default_factory=list)
     indicator_name: str = None
     override_name: str = None
     name_postix: str = None
@@ -147,7 +147,7 @@ class Indicator(ABC):
         return self.get_indicator_by_candle(self.candles[index], name)
 
     def get_indicator_by_candle(
-        self, candle: Candle, name: str = None
+        self, candle: OHLCV, name: str = None
     ) -> float | dict | None:
         """Simple method to get an indicator value from a candle,
         regardless of it's location"""
@@ -176,7 +176,7 @@ class Indicator(ABC):
         return None
 
     def _get_nested_indicator(
-        self, candle: Candle, name: str, nested_name: str
+        self, candle: OHLCV, name: str, nested_name: str
     ) -> float | None:
         if name in candle.indicators:
             if isinstance(candle.indicators[name], dict):

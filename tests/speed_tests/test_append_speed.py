@@ -3,7 +3,7 @@ import timeit
 from functools import partial
 
 import pytest
-from hexital import EMA, Candle
+from hexital import EMA, OHLCV
 
 
 @pytest.fixture(name="nasdaq_candles_large")
