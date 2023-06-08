@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Union
 
 from hexital.types.ohlcv import OHLCV
-from hexital.utilities.candles import (
+from hexital.utilities import (
     indicator_as_list,
     indicator_by_candle,
     indicator_count,

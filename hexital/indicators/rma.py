@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from hexital.types import Indicator
+from hexital.utilities import candles_sum
 
 
 @dataclass(kw_only=True)
@@ -39,9 +40,8 @@ class RMA(Indicator):
             )
         if self.get_indicator_period(self.period, index=index, name=self.input_value):
             return (
-                sum(
-                    self.get_indicator_by_candle(value, self.input_value)
-                    for value in self.candles[index - (self.period - 1) : index + 1]
+                candles_sum(
+                    self.candles, self.input_value, length=self.period, index=index
                 )
                 / self.period
             )

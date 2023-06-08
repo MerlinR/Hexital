@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from hexital.indicators.ema import EMA
+from hexital.indicators import EMA
 from hexital.types import Indicator
 
 

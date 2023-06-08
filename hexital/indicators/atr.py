@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from hexital.indicators.tr import TR
 from hexital.types import Indicator
+from hexital.utilities import candles_sum
 
 
 @dataclass(kw_only=True)
@@ -39,10 +40,7 @@ class ATR(Indicator):
 
         if self.get_indicator_period(self.period, index=index, name="close"):
             return (
-                sum(
-                    self.get_indicator_by_index(index, "TR")
-                    for i in range(index - (self.period - 1), index + 1)
-                )
+                candles_sum(self.candles, "TR", length=self.period, index=index)
                 / self.period
             )
         return None
