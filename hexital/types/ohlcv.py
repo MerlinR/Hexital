@@ -15,15 +15,15 @@ class OHLCV:
     sub_indicators: Dict[str, float | dict] = field(default_factory=dict)
 
     @classmethod
-    def from_dict(cls, value: Dict[str, float]) -> OHLCV:
+    def from_dict(cls, candle: Dict[str, float]) -> OHLCV:
         return cls(
-            value.get("open", 0.0),
-            value.get("high", 0.0),
-            value.get("low", 0.0),
-            value.get("close", 0.0),
-            value.get("volume", 0.0),
+            candle.get("open", 0.0),
+            candle.get("high", 0.0),
+            candle.get("low", 0.0),
+            candle.get("close", 0.0),
+            candle.get("volume", 0.0),
         )
 
     @staticmethod
-    def from_dicts(values: List[Dict[str, float]]) -> List[OHLCV]:
-        return [OHLCV.from_dict(value) for value in values]
+    def from_dicts(candles: List[Dict[str, float]]) -> List[OHLCV]:
+        return [OHLCV.from_dict(candle) for candle in candles]

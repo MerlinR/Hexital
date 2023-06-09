@@ -6,10 +6,10 @@ from typing import Dict, List, Union
 
 from hexital.types.ohlcv import OHLCV
 from hexital.utilities import (
-    indicator_as_list,
-    indicator_by_candle,
-    indicator_count,
-    indicator_period,
+    reading_as_list,
+    reading_by_candle,
+    reading_count,
+    reading_period,
     round_values,
 )
 
@@ -48,8 +48,8 @@ class Indicator(ABC):
         return self._output_name
 
     @property
-    def value(self) -> float | dict:
-        """Get's this newest value of this indicator"""
+    def reading(self) -> float | dict:
+        """Get's this newest reading of this indicator"""
         return self.candles[-1][self._output_name]
 
     @property
@@ -66,20 +66,20 @@ class Indicator(ABC):
             candle.indicators = {}
 
     @property
-    def has_value(self) -> bool:
+    def has_reading(self) -> bool:
         """Simple boolean to state if values are being generated yet in the candles"""
         if len(self.candles) == 0:
             return False
-        return self.get_indicator_by_index(-1) is not None
+        return self.get_reading_by_index(-1) is not None
 
-    def _set_value(self, index: int, value: Union[float, dict]):
+    def _set_reading(self, index: int, reading: Union[float, dict]):
         if self.sub_indicator:
-            self.candles[index].sub_indicators[self.name] = value
+            self.candles[index].sub_indicators[self.name] = reading
         else:
-            self.candles[index].indicators[self.name] = value
+            self.candles[index].indicators[self.name] = reading
 
     @abstractmethod
-    def _calculate_new_value(self, index: int = -1) -> float | dict | None:
+    def _calculate_new_reading(self, index: int = -1) -> float | dict | None:
         pass
 
     def calculate(self):
@@ -89,20 +89,20 @@ class Indicator(ABC):
             indicator.calculate()
 
         for index in range(self._find_starting_index(), len(self.candles)):
-            if self.get_indicator_by_index(index) is None:
-                value = round_values(
-                    self._calculate_new_value(index=index), round_by=self.round_value
+            if self.get_reading_by_index(index) is None:
+                reading = round_values(
+                    self._calculate_new_reading(index=index), round_by=self.round_value
                 )
-                self._set_value(index, value)
+                self._set_reading(index, reading)
 
     def calculate_index(self, index: int, to_index: int = None):
         """Calculate the TA values, will calculate a index range the Candles,
         where this indicator is missing"""
         for i in range(index, to_index if to_index else index + 1):
-            value = round_values(
-                self._calculate_new_value(index=i), round_by=self.round_value
+            reading = round_values(
+                self._calculate_new_reading(index=i), round_by=self.round_value
             )
-            self._set_value(i, value)
+            self._set_reading(i, reading)
 
     def _find_starting_index(self) -> int:
         """Optimisation method, to find where to start calculating the indicator from
@@ -132,46 +132,46 @@ class Indicator(ABC):
     def prev_exists(self, index: int = None) -> bool:
         if index == 0:
             return False
-        return self.get_indicator_by_index(index - 1) is not None
+        return self.get_reading_by_index(index - 1) is not None
 
-    def get_indicator_by_index(self, index: int, name: str = None) -> float | dict | None:
-        """Simple method to get an indicator value from it's index,
+    def get_reading_by_index(self, index: int, name: str = None) -> float | dict | None:
+        """Simple method to get an indicator reading from it's index,
         regardless of it's location"""
-        return indicator_by_candle(
+        return reading_by_candle(
             self.candles[index],
             name if name else self.name,
         )
 
-    def get_indicator_by_candle(
+    def get_reading_by_candle(
         self, candle: OHLCV, name: str = None
     ) -> float | dict | None:
-        """Simple method to get an indicator value from a candle,
+        """Simple method to get an indicator reading from a candle,
         regardless of it's location"""
-        return indicator_by_candle(
+        return reading_by_candle(
             candle,
             name if name else self.name,
         )
 
-    def get_indicator_count(self, name: str = None) -> int:
+    def get_reading_count(self, name: str = None) -> int:
         """Returns how many instance of the given indicator exist"""
-        return indicator_count(
+        return reading_count(
             self.candles,
             name if name else self.name,
         )
 
     def get_as_list(self, name: str = None) -> List[float | dict]:
         """Gathers the indicator for all candles as a list"""
-        return indicator_as_list(
+        return reading_as_list(
             self.candles,
             name if name else self.name,
         )
 
-    def get_indicator_period(
+    def get_reading_period(
         self, period: int, index: int = None, name: str = None
     ) -> bool:
         """Will return True if the given indicator goes back as far as amount,
         It's true if exactly or more than. Period will be period -1"""
-        return indicator_period(
+        return reading_period(
             self.candles,
             period,
             name if name else self.name,

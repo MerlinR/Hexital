@@ -31,14 +31,14 @@ class ATR(Indicator):
     def _initialise(self):
         self.add_sub_indicator(TR(candles=self.candles))
 
-    def _calculate_new_value(self, index: int = -1) -> float | dict | None:
+    def _calculate_new_reading(self, index: int = -1) -> float | dict | None:
         if self.prev_exists(index):
             return (
-                self.get_indicator_by_index(index - 1) * (self.period - 1)
-                + self.get_indicator_by_index(index, "TR")
+                self.get_reading_by_index(index - 1) * (self.period - 1)
+                + self.get_reading_by_index(index, "TR")
             ) / self.period
 
-        if self.get_indicator_period(self.period, index=index, name="close"):
+        if self.get_reading_period(self.period, index=index, name="close"):
             return (
                 candles_sum(self.candles, "TR", length=self.period, index=index)
                 / self.period

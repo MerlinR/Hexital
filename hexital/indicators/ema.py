@@ -29,15 +29,15 @@ class EMA(Indicator):
     def _generate_name(self) -> str:
         return f"{self.indicator_name}_{self.period}"
 
-    def _calculate_new_value(self, index: int = -1) -> float | dict | None:
+    def _calculate_new_reading(self, index: int = -1) -> float | dict | None:
         if self.prev_exists(index):
             mult = self.multiplier / (self.period + 1.0)
             return float(
-                mult * self.get_indicator_by_index(index, self.input_value)
-                + (1.0 - mult) * self.get_indicator_by_index(index - 1)
+                mult * self.get_reading_by_index(index, self.input_value)
+                + (1.0 - mult) * self.get_reading_by_index(index - 1)
             )
 
-        if self.get_indicator_period(self.period, index=index, name=self.input_value):
+        if self.get_reading_period(self.period, index=index, name=self.input_value):
             return (
                 candles_sum(
                     self.candles, self.input_value, length=self.period, index=index
