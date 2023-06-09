@@ -18,8 +18,5 @@ class Managed(Indicator):
     def _generate_name(self) -> str:
         return self.indicator_name
 
-    def _calculate_new_reading(self, index: int = -1) -> float | dict | None:
-        return None
-
     def set_reading(self, index: int, reading: Union[float, dict]):
         self._set_reading(index, reading)

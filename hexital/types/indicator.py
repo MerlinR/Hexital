@@ -82,7 +82,6 @@ class Indicator(ABC):
         else:
             self.candles[index].indicators[self.name] = reading
 
-    @abstractmethod
     def _calculate_new_reading(self, index: int = -1) -> float | dict | None:
         pass
 

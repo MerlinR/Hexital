@@ -64,8 +64,6 @@ class RSI(Indicator):
                 )
                 / self.period,
             )
-            if self.get_reading_by_index(index) == 0:
-                return 100.0
 
             rs = self.get_reading_by_index(
                 index, "RSI_avg_gain"
