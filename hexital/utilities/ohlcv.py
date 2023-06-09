@@ -10,7 +10,7 @@ def reading_by_index(
     """Simple method to get a reading from the given indicator from it's index,
     regardless of it's location"""
     if index is None:
-        index = len(candles) - 1
+        index = -1
 
     return reading_by_candle(candles[index], name)
 

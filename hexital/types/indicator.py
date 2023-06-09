@@ -60,10 +60,14 @@ class Indicator(ABC):
     def sub_indicator(self, value: bool):
         self._sub_indicator = value
 
-    @property
     def purge(self):
         for candle in self.candles:
-            candle.indicators = {}
+            candle.indicators.pop(self.name, None)
+            candle.sub_indicators.pop(self.name, None)
+
+    def recalculate(self):
+        self.purge()
+        self.calculate()
 
     @property
     def has_reading(self) -> bool:
