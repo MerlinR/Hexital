@@ -9,9 +9,11 @@ def candles_sum(
 ) -> float:
     """Sum of `indicator` for `length` bars back. including index/latest"""
     if not indicator_period(candles, length, indicator):
-        return False
+        length = len(candles)
 
-    if index is not None and index >= 0:
+    if index is not None and index >= len(candles):
+        index = len(candles)
+    elif index is not None and index >= 0:
         index += 1
     elif index is not None:
         index = (index * -1) + 1
