@@ -69,6 +69,7 @@ class Hexital:
         return []
 
     def add_indicator(self, indicator: Indicator | List[Indicator]):
+        """Add's a new indicator to the object. Does not automatically calculates readings"""
         if not isinstance(indicator, list):
             indicator = [indicator]
 
@@ -76,6 +77,7 @@ class Hexital:
             self._indicators.append(indi)
 
     def get_indicator(self, name: str) -> Indicator | None:
+        """Searches hexital's indicator's and Returns the Indicator object itself."""
         for indicator in self._indicators:
             if name in indicator.name:
                 return indicator
@@ -91,12 +93,14 @@ class Hexital:
         return False
 
     def remove_indicator(self, indicator_name: str):
+        """Removes an indicator from running within hexital"""
         self.purge_readings(indicator_name)
         for index, indic in enumerate(self._indicators):
             if indic.name == indicator_name:
                 self._indicators.pop(index)
 
     def append(self, candle: OHLCV | dict):
+        """Appends a OHLCV to candles and re-calculates"""
         if isinstance(candle, dict):
             new_ohlcv = OHLCV.from_dict(candle)
             if isinstance(new_ohlcv, OHLCV):
@@ -106,10 +110,13 @@ class Hexital:
         self.calculate()
 
     def calculate(self, indicator_name: str = None):
+        """Calculates all the missing indicator readings."""
         for indicator in self._indicators:
             if indicator_name is None or indicator_name in indicator.name:
                 indicator.calculate()
 
     def recalculate(self, indicator_name: str = None):
+        """Purge's all indicator reading's and re-calculates them all,
+        ideal for changing an indicator parameters midway."""
         self.purge_readings(indicator_name)
         self.calculate(indicator_name)
