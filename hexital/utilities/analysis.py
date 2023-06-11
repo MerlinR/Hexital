@@ -165,3 +165,86 @@ def lowestbars(candles: List[OHLCV], indicator: str, length: int = 4) -> int:
             low = current
 
     return distance + 1
+
+
+def cross(
+    candles: List[OHLCV], indicator_one: str, indicator_two: str, length: int = 1
+) -> bool:
+    """The `indicator_one` reading is defined as having crossed `indicator_two` reading"""
+    if not reading_period(candles, length, indicator_one) or not reading_period(
+        candles, length, indicator_two
+    ):
+        length = min(
+            [reading_count(candles, indicator_one), reading_count(candles, indicator_two)]
+        )
+
+    over = reading_by_index(candles, indicator_one) > reading_by_index(
+        candles, indicator_two
+    )
+
+    start_index = len(candles) - 2
+
+    for index in range(start_index, start_index - length, -1):
+        if (
+            reading_by_index(candles, indicator_one, index)
+            > reading_by_index(candles, indicator_two, index)
+        ) != over:
+            return True
+
+    return False
+
+
+def crossover(
+    candles: List[OHLCV], indicator_one: str, indicator_two: str, length: int = 1
+) -> bool:
+    """The `indicator_one` reading is defined as having crossed over `indicator_two` reading,
+    If  `indicator_two` is higher then `indicator_one` and in the last `length` it was under"""
+    if not reading_period(candles, length, indicator_one) or not reading_period(
+        candles, length, indicator_two
+    ):
+        length = min(
+            [reading_count(candles, indicator_one), reading_count(candles, indicator_two)]
+        )
+
+    if not reading_by_index(candles, indicator_one) > reading_by_index(
+        candles, indicator_two
+    ):
+        return False
+
+    start_index = len(candles) - 2
+
+    for index in range(start_index, start_index - length, -1):
+        if reading_by_index(candles, indicator_one, index) < reading_by_index(
+            candles, indicator_two, index
+        ):
+            return True
+
+    return False
+
+
+def crossunder(
+    candles: List[OHLCV], indicator_one: str, indicator_two: str, length: int = 1
+) -> bool:
+    """The `indicator_one` reading is defined as having crossed under `indicator_two` reading,
+    If  `indicator_two` is lower then `indicator_one` and in the last `length` it was over"""
+    if not reading_period(candles, length, indicator_one) or not reading_period(
+        candles, length, indicator_two
+    ):
+        length = min(
+            [reading_count(candles, indicator_one), reading_count(candles, indicator_two)]
+        )
+
+    if not reading_by_index(candles, indicator_one) < reading_by_index(
+        candles, indicator_two
+    ):
+        return False
+
+    start_index = len(candles) - 2
+
+    for index in range(start_index, start_index - length, -1):
+        if reading_by_index(candles, indicator_one, index) > reading_by_index(
+            candles, indicator_two, index
+        ):
+            return True
+
+    return False

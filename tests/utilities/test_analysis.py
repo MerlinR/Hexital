@@ -3,6 +3,9 @@ from hexital.types.ohlcv import OHLCV
 from hexital.utilities import (
     basic_falling,
     basic_rising,
+    cross,
+    crossover,
+    crossunder,
     falling,
     highest,
     highestbars,
@@ -55,6 +58,27 @@ def fixture_mixed_candles_two():
         OHLCV(open=110, high=150, low=120, close=130, volume=10),
         OHLCV(open=150, high=120, low=90, close=115, volume=10),
         OHLCV(open=115, high=140, low=110, close=120, volume=10),
+    ]
+
+
+@pytest.fixture(name="indicator_candles")
+def fixture_indicator_candles():
+    return [
+        OHLCV(
+            open=130, high=150, low=120, close=120, volume=10, indicators={"EMA_10": 100}
+        ),
+        OHLCV(
+            open=120, high=140, low=110, close=120, volume=10, indicators={"EMA_10": 100}
+        ),
+        OHLCV(
+            open=110, high=150, low=120, close=130, volume=10, indicators={"EMA_10": 100}
+        ),
+        OHLCV(
+            open=150, high=120, low=90, close=115, volume=10, indicators={"EMA_10": 110}
+        ),
+        OHLCV(
+            open=115, high=140, low=110, close=120, volume=10, indicators={"EMA_10": 140}
+        ),
     ]
 
 
@@ -148,3 +172,19 @@ def test_lowestbars(mixed_candles_two):
 
 def test_lowestbars_two(mixed_candles_two):
     assert lowestbars(mixed_candles_two, "close") == 1
+
+
+def test_crossover(indicator_candles):
+    assert crossover(indicator_candles, "EMA_10", "close")
+
+
+def test_cross(indicator_candles):
+    assert cross(indicator_candles, "EMA_10", "close")
+
+
+def test_cross_any_direction(indicator_candles):
+    assert cross(indicator_candles, "close", "EMA_10")
+
+
+def test_crosunder(indicator_candles):
+    assert crossunder(indicator_candles, "close", "EMA_10")
