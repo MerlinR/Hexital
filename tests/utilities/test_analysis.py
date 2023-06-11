@@ -174,17 +174,41 @@ def test_lowestbars_two(mixed_candles_two):
     assert lowestbars(mixed_candles_two, "close") == 1
 
 
-def test_crossover(indicator_candles):
-    assert crossover(indicator_candles, "EMA_10", "close")
+def test_lowestbars_two_length(mixed_candles_two):
+    assert lowestbars(mixed_candles_two, "close", length=100) == 1
 
 
 def test_cross(indicator_candles):
     assert cross(indicator_candles, "EMA_10", "close")
 
 
+def test_cross_length(indicator_candles):
+    assert cross(indicator_candles, "EMA_10", "close", length=100)
+
+
 def test_cross_any_direction(indicator_candles):
     assert cross(indicator_candles, "close", "EMA_10")
 
 
+def test_crossover(indicator_candles):
+    assert crossover(indicator_candles, "EMA_10", "close")
+
+
+def test_crossover_length(indicator_candles):
+    assert crossover(indicator_candles, "EMA_10", "close", length=10)
+
+
+def test_crossover_invalid(indicator_candles):
+    assert crossover(indicator_candles, "close", "EMA_10") is False
+
+
 def test_crosunder(indicator_candles):
     assert crossunder(indicator_candles, "close", "EMA_10")
+
+
+def test_crosunder_length(indicator_candles):
+    assert crossunder(indicator_candles, "close", "EMA_10", length=10)
+
+
+def test_crosunder_invalid(indicator_candles):
+    assert crossunder(indicator_candles, "EMA_10", "close") is False
