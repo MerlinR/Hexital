@@ -1,7 +1,12 @@
 from typing import List, Union
 
 from hexital.types.ohlcv import OHLCV
-from hexital.utilities.ohlcv import reading_by_candle, reading_by_index, reading_period
+from hexital.utilities.ohlcv import (
+    reading_by_candle,
+    reading_by_index,
+    reading_count,
+    reading_period,
+)
 
 
 def positive(candles: Union[OHLCV, List[OHLCV]], position: int = -1) -> bool:
@@ -24,7 +29,7 @@ def basic_rising(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     """True if current `indicator` is greater than any previous `indicator`
     for `length` bars back, False otherwise. Length excludes latest"""
     if not reading_period(candles, length, indicator):
-        length = len(candles)
+        length = reading_count(candles, indicator)
 
     newest_reading = reading_by_candle(candles[-1], indicator)
 
@@ -41,7 +46,7 @@ def basic_falling(candles: List[OHLCV], indicator: str, length: int = 4) -> bool
     """True if current `indicator` reading is less than any previous `indicator`
     reading for `length` bars back, False otherwise. Length excludes latest"""
     if not reading_period(candles, length, indicator):
-        length = len(candles)
+        length = reading_count(candles, indicator)
 
     newest_reading = reading_by_candle(candles[-1], indicator)
 
@@ -61,7 +66,7 @@ def rising(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     Calc:
         NewestCandle[indicator] > mean(Candles[newest] to Candles[length])"""
     if not reading_period(candles, length, indicator):
-        length = len(candles)
+        length = reading_count(candles, indicator)
 
     mean = (
         sum(
@@ -80,7 +85,7 @@ def falling(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     Calc:
         NewestCandle[indicator] > mean(Candles[newest] to Candles[length])"""
     if not reading_period(candles, length, indicator):
-        length = len(candles)
+        length = reading_count(candles, indicator)
 
     mean = (
         sum(
@@ -98,7 +103,7 @@ def highest(candles: List[OHLCV], indicator: str, length: int = 4) -> float:
         Highest reading in the series.
     """
     if not reading_period(candles, length, indicator):
-        length = len(candles)
+        length = reading_count(candles, indicator)
 
     return max(reading_by_candle(candle, indicator) for candle in candles[length * -1 :])
 
@@ -109,7 +114,7 @@ def lowest(candles: List[OHLCV], indicator: str, length: int = 4) -> float:
         Lowest reading in the series.
     """
     if not reading_period(candles, length, indicator):
-        length = len(candles)
+        length = reading_count(candles, indicator)
 
     return min(reading_by_candle(candle, indicator) for candle in candles[length * -1 :])
 
@@ -120,7 +125,7 @@ def highestbars(candles: List[OHLCV], indicator: str, length: int = 4) -> int:
         Offset to the lowest bar
     """
     if not reading_period(candles, length, indicator):
-        length = len(candles)
+        length = reading_count(candles, indicator)
 
     high = None
     distance = 0
@@ -144,7 +149,7 @@ def lowestbars(candles: List[OHLCV], indicator: str, length: int = 4) -> int:
         Offset to the lowest bar
     """
     if not reading_period(candles, length, indicator):
-        length = len(candles)
+        length = reading_count(candles, indicator)
 
     low = None
     distance = 0

@@ -5,13 +5,10 @@ from hexital.types.ohlcv import OHLCV
 
 
 def reading_by_index(
-    candles: List[OHLCV], name: str, index: int = None
+    candles: List[OHLCV], name: str, index: int = -1
 ) -> float | dict | None:
     """Simple method to get a reading from the given indicator from it's index,
     regardless of it's location"""
-    if index is None:
-        index = -1
-
     return reading_by_candle(candles[index], name)
 
 
