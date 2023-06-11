@@ -1820,6 +1820,7 @@ def generate():
             {"kind": "rsi"},
             {"kind": "atr"},
             {"kind": "stoch"},
+            {"kind": "supertrend"},
         ],
     )
 
@@ -1851,6 +1852,23 @@ def generate():
     for macd in zip(macd, macd_s, macd_h):
         macd_data.append({"MACD": macd[0], "signal": macd[1], "histogram": macd[2]})
     generate_json(macd_data, "MACD")
+
+    supertrend = [round_values(value) for value in df["SUPERT_7_3.0"].tolist()]
+    supertrendd = [round_values(value) for value in df["SUPERTd_7_3.0"].tolist()]
+    supertrendl = [round_values(value) for value in df["SUPERTl_7_3.0"].tolist()]
+    supertrends = [round_values(value) for value in df["SUPERTs_7_3.0"].tolist()]
+    supertrend_data = []
+
+    for trend in zip(supertrend, supertrendd, supertrendl, supertrends):
+        supertrend_data.append(
+            {
+                "trend": trend[0],
+                "direction": trend[1],
+                "long": trend[2],
+                "short": trend[3],
+            }
+        )
+    generate_json(supertrend_data, "SUPERTREND")
 
 
 if __name__ == "__main__":

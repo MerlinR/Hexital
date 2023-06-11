@@ -45,3 +45,9 @@ def fixture_expected_rsi():
 def fixture_expected_rma():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/RMA.json")
     return json.load(csv_files)
+
+
+@pytest.fixture(name="expected_SUPERTREND")
+def fixture_expected_supertrend():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/SUPERTREND.json")
+    return json.load(csv_files)
