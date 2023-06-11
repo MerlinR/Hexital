@@ -21,5 +21,6 @@ def candles_sum(
         index = len(candles)
 
     return sum(
-        reading_by_candle(candle, indicator) for candle in candles[index - length : index]
+        reading_by_candle(candle, indicator)
+        for candle in candles[index - length : index]
     )

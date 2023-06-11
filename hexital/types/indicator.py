@@ -35,6 +35,12 @@ class Indicator(ABC):
             self._output_name = self._generate_name()
         self._initialise()
 
+    def __str__(self):
+        data = vars(self)
+        data.pop("candles")
+        data["name"] = data["_output_name"]
+        return str(data)
+
     def _initialise(self):
         pass
 
@@ -60,13 +66,13 @@ class Indicator(ABC):
     def sub_indicator(self, value: bool):
         self._sub_indicator = value
 
-    def purge(self):
+    def purge_readings(self):
         for candle in self.candles:
             candle.indicators.pop(self.name, None)
             candle.sub_indicators.pop(self.name, None)
 
     def recalculate(self):
-        self.purge()
+        self.purge_readings()
         self.calculate()
 
     @property
