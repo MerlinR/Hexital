@@ -1,11 +1,11 @@
 [tool.poetry]
 name = "Hexital"
-version = "1.0.0"
+version = "0.1.0"
 description = "Hex Incremental Technical Analysis Library"
 authors = ["Merlin Roe <merlin.roe@hotmail.co.uk>"]
-homepage = "http://vir-gitlab-01.lan/hex-stack/hexital"
-repository =  "http://vir-gitlab-01.lan/hex-stack/hexital"
-documentation = "http://vir-gitlab-01.lan/hex-stack/hexital"
+homepage = "https://github.com/MerlinR/Hexital"
+repository =  "https://github.com/MerlinR/Hexital"
+documentation = "https://github.com/MerlinR/Hexital"
 
 [tool.poetry.dependencies]
 python = "^3.11"
