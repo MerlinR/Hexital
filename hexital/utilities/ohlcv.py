@@ -63,9 +63,11 @@ def _nested_indicator(candle: OHLCV, name: str, nested_name: str) -> float | Non
 def reading_count(candles: List[OHLCV], name: str) -> int:
     """Returns how many instance of the given indicator exist"""
     count = 0
-    for candle in candles:
+    for candle in reversed(candles):
         if reading_by_candle(candle, name):
             count += 1
+        else:
+            return count
 
     return count
 
