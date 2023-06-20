@@ -17,6 +17,9 @@ pytest = "*"
 pytest-cov = "*"
 deepdiff = "*"
 
+[tool.poetry.group.truth]
+optional = true
+
 [tool.poetry.group.truth.dependencies]
 pandas = "*"
 numpy = "*"
