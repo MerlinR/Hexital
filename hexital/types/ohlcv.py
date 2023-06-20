@@ -21,7 +21,7 @@ class OHLCV:
             candle.get("high", 0.0),
             candle.get("low", 0.0),
             candle.get("close", 0.0),
-            candle.get("volume", 0.0),
+            candle.get("volume", 0),
         )
 
     @staticmethod

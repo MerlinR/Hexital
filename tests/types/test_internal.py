@@ -1,5 +1,23 @@
+from dataclasses import dataclass, field
+from datetime import datetime
+
 import pytest
 from hexital import EMA, OHLCV
+
+
+@dataclass
+class Candle(OHLCV):
+    """
+    Candle is a tick of market data, holds more then OHLCV,
+    can merge so mutiple second data becomes minute;
+    aswell asconvert to a dataframe
+    """
+
+    mkt_id: str = None  # Exchange given ticker ID, E.G IX.I.NASDAQ.IP
+    bid: float = None
+    offer: float = None
+    spread: float = None
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 @pytest.fixture(name="nasdaq_candles_30")
@@ -95,3 +113,11 @@ def test_data_append(nasdaq_candles_30, nasdaq_candles_31st):
     test.calculate()
 
     assert test.get_as_list() == expected
+
+
+@pytest.mark.usefixtures("nasdaq_candles", "expected_EMA")
+def test_hextial_multi_dict(nasdaq_candles, expected_EMA):
+    test = EMA(candles=OHLCV.from_dicts(nasdaq_candles))
+    test.calculate()
+    print(test.get_as_list())
+    assert pytest.approx(test.get_as_list()) == expected_EMA

@@ -10,11 +10,10 @@ Roughly ordered in priority
 - More Utilities
 - Pattern Candle methods, detecting Doji, Hammer, etc
 - Pattern Indicators, use above methods to run automatically as indicators
-- Multiprocessing, of indictors stored within hexial Class.
 - Possible support for automatic multi timeframe indicator generation
   - E.G: With 1 minute candles, we can generate EMA for minute candles and 5 minute candles
 - Indicator Pluggability, to allow easy extension of this library
-
+- Multiprocessing, of indictors stored within hexial Class.
 
 ### Alternatives
 
