@@ -4,7 +4,7 @@ all: test
 
 setup:
 	@echo "Running setup"
-	poetry update
+	poetry install
 
 lint:
 	pylint --disable=C0116,C0114,C0115,E0401 --max-line-length=90 ./hexital
