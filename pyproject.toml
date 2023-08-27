@@ -8,8 +8,7 @@ repository = "https://github.com/MerlinR/Hexital"
 documentation = "https://github.com/MerlinR/Hexital"
 
 [tool.poetry.dependencies]
-python = "^3.7"
-
+python = "^3.10"
 
 [tool.poetry.dev-dependencies]
 coverage = "*"
