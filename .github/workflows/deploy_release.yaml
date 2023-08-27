@@ -3,9 +3,7 @@ name: release deployment
 on:
   release:
     types:
-      - created
-    tags:
-      - '*.*.*'
+      - published
 
 permissions:
   contents: read
