@@ -13,6 +13,7 @@ class OHLCV:
     volume: Optional[int] = None
     indicators: Dict[str, float | dict] = field(default_factory=dict)
     sub_indicators: Dict[str, float | dict] = field(default_factory=dict)
+    timestamp: datetime = None
 
     @classmethod
     def from_dict(cls, candle: Dict[str, float]) -> OHLCV:
