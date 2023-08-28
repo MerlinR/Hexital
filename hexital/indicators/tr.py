@@ -18,7 +18,7 @@ class TR(Indicator):
     indicator_name: str = "TR"
 
     def _generate_name(self) -> str:
-        return f"{self.indicator_name}"
+        return self.indicator_name
 
     def _calculate_new_reading(self, index: int = -1) -> float | dict | None:
         high = self.get_reading_by_index(index, "high")

@@ -66,7 +66,7 @@ def test_hextial_dict_arguments(candles):
 def test_hextial_read(candles, expected_SMA):
     strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
     strat.calculate()
-    assert pytest.approx(strat.read("SMA")) == expected_SMA[-1]
+    assert pytest.approx(strat.reading("SMA")) == expected_SMA[-1]
 
 
 @pytest.mark.usefixtures("candles")

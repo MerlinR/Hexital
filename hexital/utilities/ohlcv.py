@@ -1,5 +1,5 @@
 from itertools import chain
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from hexital.types.ohlcv import OHLCV
 
@@ -7,14 +7,12 @@ from hexital.types.ohlcv import OHLCV
 def reading_by_index(
     candles: List[OHLCV], name: str, index: int = -1
 ) -> float | dict | None:
-    """Simple method to get a reading from the given indicator from it's index,
-    regardless of it's location"""
+    """Simple method to get a reading from the given indicator from it's index"""
     return reading_by_candle(candles[index], name)
 
 
 def reading_by_candle(candle: OHLCV, name: str) -> float | dict | None:
-    """Simple method to get a reading from the given indicator from a candle,
-    regardless of it's location"""
+    """Simple method to get a reading from the given indicator from a candlen"""
 
     if "." in name:
         main_name, nested_name = name.split(".")
@@ -61,10 +59,9 @@ def reading_count(candles: List[OHLCV], name: str) -> int:
     """Returns how many instance of the given indicator exist"""
     count = 0
     for candle in reversed(candles):
-        if reading_by_candle(candle, name):
-            count += 1
-        else:
+        if not reading_by_candle(candle, name):
             return count
+        count += 1
 
     return count
 
@@ -75,10 +72,10 @@ def reading_as_list(candles: List[OHLCV], name: str) -> List[float | dict]:
 
 
 def reading_period(
-    candles: List[OHLCV], period: int, name: str, index: int = None
+    candles: List[OHLCV], period: int, name: str, index: Optional[int] = None
 ) -> bool:
     """Will return True if the given indicator goes back as far as amount,
-    It's true if exactly or more than. Period will be period -1"""
+    It's true if exactly or more than. Period will be period-1"""
     if index is None:
         index = len(candles) - 1
 
@@ -103,13 +100,14 @@ def reading_period(
 
 
 def round_values(
-    values: float | Dict[str, float], round_by: int = 4
+    value: float | Dict[str, float], round_by: int = 4
 ) -> float | Dict[str, float]:
-    if isinstance(values, dict):
-        for key, val in values.items():
-            if isinstance(val, float):
-                values[key] = round(val, round_by)
-    elif isinstance(values, float):
-        values = round(values, round_by)
+    if isinstance(value, float):
+        return round(value, round_by)
 
-    return values
+    if isinstance(value, dict):
+        for key, val in value.items():
+            if isinstance(val, float):
+                value[key] = round(val, round_by)
+
+    return value

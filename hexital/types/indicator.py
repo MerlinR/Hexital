@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Dict, List, Union
+from typing import Dict, List, Optional
 
 from hexital.types.ohlcv import OHLCV
 from hexital.utilities import (
@@ -18,7 +18,7 @@ from hexital.utilities import (
 class Indicator(ABC):
     candles: List[OHLCV] = field(default_factory=list)
     indicator_name: str = None
-    override_name: str = None
+    fullname_override: str = None
     name_suffix: str = None
     round_value: int = 4
     _output_name: str = ""
@@ -27,12 +27,7 @@ class Indicator(ABC):
     _sub_indicator: bool = False
 
     def __post_init__(self):
-        if self.override_name:
-            self._output_name = self.override_name
-        elif self.name_suffix:
-            self._output_name = f"{self._generate_name()}_{self.name_suffix}"
-        else:
-            self._output_name = self._generate_name()
+        self._internal_generate_name()
         self._initialise()
 
     def __str__(self):
@@ -40,6 +35,16 @@ class Indicator(ABC):
         data.pop("candles")
         data["name"] = data["_output_name"]
         return str(data)
+
+    def _internal_generate_name(self):
+        if self.fullname_override:
+            self._output_name = self.fullname_override
+        elif self.fullname_override and self.name_suffix:
+            self._output_name = f"{self.fullname_override}_{self.name_suffix}"
+        elif self.name_suffix:
+            self._output_name = f"{self._generate_name()}_{self.name_suffix}"
+        else:
+            self._output_name = self._generate_name()
 
     def _initialise(self):
         pass
@@ -49,7 +54,7 @@ class Indicator(ABC):
         pass
 
     @property
-    def name(self):
+    def name(self) -> str:
         """The indicator name that will be saved into the Candles"""
         return self._output_name
 
@@ -59,21 +64,12 @@ class Indicator(ABC):
         return self.candles[-1][self._output_name]
 
     @property
-    def sub_indicator(self):
+    def sub_indicator(self) -> Indicator:
         return self._sub_indicator
 
     @sub_indicator.setter
     def sub_indicator(self, value: bool):
         self._sub_indicator = value
-
-    def purge_readings(self):
-        for candle in self.candles:
-            candle.indicators.pop(self.name, None)
-            candle.sub_indicators.pop(self.name, None)
-
-    def recalculate(self):
-        self.purge_readings()
-        self.calculate()
 
     @property
     def has_reading(self) -> bool:
@@ -82,7 +78,7 @@ class Indicator(ABC):
             return False
         return self.get_reading_by_index(-1) is not None
 
-    def _set_reading(self, index: int, reading: Union[float, dict]):
+    def _set_reading(self, index: int, reading: float | dict):
         if self.sub_indicator:
             self.candles[index].sub_indicators[self.name] = reading
         else:
@@ -104,7 +100,7 @@ class Indicator(ABC):
                 )
                 self._set_reading(index, reading)
 
-    def calculate_index(self, index: int, to_index: int = None):
+    def calculate_index(self, index: int, to_index: Optional[int] = None):
         """Calculate the TA values, will calculate a index range the Candles,
         where this indicator is missing"""
         for i in range(index, to_index if to_index else index + 1):
@@ -138,12 +134,16 @@ class Indicator(ABC):
     def get_managed_indictor(self, name: str) -> Indicator:
         return self._managed_indicators.get(name)
 
-    def prev_exists(self, index: int = None) -> bool:
+    def prev_exists(self, index: Optional[int] = None) -> bool:
         if index == 0:
             return False
+        if index is None:
+            index = len(self.candles) - 1
         return self.get_reading_by_index(index - 1) is not None
 
-    def get_reading_by_index(self, index: int, name: str = None) -> float | dict | None:
+    def get_reading_by_index(
+        self, index: int, name: Optional[str] = None
+    ) -> float | dict | None:
         """Simple method to get an indicator reading from it's index,
         regardless of it's location"""
         return reading_by_candle(
@@ -152,7 +152,7 @@ class Indicator(ABC):
         )
 
     def get_reading_by_candle(
-        self, candle: OHLCV, name: str = None
+        self, candle: OHLCV, name: Optional[str] = None
     ) -> float | dict | None:
         """Simple method to get an indicator reading from a candle,
         regardless of it's location"""
@@ -161,14 +161,14 @@ class Indicator(ABC):
             name if name else self.name,
         )
 
-    def get_reading_count(self, name: str = None) -> int:
+    def get_reading_count(self, name: Optional[str] = None) -> int:
         """Returns how many instance of the given indicator exist"""
         return reading_count(
             self.candles,
             name if name else self.name,
         )
 
-    def get_as_list(self, name: str = None) -> List[float | dict]:
+    def get_as_list(self, name: Optional[str] = None) -> List[float | dict]:
         """Gathers the indicator for all candles as a list"""
         return reading_as_list(
             self.candles,
@@ -176,7 +176,7 @@ class Indicator(ABC):
         )
 
     def get_reading_period(
-        self, period: int, index: int = None, name: str = None
+        self, period: int, index: Optional[int] = None, name: Optional[str] = None
     ) -> bool:
         """Will return True if the given indicator goes back as far as amount,
         It's true if exactly or more than. Period will be period -1"""
@@ -186,3 +186,14 @@ class Indicator(ABC):
             name if name else self.name,
             index=index,
         )
+
+    def purge_readings(self):
+        """Remove this indicator value from all Candles"""
+        for candle in self.candles:
+            candle.indicators.pop(self.name, None)
+            candle.sub_indicators.pop(self.name, None)
+
+    def recalculate(self):
+        """Re-calculate this indicator value for all Candles"""
+        self.purge_readings()
+        self.calculate()

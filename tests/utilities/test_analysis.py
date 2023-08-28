@@ -1,16 +1,16 @@
 import pytest
 from hexital.types.ohlcv import OHLCV
 from hexital.utilities import (
-    basic_falling,
-    basic_rising,
     cross,
     crossover,
     crossunder,
     falling,
     highest,
-    highestbars,
+    highestbar,
     lowest,
-    lowestbars,
+    lowestbar,
+    mean_falling,
+    mean_rising,
     negative,
     positive,
     rising,
@@ -111,35 +111,35 @@ def test_negative_list():
 
 
 def test_basic_rising(rising_candles):
-    assert basic_rising(rising_candles, "close")
+    assert rising(rising_candles, "close")
 
 
 def test_basic_rising_false(fallling_candles):
-    assert not basic_rising(fallling_candles, "close")
+    assert not rising(fallling_candles, "close")
 
 
 def test_basic_falling(fallling_candles):
-    assert basic_falling(fallling_candles, "close")
+    assert falling(fallling_candles, "close")
 
 
 def test_basic_falling_false(rising_candles):
-    assert not basic_falling(rising_candles, "close")
+    assert not falling(rising_candles, "close")
 
 
 def test_mean_rising(mixed_candles):
-    assert rising(mixed_candles, "close")
+    assert mean_rising(mixed_candles, "close")
 
 
 def test_mean_rising_false(mixed_candles_two):
-    assert not rising(mixed_candles_two, "close")
+    assert not mean_rising(mixed_candles_two, "close")
 
 
 def test_mean_falling(mixed_candles_two):
-    assert falling(mixed_candles_two, "close")
+    assert mean_falling(mixed_candles_two, "close")
 
 
 def test_mean_falling_false(mixed_candles):
-    assert not falling(mixed_candles, "close")
+    assert not mean_falling(mixed_candles, "close")
 
 
 def test_highest(mixed_candles):
@@ -159,23 +159,23 @@ def test_lowest_two(mixed_candles_two):
 
 
 def test_highestbar(mixed_candles):
-    assert highestbars(mixed_candles, "close") == 2
+    assert highestbar(mixed_candles, "close") == 2
 
 
 def test_highestbar_two(fallling_candles):
-    assert highestbars(fallling_candles, "low") == 4
+    assert highestbar(fallling_candles, "low") == 4
 
 
 def test_lowestbars(mixed_candles_two):
-    assert lowestbars(mixed_candles_two, "open") == 2
+    assert lowestbar(mixed_candles_two, "open") == 2
 
 
 def test_lowestbars_two(mixed_candles_two):
-    assert lowestbars(mixed_candles_two, "close") == 1
+    assert lowestbar(mixed_candles_two, "close") == 1
 
 
 def test_lowestbars_two_length(mixed_candles_two):
-    assert lowestbars(mixed_candles_two, "close", length=100) == 1
+    assert lowestbar(mixed_candles_two, "close", length=100) == 1
 
 
 def test_cross(indicator_candles):

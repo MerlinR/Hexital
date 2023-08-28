@@ -25,7 +25,7 @@ def negative(candles: Union[OHLCV, List[OHLCV]], position: int = -1) -> bool:
     return candles.open > candles.close
 
 
-def basic_rising(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
+def rising(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     """True if current `indicator` is greater than any previous `indicator`
     for `length` bars back, False otherwise. Length excludes latest"""
     if not reading_period(candles, length, indicator):
@@ -42,7 +42,7 @@ def basic_rising(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     )
 
 
-def basic_falling(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
+def falling(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     """True if current `indicator` reading is less than any previous `indicator`
     reading for `length` bars back, False otherwise. Length excludes latest"""
     if not reading_period(candles, length, indicator):
@@ -59,7 +59,7 @@ def basic_falling(candles: List[OHLCV], indicator: str, length: int = 4) -> bool
     )
 
 
-def rising(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
+def mean_rising(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     """True if current `indicator` reading is greater than the avg of the previous
     `length` `indicator` reading bars back, False otherwise. Length excludes latest
 
@@ -78,7 +78,7 @@ def rising(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     return round(mean, 2) < reading_by_candle(candles[-1], indicator)
 
 
-def falling(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
+def mean_falling(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     """True if current `indicator` is less than the avg of the previous
     `length` `indicator` bars back, False otherwise. Length excludes latest
 
@@ -119,7 +119,7 @@ def lowest(candles: List[OHLCV], indicator: str, length: int = 4) -> float:
     return min(reading_by_candle(candle, indicator) for candle in candles[length * -1 :])
 
 
-def highestbars(candles: List[OHLCV], indicator: str, length: int = 4) -> int:
+def highestbar(candles: List[OHLCV], indicator: str, length: int = 4) -> int:
     """Highest reading offset for a given number of bars back. Excludes latest.
     Returns:
         Offset to the lowest bar
@@ -143,7 +143,7 @@ def highestbars(candles: List[OHLCV], indicator: str, length: int = 4) -> int:
     return distance + 1
 
 
-def lowestbars(candles: List[OHLCV], indicator: str, length: int = 4) -> int:
+def lowestbar(candles: List[OHLCV], indicator: str, length: int = 4) -> int:
     """Lowest reading offset for a given number of bars back. Excludes latest.
     Returns:
         Offset to the lowest bar
