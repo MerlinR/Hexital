@@ -1,43 +1,43 @@
-# name: release deployment
+name: release deployment
 
-# on:
-#   release:
-#     types:
-#       - published
+on:
+  release:
+    types:
+      - published
 
-# permissions:
-#   contents: read
+permissions:
+  contents: read
 
-# jobs:
-#   deploy:
-#     name: Deploy Release
-#     runs-on: "ubuntu-latest"
-#     environment:
-#       name: pypi
-#       url: https://pypi.org/p/hexital
-#     permissions:
-#       id-token: write
+jobs:
+  deploy:
+    name: Deploy Release
+    runs-on: "ubuntu-latest"
+    environment:
+      name: pypi
+      url: https://pypi.org/p/hexital
+    permissions:
+      id-token: write
 
-#     steps:
-#     - uses: actions/checkout@v3
-#     - name: Set up Python
-#       uses: actions/setup-python@v3
-#       with:
-#         python-version: '3.10'
-#     - name: Install and configure Poetry
-#       uses: snok/install-poetry@v1.3.4
-#       with:
-#         version: 1.5.1
-#     - name: Load cached venv
-#       id: cached-poetry-dependencies
-#       uses: actions/cache@v3
-#       with:
-#         path: .venv
-#         key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-#     - name: Install dependencies
-#       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-#       run: poetry install --no-interaction --no-root
-#     - name: Build Package
-#       run: poetry build
-#     - name: Publish package to PyPI
-#       uses: pypa/gh-action-pypi-publish@release/v1
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.10'
+    - name: Install and configure Poetry
+      uses: snok/install-poetry@v1.3.4
+      with:
+        version: 1.5.1
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+    - name: Install dependencies
+      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+      run: poetry install --no-interaction --no-root
+    - name: Build Package
+      run: poetry build
+    - name: Publish package to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
