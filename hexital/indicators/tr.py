@@ -24,7 +24,7 @@ class TR(Indicator):
         high = self.get_reading_by_index(index, "high")
         low = self.get_reading_by_index(index, "low")
 
-        if self.prev_exists(index):
+        if self.get_reading_by_index(index - 1, "close"):
             close = self.get_reading_by_index(index - 1, "close")
             return max(
                 high - low,
@@ -32,4 +32,4 @@ class TR(Indicator):
                 abs(low - close),
             )
 
-        return high - low
+        return None
