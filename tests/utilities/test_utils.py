@@ -1,6 +1,6 @@
 import pytest
 from hexital.types.ohlcv import OHLCV
-from hexital.utilities import candles_sum
+from hexital.utilities.utils import candles_sum
 
 
 @pytest.fixture(name="rising_candles")

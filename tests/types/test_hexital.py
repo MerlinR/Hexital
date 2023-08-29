@@ -110,7 +110,7 @@ def test_hextial_purge(candles, expected_EMA, expected_SMA):
     strat.calculate()
 
     assert strat.has_reading("SMA") and strat.has_reading("EMA")
-    strat.purge_readings("SMA_10")
+    strat.purge("SMA_10")
 
     assert not strat.has_reading("SMA") and strat.has_reading("EMA")
 

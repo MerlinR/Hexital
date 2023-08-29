@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from hexital.types.ohlcv import OHLCV
 from hexital.utilities.ohlcv import reading_by_candle, reading_period
@@ -25,3 +25,17 @@ def candles_sum(
         for candle in candles[index - length : index]
         if reading_by_candle(candle, indicator) is not None
     )
+
+
+def round_values(
+    value: float | Dict[str, float], round_by: int = 4
+) -> float | Dict[str, float]:
+    if isinstance(value, float):
+        return round(value, round_by)
+
+    if isinstance(value, dict):
+        for key, val in value.items():
+            if isinstance(val, float):
+                value[key] = round(val, round_by)
+
+    return value

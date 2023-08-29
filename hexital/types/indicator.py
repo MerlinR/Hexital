@@ -5,13 +5,7 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
 from hexital.types.ohlcv import OHLCV
-from hexital.utilities import (
-    reading_as_list,
-    reading_by_candle,
-    reading_count,
-    reading_period,
-    round_values,
-)
+from hexital.utilities import ohlcv, utils
 
 
 @dataclass(kw_only=True)
@@ -64,6 +58,11 @@ class Indicator(ABC):
         return self.candles[-1][self._output_name]
 
     @property
+    def as_list(self) -> List[float | dict]:
+        """Gathers the indicator for all candles as a list"""
+        return ohlcv.reading_as_list(self.candles, self.name)
+
+    @property
     def sub_indicator(self) -> Indicator:
         return self._sub_indicator
 
@@ -76,7 +75,7 @@ class Indicator(ABC):
         """Simple boolean to state if values are being generated yet in the candles"""
         if len(self.candles) == 0:
             return False
-        return self.get_reading_by_index(-1) is not None
+        return self.reading_by_index(-1) is not None
 
     def _set_reading(self, index: int, reading: float | dict):
         if self.sub_indicator:
@@ -84,7 +83,7 @@ class Indicator(ABC):
         else:
             self.candles[index].indicators[self.name] = reading
 
-    def _calculate_new_reading(self, index: int = -1) -> float | dict | None:
+    def _calculate_reading(self, index: int = -1) -> float | dict | None:
         pass
 
     def calculate(self):
@@ -93,23 +92,25 @@ class Indicator(ABC):
         for indicator in self._sub_indicators:
             indicator.calculate()
 
-        for index in range(self._find_starting_index(), len(self.candles)):
-            if self.get_reading_by_index(index) is None:
-                reading = round_values(
-                    self._calculate_new_reading(index=index), round_by=self.round_value
+        for index in range(self._find_calc_index(), len(self.candles)):
+            if self.reading_by_index(index) is None:
+                reading = utils.round_values(
+                    self._calculate_reading(index=index), round_by=self.round_value
                 )
                 self._set_reading(index, reading)
 
     def calculate_index(self, index: int, to_index: Optional[int] = None):
         """Calculate the TA values, will calculate a index range the Candles,
         where this indicator is missing"""
-        for i in range(index, to_index if to_index else index + 1):
-            reading = round_values(
-                self._calculate_new_reading(index=i), round_by=self.round_value
+        to_index = to_index if to_index else index + 1
+
+        for i in range(index, to_index):
+            reading = utils.round_values(
+                self._calculate_reading(index=i), round_by=self.round_value
             )
             self._set_reading(i, reading)
 
-    def _find_starting_index(self) -> int:
+    def _find_calc_index(self) -> int:
         """Optimisation method, to find where to start calculating the indicator from
         Searches from newest to oldest to find the first candle without the indicator
         """
@@ -131,7 +132,7 @@ class Indicator(ABC):
         indicator.sub_indicator = True
         self._managed_indicators[name] = indicator
 
-    def get_managed_indictor(self, name: str) -> Indicator:
+    def managed_indictor(self, name: str) -> Indicator:
         return self._managed_indicators.get(name)
 
     def prev_exists(self, index: Optional[int] = None) -> bool:
@@ -139,55 +140,48 @@ class Indicator(ABC):
             return False
         if index is None:
             index = len(self.candles) - 1
-        return self.get_reading_by_index(index - 1) is not None
+        return self.reading_by_index(index - 1) is not None
 
-    def get_reading_by_index(
+    def reading_by_index(
         self, index: int, name: Optional[str] = None
     ) -> float | dict | None:
         """Simple method to get an indicator reading from it's index,
         regardless of it's location"""
-        return reading_by_candle(
+        return ohlcv.reading_by_candle(
             self.candles[index],
             name if name else self.name,
         )
 
-    def get_reading_by_candle(
+    def reading_by_candle(
         self, candle: OHLCV, name: Optional[str] = None
     ) -> float | dict | None:
         """Simple method to get an indicator reading from a candle,
         regardless of it's location"""
-        return reading_by_candle(
+        return ohlcv.reading_by_candle(
             candle,
             name if name else self.name,
         )
 
-    def get_reading_count(self, name: Optional[str] = None) -> int:
+    def reading_count(self, name: Optional[str] = None) -> int:
         """Returns how many instance of the given indicator exist"""
-        return reading_count(
+        return ohlcv.reading_count(
             self.candles,
             name if name else self.name,
         )
 
-    def get_as_list(self, name: Optional[str] = None) -> List[float | dict]:
-        """Gathers the indicator for all candles as a list"""
-        return reading_as_list(
-            self.candles,
-            name if name else self.name,
-        )
-
-    def get_reading_period(
+    def reading_period(
         self, period: int, index: Optional[int] = None, name: Optional[str] = None
     ) -> bool:
         """Will return True if the given indicator goes back as far as amount,
         It's true if exactly or more than. Period will be period -1"""
-        return reading_period(
+        return ohlcv.reading_period(
             self.candles,
             period,
             name if name else self.name,
             index=index,
         )
 
-    def purge_readings(self):
+    def purge(self):
         """Remove this indicator value from all Candles"""
         for candle in self.candles:
             candle.indicators.pop(self.name, None)
@@ -195,5 +189,5 @@ class Indicator(ABC):
 
     def recalculate(self):
         """Re-calculate this indicator value for all Candles"""
-        self.purge_readings()
+        self.purge()
         self.calculate()

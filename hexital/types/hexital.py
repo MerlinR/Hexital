@@ -65,7 +65,7 @@ class Hexital:
         """Gathers the indicator for all candles as a list"""
         for indicator in self._indicators:
             if indicator_name is None or indicator_name in indicator.name:
-                return indicator.get_as_list()
+                return indicator.as_list
         return []
 
     def add_indicator(self, indicator: Indicator | List[Indicator]):
@@ -84,18 +84,9 @@ class Hexital:
                 return indicator
         return None
 
-    def purge_readings(self, indicator_name: Optional[str] = None) -> bool:
-        """Takes Indicator name and removes all readings for said indicator.
-        Indicator name must be exact"""
-        for indicator in self._indicators:
-            if indicator_name is None or indicator_name == indicator.name:
-                indicator.purge_readings()
-                return True
-        return False
-
     def remove_indicator(self, indicator_name: str):
         """Removes an indicator from running within hexital"""
-        self.purge_readings(indicator_name)
+        self.purge(indicator_name)
         for index, indic in enumerate(self._indicators):
             if indic.name == indicator_name:
                 self._indicators.pop(index)
@@ -110,6 +101,15 @@ class Hexital:
             self.candles.append(candle)
         self.calculate()
 
+    def purge(self, indicator_name: Optional[str] = None) -> bool:
+        """Takes Indicator name and removes all readings for said indicator.
+        Indicator name must be exact"""
+        for indicator in self._indicators:
+            if indicator_name is None or indicator_name == indicator.name:
+                indicator.purge()
+                return True
+        return False
+
     def calculate(self, indicator_name: Optional[str] = None):
         """Calculates all the missing indicator readings."""
         for indicator in self._indicators:
@@ -119,5 +119,5 @@ class Hexital:
     def recalculate(self, indicator_name: Optional[str] = None):
         """Purge's all indicator reading's and re-calculates them all,
         ideal for changing an indicator parameters midway."""
-        self.purge_readings(indicator_name)
+        self.purge(indicator_name)
         self.calculate(indicator_name)

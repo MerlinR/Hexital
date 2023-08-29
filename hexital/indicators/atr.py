@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from hexital.indicators.tr import TR
 from hexital.types import Indicator
-from hexital.utilities import candles_sum
+from hexital.utilities import utils
 
 
 @dataclass()
@@ -31,16 +31,16 @@ class ATR(Indicator):
     def _initialise(self):
         self.add_sub_indicator(TR(candles=self.candles))
 
-    def _calculate_new_reading(self, index: int = -1) -> float | dict | None:
+    def _calculate_reading(self, index: int = -1) -> float | dict | None:
         if self.prev_exists(index):
             return (
-                self.get_reading_by_index(index - 1) * (self.period - 1)
-                + self.get_reading_by_index(index, "TR")
+                self.reading_by_index(index - 1) * (self.period - 1)
+                + self.reading_by_index(index, "TR")
             ) / self.period
 
-        if self.get_reading_period(self.period, index=index, name="TR"):
+        if self.reading_period(self.period, index=index, name="TR"):
             return (
-                candles_sum(self.candles, "TR", length=self.period, index=index)
+                utils.candles_sum(self.candles, "TR", length=self.period, index=index)
                 / self.period
             )
         return None

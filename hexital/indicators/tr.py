@@ -20,12 +20,12 @@ class TR(Indicator):
     def _generate_name(self) -> str:
         return self.indicator_name
 
-    def _calculate_new_reading(self, index: int = -1) -> float | dict | None:
-        high = self.get_reading_by_index(index, "high")
-        low = self.get_reading_by_index(index, "low")
+    def _calculate_reading(self, index: int = -1) -> float | dict | None:
+        high = self.reading_by_index(index, "high")
+        low = self.reading_by_index(index, "low")
 
         if index > 0:
-            close = self.get_reading_by_index(index - 1, "close")
+            close = self.reading_by_index(index - 1, "close")
             return max(
                 high - low,
                 abs(high - close),

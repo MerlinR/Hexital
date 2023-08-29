@@ -8,7 +8,7 @@ def test_indicator(candles, expected_RMA):
     test = RMA(candles=candles)
     test.calculate()
     assert not deepdiff.DeepDiff(
-        test.get_as_list(),
+        test.as_list,
         expected_RMA,
         ignore_order=True,
         significant_digits=1,

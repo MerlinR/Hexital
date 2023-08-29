@@ -64,19 +64,19 @@ class MACD(Indicator):
             ),
         )
 
-    def _calculate_new_reading(self, index: int = -1) -> float | dict | None:
+    def _calculate_reading(self, index: int = -1) -> float | dict | None:
         if all(
-            self.get_reading_by_index(index, sub_indicator)
+            self.reading_by_index(index, sub_indicator)
             for sub_indicator in ["EMA_slow", "EMA_fast"]
         ):
-            macd = self.get_reading_by_index(
+            macd = self.reading_by_index(
                 index, f"{self.indicator_name}_EMA_fast"
-            ) - self.get_reading_by_index(index, f"{self.indicator_name}_EMA_slow")
+            ) - self.reading_by_index(index, f"{self.indicator_name}_EMA_slow")
 
             self.candles[index].indicators[self.name] = {"MACD": macd}
-            self.get_managed_indictor("signal_line").calculate_index(index)
+            self.managed_indictor("signal_line").calculate_index(index)
 
-            signal = self.get_reading_by_index(index, "signal_line")
+            signal = self.reading_by_index(index, "signal_line")
 
             histogram = None
             if macd is not None and signal is not None:

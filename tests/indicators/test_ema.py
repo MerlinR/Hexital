@@ -8,7 +8,7 @@ def test_indicator(candles, expected_EMA):
     test = EMA(candles=candles)
     test.calculate()
     assert not deepdiff.DeepDiff(
-        test.get_as_list(),
+        test.as_list,
         expected_EMA,
         ignore_order=True,
         significant_digits=1,

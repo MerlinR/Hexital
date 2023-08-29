@@ -8,7 +8,7 @@ def test_indicator(candles, expected_RSI):
     test = RSI(candles=candles)
     test.calculate()
     assert not deepdiff.DeepDiff(
-        test.get_as_list(),
+        test.as_list,
         expected_RSI,
         ignore_order=True,
         significant_digits=1,

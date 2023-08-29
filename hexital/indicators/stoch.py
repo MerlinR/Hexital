@@ -45,5 +45,5 @@ class STOCH(Indicator):
             )
         )
 
-    def _calculate_new_reading(self, index: int = -1) -> float | dict | None:
+    def _calculate_reading(self, index: int = -1) -> float | dict | None:
         return None
