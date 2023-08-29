@@ -13,7 +13,6 @@ For most libraries such as [Pandas-TA](https://github.com/twopirllc/pandas-ta) w
 - ATR
 - EMA
 - MACDR
-- RMA
 - RSI
 - SMA
 - TR
