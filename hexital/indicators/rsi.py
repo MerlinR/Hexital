@@ -30,56 +30,61 @@ class RSI(Indicator):
 
     def _initialise(self):
         self.add_managed_indicator(
-            "RSI_avg_gain", Managed(candles=self.candles, name_suffix="RSI_avg_gain")
+            "RSI_gain",
+            Managed(indicator_name="RSI_gain", candles=self.candles),
         )
         self.add_managed_indicator(
-            "RSI_avg_loss", Managed(candles=self.candles, name_suffix="RSI_avg_loss")
+            "RSI_loss",
+            Managed(indicator_name="RSI_loss", candles=self.candles),
         )
 
     def _calculate_reading(self, index: int = -1) -> float | dict | None:
-        if self.reading_by_index(index - 1, "RSI_avg_gain"):
-            diff = self.reading_by_index(
+        if self.prev_exists(index):
+            change = self.reading_by_index(
                 index - 1, self.input_value
             ) - self.reading_by_index(index, self.input_value)
 
-            self.managed_indictor("RSI_avg_gain").set_reading(
+            change_gain = -1 * change if change < 0 else 0.0
+            change_loss = change if change > 0 else 0.0
+
+            self.managed_indictor("RSI_gain").set_reading(
                 index,
                 (
-                    (self.reading_by_index(index - 1, "RSI_avg_gain") * (self.period - 1))
-                    + (diff * -1 if diff < 0 else 0)
+                    (self.reading_by_index(index - 1, "RSI_gain") * (self.period - 1))
+                    + change_gain
                 )
                 / self.period,
             )
-            self.managed_indictor("RSI_avg_loss").set_reading(
+            self.managed_indictor("RSI_loss").set_reading(
                 index,
                 (
-                    (self.reading_by_index(index - 1, "RSI_avg_loss") * (self.period - 1))
-                    + (diff if diff > 0 else 0)
+                    (self.reading_by_index(index - 1, "RSI_loss") * (self.period - 1))
+                    + change_loss
                 )
                 / self.period,
             )
-
-            rs = self.reading_by_index(index, "RSI_avg_gain") / self.reading_by_index(
-                index, "RSI_avg_loss"
-            )
-
-            rsi = 100.0 - (100.0 / (1.0 + rs))
-
-            return rsi
-
-        if self.reading_period(self.period, index=index, name=self.input_value):
-            diffs = [
-                self.reading_by_index(i - 1, self.input_value)
-                - self.reading_by_index(i, self.input_value)
+        elif self.reading_period(self.period + 1, index=index, name=self.input_value):
+            changes = [
+                self.reading_by_index(i, self.input_value)
+                - self.reading_by_index(i - 1, self.input_value)
                 for i in range(index - (self.period - 1), index + 1)
             ]
-            self.managed_indictor("RSI_avg_gain").set_reading(
+            self.managed_indictor("RSI_gain").set_reading(
                 index,
-                sum(diff * -1 if diff < 0 else 0 for diff in diffs) / self.period,
+                sum(chng for chng in changes if chng > 0) / self.period,
             )
-            self.managed_indictor("RSI_avg_loss").set_reading(
+            self.managed_indictor("RSI_loss").set_reading(
                 index,
-                sum(diff if diff > 0 else 0 for diff in diffs) / self.period,
+                sum(-1 * chng for chng in changes if chng < 0) / self.period,
             )
 
+        if self.reading_by_index(index, "RSI_gain"):
+            rs = self.reading_by_index(index, "RSI_gain") / self.reading_by_index(
+                index, "RSI_loss"
+            )
+            rsi = 100.0 - (100.0 / (1.0 + rs))
+            return rsi
+
+        self.managed_indictor("RSI_gain").set_reading(index, None)
+        self.managed_indictor("RSI_loss").set_reading(index, None)
         return None
