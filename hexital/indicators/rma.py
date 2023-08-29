@@ -4,7 +4,7 @@ from hexital.types import Indicator
 from hexital.utilities import candles_sum
 
 
-@dataclass(kw_only=True)
+@dataclass()
 class RMA(Indicator):
     """wildeR's Moving Average (RMA)
 

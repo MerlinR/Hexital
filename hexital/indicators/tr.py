@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from hexital.types import Indicator
 
 
-@dataclass(kw_only=True)
+@dataclass()
 class TR(Indicator):
     """True Range
 

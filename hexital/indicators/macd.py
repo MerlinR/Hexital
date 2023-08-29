@@ -4,7 +4,7 @@ from hexital.indicators import EMA
 from hexital.types import Indicator
 
 
-@dataclass(kw_only=True)
+@dataclass()
 class MACD(Indicator):
     """Moving Average Convergence Divergence (MACD)
 
