@@ -5,9 +5,9 @@ import pytest
 SOURCE_OF_TRUTH_PATH = "tests/data/source_of_truth/"
 
 
-@pytest.fixture(name="expected_SMA")
-def fixture_expected_sma():
-    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/SMA.json")
+@pytest.fixture(name="expected_ATR")
+def fixture_expected_atr():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/ATR.json")
     return json.load(csv_files)
 
 
@@ -23,15 +23,9 @@ def fixture_expected_macd():
     return json.load(csv_files)
 
 
-@pytest.fixture(name="expected_TR")
-def fixture_expected_tr():
-    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/TR.json")
-    return json.load(csv_files)
-
-
-@pytest.fixture(name="expected_ATR")
-def fixture_expected_atr():
-    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/ATR.json")
+@pytest.fixture(name="expected_RMA")
+def fixture_expected_rma():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/RMA.json")
     return json.load(csv_files)
 
 
@@ -41,9 +35,15 @@ def fixture_expected_rsi():
     return json.load(csv_files)
 
 
-@pytest.fixture(name="expected_RMA")
-def fixture_expected_rma():
-    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/RMA.json")
+@pytest.fixture(name="expected_SMA")
+def fixture_expected_sma():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/SMA.json")
+    return json.load(csv_files)
+
+
+@pytest.fixture(name="expected_TR")
+def fixture_expected_tr():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/TR.json")
     return json.load(csv_files)
 
 

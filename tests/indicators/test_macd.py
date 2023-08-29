@@ -10,8 +10,8 @@ def test_indicator(candles, expected_MACD):
     print(len(expected_MACD))
 
     assert not deepdiff.DeepDiff(
-        test.get_as_list()[-400:],
-        expected_MACD[-400:],
+        test.get_as_list(),
+        expected_MACD,
         ignore_order=True,
         significant_digits=1,
     )

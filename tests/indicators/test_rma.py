@@ -7,10 +7,9 @@ from hexital import RMA
 def test_indicator(candles, expected_RMA):
     test = RMA(candles=candles)
     test.calculate()
-    print(test.get_as_list())
     assert not deepdiff.DeepDiff(
-        test.get_as_list()[-400:],
-        expected_RMA[-400:],
+        test.get_as_list(),
+        expected_RMA,
         ignore_order=True,
         significant_digits=1,
     )
