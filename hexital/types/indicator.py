@@ -146,6 +146,8 @@ class Indicator(ABC):
     ) -> float | dict | None:
         """Simple method to get an indicator reading from it's index,
         regardless of it's location"""
+        if index < 0:
+            return None
         return reading_by_candle(
             self.candles[index],
             name if name else self.name,

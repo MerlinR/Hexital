@@ -38,7 +38,7 @@ class ATR(Indicator):
                 + self.get_reading_by_index(index, "TR")
             ) / self.period
 
-        if self.get_reading_period(self.period, index=index, name="close"):
+        if self.get_reading_period(self.period, index=index, name="TR"):
             return (
                 candles_sum(self.candles, "TR", length=self.period, index=index)
                 / self.period

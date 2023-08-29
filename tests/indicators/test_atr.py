@@ -7,10 +7,9 @@ from hexital import ATR
 def test_indicator(candles, expected_ATR):
     test = ATR(candles=candles)
     test.calculate()
-    print(test.get_as_list())
     assert not deepdiff.DeepDiff(
-        test.get_as_list()[-340:],
-        expected_ATR[-340:],
+        test.get_as_list(),
+        expected_ATR,
         ignore_order=True,
         significant_digits=1,
     )
