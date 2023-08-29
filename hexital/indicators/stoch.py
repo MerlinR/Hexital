@@ -4,7 +4,7 @@ from hexital.indicators import SMA
 from hexital.types import Indicator
 
 
-@dataclass()
+@dataclass(kw_only=True)
 class STOCH(Indicator):
     """Stochastic (STOCH)
 

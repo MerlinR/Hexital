@@ -4,7 +4,7 @@ from hexital.indicators import Managed
 from hexital.types import Indicator
 
 
-@dataclass()
+@dataclass(kw_only=True)
 class RSI(Indicator):
     """Relative Strength Index (RSI)
 

@@ -4,7 +4,7 @@ from hexital.types import Indicator
 from hexital.utilities import utils
 
 
-@dataclass()
+@dataclass(kw_only=True)
 class SMA(Indicator):
     """Simple Moving Average (SMA)
 
