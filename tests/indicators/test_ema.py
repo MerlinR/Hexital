@@ -10,6 +10,5 @@ def test_indicator(candles, expected_EMA):
     assert not deepdiff.DeepDiff(
         test.as_list,
         expected_EMA,
-        ignore_order=True,
         significant_digits=1,
     )

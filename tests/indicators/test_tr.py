@@ -11,6 +11,5 @@ def test_indicator(candles, expected_TR):
     assert not deepdiff.DeepDiff(
         test.as_list,
         expected_TR,
-        ignore_order=True,
         significant_digits=1,
     )

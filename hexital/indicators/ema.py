@@ -24,21 +24,26 @@ class EMA(Indicator):
     indicator_name: str = "EMA"
     input_value: str = "close"
     period: int = 10
-    multiplier: float = 2.0
+    smoothing: float = 2.0
+
+    _min_period: int = 10
 
     def _generate_name(self) -> str:
         return f"{self.indicator_name}_{self.period}"
 
+    def _initialise(self):
+        self.period = self.period if self.period > 10 else self._min_period
+
     def _calculate_reading(self, index: int = -1) -> float | dict | None:
         if self.prev_exists(index):
-            mult = self.multiplier / (self.period + 1.0)
+            multiplier = float(self.smoothing / (self.period + 1.0))
             return float(
-                mult * self.reading_by_index(index, self.input_value)
-                + (1.0 - mult) * self.reading_by_index(index - 1)
+                multiplier * self.reading_by_index(index, self.input_value)
+                + (self.reading_by_index(index - 1) * (1.0 - multiplier))
             )
 
         if self.reading_period(self.period, index=index, name=self.input_value):
-            return (
+            return float(
                 utils.candles_sum(
                     self.candles, self.input_value, length=self.period, index=index
                 )
