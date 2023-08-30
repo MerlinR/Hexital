@@ -39,44 +39,48 @@ class MACD(Indicator):
         )
 
     def _initialise(self):
+        if self.slow_period < self.fast_period:
+            self.fast_period, self.slow_period = self.slow_period, self.fast_period
+
         self.add_sub_indicator(
             EMA(
                 candles=self.candles,
-                fullname_override=f"{self.indicator_name}_EMA_fast",
+                input_value=self.input_value,
                 period=self.fast_period,
+                fullname_override=f"{self.indicator_name}_EMA_fast",
             )
         )
         self.add_sub_indicator(
             EMA(
                 candles=self.candles,
-                fullname_override=f"{self.indicator_name}_EMA_slow",
+                input_value=self.input_value,
                 period=self.slow_period,
+                fullname_override=f"{self.indicator_name}_EMA_slow",
             )
         )
 
         self.add_managed_indicator(
-            "signal_line",
+            "signal",
             EMA(
                 candles=self.candles,
-                fullname_override=f"{self.indicator_name}_signal_line",
-                period=self.signal_period,
                 input_value=f"{self.name}.MACD",
+                period=self.signal_period,
+                fullname_override=f"{self.indicator_name}_signal_line",
             ),
         )
 
     def _calculate_reading(self, index: int = -1) -> float | dict | None:
-        if all(
-            self.reading_by_index(index, sub_indicator)
-            for sub_indicator in ["EMA_slow", "EMA_fast"]
-        ):
+        if self.reading_by_index(index, f"{self.indicator_name}_EMA_slow"):
+
             macd = self.reading_by_index(
                 index, f"{self.indicator_name}_EMA_fast"
             ) - self.reading_by_index(index, f"{self.indicator_name}_EMA_slow")
 
+            # Temp manually inserting MACD to be used by signal EMA calc
             self.candles[index].indicators[self.name] = {"MACD": macd}
-            self.managed_indictor("signal_line").calculate_index(index)
+            self.managed_indictor("signal").calculate_index(index)
 
-            signal = self.reading_by_index(index, "signal_line")
+            signal = self.reading_by_index(index, "signal")
 
             histogram = None
             if macd is not None and signal is not None:
@@ -84,4 +88,4 @@ class MACD(Indicator):
 
             return {"MACD": macd, "signal": signal, "histogram": histogram}
 
-        return None
+        return {"MACD": None, "signal": None, "histogram": None}

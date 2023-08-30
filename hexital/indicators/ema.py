@@ -31,9 +31,6 @@ class EMA(Indicator):
     def _generate_name(self) -> str:
         return f"{self.indicator_name}_{self.period}"
 
-    def _initialise(self):
-        self.period = self.period if self.period > 10 else self._min_period
-
     def _calculate_reading(self, index: int = -1) -> float | dict | None:
         if self.prev_exists(index):
             multiplier = float(self.smoothing / (self.period + 1.0))
