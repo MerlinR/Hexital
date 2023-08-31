@@ -1,6 +1,7 @@
 import importlib
 from typing import List, Optional
 
+from hexital.exceptions import InvalidIndicator
 from hexital.types.indicator import Indicator
 from hexital.types.ohlcv import OHLCV
 from hexital.utilities.ohlcv import reading_by_index
@@ -21,61 +22,72 @@ class Hexital:
     ):
         self.name = name
         self.candles = candles if candles else []
-        self._indicators = self._verify_indicators(indicators)
+        self._indicators = self._validate_indicators(indicators)
         self.description = description
 
-    def _verify_indicators(self, indicators: List[dict | Indicator]) -> List[Indicator]:
+    def _validate_indicators(self, indicators: List[dict | Indicator]) -> List[Indicator]:
         module = importlib.import_module("hexital.indicators")
         valid_indicators = []
 
         if not indicators:
             return []
 
-        for indic in indicators:
-            if isinstance(indic, Indicator):
-                valid_indicators.append(indic)
-            elif isinstance(indic, dict):
-                indicator_name = indic.pop("indicator", None)
+        for indicator in indicators:
+            if isinstance(indicator, Indicator):
+                valid_indicators.append(indicator)
+            elif isinstance(indicator, dict):
+                indicator_name = indicator.pop("indicator", None)
                 if indicator_name is None:
-                    continue
+                    raise InvalidIndicator(
+                        f"Dict Indicator missing 'indicator' name: {indicator}"
+                    )
                 indicator_class = getattr(module, indicator_name, None)
                 if indicator_class is not None:
-                    valid_indicators.append(indicator_class(**indic))
+                    valid_indicators.append(indicator_class(**indicator))
+                else:
+                    raise InvalidIndicator(f"Indicator {indicator_name} does not exist")
 
-        for indic in valid_indicators:
-            indic.candles = self.candles
+        for indicator in valid_indicators:
+            indicator.candles = self.candles
 
         return valid_indicators
 
     @property
     def indicators(self) -> List[Indicator]:
+        """Simply get's a list of all the Indicators within Hexital stratergy"""
         return self._indicators
 
     def has_reading(self, indicator_name: str) -> bool:
-        """Simple boolean to state if values are being generated yet in the candles"""
+        """Checks if the given Indicator has a valid reading in latest Candle"""
         for indicator in self._indicators:
             if indicator_name in indicator.name:
                 return indicator.has_reading
         return False
 
     def reading(self, indicator_name: str, index: int = -1) -> float | dict | None:
+        """Attempts to retrive a rading with a given Indicator name.
+        `indicator_name` can use '.' to find nested reading, E.G `MACD_12_26_9.MACD`
+        """
         return reading_by_index(self.candles, indicator_name, index=index)
 
     def reading_as_list(self, indicator_name: Optional[str] = None) -> List[float | dict]:
-        """Gathers the indicator for all candles as a list"""
+        """Find given indicator and returns the readings as a list
+        Full Name of the indicator E.G EMA_12"""
         for indicator in self._indicators:
             if indicator_name is None or indicator_name in indicator.name:
                 return indicator.as_list
         return []
 
     def add_indicator(self, indicator: Indicator | List[Indicator]):
-        """Add's a new indicator to the object.
-        Does not automatically calculates readings"""
+        """Add's a new indicator to `Hexital` stratergy.
+        This accept either `Indicator` datatypes or dict string versions to be packed.
+        `add_indicator(SMA(period=10))` or `add_indicator({"indicator": "SMA", "period": 10})`
+        Does not automatically calculates readings."""
         if not isinstance(indicator, list):
             indicator = [indicator]
 
-        for indi in self._verify_indicators(indicator):
-            self._indicators.append(indi)
+        for valid_indicator in self._validate_indicators(indicator):
+            self._indicators.append(valid_indicator)
 
     def get_indicator(self, name: str) -> Indicator | None:
         """Searches hexital's indicator's and Returns the Indicator object itself."""
@@ -97,8 +109,10 @@ class Hexital:
             new_ohlcv = OHLCV.from_dict(candle)
             if isinstance(new_ohlcv, OHLCV):
                 self.candles.append()
-        else:
+        elif isinstance(candle, OHLCV):
             self.candles.append(candle)
+        else:
+            raise TypeError
         self.calculate()
 
     def purge(self, indicator_name: Optional[str] = None) -> bool:

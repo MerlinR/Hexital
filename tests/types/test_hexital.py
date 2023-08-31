@@ -1,4 +1,5 @@
 import pytest
+from hexital.exceptions import InvalidIndicator
 from hexital.indicators import EMA, SMA
 from hexital.types import Hexital
 
@@ -31,18 +32,16 @@ def test_hextial_multi_dict(candles, expected_EMA, expected_SMA):
     )
 
 
-@pytest.mark.usefixtures("candles", "expected_EMA")
-def test_hextial_multi_dict_invalid(candles, expected_EMA):
-    strat = Hexital("Test Stratergy", candles, [EMA(), {"indicator": "FUCK"}])
-    strat.calculate()
-    assert pytest.approx(strat.reading_as_list("EMA_10")) == expected_EMA
+@pytest.mark.usefixtures("candles")
+def test_hextial_multi_dict_invalid(candles):
+    with pytest.raises(InvalidIndicator):
+        Hexital("Test Stratergy", candles, [EMA(), {"indicator": "FUCK"}])
 
 
-@pytest.mark.usefixtures("candles", "expected_EMA")
-def test_hextial_multi_dict_invalid_missing(candles, expected_EMA):
-    strat = Hexital("Test Stratergy", candles, [EMA(), {"period": 10}])
-    strat.calculate()
-    assert pytest.approx(strat.reading_as_list("EMA_10")) == expected_EMA
+@pytest.mark.usefixtures("candles")
+def test_hextial_multi_dict_invalid_missing(candles):
+    with pytest.raises(InvalidIndicator):
+        Hexital("Test Stratergy", candles, [{"period": 10}])
 
 
 @pytest.mark.usefixtures("candles", "expected_EMA", "expected_SMA")
@@ -102,6 +101,13 @@ def test_hextial_append(candles, expected_SMA):
     strat.append(new_candle)
 
     assert pytest.approx(strat.reading_as_list("SMA")) == expected_SMA
+
+
+@pytest.mark.usefixtures("candles")
+def test_hextial_append_invalid(candles):
+    strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
+    with pytest.raises(TypeError):
+        strat.append([1, 2, 3])
 
 
 @pytest.mark.usefixtures("candles", "expected_EMA", "expected_SMA")
