@@ -1,29 +1,25 @@
 from typing import Dict, List, Optional
 
 from hexital.types.ohlcv import OHLCV
-from hexital.utilities.ohlcv import reading_by_candle, reading_period
+from hexital.utilities.ohlcv import reading_by_candle, reading_count, reading_period
 
 
 def candles_sum(
-    candles: List[OHLCV], indicator: str, length: int = 1, index: Optional[int] = None
+    candles: List[OHLCV], name: str, length: int = 1, index: Optional[int] = None
 ) -> float:
-    """Sum of `indicator` for `length` bars back. including index/latest"""
-    if not reading_period(candles, length, indicator):
-        length = len(candles)
+    """Sum of `indicator_name` for `length` bars back. including index/latest"""
+    if not reading_period(candles, length, name):
+        length = reading_count(candles, name)
 
-    if index is not None and index >= len(candles):
+    if index is not None and index >= len(candles) or index is None:
         index = len(candles)
     elif index is not None and index >= 0:
         index += 1
     elif index is not None:
-        index = (index * -1) + 1
-    else:
-        index = len(candles)
+        index = abs(index) + 1
 
     return sum(
-        reading_by_candle(candle, indicator)
-        for candle in candles[index - length : index]
-        if reading_by_candle(candle, indicator) is not None
+        reading_by_candle(candle, name) for candle in candles[index - length : index]
     )
 
 

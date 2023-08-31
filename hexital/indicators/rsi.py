@@ -39,34 +39,25 @@ class RSI(Indicator):
         )
 
     def _calculate_reading(self, index: int = -1) -> float | dict | None:
-        if self.prev_exists(index):
-            change = self.reading_by_index(
-                index - 1, self.input_value
-            ) - self.reading_by_index(index, self.input_value)
+        if self.prev_exists():
+            change = self.prev_reading(self.input_value) - self.reading(self.input_value)
 
             change_gain = -1 * change if change < 0 else 0.0
             change_loss = change if change > 0 else 0.0
 
             self.managed_indictor("RSI_gain").set_reading(
                 index,
-                (
-                    (self.reading_by_index(index - 1, "RSI_gain") * (self.period - 1))
-                    + change_gain
-                )
+                ((self.prev_reading("RSI_gain") * (self.period - 1)) + change_gain)
                 / self.period,
             )
             self.managed_indictor("RSI_loss").set_reading(
                 index,
-                (
-                    (self.reading_by_index(index - 1, "RSI_loss") * (self.period - 1))
-                    + change_loss
-                )
+                ((self.prev_reading("RSI_loss") * (self.period - 1)) + change_loss)
                 / self.period,
             )
-        elif self.reading_period(self.period + 1, index=index, name=self.input_value):
+        elif self.reading_period(self.period + 1, self.input_value):
             changes = [
-                self.reading_by_index(i, self.input_value)
-                - self.reading_by_index(i - 1, self.input_value)
+                self.reading(self.input_value, i) - self.reading(self.input_value, i - 1)
                 for i in range(index - (self.period - 1), index + 1)
             ]
             self.managed_indictor("RSI_gain").set_reading(
@@ -75,13 +66,11 @@ class RSI(Indicator):
             )
             self.managed_indictor("RSI_loss").set_reading(
                 index,
-                sum(-1 * chng for chng in changes if chng < 0) / self.period,
+                sum(abs(chng) for chng in changes if chng < 0) / self.period,
             )
 
-        if self.reading_by_index(index, "RSI_gain"):
-            rs = self.reading_by_index(index, "RSI_gain") / self.reading_by_index(
-                index, "RSI_loss"
-            )
+        if self.reading("RSI_gain"):
+            rs = self.reading("RSI_gain") / self.reading("RSI_loss")
             rsi = 100.0 - (100.0 / (1.0 + rs))
             return rsi
 

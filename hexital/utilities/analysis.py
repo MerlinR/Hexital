@@ -37,7 +37,7 @@ def rising(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
         val < newest_reading
         for val in [
             reading_by_candle(candle, indicator)
-            for candle in candles[(length + 1) * -1 : -1]
+            for candle in candles[-abs(length + 1) : -1]
         ]
     )
 
@@ -54,7 +54,7 @@ def falling(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
         val > newest_reading
         for val in [
             reading_by_candle(candle, indicator)
-            for candle in candles[(length + 1) * -1 : -1]
+            for candle in candles[-abs(length + 1) : -1]
         ]
     )
 
@@ -71,7 +71,7 @@ def mean_rising(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     mean = (
         sum(
             reading_by_candle(candle, indicator)
-            for candle in candles[(length + 1) * -1 : -1]
+            for candle in candles[-abs(length + 1) : -1]
         )
         / length
     )
@@ -90,7 +90,7 @@ def mean_falling(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     mean = (
         sum(
             reading_by_candle(candle, indicator)
-            for candle in candles[(length + 1) * -1 : -1]
+            for candle in candles[-abs(length + 1) : -1]
         )
         / length
     )
@@ -105,7 +105,7 @@ def highest(candles: List[OHLCV], indicator: str, length: int = 4) -> float:
     if not reading_period(candles, length, indicator):
         length = reading_count(candles, indicator)
 
-    return max(reading_by_candle(candle, indicator) for candle in candles[length * -1 :])
+    return max(reading_by_candle(candle, indicator) for candle in candles[-abs(length) :])
 
 
 def lowest(candles: List[OHLCV], indicator: str, length: int = 4) -> float:
@@ -116,7 +116,7 @@ def lowest(candles: List[OHLCV], indicator: str, length: int = 4) -> float:
     if not reading_period(candles, length, indicator):
         length = reading_count(candles, indicator)
 
-    return min(reading_by_candle(candle, indicator) for candle in candles[length * -1 :])
+    return min(reading_by_candle(candle, indicator) for candle in candles[-abs(length) :])
 
 
 def highestbar(candles: List[OHLCV], indicator: str, length: int = 4) -> int:

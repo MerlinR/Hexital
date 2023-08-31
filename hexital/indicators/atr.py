@@ -32,15 +32,11 @@ class ATR(Indicator):
         self.add_sub_indicator(TR(candles=self.candles))
 
     def _calculate_reading(self, index: int = -1) -> float | dict | None:
-        if self.prev_exists(index):
+        if self.prev_exists():
             return (
-                self.reading_by_index(index - 1) * (self.period - 1)
-                + self.reading_by_index(index, "TR")
+                self.prev_reading() * (self.period - 1) + self.reading("TR")
             ) / self.period
 
-        if self.reading_period(self.period, index=index, name="TR"):
-            return (
-                utils.candles_sum(self.candles, "TR", length=self.period, index=index)
-                / self.period
-            )
+        if self.reading_period(self.period, "TR"):
+            return self.candles_sum(self.period, "TR") / self.period
         return None

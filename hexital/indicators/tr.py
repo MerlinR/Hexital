@@ -21,11 +21,11 @@ class TR(Indicator):
         return self.indicator_name
 
     def _calculate_reading(self, index: int = -1) -> float | dict | None:
-        high = self.reading_by_index(index, "high")
-        low = self.reading_by_index(index, "low")
+        high = self.reading("high")
+        low = self.reading("low")
 
         if index > 0:
-            close = self.reading_by_index(index - 1, "close")
+            close = self.prev_reading("close")
             return max(
                 high - low,
                 abs(high - close),

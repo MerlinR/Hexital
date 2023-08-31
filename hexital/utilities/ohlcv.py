@@ -12,7 +12,8 @@ def reading_by_index(
 
 
 def reading_by_candle(candle: OHLCV, name: str) -> float | dict | None:
-    """Simple method to get a reading from the given indicator from a candlen"""
+    """Simple method to get a reading from the given indicator from a candle
+    Uses '.' to find nested reading, E.G 'MACD_12_26_9.MACD"""
 
     if "." in name:
         main_name, nested_name = name.split(".")
@@ -89,9 +90,9 @@ def reading_period(
         reading_by_index(
             candles,
             name,
-            index - int(x),
+            index - int(point),
         )
-        for x in [
+        for point in [
             period,
             period / 2,
             0,

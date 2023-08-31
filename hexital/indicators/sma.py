@@ -29,18 +29,17 @@ class SMA(Indicator):
         return f"{self.indicator_name}_{self.period}"
 
     def _calculate_reading(self, index: int = -1) -> float | dict | None:
-        if self.prev_exists(index):
-            return self.reading_by_index(index - 1) - (
-                self.reading_by_index(index - self.period, self.input_value)
-                - self.reading_by_index(index, self.input_value)
-            ) / float(self.period)
-
-        if self.reading_period(self.period, index=index, name=self.input_value):
+        if self.prev_exists():
             return (
-                utils.candles_sum(
-                    self.candles, self.input_value, length=self.period, index=index
+                self.prev_reading()
+                - (
+                    self.reading(self.input_value, index - self.period)
+                    - self.reading(self.input_value)
                 )
                 / self.period
             )
+
+        if self.reading_period(self.period, self.input_value):
+            return self.candles_sum(self.period, self.input_value) / self.period
 
         return None
