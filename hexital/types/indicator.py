@@ -94,7 +94,7 @@ class Indicator(ABC):
             indicator.calculate()
 
         for index in range(self._find_calc_index(), len(self.candles)):
-            self._active_index = index
+            self._set_index(index)
             if self.reading(index=index) is None:
                 reading = utils.round_values(
                     self._calculate_reading(index=index), round_by=self.round_value
@@ -105,7 +105,7 @@ class Indicator(ABC):
         """Calculate the TA values, will calculate a index range the Candles"""
         end_index = end_index if end_index else start_index + 1
         for index in range(start_index, end_index):
-            self._active_index = index
+            self._set_index(index)
             reading = utils.round_values(
                 self._calculate_reading(index=index), round_by=self.round_value
             )
@@ -122,6 +122,15 @@ class Indicator(ABC):
             if self.name in self.candles[index].indicators:
                 return index + 1
         return 0
+
+    def _set_index(self, index: int):
+        self._active_index = index
+        for indicator in self._managed_indicators.values():
+            try:
+                indicator.set_active_index(index)
+            except AttributeError:
+                # Due to a managed Indicator, such as a self controlled EMA(MACD)
+                pass
 
     def add_sub_indicator(self, indicator: Indicator):
         """Adds sub indicator, this will auto calculate with indicator"""

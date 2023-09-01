@@ -37,17 +37,13 @@ class VWAP(Indicator):
 
         prev_pv = 0
         prev_vol = 0
-        if self.prev_reading("volume"):
-            prev_pv = self.managed_indictor("VWAP_PV").reading(index=index - 1)
-            prev_vol = self.managed_indictor("VWAP_Vol").reading(index=index - 1)
+        if self.prev_reading("VWAP_PV"):
+            prev_pv = self.prev_reading("VWAP_PV")
+            prev_vol = self.prev_reading("VWAP_Vol")
 
         self.managed_indictor("VWAP_PV").set_reading(
-            index, prev_pv + self.reading("volume") * typical_price
+            prev_pv + self.reading("volume") * typical_price
         )
-        self.managed_indictor("VWAP_Vol").set_reading(
-            index, prev_vol + self.reading("volume")
-        )
+        self.managed_indictor("VWAP_Vol").set_reading(prev_vol + self.reading("volume"))
 
-        return self.managed_indictor("VWAP_PV").reading(
-            index=index
-        ) / self.managed_indictor("VWAP_Vol").reading(index=index)
+        return self.reading("VWAP_PV") / self.reading("VWAP_Vol")

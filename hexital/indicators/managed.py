@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Union
+from typing import Optional, Union
 
 from hexital.types import Indicator
 
@@ -14,9 +14,17 @@ class Managed(Indicator):
 
     indicator_name: str = "MAN"
     _sub_indicator: bool = True
+    _active_index: bool = 0
 
     def _generate_name(self) -> str:
         return self.indicator_name
 
-    def set_reading(self, index: int, reading: Union[float, dict]):
-        self._set_reading(index, reading)
+    def set_reading(self, reading: Union[float, dict], index: Optional[int] = None):
+        if index is None:
+            index = self._active_index
+        else:
+            self.set_active_index(index)
+        self._set_reading(self._active_index, reading)
+
+    def set_active_index(self, index: int):
+        self._active_index = index

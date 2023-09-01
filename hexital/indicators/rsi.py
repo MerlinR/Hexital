@@ -46,12 +46,10 @@ class RSI(Indicator):
             change_loss = change if change > 0 else 0.0
 
             self.managed_indictor("RSI_gain").set_reading(
-                index,
                 ((self.prev_reading("RSI_gain") * (self.period - 1)) + change_gain)
                 / self.period,
             )
             self.managed_indictor("RSI_loss").set_reading(
-                index,
                 ((self.prev_reading("RSI_loss") * (self.period - 1)) + change_loss)
                 / self.period,
             )
@@ -61,11 +59,9 @@ class RSI(Indicator):
                 for i in range(index - (self.period - 1), index + 1)
             ]
             self.managed_indictor("RSI_gain").set_reading(
-                index,
                 sum(chng for chng in changes if chng > 0) / self.period,
             )
             self.managed_indictor("RSI_loss").set_reading(
-                index,
                 sum(abs(chng) for chng in changes if chng < 0) / self.period,
             )
 
@@ -74,6 +70,6 @@ class RSI(Indicator):
             rsi = 100.0 - (100.0 / (1.0 + rs))
             return rsi
 
-        self.managed_indictor("RSI_gain").set_reading(index, None)
-        self.managed_indictor("RSI_loss").set_reading(index, None)
+        self.managed_indictor("RSI_gain").set_reading(None)
+        self.managed_indictor("RSI_loss").set_reading(None)
         return None
