@@ -41,6 +41,18 @@ def fixture_expected_sma():
     return json.load(csv_files)
 
 
+@pytest.fixture(name="expected_WMA")
+def fixture_expected_wma():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/WMA.json")
+    return json.load(csv_files)
+
+
+@pytest.fixture(name="expected_VWMA")
+def fixture_expected_vwma():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/VWMA.json")
+    return json.load(csv_files)
+
+
 @pytest.fixture(name="expected_TR")
 def fixture_expected_tr():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/TR.json")
