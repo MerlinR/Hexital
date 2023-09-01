@@ -58,6 +58,7 @@ def generate():
             {"kind": "wma"},
             {"kind": "vwma"},
             {"kind": "vwap"},
+            {"kind": "obv"},
         ],
     )
 
@@ -77,6 +78,7 @@ def generate():
     generate_json([round_values(value) for value in df["WMA_10"].tolist()], "WMA")
     generate_json([round_values(value) for value in df["VWMA_10"].tolist()], "VWMA")
     generate_json([round_values(value) for value in df["VWAP_D"].tolist()], "VWAP")
+    generate_json([round_values(value) for value in df["OBV"].tolist()], "OBV")
 
     stochk = [round_values(value) for value in df["STOCHk_14_3_3"].tolist()]
     stochd = [round_values(value) for value in df["STOCHd_14_3_3"].tolist()]
