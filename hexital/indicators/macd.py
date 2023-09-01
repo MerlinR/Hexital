@@ -38,10 +38,11 @@ class MACD(Indicator):
             self.signal_period,
         )
 
-    def _initialise(self):
+    def _validate_fields(self):
         if self.slow_period < self.fast_period:
             self.fast_period, self.slow_period = self.slow_period, self.fast_period
 
+    def _initialise(self):
         self.add_sub_indicator(
             EMA(
                 candles=self.candles,

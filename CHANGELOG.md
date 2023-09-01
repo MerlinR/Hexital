@@ -8,6 +8,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Feature: Added timestamp (datetime) to OHLCV dataclass
 - Feature: Can convert OHLCV from list
 - Feature: Can set timestamp(datetime) in lists/dict OHLCV conversion
+- Feature: Added _validate_fields method to Indicators
 - Added custom exceptions
 - More thorough unit testing
 - Updated Indicators accuracy to Truth source

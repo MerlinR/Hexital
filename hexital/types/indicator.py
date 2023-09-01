@@ -22,6 +22,7 @@ class Indicator(ABC):
     _active_index: int = 0
 
     def __post_init__(self):
+        self._validate_fields()
         self._internal_generate_name()
         self._initialise()
 
@@ -44,8 +45,11 @@ class Indicator(ABC):
     def _initialise(self):
         pass
 
+    def _validate_fields(self):
+        pass
+
     @abstractmethod
-    def _generate_name(self):
+    def _generate_name(self) -> str:
         pass
 
     @property
