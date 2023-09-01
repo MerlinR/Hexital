@@ -41,6 +41,12 @@ def fixture_expected_sma():
     return json.load(csv_files)
 
 
+@pytest.fixture(name="expected_VWAP")
+def fixture_expected_vwap():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/VWAP.json")
+    return json.load(csv_files)
+
+
 @pytest.fixture(name="expected_WMA")
 def fixture_expected_wma():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/WMA.json")

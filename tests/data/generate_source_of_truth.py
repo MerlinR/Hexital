@@ -57,6 +57,7 @@ def generate():
             {"kind": "supertrend"},
             {"kind": "wma"},
             {"kind": "vwma"},
+            {"kind": "vwap"},
         ],
     )
 
@@ -75,6 +76,7 @@ def generate():
     generate_json([round_values(value) for value in df["ATRr_14"].tolist()], "ATR")
     generate_json([round_values(value) for value in df["WMA_10"].tolist()], "WMA")
     generate_json([round_values(value) for value in df["VWMA_10"].tolist()], "VWMA")
+    generate_json([round_values(value) for value in df["VWAP_D"].tolist()], "VWAP")
 
     stochk = [round_values(value) for value in df["STOCHk_14_3_3"].tolist()]
     stochd = [round_values(value) for value in df["STOCHd_14_3_3"].tolist()]

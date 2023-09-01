@@ -6,7 +6,7 @@ from hexital.utilities.utils import candles_sum
 
 @dataclass(kw_only=True)
 class VWMA(Indicator):
-    """Weighted Moving Average
+    """Volume Weighted Moving Average
 
     Sources:
         https://www.investopedia.com/ask/answers/071414/whats-difference-between-moving-average-and-weighted-moving-average.asp

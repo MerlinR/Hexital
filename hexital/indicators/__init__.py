@@ -5,5 +5,6 @@ from .managed import Managed
 from .rsi import RSI
 from .sma import SMA
 from .tr import TR
+from .vwap import VWAP
 from .vwma import VWMA
 from .wma import WMA

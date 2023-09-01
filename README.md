@@ -16,6 +16,7 @@ For most libraries such as [Pandas-TA](https://github.com/twopirllc/pandas-ta) w
 - RSI
 - SMA
 - TR
+- VWAP
 - VWMA
 - WMA
 
