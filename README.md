@@ -18,6 +18,7 @@ For most libraries such as [Pandas-TA](https://github.com/twopirllc/pandas-ta) w
 - OBV
 - RMA
 - RSI
+- ROC
 - SMA
 - STOCH
 - Supertrend

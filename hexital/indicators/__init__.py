@@ -6,6 +6,7 @@ from .macd import MACD
 from .managed import Managed
 from .obv import OBV
 from .rma import RMA
+from .roc import ROC
 from .rsi import RSI
 from .sma import SMA
 from .stoch import STOCH

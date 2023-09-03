@@ -64,6 +64,7 @@ def generate():
             {"kind": "obv"},
             {"kind": "kc"},
             {"kind": "hl2"},
+            {"kind": "roc"},
         ],
     )
 
@@ -87,6 +88,7 @@ def generate():
     save_json_result([round_values(value) for value in df["VWAP_D"].tolist()], "VWAP")
     save_json_result([round_values(value) for value in df["OBV"].tolist()], "OBV")
     save_json_result([round_values(value) for value in df["HL2"].tolist()], "HL2")
+    save_json_result([round_values(value) for value in df["ROC_10"].tolist()], "ROC")
 
     kc_l = [round_values(value) for value in df["KCLe_20_2"].tolist()]
     kc_b = [round_values(value) for value in df["KCBe_20_2"].tolist()]

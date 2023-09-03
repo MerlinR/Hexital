@@ -136,7 +136,7 @@ class TestIndicators:
     def test_macd(self, candles, expected_macd):
         test = indicators.MACD(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_macd, amount=400)
+        assert self.verfiy(test.as_list, expected_macd)
 
     @pytest.mark.usefixtures("candles", "expected_obv")
     def test_obv(self, candles, expected_obv):
@@ -149,7 +149,13 @@ class TestIndicators:
     def test_rma(self, candles, expected_rma):
         test = indicators.RMA(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_rma, amount=470)
+        assert self.verfiy(test.as_list, expected_rma, amount=490)
+
+    @pytest.mark.usefixtures("candles", "expected_roc")
+    def test_roc(self, candles, expected_roc):
+        test = indicators.ROC(candles=candles)
+        test.calculate()
+        assert self.verfiy(test.as_list, expected_roc)
 
     @pytest.mark.usefixtures("candles", "expected_rsi")
     def test_rsi(self, candles, expected_rsi):
