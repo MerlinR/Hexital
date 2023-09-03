@@ -23,6 +23,12 @@ def fixture_expected_ema():
     return json.load(csv_files)
 
 
+@pytest.fixture(name="expected_highlowaverage")
+def fixture_expected_highlowaverage():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/HL2.json")
+    return json.load(csv_files)
+
+
 @pytest.fixture(name="expected_kc")
 def fixture_expected_kc():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/KC.json")

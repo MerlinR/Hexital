@@ -13,12 +13,14 @@ For most libraries such as [Pandas-TA](https://github.com/twopirllc/pandas-ta) w
 - ATR
 - KC
 - EMA
+- HighLowAverage
 - MACD
 - OBV
 - RMA
 - RSI
 - SMA
 - STOCH
+- Supertrend
 - TR
 - VWAP
 - VWMA

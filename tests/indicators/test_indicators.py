@@ -6,13 +6,19 @@ from hexital import indicators
 
 
 class TestIndicators:
-    def verfiy(self, result: list, expected: list, amount: Optional[int] = None) -> bool:
+    def verfiy(
+        self,
+        result: list,
+        expected: list,
+        amount: Optional[int] = None,
+        verbose: bool = False,
+    ) -> bool:
 
         if amount is not None:
             result = result[-abs(amount) :]
             expected = expected[-abs(amount) :]
 
-        self.show_results(result, expected)
+        self.show_results(result, expected, verbose)
 
         diff_result = not deepdiff.DeepDiff(
             result,
@@ -22,7 +28,9 @@ class TestIndicators:
             ignore_numeric_type_changes=True,
         )
 
-        correlation = self.correlation_validation(result, expected)
+        correlation = False
+        if not diff_result:
+            correlation = self.correlation_validation(result, expected)
 
         return any([diff_result, correlation])
 
@@ -81,9 +89,18 @@ class TestIndicators:
         dev = dev ** (1 / 2.0)
         return dev
 
-    def show_results(self, result: list, expected: list):
+    def show_results(self, result: list, expected: list, verbose: bool):
         for i, (res, exp) in enumerate(zip(result, expected)):
-            print(f"{i}: {res} == {exp}")
+            if deepdiff.DeepDiff(
+                res,
+                exp,
+                significant_digits=1,
+                number_format_notation="e",
+                ignore_numeric_type_changes=True,
+            ):
+                print("\033[91m" + f"{i}: {res} != {exp}" + "\033[0m")
+            elif verbose:
+                print("\033[92m" + f"{i}: {res} == {exp}" + "\033[0m")
 
     @pytest.mark.usefixtures("candles", "expected_atr")
     def test_atr(self, candles, expected_atr):
@@ -102,6 +119,12 @@ class TestIndicators:
         test = indicators.EMA(candles=candles)
         test.calculate()
         assert self.verfiy(test.as_list, expected_ema)
+
+    @pytest.mark.usefixtures("candles", "expected_highlowaverage")
+    def test_highlowaverage(self, candles, expected_highlowaverage):
+        test = indicators.HighLowAverage(candles=candles)
+        test.calculate()
+        assert self.verfiy(test.as_list, expected_highlowaverage)
 
     @pytest.mark.usefixtures("candles", "expected_kc")
     def test_kc(self, candles, expected_kc):
@@ -151,6 +174,12 @@ class TestIndicators:
         test = indicators.STOCH(candles=candles)
         test.calculate()
         assert self.verfiy(test.as_list, expected_stoch)
+
+    @pytest.mark.usefixtures("candles", "expected_supertrend")
+    def test_supertrend(self, candles, expected_supertrend):
+        test = indicators.Supertrend(candles=candles)
+        test.calculate()
+        assert self.verfiy(test.as_list, expected_supertrend, amount=499)
 
     @pytest.mark.usefixtures("candles", "expected_tr")
     def test_tr(self, candles, expected_tr):
