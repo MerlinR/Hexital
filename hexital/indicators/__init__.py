@@ -7,6 +7,7 @@ from .obv import OBV
 from .rma import RMA
 from .rsi import RSI
 from .sma import SMA
+from .stoch import STOCH
 from .tr import TR
 from .vwap import VWAP
 from .vwma import VWMA

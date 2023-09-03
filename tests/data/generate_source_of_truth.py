@@ -46,11 +46,9 @@ def generate():
             {"kind": "true_range"},
             {"kind": "rma"},
             {"kind": "sma"},
+            {"kind": "sma", "length": 3},
             {"kind": "ema"},
-            {"kind": "ema", "length": 12},
-            {"kind": "ema", "length": 26},
             {"kind": "macd"},
-            {"kind": "ema", "length": 9, "close": "MACD_12_26_9"},
             {"kind": "rsi"},
             {"kind": "atr"},
             {"kind": "atr", "length": 20},
@@ -75,6 +73,7 @@ def generate():
     generate_json([round_values(value) for value in df["TRUERANGE_1"].tolist()], "TR")
     generate_json([round_values(value) for value in df["EMA_10"].tolist()], "EMA")
     generate_json([round_values(value) for value in df["SMA_10"].tolist()], "SMA")
+    generate_json([round_values(value) for value in df["SMA_3"].tolist()], "SMA_3")
     generate_json([round_values(value) for value in df["RSI_14"].tolist()], "RSI")
     generate_json([round_values(value) for value in df["ATRr_14"].tolist()], "ATR")
     generate_json([round_values(value) for value in df["WMA_10"].tolist()], "WMA")
@@ -105,14 +104,6 @@ def generate():
     for macd in zip(macd, macd_s, macd_h):
         macd_data.append({"MACD": macd[0], "signal": macd[1], "histogram": macd[2]})
     generate_json(macd_data, "MACD")
-
-    macd_slow = [round_values(value) for value in df["EMA_26"].tolist()]
-    macd_fast = [round_values(value) for value in df["EMA_12"].tolist()]
-    macd_sig = [round_values(value) for value in df["EMA_9"].tolist()]
-    macd_ema = []
-    for macd in zip(macd_slow, macd_fast, macd_sig):
-        macd_ema.append({"SLOW": macd[0], "FAST": macd[1], "signal": macd[2]})
-    generate_json(macd_ema, "MACD_EMA")
 
     supertrend = [round_values(value) for value in df["SUPERT_7_3.0"].tolist()]
     supertrendd = [round_values(value) for value in df["SUPERTd_7_3.0"].tolist()]

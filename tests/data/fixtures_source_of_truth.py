@@ -59,6 +59,18 @@ def fixture_expected_sma():
     return json.load(csv_files)
 
 
+@pytest.fixture(name="expected_sma_3")
+def fixture_expected_sma_3():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/SMA_3.json")
+    return json.load(csv_files)
+
+
+@pytest.fixture(name="expected_stoch")
+def fixture_expected_stoch():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/STOCH.json")
+    return json.load(csv_files)
+
+
 @pytest.fixture(name="expected_supertrend")
 def fixture_expected_supertrend():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/SUPERTREND.json")

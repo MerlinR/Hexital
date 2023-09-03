@@ -13,6 +13,8 @@ class TestIndicators:
             result = result[-abs(amount) :]
             expected = expected[-abs(amount) :]
 
+        self.show_results(result, expected)
+
         diff_result = not deepdiff.DeepDiff(
             result,
             expected,
@@ -23,26 +25,26 @@ class TestIndicators:
 
         correlation = self.correlation_validation(result, expected)
 
-        self.show_results(result, expected)
-        print(f"Correlation: {correlation}")
-
         return any([diff_result, correlation])
 
     def correlation_validation(
         self, result: list, expected: list, accuracy: float = 0.97
     ):
+        correlation = 0
+
         if isinstance(result[0], float):
-            return self.correlation_coefficient(result, expected) >= accuracy
+            correlation = self.correlation_coefficient(result, expected)
         elif isinstance(result[0], dict):
             correlations = 0.0
-            for key in result[0].keys():
+            for key in expected[0].keys():
                 correlations += self.correlation_coefficient(
                     [row[key] for row in result], [row[key] for row in expected]
                 )
 
-            return correlations / len(result[0].keys()) >= accuracy
+            correlation = correlations / len(expected[0].keys())
 
-        return False
+        print(f"Correlation: {correlation}")
+        return correlation >= accuracy
 
     def correlation_coefficient(self, result: list, expected: list):
 
@@ -138,6 +140,18 @@ class TestIndicators:
         test = indicators.SMA(candles=candles)
         test.calculate()
         assert self.deep_diff(test.as_list, expected_sma)
+
+    @pytest.mark.usefixtures("candles", "expected_sma_3")
+    def test_sma_3(self, candles, expected_sma_3):
+        test = indicators.SMA(candles=candles, period=3)
+        test.calculate()
+        assert self.deep_diff(test.as_list, expected_sma_3)
+
+    @pytest.mark.usefixtures("candles", "expected_stoch")
+    def test_stoch(self, candles, expected_stoch):
+        test = indicators.STOCH(candles=candles)
+        test.calculate()
+        assert self.deep_diff(test.as_list, expected_stoch)
 
     @pytest.mark.usefixtures("candles", "expected_tr")
     def test_tr(self, candles, expected_tr):

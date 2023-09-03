@@ -8,8 +8,6 @@ def candles_sum(
     candles: List[OHLCV], name: str, length: int = 1, index: Optional[int] = None
 ) -> float:
     """Sum of `indicator_name` for `length` bars back. including index/latest"""
-    if not reading_period(candles, length, name):
-        length = reading_count(candles, name)
 
     if index is not None and index >= len(candles) or index is None:
         index = len(candles)

@@ -15,7 +15,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added private index property to Indicator allowing simplier method calls
   - self.reading_by_index(index, self.input_value) -> self.reading(self.input_value)
   - Multiple Method's renamed/argument re-ordered
-- Added KC, OBV, RMA, VWAP, VMA, WMA
+- Added KC, OBV, RMA, STOCH, VWAP, VMA, WMA
 ## 0.1.1 - 2023-08-28
 - Nada
 ## 0.1.0 - 2023-08-27
