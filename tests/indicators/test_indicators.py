@@ -6,9 +6,8 @@ from hexital import indicators
 
 
 class TestIndicators:
-    def deep_diff(
-        self, result: list, expected: list, amount: Optional[int] = None
-    ) -> bool:
+    def verfiy(self, result: list, expected: list, amount: Optional[int] = None) -> bool:
+
         if amount is not None:
             result = result[-abs(amount) :]
             expected = expected[-abs(amount) :]
@@ -90,89 +89,89 @@ class TestIndicators:
     def test_atr(self, candles, expected_atr):
         test = indicators.ATR(candles=candles)
         test.calculate()
-        assert self.deep_diff(test.as_list, expected_atr)
+        assert self.verfiy(test.as_list, expected_atr)
 
     @pytest.mark.usefixtures("candles", "expected_atr_20")
     def test_atr_20(self, candles, expected_atr_20):
         test = indicators.ATR(candles=candles, period=20)
         test.calculate()
-        assert self.deep_diff(test.as_list, expected_atr_20)
+        assert self.verfiy(test.as_list, expected_atr_20)
 
     @pytest.mark.usefixtures("candles", "expected_ema")
     def test_ema(self, candles, expected_ema):
         test = indicators.EMA(candles=candles)
         test.calculate()
-        assert self.deep_diff(test.as_list, expected_ema)
+        assert self.verfiy(test.as_list, expected_ema)
 
     @pytest.mark.usefixtures("candles", "expected_kc")
     def test_kc(self, candles, expected_kc):
         test = indicators.KC(candles=candles)
         test.calculate()
-        assert self.deep_diff(test.as_list, expected_kc)
+        assert self.verfiy(test.as_list, expected_kc)
 
     @pytest.mark.usefixtures("candles", "expected_macd")
     def test_macd(self, candles, expected_macd):
         test = indicators.MACD(candles=candles)
         test.calculate()
-        assert self.deep_diff(test.as_list, expected_macd, amount=400)
+        assert self.verfiy(test.as_list, expected_macd, amount=400)
 
     @pytest.mark.usefixtures("candles", "expected_obv")
     def test_obv(self, candles, expected_obv):
         test = indicators.OBV(candles=candles)
         test.calculate()
         print(test.as_list)
-        assert self.deep_diff(test.as_list, expected_obv)
+        assert self.verfiy(test.as_list, expected_obv)
 
     @pytest.mark.usefixtures("candles", "expected_rma")
     def test_rma(self, candles, expected_rma):
         test = indicators.RMA(candles=candles)
         test.calculate()
-        assert self.deep_diff(test.as_list, expected_rma, amount=470)
+        assert self.verfiy(test.as_list, expected_rma, amount=470)
 
     @pytest.mark.usefixtures("candles", "expected_rsi")
     def test_rsi(self, candles, expected_rsi):
         test = indicators.RSI(candles=candles)
         test.calculate()
-        assert self.deep_diff(test.as_list, expected_rsi)
+        assert self.verfiy(test.as_list, expected_rsi)
 
     @pytest.mark.usefixtures("candles", "expected_sma")
     def test_sma(self, candles, expected_sma):
         test = indicators.SMA(candles=candles)
         test.calculate()
-        assert self.deep_diff(test.as_list, expected_sma)
+        assert self.verfiy(test.as_list, expected_sma)
 
     @pytest.mark.usefixtures("candles", "expected_sma_3")
     def test_sma_3(self, candles, expected_sma_3):
         test = indicators.SMA(candles=candles, period=3)
         test.calculate()
-        assert self.deep_diff(test.as_list, expected_sma_3)
+        assert self.verfiy(test.as_list, expected_sma_3)
 
     @pytest.mark.usefixtures("candles", "expected_stoch")
     def test_stoch(self, candles, expected_stoch):
         test = indicators.STOCH(candles=candles)
         test.calculate()
-        assert self.deep_diff(test.as_list, expected_stoch)
+        assert self.verfiy(test.as_list, expected_stoch)
 
     @pytest.mark.usefixtures("candles", "expected_tr")
     def test_tr(self, candles, expected_tr):
         test = indicators.TR(candles=candles)
         test.calculate()
-        assert self.deep_diff(test.as_list, expected_tr)
+        assert self.verfiy(test.as_list, expected_tr)
 
     @pytest.mark.usefixtures("candles", "expected_vwap")
     def test_vwap(self, candles, expected_vwap):
         test = indicators.VWAP(candles=candles)
         test.calculate()
-        assert self.deep_diff(test.as_list, expected_vwap)
+        assert self.verfiy(test.as_list, expected_vwap)
 
     @pytest.mark.usefixtures("candles", "expected_vwma")
     def test_vwma(self, candles, expected_vwma):
         test = indicators.VWMA(candles=candles)
         test.calculate()
-        assert self.deep_diff(test.as_list, expected_vwma)
+        assert self.verfiy(test.as_list, expected_vwma)
 
     @pytest.mark.usefixtures("candles", "expected_wma")
     def test_wma(self, candles, expected_wma):
         test = indicators.WMA(candles=candles)
         test.calculate()
-        assert self.deep_diff(test.as_list, expected_wma)
+        assert self.verfiy(test.as_list, expected_wma)
