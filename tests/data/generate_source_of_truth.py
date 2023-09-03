@@ -53,12 +53,14 @@ def generate():
             {"kind": "ema", "length": 9, "close": "MACD_12_26_9"},
             {"kind": "rsi"},
             {"kind": "atr"},
+            {"kind": "atr", "length": 20},
             {"kind": "stoch"},
             {"kind": "supertrend"},
             {"kind": "wma"},
             {"kind": "vwma"},
             {"kind": "vwap"},
             {"kind": "obv"},
+            {"kind": "kc"},
         ],
     )
 
@@ -79,6 +81,15 @@ def generate():
     generate_json([round_values(value) for value in df["VWMA_10"].tolist()], "VWMA")
     generate_json([round_values(value) for value in df["VWAP_D"].tolist()], "VWAP")
     generate_json([round_values(value) for value in df["OBV"].tolist()], "OBV")
+
+    kc_l = [round_values(value) for value in df["KCLe_20_2"].tolist()]
+    kc_b = [round_values(value) for value in df["KCBe_20_2"].tolist()]
+    kc_u = [round_values(value) for value in df["KCUe_20_2"].tolist()]
+    kc_data = []
+    for kc in zip(kc_l, kc_b, kc_u):
+        kc_data.append({"lower": kc[0], "band": kc[1], "upper": kc[2]})
+    generate_json(kc_data, "KC")
+    generate_json([round_values(value) for value in df["ATRr_20"].tolist()], "ATR_20")
 
     stochk = [round_values(value) for value in df["STOCHk_14_3_3"].tolist()]
     stochd = [round_values(value) for value in df["STOCHd_14_3_3"].tolist()]

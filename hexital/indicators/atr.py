@@ -23,7 +23,6 @@ class ATR(Indicator):
 
     indicator_name: str = "ATR"
     period: int = 14
-    percentage: bool = False
 
     def _generate_name(self) -> str:
         return f"{self.indicator_name}_{self.period}"

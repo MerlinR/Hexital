@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
 from hexital.types import Indicator
-from hexital.utilities import utils
 
 
 @dataclass(kw_only=True)
@@ -26,17 +25,15 @@ class EMA(Indicator):
     period: int = 10
     smoothing: float = 2.0
 
-    _min_period: int = 10
-
     def _generate_name(self) -> str:
         return f"{self.indicator_name}_{self.period}"
 
     def _calculate_reading(self, index: int = -1) -> float | dict | None:
         if self.prev_exists():
-            multiplier = float(self.smoothing / (self.period + 1.0))
+            alpha = float(self.smoothing / (self.period + 1.0))
             return float(
-                multiplier * self.reading(self.input_value)
-                + (self.prev_reading() * (1.0 - multiplier))
+                alpha * self.reading(self.input_value)
+                + (self.prev_reading() * (1.0 - alpha))
             )
 
         if self.reading_period(self.period, self.input_value):

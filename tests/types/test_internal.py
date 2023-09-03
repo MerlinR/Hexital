@@ -115,9 +115,9 @@ def test_data_append(nasdaq_candles_30, nasdaq_candles_31st):
     assert test.as_list == expected
 
 
-@pytest.mark.usefixtures("nasdaq_candles", "expected_EMA")
-def test_hextial_multi_dict(nasdaq_candles, expected_EMA):
+@pytest.mark.usefixtures("nasdaq_candles", "expected_ema")
+def test_hextial_multi_dict(nasdaq_candles, expected_ema):
     test = EMA(candles=OHLCV.from_dicts(nasdaq_candles))
     test.calculate()
     print(test.as_list)
-    assert pytest.approx(test.as_list) == expected_EMA
+    assert pytest.approx(test.as_list) == expected_ema
