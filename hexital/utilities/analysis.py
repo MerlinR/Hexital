@@ -25,9 +25,24 @@ def negative(candles: Union[OHLCV, List[OHLCV]], position: int = -1) -> bool:
     return candles.open > candles.close
 
 
+def value_range(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
+    """Returns the difference between the min and max values in a indicator series.
+    Length `includes` latest"""
+    if not reading_period(candles, length, indicator):
+        length = reading_count(candles, indicator)
+
+    readings = [
+        reading_by_candle(candle, indicator)
+        for candle in candles[-abs(length + 1) : len(candles)]
+    ]
+
+    return abs(min(readings) - max(readings))
+
+
 def rising(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     """True if current `indicator` is greater than any previous `indicator`
-    for `length` bars back, False otherwise. Length excludes latest"""
+    for `length` bars back, False otherwise.
+    Length `excludes` latest"""
     if not reading_period(candles, length, indicator):
         length = reading_count(candles, indicator)
 
@@ -44,7 +59,8 @@ def rising(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
 
 def falling(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     """True if current `indicator` reading is less than any previous `indicator`
-    reading for `length` bars back, False otherwise. Length excludes latest"""
+    reading for `length` bars back, False otherwise.
+    Length `excludes` latest"""
     if not reading_period(candles, length, indicator):
         length = reading_count(candles, indicator)
 
@@ -61,7 +77,7 @@ def falling(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
 
 def mean_rising(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     """True if current `indicator` reading is greater than the avg of the previous
-    `length` `indicator` reading bars back, False otherwise. Length excludes latest
+    `length` `indicator` reading bars back, False otherwise. Length `excludes` latest
 
     Calc:
         NewestCandle[indicator] > mean(Candles[newest] to Candles[length])"""
@@ -80,7 +96,7 @@ def mean_rising(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
 
 def mean_falling(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     """True if current `indicator` is less than the avg of the previous
-    `length` `indicator` bars back, False otherwise. Length excludes latest
+    `length` `indicator` bars back, False otherwise. Length `excludes` latest
 
     Calc:
         NewestCandle[indicator] > mean(Candles[newest] to Candles[length])"""
@@ -98,7 +114,7 @@ def mean_falling(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
 
 
 def highest(candles: List[OHLCV], indicator: str, length: int = 4) -> float:
-    """Highest reading for a given number of bars back. Includes latest.
+    """Highest reading for a given number of bars back. Length `Includes` latest.
     Returns:
         Highest reading in the series.
     """
@@ -109,7 +125,7 @@ def highest(candles: List[OHLCV], indicator: str, length: int = 4) -> float:
 
 
 def lowest(candles: List[OHLCV], indicator: str, length: int = 4) -> float:
-    """Lowest reading for a given number of bars back. Includes latest.
+    """Lowest reading for a given number of bars back. Length `Includes` latest.
     Returns:
         Lowest reading in the series.
     """
@@ -120,7 +136,7 @@ def lowest(candles: List[OHLCV], indicator: str, length: int = 4) -> float:
 
 
 def highestbar(candles: List[OHLCV], indicator: str, length: int = 4) -> int:
-    """Highest reading offset for a given number of bars back. Excludes latest.
+    """Highest reading offset for a given number of bars back. Length `Excludes` latest.
     Returns:
         Offset to the lowest bar
     """
@@ -144,7 +160,7 @@ def highestbar(candles: List[OHLCV], indicator: str, length: int = 4) -> int:
 
 
 def lowestbar(candles: List[OHLCV], indicator: str, length: int = 4) -> int:
-    """Lowest reading offset for a given number of bars back. Excludes latest.
+    """Lowest reading offset for a given number of bars back. Length `Excludes` latest.
     Returns:
         Offset to the lowest bar
     """
