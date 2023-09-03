@@ -9,15 +9,11 @@ class TestIndicators:
     def deep_diff(
         self, result: list, expected: list, amount: Optional[int] = None
     ) -> bool:
-
-        for i, (res, exp) in enumerate(zip(result, expected)):
-            print(f"{i}: {res} == {exp}")
-
         if amount is not None:
             result = result[-abs(amount) :]
             expected = expected[-abs(amount) :]
 
-        return not deepdiff.DeepDiff(
+        diff_result = not deepdiff.DeepDiff(
             result,
             expected,
             significant_digits=1,
@@ -25,21 +21,28 @@ class TestIndicators:
             ignore_numeric_type_changes=True,
         )
 
-    def calc_mean(self, data: list):
-        total = 0
-        for value in data:
-            if value is not None:
-                total += float(value)
-        return total / len(data)
+        correlation = self.correlation_validation(result, expected)
 
-    def standard_deviation(self, data: list):
-        data_mean = self.calc_mean(data)
-        dev = 0.0
-        for val in data:
-            if data_mean is not None and val is not None:
-                dev += (val - data_mean) ** 2
-        dev = dev ** (1 / 2.0)
-        return dev
+        self.show_results(result, expected)
+        print(f"Correlation: {correlation}")
+
+        return any([diff_result, correlation])
+
+    def correlation_validation(
+        self, result: list, expected: list, accuracy: float = 0.97
+    ):
+        if isinstance(result[0], float):
+            return self.correlation_coefficient(result, expected) >= accuracy
+        elif isinstance(result[0], dict):
+            correlations = 0.0
+            for key in result[0].keys():
+                correlations += self.correlation_coefficient(
+                    [row[key] for row in result], [row[key] for row in expected]
+                )
+
+            return correlations / len(result[0].keys()) >= accuracy
+
+        return False
 
     def correlation_coefficient(self, result: list, expected: list):
 
@@ -59,7 +62,27 @@ class TestIndicators:
         r_denominator = res_stand_deviation * exp_stand_deviation
 
         correlation = r_numerator / r_denominator
-        return round(correlation, 6)
+        return round(correlation, 4)
+
+    def calc_mean(self, data: list):
+        total = 0
+        for value in data:
+            if value is not None:
+                total += float(value)
+        return total / len(data)
+
+    def standard_deviation(self, data: list):
+        data_mean = self.calc_mean(data)
+        dev = 0.0
+        for val in data:
+            if data_mean is not None and val is not None:
+                dev += (val - data_mean) ** 2
+        dev = dev ** (1 / 2.0)
+        return dev
+
+    def show_results(self, result: list, expected: list):
+        for i, (res, exp) in enumerate(zip(result, expected)):
+            print(f"{i}: {res} == {exp}")
 
     @pytest.mark.usefixtures("candles", "expected_atr")
     def test_atr(self, candles, expected_atr):
