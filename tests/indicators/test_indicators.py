@@ -102,6 +102,12 @@ class TestIndicators:
         test.calculate()
         assert self.deep_diff(test.as_list, expected_ema)
 
+    @pytest.mark.usefixtures("candles", "expected_kc")
+    def test_kc(self, candles, expected_kc):
+        test = indicators.KC(candles=candles)
+        test.calculate()
+        assert self.deep_diff(test.as_list, expected_kc)
+
     @pytest.mark.usefixtures("candles", "expected_macd")
     def test_macd(self, candles, expected_macd):
         test = indicators.MACD(candles=candles)
@@ -114,6 +120,12 @@ class TestIndicators:
         test.calculate()
         print(test.as_list)
         assert self.deep_diff(test.as_list, expected_obv)
+
+    @pytest.mark.usefixtures("candles", "expected_rma")
+    def test_rma(self, candles, expected_rma):
+        test = indicators.RMA(candles=candles)
+        test.calculate()
+        assert self.deep_diff(test.as_list, expected_rma, amount=470)
 
     @pytest.mark.usefixtures("candles", "expected_rsi")
     def test_rsi(self, candles, expected_rsi):

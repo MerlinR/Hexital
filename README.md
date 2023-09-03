@@ -11,9 +11,11 @@ For most libraries such as [Pandas-TA](https://github.com/twopirllc/pandas-ta) w
 
 ## Indicators
 - ATR
+- KC
 - EMA
 - MACD
 - OBV
+- RMA
 - RSI
 - SMA
 - TR
