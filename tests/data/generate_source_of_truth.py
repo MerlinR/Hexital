@@ -49,6 +49,7 @@ def generate():
         ta=[
             {"kind": "true_range"},
             {"kind": "rma"},
+            {"kind": "rma", "length": 20},
             {"kind": "sma"},
             {"kind": "sma", "length": 3},
             {"kind": "ema"},
@@ -78,6 +79,7 @@ def generate():
         print(f"Generated: {col}")
 
     save_json_result([round_values(value) for value in df["RMA_10"].tolist()], "RMA")
+    save_json_result([round_values(value) for value in df["RMA_20"].tolist()], "RMA_20")
     save_json_result([round_values(value) for value in df["TRUERANGE_1"].tolist()], "TR")
     save_json_result([round_values(value) for value in df["EMA_10"].tolist()], "EMA")
     save_json_result([round_values(value) for value in df["SMA_10"].tolist()], "SMA")

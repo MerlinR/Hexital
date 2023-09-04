@@ -157,7 +157,13 @@ class TestIndicators:
     def test_rma(self, candles, expected_rma):
         test = indicators.RMA(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_rma, amount=490)
+        assert self.verfiy(test.as_list, expected_rma)
+
+    @pytest.mark.usefixtures("candles", "expected_rma_20")
+    def test_rma_20(self, candles, expected_rma_20):
+        test = indicators.RMA(candles=candles, period=20)
+        test.calculate()
+        assert self.verfiy(test.as_list, expected_rma_20)
 
     @pytest.mark.usefixtures("candles", "expected_roc")
     def test_roc(self, candles, expected_roc):
