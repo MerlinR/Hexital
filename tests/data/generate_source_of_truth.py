@@ -65,6 +65,7 @@ def generate():
             {"kind": "kc"},
             {"kind": "hl2"},
             {"kind": "roc"},
+            {"kind": "adx"},
         ],
     )
 
@@ -129,6 +130,14 @@ def generate():
             }
         )
     save_json_result(supertrend_data, "SUPERTREND")
+
+    adx = [round_values(value) for value in df["ADX_14"].tolist()]
+    adx_p = [round_values(value) for value in df["DMP_14"].tolist()]
+    adx_n = [round_values(value) for value in df["DMN_14"].tolist()]
+    adx_data = []
+    for adx_row in zip(adx, adx_p, adx_n):
+        adx_data.append({"ADX": adx_row[0], "DM_Plus": adx_row[1], "DM_Neg": adx_row[2]})
+    save_json_result(adx_data, "ADX")
 
 
 if __name__ == "__main__":

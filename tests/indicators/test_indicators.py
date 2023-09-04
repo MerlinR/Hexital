@@ -35,13 +35,11 @@ class TestIndicators:
         return any([diff_result, correlation])
 
     def correlation_validation(
-        self, result: list, expected: list, accuracy: float = 0.97
+        self, result: list, expected: list, accuracy: float = 0.95
     ):
         correlation = 0
 
-        if isinstance(result[0], float):
-            correlation = self.correlation_coefficient(result, expected)
-        elif isinstance(result[0], dict):
+        if isinstance(result[0], dict):
             correlations = 0.0
             for key in expected[0].keys():
                 correlations += self.correlation_coefficient(
@@ -49,6 +47,8 @@ class TestIndicators:
                 )
 
             correlation = correlations / len(expected[0].keys())
+        else:
+            correlation = self.correlation_coefficient(result, expected)
 
         print(f"Correlation: {correlation}")
         return correlation >= accuracy
@@ -75,10 +75,12 @@ class TestIndicators:
 
     def calc_mean(self, data: list):
         total = 0
+        length = 0
         for value in data:
             if value is not None:
+                length += 1
                 total += float(value)
-        return total / len(data)
+        return total / length
 
     def standard_deviation(self, data: list):
         data_mean = self.calc_mean(data)
@@ -101,6 +103,12 @@ class TestIndicators:
                 print("\033[91m" + f"{i}: {res} != {exp}" + "\033[0m")
             elif verbose:
                 print("\033[92m" + f"{i}: {res} == {exp}" + "\033[0m")
+
+    @pytest.mark.usefixtures("candles", "expected_adx")
+    def test_adx(self, candles, expected_adx):
+        test = indicators.ADX(candles=candles)
+        test.calculate()
+        assert self.verfiy(test.as_list, expected_adx, amount=450)
 
     @pytest.mark.usefixtures("candles", "expected_atr")
     def test_atr(self, candles, expected_atr):

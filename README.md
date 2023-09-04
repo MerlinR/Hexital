@@ -10,6 +10,7 @@ For most libraries such as [Pandas-TA](https://github.com/twopirllc/pandas-ta) w
 
 
 ## Indicators
+- ADX
 - ATR
 - KC
 - EMA
