@@ -87,11 +87,14 @@ def reading_period(
 
     # Checks 3 points along period to verify values exist
     return all(
-        reading_by_index(
+        True
+        if reading_by_index(
             candles,
             name,
             index - int(point),
         )
+        is not None
+        else False
         for point in [
             period,
             period / 2,
