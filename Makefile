@@ -14,6 +14,11 @@ truth:
 	poetry install --with truth
 	poetry run python tests/data/generate_source_of_truth.py 
 
+new-test-candles:
+	@echo "Generating New Source data"
+	poetry install --with truth
+	poetry run python tests/data/generate_new_data.py 
+
 test:
 	@echo "Running Tests"
 	poetry run pytest -vv --cov=hexital --durations=0
