@@ -3,7 +3,9 @@
 All notable changes to this project will be documented in this file.
 
 The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
+## 0.2.1
+- Added Patterns:
+  - Doji Candle
 ## 0.2.0 - 2023-09-05
 - Feature: Added timestamp (datetime) to OHLCV dataclass
 - Feature: Can convert OHLCV from list and dict
