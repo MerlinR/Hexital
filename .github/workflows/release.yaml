@@ -37,7 +37,6 @@ jobs:
     - name: Install dependencies
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: poetry install --no-interaction --no-root
+    - run: poetry config pypi-token.pypi "${{ secrets.PYPI_TOKEN }}"
     - name: Build and Publish package to PyPI
-      env:
-        PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-      run: poetry publish --build -u '__token__' -u "$PYPI_TOKEN"
+      run: poetry publish --build
