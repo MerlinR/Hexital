@@ -1,7 +1,12 @@
 # Hexital - Incremental Technical Analysis Library
-![](https://img.shields.io/badge/python-3.10-blue.svg) ![](https://img.shields.io/badge/python-3.11-blue.svg) [![unit tests](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml/badge.svg?branch=master)](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml)
+[![license](https://img.shields.io/github/license/merlinr/hexital)](#license)
+[![Python Version](https://img.shields.io/pypi/pyversions/hexital?style=flat)](https://pypi.org/project/hexital/)
+[![PyPi Version](https://img.shields.io/pypi/v/hexital?style=flat)](https://pypi.org/project/hexital/)
+[![Package Status](https://img.shields.io/pypi/status/hexital?style=flat)](https://pypi.org/project/hexital/)
+[![Unit Tests - Master](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml/badge.svg?branch=master)](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml)
+[![Unit Tests - Dev](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml/badge.svg?branch=development)](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml)
 
-# `Early Development`❗
+# `Alpha Development`❗
 Note: Extremely early stages and likely change drastically, including core functionality and methods.
 # Hexital
 `Hexital` is a Python library implementing financial indicators for technical analysis. The distinctive feature of the library is its incremental computation of indicators which is designed to fit real-time applications or applications with iterative input in general.
@@ -38,14 +43,20 @@ Simple useful Candle Anaylsis methods such as those in `Pine Scripting`
 - HighestBar/LowestBar Indicator (Offset how far back)
 - Indicator Cross
 - Indicator CrossOver/CrossUnder
-- 
 
+
+## Indicators
+Simple useful Candle pattern recognition, such as Doji, hammer, etc
+- Badly Working Doji
 
 ## Installation
+### Stable
+Pip and pypi package version is the latest stable version.
 ```bash
 pip install hexital
 ```
-In case you want to install the latest development version from the repo, use
+## Latest
+In case you want to install the latest development version from the repo.
 ```bash
 pip install git+https://github.com/merlinr/hexital.git@development
 ```
@@ -71,4 +82,4 @@ Roughly ordered in priority
 Testing is a huge part of this library as it's incredibly difficult to ensure the accuracy of the indicator values being generated. In order to solve this this I rely on [Pandas-TA](https://github.com/twopirllc/pandas-ta) as my source of truth for the indicator values. Each indicator added to this library requires a test that uses the Pandas-TA lib indicator output as the expected result.
 
 ## Inspiration
-This library was was inspired by [TALIpp](https://github.com/nardew/talipp) which is another Incremental Technical Analysis Library, however I disliked the seperate input lists rather then an entire candle, and futhermore outputs are seperated entities requiring lots of managing.
+This library was was inspired by [TALIpp](https://github.com/nardew/talipp) which is another Incremental Technical Analysis Library, however I disliked the seperate input lists rather then an entire candle, and futhermore outputs are seperated entities requiring lots of managing. Whereas Hexital stores all data within the Candles making easier usage.
