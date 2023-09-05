@@ -1,10 +1,10 @@
-name: unit tests
+name: Unit Tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [ "master", "development" ]
   pull_request:
-    branches: [ master ]
+    branches: [ "master", "development" ]
 
 jobs:
   test:
@@ -26,6 +26,8 @@ jobs:
       uses: snok/install-poetry@v1.3.4
       with:
         version: 1.5.1
+        virtualenvs-create: true
+        virtualenvs-in-project: true
     - name: Load cached venv
       id: cached-poetry-dependencies
       uses: actions/cache@v3
@@ -37,5 +39,5 @@ jobs:
       run: poetry install --no-interaction --no-root
     - name: Test with pytest
       run: |
-        poetry run coverage run --omit="tests/*" -m pytest -vv --durations=0
+        poetry run coverage run --omit="tests/*" -m pytest
         poetry run coverage report
