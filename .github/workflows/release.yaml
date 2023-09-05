@@ -37,7 +37,7 @@ jobs:
     - name: Install dependencies
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: poetry install --no-interaction --no-root
-    - name: Build Package
-      run: poetry build
-    - name: Publish package to PyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
+    - name: Build and Publish package to PyPI
+      env:
+        PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+      run: poetry publish --build -u '__token__' -u "$PYPI_TOKEN"
