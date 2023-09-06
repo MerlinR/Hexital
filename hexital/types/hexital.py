@@ -21,7 +21,7 @@ class Hexital:
         description: Optional[str] = None,
     ):
         self.name = name
-        self.candles = candles if candles else []
+        self.candles = candles if isinstance(candles, list) else []
         self._indicators = self._validate_indicators(indicators)
         self.description = description
 
@@ -105,14 +105,14 @@ class Hexital:
             if indic.name == indicator_name:
                 self._indicators.pop(index)
 
-    def append(self, candle: OHLCV | dict):
-        """Appends a OHLCV to candles and re-calculates"""
-        if isinstance(candle, dict):
-            new_ohlcv = OHLCV.from_dict(candle)
-            if isinstance(new_ohlcv, OHLCV):
-                self.candles.append()
-        elif isinstance(candle, OHLCV):
-            self.candles.append(candle)
+    def append(self, candles: OHLCV | List[OHLCV]):
+        if isinstance(candles, OHLCV):
+            self.candles.append(candles)
+        elif isinstance(candles, list):
+            if isinstance(candles[0], OHLCV):
+                self.candles.append(candles)
+            else:
+                raise TypeError
         else:
             raise TypeError
         self.calculate()

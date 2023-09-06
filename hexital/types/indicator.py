@@ -88,6 +88,18 @@ class Indicator(ABC):
         else:
             self.candles[index].indicators[self.name] = reading
 
+    def append(self, candles: OHLCV | List[OHLCV]):
+        if isinstance(candles, OHLCV):
+            self.candles.append(candles)
+        if isinstance(candles, list):
+            if isinstance(candles[0], OHLCV):
+                self.candles.append(candles)
+            else:
+                raise TypeError
+        else:
+            raise TypeError
+        self.calculate()
+
     def _calculate_reading(self, index: int = -1) -> float | dict | None:
         pass
 
