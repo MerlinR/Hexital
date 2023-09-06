@@ -34,14 +34,14 @@ class ADX(Indicator):
             self.period_signal = self.period
 
     def _initialise(self):
-        self.add_sub_indicator(
+        self._add_sub_indicator(
             indicators.ATR(
                 candles=self.candles,
                 period=self.period,
                 fullname_override=f"{self.indicator_name}_atr",
             )
         )
-        self.add_managed_indicator(
+        self._add_managed_indicator(
             "positive",
             indicators.RMA(
                 candles=self.candles,
@@ -50,14 +50,14 @@ class ADX(Indicator):
                 input_value=f"{self.indicator_name}_ppos",
             ),
         )
-        self.add_managed_indicator(
+        self._add_managed_indicator(
             "plain_positive",
             indicators.Managed(
                 candles=self.candles,
                 fullname_override=f"{self.indicator_name}_ppos",
             ),
         )
-        self.add_managed_indicator(
+        self._add_managed_indicator(
             "negative",
             indicators.RMA(
                 candles=self.candles,
@@ -66,7 +66,7 @@ class ADX(Indicator):
                 input_value=f"{self.indicator_name}_pneg",
             ),
         )
-        self.add_managed_indicator(
+        self._add_managed_indicator(
             "plain_negative",
             indicators.Managed(
                 candles=self.candles,
@@ -74,7 +74,7 @@ class ADX(Indicator):
             ),
         )
 
-        self.add_managed_indicator(
+        self._add_managed_indicator(
             "dx",
             indicators.RMA(
                 candles=self.candles,
@@ -83,7 +83,7 @@ class ADX(Indicator):
                 input_value=f"{self.indicator_name}_pdx",
             ),
         )
-        self.add_managed_indicator(
+        self._add_managed_indicator(
             "plain_dx",
             indicators.Managed(
                 candles=self.candles,
@@ -104,10 +104,10 @@ class ADX(Indicator):
             positive = up if up > down and up > 0 else 0
             negative = down if down > up and down > 0 else 0
 
-            self.managed_indictor("plain_positive").set_reading(positive)
-            self.managed_indictor("plain_negative").set_reading(negative)
-            self.managed_indictor("positive").calculate_index(index)
-            self.managed_indictor("negative").calculate_index(index)
+            self._managed_indictor("plain_positive").set_reading(positive)
+            self._managed_indictor("plain_negative").set_reading(negative)
+            self._managed_indictor("positive").calculate_index(index)
+            self._managed_indictor("negative").calculate_index(index)
 
             if self.reading(f"{self.indicator_name}_atr") and self.reading(
                 f"{self.indicator_name}_pos"
@@ -122,8 +122,8 @@ class ADX(Indicator):
                     100 * abs(adx_positive - adx_negative) / (adx_positive + adx_negative)
                 )
 
-                self.managed_indictor("plain_dx").set_reading(dx)
-                self.managed_indictor("dx").calculate_index(index)
+                self._managed_indictor("plain_dx").set_reading(dx)
+                self._managed_indictor("dx").calculate_index(index)
 
                 if self.reading(f"{self.indicator_name}_dx"):
                     adx_final = self.reading(f"{self.indicator_name}_dx")

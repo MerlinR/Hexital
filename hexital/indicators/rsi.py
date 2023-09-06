@@ -29,11 +29,11 @@ class RSI(Indicator):
         return f"{self.indicator_name}_{self.period}"
 
     def _initialise(self):
-        self.add_managed_indicator(
+        self._add_managed_indicator(
             "RSI_gain",
             Managed(indicator_name="RSI_gain", candles=self.candles),
         )
-        self.add_managed_indicator(
+        self._add_managed_indicator(
             "RSI_loss",
             Managed(indicator_name="RSI_loss", candles=self.candles),
         )
@@ -45,11 +45,11 @@ class RSI(Indicator):
             change_gain = -1 * change if change < 0 else 0.0
             change_loss = change if change > 0 else 0.0
 
-            self.managed_indictor("RSI_gain").set_reading(
+            self._managed_indictor("RSI_gain").set_reading(
                 ((self.prev_reading("RSI_gain") * (self.period - 1)) + change_gain)
                 / self.period,
             )
-            self.managed_indictor("RSI_loss").set_reading(
+            self._managed_indictor("RSI_loss").set_reading(
                 ((self.prev_reading("RSI_loss") * (self.period - 1)) + change_loss)
                 / self.period,
             )
@@ -58,10 +58,10 @@ class RSI(Indicator):
                 self.reading(self.input_value, i) - self.reading(self.input_value, i - 1)
                 for i in range(index - (self.period - 1), index + 1)
             ]
-            self.managed_indictor("RSI_gain").set_reading(
+            self._managed_indictor("RSI_gain").set_reading(
                 sum(chng for chng in changes if chng > 0) / self.period,
             )
-            self.managed_indictor("RSI_loss").set_reading(
+            self._managed_indictor("RSI_loss").set_reading(
                 sum(abs(chng) for chng in changes if chng < 0) / self.period,
             )
 
@@ -70,6 +70,6 @@ class RSI(Indicator):
             rsi = 100.0 - (100.0 / (1.0 + rs))
             return rsi
 
-        self.managed_indictor("RSI_gain").set_reading(None)
-        self.managed_indictor("RSI_loss").set_reading(None)
+        self._managed_indictor("RSI_gain").set_reading(None)
+        self._managed_indictor("RSI_loss").set_reading(None)
         return None

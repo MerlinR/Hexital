@@ -17,28 +17,28 @@ class Supertrend(Indicator):
         return f"{self.indicator_name}_{self.period}"
 
     def _initialise(self):
-        self.add_sub_indicator(
+        self._add_sub_indicator(
             indicators.ATR(
                 candles=self.candles,
                 period=self.period,
                 fullname_override=f"{self.indicator_name}_atr",
             )
         )
-        self.add_sub_indicator(
+        self._add_sub_indicator(
             indicators.HighLowAverage(
                 candles=self.candles,
                 fullname_override=f"{self.indicator_name}_HL",
             )
         )
 
-        self.add_managed_indicator(
+        self._add_managed_indicator(
             "basic_upper",
             indicators.Managed(
                 candles=self.candles,
                 fullname_override="ST_Upper",
             ),
         )
-        self.add_managed_indicator(
+        self._add_managed_indicator(
             "basic_lower",
             indicators.Managed(
                 candles=self.candles,
@@ -68,8 +68,8 @@ class Supertrend(Indicator):
                     if direction < 0 and upper > self.prev_reading("ST_Upper"):
                         upper = self.prev_reading("ST_Upper")
 
-            self.managed_indictor("basic_upper").set_reading(upper)
-            self.managed_indictor("basic_lower").set_reading(lower)
+            self._managed_indictor("basic_upper").set_reading(upper)
+            self._managed_indictor("basic_lower").set_reading(lower)
 
             return {
                 "trend": lower if direction == 1 else upper,

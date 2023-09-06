@@ -43,7 +43,7 @@ class STOCH(Indicator):
         return
 
     def _initialise(self):
-        self.add_managed_indicator(
+        self._add_managed_indicator(
             "k",
             SMA(
                 candles=self.candles,
@@ -52,7 +52,7 @@ class STOCH(Indicator):
                 fullname_override=f"{self.indicator_name}_k",
             ),
         )
-        self.add_managed_indicator(
+        self._add_managed_indicator(
             "d",
             SMA(
                 candles=self.candles,
@@ -77,11 +77,11 @@ class STOCH(Indicator):
             stoch = ((self.reading(self.input_value) - lowest) / (highest - lowest)) * 100
 
             self.candles[index].indicators[self.name] = {"stoch": stoch}
-            self.managed_indictor("k").calculate_index(index)
+            self._managed_indictor("k").calculate_index(index)
             k = self.reading(f"{self.indicator_name}_k")
 
             self.candles[index].indicators[self.name] = {"stoch": stoch, "k": k}
-            self.managed_indictor("d").calculate_index(index)
+            self._managed_indictor("d").calculate_index(index)
             d = self.reading(f"{self.indicator_name}_d")
 
             return {"stoch": stoch, "k": k, "d": d}

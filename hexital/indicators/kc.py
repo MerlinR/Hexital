@@ -23,7 +23,7 @@ class KC(Indicator):
         return f"{self.indicator_name}_{self.period}_{self.multiplier}"
 
     def _initialise(self):
-        self.add_sub_indicator(
+        self._add_sub_indicator(
             ATR(
                 candles=self.candles,
                 period=self.period,
@@ -31,7 +31,7 @@ class KC(Indicator):
             )
         )
 
-        self.add_sub_indicator(
+        self._add_sub_indicator(
             EMA(
                 candles=self.candles,
                 input_value=self.input_value,

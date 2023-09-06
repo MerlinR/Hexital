@@ -20,11 +20,11 @@ class VWAP(Indicator):
         return f"{self.indicator_name}_{self.period}"
 
     def _initialise(self):
-        self.add_managed_indicator(
+        self._add_managed_indicator(
             "VWAP_PV",
             Managed(indicator_name="VWAP_PV", candles=self.candles),
         )
-        self.add_managed_indicator(
+        self._add_managed_indicator(
             "VWAP_Vol",
             Managed(indicator_name="VWAP_Vol", candles=self.candles),
         )
@@ -41,9 +41,9 @@ class VWAP(Indicator):
             prev_pv = self.prev_reading("VWAP_PV")
             prev_vol = self.prev_reading("VWAP_Vol")
 
-        self.managed_indictor("VWAP_PV").set_reading(
+        self._managed_indictor("VWAP_PV").set_reading(
             prev_pv + self.reading("volume") * typical_price
         )
-        self.managed_indictor("VWAP_Vol").set_reading(prev_vol + self.reading("volume"))
+        self._managed_indictor("VWAP_Vol").set_reading(prev_vol + self.reading("volume"))
 
         return self.reading("VWAP_PV") / self.reading("VWAP_Vol")

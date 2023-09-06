@@ -68,14 +68,6 @@ class Indicator(ABC):
         return ohlcv.reading_as_list(self.candles, self.name)
 
     @property
-    def sub_indicator(self) -> Indicator:
-        return self._sub_indicator
-
-    @sub_indicator.setter
-    def sub_indicator(self, value: bool):
-        self._sub_indicator = value
-
-    @property
     def has_reading(self) -> bool:
         """Simple boolean to state if values are being generated yet in the candles"""
         if len(self.candles) == 0:
@@ -83,7 +75,7 @@ class Indicator(ABC):
         return self.reading(index=-1) is not None
 
     def _set_reading(self, index: int, reading: float | dict):
-        if self.sub_indicator:
+        if self._sub_indicator:
             self.candles[index].sub_indicators[self.name] = reading
         else:
             self.candles[index].indicators[self.name] = reading
@@ -148,17 +140,17 @@ class Indicator(ABC):
                 # Due to a managed Indicator, such as a self controlled EMA(MACD)
                 pass
 
-    def add_sub_indicator(self, indicator: Indicator):
+    def _add_sub_indicator(self, indicator: Indicator):
         """Adds sub indicator, this will auto calculate with indicator"""
-        indicator.sub_indicator = True
+        indicator._sub_indicator = True
         self._sub_indicators.append(indicator)
 
-    def add_managed_indicator(self, name: str, indicator: Indicator):
+    def _add_managed_indicator(self, name: str, indicator: Indicator):
         """Adds managed sub indicator, this will not auto calculate with indicator"""
-        indicator.sub_indicator = True
+        indicator._sub_indicator = True
         self._managed_indicators[name] = indicator
 
-    def managed_indictor(self, name: str) -> Indicator:
+    def _managed_indictor(self, name: str) -> Indicator:
         return self._managed_indicators.get(name)
 
     def prev_exists(self) -> bool:
