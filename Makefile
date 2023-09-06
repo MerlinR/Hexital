@@ -14,6 +14,13 @@ truth:
 	poetry install --with truth
 	poetry run python tests/data/generate_source_of_truth.py 
 
+
+speed_test:
+	@echo "Running Speed tests"
+	poetry install --with speed_tests
+	poetry run python tests/speed_tests/run_speed_tests.py 
+
+
 new-test-candles:
 	@echo "Generating New Source data"
 	poetry install --with truth

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hexital"
-version = "0.2.0"
+version = "0.2.1"
 description = "Hex Incremental Technical Analysis Library"
 readme = "README.md"
 license = "MIT"
@@ -34,6 +34,16 @@ deepdiff = "*"
 optional = true
 
 [tool.poetry.group.truth.dependencies]
+pandas = "*"
+numpy = "*"
+ta-lib = "*"
+pandas-ta = { git = "https://github.com/twopirllc/pandas-ta.git" }
+
+[tool.poetry.group.speed_tests]
+optional = true
+
+[tool.poetry.group.speed_tests.dependencies]
+matplotlib = "*"
 pandas = "*"
 numpy = "*"
 ta-lib = "*"
