@@ -62,6 +62,71 @@ pip install git+https://github.com/merlinr/hexital.git@development
 ```
 
 
+## Usage
+
+### Single Indicator
+```python
+from hexital import indicators
+
+my_candles = [
+    {"open": 17213, "high": 2395, "low": 7813, "close": 3615, "volume": 19661},
+    {"open": 1301, "high": 3007, "low": 11626, "close": 19048, "volume": 28909},
+    {"open": 12615, "high": 923, "low": 7318, "close": 1351, "volume": 33765},
+    {"open": 1643, "high": 16229, "low": 17721, "close": 212, "volume": 3281},
+    {"open": 424, "high": 10614, "low": 17133, "close": 7308, "volume": 41793},
+    {"open": 4323, "high": 5858, "low": 8785, "close": 8418, "volume": 34913},
+    {"open": 13838, "high": 13533, "low": 4830, "close": 17765, "volume": 586},
+    {"open": 14373, "high": 18026, "low": 7844, "close": 18798, "volume": 25993},
+    {"open": 12382, "high": 19875, "low": 2853, "close": 1431, "volume": 10055},
+    {"open": 19202, "high": 6584, "low": 6349, "close": 8299, "volume": 13199},
+]
+# Convert Basic candles
+candles = OHLCV.from_dicts(my_candles)
+my_ema = indicators.EMA(candles=parsed_candles, period=3)
+my_ema.calculate()
+
+# Indicator name is generated based on Indicator and parameters
+print(my_ema.name) # EMA_3
+
+# Check if started generating Readings
+print(my_ema.has_reading) # True
+
+# Get EMA indicator readings
+# Latest
+print(my_ema.reading()) # 8408.7552
+# All
+print(my_ema.as_list) # [None, None, 8004.6667, 4108.3333, 5708.1667, 7063.0833, 12414.0416, 15606.0208, 8518.5104, 8408.7552]
+
+# Add new
+my_ema.append(OHLCV.from_dict({'open': 19723, 'high': 4837, 'low': 11631, 'close': 6231, 'volume': 38993}))
+print(my_ema.as_list) # [None, None, 8004.6667, 4108.3333, 5708.1667, 7063.0833, 12414.0416, 15606.0208, 8518.5104, 8408.7552, 7319.8776]
+
+# Check Reading and Prev Reading
+print(my_ema.reading()) # 7319.8776
+print(my_ema.prev_reading()) # 8408.7552
+
+# How many EMA readings been generated
+print(my_ema.reading_count()) # 9
+
+# Purge Readings
+my_ema.purge()
+print(my_ema.reading()) # None
+
+# Purge and Re-calculate
+my_ema.recalculate()
+print(my_ema.reading()) # 7319.8776
+
+
+# Access other Readings (Reading get's the latest readings)
+print(my_ema.reading("high")) # 4837
+print(my_ema.candles[-1].high)  # 4837
+
+# Access other specific Readings (Older readings)
+print(my_ema.reading("high", index=-2)) # 6584
+
+```
+
+
 ## Upcoming Features
 
 Roughly ordered in priority
