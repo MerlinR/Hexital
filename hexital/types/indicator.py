@@ -119,7 +119,7 @@ class Indicator(ABC):
         """Optimisation method, to find where to start calculating the indicator from
         Searches from newest to oldest to find the first candle without the indicator
         """
-        if self.name not in self.candles[0].indicators:
+        if len(self.candles) == 0 or self.name not in self.candles[0].indicators:
             return 0
 
         for index in range(len(self.candles) - 1, 0, -1):
