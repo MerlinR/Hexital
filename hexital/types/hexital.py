@@ -36,14 +36,16 @@ class Hexital:
             if isinstance(indicator, Indicator):
                 valid_indicators.append(indicator)
             elif isinstance(indicator, dict):
-                indicator_name = indicator.pop("indicator", None)
+                indicator_name = indicator.get("indicator")
                 if indicator_name is None:
                     raise InvalidIndicator(
                         f"Dict Indicator missing 'indicator' name: {indicator}"
                     )
                 indicator_class = getattr(module, indicator_name, None)
                 if indicator_class is not None:
-                    valid_indicators.append(indicator_class(**indicator))
+                    arguments = indicator.copy()
+                    arguments.pop("indicator")
+                    valid_indicators.append(indicator_class(**arguments))
                 else:
                     raise InvalidIndicator(f"Indicator {indicator_name} does not exist")
 
