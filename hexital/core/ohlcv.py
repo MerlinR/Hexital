@@ -14,19 +14,19 @@ class OHLCV:
     volume: Optional[int] = None
     indicators: Dict[str, float | dict] = field(default_factory=dict)
     sub_indicators: Dict[str, float | dict] = field(default_factory=dict)
-    timestamp: datetime = None
+    timestamp: Optional[datetime] = None
 
     @classmethod
     def from_dict(cls, candle: Dict[str, float]) -> OHLCV:
         """Expected dict with keys ['open', 'high', 'low', 'close', 'volume']
         with optional 'timestamp' key."""
         return cls(
-            candle.get("open", 0.0),
-            candle.get("high", 0.0),
-            candle.get("low", 0.0),
-            candle.get("close", 0.0),
-            candle.get("volume", 0),
-            timestamp=candle.get("timestamp"),
+            candle.get("open", candle.get("Open", 0.0)),
+            candle.get("high", candle.get("High", 0.0)),
+            candle.get("low", candle.get("Low", 0.0)),
+            candle.get("close", candle.get("Close", 0.0)),
+            candle.get("volume", candle.get("Volume", 0.0)),
+            timestamp=candle.get("timestamp", candle.get("Timestamp")),
         )
 
     @staticmethod
@@ -54,8 +54,8 @@ class OHLCV:
             timestamp=timestamp,
         )
 
-    @classmethod
-    def from_lists(cls, candles: List[List[float]]) -> List[OHLCV]:
+    @staticmethod
+    def from_lists(candles: List[List[float]]) -> List[OHLCV]:
         """Expected list of the folling list [open, high, low, close, volume]
         with optional datetime at the begining or end."""
         return [OHLCV.from_list(candle) for candle in candles]
