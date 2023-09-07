@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from hexital.types import Indicator
-from hexital.utilities.utils import candles_sum
+from hexital.core import Indicator
+from hexital.lib.utils import candles_sum
 
 
 @dataclass(kw_only=True)

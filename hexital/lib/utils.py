@@ -1,7 +1,7 @@
 from typing import Dict, List, Optional
 
-from hexital.types.ohlcv import OHLCV
-from hexital.utilities.ohlcv import reading_by_candle
+from hexital.core.ohlcv import OHLCV
+from hexital.lib.ohlcv import reading_by_candle
 
 
 def candles_sum(

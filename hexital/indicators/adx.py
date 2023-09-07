@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 from hexital import indicators
-from hexital.types import Indicator
+from hexital.core import Indicator
 
 
 @dataclass(kw_only=True)

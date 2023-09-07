@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from hexital.types.ohlcv import OHLCV
+from hexital.core.ohlcv import OHLCV
 
 
 def doji(candles: List[OHLCV], length: int = 10, lookback: Optional[int] = None) -> bool:

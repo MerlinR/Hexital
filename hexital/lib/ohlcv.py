@@ -1,7 +1,7 @@
 from itertools import chain
 from typing import List, Optional
 
-from hexital.types.ohlcv import OHLCV
+from hexital.core.ohlcv import OHLCV
 
 
 def reading_by_index(

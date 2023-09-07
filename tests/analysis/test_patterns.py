@@ -1,6 +1,6 @@
 import pytest
-from hexital.types.ohlcv import OHLCV
-from hexital.utilities import patterns
+from hexital.analysis import patterns
+from hexital.core.ohlcv import OHLCV
 
 
 @pytest.fixture(name="doji_candle")

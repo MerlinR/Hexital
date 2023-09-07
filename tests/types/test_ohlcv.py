@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import pytest
-from hexital.types import OHLCV
+from hexital.core import OHLCV
 
 
 @pytest.fixture(name="ohlcv_dict")

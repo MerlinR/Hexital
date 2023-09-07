@@ -1,7 +1,7 @@
 import pytest
+from hexital.core import Hexital
 from hexital.exceptions import InvalidIndicator
 from hexital.indicators import EMA, SMA
-from hexital.types import Hexital
 
 
 @pytest.mark.usefixtures("candles", "expected_ema")

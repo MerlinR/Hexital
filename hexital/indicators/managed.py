@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional, Union
 
-from hexital.types import Indicator
+from hexital.core import Indicator
 
 
 @dataclass(kw_only=True)

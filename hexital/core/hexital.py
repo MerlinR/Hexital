@@ -1,10 +1,10 @@
 import importlib
 from typing import List, Optional
 
+from hexital.core.indicator import Indicator
+from hexital.core.ohlcv import OHLCV
 from hexital.exceptions import InvalidIndicator
-from hexital.types.indicator import Indicator
-from hexital.types.ohlcv import OHLCV
-from hexital.utilities.ohlcv import reading_by_index
+from hexital.lib.ohlcv import reading_by_index
 
 
 class Hexital:

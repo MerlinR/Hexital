@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
+from hexital.core import Indicator
 from hexital.indicators import SMA
-from hexital.types import Indicator
 
 
 @dataclass(kw_only=True)

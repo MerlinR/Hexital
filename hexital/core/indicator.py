@@ -4,8 +4,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
-from hexital.types.ohlcv import OHLCV
-from hexital.utilities import ohlcv, utils
+from hexital.core.ohlcv import OHLCV
+from hexital.lib import ohlcv, utils
 
 
 @dataclass(kw_only=True)

@@ -1,6 +1,6 @@
 import pytest
-from hexital.types.ohlcv import OHLCV
-from hexital.utilities import analysis
+from hexital.analysis import movement
+from hexital.core.ohlcv import OHLCV
 
 
 @pytest.fixture(name="rising_candles")
@@ -69,136 +69,136 @@ def fixture_indicator_candles():
 
 
 def test_positive():
-    assert analysis.positive(OHLCV(open=100, high=120, low=90, close=110, volume=10))
+    assert movement.positive(OHLCV(open=100, high=120, low=90, close=110, volume=10))
 
 
 def test_positive_false():
-    assert not analysis.positive(OHLCV(open=100, high=120, low=90, close=90, volume=10))
+    assert not movement.positive(OHLCV(open=100, high=120, low=90, close=90, volume=10))
 
 
 def test_positive_list():
-    assert not analysis.positive(
+    assert not movement.positive(
         [OHLCV(open=100, high=120, low=90, close=90, volume=10)], position=0
     )
 
 
 def test_negative():
-    assert analysis.negative(OHLCV(open=100, high=120, low=90, close=90, volume=10))
+    assert movement.negative(OHLCV(open=100, high=120, low=90, close=90, volume=10))
 
 
 def test_negative_false():
-    assert not analysis.negative(OHLCV(open=100, high=120, low=90, close=110, volume=10))
+    assert not movement.negative(OHLCV(open=100, high=120, low=90, close=110, volume=10))
 
 
 def test_negative_list():
-    assert not analysis.negative(
+    assert not movement.negative(
         [OHLCV(open=100, high=120, low=90, close=110, volume=10)], position=0
     )
 
 
 def test_value_range(rising_candles):
-    assert analysis.value_range(rising_candles, "close") == 40
+    assert movement.value_range(rising_candles, "close") == 40
 
 
 def test_basic_rising(rising_candles):
-    assert analysis.rising(rising_candles, "close")
+    assert movement.rising(rising_candles, "close")
 
 
 def test_basic_rising_false(fallling_candles):
-    assert not analysis.rising(fallling_candles, "close")
+    assert not movement.rising(fallling_candles, "close")
 
 
 def test_basic_falling(fallling_candles):
-    assert analysis.falling(fallling_candles, "close")
+    assert movement.falling(fallling_candles, "close")
 
 
 def test_basic_falling_false(rising_candles):
-    assert not analysis.falling(rising_candles, "close")
+    assert not movement.falling(rising_candles, "close")
 
 
 def test_mean_rising(mixed_candles):
-    assert analysis.mean_rising(mixed_candles, "close")
+    assert movement.mean_rising(mixed_candles, "close")
 
 
 def test_mean_rising_false(mixed_candles_two):
-    assert not analysis.mean_rising(mixed_candles_two, "close")
+    assert not movement.mean_rising(mixed_candles_two, "close")
 
 
 def test_mean_falling(mixed_candles_two):
-    assert analysis.mean_falling(mixed_candles_two, "close")
+    assert movement.mean_falling(mixed_candles_two, "close")
 
 
 def test_mean_falling_false(mixed_candles):
-    assert not analysis.mean_falling(mixed_candles, "close")
+    assert not movement.mean_falling(mixed_candles, "close")
 
 
 def test_highest(mixed_candles):
-    assert analysis.highest(mixed_candles, "close") == 150
+    assert movement.highest(mixed_candles, "close") == 150
 
 
 def test_highest_two(mixed_candles):
-    assert analysis.highest(mixed_candles, "low") == 120
+    assert movement.highest(mixed_candles, "low") == 120
 
 
 def test_lowest(mixed_candles_two):
-    assert analysis.lowest(mixed_candles_two, "close") == 115
+    assert movement.lowest(mixed_candles_two, "close") == 115
 
 
 def test_lowest_two(mixed_candles_two):
-    assert analysis.lowest(mixed_candles_two, "low") == 90
+    assert movement.lowest(mixed_candles_two, "low") == 90
 
 
 def test_highestbar(mixed_candles):
-    assert analysis.highestbar(mixed_candles, "close") == 2
+    assert movement.highestbar(mixed_candles, "close") == 2
 
 
 def test_highestbar_two(fallling_candles):
-    assert analysis.highestbar(fallling_candles, "low") == 4
+    assert movement.highestbar(fallling_candles, "low") == 4
 
 
 def test_lowestbars(mixed_candles_two):
-    assert analysis.lowestbar(mixed_candles_two, "open") == 2
+    assert movement.lowestbar(mixed_candles_two, "open") == 2
 
 
 def test_lowestbars_two(mixed_candles_two):
-    assert analysis.lowestbar(mixed_candles_two, "close") == 1
+    assert movement.lowestbar(mixed_candles_two, "close") == 1
 
 
 def test_lowestbars_two_length(mixed_candles_two):
-    assert analysis.lowestbar(mixed_candles_two, "close", length=100) == 1
+    assert movement.lowestbar(mixed_candles_two, "close", length=100) == 1
 
 
 def test_cross(indicator_candles):
-    assert analysis.cross(indicator_candles, "EMA_10", "close")
+    assert movement.cross(indicator_candles, "EMA_10", "close")
 
 
 def test_cross_length(indicator_candles):
-    assert analysis.cross(indicator_candles, "EMA_10", "close", length=100)
+    assert movement.cross(indicator_candles, "EMA_10", "close", length=100)
 
 
 def test_cross_any_direction(indicator_candles):
-    assert analysis.cross(indicator_candles, "close", "EMA_10")
+    assert movement.cross(indicator_candles, "close", "EMA_10")
 
 
 def test_crossover(indicator_candles):
-    assert analysis.crossover(indicator_candles, "EMA_10", "close")
+    assert movement.crossover(indicator_candles, "EMA_10", "close")
 
 
 def test_crossover_length(indicator_candles):
-    assert analysis.crossover(indicator_candles, "EMA_10", "close", length=10)
+    assert movement.crossover(indicator_candles, "EMA_10", "close", length=10)
 
 
 def test_crossover_invalid(indicator_candles):
-    assert analysis.crossover(indicator_candles, "close", "EMA_10") is False
+    assert movement.crossover(indicator_candles, "close", "EMA_10") is False
 
 
 def test_crosunder(indicator_candles):
-    assert analysis.crossunder(indicator_candles, "close", "EMA_10")
+    assert movement.crossunder(indicator_candles, "close", "EMA_10")
 
 
 def test_crosunder_length(indicator_candles):
-    assert analysis.crossunder(indicator_candles, "close", "EMA_10", length=10)
+    assert movement.crossunder(indicator_candles, "close", "EMA_10", length=10)
 
 
 def test_crosunder_invalid(indicator_candles):
-    assert analysis.crossunder(indicator_candles, "EMA_10", "close") is False
+    assert movement.crossunder(indicator_candles, "EMA_10", "close") is False

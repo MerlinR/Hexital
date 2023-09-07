@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pandas_ta as ta
-from hexital.types import OHLCV, Hexital
+from hexital.core import OHLCV, Hexital
 
 
 def generate_random_candles(amount: int) -> list:

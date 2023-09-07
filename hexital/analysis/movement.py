@@ -1,7 +1,7 @@
 from typing import List, Union
 
-from hexital.types.ohlcv import OHLCV
-from hexital.utilities.ohlcv import (
+from hexital.core.ohlcv import OHLCV
+from hexital.lib.ohlcv import (
     reading_by_candle,
     reading_by_index,
     reading_count,
