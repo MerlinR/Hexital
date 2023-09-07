@@ -105,12 +105,22 @@ class Hexital:
             if indic.name == indicator_name:
                 self._indicators.pop(index)
 
-    def append(self, candles: OHLCV | List[OHLCV]):
+    def append(
+        self, candles: OHLCV | List[OHLCV] | dict | List[dict] | list | List[list]
+    ):
         if isinstance(candles, OHLCV):
             self.candles.append(candles)
+        elif isinstance(candles, dict):
+            self.candles.append(OHLCV.from_dict(candles))
         elif isinstance(candles, list):
             if isinstance(candles[0], OHLCV):
-                self.candles.append(candles)
+                self.candles.extend(candles)
+            elif isinstance(candles[0], dict):
+                self.candles.extend(OHLCV.from_dicts(candles))
+            elif isinstance(candles[0], (float, int)):
+                self.candles.append(OHLCV.from_list(candles))
+            elif isinstance(candles[0], list):
+                self.candles.extend(OHLCV.from_lists(candles))
             else:
                 raise TypeError
         else:

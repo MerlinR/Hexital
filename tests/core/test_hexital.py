@@ -90,24 +90,72 @@ def test_hextial_reading_missing(candles):
     assert strat.has_reading("EMA") is False
 
 
-@pytest.mark.usefixtures("candles", "expected_sma")
-def test_hextial_append(candles, expected_sma):
+@pytest.mark.usefixtures("candles")
+def test_hextial_append_ohlcv(candles):
     new_candle = candles.pop()
-    strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
-
-    strat.calculate()
-    assert pytest.approx(strat.reading_as_list("SMA")) != expected_sma
+    strat = Hexital("Test Stratergy", [])
 
     strat.append(new_candle)
 
-    assert pytest.approx(strat.reading_as_list("SMA")) == expected_sma
+    assert strat.candles == [new_candle]
+
+
+@pytest.mark.usefixtures("candles")
+def test_hextial_append_ohlcv_list(candles):
+    strat = Hexital("Test Stratergy", [])
+
+    strat.append(candles)
+
+    assert strat.candles == candles
+
+
+@pytest.mark.usefixtures("candles")
+def test_hextial_append_dict(candles):
+    strat = Hexital("Test Stratergy", [])
+
+    strat.append(
+        {"open": 17213, "high": 2395, "low": 7813, "close": 3615, "volume": 19661}
+    )
+    assert strat.candles == [candles[0]]
+
+
+@pytest.mark.usefixtures("candles")
+def test_hextial_append_dict_list(candles):
+    strat = Hexital("Test Stratergy", [])
+
+    strat.append(
+        [
+            {"open": 17213, "high": 2395, "low": 7813, "close": 3615, "volume": 19661},
+            {"open": 1301, "high": 3007, "low": 11626, "close": 19048, "volume": 28909},
+        ]
+    )
+
+    assert strat.candles == candles[:2]
+
+
+@pytest.mark.usefixtures("candles")
+def test_hextial_append_list(candles):
+    strat = Hexital("Test Stratergy", [])
+
+    strat.append([17213, 2395, 7813, 3615, 19661])
+
+    assert strat.candles == [candles[0]]
+
+
+@pytest.mark.usefixtures("candles")
+def test_hextial_append_list_list(candles):
+    strat = Hexital("Test Stratergy", [])
+
+    strat.append([[17213, 2395, 7813, 3615, 19661], [1301, 3007, 11626, 19048, 28909]])
+
+    assert strat.candles == candles[:2]
 
 
 @pytest.mark.usefixtures("candles")
 def test_hextial_append_invalid(candles):
     strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
     with pytest.raises(TypeError):
-        strat.append([1, 2, 3])
+        strat.append(["Fuck", 2, 3])
 
 
 @pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
