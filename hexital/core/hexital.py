@@ -1,22 +1,22 @@
 import importlib
 from typing import List, Optional
 
+from hexital.core.candle import Candle
 from hexital.core.indicator import Indicator
-from hexital.core.ohlcv import OHLCV
 from hexital.exceptions import InvalidIndicator
-from hexital.lib.ohlcv import reading_by_index
+from hexital.lib.candle_extension import reading_by_index
 
 
 class Hexital:
     name: str = ""
-    candles: List[OHLCV] = None
+    candles: List[Candle] = None
     _indicators: List[Indicator] = None
     description: Optional[str] = None
 
     def __init__(
         self,
         name: str,
-        candles: List[OHLCV],
+        candles: List[Candle],
         indicators: List[dict | Indicator] = None,
         description: Optional[str] = None,
     ):
@@ -106,21 +106,21 @@ class Hexital:
                 self._indicators.pop(index)
 
     def append(
-        self, candles: OHLCV | List[OHLCV] | dict | List[dict] | list | List[list]
+        self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]
     ):
-        if isinstance(candles, OHLCV):
+        if isinstance(candles, Candle):
             self.candles.append(candles)
         elif isinstance(candles, dict):
-            self.candles.append(OHLCV.from_dict(candles))
+            self.candles.append(Candle.from_dict(candles))
         elif isinstance(candles, list):
-            if isinstance(candles[0], OHLCV):
+            if isinstance(candles[0], Candle):
                 self.candles.extend(candles)
             elif isinstance(candles[0], dict):
-                self.candles.extend(OHLCV.from_dicts(candles))
+                self.candles.extend(Candle.from_dicts(candles))
             elif isinstance(candles[0], (float, int)):
-                self.candles.append(OHLCV.from_list(candles))
+                self.candles.append(Candle.from_list(candles))
             elif isinstance(candles[0], list):
-                self.candles.extend(OHLCV.from_lists(candles))
+                self.candles.extend(Candle.from_lists(candles))
             else:
                 raise TypeError
         else:

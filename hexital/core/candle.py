@@ -6,7 +6,7 @@ from typing import Dict, List, Optional
 
 
 @dataclass
-class OHLCV:
+class Candle:
     open: Optional[float] = None
     high: Optional[float] = None
     low: Optional[float] = None
@@ -17,7 +17,7 @@ class OHLCV:
     timestamp: Optional[datetime] = None
 
     @classmethod
-    def from_dict(cls, candle: Dict[str, float]) -> OHLCV:
+    def from_dict(cls, candle: Dict[str, float]) -> Candle:
         """Expected dict with keys ['open', 'high', 'low', 'close', 'volume']
         with optional 'timestamp' key."""
         return cls(
@@ -30,13 +30,13 @@ class OHLCV:
         )
 
     @staticmethod
-    def from_dicts(candles: List[Dict[str, float]]) -> List[OHLCV]:
+    def from_dicts(candles: List[Dict[str, float]]) -> List[Candle]:
         """Expected list of dict's with keys ['open', 'high', 'low', 'close', 'volume']
         with optional 'timestamp' key."""
-        return [OHLCV.from_dict(candle) for candle in candles]
+        return [Candle.from_dict(candle) for candle in candles]
 
     @classmethod
-    def from_list(cls, candle: List[float]) -> OHLCV:
+    def from_list(cls, candle: List[float]) -> Candle:
         """Expected list [open, high, low, close, volume]
         with optional datetime at the begining or end."""
         timestamp = None
@@ -55,7 +55,7 @@ class OHLCV:
         )
 
     @staticmethod
-    def from_lists(candles: List[List[float]]) -> List[OHLCV]:
+    def from_lists(candles: List[List[float]]) -> List[Candle]:
         """Expected list of the folling list [open, high, low, close, volume]
         with optional datetime at the begining or end."""
-        return [OHLCV.from_list(candle) for candle in candles]
+        return [Candle.from_list(candle) for candle in candles]

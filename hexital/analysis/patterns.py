@@ -1,9 +1,9 @@
 from typing import List, Optional
 
-from hexital.core.ohlcv import OHLCV
+from hexital.core.candle import Candle
 
 
-def doji(candles: List[OHLCV], length: int = 10, lookback: Optional[int] = None) -> bool:
+def doji(candles: List[Candle], length: int = 10, lookback: Optional[int] = None) -> bool:
     """A candle body is Doji.
     when it's shorter than 10% of theaverage of the 10 previous candles' high-low range.
     Lookback allows detecting ant Doji candles N back"""

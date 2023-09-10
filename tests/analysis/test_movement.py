@@ -1,98 +1,98 @@
 import pytest
 from hexital.analysis import movement
-from hexital.core.ohlcv import OHLCV
+from hexital.core.candle import Candle
 
 
 @pytest.fixture(name="rising_candles")
 def fixture_rising_candles():
     return [
-        OHLCV(open=90, high=110, low=80, close=80, volume=10),
-        OHLCV(open=100, high=120, low=90, close=90, volume=10),
-        OHLCV(open=110, high=130, low=100, close=100, volume=10),
-        OHLCV(open=120, high=140, low=110, close=110, volume=10),
-        OHLCV(open=130, high=150, low=120, close=120, volume=10),
+        Candle(open=90, high=110, low=80, close=80, volume=10),
+        Candle(open=100, high=120, low=90, close=90, volume=10),
+        Candle(open=110, high=130, low=100, close=100, volume=10),
+        Candle(open=120, high=140, low=110, close=110, volume=10),
+        Candle(open=130, high=150, low=120, close=120, volume=10),
     ]
 
 
 @pytest.fixture(name="fallling_candles")
 def fixture_fallling_candles():
     return [
-        OHLCV(open=130, high=150, low=120, close=120, volume=10),
-        OHLCV(open=120, high=140, low=110, close=110, volume=10),
-        OHLCV(open=110, high=130, low=100, close=100, volume=10),
-        OHLCV(open=100, high=120, low=90, close=90, volume=10),
-        OHLCV(open=90, high=110, low=80, close=80, volume=10),
+        Candle(open=130, high=150, low=120, close=120, volume=10),
+        Candle(open=120, high=140, low=110, close=110, volume=10),
+        Candle(open=110, high=130, low=100, close=100, volume=10),
+        Candle(open=100, high=120, low=90, close=90, volume=10),
+        Candle(open=90, high=110, low=80, close=80, volume=10),
     ]
 
 
 @pytest.fixture(name="mixed_candles")
 def fixture_mixed_candles():
     return [
-        OHLCV(open=130, high=150, low=120, close=120, volume=10),
-        OHLCV(open=120, high=140, low=110, close=110, volume=10),
-        OHLCV(open=110, high=150, low=120, close=150, volume=10),
-        OHLCV(open=150, high=120, low=90, close=110, volume=10),
-        OHLCV(open=110, high=140, low=110, close=140, volume=10),
+        Candle(open=130, high=150, low=120, close=120, volume=10),
+        Candle(open=120, high=140, low=110, close=110, volume=10),
+        Candle(open=110, high=150, low=120, close=150, volume=10),
+        Candle(open=150, high=120, low=90, close=110, volume=10),
+        Candle(open=110, high=140, low=110, close=140, volume=10),
     ]
 
 
 @pytest.fixture(name="mixed_candles_two")
 def fixture_mixed_candles_two():
     return [
-        OHLCV(open=130, high=150, low=120, close=120, volume=10),
-        OHLCV(open=120, high=140, low=110, close=120, volume=10),
-        OHLCV(open=110, high=150, low=120, close=130, volume=10),
-        OHLCV(open=150, high=120, low=90, close=115, volume=10),
-        OHLCV(open=115, high=140, low=110, close=120, volume=10),
+        Candle(open=130, high=150, low=120, close=120, volume=10),
+        Candle(open=120, high=140, low=110, close=120, volume=10),
+        Candle(open=110, high=150, low=120, close=130, volume=10),
+        Candle(open=150, high=120, low=90, close=115, volume=10),
+        Candle(open=115, high=140, low=110, close=120, volume=10),
     ]
 
 
 @pytest.fixture(name="indicator_candles")
 def fixture_indicator_candles():
     return [
-        OHLCV(
+        Candle(
             open=130, high=150, low=120, close=120, volume=10, indicators={"EMA_10": 100}
         ),
-        OHLCV(
+        Candle(
             open=120, high=140, low=110, close=120, volume=10, indicators={"EMA_10": 100}
         ),
-        OHLCV(
+        Candle(
             open=110, high=150, low=120, close=130, volume=10, indicators={"EMA_10": 100}
         ),
-        OHLCV(
+        Candle(
             open=150, high=120, low=90, close=115, volume=10, indicators={"EMA_10": 110}
         ),
-        OHLCV(
+        Candle(
             open=115, high=140, low=110, close=120, volume=10, indicators={"EMA_10": 140}
         ),
     ]
 
 
 def test_positive():
-    assert movement.positive(OHLCV(open=100, high=120, low=90, close=110, volume=10))
+    assert movement.positive(Candle(open=100, high=120, low=90, close=110, volume=10))
 
 
 def test_positive_false():
-    assert not movement.positive(OHLCV(open=100, high=120, low=90, close=90, volume=10))
+    assert not movement.positive(Candle(open=100, high=120, low=90, close=90, volume=10))
 
 
 def test_positive_list():
     assert not movement.positive(
-        [OHLCV(open=100, high=120, low=90, close=90, volume=10)], position=0
+        [Candle(open=100, high=120, low=90, close=90, volume=10)], position=0
     )
 
 
 def test_negative():
-    assert movement.negative(OHLCV(open=100, high=120, low=90, close=90, volume=10))
+    assert movement.negative(Candle(open=100, high=120, low=90, close=90, volume=10))
 
 
 def test_negative_false():
-    assert not movement.negative(OHLCV(open=100, high=120, low=90, close=110, volume=10))
+    assert not movement.negative(Candle(open=100, high=120, low=90, close=110, volume=10))
 
 
 def test_negative_list():
     assert not movement.negative(
-        [OHLCV(open=100, high=120, low=90, close=110, volume=10)], position=0
+        [Candle(open=100, high=120, low=90, close=110, volume=10)], position=0
     )
 
 

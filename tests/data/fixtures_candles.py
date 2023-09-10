@@ -1,7 +1,7 @@
 import json
 
 import pytest
-from hexital import OHLCV
+from hexital import Candle
 
 
 def load_json_candles() -> list:
@@ -11,4 +11,4 @@ def load_json_candles() -> list:
 
 @pytest.fixture(name="candles")
 def fixture_candle_data():
-    return OHLCV.from_dicts(load_json_candles())
+    return Candle.from_dicts(load_json_candles())

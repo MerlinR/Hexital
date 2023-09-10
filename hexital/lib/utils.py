@@ -1,11 +1,11 @@
 from typing import Dict, List, Optional
 
-from hexital.core.ohlcv import OHLCV
-from hexital.lib.ohlcv import reading_by_candle
+from hexital.core.candle import Candle
+from hexital.lib.candle_extension import reading_by_candle
 
 
 def candles_sum(
-    candles: List[OHLCV], indicator: str, length: int = 1, index: Optional[int] = None
+    candles: List[Candle], indicator: str, length: int = 1, index: Optional[int] = None
 ) -> float:
     """Sum of `indicator` for `length` bars back. including index/latest"""
 

@@ -34,7 +34,7 @@ For most libraries such as [Pandas-TA](https://github.com/twopirllc/pandas-ta) w
 - WMA
 
 
-## Analysis
+## Candlestick Movement
 Simple useful Candle Anaylsis methods such as those in [Pine Scripting](https://www.tradingview.com/pine-script-reference/v5/)
 - Positive/Negative Candle
 - Rising/Falling Indicator
@@ -45,7 +45,7 @@ Simple useful Candle Anaylsis methods such as those in [Pine Scripting](https://
 - Indicator CrossOver/CrossUnder
 
 
-## Indicators
+## Candlestick Patterns
 Simple useful Candle pattern recognition, such as Doji, hammer, etc
 - Doji
 
@@ -66,7 +66,7 @@ pip install git+https://github.com/merlinr/hexital.git@development
 
 ### Single Indicator
 ```python
-from hexital import indicators
+from hexital import EMA, Candle
 
 my_candles = [
     {"open": 17213, "high": 2395, "low": 7813, "close": 3615, "volume": 19661},
@@ -81,8 +81,8 @@ my_candles = [
     {"open": 19202, "high": 6584, "low": 6349, "close": 8299, "volume": 13199},
 ]
 # Convert Basic candles
-candles = OHLCV.from_dicts(my_candles)
-my_ema = indicators.EMA(candles=parsed_candles, period=3)
+candles = Candle.from_dicts(my_candles)
+my_ema = EMA(candles=parsed_candles, period=3)
 my_ema.calculate()
 
 # Indicator name is generated based on Indicator and parameters
@@ -98,7 +98,7 @@ print(my_ema.reading()) # 8408.7552
 print(my_ema.as_list) # [None, None, 8004.6667, 4108.3333, 5708.1667, 7063.0833, 12414.0416, 15606.0208, 8518.5104, 8408.7552]
 
 # Add new
-my_ema.append(OHLCV.from_dict({'open': 19723, 'high': 4837, 'low': 11631, 'close': 6231, 'volume': 38993}))
+my_ema.append(Candle.from_dict({'open': 19723, 'high': 4837, 'low': 11631, 'close': 6231, 'volume': 38993}))
 print(my_ema.as_list) # [None, None, 8004.6667, 4108.3333, 5708.1667, 7063.0833, 12414.0416, 15606.0208, 8518.5104, 8408.7552, 7319.8776]
 
 # Check Reading and Prev Reading
@@ -152,17 +152,16 @@ The following charts indicate the results and speed of Pandas-TA and Hexital bot
 The incremental chart's here are calculating the TA, adding one, re-calculating up to N amount. Pandas-TA/Pandas/Numpy for incremental data is clearly a slow process, this from my understanding due to the underlying way numpy will append/concat data, having to re-create the memory rather than resize. This is why Numpy/Panda's recommend gathering all the data prior to running calculations on it. Whereby the bulk calculating in Pandas-TA is consistent with a small time increase with the amount of data. While `Hexital` running purely pythonic can run in quickly in bulk and incremental, with little to no extra overhead time; clearly performing far faster than Pandas-TA Incremental and even faster than Pandas-TA with smaller set of data. 
 
 ![EMA 10 test results.](tests/speed_tests/EMA_10.png)
-![MACD  test results.](tests/speed_tests/MACD_10.png)
 
 From chart _(3)_  you can clearly see that with bulk calculations with an extremely large dataset, Pandas-Ta performs better than `Hexital` in large Bulk data. Bulk calculations Pandas-TA going from 0.08 for 1,000 and staying there for 10,000, While Hexital Goes from 0.005 seconds for 1,000 to 0.05 seconds for 10,000. While Hexital is faster, there is a clear growth in process time. Therefore for backtesting with a large dataset, Pandas-TA will give you the best performance, whereas Hexital will continue to slow down.
 
+![EMA 10 Bulk test results.](tests/speed_tests/EMA_10%20Bulk%20Calculations.png)
+
 However referencing chart _(4)_ being an example of using both these libraries for a live application, whereby at n candles we incrementing a dataset with a candle and calculating the new TA; `Hexital` is far quicker. This is due to the speed that python can increment a list of data rather than Panda, as well as `Hexital` only needing to calculate the newest candle rather than having to re-calculate the entire dataset. Chart _3_ clearly shows the speed benefits it has over Pandas-TA and other Panda based Technical Analysis tools for incremental data sets.
 
-
-![EMA 10 Bulk test results.](tests/speed_tests/EMA_10%20Bulk%20Calculations.png)
 ![EMA 10 Real world usage.](tests/speed_tests/EMA_10_real_world.png)
 
-For reference, if using seconds OHLCV with 10,000 candles that is around 2 Hours 46 minutes.
+For reference, if using seconds Candle with 10,000 candles that is around 2 Hours 46 minutes.
 #### Note
 The code that produces these charts is: `tests/speed_tests/run_speed_test.py` and can be ran by calling `make speed-test`. Some noise is seen due to running on personal laptop while in use.
 ## Inspiration

@@ -91,7 +91,7 @@ def test_hextial_reading_missing(candles):
 
 
 @pytest.mark.usefixtures("candles")
-def test_hextial_append_ohlcv(candles):
+def test_hextial_append_candle(candles):
     new_candle = candles.pop()
     strat = Hexital("Test Stratergy", [])
 
@@ -101,7 +101,7 @@ def test_hextial_append_ohlcv(candles):
 
 
 @pytest.mark.usefixtures("candles")
-def test_hextial_append_ohlcv_list(candles):
+def test_hextial_append_candle_list(candles):
     strat = Hexital("Test Stratergy", [])
 
     strat.append(candles)

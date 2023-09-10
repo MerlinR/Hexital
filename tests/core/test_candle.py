@@ -1,11 +1,11 @@
 from datetime import datetime
 
 import pytest
-from hexital.core import OHLCV
+from hexital.core import Candle
 
 
-@pytest.fixture(name="ohlcv_dict")
-def fixture_ohlcv_dict():
+@pytest.fixture(name="candle_dict")
+def fixture_candle_dict():
     return [
         {
             "open": 12331.69043,
@@ -24,8 +24,8 @@ def fixture_ohlcv_dict():
     ]
 
 
-@pytest.fixture(name="ohlcv_dict_datetime")
-def fixture_ohlcv_dict_datetime():
+@pytest.fixture(name="candle_dict_datetime")
+def fixture_candle_dict_datetime():
     return {
         "open": 12331.69043,
         "high": 12542.540039,
@@ -36,16 +36,16 @@ def fixture_ohlcv_dict_datetime():
     }
 
 
-@pytest.fixture(name="ohlcv_list")
-def fixture_ohlcv_list():
+@pytest.fixture(name="candle_list")
+def fixture_candle_list():
     return [
         [12331.69043, 12542.540039, 12202.410156, 12536.019531, 4918240000],
         [12511.459961, 12645.830078, 12460.990234, 12563.759766, 4547280000],
     ]
 
 
-@pytest.fixture(name="ohlcv_list_datetime")
-def fixture_ohlcv_list_datetime():
+@pytest.fixture(name="candle_list_datetime")
+def fixture_candle_list_datetime():
     return [
         12331.69043,
         12542.540039,
@@ -56,8 +56,8 @@ def fixture_ohlcv_list_datetime():
     ]
 
 
-def test_OHLCV_from_dict(ohlcv_dict):
-    assert OHLCV.from_dict(ohlcv_dict[0]) == OHLCV(
+def test_candle_from_dict(candle_dict):
+    assert Candle.from_dict(candle_dict[0]) == Candle(
         open=12331.69043,
         high=12542.540039,
         low=12202.410156,
@@ -68,8 +68,8 @@ def test_OHLCV_from_dict(ohlcv_dict):
     )
 
 
-def test_OHLCV_from_dict_datetime(ohlcv_dict_datetime):
-    assert OHLCV.from_dict(ohlcv_dict_datetime) == OHLCV(
+def test_candle_from_dict_datetime(candle_dict_datetime):
+    assert Candle.from_dict(candle_dict_datetime) == Candle(
         open=12331.69043,
         high=12542.540039,
         low=12202.410156,
@@ -81,9 +81,9 @@ def test_OHLCV_from_dict_datetime(ohlcv_dict_datetime):
     )
 
 
-def test_OHLCV_from_dicts(ohlcv_dict):
-    assert OHLCV.from_dicts(ohlcv_dict) == [
-        OHLCV(
+def test_candle_from_dicts(candle_dict):
+    assert Candle.from_dicts(candle_dict) == [
+        Candle(
             open=12331.69043,
             high=12542.540039,
             low=12202.410156,
@@ -92,7 +92,7 @@ def test_OHLCV_from_dicts(ohlcv_dict):
             indicators={},
             sub_indicators={},
         ),
-        OHLCV(
+        Candle(
             open=12511.459961,
             high=12645.830078,
             low=12460.990234,
@@ -104,8 +104,8 @@ def test_OHLCV_from_dicts(ohlcv_dict):
     ]
 
 
-def test_OHLCV_from_list(ohlcv_list):
-    assert OHLCV.from_list(ohlcv_list[0]) == OHLCV(
+def test_candle_from_list(candle_list):
+    assert Candle.from_list(candle_list[0]) == Candle(
         open=12331.69043,
         high=12542.540039,
         low=12202.410156,
@@ -116,8 +116,8 @@ def test_OHLCV_from_list(ohlcv_list):
     )
 
 
-def test_OHLCV_from_list_datetime(ohlcv_list_datetime):
-    assert OHLCV.from_list(ohlcv_list_datetime) == OHLCV(
+def test_candle_from_list_datetime(candle_list_datetime):
+    assert Candle.from_list(candle_list_datetime) == Candle(
         open=12331.69043,
         high=12542.540039,
         low=12202.410156,
@@ -129,9 +129,9 @@ def test_OHLCV_from_list_datetime(ohlcv_list_datetime):
     )
 
 
-def test_OHLCV_from_lists(ohlcv_list):
-    assert OHLCV.from_lists(ohlcv_list) == [
-        OHLCV(
+def test_candle_from_lists(candle_list):
+    assert Candle.from_lists(candle_list) == [
+        Candle(
             open=12331.69043,
             high=12542.540039,
             low=12202.410156,
@@ -140,7 +140,7 @@ def test_OHLCV_from_lists(ohlcv_list):
             indicators={},
             sub_indicators={},
         ),
-        OHLCV(
+        Candle(
             open=12511.459961,
             high=12645.830078,
             low=12460.990234,

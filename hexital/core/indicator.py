@@ -4,13 +4,13 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
-from hexital.core.ohlcv import OHLCV
-from hexital.lib import ohlcv, utils
+from hexital.core.candle import Candle
+from hexital.lib import candle_extension, utils
 
 
 @dataclass(kw_only=True)
 class Indicator(ABC):
-    candles: List[OHLCV] = field(default_factory=list)
+    candles: List[Candle] = field(default_factory=list)
     indicator_name: str = None
     fullname_override: str = None
     name_suffix: str = None
@@ -65,7 +65,7 @@ class Indicator(ABC):
     @property
     def as_list(self) -> List[float | dict]:
         """Gathers the indicator for all candles as a list"""
-        return ohlcv.reading_as_list(self.candles, self.name)
+        return candle_extension.reading_as_list(self.candles, self.name)
 
     @property
     def has_reading(self) -> bool:
@@ -81,21 +81,21 @@ class Indicator(ABC):
             self.candles[index].indicators[self.name] = reading
 
     def append(
-        self, candles: OHLCV | List[OHLCV] | dict | List[dict] | list | List[list]
+        self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]
     ):
-        if isinstance(candles, OHLCV):
+        if isinstance(candles, Candle):
             self.candles.append(candles)
         elif isinstance(candles, dict):
-            self.candles.append(OHLCV.from_dict(candles))
+            self.candles.append(Candle.from_dict(candles))
         elif isinstance(candles, list):
-            if isinstance(candles[0], OHLCV):
+            if isinstance(candles[0], Candle):
                 self.candles.extend(candles)
             elif isinstance(candles[0], dict):
-                self.candles.extend(OHLCV.from_dicts(candles))
+                self.candles.extend(Candle.from_dicts(candles))
             elif isinstance(candles[0], (float, int)):
-                self.candles.append(OHLCV.from_list(candles))
+                self.candles.append(Candle.from_list(candles))
             elif isinstance(candles[0], list):
-                self.candles.extend(OHLCV.from_lists(candles))
+                self.candles.extend(Candle.from_lists(candles))
             else:
                 raise TypeError
         else:
@@ -178,24 +178,24 @@ class Indicator(ABC):
     ) -> float | dict | None:
         """Simple method to get an indicator reading from the index
         Name can use '.' to find nested reading, E.G 'MACD_12_26_9.MACD"""
-        return ohlcv.reading_by_candle(
+        return candle_extension.reading_by_candle(
             self.candles[index if index is not None else self._active_index],
             name if name else self.name,
         )
 
     def read_candle(
-        self, candle: OHLCV, name: Optional[str] = None
+        self, candle: Candle, name: Optional[str] = None
     ) -> float | dict | None:
         """Simple method to get an indicator reading from a candle,
         regardless of it's location"""
-        return ohlcv.reading_by_candle(
+        return candle_extension.reading_by_candle(
             candle,
             name if name else self.name,
         )
 
     def reading_count(self, name: Optional[str] = None) -> int:
         """Returns how many instance of the given indicator exist"""
-        return ohlcv.reading_count(
+        return candle_extension.reading_count(
             self.candles,
             name if name else self.name,
         )
@@ -205,7 +205,7 @@ class Indicator(ABC):
     ) -> bool:
         """Will return True if the given indicator goes back as far as amount,
         It's true if exactly or more than. Period will be period -1"""
-        return ohlcv.reading_period(
+        return candle_extension.reading_period(
             self.candles,
             period=period,
             name=name if name else self.name,

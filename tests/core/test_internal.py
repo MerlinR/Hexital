@@ -2,13 +2,13 @@ from dataclasses import dataclass, field
 from datetime import datetime
 
 import pytest
-from hexital import EMA, OHLCV
+from hexital import EMA, Candle
 
 
 @dataclass
-class Candle(OHLCV):
+class Candle(Candle):
     """
-    Candle is a tick of market data, holds more then OHLCV,
+    Candle is a tick of market data, holds more then Candle,
     can merge so mutiple second data becomes minute;
     aswell asconvert to a dataframe
     """

@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pandas_ta as ta
-from hexital.core import OHLCV, Hexital
+from hexital.core import Candle, Hexital
 
 
 def generate_random_candles(amount: int) -> list:
@@ -85,7 +85,7 @@ def test_pandas_ta_incremental(candle_length: int, strat: list):
 
 def test_hexital_bulk(candle_length: int, strat: list):
     hexitl = Hexital(
-        "test", OHLCV.from_dicts(generate_random_candles(candle_length)), strat
+        "test", Candle.from_dicts(generate_random_candles(candle_length)), strat
     )
     start_time = time.time()
     hexitl.calculate()
@@ -93,7 +93,7 @@ def test_hexital_bulk(candle_length: int, strat: list):
 
 
 def hexital_incremental(candle_length: int, strat: list):
-    candles = OHLCV.from_dicts(generate_random_candles(candle_length))
+    candles = Candle.from_dicts(generate_random_candles(candle_length))
 
     hexitl = Hexital("Test Stratergy", [candles[0]], strat)
     start_time = time.time()
@@ -217,11 +217,11 @@ def run_test_real_usage(candle_count: int, steps: int):
         print(f"Candles: {i}")
         results["amount"].append(i)
 
-        candles = OHLCV.from_dicts(generate_random_candles(i))
+        candles = Candle.from_dicts(generate_random_candles(i))
         hexitl = Hexital("Test Stratergy", candles, hex_strat)
         hexitl.calculate()
         start_time = time.time()
-        hexitl.append(OHLCV.from_dict(generate_random_candles(1)[0]))
+        hexitl.append(Candle.from_dict(generate_random_candles(1)[0]))
         hexitl.calculate()
         results["Hexital Incremental"].append(round(time.time() - start_time, 4))
 

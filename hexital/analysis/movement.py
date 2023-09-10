@@ -1,7 +1,7 @@
 from typing import List, Union
 
-from hexital.core.ohlcv import OHLCV
-from hexital.lib.ohlcv import (
+from hexital.core.candle import Candle
+from hexital.lib.candle_extension import (
     reading_by_candle,
     reading_by_index,
     reading_count,
@@ -9,7 +9,7 @@ from hexital.lib.ohlcv import (
 )
 
 
-def positive(candles: Union[OHLCV, List[OHLCV]], position: int = -1) -> bool:
+def positive(candles: Union[Candle, List[Candle]], position: int = -1) -> bool:
     if isinstance(candles, list):
         if position >= len(candles):
             position = -1
@@ -17,7 +17,7 @@ def positive(candles: Union[OHLCV, List[OHLCV]], position: int = -1) -> bool:
     return candles.open < candles.close
 
 
-def negative(candles: Union[OHLCV, List[OHLCV]], position: int = -1) -> bool:
+def negative(candles: Union[Candle, List[Candle]], position: int = -1) -> bool:
     if isinstance(candles, list):
         if position >= len(candles):
             position = -1
@@ -25,7 +25,7 @@ def negative(candles: Union[OHLCV, List[OHLCV]], position: int = -1) -> bool:
     return candles.open > candles.close
 
 
-def value_range(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
+def value_range(candles: List[Candle], indicator: str, length: int = 4) -> bool:
     """Returns the difference between the min and max values in a indicator series.
     Length `includes` latest"""
     if not reading_period(candles, length, indicator):
@@ -39,7 +39,7 @@ def value_range(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     return abs(min(readings) - max(readings))
 
 
-def rising(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
+def rising(candles: List[Candle], indicator: str, length: int = 4) -> bool:
     """True if current `indicator` is greater than any previous `indicator`
     for `length` bars back, False otherwise.
     Length `excludes` latest"""
@@ -57,7 +57,7 @@ def rising(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     )
 
 
-def falling(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
+def falling(candles: List[Candle], indicator: str, length: int = 4) -> bool:
     """True if current `indicator` reading is less than any previous `indicator`
     reading for `length` bars back, False otherwise.
     Length `excludes` latest"""
@@ -75,7 +75,7 @@ def falling(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     )
 
 
-def mean_rising(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
+def mean_rising(candles: List[Candle], indicator: str, length: int = 4) -> bool:
     """True if current `indicator` reading is greater than the avg of the previous
     `length` `indicator` reading bars back, False otherwise. Length `excludes` latest
 
@@ -94,7 +94,7 @@ def mean_rising(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     return round(mean, 2) < reading_by_candle(candles[-1], indicator)
 
 
-def mean_falling(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
+def mean_falling(candles: List[Candle], indicator: str, length: int = 4) -> bool:
     """True if current `indicator` is less than the avg of the previous
     `length` `indicator` bars back, False otherwise. Length `excludes` latest
 
@@ -113,7 +113,7 @@ def mean_falling(candles: List[OHLCV], indicator: str, length: int = 4) -> bool:
     return round(mean, 2) > reading_by_candle(candles[-1], indicator)
 
 
-def highest(candles: List[OHLCV], indicator: str, length: int = 4) -> float:
+def highest(candles: List[Candle], indicator: str, length: int = 4) -> float:
     """Highest reading for a given number of bars back. Length `Includes` latest.
     Returns:
         Highest reading in the series.
@@ -124,7 +124,7 @@ def highest(candles: List[OHLCV], indicator: str, length: int = 4) -> float:
     return max(reading_by_candle(candle, indicator) for candle in candles[-abs(length) :])
 
 
-def lowest(candles: List[OHLCV], indicator: str, length: int = 4) -> float:
+def lowest(candles: List[Candle], indicator: str, length: int = 4) -> float:
     """Lowest reading for a given number of bars back. Length `Includes` latest.
     Returns:
         Lowest reading in the series.
@@ -135,7 +135,7 @@ def lowest(candles: List[OHLCV], indicator: str, length: int = 4) -> float:
     return min(reading_by_candle(candle, indicator) for candle in candles[-abs(length) :])
 
 
-def highestbar(candles: List[OHLCV], indicator: str, length: int = 4) -> int:
+def highestbar(candles: List[Candle], indicator: str, length: int = 4) -> int:
     """Highest reading offset for a given number of bars back. Length `Excludes` latest.
     Returns:
         Offset to the lowest bar
@@ -159,7 +159,7 @@ def highestbar(candles: List[OHLCV], indicator: str, length: int = 4) -> int:
     return distance + 1
 
 
-def lowestbar(candles: List[OHLCV], indicator: str, length: int = 4) -> int:
+def lowestbar(candles: List[Candle], indicator: str, length: int = 4) -> int:
     """Lowest reading offset for a given number of bars back. Length `Excludes` latest.
     Returns:
         Offset to the lowest bar
@@ -184,7 +184,7 @@ def lowestbar(candles: List[OHLCV], indicator: str, length: int = 4) -> int:
 
 
 def cross(
-    candles: List[OHLCV], indicator_one: str, indicator_two: str, length: int = 1
+    candles: List[Candle], indicator_one: str, indicator_two: str, length: int = 1
 ) -> bool:
     """The `indicator_one` reading is defined as having crossed `indicator_two` reading"""
     if not reading_period(candles, length, indicator_one) or not reading_period(
@@ -211,7 +211,7 @@ def cross(
 
 
 def crossover(
-    candles: List[OHLCV], indicator_one: str, indicator_two: str, length: int = 1
+    candles: List[Candle], indicator_one: str, indicator_two: str, length: int = 1
 ) -> bool:
     """The `indicator_one` reading is defined as having crossed over `indicator_two` reading,
     If  `indicator_two` is higher then `indicator_one` and in the last `length` it was under"""
@@ -239,7 +239,7 @@ def crossover(
 
 
 def crossunder(
-    candles: List[OHLCV], indicator_one: str, indicator_two: str, length: int = 1
+    candles: List[Candle], indicator_one: str, indicator_two: str, length: int = 1
 ) -> bool:
     """The `indicator_one` reading is defined as having crossed under `indicator_two` reading,
     If  `indicator_two` is lower then `indicator_one` and in the last `length` it was over"""

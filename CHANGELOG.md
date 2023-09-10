@@ -6,10 +6,14 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 ## 0.2.1
 - Added Patterns:
   - Doji Candle
+- Added append method to Indicator just like Hexital
+- Fixed bug where Hexital would alter indicator list
+- Fixed bug in _find_calc_index with no candles
+
 ## 0.2.0 - 2023-09-05
-- Feature: Added timestamp (datetime) to OHLCV dataclass
-- Feature: Can convert OHLCV from list and dict
-- Feature: Can set timestamp(datetime) in lists/dict OHLCV conversion
+- Feature: Added timestamp (datetime) to Candle dataclass
+- Feature: Can convert Candle from list and dict
+- Feature: Can set timestamp(datetime) in lists/dict Candle conversion
 - Feature: Added _validate_fields method to Indicators
 - Added custom exceptions
 - More thorough unit testing

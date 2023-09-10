@@ -1,17 +1,17 @@
 from itertools import chain
 from typing import List, Optional
 
-from hexital.core.ohlcv import OHLCV
+from hexital.core.candle import Candle
 
 
 def reading_by_index(
-    candles: List[OHLCV], name: str, index: int = -1
+    candles: List[Candle], name: str, index: int = -1
 ) -> float | dict | None:
     """Simple method to get a reading from the given indicator from it's index"""
     return reading_by_candle(candles[index], name)
 
 
-def reading_by_candle(candle: OHLCV, name: str) -> float | dict | None:
+def reading_by_candle(candle: Candle, name: str) -> float | dict | None:
     """Simple method to get a reading from the given indicator from a candle
     Uses '.' to find nested reading, E.G 'MACD_12_26_9.MACD"""
 
@@ -37,7 +37,7 @@ def reading_by_candle(candle: OHLCV, name: str) -> float | dict | None:
     return None
 
 
-def _nested_indicator(candle: OHLCV, name: str, nested_name: str) -> float | None:
+def _nested_indicator(candle: Candle, name: str, nested_name: str) -> float | None:
     if name in candle.indicators:
         if isinstance(candle.indicators[name], dict):
             return candle.indicators[name].get(nested_name)
@@ -56,7 +56,7 @@ def _nested_indicator(candle: OHLCV, name: str, nested_name: str) -> float | Non
     return None
 
 
-def reading_count(candles: List[OHLCV], name: str) -> int:
+def reading_count(candles: List[Candle], name: str) -> int:
     """Returns how many instance of the given indicator exist"""
     count = 0
     for candle in reversed(candles):
@@ -67,13 +67,13 @@ def reading_count(candles: List[OHLCV], name: str) -> int:
     return count
 
 
-def reading_as_list(candles: List[OHLCV], name: str) -> List[float | dict]:
+def reading_as_list(candles: List[Candle], name: str) -> List[float | dict]:
     """Gathers the indicator for all candles as a list"""
     return [candle.indicators.get(name) for candle in candles]
 
 
 def reading_period(
-    candles: List[OHLCV], period: int, name: str, index: Optional[int] = None
+    candles: List[Candle], period: int, name: str, index: Optional[int] = None
 ) -> bool:
     """Will return True if the given indicator goes back as far as amount,
     It's true if exactly or more than. Period will be period-1"""
