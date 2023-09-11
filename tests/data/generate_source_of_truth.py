@@ -12,8 +12,9 @@ def load_json_candles() -> list:
     return json.load(csv_file)
 
 
-def save_json_result(data: list, filename: str):
-    with open(f"tests/data/source_of_truth/{filename}.json", "w") as json_file:
+def save_json_result(data: list, filename: str, indicator: bool = True):
+    path = "indicator" if indicator else "pattern"
+    with open(f"tests/data/source_of_truth/{path}/{filename}.json", "w") as json_file:
         json.dump(
             data,
             json_file,
@@ -40,7 +41,8 @@ def round_values(values: float | Dict[str, float]) -> float | Dict[str, float]:
     return values
 
 
-def generate():
+def generate_indicators():
+    print("Generating Indicators")
     df = pd.DataFrame.from_dict(load_json_candles())
     df = add_timestamp(df)
 
@@ -142,5 +144,26 @@ def generate():
     save_json_result(adx_data, "ADX")
 
 
+def generate_patterns():
+    print("Generating Patterns")
+    df = pd.DataFrame.from_dict(load_json_candles())
+    df = add_timestamp(df)
+
+    df = df.ta.cdl_pattern(name=["doji"])
+    df = df.astype(object).replace(np.nan, None)
+
+    for col in df.columns:
+        if col in ["open", "high", "low", "close", "volume"]:
+            continue
+        print(f"Generated: {col}")
+
+    save_json_result(
+        [bool(value) for value in df["CDL_DOJI_10_0.1"].tolist()],
+        "DOJI",
+        False,
+    )
+
+
 if __name__ == "__main__":
-    generate()
+    generate_indicators()
+    generate_patterns()

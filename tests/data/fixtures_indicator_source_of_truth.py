@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-SOURCE_OF_TRUTH_PATH = "tests/data/source_of_truth/"
+SOURCE_OF_TRUTH_PATH = "tests/data/source_of_truth/indicator"
 
 
 @pytest.fixture(name="expected_adx")
