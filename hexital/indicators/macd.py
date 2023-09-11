@@ -25,10 +25,10 @@ class MACD(Indicator):
     """
 
     indicator_name: str = "MACD"
-    input_value: str = "close"
     fast_period: int = 12
     slow_period: int = 26
     signal_period: int = 9
+    input_value: str = "close"
 
     def _generate_name(self) -> str:
         return "{}_{}_{}_{}".format(

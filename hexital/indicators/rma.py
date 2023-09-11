@@ -14,8 +14,8 @@ class RMA(Indicator):
     """
 
     indicator_name: str = "RMA"
-    input_value: str = "close"
     period: int = 10
+    input_value: str = "close"
 
     def _generate_name(self) -> str:
         return f"{self.indicator_name}_{self.period}"

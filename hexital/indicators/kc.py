@@ -15,9 +15,9 @@ class KC(Indicator):
     """
 
     indicator_name: str = "KC"
-    input_value: str = "close"
     period: int = 20
     multiplier: float = 2.0
+    input_value: str = "close"
 
     def _generate_name(self) -> str:
         return f"{self.indicator_name}_{self.period}_{self.multiplier}"

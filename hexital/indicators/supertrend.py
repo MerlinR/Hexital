@@ -9,9 +9,9 @@ class Supertrend(Indicator):
     """Supertrend"""
 
     indicator_name: str = "Supertrend"
-    input_value: str = "close"
     period: int = 7
     mulitplier: float = 3.0
+    input_value: str = "close"
 
     def _generate_name(self) -> str:
         return f"{self.indicator_name}_{self.period}"
