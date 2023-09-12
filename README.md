@@ -134,7 +134,6 @@ Roughly ordered in priority
 - More Indicators
 - More Analysis methods
 - Pattern Candle recognition methods, detecting Doji, Hammer, etc
-- Pattern Indicators, use above methods to run automatically as indicators
 - Support for automatic multi timeframe indicator generation
   - E.G: With 1 minute candles, we can generate EMA for minute candles and 5 minute candles
 - Indicator Pluggability, to allow easy extension of this library
