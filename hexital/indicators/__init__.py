@@ -6,6 +6,7 @@ from .kc import KC
 from .macd import MACD
 from .managed import Managed
 from .obv import OBV
+from .pattern import Pattern
 from .rma import RMA
 from .roc import ROC
 from .rsi import RSI

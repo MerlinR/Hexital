@@ -9,6 +9,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added append method to Indicator just like Hexital
 - Fixed bug where Hexital would alter indicator list
 - Fixed bug in _find_calc_index with no candles
+- Added Pattern Indicator, skeleton to run Any Patterns as a Indicator
+  - E.G On all Candles automatically
 
 ## 0.2.0 - 2023-09-05
 - Feature: Added timestamp (datetime) to Candle dataclass
