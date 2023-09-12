@@ -33,6 +33,9 @@ For most libraries such as [Pandas-TA](https://github.com/twopirllc/pandas-ta) w
 - VWMA
 - WMA
 
+## Patterns
+Simple useful Candle pattern recognition, such as Doji, hammer, etc
+- Doji
 
 ## Candlestick Movement
 Simple useful Candle Anaylsis methods such as those in [Pine Scripting](https://www.tradingview.com/pine-script-reference/v5/)
@@ -43,11 +46,6 @@ Simple useful Candle Anaylsis methods such as those in [Pine Scripting](https://
 - HighestBar/LowestBar Indicator (Offset how far back)
 - Indicator Cross
 - Indicator CrossOver/CrossUnder
-
-
-## Candlestick Patterns
-Simple useful Candle pattern recognition, such as Doji, hammer, etc
-- Doji
 
 ## Installation
 ### Stable
@@ -60,7 +58,6 @@ In case you want to install the latest development version from the repo.
 ```bash
 pip install git+https://github.com/merlinr/hexital.git@development
 ```
-
 
 ## Usage
 

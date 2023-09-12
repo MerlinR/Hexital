@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+from hexital.analysis import movement, utils
 from hexital.core.candle import Candle
 
 
@@ -8,7 +9,7 @@ def doji(
     length: int = 10,
     lookback: Optional[int] = None,
     asint: bool = False,
-    index=None,
+    index: int = None,
 ) -> bool | int:
     """Doji Pattern
     A candle body is Doji when it's shorter than 10% of the average of the
@@ -24,21 +25,16 @@ def doji(
     Returns:
         bool | int: If The given Candle is Doji bool or 1/2
     """
-    if len(candles) < length:
+    if len(candles) < length or index + 1 < length:
         return False
     if index is None:
         index = len(candles) - 1
 
     def _doji_check(indx: int):
-        body = abs(candles[indx].close - candles[indx].open)
+        body = utils.candle_realbody(candles[indx])
 
-        high_low_avg = (
-            sum(
-                abs(candles[i].high - candles[i].low)
-                for i in range(len(candles) - length, len(candles))
-            )
-            / length
-        )
+        high_low_avg = utils.candle_high_low_diff_avg(candles, length, indx)
+
         if asint:
             return 1 if body < 0.13 * high_low_avg else 0
         return body < 0.13 * high_low_avg
