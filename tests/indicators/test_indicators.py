@@ -63,7 +63,7 @@ class TestIndicators:
 
         # r numerator
         r_numerator = 0.0
-        for index in range(len(result)):
+        for index, _ in enumerate(result):
             if result[index] is not None and expected[index] is not None:
                 r_numerator += (result[index] - res_mean) * (expected[index] - exp_mean)
 
