@@ -25,10 +25,10 @@ def doji(
     Returns:
         bool | int: If The given Candle is Doji bool or 1/2
     """
-    if len(candles) < length or index + 1 < length:
-        return False
     if index is None:
         index = len(candles) - 1
+    if len(candles) < length or index + 1 < length:
+        return False
 
     def _doji_check(indx: int):
         body = utils.candle_realbody(candles[indx])
