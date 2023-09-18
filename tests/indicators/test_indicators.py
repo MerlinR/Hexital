@@ -61,6 +61,9 @@ class TestIndicators:
         res_stand_deviation = self.standard_deviation(result)
         exp_stand_deviation = self.standard_deviation(expected)
 
+        if res_mean == None or exp_mean == None:
+            return 1.0
+
         # r numerator
         r_numerator = 0.0
         for index, _ in enumerate(result):
@@ -69,6 +72,9 @@ class TestIndicators:
 
         # r denominator
         r_denominator = res_stand_deviation * exp_stand_deviation
+
+        if r_denominator == 0:
+            return 1.0
 
         correlation = r_numerator / r_denominator
         return round(correlation, 4)
@@ -80,6 +86,8 @@ class TestIndicators:
             if value is not None:
                 length += 1
                 total += float(value)
+        if length == 0:
+            return None
         return total / length
 
     def standard_deviation(self, data: list):
