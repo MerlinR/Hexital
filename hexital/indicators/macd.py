@@ -70,7 +70,7 @@ class MACD(Indicator):
             ),
         )
 
-    def _calculate_reading(self, index: int = -1) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | dict | None:
         if self.reading(f"{self.indicator_name}_EMA_slow"):
 
             macd = self.reading(f"{self.indicator_name}_EMA_fast") - self.reading(

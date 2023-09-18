@@ -62,7 +62,7 @@ class STOCH(Indicator):
             ),
         )
 
-    def _calculate_reading(self, index: int = -1) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | dict | None:
 
         if self.reading_period(self.period, self.input_value):
             lowest = min(

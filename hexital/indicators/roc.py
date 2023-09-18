@@ -14,7 +14,7 @@ class ROC(Indicator):
     def _generate_name(self) -> str:
         return f"{self.indicator_name}"
 
-    def _calculate_reading(self, index: int = -1) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | dict | None:
         if self.prev_exists() or self.reading_period(self.period + 1, "close"):
             period_n_back = self.reading(self.input_value, index - self.period)
 

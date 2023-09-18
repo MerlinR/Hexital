@@ -24,7 +24,7 @@ class Managed(Indicator):
             index = self._active_index
         else:
             self.set_active_index(index)
-        self._set_reading(self._active_index, reading)
+        self._set_reading(reading, self._active_index)
 
     def set_active_index(self, index: int):
         self._active_index = index

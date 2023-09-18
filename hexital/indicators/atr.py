@@ -30,7 +30,7 @@ class ATR(Indicator):
     def _initialise(self):
         self._add_sub_indicator(TR(candles=self.candles))
 
-    def _calculate_reading(self, index: int = -1) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | dict | None:
         if self.prev_exists():
             return (
                 self.prev_reading() * (self.period - 1) + self.reading("TR")

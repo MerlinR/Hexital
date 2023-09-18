@@ -23,7 +23,7 @@ class RMA(Indicator):
     def _initialise(self):
         return
 
-    def _calculate_reading(self, index: int = -1) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | dict | None:
         alpha = float(1.0 / self.period)
 
         if self.prev_exists():

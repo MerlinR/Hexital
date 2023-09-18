@@ -40,7 +40,7 @@ class KC(Indicator):
             )
         )
 
-    def _calculate_reading(self, index: int = -1) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | dict | None:
         if not all(
             [
                 self.reading(f"{self.indicator_name}_EMA"),

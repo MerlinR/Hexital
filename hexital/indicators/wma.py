@@ -19,7 +19,7 @@ class WMA(Indicator):
     def _generate_name(self) -> str:
         return f"{self.indicator_name}_{self.period}"
 
-    def _calculate_reading(self, index: int = -1) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | dict | None:
         if self.prev_exists() or self.reading_period(self.period, self.input_value):
             values = sum(
                 self.reading(self.input_value, i) * (self.period - py)

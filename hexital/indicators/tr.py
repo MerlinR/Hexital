@@ -20,7 +20,7 @@ class TR(Indicator):
     def _generate_name(self) -> str:
         return self.indicator_name
 
-    def _calculate_reading(self, index: int = -1) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | dict | None:
         high = self.reading("high")
         low = self.reading("low")
 

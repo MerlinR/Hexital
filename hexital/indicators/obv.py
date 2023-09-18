@@ -17,7 +17,7 @@ class OBV(Indicator):
     def _generate_name(self) -> str:
         return self.indicator_name
 
-    def _calculate_reading(self, index: int = -1) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | dict | None:
         if self.prev_exists():
             if self.reading("volume") == self.prev_reading("volume"):
                 return self.prev_reading()

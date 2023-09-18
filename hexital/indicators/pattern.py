@@ -56,7 +56,7 @@ class Pattern(Indicator):
             name += f"_{self._pattern_kwargs['length']}"
         return name
 
-    def _calculate_reading(self, index: int = -1) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | dict | None:
         return self._pattern_method(
             candles=self.candles, index=index, **self._pattern_kwargs
         )

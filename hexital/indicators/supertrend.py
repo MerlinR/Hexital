@@ -46,7 +46,7 @@ class Supertrend(Indicator):
             ),
         )
 
-    def _calculate_reading(self, index: int = -1) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | dict | None:
         direction = 1
         trend = None
 

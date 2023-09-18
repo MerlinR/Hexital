@@ -74,7 +74,9 @@ class Indicator(ABC):
             return False
         return self.reading(index=-1) is not None
 
-    def _set_reading(self, index: int, reading: float | dict):
+    def _set_reading(self, reading: float | dict, index: Optional[int] = None):
+        if index is None:
+            index = self._active_index
         if self._sub_indicator:
             self.candles[index].sub_indicators[self.name] = reading
         else:
@@ -102,7 +104,7 @@ class Indicator(ABC):
             raise TypeError
         self.calculate()
 
-    def _calculate_reading(self, index: int = -1) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | dict | None:
         pass
 
     def calculate(self):
@@ -117,7 +119,7 @@ class Indicator(ABC):
                 reading = utils.round_values(
                     self._calculate_reading(index=index), round_by=self.round_value
                 )
-                self._set_reading(index, reading)
+                self._set_reading(reading, index)
 
     def calculate_index(self, start_index: int, end_index: Optional[int] = None):
         """Calculate the TA values, will calculate a index range the Candles"""
@@ -127,7 +129,7 @@ class Indicator(ABC):
             reading = utils.round_values(
                 self._calculate_reading(index=index), round_by=self.round_value
             )
-            self._set_reading(index, reading)
+            self._set_reading(reading, index)
 
     def _find_calc_index(self) -> int:
         """Optimisation method, to find where to start calculating the indicator from

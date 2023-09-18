@@ -29,7 +29,7 @@ class VWAP(Indicator):
             Managed(indicator_name="VWAP_Vol", candles=self.candles),
         )
 
-    def _calculate_reading(self, index: int = -1) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | dict | None:
 
         typical_price = (
             self.reading("high") + self.reading("low") + self.reading("close")

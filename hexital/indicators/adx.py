@@ -91,7 +91,7 @@ class ADX(Indicator):
             ),
         )
 
-    def _calculate_reading(self, index: int = -1) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | dict | None:
         adx_final = None
         adx_positive = None
         adx_negative = None

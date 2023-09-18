@@ -19,7 +19,7 @@ class VWMA(Indicator):
     def _generate_name(self) -> str:
         return f"{self.indicator_name}_{self.period}"
 
-    def _calculate_reading(self, index: int = -1) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | dict | None:
         if self.prev_exists() or self.reading_period(self.period, "close"):
             volume_close = sum(
                 self.reading("close", i) * self.reading("volume", i)
