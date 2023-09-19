@@ -14,7 +14,7 @@ def candles_sum(
     elif index is not None and index >= 0:
         index += 1
     elif index is not None:
-        index = (index * -1) + 1
+        index = abs(index) + 1
 
     if length > len(candles):
         length = len(candles)

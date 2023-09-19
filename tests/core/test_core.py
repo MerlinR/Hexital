@@ -6,7 +6,7 @@ from hexital import EMA, Candle
 
 
 @dataclass
-class Candle(Candle):
+class InheritedCandle(Candle):
     """
     Candle is a tick of market data, holds more then Candle,
     can merge so mutiple second data becomes minute;

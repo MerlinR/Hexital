@@ -33,10 +33,10 @@ class Indicator(ABC):
         return str(data)
 
     def _internal_generate_name(self):
-        if self.fullname_override:
-            self._output_name = self.fullname_override
-        elif self.fullname_override and self.name_suffix:
+        if self.fullname_override and self.name_suffix:
             self._output_name = f"{self.fullname_override}_{self.name_suffix}"
+        elif self.fullname_override:
+            self._output_name = self.fullname_override
         elif self.name_suffix:
             self._output_name = f"{self._generate_name()}_{self.name_suffix}"
         else:
@@ -60,7 +60,7 @@ class Indicator(ABC):
     @property
     def read(self) -> float | dict:
         """Get's this newest reading of this indicator"""
-        return self.candles[-1][self._output_name]
+        return self.reading()
 
     @property
     def as_list(self) -> List[float | dict]:
