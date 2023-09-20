@@ -5,7 +5,7 @@ from hexital.lib.candle_extension import reading_by_candle
 
 
 def candles_sum(
-    candles: List[Candle], indicator: str, length: int = 1, index: Optional[int] = None
+    candles: List[Candle], indicator: str, length: int, index: Optional[int] = None
 ) -> float:
     """Sum of `indicator` for `length` bars back. including index/latest"""
 
@@ -14,7 +14,7 @@ def candles_sum(
     elif index is not None and index >= 0:
         index += 1
     elif index is not None:
-        index = abs(index) + 1
+        index = len(candles) - (abs(index) - 1)
 
     if length > len(candles):
         length = len(candles)

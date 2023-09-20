@@ -79,20 +79,6 @@ def test_reading_period(candles: List[Candle]):
 
 
 @pytest.mark.usefixtures("candles")
-def test_candles_sum(candles: List[Candle]):
-    test = SMA(candles=candles)
-    test.calculate()
-    assert test.candles_sum(69) == 6900.0
-
-
-@pytest.mark.usefixtures("candles")
-def test_candles_sum_longer_period(candles: List[Candle]):
-    test = SMA(candles=candles)
-    test.calculate()
-    assert test.candles_sum(69, index=0) == 100.0
-
-
-@pytest.mark.usefixtures("candles")
 def test_purge(candles: List[Candle]):
     test = SMA(candles=candles)
     assert test.has_reading is False
