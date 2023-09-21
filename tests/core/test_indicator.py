@@ -6,8 +6,8 @@ from hexital.core import Candle, Indicator
 
 
 @dataclass(kw_only=True)
-class SMA(Indicator):
-    indicator_name: str = "SMA"
+class FakeIndicator(Indicator):
+    indicator_name: str = "Fake"
     period: int = 10
     input_value: str = "close"
 
@@ -20,43 +20,45 @@ class SMA(Indicator):
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_calculate(minimal_candles: List[Candle]):
-    test = SMA(candles=minimal_candles)
+    test = FakeIndicator(candles=minimal_candles)
     test.calculate()
-    assert minimal_candles[-1].indicators.get("SMA_10")
+    assert minimal_candles[-1].indicators.get("Fake_10")
 
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_name_default(minimal_candles: List[Candle]):
-    test = SMA(candles=minimal_candles)
+    test = FakeIndicator(candles=minimal_candles)
     test.calculate()
-    assert test.reading("SMA_10")
-    assert test.name == "SMA_10"
+    assert test.reading("Fake_10")
+    assert test.name == "Fake_10"
 
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_name_fulloverride(minimal_candles: List[Candle]):
-    test = SMA(candles=minimal_candles, fullname_override="FUCK")
+    test = FakeIndicator(candles=minimal_candles, fullname_override="FUCK")
     test.calculate()
     assert minimal_candles[-1].indicators.get("FUCK")
 
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_name_fulloverride_and_suffix(minimal_candles: List[Candle]):
-    test = SMA(candles=minimal_candles, fullname_override="FUCK", name_suffix="YOU")
+    test = FakeIndicator(
+        candles=minimal_candles, fullname_override="FUCK", name_suffix="YOU"
+    )
     test.calculate()
     assert minimal_candles[-1].indicators.get("FUCK_YOU")
 
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_name_suffix(minimal_candles: List[Candle]):
-    test = SMA(candles=minimal_candles, name_suffix="YOU")
+    test = FakeIndicator(candles=minimal_candles, name_suffix="YOU")
     test.calculate()
-    assert minimal_candles[-1].indicators.get("SMA_10_YOU")
+    assert minimal_candles[-1].indicators.get("Fake_10_YOU")
 
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_read(minimal_candles: List[Candle]):
-    test = SMA(candles=minimal_candles)
+    test = FakeIndicator(candles=minimal_candles)
     assert test.read is None
     test.calculate()
     assert test.read == 100.0
@@ -64,7 +66,7 @@ def test_read(minimal_candles: List[Candle]):
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_has_reading(minimal_candles: List[Candle]):
-    test = SMA(candles=minimal_candles)
+    test = FakeIndicator(candles=minimal_candles)
     assert test.has_reading is False
     test.calculate()
     assert test.has_reading is True
@@ -72,7 +74,7 @@ def test_has_reading(minimal_candles: List[Candle]):
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_set_reading(minimal_candles: List[Candle]):
-    test = SMA(candles=minimal_candles)
+    test = FakeIndicator(candles=minimal_candles)
     test.calculate()
     assert test.read == 100
     test._set_reading(420)
@@ -81,7 +83,7 @@ def test_set_reading(minimal_candles: List[Candle]):
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_set_reading_indexed(minimal_candles: List[Candle]):
-    test = SMA(candles=minimal_candles)
+    test = FakeIndicator(candles=minimal_candles)
     test.calculate()
     assert test.prev_reading() == 100
     test._set_reading(420, -2)
@@ -90,7 +92,7 @@ def test_set_reading_indexed(minimal_candles: List[Candle]):
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_reading_period(minimal_candles: List[Candle]):
-    test = SMA(candles=minimal_candles)
+    test = FakeIndicator(candles=minimal_candles)
     assert test.reading_period(10) is False
     test.calculate()
     assert test.reading_period(10) is True
@@ -99,7 +101,7 @@ def test_reading_period(minimal_candles: List[Candle]):
 @pytest.mark.usefixtures("minimal_candles")
 def test_append_candle(minimal_candles):
     new_candle = minimal_candles.pop()
-    test = SMA(candles=[])
+    test = FakeIndicator(candles=[])
 
     test.append(new_candle)
 
@@ -108,7 +110,7 @@ def test_append_candle(minimal_candles):
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_append_candle_list(minimal_candles):
-    test = SMA(candles=[])
+    test = FakeIndicator(candles=[])
 
     test.append(minimal_candles)
 
@@ -116,7 +118,7 @@ def test_append_candle_list(minimal_candles):
 
 
 def test_append_dict():
-    test = SMA(candles=[])
+    test = FakeIndicator(candles=[])
 
     test.append(
         {
@@ -128,12 +130,12 @@ def test_append_dict():
         }
     )
     assert test.candles == [
-        Candle(17213, 2395, 7813, 3615, 19661, indicators={"SMA_10": 100.0})
+        Candle(17213, 2395, 7813, 3615, 19661, indicators={"Fake_10": 100.0})
     ]
 
 
 def test_append_dict_list():
-    test = SMA(candles=[])
+    test = FakeIndicator(candles=[])
 
     test.append(
         [
@@ -143,41 +145,41 @@ def test_append_dict_list():
     )
 
     assert test.candles == [
-        Candle(17213, 2395, 7813, 3615, 19661, indicators={"SMA_10": 100.0}),
-        Candle(1301, 3007, 11626, 19048, 28909, indicators={"SMA_10": 100.0}),
+        Candle(17213, 2395, 7813, 3615, 19661, indicators={"Fake_10": 100.0}),
+        Candle(1301, 3007, 11626, 19048, 28909, indicators={"Fake_10": 100.0}),
     ]
 
 
 def test_append_list():
-    test = SMA(candles=[])
+    test = FakeIndicator(candles=[])
 
     test.append([17213, 2395, 7813, 3615, 19661])
 
     assert test.candles == [
-        Candle(17213, 2395, 7813, 3615, 19661, indicators={"SMA_10": 100.0})
+        Candle(17213, 2395, 7813, 3615, 19661, indicators={"Fake_10": 100.0})
     ]
 
 
 def test_append_list_list():
-    test = SMA(candles=[])
+    test = FakeIndicator(candles=[])
 
     test.append([[17213, 2395, 7813, 3615, 19661], [1301, 3007, 11626, 19048, 28909]])
 
     assert test.candles == [
-        Candle(17213, 2395, 7813, 3615, 19661, indicators={"SMA_10": 100.0}),
-        Candle(1301, 3007, 11626, 19048, 28909, indicators={"SMA_10": 100.0}),
+        Candle(17213, 2395, 7813, 3615, 19661, indicators={"Fake_10": 100.0}),
+        Candle(1301, 3007, 11626, 19048, 28909, indicators={"Fake_10": 100.0}),
     ]
 
 
 def test_append_invalid():
-    test = SMA(candles=[])
+    test = FakeIndicator(candles=[])
     with pytest.raises(TypeError):
         test.append(["Fuck", 2, 3])
 
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_purge(minimal_candles: List[Candle]):
-    test = SMA(candles=minimal_candles)
+    test = FakeIndicator(candles=minimal_candles)
     assert test.has_reading is False
     test.calculate()
     assert test.has_reading is True
