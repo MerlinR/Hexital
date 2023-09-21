@@ -6,6 +6,7 @@ from typing import Dict, List, Optional
 
 from hexital.core.candle import Candle
 from hexital.lib import candle_extension, utils
+from hexital.lib.timeframe_utils import merge_candles
 
 
 @dataclass(kw_only=True)
@@ -15,6 +16,7 @@ class Indicator(ABC):
     fullname_override: str = None
     name_suffix: str = None
     round_value: int = 4
+    timeframe: str = None
     _output_name: str = ""
     _sub_indicators: List[Indicator] = field(default_factory=list)
     _managed_indicators: Dict[str, Indicator] = field(default_factory=dict)
@@ -24,6 +26,8 @@ class Indicator(ABC):
     def __post_init__(self):
         self._validate_fields()
         self._internal_generate_name()
+        if self.timeframe is not None:
+            self.candles = merge_candles(self.candles, self.timeframe)
         self._initialise()
 
     def __str__(self):
@@ -33,14 +37,17 @@ class Indicator(ABC):
         return str(data)
 
     def _internal_generate_name(self):
-        if self.fullname_override and self.name_suffix:
-            self._output_name = f"{self.fullname_override}_{self.name_suffix}"
-        elif self.fullname_override:
-            self._output_name = self.fullname_override
-        elif self.name_suffix:
-            self._output_name = f"{self._generate_name()}_{self.name_suffix}"
+        if self.fullname_override:
+            self._output_name = "{}{}".format(
+                self.fullname_override,
+                f"_{self.name_suffix}" if self.name_suffix else "",
+            )
         else:
-            self._output_name = self._generate_name()
+            self._output_name = "{}{}{}".format(
+                self._generate_name(),
+                f"_{self.timeframe}" if self.timeframe else "",
+                f"_{self.name_suffix}" if self.name_suffix else "",
+            )
 
     def _initialise(self):
         pass
@@ -102,6 +109,10 @@ class Indicator(ABC):
                 raise TypeError
         else:
             raise TypeError
+
+        if self.timeframe is not None:
+            self.candles = merge_candles(self.candles, self.timeframe)
+
         self.calculate()
 
     def _calculate_reading(self, index: int) -> float | dict | None:

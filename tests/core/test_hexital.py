@@ -1,5 +1,7 @@
+from datetime import datetime
+
 import pytest
-from hexital.core import Hexital
+from hexital.core import Candle, Hexital
 from hexital.exceptions import InvalidIndicator
 from hexital.indicators import EMA, SMA
 
@@ -90,9 +92,9 @@ def test_hextial_reading_missing(candles):
     assert strat.has_reading("EMA") is False
 
 
-@pytest.mark.usefixtures("candles")
-def test_hextial_append_candle(candles):
-    new_candle = candles.pop()
+@pytest.mark.usefixtures("minimal_candles")
+def test_hextial_append_candle(minimal_candles):
+    new_candle = minimal_candles.pop(0)
     strat = Hexital("Test Stratergy", [])
 
     strat.append(new_candle)
@@ -100,23 +102,28 @@ def test_hextial_append_candle(candles):
     assert strat.candles == [new_candle]
 
 
-@pytest.mark.usefixtures("candles")
-def test_hextial_append_candle_list(candles):
+@pytest.mark.usefixtures("minimal_candles")
+def test_hextial_append_candle_list(minimal_candles):
     strat = Hexital("Test Stratergy", [])
 
-    strat.append(candles)
+    strat.append(minimal_candles)
 
-    assert strat.candles == candles
+    assert strat.candles == minimal_candles
 
 
-@pytest.mark.usefixtures("candles")
-def test_hextial_append_dict(candles):
+def test_hextial_append_dict():
     strat = Hexital("Test Stratergy", [])
 
     strat.append(
-        {"open": 17213, "high": 2395, "low": 7813, "close": 3615, "volume": 19661}
+        {
+            "open": 17213,
+            "high": 2395,
+            "low": 7813,
+            "close": 3615,
+            "volume": 19661,
+        }
     )
-    assert strat.candles == [candles[0]]
+    assert strat.candles == [Candle(17213, 2395, 7813, 3615, 19661)]
 
 
 @pytest.mark.usefixtures("candles")
@@ -125,30 +132,51 @@ def test_hextial_append_dict_list(candles):
 
     strat.append(
         [
-            {"open": 17213, "high": 2395, "low": 7813, "close": 3615, "volume": 19661},
-            {"open": 1301, "high": 3007, "low": 11626, "close": 19048, "volume": 28909},
+            {
+                "open": 17213,
+                "high": 2395,
+                "low": 7813,
+                "close": 3615,
+                "volume": 19661,
+            },
+            {
+                "open": 1301,
+                "high": 3007,
+                "low": 11626,
+                "close": 19048,
+                "volume": 28909,
+            },
         ]
     )
 
-    assert strat.candles == candles[:2]
+    assert strat.candles == [
+        Candle(17213, 2395, 7813, 3615, 19661),
+        Candle(1301, 3007, 11626, 19048, 28909),
+    ]
 
 
-@pytest.mark.usefixtures("candles")
-def test_hextial_append_list(candles):
+def test_hextial_append_list():
     strat = Hexital("Test Stratergy", [])
 
     strat.append([17213, 2395, 7813, 3615, 19661])
 
-    assert strat.candles == [candles[0]]
+    assert strat.candles == [Candle(17213, 2395, 7813, 3615, 19661)]
 
 
-@pytest.mark.usefixtures("candles")
-def test_hextial_append_list_list(candles):
+def test_hextial_append_list_list():
     strat = Hexital("Test Stratergy", [])
 
-    strat.append([[17213, 2395, 7813, 3615, 19661], [1301, 3007, 11626, 19048, 28909]])
+    strat.append(
+        [
+            [17213, 2395, 7813, 3615, 19661],
+            [1301, 3007, 11626, 19048, 28909],
+        ]
+    )
 
-    assert strat.candles == candles[:2]
+    assert strat.candles == [
+        Candle(17213, 2395, 7813, 3615, 19661),
+        Candle(1301, 3007, 11626, 19048, 28909),
+    ]
 
 
 @pytest.mark.usefixtures("candles")

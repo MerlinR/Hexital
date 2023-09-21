@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 import pytest
 from hexital import Candle
@@ -6,7 +7,15 @@ from hexital import Candle
 
 def load_json_candles() -> list:
     csv_file = open("tests/data/test_candles.json")
-    return json.load(csv_file)
+    raw_candles = json.load(csv_file)
+    for candle in raw_candles:
+        candle["timestamp"] = datetime.strptime(candle["timestamp"], "%Y-%m-%dT%H:%M:%S")
+    return raw_candles
+
+
+@pytest.fixture(name="candles")
+def fixture_candle_data():
+    return Candle.from_dicts(load_json_candles())
 
 
 @pytest.fixture(name="minimal_candles")
@@ -20,7 +29,7 @@ def fixture_minimal_candles():
             volume=19661,
             indicators={"ATR": 100, "NATR": {"nested": 101}},
             sub_indicators={"SATR": 110, "SSATR": {"nested": 111}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 0, 10),
         ),
         Candle(
             open=1301,
@@ -30,7 +39,7 @@ def fixture_minimal_candles():
             volume=28909,
             indicators={"ATR": 200, "NATR": {"nested": 201}},
             sub_indicators={"SATR": 210, "SSATR": {"nested": 211}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 1, 0),
         ),
         Candle(
             open=12615,
@@ -40,7 +49,7 @@ def fixture_minimal_candles():
             volume=33765,
             indicators={"ATR": 300, "NATR": {"nested": 301}},
             sub_indicators={"SATR": 310, "SSATR": {"nested": 311}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 2, 0),
         ),
         Candle(
             open=1643,
@@ -50,7 +59,7 @@ def fixture_minimal_candles():
             volume=3281,
             indicators={"ATR": 400, "NATR": {"nested": 401}},
             sub_indicators={"SATR": 410, "SSATR": {"nested": 411}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 3, 0),
         ),
         Candle(
             open=424,
@@ -60,7 +69,7 @@ def fixture_minimal_candles():
             volume=41793,
             indicators={"ATR": 500, "NATR": {"nested": 501}},
             sub_indicators={"SATR": 510, "SSATR": {"nested": 511}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 4, 0),
         ),
         Candle(
             open=4323,
@@ -70,7 +79,7 @@ def fixture_minimal_candles():
             volume=34913,
             indicators={"ATR": 600, "NATR": {"nested": 601}},
             sub_indicators={"SATR": 610, "SSATR": {"nested": 611}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 5, 0),
         ),
         Candle(
             open=13838,
@@ -80,7 +89,7 @@ def fixture_minimal_candles():
             volume=586,
             indicators={"ATR": 700, "NATR": {"nested": 701}},
             sub_indicators={"SATR": 710, "SSATR": {"nested": 711}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 6, 0),
         ),
         Candle(
             open=14373,
@@ -90,7 +99,7 @@ def fixture_minimal_candles():
             volume=25993,
             indicators={"ATR": 800, "NATR": {"nested": 801}},
             sub_indicators={"SATR": 810, "SSATR": {"nested": 811}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 7, 0),
         ),
         Candle(
             open=12382,
@@ -100,7 +109,7 @@ def fixture_minimal_candles():
             volume=10055,
             indicators={"ATR": 900, "NATR": {"nested": 901}},
             sub_indicators={"SATR": 910, "SSATR": {"nested": 911}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 8, 0),
         ),
         Candle(
             open=19202,
@@ -110,7 +119,7 @@ def fixture_minimal_candles():
             volume=13199,
             indicators={"ATR": 1000, "NATR": {"nested": 1001}},
             sub_indicators={"SATR": 1010, "SSATR": {"nested": 1011}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 9, 0),
         ),
         Candle(
             open=19723,
@@ -120,7 +129,7 @@ def fixture_minimal_candles():
             volume=38993,
             indicators={"ATR": 1100, "NATR": {"nested": 1101}, "MinTR": 1102},
             sub_indicators={"SATR": 1110, "SSATR": {"nested": 1111}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 10, 0),
         ),
         Candle(
             open=13564,
@@ -130,7 +139,7 @@ def fixture_minimal_candles():
             volume=30262,
             indicators={"ATR": 1200, "NATR": {"nested": 1201}, "MinTR": 1202},
             sub_indicators={"SATR": 1210, "SSATR": {"nested": 1211}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 11, 0),
         ),
         Candle(
             open=16319,
@@ -140,7 +149,7 @@ def fixture_minimal_candles():
             volume=47713,
             indicators={"ATR": 1300, "NATR": {"nested": 1301}, "MinTR": 1302},
             sub_indicators={"SATR": 1310, "SSATR": {"nested": 1311}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 12, 0),
         ),
         Candle(
             open=4709,
@@ -150,7 +159,7 @@ def fixture_minimal_candles():
             volume=14711,
             indicators={"ATR": 1400, "NATR": {"nested": 1401}, "MinTR": 1402},
             sub_indicators={"SATR": 1410, "SSATR": {"nested": 1411}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 13, 0),
         ),
         Candle(
             open=15803,
@@ -160,7 +169,7 @@ def fixture_minimal_candles():
             volume=36686,
             indicators={"ATR": 1500, "NATR": {"nested": 1501}, "MinTR": 1502},
             sub_indicators={"SATR": 1510, "SSATR": {"nested": 1511}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 14, 0),
         ),
         Candle(
             open=16425,
@@ -170,7 +179,7 @@ def fixture_minimal_candles():
             volume=41744,
             indicators={"ATR": 1600, "NATR": {"nested": 1601}, "MinTR": 1602},
             sub_indicators={"SATR": 1610, "SSATR": {"nested": 1611}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 15, 0),
         ),
         Candle(
             open=19535,
@@ -180,7 +189,7 @@ def fixture_minimal_candles():
             volume=47128,
             indicators={"ATR": 1700, "NATR": {"nested": 1701}, "MinTR": 1702},
             sub_indicators={"SATR": 1710, "SSATR": {"nested": 1711}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 16, 0),
         ),
         Candle(
             open=5837,
@@ -190,7 +199,7 @@ def fixture_minimal_candles():
             volume=9,
             indicators={"ATR": 1800, "NATR": {"nested": 1801}, "MinTR": 1802},
             sub_indicators={"SATR": 1810, "SSATR": {"nested": 1811}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 17, 0),
         ),
         Candle(
             open=16346,
@@ -200,7 +209,7 @@ def fixture_minimal_candles():
             volume=31307,
             indicators={"ATR": 1900, "NATR": {"nested": 1901}, "MinTR": 1902},
             sub_indicators={"SATR": 1910, "SSATR": {"nested": 1911}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 18, 0),
         ),
         Candle(
             open=2424,
@@ -210,13 +219,83 @@ def fixture_minimal_candles():
             volume=15750,
             indicators={"ATR": 2000, "NATR": {"nested": 2001}, "MinTR": 2002},
             sub_indicators={"SATR": 2010, "SSATR": {"nested": 2011}},
-            timestamp=None,
+            timestamp=datetime(2023, 6, 1, 9, 19, 0),
         ),
     ]
 
     return candles
 
 
-@pytest.fixture(name="candles")
-def fixture_candle_data():
-    return Candle.from_dicts(load_json_candles())
+@pytest.fixture(name="minimal_candles_t5")
+def fixture_minimal_candles_5_minute():
+    candles = [
+        Candle(
+            open=17213,
+            high=16229,
+            low=7318,
+            close=8418,
+            volume=162322,
+            indicators={},
+            sub_indicators={},
+            timestamp=datetime(2023, 6, 1, 9, 5, 0),
+        ),
+        Candle(
+            open=13838,
+            high=19875,
+            low=2853,
+            close=6231,
+            volume=88826,
+            indicators={},
+            sub_indicators={},
+            timestamp=datetime(2023, 6, 1, 9, 10, 0),
+        ),
+        Candle(
+            open=13564,
+            high=12390,
+            low=590,
+            close=19637,
+            volume=171116,
+            indicators={},
+            sub_indicators={},
+            timestamp=datetime(2023, 6, 1, 9, 15, 0),
+        ),
+        Candle(
+            open=19535,
+            high=11555,
+            low=1903,
+            close=13649,
+            volume=94194,
+            indicators={},
+            sub_indicators={},
+            timestamp=datetime(2023, 6, 1, 9, 20, 0),
+        ),
+    ]
+    return candles
+
+
+@pytest.fixture(name="minimal_candles_t10")
+def fixture_minimal_candles_10_minute():
+    candles = [
+        Candle(
+            open=17213,
+            high=19875,
+            low=2853,
+            close=6231,
+            volume=251148,
+            indicators={},
+            sub_indicators={},
+            timestamp=datetime(2023, 6, 1, 9, 10, 0),
+        ),
+        #
+        Candle(
+            open=13564,
+            high=12390,
+            low=590,
+            close=13649,
+            volume=265310,
+            indicators={},
+            sub_indicators={},
+            timestamp=datetime(2023, 6, 1, 9, 20, 0),
+        ),
+    ]
+    return candles

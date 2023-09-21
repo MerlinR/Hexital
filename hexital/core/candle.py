@@ -59,3 +59,20 @@ class Candle:
         """Expected list of the folling list [open, high, low, close, volume]
         with optional datetime at the begining or end."""
         return [Candle.from_list(candle) for candle in candles]
+
+    def merge(self, candle: Candle):
+        """Merge candle into existing candle, will use the merged into
+        Candle for any already calc indicators"""
+        ignored_keys = ["timestamp", "open"]
+
+        for key, val in vars(candle).items():
+            if key in ignored_keys or isinstance(val, dict):
+                continue
+            if key == "high":
+                self.high = max(self.high, val)
+            elif key == "low":
+                self.low = min(self.low, val)
+            elif key == "volume":
+                self.volume += val
+            elif val is not None:
+                setattr(self, key, val)
