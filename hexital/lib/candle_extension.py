@@ -1,7 +1,9 @@
+from copy import deepcopy
 from itertools import chain
 from typing import List, Optional
 
 from hexital.core.candle import Candle
+from hexital.lib.timeframe_utils import round_down_timestamp, timeframe_to_timedelta
 
 
 def reading_by_index(
@@ -101,3 +103,34 @@ def reading_period(
             0,
         ]
     )
+
+
+def merge_candles_timeframe(candles: List[Candle], timeframe: str):
+    if not candles:
+        return []
+
+    candles_ = deepcopy(candles)
+    timeframe_delta = timeframe_to_timedelta(timeframe)
+
+    collapsed_candles = [candles_.pop(0)]
+
+    if collapsed_candles[0].timestamp.timestamp() % timeframe_delta.total_seconds() == 0:
+        if len(candles) > 0:
+            collapsed_candles.append(candles_.pop(0))
+
+    start_timestamp = round_down_timestamp(
+        collapsed_candles[0].timestamp, timeframe_delta
+    )
+    collapsed_candles[-1].timestamp = start_timestamp + timeframe_delta
+
+    while candles_:
+        candle = candles_.pop(0)
+
+        if start_timestamp < candle.timestamp <= start_timestamp + timeframe_delta:
+            collapsed_candles[-1].merge(candle)
+        else:
+            start_timestamp = round_down_timestamp(candle.timestamp, timeframe_delta)
+            candle.timestamp = start_timestamp + timeframe_delta
+            collapsed_candles.append(candle)
+
+    return collapsed_candles

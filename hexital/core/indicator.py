@@ -6,7 +6,6 @@ from typing import Dict, List, Optional
 
 from hexital.core.candle import Candle
 from hexital.lib import candle_extension, utils
-from hexital.lib.timeframe_utils import merge_candles
 
 
 @dataclass(kw_only=True)
@@ -27,7 +26,9 @@ class Indicator(ABC):
         self._validate_fields()
         self._internal_generate_name()
         if self.timeframe is not None:
-            self.candles = merge_candles(self.candles, self.timeframe)
+            self.candles = candle_extension.merge_candles_timeframe(
+                self.candles, self.timeframe
+            )
         self._initialise()
 
     def __str__(self):
@@ -111,7 +112,9 @@ class Indicator(ABC):
             raise TypeError
 
         if self.timeframe is not None:
-            self.candles = merge_candles(self.candles, self.timeframe)
+            self.candles = candle_extension.merge_candles_timeframe(
+                self.candles, self.timeframe
+            )
 
         self.calculate()
 
