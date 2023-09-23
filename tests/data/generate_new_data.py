@@ -1,6 +1,6 @@
 import json
 import random
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Dict
 
 AMOUNT = 500
@@ -17,7 +17,7 @@ def save_json_result(data: list):
 
 def generate():
     data = []
-
+    start = datetime.now()
     for i in range(AMOUNT):
         data.append(
             {
@@ -26,6 +26,7 @@ def generate():
                 "low": random.randint(0, 9000000),
                 "close": random.randint(0, 9000000),
                 "volume": random.randint(0, 10000),
+                "timestamp": start + timedelta(minutes=i),
             },
         )
 

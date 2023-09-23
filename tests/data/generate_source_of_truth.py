@@ -41,6 +41,26 @@ def round_values(values: float | Dict[str, float]) -> float | Dict[str, float]:
     return values
 
 
+def candle_compress_dataframe(data: pd.DataFrame, freq: str = "5T"):
+    data.set_index(pd.DatetimeIndex(data["timestamp"]), inplace=True)
+    data.drop("timestamp", axis=1, inplace=True)
+
+    ohlc_dict = {
+        "open": "first",
+        "high": "max",
+        "low": "min",
+        "close": "last",
+        "volume": "sum",
+    }
+
+    for col in data.columns:
+        if col not in ohlc_dict:
+            ohlc_dict[col] = "last"
+
+    data = data.resample(freq, closed="right", label="right").apply(ohlc_dict)
+    return data
+
+
 def generate_indicators():
     print("Generating Indicators")
     df = pd.DataFrame.from_dict(load_json_candles())
@@ -144,6 +164,39 @@ def generate_indicators():
     save_json_result(adx_data, "ADX")
 
 
+def generate_indicators_timeframe(frame: str):
+    print(f"Generating Indicators with timeframe: {frame}")
+    df = pd.DataFrame.from_dict(load_json_candles())
+    df = candle_compress_dataframe(df, frame)
+
+    MyStrategy = ta.Strategy(
+        name="Truth Source",
+        ta=[
+            {"kind": "ema"},
+            {"kind": "sma"},
+            {"kind": "obv"},
+        ],
+    )
+
+    df.ta.strategy(MyStrategy)
+    df = df.astype(object).replace(np.nan, None)
+
+    for col in df.columns:
+        if col in ["open", "high", "low", "close", "volume"]:
+            continue
+        print(f"Generated: {col}")
+
+    save_json_result(
+        [round_values(value) for value in df["EMA_10"].tolist()], f"EMA_{frame}"
+    )
+    save_json_result(
+        [round_values(value) for value in df["SMA_10"].tolist()], f"SMA_{frame}"
+    )
+    save_json_result(
+        [round_values(value) for value in df["OBV"].tolist()], f"OBV_{frame}"
+    )
+
+
 def generate_patterns():
     print("Generating Patterns")
     df = pd.DataFrame.from_dict(load_json_candles())
@@ -167,3 +220,5 @@ def generate_patterns():
 if __name__ == "__main__":
     generate_indicators()
     generate_patterns()
+    generate_indicators_timeframe("5T")
+    generate_indicators_timeframe("10T")
