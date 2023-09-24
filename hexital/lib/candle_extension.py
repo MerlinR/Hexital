@@ -114,23 +114,36 @@ def collapse_candles_timeframe(candles: List[Candle], timeframe: str, fill: bool
 
     collapsed_candles = [candles_.pop(0)]
 
-    if collapsed_candles[0].timestamp.timestamp() % timeframe_delta.total_seconds() == 0:
-        if len(candles) > 0:
-            collapsed_candles.append(candles_.pop(0))
-
     start_timestamp = round_down_timestamp(
         collapsed_candles[0].timestamp, timeframe_delta
     )
-    collapsed_candles[-1].timestamp = start_timestamp + timeframe_delta
+
+    if collapsed_candles[0].timestamp.timestamp() % timeframe_delta.total_seconds() != 0:
+        collapsed_candles[0].timestamp = start_timestamp + timeframe_delta
 
     while candles_:
         candle = candles_.pop(0)
 
-        if start_timestamp < candle.timestamp <= start_timestamp + timeframe_delta:
-            collapsed_candles[-1].merge(candle)
+        # If current candle before the lastest collapsed candle
+        if start_timestamp + timeframe_delta > candle.timestamp:
+            start_timestamp = round_down_timestamp(candle.timestamp, timeframe_delta)
+
+        end_timestamp = start_timestamp + timeframe_delta
+
+        # If candle time is within current candle timeframe
+        if start_timestamp < candle.timestamp <= end_timestamp:
+            # If prev candle the end of current timeframe
+            if collapsed_candles[-1].timestamp == end_timestamp:
+                collapsed_candles[-1].merge(candle)
+            else:
+                candle.timestamp = end_timestamp
+                collapsed_candles.append(candle)
+                start_timestamp = round_down_timestamp(candle.timestamp, timeframe_delta)
+        # If candle is outside current candle timeframe
         else:
             start_timestamp = round_down_timestamp(candle.timestamp, timeframe_delta)
-            candle.timestamp = start_timestamp + timeframe_delta
+            end_timestamp = start_timestamp + timeframe_delta
+            candle.timestamp = end_timestamp
             collapsed_candles.append(candle)
 
     if fill:

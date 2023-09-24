@@ -206,6 +206,18 @@ class TestMergingCandlesTimeFrame:
         assert collapsed_candles == minimal_candles_t10
 
     @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t5")
+    def test_collapse_candles_t5_multiple_collapse(
+        self, minimal_candles: List[Candle], minimal_candles_t5: List[Candle]
+    ):
+        minimal_candles = self.remove_indicators(minimal_candles)
+        collapsed_candles = collapse_candles_timeframe(minimal_candles, "T5")
+        assert collapsed_candles == minimal_candles_t5
+        collapsed_candles = collapse_candles_timeframe(collapsed_candles, "T5")
+        assert collapsed_candles == minimal_candles_t5
+        collapsed_candles = collapse_candles_timeframe(collapsed_candles, "T5")
+        assert collapsed_candles == minimal_candles_t5
+
+    @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t5")
     def test_collapse_candles_t5_mixed_seconds_neat(
         self, minimal_candles: List[Candle], minimal_candles_t5: List[Candle]
     ):
@@ -228,6 +240,19 @@ class TestMergingCandlesTimeFrame:
 
     @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t5")
     def test_collapse_candles_t5_missing_section(
+        self, minimal_candles: List[Candle], minimal_candles_t5: List[Candle]
+    ):
+        minimal_candles = self.remove_indicators(minimal_candles)
+
+        cut_candles = minimal_candles[:6] + minimal_candles[-4:]
+
+        assert collapse_candles_timeframe(cut_candles, "T5", False) == [
+            minimal_candles_t5[0],
+            minimal_candles_t5[-1],
+        ]
+
+    @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t5")
+    def test_collapse_candles_t5_missing_section_fill(
         self, minimal_candles: List[Candle], minimal_candles_t5: List[Candle]
     ):
         minimal_candles = self.remove_indicators(minimal_candles)
