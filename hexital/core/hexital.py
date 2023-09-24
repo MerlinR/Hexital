@@ -108,23 +108,31 @@ class Hexital:
     def append(
         self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]
     ):
+        candles_ = []
         if isinstance(candles, Candle):
-            self.candles.append(candles)
+            candles_.append(candles)
         elif isinstance(candles, dict):
-            self.candles.append(Candle.from_dict(candles))
+            candles_.append(Candle.from_dict(candles))
         elif isinstance(candles, list):
             if isinstance(candles[0], Candle):
-                self.candles.extend(candles)
+                candles_.extend(candles)
             elif isinstance(candles[0], dict):
-                self.candles.extend(Candle.from_dicts(candles))
+                candles_.extend(Candle.from_dicts(candles))
             elif isinstance(candles[0], (float, int)):
-                self.candles.append(Candle.from_list(candles))
+                candles_.append(Candle.from_list(candles))
             elif isinstance(candles[0], list):
-                self.candles.extend(Candle.from_lists(candles))
+                candles_.extend(Candle.from_lists(candles))
             else:
                 raise TypeError
         else:
             raise TypeError
+
+        self.candles.extend(candles_)
+
+        for indicator in self.indicators:
+            if indicator.timeframe is not None:
+                indicator.append(candles_)
+
         self.calculate()
 
     def purge(self, indicator_name: Optional[str] = None) -> bool:
