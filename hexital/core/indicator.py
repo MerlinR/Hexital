@@ -25,12 +25,10 @@ class Indicator(ABC):
 
     def __post_init__(self):
         self._validate_fields()
-        self._internal_generate_name()
         if self.timeframe is not None:
             self.timeframe = self.timeframe.upper()
-            self.candles = candle_extension.collapse_candles_timeframe(
-                self.candles, self.timeframe, self.timeframe_fill
-            )
+            self.collapse_candles()
+        self._internal_generate_name()
         self._initialise()
 
     def __str__(self):
@@ -113,19 +111,22 @@ class Indicator(ABC):
         else:
             raise TypeError
 
-        if self.timeframe is not None:
-            self.candles = candle_extension.collapse_candles_timeframe(
-                self.candles, self.timeframe, self.timeframe_fill
-            )
-
         self.calculate()
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         pass
 
+    def collapse_candles(self):
+        if self.timeframe is not None:
+            self.candles = candle_extension.collapse_candles_timeframe(
+                self.candles, self.timeframe, self.timeframe_fill
+            )
+
     def calculate(self):
         """Calculate the TA values, will calculate for all the Candles,
         where this indicator is missing"""
+        self.collapse_candles()
+
         for indicator in self._sub_indicators:
             indicator.calculate()
 
@@ -139,6 +140,8 @@ class Indicator(ABC):
 
     def calculate_index(self, start_index: int, end_index: Optional[int] = None):
         """Calculate the TA values, will calculate a index range the Candles"""
+        self.collapse_candles()
+
         end_index = end_index if end_index else start_index + 1
         for index in range(start_index, end_index):
             self._set_index(index)

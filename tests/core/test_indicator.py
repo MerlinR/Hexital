@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List
 
 import pytest
@@ -7,6 +7,12 @@ from hexital.core import Candle, Indicator
 
 @dataclass(kw_only=True)
 class FakeIndicator(Indicator):
+    candles: List[Candle] = field(default_factory=list)
+    indicator_name: str = None
+    fullname_override: str = None
+    name_suffix: str = None
+    round_value: int = 4
+
     indicator_name: str = "Fake"
     period: int = 10
     input_value: str = "close"
@@ -37,7 +43,7 @@ def test_name_default(minimal_candles: List[Candle]):
 def test_name_fulloverride(minimal_candles: List[Candle]):
     test = FakeIndicator(candles=minimal_candles, fullname_override="FUCK")
     test.calculate()
-    assert minimal_candles[-1].indicators.get("FUCK")
+    assert test.name == "FUCK"
 
 
 @pytest.mark.usefixtures("minimal_candles")
@@ -46,14 +52,37 @@ def test_name_fulloverride_and_suffix(minimal_candles: List[Candle]):
         candles=minimal_candles, fullname_override="FUCK", name_suffix="YOU"
     )
     test.calculate()
-    assert minimal_candles[-1].indicators.get("FUCK_YOU")
+    assert test.name == "FUCK_YOU"
 
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_name_suffix(minimal_candles: List[Candle]):
     test = FakeIndicator(candles=minimal_candles, name_suffix="YOU")
     test.calculate()
-    assert minimal_candles[-1].indicators.get("Fake_10_YOU")
+    assert test.name == "Fake_10_YOU"
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_name_timeframe(minimal_candles: List[Candle]):
+    test = FakeIndicator(candles=minimal_candles, timeframe="t5")
+    test.calculate()
+    assert test.name == "Fake_10_T5"
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_name_timeframe_override(minimal_candles: List[Candle]):
+    test = FakeIndicator(
+        candles=minimal_candles, fullname_override="FUCK", timeframe="t5"
+    )
+    test.calculate()
+    assert test.name == "FUCK"
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_name_timeframe_suffix(minimal_candles: List[Candle]):
+    test = FakeIndicator(candles=minimal_candles, name_suffix="YOU", timeframe="t5")
+    test.calculate()
+    assert test.name == "Fake_10_T5_YOU"
 
 
 @pytest.mark.usefixtures("minimal_candles")
