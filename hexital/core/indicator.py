@@ -16,6 +16,7 @@ class Indicator(ABC):
     name_suffix: str = None
     round_value: int = 4
     timeframe: str = None
+    timeframe_fill: bool = False
     _output_name: str = ""
     _sub_indicators: List[Indicator] = field(default_factory=list)
     _managed_indicators: Dict[str, Indicator] = field(default_factory=dict)
@@ -27,7 +28,7 @@ class Indicator(ABC):
         self._internal_generate_name()
         if self.timeframe is not None:
             self.candles = candle_extension.merge_candles_timeframe(
-                self.candles, self.timeframe
+                self.candles, self.timeframe, self.timeframe_fill
             )
         self._initialise()
 
@@ -113,7 +114,7 @@ class Indicator(ABC):
 
         if self.timeframe is not None:
             self.candles = candle_extension.merge_candles_timeframe(
-                self.candles, self.timeframe
+                self.candles, self.timeframe, self.timeframe_fill
             )
 
         self.calculate()

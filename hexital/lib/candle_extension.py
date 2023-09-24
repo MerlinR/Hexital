@@ -105,7 +105,7 @@ def reading_period(
     )
 
 
-def merge_candles_timeframe(candles: List[Candle], timeframe: str):
+def merge_candles_timeframe(candles: List[Candle], timeframe: str, fill: bool = False):
     if not candles:
         return []
 
@@ -132,5 +132,22 @@ def merge_candles_timeframe(candles: List[Candle], timeframe: str):
             start_timestamp = round_down_timestamp(candle.timestamp, timeframe_delta)
             candle.timestamp = start_timestamp + timeframe_delta
             collapsed_candles.append(candle)
+
+    if fill:
+        index = 1
+        start_timestamp = collapsed_candles[0].timestamp
+
+        while True:
+            if (
+                collapsed_candles[index].timestamp
+                != collapsed_candles[index - 1].timestamp + timeframe_delta
+            ):
+                fill_candle = deepcopy(collapsed_candles[index - 1])
+                fill_candle.timestamp += timeframe_delta
+                collapsed_candles.insert(index, fill_candle)
+
+            index += 1
+            if index >= len(collapsed_candles):
+                break
 
     return collapsed_candles

@@ -1,5 +1,5 @@
 import copy
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List
 
 import pytest
@@ -223,3 +223,23 @@ class TestMergingCandlesTimeFrame:
         merged_candles.extend(minimal_candles[7:])
         merged_candles = merge_candles_timeframe(merged_candles, "t5")
         assert merged_candles == minimal_candles_t5
+
+    @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t5")
+    def test_merge_candles_t5_missing_section(
+        self, minimal_candles: List[Candle], minimal_candles_t5: List[Candle]
+    ):
+        minimal_candles = self.remove_indicators(minimal_candles)
+
+        cut_candles = minimal_candles[:6] + minimal_candles[-4:]
+
+        new_cdl = copy.deepcopy(minimal_candles_t5[0])
+        new_cdl2 = copy.deepcopy(minimal_candles_t5[0])
+        new_cdl.timestamp += timedelta(minutes=5)
+        new_cdl2.timestamp += timedelta(minutes=10)
+
+        assert merge_candles_timeframe(cut_candles, "t5", True) == [
+            minimal_candles_t5[0],
+            new_cdl,
+            new_cdl2,
+            minimal_candles_t5[-1],
+        ]
