@@ -105,7 +105,7 @@ def reading_period(
     )
 
 
-def merge_candles_timeframe(candles: List[Candle], timeframe: str, fill: bool = False):
+def collapse_candles_timeframe(candles: List[Candle], timeframe: str, fill: bool = False):
     if not candles:
         return []
 
@@ -135,8 +135,6 @@ def merge_candles_timeframe(candles: List[Candle], timeframe: str, fill: bool = 
 
     if fill:
         index = 1
-        start_timestamp = collapsed_candles[0].timestamp
-
         while True:
             if (
                 collapsed_candles[index].timestamp

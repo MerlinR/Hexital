@@ -27,7 +27,8 @@ class Indicator(ABC):
         self._validate_fields()
         self._internal_generate_name()
         if self.timeframe is not None:
-            self.candles = candle_extension.merge_candles_timeframe(
+            self.timeframe = self.timeframe.upper()
+            self.candles = candle_extension.collapse_candles_timeframe(
                 self.candles, self.timeframe, self.timeframe_fill
             )
         self._initialise()
@@ -113,7 +114,7 @@ class Indicator(ABC):
             raise TypeError
 
         if self.timeframe is not None:
-            self.candles = candle_extension.merge_candles_timeframe(
+            self.candles = candle_extension.collapse_candles_timeframe(
                 self.candles, self.timeframe, self.timeframe_fill
             )
 

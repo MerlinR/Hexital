@@ -6,23 +6,23 @@ from hexital.lib.timeframe_utils import round_down_timestamp, timeframe_to_timed
 
 
 def test_timeframe_to_delta_min():
-    assert timeframe_to_timedelta("t10") == timedelta(minutes=10)
+    assert timeframe_to_timedelta("T10") == timedelta(minutes=10)
 
 
 def test_timeframe_to_delta_secs():
-    assert timeframe_to_timedelta("s10") == timedelta(seconds=10)
+    assert timeframe_to_timedelta("S10") == timedelta(seconds=10)
 
 
 def test_timeframe_to_delta_secs_long():
-    assert timeframe_to_timedelta("s90") == timedelta(minutes=1, seconds=30)
+    assert timeframe_to_timedelta("S90") == timedelta(minutes=1, seconds=30)
 
 
 def test_timeframe_to_delta_hours():
-    assert timeframe_to_timedelta("h5") == timedelta(hours=5)
+    assert timeframe_to_timedelta("H5") == timedelta(hours=5)
 
 
 def test_timeframe_to_delta_days():
-    assert timeframe_to_timedelta("d1") == timedelta(days=1)
+    assert timeframe_to_timedelta("D1") == timedelta(days=1)
 
 
 def test_timeframe_to_delta_invalid_key():
