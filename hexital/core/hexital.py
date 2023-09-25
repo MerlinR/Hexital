@@ -12,7 +12,7 @@ class Hexital:
     name: str = None
     candles: List[Candle] = None
     _candles_timeframe: Dict[str, List[Candle]] = None
-    _indicators: List[Indicator] = None
+    _indicators: Dict[str, Indicator] = None
     description: Optional[str] = None
     timeframe_fill: bool = False
 
@@ -32,16 +32,18 @@ class Hexital:
         self.timeframe_fill = timeframe_fill
         self._collapse_candles()
 
-    def _validate_indicators(self, indicators: List[dict | Indicator]) -> List[Indicator]:
+    def _validate_indicators(
+        self, indicators: List[dict | Indicator]
+    ) -> Dict[str, Indicator]:
         module = importlib.import_module("hexital.indicators")
-        valid_indicators = []
+        valid_indicators = {}
 
         if not indicators:
-            return []
+            return {}
 
         for indicator in indicators:
             if isinstance(indicator, Indicator):
-                valid_indicators.append(indicator)
+                valid_indicators[indicator.name] = indicator
             elif isinstance(indicator, dict):
                 indicator_name = indicator.get("indicator")
                 if indicator_name is None:
@@ -52,11 +54,12 @@ class Hexital:
                 if indicator_class is not None:
                     arguments = indicator.copy()
                     arguments.pop("indicator")
-                    valid_indicators.append(indicator_class(**arguments))
+                    new_indicator = indicator_class(**arguments)
+                    valid_indicators[new_indicator.name] = new_indicator
                 else:
                     raise InvalidIndicator(f"Indicator {indicator_name} does not exist")
 
-        for indicator in valid_indicators:
+        for indicator in valid_indicators.values():
             if indicator.timeframe is not None:
                 if self._candles_timeframe.get(indicator.timeframe) is None:
                     self._candles_timeframe[indicator.timeframe] = deepcopy(self.candles)
@@ -73,29 +76,32 @@ class Hexital:
             )
 
     @property
-    def indicators(self) -> List[Indicator]:
+    def indicators(self) -> Dict[str, Indicator]:
         """Simply get's a list of all the Indicators within Hexital stratergy"""
         return self._indicators
 
-    def has_reading(self, indicator_name: str) -> bool:
+    def has_reading(self, name: str) -> bool:
         """Checks if the given Indicator has a valid reading in latest Candle"""
-        for indicator in self._indicators:
-            if indicator_name in indicator.name:
-                return indicator.has_reading
-        return False
+        return bool(self.reading(name))
 
-    def reading(self, indicator_name: str, index: int = -1) -> float | dict | None:
+    def reading(self, name: str, index: int = -1) -> float | dict | None:
         """Attempts to retrive a rading with a given Indicator name.
-        `indicator_name` can use '.' to find nested reading, E.G `MACD_12_26_9.MACD`
+        `name` can use '.' to find nested reading, E.G `MACD_12_26_9.MACD`
         """
-        return reading_by_index(self.candles, indicator_name, index=index)
+        reading = reading_by_index(self.candles, name, index=index)
+        if reading is None:
+            for candles in self._candles_timeframe.values():
+                reading = reading_by_index(candles, name, index=index)
+                if reading is not None:
+                    break
 
-    def reading_as_list(self, indicator_name: Optional[str] = None) -> List[float | dict]:
+        return reading
+
+    def reading_as_list(self, name: Optional[str] = None) -> List[float | dict]:
         """Find given indicator and returns the readings as a list
         Full Name of the indicator E.G EMA_12"""
-        for indicator in self._indicators:
-            if indicator_name is None or indicator_name in indicator.name:
-                return indicator.as_list
+        if self._indicators.get(name):
+            return self._indicators[name].as_list
         return []
 
     def add_indicator(self, indicator: Indicator | List[Indicator]):
@@ -106,22 +112,18 @@ class Hexital:
         if not isinstance(indicator, list):
             indicator = [indicator]
 
-        for valid_indicator in self._validate_indicators(indicator):
-            self._indicators.append(valid_indicator)
+        for valid_indicator in self._validate_indicators(indicator).values():
+            self._indicators[valid_indicator.name] = valid_indicator
+        self._collapse_candles()
 
     def get_indicator(self, name: str) -> Indicator | None:
         """Searches hexital's indicator's and Returns the Indicator object itself."""
-        for indicator in self._indicators:
-            if name in indicator.name:
-                return indicator
-        return None
+        return self._indicators.get(name)
 
-    def remove_indicator(self, indicator_name: str):
+    def remove_indicator(self, name: str):
         """Removes an indicator from running within hexital"""
-        self.purge(indicator_name)
-        for index, indic in enumerate(self._indicators):
-            if indic.name == indicator_name:
-                self._indicators.pop(index)
+        self.purge(name)
+        self._indicators.pop(name, None)
 
     def append(
         self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]
@@ -147,30 +149,29 @@ class Hexital:
 
         self.candles.extend(candles_)
 
-        for indicator in self.indicators:
-            if indicator.timeframe is not None:
-                self._candles_timeframe[indicator.timeframe].extend(deepcopy(candles_))
+        for timeframes in self._candles_timeframe.values():
+            timeframes.extend(deepcopy(candles_))
         self._collapse_candles()
 
         self.calculate()
 
-    def purge(self, indicator_name: Optional[str] = None) -> bool:
+    def purge(self, name: Optional[str] = None) -> bool:
         """Takes Indicator name and removes all readings for said indicator.
         Indicator name must be exact"""
-        for indicator in self._indicators:
-            if indicator_name is None or indicator_name == indicator.name:
+        for indicator_name, indicator in self._indicators.items():
+            if name is None or indicator_name == name:
                 indicator.purge()
                 return True
         return False
 
-    def calculate(self, indicator_name: Optional[str] = None):
+    def calculate(self, name: Optional[str] = None):
         """Calculates all the missing indicator readings."""
-        for indicator in self._indicators:
-            if indicator_name is None or indicator_name in indicator.name:
+        for indicator_name, indicator in self._indicators.items():
+            if name is None or indicator_name == name:
                 indicator.calculate()
 
-    def recalculate(self, indicator_name: Optional[str] = None):
+    def recalculate(self, name: Optional[str] = None):
         """Purge's all indicator reading's and re-calculates them all,
         ideal for changing an indicator parameters midway."""
-        self.purge(indicator_name)
-        self.calculate(indicator_name)
+        self.purge(name)
+        self.calculate(name)

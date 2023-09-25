@@ -206,9 +206,7 @@ def test_hextial_remove_indicator(candles, expected_ema, expected_sma):
 
     strat.remove_indicator("SMA_10")
 
-    assert not any(
-        indicator for indicator in strat.indicators if indicator.name == "SMA_10"
-    )
+    assert not any(name for name in strat.indicators.keys() if name == "SMA_10")
 
 
 @pytest.mark.usefixtures("candles", "expected_ema", "expected_sma_t10")
@@ -256,8 +254,8 @@ def test_hextial_multi_timeframes_shared_candles(
     )
 
 
-# @pytest.mark.usefixtures("candles", "expected_sma_t10")
-# def test_hextial_multi_timeframe_reading(candles, expected_sma_t10):
-#     strat = Hexital("Test Stratergy", candles, [EMA(), SMA(timeframe="t10")])
-#     strat.calculate()
-#     assert pytest.approx(strat.reading("SMA_10_T10")) == expected_sma_t10[-1]
+@pytest.mark.usefixtures("candles", "expected_sma_t10")
+def test_hextial_multi_timeframe_reading(candles, expected_sma_t10):
+    strat = Hexital("Test Stratergy", candles, [EMA(), SMA(timeframe="t10")])
+    strat.calculate()
+    assert pytest.approx(strat.reading("SMA_10_T10")) == expected_sma_t10[-1]
