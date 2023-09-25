@@ -14,6 +14,28 @@ Note: Extremely early stages and likely change drastically, including core funct
 For most libraries such as [Pandas-TA](https://github.com/twopirllc/pandas-ta) which is fantastic for generating Indicators for a large set of data, it's incredibly slow when computing real-time/incremental data sets. The entire input vector is always used to calculate new values of indicators, which is a major cause of this speed issue. Despite the fact that these indicator values will remain unchanged and/or you don't want past data points to be changed by new data. `Hexital` resolves this by using an incremental approach, only calculating new/missing indicator value's, this implies it requires O(1) time to produce new indicator values in comparison to O(n) (or worse) required by other libraries.
 
 
+## Features
+
+### Indicators
+Hexital comes with a growing selection of available Indicators to compute. These can be used individually to calculate a single indicator, or used with the `Hexital` class to automatically compute multiple indicators with a single incremental candle list; which is easily parsable.
+
+### Candle Patterns
+Hexital also supports detecting candle patterns, such as Doji, etc. This can be achieved easily by calling the Pattern function with the candles, or used automatically as an indicator where it would be computed alongside Indicators.
+
+### Multi-Timeframes
+Hexital has a key feature of supporting indicator and pattern computation on multiple candle timeframes with a single set of candles. For instance an indicator can be given 1m or second candles and given a timeframe of 10 minutes, the indicator will automatically collapse these candles into 10m candle and compute the indicator value.
+
+This can also be mixed within the `Hexital` class, allowing you to automatically compute a multiple incremental indictors and patterns of which consistent of multiple timeframes by appending a single candle of any timeframe. E.G By appending 1m candles  into `Hexital` you can automatically compute an RSI using the 1 minute candles and computing an EMA using the 10 minute candles.
+Example:
+```python
+stratergy = Hexital("Test Stratergy", candles_1m, [RSI(), EMA(timeframe="T10")])
+# OR
+stratergy = Hexital("Test Stratergy", candles_tick, [RSI(timeframe="T1"), EMA(timeframe="T10")])
+```
+
+### Candlestick Movement
+Hexital also comes built with some candle utility methods, such as Rising Candles, Cross overs, etc, these are designed to be simple to make using the candles and common features easy,  many of these are also found in pine scripting. 
+
 ## Indicators
 - ADX
 - ATR
@@ -33,7 +55,7 @@ For most libraries such as [Pandas-TA](https://github.com/twopirllc/pandas-ta) w
 - VWMA
 - WMA
 
-## Patterns
+## Candle Patterns
 Simple useful Candle pattern recognition, such as Doji, hammer, etc
 - Doji
 
@@ -116,7 +138,6 @@ print(my_ema.reading()) # 7319.8776
 
 # Access other Readings (Reading get's the latest readings)
 print(my_ema.reading("high")) # 4837
-print(my_ema.candles[-1].high)  # 4837
 
 # Access other specific Readings (Older readings)
 print(my_ema.reading("high", index=-2)) # 6584
@@ -129,10 +150,8 @@ print(my_ema.reading("high", index=-2)) # 6584
 Roughly ordered in priority
 
 - More Indicators
-- More Analysis methods
+- More Movement methods
 - Pattern Candle recognition methods, detecting Doji, Hammer, etc
-- Support for automatic multi timeframe indicator generation
-  - E.G: With 1 minute candles, we can generate EMA for minute candles and 5 minute candles
 - Indicator Pluggability, to allow easy extension of this library
   - Allowing custom Indictors to be added
 - Multiprocessing, of indictors stored within hexial Class.

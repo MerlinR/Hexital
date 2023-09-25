@@ -11,6 +11,9 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Fixed bug in _find_calc_index with no candles
 - Added Pattern Indicator, skeleton to run Any Patterns as a Indicator
   - E.G On all Candles automatically
+- Added support to generate Indicators on multiple timeframes at once
+  - Allowing one set of candles to be used to generate higher timeframe indicators
+  - E.G 1m candles can be used to generate 10m indicators simultaneously with 1m indicators
 
 ## 0.2.0 - 2023-09-05
 - Feature: Added timestamp (datetime) to Candle dataclass
@@ -20,7 +23,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added custom exceptions
 - More thorough unit testing
 - Updated Indicators accuracy to Truth source
-- Added private index property to Indicator allowing simplier method calls
+- Added private index property to Indicator allowing simpler method calls
   - self.reading_by_index(index, self.input_value) -> self.reading(self.input_value)
   - Multiple Method's renamed/argument re-ordered
 - Added Indicators:
