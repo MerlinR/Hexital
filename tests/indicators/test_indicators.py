@@ -187,7 +187,7 @@ class TestIndicators:
     @pytest.mark.usefixtures("candles", "expected_obv_t10")
     def test_obv_t10_double_collapse(self, candles, expected_obv_t10):
         test = indicators.OBV(candles=candles, timeframe="t10")
-        test.collapse_candles()
+        test._collapse_candles()
         test.calculate()
 
         assert self.verfiy(test.as_list, expected_obv_t10, verbose=True)

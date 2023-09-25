@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
@@ -27,7 +28,9 @@ class Indicator(ABC):
         self._validate_fields()
         if self.timeframe is not None:
             self.timeframe = self.timeframe.upper()
-            self.collapse_candles()
+            if self.candles:
+                self.candles = deepcopy(self.candles)
+                self._collapse_candles()
         self._internal_generate_name()
         self._initialise()
 
@@ -93,40 +96,47 @@ class Indicator(ABC):
     def append(
         self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]
     ):
+        candles_ = []
         if isinstance(candles, Candle):
-            self.candles.append(candles)
+            candles_.append(candles)
         elif isinstance(candles, dict):
-            self.candles.append(Candle.from_dict(candles))
+            candles_.append(Candle.from_dict(candles))
         elif isinstance(candles, list):
             if isinstance(candles[0], Candle):
-                self.candles.extend(candles)
+                candles_.extend(candles)
             elif isinstance(candles[0], dict):
-                self.candles.extend(Candle.from_dicts(candles))
+                candles_.extend(Candle.from_dicts(candles))
             elif isinstance(candles[0], (float, int)):
-                self.candles.append(Candle.from_list(candles))
+                candles_.append(Candle.from_list(candles))
             elif isinstance(candles[0], list):
-                self.candles.extend(Candle.from_lists(candles))
+                candles_.extend(Candle.from_lists(candles))
             else:
                 raise TypeError
         else:
             raise TypeError
+
+        if self.timeframe is not None:
+            self.candles.extend(deepcopy(candles_))
+            self._collapse_candles()
+        else:
+            self.candles.extend(candles_)
 
         self.calculate()
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         pass
 
-    def collapse_candles(self):
+    def _collapse_candles(self):
         if self.timeframe is not None:
-            self.candles = candle_extension.collapse_candles_timeframe(
-                self.candles, self.timeframe, self.timeframe_fill
+            self.candles.extend(
+                candle_extension.collapse_candles_timeframe(
+                    self.candles, self.timeframe, self.timeframe_fill
+                )
             )
 
     def calculate(self):
         """Calculate the TA values, will calculate for all the Candles,
         where this indicator is missing"""
-        self.collapse_candles()
-
         for indicator in self._sub_indicators:
             indicator.calculate()
 
@@ -140,8 +150,6 @@ class Indicator(ABC):
 
     def calculate_index(self, start_index: int, end_index: Optional[int] = None):
         """Calculate the TA values, will calculate a index range the Candles"""
-        self.collapse_candles()
-
         end_index = end_index if end_index else start_index + 1
         for index in range(start_index, end_index):
             self._set_index(index)

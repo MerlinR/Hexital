@@ -1,4 +1,3 @@
-from copy import deepcopy
 from itertools import chain
 from typing import List, Optional
 
@@ -10,6 +9,8 @@ def reading_by_index(
     candles: List[Candle], name: str, index: int = -1
 ) -> float | dict | None:
     """Simple method to get a reading from the given indicator from it's index"""
+    if index is None:
+        index = -1
     return reading_by_candle(candles[index], name)
 
 
@@ -109,10 +110,9 @@ def collapse_candles_timeframe(candles: List[Candle], timeframe: str, fill: bool
     if not candles:
         return []
 
-    candles_ = deepcopy(candles)
     timeframe_delta = timeframe_to_timedelta(timeframe)
 
-    collapsed_candles = [candles_.pop(0)]
+    collapsed_candles = [candles.pop(0)]
 
     start_timestamp = round_down_timestamp(
         collapsed_candles[0].timestamp, timeframe_delta
@@ -121,8 +121,8 @@ def collapse_candles_timeframe(candles: List[Candle], timeframe: str, fill: bool
     if collapsed_candles[0].timestamp.timestamp() % timeframe_delta.total_seconds() != 0:
         collapsed_candles[0].timestamp = start_timestamp + timeframe_delta
 
-    while candles_:
-        candle = candles_.pop(0)
+    while candles:
+        candle = candles.pop(0)
 
         # If current candle before the lastest collapsed candle
         if start_timestamp + timeframe_delta > candle.timestamp:
@@ -149,12 +149,19 @@ def collapse_candles_timeframe(candles: List[Candle], timeframe: str, fill: bool
     if fill:
         index = 1
         while True:
+            prev_candle = collapsed_candles[index - 1]
             if (
                 collapsed_candles[index].timestamp
-                != collapsed_candles[index - 1].timestamp + timeframe_delta
+                != prev_candle.timestamp + timeframe_delta
             ):
-                fill_candle = deepcopy(collapsed_candles[index - 1])
-                fill_candle.timestamp += timeframe_delta
+                fill_candle = Candle(
+                    open=prev_candle.open,
+                    close=prev_candle.close,
+                    high=prev_candle.high,
+                    low=prev_candle.low,
+                    volume=prev_candle.volume,
+                    timestamp=prev_candle.timestamp + timeframe_delta,
+                )
                 collapsed_candles.insert(index, fill_candle)
 
             index += 1
