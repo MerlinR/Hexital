@@ -80,6 +80,12 @@ class Hexital:
         """Simply get's a list of all the Indicators within Hexital stratergy"""
         return self._indicators
 
+    def indicator(self, name: str) -> Indicator | None:
+        for indicator_name, indicator in self._indicators.items():
+            if name in indicator_name:
+                return indicator
+        return None
+
     def has_reading(self, name: str) -> bool:
         """Checks if the given Indicator has a valid reading in latest Candle"""
         return bool(self.reading(name))
@@ -97,12 +103,20 @@ class Hexital:
 
         return reading
 
+    def prev_reading(self, name: str = None) -> float | dict | None:
+        return self.reading(name, index=-2)
+
     def reading_as_list(self, name: Optional[str] = None) -> List[float | dict]:
         """Find given indicator and returns the readings as a list
         Full Name of the indicator E.G EMA_12"""
         if self._indicators.get(name):
             return self._indicators[name].as_list
         return []
+
+    def get_candles(self, timeframe: Optional[str] = None) -> List[Candle]:
+        if timeframe:
+            return self._candles_timeframe.get(timeframe)
+        return self.candles
 
     def add_indicator(self, indicator: Indicator | List[Indicator]):
         """Add's a new indicator to `Hexital` stratergy.

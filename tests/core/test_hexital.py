@@ -1,7 +1,7 @@
 from copy import deepcopy
 
 import pytest
-from hexital.core import Candle, Hexital
+from hexital.core import Candle, Hexital, Indicator
 from hexital.exceptions import InvalidIndicator
 from hexital.indicators import EMA, OBV, SMA
 
@@ -64,14 +64,21 @@ def test_hextial_dict_arguments(candles):
 
 
 @pytest.mark.usefixtures("candles", "expected_sma")
-def test_hextial_read(candles, expected_sma):
+def test_hextial_reading(candles, expected_sma):
     strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
     strat.calculate()
     assert pytest.approx(strat.reading("SMA")) == expected_sma[-1]
 
 
+@pytest.mark.usefixtures("candles", "expected_sma")
+def test_hextial_prev_reading(candles, expected_sma):
+    strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
+    strat.calculate()
+    assert pytest.approx(strat.prev_reading("SMA")) == expected_sma[-2]
+
+
 @pytest.mark.usefixtures("candles")
-def test_hextial_reading(candles):
+def test_hextial_has_reading(candles):
     strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
     assert strat.has_reading("SMA") is False
 
@@ -80,16 +87,23 @@ def test_hextial_reading(candles):
 
 
 @pytest.mark.usefixtures("candles")
-def test_hextial_reading_exists_no_values(candles):
+def test_hextial_has_reading_exists_no_values(candles):
     strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
     assert strat.has_reading("SMA") is False
 
 
 @pytest.mark.usefixtures("candles")
-def test_hextial_reading_missing(candles):
+def test_hextial_has_reading_missing(candles):
     strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
     strat.calculate()
     assert strat.has_reading("EMA") is False
+
+
+@pytest.mark.usefixtures("candles")
+def test_hextial_indicator_selection(candles):
+    strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
+    strat.calculate()
+    assert isinstance(strat.indicator("SMA"), Indicator)
 
 
 @pytest.mark.usefixtures("minimal_candles")
@@ -206,7 +220,7 @@ def test_hextial_remove_indicator(candles, expected_ema, expected_sma):
 
     strat.remove_indicator("SMA_10")
 
-    assert not any(name for name in strat.indicators.keys() if name == "SMA_10")
+    assert not strat.indicator("SMA")
 
 
 @pytest.mark.usefixtures("candles", "expected_ema", "expected_sma_t10")
@@ -247,11 +261,31 @@ def test_hextial_multi_timeframes_shared_candles(
     assert (
         strat._candles_timeframe["T10"][-1].indicators.get("SMA_10_T10")
         == expected_sma_t10[-1]
-    )
-    assert (
-        strat._candles_timeframe["T10"][-1].indicators.get("OBV_T10")
+        and strat._candles_timeframe["T10"][-1].indicators.get("OBV_T10")
         == expected_obv_t10[-1]
     )
+
+
+@pytest.mark.usefixtures("candles")
+def test_hextial_multi_timeframes_get_candles(candles):
+    strat = Hexital(
+        "Test Stratergy",
+        candles,
+        [SMA(timeframe="t10"), OBV(timeframe="T10")],
+    )
+    strat.calculate()
+
+    assert strat.get_candles("T10")[-1].indicators.get(
+        "SMA_10_T10"
+    ) and strat.get_candles("T10")[-1].indicators.get("OBV_T10")
+
+
+@pytest.mark.usefixtures("candles")
+def test_hextial_get_candles(candles):
+    strat = Hexital("Test Stratergy", candles, [EMA()])
+    strat.calculate()
+
+    assert strat.get_candles()[-1].indicators.get("EMA_10")
 
 
 @pytest.mark.usefixtures("candles", "expected_sma_t10")
