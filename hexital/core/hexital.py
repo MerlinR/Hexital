@@ -1,17 +1,20 @@
 import importlib
-from typing import List, Optional
+from copy import deepcopy
+from typing import Dict, List, Optional
 
 from hexital.core.candle import Candle
 from hexital.core.indicator import Indicator
 from hexital.exceptions import InvalidIndicator
-from hexital.lib.candle_extension import reading_by_index
+from hexital.lib.candle_extension import collapse_candles_timeframe, reading_by_index
 
 
 class Hexital:
-    name: str = ""
+    name: str = None
     candles: List[Candle] = None
+    _candles_timeframe: Dict[str, List[Candle]] = None
     _indicators: List[Indicator] = None
     description: Optional[str] = None
+    timeframe_fill: bool = False
 
     def __init__(
         self,
@@ -19,11 +22,15 @@ class Hexital:
         candles: List[Candle],
         indicators: List[dict | Indicator] = None,
         description: Optional[str] = None,
+        timeframe_fill: bool = False,
     ):
         self.name = name
         self.candles = candles if isinstance(candles, list) else []
+        self._candles_timeframe = {}
         self._indicators = self._validate_indicators(indicators)
         self.description = description
+        self.timeframe_fill = timeframe_fill
+        self._collapse_candles()
 
     def _validate_indicators(self, indicators: List[dict | Indicator]) -> List[Indicator]:
         module = importlib.import_module("hexital.indicators")
@@ -50,9 +57,20 @@ class Hexital:
                     raise InvalidIndicator(f"Indicator {indicator_name} does not exist")
 
         for indicator in valid_indicators:
-            indicator.candles = self.candles
+            if indicator.timeframe is not None:
+                if self._candles_timeframe.get(indicator.timeframe) is None:
+                    self._candles_timeframe[indicator.timeframe] = deepcopy(self.candles)
+                indicator.candles = self._candles_timeframe[indicator.timeframe]
+            else:
+                indicator.candles = self.candles
 
         return valid_indicators
+
+    def _collapse_candles(self):
+        for timeframe, candles in self._candles_timeframe.items():
+            candles.extend(
+                collapse_candles_timeframe(candles, timeframe, self.timeframe_fill)
+            )
 
     @property
     def indicators(self) -> List[Indicator]:
@@ -131,7 +149,8 @@ class Hexital:
 
         for indicator in self.indicators:
             if indicator.timeframe is not None:
-                indicator.append(candles_)
+                self._candles_timeframe[indicator.timeframe].extend(deepcopy(candles_))
+        self._collapse_candles()
 
         self.calculate()
 
