@@ -113,7 +113,7 @@ def test_hextial_append_candle(minimal_candles):
 
     strat.append(new_candle)
 
-    assert strat.candles == [new_candle]
+    assert strat.candles() == [new_candle]
 
 
 @pytest.mark.usefixtures("minimal_candles")
@@ -122,7 +122,7 @@ def test_hextial_append_candle_list(minimal_candles):
 
     strat.append(minimal_candles)
 
-    assert strat.candles == minimal_candles
+    assert strat.candles() == minimal_candles
 
 
 def test_hextial_append_dict():
@@ -137,7 +137,7 @@ def test_hextial_append_dict():
             "volume": 19661,
         }
     )
-    assert strat.candles == [Candle(17213, 2395, 7813, 3615, 19661)]
+    assert strat.candles() == [Candle(17213, 2395, 7813, 3615, 19661)]
 
 
 @pytest.mark.usefixtures("candles")
@@ -163,7 +163,7 @@ def test_hextial_append_dict_list(candles):
         ]
     )
 
-    assert strat.candles == [
+    assert strat.candles() == [
         Candle(17213, 2395, 7813, 3615, 19661),
         Candle(1301, 3007, 11626, 19048, 28909),
     ]
@@ -174,7 +174,7 @@ def test_hextial_append_list():
 
     strat.append([17213, 2395, 7813, 3615, 19661])
 
-    assert strat.candles == [Candle(17213, 2395, 7813, 3615, 19661)]
+    assert strat.candles() == [Candle(17213, 2395, 7813, 3615, 19661)]
 
 
 def test_hextial_append_list_list():
@@ -187,7 +187,7 @@ def test_hextial_append_list_list():
         ]
     )
 
-    assert strat.candles == [
+    assert strat.candles() == [
         Candle(17213, 2395, 7813, 3615, 19661),
         Candle(1301, 3007, 11626, 19048, 28909),
     ]
@@ -259,10 +259,8 @@ def test_hextial_multi_timeframes_shared_candles(
 
     assert pytest.approx(strat.reading_as_list("EMA_10")) == expected_ema
     assert (
-        strat._candles_timeframe["T10"][-1].indicators.get("SMA_10_T10")
-        == expected_sma_t10[-1]
-        and strat._candles_timeframe["T10"][-1].indicators.get("OBV_T10")
-        == expected_obv_t10[-1]
+        strat._candles["T10"][-1].indicators.get("SMA_10_T10") == expected_sma_t10[-1]
+        and strat._candles["T10"][-1].indicators.get("OBV_T10") == expected_obv_t10[-1]
     )
 
 
@@ -275,9 +273,9 @@ def test_hextial_multi_timeframes_get_candles(candles):
     )
     strat.calculate()
 
-    assert strat.get_candles("T10")[-1].indicators.get(
-        "SMA_10_T10"
-    ) and strat.get_candles("T10")[-1].indicators.get("OBV_T10")
+    assert strat.candles("T10")[-1].indicators.get("SMA_10_T10") and strat.candles("T10")[
+        -1
+    ].indicators.get("OBV_T10")
 
 
 @pytest.mark.usefixtures("candles")
@@ -285,7 +283,7 @@ def test_hextial_get_candles(candles):
     strat = Hexital("Test Stratergy", candles, [EMA()])
     strat.calculate()
 
-    assert strat.get_candles()[-1].indicators.get("EMA_10")
+    assert strat.candles()[-1].indicators.get("EMA_10")
 
 
 @pytest.mark.usefixtures("candles", "expected_sma_t10")

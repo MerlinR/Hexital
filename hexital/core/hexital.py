@@ -7,11 +7,12 @@ from hexital.core.indicator import Indicator
 from hexital.exceptions import InvalidIndicator
 from hexital.lib.candle_extension import collapse_candles_timeframe, reading_by_index
 
+DEFAULT = "default"
+
 
 class Hexital:
     name: str = None
-    candles: List[Candle] = None
-    _candles_timeframe: Dict[str, List[Candle]] = None
+    _candles: Dict[str, List[Candle]] = None
     _indicators: Dict[str, Indicator] = None
     description: Optional[str] = None
     timeframe_fill: bool = False
@@ -25,8 +26,7 @@ class Hexital:
         timeframe_fill: bool = False,
     ):
         self.name = name
-        self.candles = candles if isinstance(candles, list) else []
-        self._candles_timeframe = {}
+        self._candles = {DEFAULT: deepcopy(candles) if isinstance(candles, list) else []}
         self._indicators = self._validate_indicators(indicators)
         self.description = description
         self.timeframe_fill = timeframe_fill
@@ -61,23 +61,28 @@ class Hexital:
 
         for indicator in valid_indicators.values():
             if indicator.timeframe is not None:
-                if self._candles_timeframe.get(indicator.timeframe) is None:
-                    self._candles_timeframe[indicator.timeframe] = deepcopy(self.candles)
-                indicator.candles = self._candles_timeframe[indicator.timeframe]
+                if self._candles.get(indicator.timeframe) is None:
+                    self._candles[indicator.timeframe] = deepcopy(self._candles[DEFAULT])
+                indicator.candles = self._candles[indicator.timeframe]
             else:
-                indicator.candles = self.candles
+                indicator.candles = self._candles[DEFAULT]
 
         return valid_indicators
 
     def _collapse_candles(self):
-        for timeframe, candles in self._candles_timeframe.items():
+        for timeframe, candles in self._candles.items():
+            if timeframe == DEFAULT:
+                continue
             candles.extend(
                 collapse_candles_timeframe(candles, timeframe, self.timeframe_fill)
             )
 
+    def candles(self, timeframe: Optional[str] = DEFAULT) -> List[Candle]:
+        return self._candles.get(timeframe, DEFAULT)
+
     @property
     def indicators(self) -> Dict[str, Indicator]:
-        """Simply get's a list of all the Indicators within Hexital stratergy"""
+        """Simply get's a list of all the Indicators within Hexital strategy"""
         return self._indicators
 
     def indicator(self, name: str) -> Indicator | None:
@@ -91,12 +96,12 @@ class Hexital:
         return bool(self.reading(name))
 
     def reading(self, name: str, index: int = -1) -> float | dict | None:
-        """Attempts to retrive a rading with a given Indicator name.
+        """Attempts to retrieve a reading with a given Indicator name.
         `name` can use '.' to find nested reading, E.G `MACD_12_26_9.MACD`
         """
-        reading = reading_by_index(self.candles, name, index=index)
+        reading = reading_by_index(self._candles[DEFAULT], name, index=index)
         if reading is None:
-            for candles in self._candles_timeframe.values():
+            for candles in self._candles.values():
                 reading = reading_by_index(candles, name, index=index)
                 if reading is not None:
                     break
@@ -113,13 +118,8 @@ class Hexital:
             return self._indicators[name].as_list
         return []
 
-    def get_candles(self, timeframe: Optional[str] = None) -> List[Candle]:
-        if timeframe:
-            return self._candles_timeframe.get(timeframe)
-        return self.candles
-
     def add_indicator(self, indicator: Indicator | List[Indicator]):
-        """Add's a new indicator to `Hexital` stratergy.
+        """Add's a new indicator to `Hexital` strategy.
         This accept either `Indicator` datatypes or dict string versions to be packed.
         `add_indicator(SMA(period=10))` or `add_indicator({"indicator": "SMA", "period": 10})`
         Does not automatically calculates readings."""
@@ -161,10 +161,9 @@ class Hexital:
         else:
             raise TypeError
 
-        self.candles.extend(candles_)
+        for existing_candles in self._candles.values():
+            existing_candles.extend(deepcopy(candles_))
 
-        for timeframes in self._candles_timeframe.values():
-            timeframes.extend(deepcopy(candles_))
         self._collapse_candles()
 
         self.calculate()
