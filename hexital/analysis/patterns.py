@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from hexital.analysis import movement, utils
+from hexital.analysis import utils
 from hexital.core.candle import Candle
 
 
@@ -19,7 +19,7 @@ def doji(
         candles (List[Candle]): Candles to use to find Doji Candle
         length (int, optional): Check for the average. Defaults to 10.
         lookback (Optional[int], optional): Lookback allows detecting ant Doji candles N back. Defaults to None.
-        asint (bool, optional): Use Intergers or Bools. Defaults to False.
+        asint (bool, optional): Use Integers or Bools. Defaults to False.
         index (_type_, optional): Index of Candle to check. Defaults to None/Latest.
 
     Returns:

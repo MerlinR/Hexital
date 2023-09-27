@@ -12,7 +12,6 @@ from hexital.lib import candle_extension, utils
 @dataclass(kw_only=True)
 class Indicator(ABC):
     candles: List[Candle] = field(default_factory=list)
-    indicator_name: str = None
     fullname_override: str = None
     name_suffix: str = None
     round_value: int = 4

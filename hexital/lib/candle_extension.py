@@ -124,7 +124,7 @@ def collapse_candles_timeframe(candles: List[Candle], timeframe: str, fill: bool
     while candles:
         candle = candles.pop(0)
 
-        # If current candle before the lastest collapsed candle
+        # If current candle before the latest collapsed candle
         if start_timestamp + timeframe_delta > candle.timestamp:
             start_timestamp = round_down_timestamp(candle.timestamp, timeframe_delta)
 
