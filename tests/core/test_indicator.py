@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta
 from typing import List
 
 import pytest
@@ -214,3 +215,43 @@ def test_purge(minimal_candles: List[Candle]):
     assert test.has_reading is True
     test.purge()
     assert test.has_reading is False
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_candle_timerange(minimal_candles):
+    test = FakeIndicator(candles=[], candles_timerange=timedelta(minutes=1))
+
+    test.append(minimal_candles)
+
+    assert test.candles == [
+        Candle(
+            open=16346,
+            high=4309,
+            low=1903,
+            close=6255,
+            volume=31307,
+            indicators={
+                "ATR": 1900,
+                "Fake_10": 100.0,
+                "MinTR": 1902,
+                "NATR": {"nested": 1901},
+            },
+            sub_indicators={"SATR": 1910, "SSATR": {"nested": 1911}},
+            timestamp=datetime(2023, 6, 1, 9, 18),
+        ),
+        Candle(
+            open=2424,
+            high=10767,
+            low=13115,
+            close=13649,
+            volume=15750,
+            indicators={
+                "ATR": 2000,
+                "Fake_10": 100.0,
+                "MinTR": 2002,
+                "NATR": {"nested": 2001},
+            },
+            sub_indicators={"SATR": 2010, "SSATR": {"nested": 2011}},
+            timestamp=datetime(2023, 6, 1, 9, 19),
+        ),
+    ]

@@ -3,6 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from copy import deepcopy
 from dataclasses import dataclass, field
+from datetime import timedelta
 from typing import Dict, List, Optional
 
 from hexital.core.candle import Candle
@@ -17,6 +18,7 @@ class Indicator(ABC):
     round_value: int = 4
     timeframe: str = None
     timeframe_fill: bool = False
+    candles_timerange: timedelta = None
     _output_name: str = ""
     _sub_indicators: List[Indicator] = field(default_factory=list)
     _managed_indicators: Dict[str, Indicator] = field(default_factory=dict)
@@ -30,6 +32,7 @@ class Indicator(ABC):
             if self.candles:
                 self.candles = deepcopy(self.candles)
                 self._collapse_candles()
+        self._candles_timerange()
         self._internal_generate_name()
         self._initialise()
 
@@ -120,6 +123,8 @@ class Indicator(ABC):
         else:
             self.candles.extend(candles_)
 
+        self._candles_timerange()
+
         self.calculate()
 
     def _calculate_reading(self, index: int) -> float | dict | None:
@@ -132,6 +137,14 @@ class Indicator(ABC):
                     self.candles, self.timeframe, self.timeframe_fill
                 )
             )
+
+    def _candles_timerange(self):
+        if self.candles_timerange is None or not self.candles:
+            return
+
+        latest = self.candles[-1].timestamp
+        while self.candles[0].timestamp < latest - self.candles_timerange:
+            self.candles.pop(0)
 
     def calculate(self):
         """Calculate the TA values, will calculate for all the Candles,

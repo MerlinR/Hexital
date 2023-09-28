@@ -1,4 +1,4 @@
-from copy import deepcopy
+from datetime import datetime, timedelta
 
 import pytest
 from hexital.core import Candle, Hexital, Indicator
@@ -291,3 +291,33 @@ def test_hextial_multi_timeframe_reading(candles, expected_sma_t10):
     strat = Hexital("Test Stratergy", candles, [EMA(), SMA(timeframe="t10")])
     strat.calculate()
     assert pytest.approx(strat.reading("SMA_10_T10")) == expected_sma_t10[-1]
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_hextial_timerange(minimal_candles):
+    strat = Hexital("Test Stratergy", [], candles_timerange=timedelta(minutes=1))
+
+    strat.append(minimal_candles)
+
+    assert strat.candles() == [
+        Candle(
+            open=16346,
+            high=4309,
+            low=1903,
+            close=6255,
+            volume=31307,
+            indicators={"ATR": 1900, "MinTR": 1902, "NATR": {"nested": 1901}},
+            sub_indicators={"SATR": 1910, "SSATR": {"nested": 1911}},
+            timestamp=datetime(2023, 6, 1, 9, 18),
+        ),
+        Candle(
+            open=2424,
+            high=10767,
+            low=13115,
+            close=13649,
+            volume=15750,
+            indicators={"ATR": 2000, "MinTR": 2002, "NATR": {"nested": 2001}},
+            sub_indicators={"SATR": 2010, "SSATR": {"nested": 2011}},
+            timestamp=datetime(2023, 6, 1, 9, 19),
+        ),
+    ]
