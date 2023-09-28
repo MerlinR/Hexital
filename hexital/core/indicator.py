@@ -117,11 +117,8 @@ class Indicator(ABC):
         else:
             raise TypeError
 
-        if self.timeframe is not None:
-            self.candles.extend(deepcopy(candles_))
-            self._collapse_candles()
-        else:
-            self.candles.extend(candles_)
+        self.candles.extend(deepcopy(candles_))
+        self._collapse_candles()
 
         self._candles_timerange()
 

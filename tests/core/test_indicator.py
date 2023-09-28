@@ -131,8 +131,9 @@ def test_reading_period(minimal_candles: List[Candle]):
 @pytest.mark.usefixtures("minimal_candles")
 def test_append_candle(minimal_candles):
     new_candle = minimal_candles.pop()
-    test = FakeIndicator(candles=[])
+    new_candle.indicators["Fake_10"] = 100.0
 
+    test = FakeIndicator(candles=[])
     test.append(new_candle)
 
     assert test.candles == [new_candle]
@@ -143,6 +144,9 @@ def test_append_candle_list(minimal_candles):
     test = FakeIndicator(candles=[])
 
     test.append(minimal_candles)
+
+    for candle in minimal_candles:
+        candle.indicators["Fake_10"] = 100.0
 
     assert test.candles == minimal_candles
 

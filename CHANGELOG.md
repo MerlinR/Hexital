@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## 0.3.1
 - Added candles_timerange to auto remove older than N candles
-
+- Fixed bug where no timeframe indicator wasnt creating new copy of candles
 ## 0.3.0 - 2023-09-27
 - Added Patterns:
   - Doji Candle
