@@ -6,6 +6,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 ## 0.3.1
 - Added candles_timerange to auto remove older than N candles
 - Fixed bug where no timeframe indicator wasnt creating new copy of candles
+- Fixed bug where collapsed timeframe candles will use first calculated indicator value
+  - Meaning 1 minute candle that only had first 10 seconds,  will never re-calculate for rest of the minute
 ## 0.3.0 - 2023-09-27
 - Added Patterns:
   - Doji Candle

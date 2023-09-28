@@ -66,13 +66,16 @@ class Candle:
         ignored_keys = ["timestamp", "open"]
 
         for key, val in vars(candle).items():
-            if key in ignored_keys or isinstance(val, dict):
+            if key in ignored_keys:
                 continue
+
             if key == "high":
                 self.high = max(self.high, val)
             elif key == "low":
                 self.low = min(self.low, val)
             elif key == "volume":
                 self.volume += val
+            elif isinstance(val, dict):
+                setattr(self, key, {})
             elif val is not None:
                 setattr(self, key, val)
