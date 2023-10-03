@@ -104,6 +104,11 @@ class Hexital:
         """Simply get's a list of all the Indicators within Hexital strategy"""
         return self._indicators
 
+    @property
+    def indicator_settings(self) -> List[dict]:
+        """Simply get's a list of all the Indicators within Hexital strategy"""
+        return [indicator.settings for indicator in self._indicators.values()]
+
     def indicator(self, name: str) -> Indicator | None:
         for indicator_name, indicator in self._indicators.items():
             if name in indicator_name:

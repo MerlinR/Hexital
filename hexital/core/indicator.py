@@ -87,6 +87,22 @@ class Indicator(ABC):
             return False
         return self.reading(index=-1) is not None
 
+    @property
+    def settings(self) -> dict:
+        """Returns a dict format of how this indicator can be generated"""
+        settings = self.__dict__
+        output = {"indicator": type(self).__name__}
+
+        for name, value in settings.items():
+            if name == "candles":
+                continue
+            if name == "timeframe_fill" and self.timeframe is None:
+                continue
+            if not name.startswith("_") and value is not None:
+                output[name] = deepcopy(value)
+
+        return output
+
     def _set_reading(self, reading: float | dict, index: Optional[int] = None):
         if index is None:
             index = self._active_index

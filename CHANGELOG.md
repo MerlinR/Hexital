@@ -8,6 +8,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Fixed bug where no timeframe indicator wasnt creating new copy of candles
 - Fixed bug where collapsed timeframe candles will use first calculated indicator value
   - Meaning 1 minute candle that only had first 10 seconds,  will never re-calculate for rest of the minute
+- Added 'Settings' propety, to output Indicator in a dict format, that can be fed into back into Hexital
 ## 0.3.0 - 2023-09-27
 - Added Patterns:
   - Doji Candle
