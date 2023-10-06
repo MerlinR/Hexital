@@ -35,6 +35,13 @@ def test_hextial_multi_dict(candles, expected_ema, expected_sma):
 
 
 @pytest.mark.usefixtures("candles")
+def test_hextial_dict_pattern(candles):
+    strat = Hexital("Test Stratergy", candles, [{"pattern": "doji"}])
+    strat.calculate()
+    assert strat.reading("doji") is not None
+
+
+@pytest.mark.usefixtures("candles")
 def test_hextial_multi_dict_invalid(candles):
     with pytest.raises(InvalidIndicator):
         Hexital("Test Stratergy", candles, [EMA(), {"indicator": "FUCK"}])

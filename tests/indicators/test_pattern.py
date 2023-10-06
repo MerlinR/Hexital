@@ -151,5 +151,4 @@ class TestPatterns:
     def test_doji(self, candles, expected_doji):
         test = indicators.Pattern(pattern=patterns.doji, candles=candles)
         test.calculate()
-        print(test.name)
         assert self.verfiy(test.as_list, expected_doji)

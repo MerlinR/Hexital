@@ -40,7 +40,8 @@ class Hexital:
     def _validate_indicators(
         self, indicators: List[dict | Indicator]
     ) -> Dict[str, Indicator]:
-        module = importlib.import_module("hexital.indicators")
+        indicator_module = importlib.import_module("hexital.indicators")
+        pattern_module = importlib.import_module("hexital.analysis.patterns")
         valid_indicators = {}
 
         if not indicators:
@@ -51,18 +52,34 @@ class Hexital:
                 valid_indicators[indicator.name] = indicator
             elif isinstance(indicator, dict):
                 indicator_name = indicator.get("indicator")
-                if indicator_name is None:
+                pattern_name = indicator.get("pattern")
+
+                if indicator_name is None and pattern_name is None:
                     raise InvalidIndicator(
-                        f"Dict Indicator missing 'indicator' name: {indicator}"
+                        f"Dict Indicator missing 'indicator' or 'pattern' name: {indicator}"
                     )
-                indicator_class = getattr(module, indicator_name, None)
-                if indicator_class is not None:
-                    arguments = indicator.copy()
-                    arguments.pop("indicator")
-                    new_indicator = indicator_class(**arguments)
-                    valid_indicators[new_indicator.name] = new_indicator
-                else:
-                    raise InvalidIndicator(f"Indicator {indicator_name} does not exist")
+
+                if indicator_name:
+                    indicator_class = getattr(indicator_module, indicator_name, None)
+                    if indicator_class is not None:
+                        arguments = indicator.copy()
+                        arguments.pop("indicator")
+                        new_indicator = indicator_class(**arguments)
+                        valid_indicators[new_indicator.name] = new_indicator
+                    else:
+                        raise InvalidIndicator(
+                            f"Indicator {indicator_name} does not exist"
+                        )
+                elif pattern_name:
+                    pattern_func = getattr(pattern_module, pattern_name, None)
+                    pattern_class = getattr(indicator_module, "Pattern", None)
+                    if pattern_func is not None:
+                        arguments = indicator.copy()
+                        arguments.pop("pattern")
+                        new_indicator = pattern_class(pattern=pattern_func, **arguments)
+                        valid_indicators[new_indicator.name] = new_indicator
+                    else:
+                        raise InvalidIndicator(f"Indicator {pattern_name} does not exist")
 
         for indicator in valid_indicators.values():
             if indicator.timeframe is not None:
