@@ -140,6 +140,14 @@ def test_settings(minimal_candles: List[Candle]):
     }
 
 
+def test_settings_pattern():
+    test = Pattern(pattern="doji")
+    assert test.settings == {
+        "pattern": "doji",
+        "round_value": 4,
+    }
+
+
 @pytest.mark.usefixtures("minimal_candles")
 def test_append_candle(minimal_candles):
     new_candle = minimal_candles.pop()

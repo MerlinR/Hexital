@@ -1,5 +1,6 @@
 import importlib
 import inspect
+from copy import deepcopy
 from typing import Callable
 
 from hexital.core import Indicator
@@ -39,6 +40,22 @@ class Pattern(Indicator):
             self._pattern_kwargs.update(args)
 
         super().__init__(**kwargs)
+
+    @property
+    def settings(self) -> dict:
+        """Returns a dict format of how this indicator can be generated"""
+        settings = self.__dict__
+        output = {"pattern": self._pattern_method.__name__}
+
+        for name, value in settings.items():
+            if name == "candles":
+                continue
+            if name == "timeframe_fill" and self.timeframe is None:
+                continue
+            if not name.startswith("_") and value is not None:
+                output[name] = deepcopy(value)
+
+        return output
 
     @staticmethod
     def _seperate_indicator_attributes(kwargs: dict) -> tuple[dict, dict]:
