@@ -54,6 +54,7 @@ def rising(candles: List[Candle], indicator: str, length: int = 4) -> bool:
             reading_by_candle(candle, indicator)
             for candle in candles[-abs(length + 1) : -1]
         ]
+        if val is not None
     )
 
 
@@ -72,6 +73,7 @@ def falling(candles: List[Candle], indicator: str, length: int = 4) -> bool:
             reading_by_candle(candle, indicator)
             for candle in candles[-abs(length + 1) : -1]
         ]
+        if val is not None
     )
 
 

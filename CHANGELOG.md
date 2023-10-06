@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## 0.3.1
 - Added candles_timerange to auto remove older than N candles
+- Added 'Settings' propety, to output Indicator in a dict format, that can be fed into back into Hexital
+- Updated Hexital to better take Pattern's as a dict input
+- Updated Hexital dict input to accept custom method Patterns
+- Fixed bug in Movement on to few candles
 - Fixed bug where no timeframe indicator wasnt creating new copy of candles
 - Fixed bug where collapsed timeframe candles will use first calculated indicator value
   - Meaning 1 minute candle that only had first 10 seconds,  will never re-calculate for rest of the minute
