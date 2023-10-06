@@ -70,7 +70,7 @@ class Hexital:
                         raise InvalidIndicator(
                             f"Indicator {indicator_name} does not exist"
                         )
-                elif pattern_name:
+                elif pattern_name and isinstance(pattern_name, str):
                     pattern_func = getattr(pattern_module, pattern_name, None)
                     pattern_class = getattr(indicator_module, "Pattern", None)
                     if pattern_func is not None:
@@ -80,6 +80,14 @@ class Hexital:
                         valid_indicators[new_indicator.name] = new_indicator
                     else:
                         raise InvalidIndicator(f"Indicator {pattern_name} does not exist")
+                elif pattern_name and callable(pattern_name):
+                    pattern_class = getattr(indicator_module, "Pattern", None)
+                    arguments = indicator.copy()
+                    arguments.pop("pattern")
+                    new_indicator = pattern_class(pattern=pattern_name, **arguments)
+                    valid_indicators[new_indicator.name] = new_indicator
+                else:
+                    raise InvalidIndicator(f"Indicator {pattern_name} does not exist")
 
         for indicator in valid_indicators.values():
             if indicator.timeframe is not None:

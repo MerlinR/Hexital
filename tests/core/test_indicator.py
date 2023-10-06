@@ -4,6 +4,7 @@ from typing import List
 
 import pytest
 from hexital.core import Candle, Indicator
+from hexital.indicators.pattern import Pattern
 
 
 @dataclass(kw_only=True)

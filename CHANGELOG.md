@@ -10,6 +10,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - Meaning 1 minute candle that only had first 10 seconds,  will never re-calculate for rest of the minute
 - Added 'Settings' propety, to output Indicator in a dict format, that can be fed into back into Hexital
 - Updated Hexital to better take Pattern's as a dict input
+- Updated Hexital dict input to accept custom method Patterns
 
 ## 0.3.0 - 2023-09-27
 - Added Patterns:

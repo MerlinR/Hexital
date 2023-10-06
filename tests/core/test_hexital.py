@@ -1,9 +1,14 @@
 from datetime import datetime, timedelta
+from typing import List
 
 import pytest
 from hexital.core import Candle, Hexital, Indicator
 from hexital.exceptions import InvalidIndicator
 from hexital.indicators import EMA, OBV, SMA
+
+
+def fake_pattern(candles: List[Candle], index=-1):
+    return 1
 
 
 @pytest.mark.usefixtures("candles", "expected_ema")
@@ -39,6 +44,13 @@ def test_hextial_dict_pattern(candles):
     strat = Hexital("Test Stratergy", candles, [{"pattern": "doji"}])
     strat.calculate()
     assert strat.reading("doji") is not None
+
+
+@pytest.mark.usefixtures("candles")
+def test_hextial_dict_pattern_custom(candles):
+    strat = Hexital("Test Stratergy", candles, [{"pattern": fake_pattern}])
+    strat.calculate()
+    assert strat.reading("fake_pattern") is not None
 
 
 @pytest.mark.usefixtures("candles")
