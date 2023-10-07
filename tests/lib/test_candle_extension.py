@@ -19,9 +19,16 @@ class TestReadByIndex:
     def test_basic(self, minimal_candles: List[Candle]):
         assert reading_by_index(minimal_candles, "high") == 10767
 
+    def test_basic_invalid(self):
+        assert reading_by_index([], "high") is None
+
     @pytest.mark.usefixtures("minimal_candles")
     def test_indexed(self, minimal_candles: List[Candle]):
         assert reading_by_index(minimal_candles, "high", index=5) == 5858
+
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_indexed_invalid(self, minimal_candles: List[Candle]):
+        assert reading_by_index(minimal_candles, "high", index=6000) is None
 
     @pytest.mark.usefixtures("minimal_candles")
     def test_indicator(self, minimal_candles: List[Candle]):
