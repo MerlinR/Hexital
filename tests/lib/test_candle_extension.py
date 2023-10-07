@@ -5,6 +5,7 @@ from typing import List
 import pytest
 from hexital.core import Candle
 from hexital.lib.candle_extension import (
+    candles_sum,
     collapse_candles_timeframe,
     reading_as_list,
     reading_by_index,
@@ -270,3 +271,33 @@ class TestMergingCandlesTimeFrame:
             new_cdl2,
             minimal_candles_t5[-1],
         ]
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_candle_sum_reg_close(minimal_candles):
+    assert candles_sum(minimal_candles, "close", length=2) == 19904
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_candle_sum_reg_close_all(minimal_candles):
+    assert candles_sum(minimal_candles, "close", length=9) == 104074
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_candle_sum_reg_indicator(minimal_candles):
+    assert candles_sum(minimal_candles, "ATR", length=3) == 5700
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_candle_sum_reg_indicator_inverse_length(minimal_candles):
+    assert candles_sum(minimal_candles, "ATR", length=3, index=-3) == 5100
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_candle_sum_reg_indicator_insane_index(minimal_candles):
+    assert candles_sum(minimal_candles, "ATR", length=3, index=100) is None
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_candle_sum_reg_indicator_insane_index_and_length(minimal_candles):
+    assert candles_sum(minimal_candles, "ATR", length=100, index=100) is None

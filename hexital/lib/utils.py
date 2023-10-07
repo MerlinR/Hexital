@@ -1,29 +1,29 @@
-from typing import Dict, List, Optional
-
-from hexital.core.candle import Candle
-from hexital.lib.candle_extension import reading_by_candle
+from typing import Dict
 
 
-def candles_sum(
-    candles: List[Candle], indicator: str, length: int, index: Optional[int] = None
-) -> float:
-    """Sum of `indicator` for `length` bars back. including index/latest"""
+def validate_index(index: int, length: int, default: int = -1) -> int | None:
+    if index is None:
+        index = default
+    if not valid_index(index, length):
+        return None
+    return absindex(index, length)
 
-    if (index is not None and index >= len(candles)) or index is None:
-        index = len(candles)
-    elif index is not None and index >= 0:
-        index += 1
-    elif index is not None:
-        index = len(candles) - (abs(index) - 1)
 
-    if length > len(candles):
-        length = len(candles)
+def absindex(index: int, length: int) -> int:
+    """Ensure's Index is a positive index, -1 == length-1"""
+    if index is None:
+        return length - 1
+    if index < 0:
+        return length + index
+    return index
 
-    return sum(
-        reading_by_candle(candle, indicator)
-        for candle in candles[index - length : index]
-        if reading_by_candle(candle, indicator) is not None
-    )
+
+def valid_index(index: int, length: int) -> bool:
+    if index is None:
+        return False
+    if not length > index >= -length:
+        return False
+    return True
 
 
 def round_values(

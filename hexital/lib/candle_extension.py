@@ -3,14 +3,16 @@ from typing import List, Optional
 
 from hexital.core.candle import Candle
 from hexital.lib.timeframe_utils import round_down_timestamp, timeframe_to_timedelta
+from hexital.lib.utils import absindex, valid_index
 
 
 def reading_by_index(
     candles: List[Candle], name: str, index: int = -1
 ) -> float | dict | None:
     """Simple method to get a reading from the given indicator from it's index"""
-    if index is None:
-        index = -1
+    if not valid_index(index, len(candles)):
+        return None
+
     return reading_by_candle(candles[index], name)
 
 
@@ -103,6 +105,25 @@ def reading_period(
             period / 2,
             0,
         ]
+    )
+
+
+def candles_sum(
+    candles: List[Candle], indicator: str, length: int, index: int = -1
+) -> float:
+    """Sum of `indicator` for `length` bars back. including index/latest"""
+    if not valid_index(index, len(candles)):
+        return None
+
+    index = absindex(index, len(candles)) + 1
+
+    if length > len(candles):
+        length = len(candles)
+
+    return sum(
+        reading_by_candle(candle, indicator)
+        for candle in candles[index - length : index]
+        if reading_by_candle(candle, indicator) is not None
     )
 
 

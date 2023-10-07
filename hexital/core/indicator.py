@@ -269,7 +269,7 @@ class Indicator(ABC):
     def candles_sum(
         self, length: int = 1, name: Optional[str] = None, index: Optional[int] = None
     ) -> float:
-        return utils.candles_sum(
+        return candle_extension.candles_sum(
             self.candles,
             name if name else self.name,
             length,

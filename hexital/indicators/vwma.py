@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
 from hexital.core import Indicator
-from hexital.lib.utils import candles_sum
 
 
 @dataclass(kw_only=True)
@@ -25,5 +24,5 @@ class VWMA(Indicator):
                 self.reading("close", i) * self.reading("volume", i)
                 for i in range(index - (self.period - 1), index + 1)
             )
-            return volume_close / candles_sum(self.candles, "volume", self.period, index)
+            return volume_close / self.candles_sum(self.period, "volume")
         return None
