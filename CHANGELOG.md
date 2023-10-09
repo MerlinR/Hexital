@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-## 0.3.1
+## 0.3.1 - 2023-10-09
 - Added candles_timerange to auto remove older than N candles
 - Added 'Settings' propety, to output Indicator in a dict format, that can be fed into back into Hexital
 - Updated Hexital to better take Pattern's as a dict input
