@@ -6,13 +6,15 @@ def validate_index(index: int, length: int, default: int = -1) -> int | None:
         index = default
     if not valid_index(index, length):
         return None
-    return absindex(index, length)
+    return index
 
 
-def absindex(index: int, length: int) -> int:
+def absindex(index: int, length: int) -> int | None:
     """Ensure's Index is a positive index, -1 == length-1"""
     if index is None:
         return length - 1
+    if not valid_index(index, length):
+        return None
     if index < 0:
         return length + index
     return index

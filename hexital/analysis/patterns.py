@@ -2,6 +2,7 @@ from typing import List, Optional
 
 from hexital.analysis import utils
 from hexital.core.candle import Candle
+from hexital.lib.utils import validate_index
 
 
 def doji(
@@ -25,9 +26,8 @@ def doji(
     Returns:
         bool | int: If The given Candle is Doji bool or 1/2
     """
+    index = validate_index(index, len(candles), -1)
     if index is None:
-        index = len(candles) - 1
-    if len(candles) < length or index + 1 < length:
         return False
 
     def _doji_check(indx: int):
