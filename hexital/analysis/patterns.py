@@ -10,7 +10,7 @@ def doji(
     length: int = 10,
     lookback: Optional[int] = None,
     asint: bool = False,
-    index: int = None,
+    index: Optional[int] = None,
 ) -> bool | int:
     """Doji Pattern
     A candle body is Doji when it's shorter than 10% of the average of the

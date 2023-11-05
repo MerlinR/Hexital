@@ -72,7 +72,7 @@ def reading_count(candles: List[Candle], name: str) -> int:
     return count
 
 
-def reading_as_list(candles: List[Candle], name: str) -> List[float | dict]:
+def reading_as_list(candles: List[Candle], name: str) -> List[float | dict | None]:
     """Gathers the indicator for all candles as a list"""
     return [candle.indicators.get(name) for candle in candles]
 
@@ -110,7 +110,7 @@ def reading_period(
 
 def candles_sum(
     candles: List[Candle], indicator: str, length: int, index: int = -1
-) -> float:
+) -> float | None:
     """Sum of `indicator` for `length` bars back. including index/latest"""
     if not valid_index(index, len(candles)):
         return None
@@ -127,7 +127,9 @@ def candles_sum(
     )
 
 
-def collapse_candles_timeframe(candles: List[Candle], timeframe: str, fill: bool = False):
+def collapse_candles_timeframe(
+    candles: List[Candle], timeframe: str, fill: bool = False
+):
     if not candles:
         return []
 
@@ -135,11 +137,17 @@ def collapse_candles_timeframe(candles: List[Candle], timeframe: str, fill: bool
 
     collapsed_candles = [candles.pop(0)]
 
+    if collapsed_candles[0].timestamp is None:
+        return
+
     start_timestamp = round_down_timestamp(
         collapsed_candles[0].timestamp, timeframe_delta
     )
 
-    if collapsed_candles[0].timestamp.timestamp() % timeframe_delta.total_seconds() != 0:
+    if (
+        collapsed_candles[0].timestamp.timestamp() % timeframe_delta.total_seconds()
+        != 0
+    ):
         collapsed_candles[0].timestamp = start_timestamp + timeframe_delta
 
     while candles:
@@ -159,7 +167,9 @@ def collapse_candles_timeframe(candles: List[Candle], timeframe: str, fill: bool
             else:
                 candle.timestamp = end_timestamp
                 collapsed_candles.append(candle)
-                start_timestamp = round_down_timestamp(candle.timestamp, timeframe_delta)
+                start_timestamp = round_down_timestamp(
+                    candle.timestamp, timeframe_delta
+                )
         # If candle is outside current candle timeframe
         else:
             start_timestamp = round_down_timestamp(candle.timestamp, timeframe_delta)
@@ -172,7 +182,8 @@ def collapse_candles_timeframe(candles: List[Candle], timeframe: str, fill: bool
         while True:
             prev_candle = collapsed_candles[index - 1]
             if (
-                collapsed_candles[index].timestamp
+                prev_candle.timestamp
+                and collapsed_candles[index].timestamp
                 != prev_candle.timestamp + timeframe_delta
             ):
                 fill_candle = Candle(

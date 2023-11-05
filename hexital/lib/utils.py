@@ -1,7 +1,6 @@
-from typing import Dict
+from typing import Dict, Optional
 
-
-def validate_index(index: int, length: int, default: int = -1) -> int | None:
+def validate_index(index: Optional[int], length: int, default: int = -1) -> int | None:
     if index is None:
         index = default
     if not valid_index(index, length):
@@ -29,8 +28,8 @@ def valid_index(index: int, length: int) -> bool:
 
 
 def round_values(
-    value: float | Dict[str, float], round_by: int = 4
-) -> float | Dict[str, float]:
+    value: float | Dict[str, float | None] | None, round_by: int = 4
+) -> float | Dict[str, float | None] | None:
     if isinstance(value, float):
         return round(value, round_by)
 

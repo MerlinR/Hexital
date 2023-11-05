@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import List
+from typing import List, Optional
 
 import pytest
 from hexital.core import Candle, Indicator
@@ -10,12 +10,11 @@ from hexital.indicators.pattern import Pattern
 @dataclass(kw_only=True)
 class FakeIndicator(Indicator):
     candles: List[Candle] = field(default_factory=list)
-    indicator_name: str = None
-    fullname_override: str = None
-    name_suffix: str = None
-    round_value: int = 4
-
     indicator_name: str = "Fake"
+    fullname_override: Optional[str] = None
+    name_suffix: Optional[str] = None
+    round_value: int = 4
+    
     period: int = 10
     input_value: str = "close"
 

@@ -26,5 +26,5 @@ def timeframe_to_timedelta(timeframe: str) -> timedelta:
         return timedelta(hours=int(timeframe[1:]))
     if timeframe.startswith("D"):
         return timedelta(days=int(timeframe[1:]))
-
-    InvalidTimeFrame(f"Invalid value: {timeframe}, somehow")
+        
+    raise InvalidTimeFrame(f"Invalid value: {timeframe}, somehow")

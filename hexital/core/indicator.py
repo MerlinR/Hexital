@@ -13,12 +13,12 @@ from hexital.lib import candle_extension, utils
 @dataclass(kw_only=True)
 class Indicator(ABC):
     candles: List[Candle] = field(default_factory=list)
-    fullname_override: str = None
-    name_suffix: str = None
+    fullname_override: Optional[str] = None
+    name_suffix: Optional[str] = None
     round_value: int = 4
-    timeframe: str = None
+    timeframe: Optional[str] = None
     timeframe_fill: bool = False
-    candles_timerange: timedelta = None
+    candles_timerange: Optional[timedelta] = None
     _output_name: str = ""
     _sub_indicators: List[Indicator] = field(default_factory=list)
     _managed_indicators: Dict[str, Indicator] = field(default_factory=dict)
@@ -51,7 +51,7 @@ class Indicator(ABC):
         else:
             self._output_name = "{}{}{}".format(
                 self._generate_name(),
-                f"_{self.timeframe}" if self.timeframe else "",
+                f"_{self.timeframe}" if self.timeframe is not None else "",
                 f"_{self.name_suffix}" if self.name_suffix else "",
             )
 
@@ -71,12 +71,12 @@ class Indicator(ABC):
         return self._output_name
 
     @property
-    def read(self) -> float | dict:
+    def read(self) -> float | dict | None:
         """Get's this newest reading of this indicator"""
         return self.reading()
 
     @property
-    def as_list(self) -> List[float | dict]:
+    def as_list(self) -> List[float | dict | None]:
         """Gathers the indicator for all candles as a list"""
         return candle_extension.reading_as_list(self.candles, self.name)
 
@@ -103,7 +103,7 @@ class Indicator(ABC):
 
         return output
 
-    def _set_reading(self, reading: float | dict, index: Optional[int] = None):
+    def _set_reading(self, reading: float | dict | None, index: Optional[int] = None):
         if index is None:
             index = self._active_index
         if self._sub_indicator:
@@ -156,9 +156,12 @@ class Indicator(ABC):
             return
 
         latest = self.candles[-1].timestamp
-        while self.candles[0].timestamp < latest - self.candles_timerange:
+        if not latest:
+            return
+    
+        while self.candles[0].timestamp and self.candles[0].timestamp < latest - self.candles_timerange:
             self.candles.pop(0)
-
+    
     def calculate(self):
         """Calculate the TA values, will calculate for all the Candles,
         where this indicator is missing"""
@@ -199,11 +202,9 @@ class Indicator(ABC):
     def _set_index(self, index: int):
         self._active_index = index
         for indicator in self._managed_indicators.values():
-            try:
+            if hasattr(indicator, "set_active_index"):
                 indicator.set_active_index(index)
-            except AttributeError:
-                # Due to a managed Indicator, such as a self controlled EMA(MACD)
-                pass
+
 
     def _add_sub_indicator(self, indicator: Indicator):
         """Adds sub indicator, this will auto calculate with indicator"""
@@ -215,7 +216,7 @@ class Indicator(ABC):
         indicator._sub_indicator = True
         self._managed_indicators[name] = indicator
 
-    def _managed_indictor(self, name: str) -> Indicator:
+    def _managed_indictor(self, name: str) -> Indicator | None:
         return self._managed_indicators.get(name)
 
     def prev_exists(self) -> bool:
@@ -268,7 +269,7 @@ class Indicator(ABC):
 
     def candles_sum(
         self, length: int = 1, name: Optional[str] = None, index: Optional[int] = None
-    ) -> float:
+    ) -> float | None:
         return candle_extension.candles_sum(
             self.candles,
             name if name else self.name,

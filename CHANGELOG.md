@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 
 The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 0.3.2 - 2023-10-09
+- Cleaned up code and some potential Bugs ruff/pyright
+
 ## 0.3.1 - 2023-10-09
 - Added candles_timerange to auto remove older than N candles
 - Added 'Settings' propety, to output Indicator in a dict format, that can be fed into back into Hexital

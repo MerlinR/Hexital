@@ -1,7 +1,7 @@
 import importlib
 import inspect
 from copy import deepcopy
-from typing import Callable
+from typing import Callable, Optional
 
 from hexital.core import Indicator
 from hexital.exceptions import InvalidPattern
@@ -19,10 +19,10 @@ class Pattern(Indicator):
 
     """
 
-    _pattern_method: Callable = None
-    _pattern_kwargs = {}
+    _pattern_method: Callable
+    _pattern_kwargs: dict
 
-    def __init__(self, pattern: str | Callable, args: dict = None, **kwargs):
+    def __init__(self, pattern: str | Callable, args: Optional[dict] = None, **kwargs):
         if isinstance(pattern, str):
             pattern_module = importlib.import_module("hexital.analysis.patterns")
             pattern_method = getattr(pattern_module, pattern, None)
@@ -31,7 +31,7 @@ class Pattern(Indicator):
         elif callable(pattern):
             self._pattern_method = pattern
 
-        if self._pattern_method is None:
+        if not hasattr(self, "_pattern_method"):
             raise InvalidPattern(f"The given pattern [{pattern}] is invalid")
 
         self._pattern_kwargs, kwargs = self._seperate_indicator_attributes(kwargs)
@@ -52,7 +52,7 @@ class Pattern(Indicator):
                 continue
             if name == "timeframe_fill" and self.timeframe is None:
                 continue
-            if not name.startswith("_") and value is not None:
+            if not name.startswith("_") and value:
                 output[name] = deepcopy(value)
 
         return output

@@ -61,7 +61,7 @@ class TestIndicators:
         res_stand_deviation = self.standard_deviation(result)
         exp_stand_deviation = self.standard_deviation(expected)
 
-        if res_mean == None or exp_mean == None:
+        if res_mean is None or exp_mean is None:
             return 1.0
 
         # r numerator
@@ -250,6 +250,14 @@ class TestIndicators:
     def test_supertrend(self, candles, expected_supertrend):
         test = indicators.Supertrend(candles=candles)
         test.calculate()
+        assert self.verfiy(test.as_list, expected_supertrend, amount=499)
+
+    @pytest.mark.usefixtures("candles", "expected_supertrend")
+    def test_append_supertrend(self, candles, expected_supertrend):
+        test = indicators.Supertrend(candles=[])
+        for candle in candles:
+            test.append(candle)
+            test.calculate()
         assert self.verfiy(test.as_list, expected_supertrend, amount=499)
 
     @pytest.mark.usefixtures("candles", "expected_tr")

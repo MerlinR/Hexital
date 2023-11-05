@@ -30,7 +30,7 @@ def negative(candles: Union[Candle, List[Candle]], position: int = -1) -> bool:
     return candles.open > candles.close
 
 
-def value_range(candles: List[Candle], indicator: str, length: int = 4) -> float:
+def value_range(candles: List[Candle], indicator: str, length: int = 4) -> float | None:
     """Returns the difference between the min and max values in a indicator series.
     Length `includes` latest, if lenth is too long for amount of candles,
     will check all of them"""
@@ -48,6 +48,9 @@ def value_range(candles: List[Candle], indicator: str, length: int = 4) -> float
         reading_by_candle(candle, indicator)
         for candle in candles[end_index - length : end_index + 1]
     ]
+
+    readings = [reading for reading in readings if isinstance(reading, (float,int))]
+
     return abs(min(readings) - max(readings))
 
 
@@ -183,7 +186,7 @@ def lowest(candles: List[Candle], indicator: str, length: int = 4) -> float:
     )
 
 
-def highestbar(candles: List[Candle], indicator: str, length: int = 4) -> int:
+def highestbar(candles: List[Candle], indicator: str, length: int = 4) -> int | None:
     """Highest reading offset for a given number of bars back.
     Returns:
         Offset to the lowest bar
@@ -200,6 +203,10 @@ def highestbar(candles: List[Candle], indicator: str, length: int = 4) -> int:
 
     for dist, index in enumerate(range(start_index, start_index - length, -1)):
         current = reading_by_index(candles, indicator, index)
+
+        if isinstance(current, dict):
+            return None
+
         if high and high < current:
             high = current
             distance = dist
@@ -209,7 +216,7 @@ def highestbar(candles: List[Candle], indicator: str, length: int = 4) -> int:
     return distance
 
 
-def lowestbar(candles: List[Candle], indicator: str, length: int = 4) -> int:
+def lowestbar(candles: List[Candle], indicator: str, length: int = 4) -> int | None:
     """Lowest reading offset for a given number of bars back.
     Returns:
         Offset to the lowest bar
@@ -235,9 +242,7 @@ def lowestbar(candles: List[Candle], indicator: str, length: int = 4) -> int:
     return distance
 
 
-def cross(
-    candles: List[Candle], indicator_one: str, indicator_two: str, length: int = 1
-) -> bool:
+def cross(candles: List[Candle], indicator_one: str, indicator_two: str, length: int = 1) -> bool:
     """The `indicator_one` reading is defined as having crossed `indicator_two` reading.
     Either direction"""
     start_index = absindex(-1, len(candles))

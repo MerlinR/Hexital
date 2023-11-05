@@ -1,7 +1,6 @@
 import json
 import random
 from datetime import datetime, timedelta
-from typing import Dict
 
 AMOUNT = 500
 

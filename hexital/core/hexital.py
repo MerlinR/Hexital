@@ -12,24 +12,26 @@ DEFAULT = "default"
 
 
 class Hexital:
-    name: str = None
-    _candles: Dict[str, List[Candle]] = None
-    _indicators: Dict[str, Indicator] = None
+    name: str
+    _candles: Dict[str, List[Candle]]
+    _indicators: Dict[str, Indicator]
     description: Optional[str] = None
     timeframe_fill: bool = False
-    candles_timerange: timedelta = None
+    candles_timerange: Optional[timedelta] = None
 
     def __init__(
         self,
         name: str,
         candles: List[Candle],
-        indicators: List[dict | Indicator] = None,
+        indicators: Optional[List[dict | Indicator]] = None,
         description: Optional[str] = None,
         timeframe_fill: bool = False,
-        candles_timerange: timedelta = None,
+        candles_timerange: Optional[timedelta] = None,
     ):
         self.name = name
-        self._candles = {DEFAULT: deepcopy(candles) if isinstance(candles, list) else []}
+        self._candles = {
+            DEFAULT: deepcopy(candles) if isinstance(candles, list) else []
+        }
         self._indicators = self._validate_indicators(indicators)
         self.description = description
         self.timeframe_fill = timeframe_fill
@@ -38,7 +40,7 @@ class Hexital:
         self._candles_timerange()
 
     def _validate_indicators(
-        self, indicators: List[dict | Indicator]
+        self, indicators: List[dict | Indicator] | List[dict] | List[Indicator] | None
     ) -> Dict[str, Indicator]:
         indicator_module = importlib.import_module("hexital.indicators")
         pattern_module = importlib.import_module("hexital.analysis.patterns")
@@ -73,26 +75,31 @@ class Hexital:
                 elif pattern_name and isinstance(pattern_name, str):
                     pattern_func = getattr(pattern_module, pattern_name, None)
                     pattern_class = getattr(indicator_module, "Pattern", None)
-                    if pattern_func is not None:
+                    if pattern_func is not None and pattern_class is not None:
                         arguments = indicator.copy()
                         arguments.pop("pattern")
                         new_indicator = pattern_class(pattern=pattern_func, **arguments)
                         valid_indicators[new_indicator.name] = new_indicator
                     else:
-                        raise InvalidIndicator(f"Indicator {pattern_name} does not exist")
+                        raise InvalidIndicator(
+                            f"Indicator {pattern_name} does not exist"
+                        )
                 elif pattern_name and callable(pattern_name):
                     pattern_class = getattr(indicator_module, "Pattern", None)
-                    arguments = indicator.copy()
-                    arguments.pop("pattern")
-                    new_indicator = pattern_class(pattern=pattern_name, **arguments)
-                    valid_indicators[new_indicator.name] = new_indicator
+                    if pattern_class is not None:
+                        arguments = indicator.copy()
+                        arguments.pop("pattern")
+                        new_indicator = pattern_class(pattern=pattern_name, **arguments)
+                        valid_indicators[new_indicator.name] = new_indicator
                 else:
                     raise InvalidIndicator(f"Indicator {pattern_name} does not exist")
 
         for indicator in valid_indicators.values():
             if indicator.timeframe is not None:
                 if self._candles.get(indicator.timeframe) is None:
-                    self._candles[indicator.timeframe] = deepcopy(self._candles[DEFAULT])
+                    self._candles[indicator.timeframe] = deepcopy(
+                        self._candles[DEFAULT]
+                    )
                 indicator.candles = self._candles[indicator.timeframe]
             else:
                 indicator.candles = self._candles[DEFAULT]
@@ -114,12 +121,21 @@ class Hexital:
         for candles in self._candles.values():
             if not candles:
                 return
+
             latest = candles[-1].timestamp
-            while candles[0].timestamp < latest - self.candles_timerange:
+            if not latest:
+                return
+
+            while (
+                candles[0].timestamp
+                and candles[0].timestamp < latest - self.candles_timerange
+            ):
                 candles.pop(0)
 
-    def candles(self, timeframe: Optional[str] = DEFAULT) -> List[Candle]:
-        return self._candles.get(timeframe, DEFAULT)
+    def candles(self, timeframe: Optional[str] = None) -> List[Candle]:
+        if timeframe is not None:
+            return self._candles.get(timeframe, [])
+        return self._candles.get(DEFAULT, [])
 
     def candles_all(self) -> Dict[str, List[Candle]]:
         return self._candles
@@ -140,14 +156,15 @@ class Hexital:
                 return indicator
         return None
 
-    def has_reading(self, name: str) -> bool:
+    def has_reading(self, name: Optional[str]) -> bool:
         """Checks if the given Indicator has a valid reading in latest Candle"""
         return bool(self.reading(name))
 
-    def reading(self, name: str, index: int = -1) -> float | dict | None:
+    def reading(self, name: Optional[str], index: int = -1) -> float | dict | None:
         """Attempts to retrieve a reading with a given Indicator name.
         `name` can use '.' to find nested reading, E.G `MACD_12_26_9.MACD`
         """
+        name = name if name else self.name
         reading = reading_by_index(self._candles[DEFAULT], name, index=index)
         if reading is None:
             for candles in self._candles.values():
@@ -157,12 +174,13 @@ class Hexital:
 
         return reading
 
-    def prev_reading(self, name: str = None) -> float | dict | None:
+    def prev_reading(self, name: Optional[str] = None) -> float | dict | None:
         return self.reading(name, index=-2)
 
-    def reading_as_list(self, name: Optional[str] = None) -> List[float | dict]:
+    def reading_as_list(self, name: Optional[str] = None) -> List[float | dict | None]:
         """Find given indicator and returns the readings as a list
         Full Name of the indicator E.G EMA_12"""
+        name = name if name else self.name
         if self._indicators.get(name):
             return self._indicators[name].as_list
         return []
