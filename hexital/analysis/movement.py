@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List
 
 from hexital.core.candle import Candle
 from hexital.lib.candle_extension import (
@@ -10,24 +10,50 @@ from hexital.lib.candle_extension import (
 from hexital.lib.utils import absindex, valid_index
 
 
-def positive(candles: Union[Candle, List[Candle]], position: int = -1) -> bool:
+def positive(candles: Candle | List[Candle], index: int = -1) -> bool:
     if not candles:
         return False
     if isinstance(candles, list):
-        if not valid_index(position, len(candles)):
+        if not valid_index(index, len(candles)):
             return False
-        return candles[position].open < candles[position].close
+        return candles[index].open < candles[index].close
     return candles.open < candles.close
 
 
-def negative(candles: Union[Candle, List[Candle]], position: int = -1) -> bool:
+def negative(candles: Candle | List[Candle], index: int = -1) -> bool:
     if not candles:
         return False
     if isinstance(candles, list):
-        if not valid_index(position, len(candles)):
+        if not valid_index(index, len(candles)):
             return False
-        return candles[position].open > candles[position].close
+        return candles[index].open > candles[index].close
     return candles.open > candles.close
+
+
+def above(candles: List[Candle], indicator: str, indicator_two: str, index: int = -1) -> bool:
+    """Check if indicator is a higher value than indicator_two"""
+    if not candles:
+        return False
+
+    _indicator_one = reading_by_index(candles, indicator, index)
+    _indicator_two = reading_by_index(candles, indicator_two, index)
+
+    if isinstance(_indicator_one, (float, int)) and isinstance(_indicator_two, (float, int)):
+        return _indicator_one > _indicator_two
+    return False
+
+
+def below(candles: List[Candle], indicator: str, indicator_two: str, index: int = -1) -> bool:
+    """Check if indicator is a higher value than indicator_two"""
+    if not candles:
+        return False
+
+    _indicator_one = reading_by_index(candles, indicator, index)
+    _indicator_two = reading_by_index(candles, indicator_two, index)
+
+    if isinstance(_indicator_one, (float, int)) and isinstance(_indicator_two, (float, int)):
+        return _indicator_one < _indicator_two
+    return False
 
 
 def value_range(candles: List[Candle], indicator: str, length: int = 4) -> float | None:
@@ -49,7 +75,7 @@ def value_range(candles: List[Candle], indicator: str, length: int = 4) -> float
         for candle in candles[end_index - length : end_index + 1]
     ]
 
-    readings = [reading for reading in readings if isinstance(reading, (float,int))]
+    readings = [reading for reading in readings if isinstance(reading, (float, int))]
 
     return abs(min(readings) - max(readings))
 
@@ -293,10 +319,8 @@ def crossover(
         length -= 1
 
     for index in range(start_index, start_index - length, -1):
-        if reading_by_index(candles, indicator_one, index) > reading_by_index(
-            candles, indicator_two, index
-        ) and reading_by_index(candles, indicator_one, index - 1) <= reading_by_index(
-            candles, indicator_two, index - 1
+        if above(candles, indicator_one, indicator_two, index) and below(
+            candles, indicator_one, indicator_two, index - 1
         ):
             return True
 
@@ -322,10 +346,8 @@ def crossunder(
         length -= 1
 
     for index in range(start_index, start_index - length, -1):
-        if reading_by_index(candles, indicator_one, index) < reading_by_index(
-            candles, indicator_two, index
-        ) and reading_by_index(candles, indicator_one, index - 1) >= reading_by_index(
-            candles, indicator_two, index - 1
+        if below(candles, indicator_one, indicator_two, index) and above(
+            candles, indicator_one, indicator_two, index - 1
         ):
             return True
 

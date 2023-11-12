@@ -50,21 +50,11 @@ def fixture_mixed_candles_two():
 @pytest.fixture(name="indicator_candles")
 def fixture_indicator_candles():
     return [
-        Candle(
-            open=130, high=100, low=120, close=120, volume=10, indicators={"EMA_10": 100}
-        ),
-        Candle(
-            open=120, high=110, low=110, close=120, volume=10, indicators={"EMA_10": 100}
-        ),
-        Candle(
-            open=110, high=150, low=120, close=130, volume=10, indicators={"EMA_10": 100}
-        ),
-        Candle(
-            open=150, high=120, low=90, close=115, volume=10, indicators={"EMA_10": 110}
-        ),
-        Candle(
-            open=115, high=140, low=110, close=120, volume=10, indicators={"EMA_10": 140}
-        ),
+        Candle(open=130, high=100, low=120, close=120, volume=10, indicators={"EMA_10": 100}),
+        Candle(open=120, high=110, low=110, close=120, volume=10, indicators={"EMA_10": 100}),
+        Candle(open=110, high=150, low=120, close=130, volume=10, indicators={"EMA_10": 100}),
+        Candle(open=150, high=120, low=90, close=115, volume=10, indicators={"EMA_10": 110}),
+        Candle(open=115, high=140, low=110, close=120, volume=10, indicators={"EMA_10": 140}),
     ]
 
 
@@ -73,12 +63,8 @@ def fixture_indicator_candles_partial():
     return [
         Candle(open=130, high=150, low=120, close=120, volume=10, indicators={}),
         Candle(open=120, high=140, low=110, close=120, volume=10, indicators={}),
-        Candle(
-            open=110, high=150, low=120, close=130, volume=10, indicators={"EMA_10": 100}
-        ),
-        Candle(
-            open=150, high=120, low=90, close=115, volume=10, indicators={"EMA_10": 110}
-        ),
+        Candle(open=110, high=150, low=120, close=130, volume=10, indicators={"EMA_10": 100}),
+        Candle(open=150, high=120, low=90, close=115, volume=10, indicators={"EMA_10": 110}),
         Candle(
             open=115,
             high=140,
@@ -100,7 +86,7 @@ def test_positive_false():
 
 def test_positive_list():
     assert not movement.positive(
-        [Candle(open=100, high=120, low=90, close=90, volume=10)], position=0
+        [Candle(open=100, high=120, low=90, close=90, volume=10)], index=0
     )
 
 
@@ -118,16 +104,56 @@ def test_negative_false():
 
 def test_negative_list():
     assert not movement.negative(
-        [Candle(open=100, high=120, low=90, close=110, volume=10)], position=0
+        [Candle(open=100, high=120, low=90, close=110, volume=10)], index=0
     )
 
 
 def test_negative_list_missing():
-    assert not movement.negative([], position=0)
+    assert not movement.negative([], index=0)
 
 
 def test_negative_list_empty():
     assert not movement.negative([])
+
+
+def test_above(indicator_candles):
+    assert movement.above(indicator_candles, "high", "low")
+
+
+def test_above_missing():
+    assert movement.above([], "high", "low") is False
+
+
+def test_above_wrong(indicator_candles):
+    assert movement.above(indicator_candles, "low", "high") is False
+
+
+def test_above_indicator(indicator_candles):
+    assert movement.above(indicator_candles, "EMA_10", "close")
+
+
+def test_above_indicator_indexed(indicator_candles):
+    assert movement.above(indicator_candles, "EMA_10", "close", -2) is False
+
+
+def test_below(indicator_candles):
+    assert movement.below(indicator_candles, "high", "low") is False
+
+
+def test_below_missing():
+    assert movement.below([], "high", "low") is False
+
+
+def test_below_wrong(indicator_candles):
+    assert movement.below(indicator_candles, "low", "high")
+
+
+def test_below_indicator(indicator_candles):
+    assert movement.below(indicator_candles, "EMA_10", "close") is False
+
+
+def test_below_indicator_indexed(indicator_candles):
+    assert movement.below(indicator_candles, "EMA_10", "close", -2)
 
 
 def test_value_range(rising_candles):
@@ -345,14 +371,10 @@ class TestCrossMethods:
         assert movement.crossover([], "EMA_10", "close") is False
 
     def test_crossover_partial(self, indicator_candles_partial):
-        assert (
-            movement.crossover(indicator_candles_partial, "volume", "EMA_10", 5) is False
-        )
+        assert movement.crossover(indicator_candles_partial, "volume", "EMA_10", 5) is False
 
     def test_crossover_partial_missing(self, indicator_candles_partial):
-        assert (
-            movement.crossover(indicator_candles_partial, "volume", "SMA_10", 5) is False
-        )
+        assert movement.crossover(indicator_candles_partial, "volume", "SMA_10", 5) is False
 
     def test_crossover_length(self, indicator_candles):
         assert movement.crossover(indicator_candles, "EMA_10", "close", length=10) is True
@@ -367,16 +389,10 @@ class TestCrossMethods:
         assert movement.crossunder([], "close", "EMA_10") is False
 
     def test_crossunder_partial(self, indicator_candles_partial):
-        assert (
-            movement.crossunder(indicator_candles_partial, "volume", "EMA_10", 5) is False
-        )
+        assert movement.crossunder(indicator_candles_partial, "volume", "EMA_10", 5) is False
 
     def test_crossunder_partial_missing(self, indicator_candles_partial):
-        assert (
-            movement.crossunder(indicator_candles_partial, "volume", "SMA_10", 5) is False
-        )
+        assert movement.crossunder(indicator_candles_partial, "volume", "SMA_10", 5) is False
 
     def test_crossunder_length(self, indicator_candles):
-        assert (
-            movement.crossunder(indicator_candles, "close", "EMA_10", length=10) is True
-        )
+        assert movement.crossunder(indicator_candles, "close", "EMA_10", length=10) is True
