@@ -13,7 +13,6 @@ class TestIndicators:
         amount: Optional[int] = None,
         verbose: bool = False,
     ) -> bool:
-
         if amount is not None:
             result = result[-abs(amount) :]
             expected = expected[-abs(amount) :]
@@ -34,9 +33,7 @@ class TestIndicators:
 
         return any([diff_result, correlation])
 
-    def correlation_validation(
-        self, result: list, expected: list, accuracy: float = 0.95
-    ):
+    def correlation_validation(self, result: list, expected: list, accuracy: float = 0.95):
         correlation = 0
 
         if isinstance(result[0], dict):
@@ -54,7 +51,6 @@ class TestIndicators:
         return correlation >= accuracy
 
     def correlation_coefficient(self, result: list, expected: list):
-
         # First establish the means and standard deviations for both lists.
         res_mean = self.calc_mean(result)
         exp_mean = self.calc_mean(expected)
@@ -214,6 +210,14 @@ class TestIndicators:
     def test_rsi(self, candles, expected_rsi):
         test = indicators.RSI(candles=candles)
         test.calculate()
+        assert self.verfiy(test.as_list, expected_rsi)
+
+    @pytest.mark.usefixtures("candles", "expected_rsi")
+    def test_append_rsi(self, candles, expected_rsi):
+        test = indicators.RSI(candles=[])
+        for candle in candles:
+            test.append(candle)
+            test.calculate()
         assert self.verfiy(test.as_list, expected_rsi)
 
     @pytest.mark.usefixtures("candles", "expected_sma")

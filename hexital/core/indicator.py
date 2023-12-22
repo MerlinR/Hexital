@@ -24,6 +24,7 @@ class Indicator(ABC):
     _managed_indicators: Dict[str, Indicator] = field(default_factory=dict)
     _sub_indicator: bool = False
     _active_index: int = 0
+    _initialised: bool = False
 
     def __post_init__(self):
         self._validate_fields()
@@ -34,7 +35,6 @@ class Indicator(ABC):
                 self._collapse_candles()
         self._candles_timerange()
         self._internal_generate_name()
-        self._initialise()
 
     def __str__(self):
         data = vars(self)
@@ -106,14 +106,13 @@ class Indicator(ABC):
     def _set_reading(self, reading: float | dict | None, index: Optional[int] = None):
         if index is None:
             index = self._active_index
+
         if self._sub_indicator:
             self.candles[index].sub_indicators[self.name] = reading
         else:
             self.candles[index].indicators[self.name] = reading
 
-    def append(
-        self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]
-    ):
+    def append(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
         candles_ = []
         if isinstance(candles, Candle):
             candles_.append(candles)
@@ -133,7 +132,11 @@ class Indicator(ABC):
         else:
             raise TypeError
 
-        self.candles.extend(deepcopy(candles_))
+        if self.timeframe is not None:
+            self.candles.extend(deepcopy(candles_))
+        else:
+            self.candles.extend(candles_)
+
         self._collapse_candles()
 
         self._candles_timerange()
@@ -158,13 +161,20 @@ class Indicator(ABC):
         latest = self.candles[-1].timestamp
         if not latest:
             return
-    
-        while self.candles[0].timestamp and self.candles[0].timestamp < latest - self.candles_timerange:
+
+        while (
+            self.candles[0].timestamp
+            and self.candles[0].timestamp < latest - self.candles_timerange
+        ):
             self.candles.pop(0)
-    
+
     def calculate(self):
         """Calculate the TA values, will calculate for all the Candles,
         where this indicator is missing"""
+        if not self._initialised:
+            self._initialise()
+            self._initialised = True
+
         for indicator in self._sub_indicators:
             indicator.calculate()
 
@@ -205,7 +215,6 @@ class Indicator(ABC):
             if hasattr(indicator, "set_active_index"):
                 indicator.set_active_index(index)
 
-
     def _add_sub_indicator(self, indicator: Indicator):
         """Adds sub indicator, this will auto calculate with indicator"""
         indicator._sub_indicator = True
@@ -238,9 +247,7 @@ class Indicator(ABC):
             name if name else self.name,
         )
 
-    def read_candle(
-        self, candle: Candle, name: Optional[str] = None
-    ) -> float | dict | None:
+    def read_candle(self, candle: Candle, name: Optional[str] = None) -> float | dict | None:
         """Simple method to get an indicator reading from a candle,
         regardless of it's location"""
         return candle_extension.reading_by_candle(

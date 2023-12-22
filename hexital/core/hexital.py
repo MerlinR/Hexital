@@ -29,9 +29,7 @@ class Hexital:
         candles_timerange: Optional[timedelta] = None,
     ):
         self.name = name
-        self._candles = {
-            DEFAULT: deepcopy(candles) if isinstance(candles, list) else []
-        }
+        self._candles = {DEFAULT: deepcopy(candles) if isinstance(candles, list) else []}
         self._indicators = self._validate_indicators(indicators)
         self.description = description
         self.timeframe_fill = timeframe_fill
@@ -53,8 +51,9 @@ class Hexital:
             if isinstance(indicator, Indicator):
                 valid_indicators[indicator.name] = indicator
             elif isinstance(indicator, dict):
-                indicator_name = indicator.get("indicator")
-                pattern_name = indicator.get("pattern")
+                indicator_name = indicator.pop("indicator", None)
+                pattern_name = indicator.pop("pattern", None)
+                arguments = indicator.copy()
 
                 if indicator_name is None and pattern_name is None:
                     raise InvalidIndicator(
@@ -64,31 +63,21 @@ class Hexital:
                 if indicator_name:
                     indicator_class = getattr(indicator_module, indicator_name, None)
                     if indicator_class is not None:
-                        arguments = indicator.copy()
-                        arguments.pop("indicator")
                         new_indicator = indicator_class(**arguments)
                         valid_indicators[new_indicator.name] = new_indicator
                     else:
-                        raise InvalidIndicator(
-                            f"Indicator {indicator_name} does not exist"
-                        )
+                        raise InvalidIndicator(f"Indicator {indicator_name} does not exist")
                 elif pattern_name and isinstance(pattern_name, str):
                     pattern_func = getattr(pattern_module, pattern_name, None)
                     pattern_class = getattr(indicator_module, "Pattern", None)
                     if pattern_func is not None and pattern_class is not None:
-                        arguments = indicator.copy()
-                        arguments.pop("pattern")
                         new_indicator = pattern_class(pattern=pattern_func, **arguments)
                         valid_indicators[new_indicator.name] = new_indicator
                     else:
-                        raise InvalidIndicator(
-                            f"Indicator {pattern_name} does not exist"
-                        )
+                        raise InvalidIndicator(f"Indicator {pattern_name} does not exist")
                 elif pattern_name and callable(pattern_name):
                     pattern_class = getattr(indicator_module, "Pattern", None)
                     if pattern_class is not None:
-                        arguments = indicator.copy()
-                        arguments.pop("pattern")
                         new_indicator = pattern_class(pattern=pattern_name, **arguments)
                         valid_indicators[new_indicator.name] = new_indicator
                 else:
@@ -97,9 +86,7 @@ class Hexital:
         for indicator in valid_indicators.values():
             if indicator.timeframe is not None:
                 if self._candles.get(indicator.timeframe) is None:
-                    self._candles[indicator.timeframe] = deepcopy(
-                        self._candles[DEFAULT]
-                    )
+                    self._candles[indicator.timeframe] = deepcopy(self._candles[DEFAULT])
                 indicator.candles = self._candles[indicator.timeframe]
             else:
                 indicator.candles = self._candles[DEFAULT]
@@ -110,9 +97,7 @@ class Hexital:
         for timeframe, candles in self._candles.items():
             if timeframe == DEFAULT:
                 continue
-            candles.extend(
-                collapse_candles_timeframe(candles, timeframe, self.timeframe_fill)
-            )
+            candles.extend(collapse_candles_timeframe(candles, timeframe, self.timeframe_fill))
 
     def _candles_timerange(self):
         if self.candles_timerange is None:
@@ -126,10 +111,7 @@ class Hexital:
             if not latest:
                 return
 
-            while (
-                candles[0].timestamp
-                and candles[0].timestamp < latest - self.candles_timerange
-            ):
+            while candles[0].timestamp and candles[0].timestamp < latest - self.candles_timerange:
                 candles.pop(0)
 
     def candles(self, timeframe: Optional[str] = None) -> List[Candle]:
@@ -206,9 +188,7 @@ class Hexital:
         self.purge(name)
         self._indicators.pop(name, None)
 
-    def append(
-        self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]
-    ):
+    def append(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
         candles_ = []
         if isinstance(candles, Candle):
             candles_.append(candles)

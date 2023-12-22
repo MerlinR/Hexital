@@ -263,9 +263,7 @@ def test_hextial_multi_timeframes_append(candles, expected_ema, expected_sma_t10
     assert pytest.approx(strat.reading_as_list("SMA_10_T10")) == expected_sma_t10
 
 
-@pytest.mark.usefixtures(
-    "candles", "expected_ema", "expected_sma_t10", "expected_obv_t10"
-)
+@pytest.mark.usefixtures("candles", "expected_ema", "expected_sma_t10", "expected_obv_t10")
 def test_hextial_multi_timeframes_shared_candles(
     candles, expected_ema, expected_sma_t10, expected_obv_t10
 ):
@@ -340,3 +338,23 @@ def test_hextial_timerange(minimal_candles):
             timestamp=datetime(2023, 6, 1, 9, 19),
         ),
     ]
+
+
+@pytest.mark.usefixtures("candles", "expected_ema")
+def test_append_hexital_calc(candles, expected_ema):
+    strat = Hexital("Test Stratergy", [], [{"indicator": "EMA"}])
+    for candle in candles:
+        strat.append(candle)
+        strat.calculate()
+
+    assert pytest.approx(strat.indicator("EMA_10").as_list) == expected_ema
+
+
+@pytest.mark.usefixtures("candles", "expected_rsi")
+def test_append_hexital_calc_sub_indicators(candles, expected_rsi):
+    strat = Hexital("Test Stratergy", [], [{"indicator": "RSI", "period": 14}])
+
+    for candle in candles:
+        strat.append(candle)
+        strat.calculate()
+    assert pytest.approx(strat.indicator("RSI_14").as_list) == expected_rsi
