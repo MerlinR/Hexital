@@ -32,84 +32,16 @@ def fixture_candles_31st(candles):
     return candles[30]
 
 
-def test_data(candles_30):
-    expected = [
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        9827.5,
-        9889.3571,
-        9235.704,
-        9993.8274,
-        9233.7486,
-        9499.0106,
-        10284.5334,
-        10476.3874,
-        11224.8267,
-        11506.8432,
-        11406.3819,
-    ]
-
-    test = EMA(candles=candles_30, period=20, input_value="close")
+def test_data(candles_30, expected_ema):
+    test = EMA(candles=candles_30, input_value="close")
     test.calculate()
+    assert pytest.approx(test.as_list) == expected_ema[0:30]
 
-    assert test.as_list == expected
 
-
-def test_data_append(candles_30, candles_31st):
-    expected = [
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        9827.5,
-        9889.3571,
-        9235.704,
-        9993.8274,
-        9233.7486,
-        9499.0106,
-        10284.5334,
-        10476.3874,
-        11224.8267,
-        11506.8432,
-        11406.3819,
-        10804.1551,
-    ]
-
-    test = EMA(candles=candles_30, period=20, input_value="close")
+def test_data_append(candles_30, candles_31st, expected_ema):
+    test = EMA(candles=candles_30, input_value="close")
     test.calculate()
     candles_30.append(candles_31st)
     test.calculate()
 
-    assert test.as_list == expected
+    assert pytest.approx(test.as_list) == expected_ema[0:31]
