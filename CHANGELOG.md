@@ -10,6 +10,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added movement Above/Below and updated others to use it
 - Fixed Timeframe bug with candles reference in indicator that use sub indicators
 - Fixed possible error in VWAP with no volumes traded
+- Fixed bug with nested Indicator returning None for valid 0 Value
 
 ## 0.3.1 - 2023-10-09
 - Added candles_timerange to auto remove older than N candles

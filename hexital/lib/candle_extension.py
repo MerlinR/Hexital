@@ -23,7 +23,7 @@ def reading_by_candle(candle: Candle, name: str) -> float | dict | None:
     if "." in name:
         main_name, nested_name = name.split(".")
         reading = _nested_indicator(candle, main_name, nested_name)
-        if reading:
+        if reading is not None:
             return reading
 
     if getattr(candle, name, None) is not None:
