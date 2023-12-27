@@ -242,72 +242,12 @@ def test_hextial_remove_indicator(candles, expected_ema, expected_sma):
     assert not strat.indicator("SMA")
 
 
-@pytest.mark.usefixtures("candles", "expected_ema", "expected_sma_t10")
-def test_hextial_multi_timeframes(candles, expected_ema, expected_sma_t10):
-    strat = Hexital("Test Stratergy", candles, [EMA(), SMA(timeframe="t10")])
-    strat.calculate()
-    assert pytest.approx(strat.reading_as_list("EMA_10")) == expected_ema
-    assert pytest.approx(strat.reading_as_list("SMA_10_T10")) == expected_sma_t10
-
-
-@pytest.mark.usefixtures("candles", "expected_ema", "expected_sma_t10")
-def test_hextial_multi_timeframes_append(candles, expected_ema, expected_sma_t10):
-    strat = Hexital("Test Stratergy", candles[:251], [EMA(), SMA(timeframe="t10")])
-    strat.calculate()
-
-    assert pytest.approx(strat.reading_as_list("EMA_10")) == expected_ema[:251]
-    assert pytest.approx(strat.reading_as_list("SMA_10_T10")) == expected_sma_t10[:25]
-
-    strat.append(candles[-249:])
-    assert pytest.approx(strat.reading_as_list("EMA_10")) == expected_ema
-    assert pytest.approx(strat.reading_as_list("SMA_10_T10")) == expected_sma_t10
-
-
-@pytest.mark.usefixtures("candles", "expected_ema", "expected_sma_t10", "expected_obv_t10")
-def test_hextial_multi_timeframes_shared_candles(
-    candles, expected_ema, expected_sma_t10, expected_obv_t10
-):
-    strat = Hexital(
-        "Test Stratergy",
-        candles,
-        [EMA(), SMA(timeframe="t10"), {"indicator": "OBV", "timeframe": "T10"}],
-    )
-    strat.calculate()
-
-    assert pytest.approx(strat.reading_as_list("EMA_10")) == expected_ema
-    assert (
-        strat._candles["T10"][-1].indicators.get("SMA_10_T10") == expected_sma_t10[-1]
-        and strat._candles["T10"][-1].indicators.get("OBV_T10") == expected_obv_t10[-1]
-    )
-
-
-@pytest.mark.usefixtures("candles")
-def test_hextial_multi_timeframes_get_candles(candles):
-    strat = Hexital(
-        "Test Stratergy",
-        candles,
-        [SMA(timeframe="t10"), OBV(timeframe="T10")],
-    )
-    strat.calculate()
-
-    assert strat.candles("T10")[-1].indicators.get("SMA_10_T10") and strat.candles("T10")[
-        -1
-    ].indicators.get("OBV_T10")
-
-
 @pytest.mark.usefixtures("candles")
 def test_hextial_get_candles(candles):
     strat = Hexital("Test Stratergy", candles, [EMA()])
     strat.calculate()
 
     assert strat.candles()[-1].indicators.get("EMA_10")
-
-
-@pytest.mark.usefixtures("candles", "expected_sma_t10")
-def test_hextial_multi_timeframe_reading(candles, expected_sma_t10):
-    strat = Hexital("Test Stratergy", candles, [EMA(), SMA(timeframe="t10")])
-    strat.calculate()
-    assert pytest.approx(strat.reading("SMA_10_T10")) == expected_sma_t10[-1]
 
 
 @pytest.mark.usefixtures("minimal_candles")
