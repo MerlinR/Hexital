@@ -276,6 +276,14 @@ class TestIndicators:
         test.calculate()
         assert self.verfiy(test.as_list, expected_vwap)
 
+    @pytest.mark.usefixtures("candles", "expected_vwap")
+    def test_vwap_append(self, candles, expected_vwap):
+        test = indicators.VWAP(candles=[])
+        for candle in candles:
+            test.append(candle)
+            test.calculate()
+        assert self.verfiy(test.as_list, expected_vwap)
+
     @pytest.mark.usefixtures("candles", "expected_vwma")
     def test_vwma(self, candles, expected_vwma):
         test = indicators.VWMA(candles=candles)
