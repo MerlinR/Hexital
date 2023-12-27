@@ -12,12 +12,8 @@ class Candle:
     low: float
     close: float
     volume: int
-    indicators: Dict[str, float | Dict[str, float | None] | None] = field(
-        default_factory=dict
-    )
-    sub_indicators: Dict[str, float | Dict[str, float | None] | None] = field(
-        default_factory=dict
-    )
+    indicators: Dict[str, float | Dict[str, float | None] | None] = field(default_factory=dict)
+    sub_indicators: Dict[str, float | Dict[str, float | None] | None] = field(default_factory=dict)
     timestamp: Optional[datetime] = None
 
     @classmethod

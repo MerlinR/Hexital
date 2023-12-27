@@ -97,7 +97,6 @@ class ADX(Indicator):
         adx_negative = None
 
         if self.reading("high"):
-
             up = self.reading("high") - self.reading("high", index - 1)
             down = self.reading("low", index - 1) - self.reading("low")
 
@@ -112,15 +111,12 @@ class ADX(Indicator):
             if self.reading(f"{self.indicator_name}_atr") and self.reading(
                 f"{self.indicator_name}_pos"
             ):
-
                 mod = 100 / self.reading(f"{self.indicator_name}_atr")
 
                 adx_positive = mod * self.reading(f"{self.indicator_name}_pos")
                 adx_negative = mod * self.reading(f"{self.indicator_name}_neg")
 
-                dx = (
-                    100 * abs(adx_positive - adx_negative) / (adx_positive + adx_negative)
-                )
+                dx = 100 * abs(adx_positive - adx_negative) / (adx_positive + adx_negative)
 
                 self._managed_indictor("plain_dx").set_reading(dx)
                 self._managed_indictor("dx").calculate_index(index)
