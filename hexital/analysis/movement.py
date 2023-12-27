@@ -152,6 +152,7 @@ def mean_rising(candles: List[Candle], indicator: str, length: int = 4) -> bool:
         sum(
             reading_by_candle(candle, indicator)
             for candle in candles[end_index - length : end_index]
+            if reading_by_candle(candle, indicator) is not None
         )
         / length
     )
@@ -178,6 +179,7 @@ def mean_falling(candles: List[Candle], indicator: str, length: int = 4) -> bool
         sum(
             reading_by_candle(candle, indicator)
             for candle in candles[end_index - length : end_index]
+            if reading_by_candle(candle, indicator) is not None
         )
         / length
     )
