@@ -95,9 +95,8 @@ class Hexital:
 
     def _collapse_candles(self):
         for timeframe, candles in self._candles.items():
-            if timeframe == DEFAULT:
-                continue
-            candles.extend(collapse_candles_timeframe(candles, timeframe, self.timeframe_fill))
+            if timeframe != DEFAULT:
+                candles.extend(collapse_candles_timeframe(candles, timeframe, self.timeframe_fill))
 
     def _candles_timerange(self):
         if self.candles_timerange is None:
@@ -212,9 +211,8 @@ class Hexital:
             existing_candles.extend(deepcopy(candles_))
 
         self._collapse_candles()
-        self._candles_timerange()
-
         self.calculate()
+        self._candles_timerange()
 
     def purge(self, name: Optional[str] = None) -> bool:
         """Takes Indicator name and removes all readings for said indicator.

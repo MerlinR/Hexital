@@ -138,10 +138,8 @@ class Indicator(ABC):
             self.candles.extend(candles_)
 
         self._collapse_candles()
-
-        self._candles_timerange()
-
         self.calculate()
+        self._candles_timerange()
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         pass
