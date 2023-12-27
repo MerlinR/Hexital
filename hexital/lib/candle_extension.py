@@ -6,9 +6,7 @@ from hexital.lib.timeframe_utils import round_down_timestamp, timeframe_to_timed
 from hexital.lib.utils import absindex, valid_index
 
 
-def reading_by_index(
-    candles: List[Candle], name: str, index: int = -1
-) -> float | dict | None:
+def reading_by_index(candles: List[Candle], name: str, index: int = -1) -> float | dict | None:
     """Simple method to get a reading from the given indicator from it's index"""
     if not valid_index(index, len(candles)):
         return None
@@ -128,30 +126,29 @@ def candles_sum(
 
 
 def collapse_candles_timeframe(
-    candles: List[Candle], timeframe: str, fill: bool = False
-):
+    candles: List[Candle], timeframe: str, fill_blanks: bool = False
+) -> List[Candle]:
     if not candles:
         return []
 
     timeframe_delta = timeframe_to_timedelta(timeframe)
+    merged_candles = [candles.pop(0)]
+    init_candle = merged_candles[0]
 
-    collapsed_candles = [candles.pop(0)]
+    if init_candle.timestamp is None:
+        return candles
 
-    if collapsed_candles[0].timestamp is None:
-        return
+    start_timestamp = round_down_timestamp(init_candle.timestamp, timeframe_delta)
 
-    start_timestamp = round_down_timestamp(
-        collapsed_candles[0].timestamp, timeframe_delta
-    )
-
-    if (
-        collapsed_candles[0].timestamp.timestamp() % timeframe_delta.total_seconds()
-        != 0
-    ):
-        collapsed_candles[0].timestamp = start_timestamp + timeframe_delta
+    if init_candle.timestamp.timestamp() % timeframe_delta.total_seconds() != 0:
+        init_candle.timestamp = start_timestamp + timeframe_delta
 
     while candles:
         candle = candles.pop(0)
+        if not candle.timestamp:
+            continue
+
+        candle.timestamp = candle.timestamp.replace(microsecond=0)
 
         # If current candle before the latest collapsed candle
         if start_timestamp + timeframe_delta > candle.timestamp:
@@ -162,29 +159,26 @@ def collapse_candles_timeframe(
         # If candle time is within current candle timeframe
         if start_timestamp < candle.timestamp <= end_timestamp:
             # If prev candle the end of current timeframe
-            if collapsed_candles[-1].timestamp == end_timestamp:
-                collapsed_candles[-1].merge(candle)
+            if merged_candles[-1].timestamp == end_timestamp:
+                merged_candles[-1].merge(candle)
             else:
                 candle.timestamp = end_timestamp
-                collapsed_candles.append(candle)
-                start_timestamp = round_down_timestamp(
-                    candle.timestamp, timeframe_delta
-                )
+                merged_candles.append(candle)
+                start_timestamp = round_down_timestamp(candle.timestamp, timeframe_delta)
         # If candle is outside current candle timeframe
         else:
             start_timestamp = round_down_timestamp(candle.timestamp, timeframe_delta)
             end_timestamp = start_timestamp + timeframe_delta
             candle.timestamp = end_timestamp
-            collapsed_candles.append(candle)
+            merged_candles.append(candle)
 
-    if fill:
+    if fill_blanks:
         index = 1
         while True:
-            prev_candle = collapsed_candles[index - 1]
+            prev_candle = merged_candles[index - 1]
             if (
                 prev_candle.timestamp
-                and collapsed_candles[index].timestamp
-                != prev_candle.timestamp + timeframe_delta
+                and merged_candles[index].timestamp != prev_candle.timestamp + timeframe_delta
             ):
                 fill_candle = Candle(
                     open=prev_candle.open,
@@ -194,10 +188,10 @@ def collapse_candles_timeframe(
                     volume=prev_candle.volume,
                     timestamp=prev_candle.timestamp + timeframe_delta,
                 )
-                collapsed_candles.insert(index, fill_candle)
+                merged_candles.insert(index, fill_candle)
 
             index += 1
-            if index >= len(collapsed_candles):
+            if index >= len(merged_candles):
                 break
 
-    return collapsed_candles
+    return merged_candles

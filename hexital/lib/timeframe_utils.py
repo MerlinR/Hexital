@@ -6,6 +6,7 @@ VALID_TIMEFRAME_PREFIXES = ["S", "T", "H", "D"]
 
 
 def round_down_timestamp(timestamp: datetime, timeframe: timedelta) -> datetime:
+    timestamp = timestamp.replace(microsecond=0)
     return datetime.fromtimestamp(
         timestamp.timestamp() // timeframe.total_seconds() * timeframe.total_seconds()
     )
@@ -26,5 +27,5 @@ def timeframe_to_timedelta(timeframe: str) -> timedelta:
         return timedelta(hours=int(timeframe[1:]))
     if timeframe.startswith("D"):
         return timedelta(days=int(timeframe[1:]))
-        
+
     raise InvalidTimeFrame(f"Invalid value: {timeframe}, somehow")

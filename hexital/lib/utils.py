@@ -1,5 +1,6 @@
 from typing import Dict, Optional
 
+
 def validate_index(index: Optional[int], length: int, default: int = -1) -> int | None:
     if index is None:
         index = default
