@@ -268,7 +268,11 @@ class TestMergingCandlesTimeFrame:
         cut_candles = minimal_candles[:6] + minimal_candles[-4:]
 
         new_cdl = copy.deepcopy(minimal_candles_t5[0])
-        new_cdl2 = copy.deepcopy(minimal_candles_t5[0])
+        new_cdl.open = new_cdl.close
+        new_cdl.high = new_cdl.close
+        new_cdl.low = new_cdl.close
+        new_cdl.volume = 0
+        new_cdl2 = copy.deepcopy(new_cdl)
         new_cdl.timestamp += timedelta(minutes=5)
         new_cdl2.timestamp += timedelta(minutes=10)
 

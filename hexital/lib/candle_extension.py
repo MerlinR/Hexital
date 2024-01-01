@@ -181,11 +181,11 @@ def collapse_candles_timeframe(
                 and merged_candles[index].timestamp != prev_candle.timestamp + timeframe_delta
             ):
                 fill_candle = Candle(
-                    open=prev_candle.open,
+                    open=prev_candle.close,
                     close=prev_candle.close,
-                    high=prev_candle.high,
-                    low=prev_candle.low,
-                    volume=prev_candle.volume,
+                    high=prev_candle.close,
+                    low=prev_candle.close,
+                    volume=0,
                     timestamp=prev_candle.timestamp + timeframe_delta,
                 )
                 merged_candles.insert(index, fill_candle)
