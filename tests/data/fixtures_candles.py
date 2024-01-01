@@ -20,12 +20,12 @@ def fixture_candle_data():
 
 @pytest.fixture(name="candles_T5")
 def fixture_candle_data_T5():
-    return Candle.from_dicts(load_json_candles("test_candles_T5"))
+    return Candle.from_dicts(load_json_candles("test_candles_5T"))
 
 
 @pytest.fixture(name="candles_T10")
 def fixture_candle_data_T10():
-    return Candle.from_dicts(load_json_candles("test_candles_T10"))
+    return Candle.from_dicts(load_json_candles("test_candles_10T"))
 
 
 @pytest.fixture(name="minimal_candles")

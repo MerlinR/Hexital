@@ -1,25 +1,25 @@
 import json
 from datetime import datetime
-from typing import Dict
+from typing import Dict, Optional, List
 
 import numpy as np
 import pandas as pd
 import pandas_ta as ta
 
+PATH_INDICATOR = "source_of_truth/indicator"
+PATH_PATTERN = "source_of_truth/pattern"
+PATH_DATA = "."
 
-def load_json_candles() -> list:
+
+def load_json_candles() -> List[dict]:
     csv_file = open("tests/data/test_candles.json")
     return json.load(csv_file)
 
 
-def save_json_result(data: list, filename: str, indicator: bool = True):
-    path = "indicator" if indicator else "pattern"
-    with open(f"tests/data/source_of_truth/{path}/{filename}.json", "w") as json_file:
-        json.dump(
-            data,
-            json_file,
-            indent=4,
-        )
+def save_json_result(data: list, filename: str, path: Optional[str] = None):
+    path = path if path is not None else "source_of_truth/indicator"
+    with open(f"tests/data/{path}/{filename}.json", "w") as json_file:
+        json.dump(data, json_file, indent=4, default=str)
 
 
 def add_timestamp(candles: pd.DataFrame):
@@ -186,15 +186,9 @@ def generate_indicators_timeframe(frame: str):
             continue
         print(f"Generated: {col}")
 
-    save_json_result(
-        [round_values(value) for value in df["EMA_10"].tolist()], f"EMA_{frame}"
-    )
-    save_json_result(
-        [round_values(value) for value in df["SMA_10"].tolist()], f"SMA_{frame}"
-    )
-    save_json_result(
-        [round_values(value) for value in df["OBV"].tolist()], f"OBV_{frame}"
-    )
+    save_json_result([round_values(value) for value in df["EMA_10"].tolist()], f"EMA_{frame}")
+    save_json_result([round_values(value) for value in df["SMA_10"].tolist()], f"SMA_{frame}")
+    save_json_result([round_values(value) for value in df["OBV"].tolist()], f"OBV_{frame}")
 
 
 def generate_patterns():
@@ -213,11 +207,28 @@ def generate_patterns():
     save_json_result(
         [bool(value) for value in df["CDL_DOJI_10_0.1"].tolist()],
         "DOJI",
-        False,
+        PATH_PATTERN,
     )
 
 
+def generate_timeframe_candles(frame: str):
+    print(f"Generating candles with timeframe: {frame}")
+    df = pd.DataFrame.from_dict(load_json_candles())
+    df = candle_compress_dataframe(df, frame)
+    df = df.astype(object).replace(np.nan, None)
+
+    df["timestamp"] = df.index
+
+    output = []
+    for row in df.to_dict("records"):
+        row["timestamp"] = row["timestamp"].to_pydatetime().isoformat(timespec="seconds")
+        output.append(row)
+    save_json_result(output, f"test_candles_{frame}", PATH_DATA)
+
+
 if __name__ == "__main__":
+    generate_timeframe_candles("5T")
+    generate_timeframe_candles("10T")
     generate_indicators()
     generate_patterns()
     generate_indicators_timeframe("5T")
