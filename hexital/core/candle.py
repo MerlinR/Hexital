@@ -38,7 +38,7 @@ class Candle:
     @classmethod
     def from_list(cls, candle: list) -> Candle:
         """Expected list [open, high, low, close, volume]
-        with optional datetime at the begining or end."""
+        with optional datetime at the beginning or end."""
         timestamp = None
         if isinstance(candle[0], datetime):
             timestamp = candle.pop(0)

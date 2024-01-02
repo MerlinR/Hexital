@@ -1,8 +1,14 @@
+from datetime import timedelta
 from itertools import chain
 from typing import List, Optional
-
+from hexital.exceptions import InvalidCandleOrder
 from hexital.core.candle import Candle
-from hexital.lib.timeframe_utils import round_down_timestamp, timeframe_to_timedelta
+from hexital.lib.timeframe_utils import (
+    round_down_timestamp,
+    timeframe_to_timedelta,
+    clean_timestamp,
+    on_timeframe,
+)
 from hexital.lib.utils import absindex, valid_index
 
 
@@ -126,72 +132,89 @@ def candles_sum(
 
 
 def collapse_candles_timeframe(
-    candles: List[Candle], timeframe: str, fill_blanks: bool = False
+    candles: List[Candle], timeframe: str, fill_missing: bool = False
 ) -> List[Candle]:
+    """Collapses the given list of candles into specific timeframe candles.
+    This can re-ran with same list to collapse latest candles.
+    This method is destructive, returning a new list for the collapsed candles"""
     if not candles:
         return []
 
-    timeframe_delta = timeframe_to_timedelta(timeframe)
-    merged_candles = [candles.pop(0)]
-    init_candle = merged_candles[0]
+    timeframe_ = timeframe_to_timedelta(timeframe)
+    candles_ = [candles.pop(0)]
+    init_candle = candles_[0]
 
     if init_candle.timestamp is None:
         return candles
 
-    start_timestamp = round_down_timestamp(init_candle.timestamp, timeframe_delta)
+    start_time = round_down_timestamp(init_candle.timestamp, timeframe_)
+    end_time = start_time + timeframe_
 
-    if init_candle.timestamp.timestamp() % timeframe_delta.total_seconds() != 0:
-        init_candle.timestamp = start_timestamp + timeframe_delta
+    if not on_timeframe(init_candle.timestamp, timeframe_):
+        init_candle.timestamp = end_time
 
     while candles:
         candle = candles.pop(0)
-        if not candle.timestamp:
+        prev_candle = candles_[-1]
+
+        if not candle.timestamp or not prev_candle.timestamp:
             continue
 
-        candle.timestamp = candle.timestamp.replace(microsecond=0)
+        candle.timestamp = clean_timestamp(candle.timestamp)
 
-        # If current candle before the latest collapsed candle
-        if start_timestamp + timeframe_delta > candle.timestamp:
-            start_timestamp = round_down_timestamp(candle.timestamp, timeframe_delta)
-
-        end_timestamp = start_timestamp + timeframe_delta
-
-        # If candle time is within current candle timeframe
-        if start_timestamp < candle.timestamp <= end_timestamp:
-            # If prev candle the end of current timeframe
-            if merged_candles[-1].timestamp == end_timestamp:
-                merged_candles[-1].merge(candle)
-            else:
-                candle.timestamp = end_timestamp
-                merged_candles.append(candle)
-                start_timestamp = round_down_timestamp(candle.timestamp, timeframe_delta)
-        # If candle is outside current candle timeframe
+        if start_time < candle.timestamp <= end_time and prev_candle.timestamp == end_time:
+            prev_candle.merge(candle)
+        elif start_time < candle.timestamp <= end_time:
+            candle.timestamp = end_time
+            candles_.append(candle)
+        elif (
+            start_time - timeframe_ < candle.timestamp <= start_time
+            and prev_candle.timestamp == start_time
+        ):
+            prev_candle.merge(candle)
+        elif end_time < candle.timestamp <= end_time + timeframe_:
+            candle.timestamp = end_time + timeframe_
+            candles_.append(candle)
+            start_time += timeframe_
+            end_time += timeframe_
+        elif start_time < candle.timestamp and on_timeframe(candle.timestamp, timeframe_):
+            start_time = round_down_timestamp(candle.timestamp, timeframe_)
+            end_time = start_time + timeframe_
+            candle.timestamp = start_time
+            candles_.append(candle)
+        elif end_time + timeframe_ < candle.timestamp:
+            start_time = round_down_timestamp(candle.timestamp, timeframe_)
+            end_time = start_time + timeframe_
+            candle.timestamp = end_time
+            candles_.append(candle)
         else:
-            start_timestamp = round_down_timestamp(candle.timestamp, timeframe_delta)
-            end_timestamp = start_timestamp + timeframe_delta
-            candle.timestamp = end_timestamp
-            merged_candles.append(candle)
+            # Shit's fucked yo
+            raise InvalidCandleOrder(
+                f"Failed to collapse_candles due to invalid candle order prev: [{prev_candle}] - current: [{candle}]",
+            )
 
-    if fill_blanks:
-        index = 1
-        while True:
-            prev_candle = merged_candles[index - 1]
-            if (
-                prev_candle.timestamp
-                and merged_candles[index].timestamp != prev_candle.timestamp + timeframe_delta
-            ):
-                fill_candle = Candle(
-                    open=prev_candle.close,
-                    close=prev_candle.close,
-                    high=prev_candle.close,
-                    low=prev_candle.close,
-                    volume=0,
-                    timestamp=prev_candle.timestamp + timeframe_delta,
-                )
-                merged_candles.insert(index, fill_candle)
+    if fill_missing:
+        candles_ = fill_missing_candles(candles_, timeframe_)
 
-            index += 1
-            if index >= len(merged_candles):
-                break
+    return candles_
 
-    return merged_candles
+
+def fill_missing_candles(candles: List[Candle], timeframe: timedelta) -> List[Candle]:
+    index = 1
+    while True:
+        prev_candle = candles[index - 1]
+        if prev_candle.timestamp and candles[index].timestamp != prev_candle.timestamp + timeframe:
+            fill_candle = Candle(
+                open=prev_candle.close,
+                close=prev_candle.close,
+                high=prev_candle.close,
+                low=prev_candle.close,
+                volume=0,
+                timestamp=prev_candle.timestamp + timeframe,
+            )
+            candles.insert(index, fill_candle)
+
+        index += 1
+        if index >= len(candles):
+            break
+    return candles
