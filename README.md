@@ -58,6 +58,7 @@ Hexital also comes built with some candle utility methods, such as Rising Candle
 ## Candle Patterns
 Simple useful Candle pattern recognition, such as Doji, hammer, etc
 - Doji
+- Hammer
 
 ## Candlestick Movement
 Simple useful Candle Anaylsis methods such as those in [Pine Scripting](https://www.tradingview.com/pine-script-reference/v5/)
