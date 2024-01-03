@@ -7,7 +7,8 @@
 [![Unit Tests - Dev](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml/badge.svg?branch=development)](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml)
 
 # `Alpha Development`❗
-Note: Extremely early stages and likely change drastically, including core functionality and methods. Specifically until a basis for Patterns and Multi time TA are designed.
+Note: Extremely early stages and likely change drastically, including core functionality and methods.
+
 # Hexital
 `Hexital` is a Python library implementing financial indicators for technical analysis. The distinctive feature of the library is its incremental computation of indicators which is designed to fit real-time applications or applications with iterative input in general.
 
@@ -102,7 +103,7 @@ my_candles = [
 ]
 # Convert Basic candles
 candles = Candle.from_dicts(my_candles)
-my_ema = EMA(candles=parsed_candles, period=3)
+my_ema = EMA(candles=candles, period=3)
 my_ema.calculate()
 
 # Indicator name is generated based on Indicator and parameters
