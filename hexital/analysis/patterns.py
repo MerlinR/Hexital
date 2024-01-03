@@ -33,11 +33,11 @@ def doji(
     def _doji_check(indx: int):
         body = utils.candle_realbody(candles[indx])
 
-        high_low_avg = utils.candle_high_low_diff_avg(candles, length, indx)
+        high_low_avg = utils.candle_high_low_avg(candles, length, indx)
 
         if asint:
-            return 1 if body < 0.13 * high_low_avg else 0
-        return body < 0.13 * high_low_avg
+            return int(body < 0.1 * high_low_avg)
+        return body < 0.1 * high_low_avg
 
     if lookback is None:
         return _doji_check(index)
