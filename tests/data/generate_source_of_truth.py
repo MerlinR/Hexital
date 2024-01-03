@@ -196,7 +196,7 @@ def generate_patterns():
     df = pd.DataFrame.from_dict(load_json_candles())
     df = add_timestamp(df)
 
-    df = df.ta.cdl_pattern(name=["doji"])
+    df = df.ta.cdl_pattern(name=["doji", "hammer"])
     df = df.astype(object).replace(np.nan, None)
 
     for col in df.columns:
@@ -209,6 +209,7 @@ def generate_patterns():
         "DOJI",
         PATH_PATTERN,
     )
+    save_json_result([bool(value) for value in df["CDL_HAMMER"].tolist()], "HAMMER", PATH_PATTERN)
 
 
 def generate_timeframe_candles(frame: str):

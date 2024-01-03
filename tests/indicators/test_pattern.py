@@ -7,14 +7,13 @@ from hexital.exceptions import InvalidPattern
 
 
 class TestPatterns:
-    def verfiy(
+    def verify(
         self,
         result: list,
         expected: list,
         amount: Optional[int] = None,
         verbose: bool = False,
     ) -> bool:
-
         if amount is not None:
             result = result[-abs(amount) :]
             expected = expected[-abs(amount) :]
@@ -35,9 +34,7 @@ class TestPatterns:
 
         return any([diff_result, correlation])
 
-    def correlation_validation(
-        self, result: list, expected: list, accuracy: float = 0.95
-    ):
+    def correlation_validation(self, result: list, expected: list, accuracy: float = 0.95):
         correlation = 0
 
         if isinstance(result[0], dict):
@@ -55,12 +52,14 @@ class TestPatterns:
         return correlation >= accuracy
 
     def correlation_coefficient(self, result: list, expected: list):
-
         # First establish the means and standard deviations for both lists.
         res_mean = self.calc_mean(result)
         exp_mean = self.calc_mean(expected)
         res_stand_deviation = self.standard_deviation(result)
         exp_stand_deviation = self.standard_deviation(expected)
+
+        if res_mean is None or exp_mean is None:
+            return 1.0
 
         # r numerator
         r_numerator = 0.0
@@ -70,6 +69,9 @@ class TestPatterns:
 
         # r denominator
         r_denominator = res_stand_deviation * exp_stand_deviation
+
+        if r_denominator == 0:
+            return 1.0
 
         correlation = r_numerator / r_denominator
         return round(correlation, 4)
@@ -81,6 +83,8 @@ class TestPatterns:
             if value is not None:
                 length += 1
                 total += float(value)
+        if length == 0:
+            return None
         return total / length
 
     def standard_deviation(self, data: list):
@@ -130,9 +134,7 @@ class TestPatterns:
 
     @pytest.mark.usefixtures("candles")
     def test_pattern_dict_arguments(self, candles):
-        test = indicators.Pattern(
-            pattern=patterns.doji, candles=candles, args={"length": 20}
-        )
+        test = indicators.Pattern(pattern=patterns.doji, candles=candles, args={"length": 20})
         test.calculate()
         assert test.name == "doji_20"
 
@@ -151,4 +153,10 @@ class TestPatterns:
     def test_doji(self, candles, expected_doji):
         test = indicators.Pattern(pattern=patterns.doji, candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_doji)
+        assert self.verify(test.as_list, expected_doji)
+
+    @pytest.mark.usefixtures("candles", "expected_hammer")
+    def test_hammer(self, candles, expected_hammer):
+        test = indicators.Pattern(pattern=patterns.hammer, candles=candles)
+        test.calculate()
+        assert self.verify(test.as_list, expected_hammer)

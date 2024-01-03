@@ -9,6 +9,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Cleaned up code and some potential Bugs ruff/pyright
 - Added movement Above/Below and updated others to use it
 - Updated collapse candle 'fill' to show essentially doji candle rather than copy prev
+- Added Patterns:
+  - Hammer Candle
 - Major Fix: Re-wrote collapse_candles_timeframe to correctly handle candles,gaps and appending
 - Fixed Doji pattern
 - Fixed Supertrend Indicator
