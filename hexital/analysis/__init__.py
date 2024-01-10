@@ -1,4 +1,4 @@
-from .movement import ( # noqa F401
+from .movement import (  # noqa F401
     cross,
     crossover,
     crossunder,
@@ -14,4 +14,4 @@ from .movement import ( # noqa F401
     rising,
     value_range,
 )
-from .patterns import doji # noqa F401 
+from .patterns import doji, hammer  # noqa F401
