@@ -5,7 +5,7 @@ from typing import Dict, List, Optional
 
 from hexital.core.candle import Candle
 from hexital.core.indicator import Indicator
-from hexital.exceptions import InvalidIndicator
+from hexital.exceptions import InvalidIndicator, InvalidPattern
 from hexital.lib.candle_extension import collapse_candles_timeframe, reading_by_index
 
 DEFAULT = "default"
@@ -40,48 +40,67 @@ class Hexital:
     def _validate_indicators(
         self, indicators: List[dict | Indicator] | List[dict] | List[Indicator] | None
     ) -> Dict[str, Indicator]:
-        indicator_module = importlib.import_module("hexital.indicators")
-        pattern_module = importlib.import_module("hexital.analysis.patterns")
         valid_indicators = {}
 
         if not indicators:
-            return {}
+            return valid_indicators
+
+        indicator_module = importlib.import_module("hexital.indicators")
 
         for indicator in indicators:
             if isinstance(indicator, Indicator):
                 valid_indicators[indicator.name] = indicator
-            elif isinstance(indicator, dict):
-                indicator_name = indicator.pop("indicator", None)
-                pattern_name = indicator.pop("pattern", None)
-                arguments = indicator.copy()
+                continue
 
-                if indicator_name is None and pattern_name is None:
-                    raise InvalidIndicator(
-                        f"Dict Indicator missing 'indicator' or 'pattern' name: {indicator}"
-                    )
+            if not isinstance(indicator, dict):
+                raise InvalidIndicator(
+                    f"Indicator type invalid 'indicator' must be a dict or Indicator type: {indicator}"
+                )
 
-                if indicator_name:
-                    indicator_class = getattr(indicator_module, indicator_name, None)
-                    if indicator_class is not None:
-                        new_indicator = indicator_class(**arguments)
-                        valid_indicators[new_indicator.name] = new_indicator
-                    else:
-                        raise InvalidIndicator(f"Indicator {indicator_name} does not exist")
-                elif pattern_name and isinstance(pattern_name, str):
-                    pattern_func = getattr(pattern_module, pattern_name, None)
-                    pattern_class = getattr(indicator_module, "Pattern", None)
-                    if pattern_func is not None and pattern_class is not None:
-                        new_indicator = pattern_class(pattern=pattern_func, **arguments)
-                        valid_indicators[new_indicator.name] = new_indicator
-                    else:
-                        raise InvalidIndicator(f"Indicator {pattern_name} does not exist")
-                elif pattern_name and callable(pattern_name):
-                    pattern_class = getattr(indicator_module, "Pattern", None)
-                    if pattern_class is not None:
-                        new_indicator = pattern_class(pattern=pattern_name, **arguments)
-                        valid_indicators[new_indicator.name] = new_indicator
-                else:
-                    raise InvalidIndicator(f"Indicator {pattern_name} does not exist")
+            pattern_class = getattr(indicator_module, "Pattern")
+
+            if indicator.get("indicator"):
+                indicator_name = indicator.pop("indicator")
+
+                try:
+                    indicator_class = getattr(indicator_module, indicator_name)
+                except AttributeError:
+                    raise InvalidIndicator(f"Indicator {indicator_name} does not exist")
+
+                new_indicator = indicator_class(**indicator)
+                valid_indicators[new_indicator.name] = new_indicator
+
+            elif indicator.get("pattern") and isinstance(indicator.get("pattern"), str):
+                pattern_name = indicator.pop("pattern")
+                pattern_module = importlib.import_module("hexital.analysis.patterns")
+
+                try:
+                    pattern_func = getattr(pattern_module, pattern_name)
+                except AttributeError:
+                    raise InvalidIndicator(f"pattern {pattern_name} does not exist")
+
+                new_indicator = pattern_class(pattern=pattern_func, **indicator)
+                valid_indicators[new_indicator.name] = new_indicator
+
+            elif indicator.get("movement") and isinstance(indicator.get("movement"), str):
+                movement_name = indicator.pop("movement")
+                movement_module = importlib.import_module("hexital.analysis.movement")
+                try:
+                    movement_func = getattr(movement_module, movement_name)
+                except AttributeError:
+                    raise InvalidIndicator(f"movement {movement_name} does not exist")
+
+                new_indicator = pattern_class(pattern=movement_func, **indicator)
+                valid_indicators[new_indicator.name] = new_indicator
+
+            elif indicator.get("method") and callable(indicator.get("method")):
+                method_name = indicator.pop("method")
+                new_indicator = pattern_class(pattern=method_name, **indicator)
+                valid_indicators[new_indicator.name] = new_indicator
+            else:
+                raise InvalidIndicator(
+                    f"Dict Indicator missing 'indicator', 'pattern', 'movement' or 'pattern' name, not: {indicator}"
+                )
 
         for indicator in valid_indicators.values():
             if indicator.timeframe is not None:

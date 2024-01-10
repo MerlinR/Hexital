@@ -3,7 +3,6 @@ from typing import Optional
 import deepdiff
 import pytest
 from hexital import indicators, patterns
-from hexital.exceptions import InvalidPattern
 
 
 class TestPatterns:
@@ -108,46 +107,6 @@ class TestPatterns:
                 print("\033[91m" + f"{i}: {res} != {exp}" + "\033[0m")
             elif verbose:
                 print("\033[92m" + f"{i}: {res} == {exp}" + "\033[0m")
-
-    @pytest.mark.usefixtures("candles")
-    def test_invalid_pattern(self, candles):
-        with pytest.raises(InvalidPattern):
-            indicators.Pattern(pattern="FUCK", candles=candles)
-
-    @pytest.mark.usefixtures("candles")
-    def test_string_pattern(self, candles):
-        test = indicators.Pattern(pattern="doji", candles=candles)
-        test.calculate()
-        assert test.reading() is not None
-
-    @pytest.mark.usefixtures("candles")
-    def test_method_pattern(self, candles):
-        test = indicators.Pattern(pattern=patterns.doji, candles=candles)
-        test.calculate()
-        assert test.reading() is not None
-
-    @pytest.mark.usefixtures("candles")
-    def test_pattern_multi_arguments(self, candles):
-        test = indicators.Pattern(pattern=patterns.doji, candles=candles, length=20)
-        test.calculate()
-        assert test.name == "doji_20"
-
-    @pytest.mark.usefixtures("candles")
-    def test_pattern_dict_arguments(self, candles):
-        test = indicators.Pattern(pattern=patterns.doji, candles=candles, args={"length": 20})
-        test.calculate()
-        assert test.name == "doji_20"
-
-    @pytest.mark.usefixtures("candles")
-    def test_pattern_merged_aguments(self, candles):
-        test = indicators.Pattern(
-            pattern=patterns.doji,
-            candles=candles,
-            length=20,
-            fullname_override="MERGED_ARGS",
-        )
-        test.calculate()
-        assert test.name == "MERGED_ARGS"
 
     @pytest.mark.usefixtures("candles", "expected_doji")
     def test_doji(self, candles, expected_doji):

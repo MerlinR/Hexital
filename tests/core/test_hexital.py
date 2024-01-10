@@ -11,6 +11,81 @@ def fake_pattern(candles: List[Candle], index=-1):
     return 1
 
 
+class TestIndicatorPattern:
+    @pytest.mark.usefixtures("candles", "expected_ema")
+    def test_hextial_single(self, candles, expected_ema):
+        strat = Hexital("Test Stratergy", candles, [EMA()])
+        strat.calculate()
+        assert pytest.approx(strat.reading_as_list("EMA_10")) == expected_ema
+
+    @pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
+    def test_hextial_multi(self, candles, expected_ema, expected_sma):
+        strat = Hexital("Test Stratergy", candles, [EMA(), SMA()])
+        strat.calculate()
+        assert (
+            pytest.approx(strat.reading_as_list("EMA_10")) == expected_ema
+            and pytest.approx(strat.reading_as_list("SMA_10")) == expected_sma
+        )
+
+    @pytest.mark.usefixtures("candles", "expected_sma")
+    def test_hextial_dict(self, candles, expected_sma):
+        strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA"}])
+        strat.calculate()
+        assert pytest.approx(strat.reading_as_list("SMA_10")) == expected_sma
+
+    @pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
+    def test_hextial_mixed(self, candles, expected_ema, expected_sma):
+        strat = Hexital("Test Stratergy", candles, [EMA(), {"indicator": "SMA"}])
+        strat.calculate()
+        assert (
+            pytest.approx(strat.reading_as_list("EMA_10")) == expected_ema
+            and pytest.approx(strat.reading_as_list("SMA_10")) == expected_sma
+        )
+
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_dict_arguments(self, candles):
+        strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 20}])
+        assert strat.get_indicator("SMA_20")
+
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_dict_invalid(self, candles):
+        with pytest.raises(InvalidIndicator):
+            Hexital("Test Stratergy", candles, [{"indicator": "FUCK"}])
+
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_dict_invalid_missing(self, candles):
+        with pytest.raises(InvalidIndicator):
+            Hexital("Test Stratergy", candles, [{"period": 10}])
+
+    @pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
+    def test_hextial_dict_append(self, candles, expected_ema, expected_sma):
+        strat = Hexital("Test Stratergy", candles, [EMA()])
+        strat.add_indicator({"indicator": "SMA"})
+        strat.calculate()
+        assert (
+            pytest.approx(strat.reading_as_list("EMA_10")) == expected_ema
+            and pytest.approx(strat.reading_as_list("SMA_10")) == expected_sma
+        )
+
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_dict_pattern(self, candles):
+        strat = Hexital("Test Stratergy", candles, [{"pattern": "doji"}])
+        strat.calculate()
+        assert strat.reading("doji") is not None
+
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_dict_movement(self, candles):
+        strat = Hexital("Test Stratergy", candles, [{"movement": "positive"}])
+        strat.calculate()
+        assert strat.reading("positive") is not None
+
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_dict_pattern_custom(self, candles):
+        strat = Hexital("Test Stratergy", candles, [{"method": fake_pattern}])
+        strat.calculate()
+        assert strat.reading("fake_pattern") is not None
+
+
 @pytest.mark.usefixtures("candles", "expected_ema")
 def test_hextial_single(candles, expected_ema):
     strat = Hexital("Test Stratergy", candles)
@@ -27,59 +102,6 @@ def test_hextial_multi(candles, expected_ema, expected_sma):
         pytest.approx(strat.reading_as_list("EMA_10")) == expected_ema
         and pytest.approx(strat.reading_as_list("SMA_10")) == expected_sma
     )
-
-
-@pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
-def test_hextial_multi_dict(candles, expected_ema, expected_sma):
-    strat = Hexital("Test Stratergy", candles, [EMA(), {"indicator": "SMA"}])
-    strat.calculate()
-    assert (
-        pytest.approx(strat.reading_as_list("EMA_10")) == expected_ema
-        and pytest.approx(strat.reading_as_list("SMA_10")) == expected_sma
-    )
-
-
-@pytest.mark.usefixtures("candles")
-def test_hextial_dict_pattern(candles):
-    strat = Hexital("Test Stratergy", candles, [{"pattern": "doji"}])
-    strat.calculate()
-    assert strat.reading("doji") is not None
-
-
-@pytest.mark.usefixtures("candles")
-def test_hextial_dict_pattern_custom(candles):
-    strat = Hexital("Test Stratergy", candles, [{"pattern": fake_pattern}])
-    strat.calculate()
-    assert strat.reading("fake_pattern") is not None
-
-
-@pytest.mark.usefixtures("candles")
-def test_hextial_multi_dict_invalid(candles):
-    with pytest.raises(InvalidIndicator):
-        Hexital("Test Stratergy", candles, [EMA(), {"indicator": "FUCK"}])
-
-
-@pytest.mark.usefixtures("candles")
-def test_hextial_multi_dict_invalid_missing(candles):
-    with pytest.raises(InvalidIndicator):
-        Hexital("Test Stratergy", candles, [{"period": 10}])
-
-
-@pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
-def test_hextial_multi_dict_append(candles, expected_ema, expected_sma):
-    strat = Hexital("Test Stratergy", candles, [EMA()])
-    strat.add_indicator({"indicator": "SMA"})
-    strat.calculate()
-    assert (
-        pytest.approx(strat.reading_as_list("EMA_10")) == expected_ema
-        and pytest.approx(strat.reading_as_list("SMA_10")) == expected_sma
-    )
-
-
-@pytest.mark.usefixtures("candles")
-def test_hextial_dict_arguments(candles):
-    strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 20}])
-    assert strat.get_indicator("SMA_20")
 
 
 @pytest.mark.usefixtures("candles", "expected_sma")

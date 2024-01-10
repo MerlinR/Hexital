@@ -25,9 +25,13 @@ class Pattern(Indicator):
     def __init__(self, pattern: str | Callable, args: Optional[dict] = None, **kwargs):
         if isinstance(pattern, str):
             pattern_module = importlib.import_module("hexital.analysis.patterns")
+            movement_module = importlib.import_module("hexital.analysis.movement")
             pattern_method = getattr(pattern_module, pattern, None)
+            movement_module = getattr(movement_module, pattern, None)
             if pattern_method is not None:
                 self._pattern_method = pattern_method
+            elif movement_module is not None:
+                self._pattern_method = movement_module
         elif callable(pattern):
             self._pattern_method = pattern
 
@@ -74,6 +78,4 @@ class Pattern(Indicator):
         return name
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        return self._pattern_method(
-            candles=self.candles, index=index, **self._pattern_kwargs
-        )
+        return self._pattern_method(candles=self.candles, index=index, **self._pattern_kwargs)
