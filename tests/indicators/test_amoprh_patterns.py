@@ -110,12 +110,12 @@ class TestPatterns:
 
     @pytest.mark.usefixtures("candles", "expected_doji")
     def test_doji(self, candles, expected_doji):
-        test = indicators.Pattern(pattern=patterns.doji, candles=candles)
+        test = indicators.Amorph(analysis=patterns.doji, candles=candles)
         test.calculate()
         assert self.verify(test.as_list, expected_doji)
 
     @pytest.mark.usefixtures("candles", "expected_hammer")
     def test_hammer(self, candles, expected_hammer):
-        test = indicators.Pattern(pattern=patterns.hammer, candles=candles)
+        test = indicators.Amorph(analysis=patterns.hammer, candles=candles)
         test.calculate()
         assert self.verify(test.as_list, expected_hammer)

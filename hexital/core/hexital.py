@@ -1,11 +1,11 @@
 import importlib
 from copy import deepcopy
 from datetime import timedelta
-from typing import Dict, List, Optional
+from typing import Callable, Dict, List, Optional
 
 from hexital.core.candle import Candle
 from hexital.core.indicator import Indicator
-from hexital.exceptions import InvalidIndicator, InvalidPattern
+from hexital.exceptions import InvalidIndicator, InvalidAnalysis
 from hexital.lib.candle_extension import collapse_candles_timeframe, reading_by_index
 
 DEFAULT = "default"
@@ -57,7 +57,7 @@ class Hexital:
                     f"Indicator type invalid 'indicator' must be a dict or Indicator type: {indicator}"
                 )
 
-            pattern_class = getattr(indicator_module, "Pattern")
+            amorph_class = getattr(indicator_module, "Amorph")
 
             if indicator.get("indicator"):
                 indicator_name = indicator.pop("indicator")
@@ -70,36 +70,28 @@ class Hexital:
                 new_indicator = indicator_class(**indicator)
                 valid_indicators[new_indicator.name] = new_indicator
 
-            elif indicator.get("pattern") and isinstance(indicator.get("pattern"), str):
-                pattern_name = indicator.pop("pattern")
+            elif indicator.get("analysis") and isinstance(indicator.get("analysis"), str):
+                name = indicator.pop("analysis")
                 pattern_module = importlib.import_module("hexital.analysis.patterns")
-
-                try:
-                    pattern_func = getattr(pattern_module, pattern_name)
-                except AttributeError:
-                    raise InvalidIndicator(f"pattern {pattern_name} does not exist")
-
-                new_indicator = pattern_class(pattern=pattern_func, **indicator)
-                valid_indicators[new_indicator.name] = new_indicator
-
-            elif indicator.get("movement") and isinstance(indicator.get("movement"), str):
-                movement_name = indicator.pop("movement")
                 movement_module = importlib.import_module("hexital.analysis.movement")
-                try:
-                    movement_func = getattr(movement_module, movement_name)
-                except AttributeError:
-                    raise InvalidIndicator(f"movement {movement_name} does not exist")
 
-                new_indicator = pattern_class(pattern=movement_func, **indicator)
+                pattern_func = getattr(pattern_module, name, None)
+                analysis_func = getattr(movement_module, name, pattern_func)
+                if not analysis_func:
+                    raise InvalidAnalysis(
+                        f"analysis {name} does not exist in patterns or movements"
+                    )
+
+                new_indicator = amorph_class(analysis=analysis_func, **indicator)
                 valid_indicators[new_indicator.name] = new_indicator
 
-            elif indicator.get("method") and callable(indicator.get("method")):
-                method_name = indicator.pop("method")
-                new_indicator = pattern_class(pattern=method_name, **indicator)
+            elif indicator.get("analysis") and callable(indicator.get("analysis")):
+                method_name = indicator.pop("analysis")
+                new_indicator = amorph_class(analysis=method_name, **indicator)
                 valid_indicators[new_indicator.name] = new_indicator
             else:
-                raise InvalidIndicator(
-                    f"Dict Indicator missing 'indicator', 'pattern', 'movement' or 'pattern' name, not: {indicator}"
+                raise InvalidAnalysis(
+                    f"Dict Indicator missing 'indicator' or 'analysis' name, not: {indicator}"
                 )
 
         for indicator in valid_indicators.values():
@@ -185,7 +177,7 @@ class Hexital:
             return self._indicators[name].as_list
         return []
 
-    def add_indicator(self, indicator: Indicator | List[Indicator]):
+    def add_indicator(self, indicator: Indicator | List[Indicator] | Dict[str, str | Callable]):
         """Add's a new indicator to `Hexital` strategy.
         This accept either `Indicator` datatypes or dict string versions to be packed.
         `add_indicator(SMA(period=10))` or `add_indicator({"indicator": "SMA", "period": 10})`

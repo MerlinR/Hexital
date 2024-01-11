@@ -4,7 +4,7 @@ from typing import List, Optional
 
 import pytest
 from hexital.core import Candle, Indicator
-from hexital.indicators.pattern import Pattern
+from hexital.indicators.amorph import Amorph
 
 
 @dataclass(kw_only=True)
@@ -14,7 +14,7 @@ class FakeIndicator(Indicator):
     fullname_override: Optional[str] = None
     name_suffix: Optional[str] = None
     round_value: int = 4
-    
+
     period: int = 10
     input_value: str = "close"
 
@@ -49,9 +49,7 @@ def test_name_fulloverride(minimal_candles: List[Candle]):
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_name_fulloverride_and_suffix(minimal_candles: List[Candle]):
-    test = FakeIndicator(
-        candles=minimal_candles, fullname_override="FUCK", name_suffix="YOU"
-    )
+    test = FakeIndicator(candles=minimal_candles, fullname_override="FUCK", name_suffix="YOU")
     test.calculate()
     assert test.name == "FUCK_YOU"
 
@@ -72,9 +70,7 @@ def test_name_timeframe(minimal_candles: List[Candle]):
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_name_timeframe_override(minimal_candles: List[Candle]):
-    test = FakeIndicator(
-        candles=minimal_candles, fullname_override="FUCK", timeframe="t5"
-    )
+    test = FakeIndicator(candles=minimal_candles, fullname_override="FUCK", timeframe="t5")
     test.calculate()
     assert test.name == "FUCK"
 
@@ -140,10 +136,10 @@ def test_settings(minimal_candles: List[Candle]):
     }
 
 
-def test_settings_pattern():
-    test = Pattern(pattern="doji")
+def test_settings_analysis():
+    test = Amorph(analysis="doji")
     assert test.settings == {
-        "pattern": "doji",
+        "analysis": "doji",
         "round_value": 4,
     }
 
@@ -183,9 +179,7 @@ def test_append_dict():
             "volume": 19661,
         }
     )
-    assert test.candles == [
-        Candle(17213, 2395, 7813, 3615, 19661, indicators={"Fake_10": 100.0})
-    ]
+    assert test.candles == [Candle(17213, 2395, 7813, 3615, 19661, indicators={"Fake_10": 100.0})]
 
 
 def test_append_dict_list():
@@ -209,9 +203,7 @@ def test_append_list():
 
     test.append([17213, 2395, 7813, 3615, 19661])
 
-    assert test.candles == [
-        Candle(17213, 2395, 7813, 3615, 19661, indicators={"Fake_10": 100.0})
-    ]
+    assert test.candles == [Candle(17213, 2395, 7813, 3615, 19661, indicators={"Fake_10": 100.0})]
 
 
 def test_append_list_list():

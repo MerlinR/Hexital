@@ -3,8 +3,8 @@ from typing import List
 
 import pytest
 from hexital.core import Candle, Hexital, Indicator
-from hexital.exceptions import InvalidIndicator
-from hexital.indicators import EMA, OBV, SMA
+from hexital.exceptions import InvalidAnalysis, InvalidIndicator
+from hexital.indicators import EMA, SMA
 
 
 def fake_pattern(candles: List[Candle], index=-1):
@@ -54,7 +54,7 @@ class TestIndicatorPattern:
 
     @pytest.mark.usefixtures("candles")
     def test_hextial_dict_invalid_missing(self, candles):
-        with pytest.raises(InvalidIndicator):
+        with pytest.raises(InvalidAnalysis):
             Hexital("Test Stratergy", candles, [{"period": 10}])
 
     @pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
@@ -68,20 +68,20 @@ class TestIndicatorPattern:
         )
 
     @pytest.mark.usefixtures("candles")
-    def test_hextial_dict_pattern(self, candles):
-        strat = Hexital("Test Stratergy", candles, [{"pattern": "doji"}])
+    def test_hextial_dict_analysis_pattern(self, candles):
+        strat = Hexital("Test Stratergy", candles, [{"analysis": "doji"}])
         strat.calculate()
         assert strat.reading("doji") is not None
 
     @pytest.mark.usefixtures("candles")
     def test_hextial_dict_movement(self, candles):
-        strat = Hexital("Test Stratergy", candles, [{"movement": "positive"}])
+        strat = Hexital("Test Stratergy", candles, [{"analysis": "positive"}])
         strat.calculate()
         assert strat.reading("positive") is not None
 
     @pytest.mark.usefixtures("candles")
-    def test_hextial_dict_pattern_custom(self, candles):
-        strat = Hexital("Test Stratergy", candles, [{"method": fake_pattern}])
+    def test_hextial_dict_analysis_custom(self, candles):
+        strat = Hexital("Test Stratergy", candles, [{"analysis": fake_pattern}])
         strat.calculate()
         assert strat.reading("fake_pattern") is not None
 

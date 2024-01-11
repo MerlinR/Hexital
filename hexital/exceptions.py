@@ -3,7 +3,7 @@ class InvalidIndicator(Exception):
         super().__init__(message)
 
 
-class InvalidPattern(Exception):
+class InvalidAnalysis(Exception):
     def __init__(self, message):
         super().__init__(message)
 
