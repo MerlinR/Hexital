@@ -118,11 +118,12 @@ def test_negative_list_empty():
 
 class TestAbove:
     def test_above(self, indicator_candles):
-        assert movement.above(indicator_candles, "high", "low")
+        assert movement.above(indicator_candles, "high", "low") is True
 
-    def test_above_missing(
-        self,
-    ):
+    def test_above_false(self, indicator_candles):
+        assert movement.above(indicator_candles, "low", "high") is False
+
+    def test_above_missing(self):
         assert movement.above([], "high", "low") is False
 
     def test_above_wrong(self, indicator_candles):
@@ -139,9 +140,10 @@ class TestBelow:
     def test_below(self, indicator_candles):
         assert movement.below(indicator_candles, "high", "low") is False
 
-    def test_below_missing(
-        self,
-    ):
+    def test_below_false(self, indicator_candles):
+        assert movement.below(indicator_candles, "low", "high") is True
+
+    def test_below_missing(self):
         assert movement.below([], "high", "low") is False
 
     def test_below_wrong(self, indicator_candles):
@@ -158,9 +160,7 @@ class TestValueRange:
     def test_value_range(self, rising_candles):
         assert movement.value_range(rising_candles, "close") == 40
 
-    def test_value_range_missing(
-        self,
-    ):
+    def test_value_range_missing(self):
         assert movement.value_range([], "close") is None
 
     def test_value_range_partial(self, indicator_candles_partial):
@@ -177,9 +177,7 @@ class TestRising:
     def test_basic_rising_false(self, fallling_candles):
         assert movement.rising(fallling_candles, "close") is False
 
-    def test_basic_rising_missing(
-        self,
-    ):
+    def test_basic_rising_missing(self):
         assert movement.rising([], "close") is False
 
     def test_basic_rising_partial(self, indicator_candles_partial):
@@ -259,9 +257,7 @@ class TestHighest:
     def test_highest_two(self, indicator_candles):
         assert movement.highest(indicator_candles, "low") == 120
 
-    def test_highest_missing(
-        self,
-    ):
+    def test_highest_missing(self):
         assert movement.highest([], "close") is False
 
     def test_highest_partial(self, indicator_candles_partial):
@@ -281,9 +277,7 @@ class TestLowest:
     def test_lowest_two(self, indicator_candles):
         assert movement.lowest(indicator_candles, "high") == 110
 
-    def test_lowest_missing(
-        self,
-    ):
+    def test_lowest_missing(self):
         assert movement.lowest([], "low") is False
 
     def test_lowest_partial(self, indicator_candles_partial):
@@ -303,9 +297,7 @@ class TestHighestBar:
     def test_highestbar_two(self, indicator_candles):
         assert movement.highestbar(indicator_candles, "low") == 2
 
-    def test_highestbar_missing(
-        self,
-    ):
+    def test_highestbar_missing(self):
         assert movement.highestbar([], "close") is None
 
     def test_highestbar_partial(self, indicator_candles_partial):
@@ -325,9 +317,7 @@ class TestLowestBar:
     def test_lowestbars_two(self, indicator_candles):
         assert movement.lowestbar(indicator_candles, "close") == 1
 
-    def test_lowestbars_missing(
-        self,
-    ):
+    def test_lowestbars_missing(self):
         assert movement.lowestbar([], "open") is None
 
     def test_lowestbars_partial(self, indicator_candles_partial):

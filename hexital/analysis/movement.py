@@ -11,8 +11,6 @@ from hexital.lib.utils import absindex, valid_index
 
 
 def positive(candles: Candle | List[Candle], index: int = -1) -> bool:
-    if not candles:
-        return False
     if isinstance(candles, list):
         if not valid_index(index, len(candles)):
             return False
@@ -21,8 +19,6 @@ def positive(candles: Candle | List[Candle], index: int = -1) -> bool:
 
 
 def negative(candles: Candle | List[Candle], index: int = -1) -> bool:
-    if not candles:
-        return False
     if isinstance(candles, list):
         if not valid_index(index, len(candles)):
             return False
@@ -62,9 +58,6 @@ def value_range(
     """Returns the difference between the min and max values in a indicator series.
     Length `includes` latest, if lenth is too long for amount of candles,
     will check all of them"""
-    if not candles:
-        return None
-
     index_ = absindex(index, len(candles))
     if index_ is None:
         return None
@@ -88,9 +81,6 @@ def rising(candles: List[Candle], indicator: str, length: int = 4, index: int = 
     """True if current `indicator` is greater than any previous `indicator`
     for `length` bars back, False otherwise.
     Length `excludes` latest"""
-    if not candles:
-        return False
-
     index_ = absindex(index, len(candles))
     if index_ is None:
         return False
@@ -101,14 +91,14 @@ def rising(candles: List[Candle], indicator: str, length: int = 4, index: int = 
     if length < 1 or len(candles) < 2:
         return False
 
-    newest_reading = reading_by_candle(candles[-1], indicator)
+    latest_reading = reading_by_candle(candles[-1], indicator)
 
     return all(
-        val < newest_reading
+        val < latest_reading
         for val in [
             reading_by_candle(candle, indicator) for candle in candles[index_ - length : index_]
         ]
-        if val is not None
+        if isinstance(val, (float, int))
     )
 
 
@@ -116,9 +106,6 @@ def falling(candles: List[Candle], indicator: str, length: int = 4, index: int =
     """True if current `indicator` reading is less than any previous `indicator`
     reading for `length` bars back, False otherwise.
     Length `excludes` latest"""
-    if not candles:
-        return False
-
     index_ = absindex(index, len(candles))
     if index_ is None:
         return False
@@ -129,14 +116,14 @@ def falling(candles: List[Candle], indicator: str, length: int = 4, index: int =
     if length < 1 or len(candles) < 2:
         return False
 
-    newest_reading = reading_by_candle(candles[-1], indicator)
+    latest_reading = reading_by_candle(candles[-1], indicator)
 
     return any(
-        val > newest_reading
+        val > latest_reading
         for val in [
             reading_by_candle(candle, indicator) for candle in candles[index_ - length : index_]
         ]
-        if val is not None
+        if isinstance(val, (float, int))
     )
 
 
@@ -146,9 +133,6 @@ def mean_rising(candles: List[Candle], indicator: str, length: int = 4, index: i
 
     Calc:
         NewestCandle[indicator] > mean(Candles[newest] to Candles[length])"""
-    if not candles:
-        return False
-
     index_ = absindex(index, len(candles))
     if index_ is None:
         return False
@@ -176,9 +160,6 @@ def mean_falling(candles: List[Candle], indicator: str, length: int = 4, index: 
 
     Calc:
         NewestCandle[indicator] > mean(Candles[newest] to Candles[length])"""
-    if not candles:
-        return False
-
     index_ = absindex(index, len(candles))
     if index_ is None:
         return False
@@ -200,14 +181,13 @@ def mean_falling(candles: List[Candle], indicator: str, length: int = 4, index: 
     return round(mean, 2) > reading_by_candle(candles[-1], indicator)
 
 
-def highest(candles: List[Candle], indicator: str, length: int = 4, index: int = -1) -> float:
+def highest(
+    candles: List[Candle], indicator: str, length: int = 4, index: int = -1
+) -> float | bool:
     """Highest reading for a given number of bars back.
     Returns:
         Highest reading in the series.
     """
-    if not candles:
-        return False
-
     index_ = absindex(index, len(candles))
     if index_ is None:
         return False
@@ -224,17 +204,16 @@ def highest(candles: List[Candle], indicator: str, length: int = 4, index: int =
     )
 
 
-def lowest(candles: List[Candle], indicator: str, length: int = 4, index: int = -1) -> float:
+def lowest(
+    candles: List[Candle], indicator: str, length: int = 4, index: int = -1
+) -> float | bool:
     """Lowest reading for a given number of bars back.
     Returns:
         Lowest reading in the series.
     """
-    if not candles:
-        return False
-
     index_ = absindex(index, len(candles))
     if index_ is None:
-        return 0
+        return False
 
     if not reading_period(candles, length, indicator):
         length = reading_count(candles, indicator)
@@ -255,9 +234,6 @@ def highestbar(
     Returns:
         Offset to the lowest bar
     """
-    if not candles:
-        return None
-
     index_ = absindex(index, len(candles))
     if index_ is None:
         return None
@@ -270,9 +246,6 @@ def highestbar(
 
     for dist, index in enumerate(range(index_, index_ - length, -1)):
         current = reading_by_index(candles, indicator, index)
-
-        if isinstance(current, dict):
-            return None
 
         if high and high < current:
             high = current
@@ -290,9 +263,6 @@ def lowestbar(
     Returns:
         Offset to the lowest bar
     """
-    if not candles:
-        return None
-
     index_ = absindex(index, len(candles))
     if index_ is None:
         return None
@@ -305,6 +275,7 @@ def lowestbar(
 
     for dist, index in enumerate(range(index_, index_ - length, -1)):
         current = reading_by_index(candles, indicator, index)
+
         if low and low > current:
             low = current
             distance = dist
@@ -319,9 +290,6 @@ def cross(
 ) -> bool:
     """The `indicator_one` reading is defined as having crossed `indicator_two` reading.
     Either direction"""
-    if not candles:
-        return False
-
     index_ = absindex(index, len(candles))
     if index_ is None:
         return False
@@ -357,9 +325,6 @@ def crossover(
     """The `indicator_one` reading is defined as having crossed over `indicator_two` reading,
     If  `indicator_two` is higher then `indicator_one` and in the last `length` it was under.
     Length is how far back to check, if length is greater then amount of candles, check all"""
-    if not candles:
-        return False
-
     index_ = absindex(index, len(candles))
     if index_ is None:
         return False
@@ -387,9 +352,6 @@ def crossunder(
     """The `indicator_one` reading is defined as having crossed under `indicator_two` reading,
     If `indicator_two` is lower then `indicator_one` and in the last `length` it was over.
     Length is how far back to check, if length is greater then amount of candles, check all"""
-    if not candles:
-        return False
-
     index_ = absindex(index, len(candles))
     if index_ is None:
         return False
