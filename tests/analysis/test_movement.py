@@ -116,236 +116,228 @@ def test_negative_list_empty():
     assert not movement.negative([])
 
 
-def test_above(indicator_candles):
-    assert movement.above(indicator_candles, "high", "low")
+class TestAbove:
+    def test_above(self, indicator_candles):
+        assert movement.above(indicator_candles, "high", "low")
 
+    def test_above_missing(
+        self,
+    ):
+        assert movement.above([], "high", "low") is False
 
-def test_above_missing():
-    assert movement.above([], "high", "low") is False
+    def test_above_wrong(self, indicator_candles):
+        assert movement.above(indicator_candles, "low", "high") is False
 
+    def test_above_indicator(self, indicator_candles):
+        assert movement.above(indicator_candles, "EMA_10", "close")
 
-def test_above_wrong(indicator_candles):
-    assert movement.above(indicator_candles, "low", "high") is False
+    def test_above_indicator_indexed(self, indicator_candles):
+        assert movement.above(indicator_candles, "EMA_10", "close", -2) is False
 
 
-def test_above_indicator(indicator_candles):
-    assert movement.above(indicator_candles, "EMA_10", "close")
+class TestBelow:
+    def test_below(self, indicator_candles):
+        assert movement.below(indicator_candles, "high", "low") is False
 
+    def test_below_missing(
+        self,
+    ):
+        assert movement.below([], "high", "low") is False
 
-def test_above_indicator_indexed(indicator_candles):
-    assert movement.above(indicator_candles, "EMA_10", "close", -2) is False
+    def test_below_wrong(self, indicator_candles):
+        assert movement.below(indicator_candles, "low", "high")
 
+    def test_below_indicator(self, indicator_candles):
+        assert movement.below(indicator_candles, "EMA_10", "close") is False
 
-def test_below(indicator_candles):
-    assert movement.below(indicator_candles, "high", "low") is False
+    def test_below_indicator_indexed(self, indicator_candles):
+        assert movement.below(indicator_candles, "EMA_10", "close", -2)
 
 
-def test_below_missing():
-    assert movement.below([], "high", "low") is False
+class TestValueRange:
+    def test_value_range(self, rising_candles):
+        assert movement.value_range(rising_candles, "close") == 40
 
+    def test_value_range_missing(
+        self,
+    ):
+        assert movement.value_range([], "close") is None
 
-def test_below_wrong(indicator_candles):
-    assert movement.below(indicator_candles, "low", "high")
+    def test_value_range_partial(self, indicator_candles_partial):
+        assert movement.value_range(indicator_candles_partial, "EMA_10") == 40
 
+    def test_value_range_prtial_missing(self, indicator_candles_partial):
+        assert movement.value_range(indicator_candles_partial, "SMA_10") is None
 
-def test_below_indicator(indicator_candles):
-    assert movement.below(indicator_candles, "EMA_10", "close") is False
 
+class TestRising:
+    def test_basic_rising(self, rising_candles):
+        assert movement.rising(rising_candles, "close")
 
-def test_below_indicator_indexed(indicator_candles):
-    assert movement.below(indicator_candles, "EMA_10", "close", -2)
+    def test_basic_rising_false(self, fallling_candles):
+        assert movement.rising(fallling_candles, "close") is False
 
+    def test_basic_rising_missing(
+        self,
+    ):
+        assert movement.rising([], "close") is False
 
-def test_value_range(rising_candles):
-    assert movement.value_range(rising_candles, "close") == 40
+    def test_basic_rising_partial(self, indicator_candles_partial):
+        assert movement.rising(indicator_candles_partial, "EMA_10") is True
 
+    def test_basic_rising_partial_missing(self, indicator_candles_partial):
+        assert movement.rising(indicator_candles_partial, "SMA_10") is False
 
-def test_value_range_missing():
-    assert movement.value_range([], "close") is None
+    def test_basic_rising_length(self, rising_candles):
+        assert movement.rising(rising_candles, "close", 100) is True
 
 
-def test_value_range_partial(indicator_candles_partial):
-    assert movement.value_range(indicator_candles_partial, "EMA_10") == 40
+class TestFalling:
+    def test_basic_falling(self, fallling_candles):
+        assert movement.falling(fallling_candles, "close")
 
+    def test_basic_falling_false(self, rising_candles):
+        assert not movement.falling(rising_candles, "close")
 
-def test_value_range_prtial_missing(indicator_candles_partial):
-    assert movement.value_range(indicator_candles_partial, "SMA_10") is None
+    def test_basic_falling_missing(self):
+        assert movement.falling([], "close") is False
 
+    def test_basic_falling_partial(self, indicator_candles_partial):
+        assert movement.falling(indicator_candles_partial, "EMA_10") is False
 
-def test_basic_rising(rising_candles):
-    assert movement.rising(rising_candles, "close")
+    def test_basic_falling_partial_missing(self, indicator_candles_partial):
+        assert movement.falling(indicator_candles_partial, "SMA_10") is False
 
+    def test_basic_falling_length(self, fallling_candles):
+        assert movement.falling(fallling_candles, "close", 100) is True
 
-def test_basic_rising_false(fallling_candles):
-    assert movement.rising(fallling_candles, "close") is False
 
+class TestMeanRising:
+    def test_mean_rising(self, mixed_candles):
+        assert movement.mean_rising(mixed_candles, "close") is True
 
-def test_basic_rising_missing():
-    assert movement.rising([], "close") is False
+    def test_mean_rising_false(self, mixed_candles_two):
+        assert movement.mean_rising(mixed_candles_two, "close") is False
 
+    def test_mean_rising_empty(self):
+        assert movement.mean_rising([], "close") is False
 
-def test_basic_rising_partial(indicator_candles_partial):
-    assert movement.rising(indicator_candles_partial, "EMA_10") is True
+    def test_mean_rising_partial(self, indicator_candles_partial):
+        assert movement.mean_rising(indicator_candles_partial, "EMA_10") is True
 
+    def test_mean_rising_partial_missing(self, indicator_candles_partial):
+        assert movement.mean_rising(indicator_candles_partial, "SMA_10") is False
 
-def test_basic_rising_partial_missing(indicator_candles_partial):
-    assert movement.rising(indicator_candles_partial, "SMA_10") is False
+    def test_mean_rising_length(self, mixed_candles):
+        assert movement.mean_rising(mixed_candles, "close", 100) is True
 
 
-def test_basic_rising_length(rising_candles):
-    assert movement.rising(rising_candles, "close", 100) is True
+class TestMeanFalling:
+    def test_mean_falling(self, mixed_candles_two):
+        assert movement.mean_falling(mixed_candles_two, "close")
 
+    def test_mean_falling_false(self, mixed_candles):
+        assert not movement.mean_falling(mixed_candles, "close")
 
-def test_basic_falling(fallling_candles):
-    assert movement.falling(fallling_candles, "close")
+    def test_mean_falling_empty(self):
+        assert movement.mean_falling([], "close") is False
 
+    def test_mean_falling_partial(self, indicator_candles_partial):
+        assert movement.mean_falling(indicator_candles_partial, "EMA_10") is False
 
-def test_basic_falling_false(rising_candles):
-    assert not movement.falling(rising_candles, "close")
+    def test_mean_falling_partial_missing(self, indicator_candles_partial):
+        assert movement.mean_falling(indicator_candles_partial, "SMA_10") is False
 
+    def test_mean_falling_length(self, mixed_candles):
+        assert movement.mean_falling(mixed_candles, "close", 100) is False
 
-def test_basic_falling_missing():
-    assert movement.falling([], "close") is False
 
+class TestHighest:
+    def test_highest(self, indicator_candles):
+        assert movement.highest(indicator_candles, "close") == 130
 
-def test_basic_falling_partial(indicator_candles_partial):
-    assert movement.falling(indicator_candles_partial, "EMA_10") is False
+    def test_highest_two(self, indicator_candles):
+        assert movement.highest(indicator_candles, "low") == 120
 
+    def test_highest_missing(
+        self,
+    ):
+        assert movement.highest([], "close") is False
 
-def test_basic_falling_partial_missing(indicator_candles_partial):
-    assert movement.falling(indicator_candles_partial, "SMA_10") is False
+    def test_highest_partial(self, indicator_candles_partial):
+        assert movement.highest(indicator_candles_partial, "EMA_10") == 140
 
+    def test_highest_partial_missing(self, indicator_candles_partial):
+        assert movement.highest(indicator_candles_partial, "SMA_10") == 100
 
-def test_basic_falling_length(fallling_candles):
-    assert movement.falling(fallling_candles, "close", 100) is True
+    def test_highest_length(self, indicator_candles):
+        assert movement.highest(indicator_candles, "open", 200) == 150
 
 
-def test_mean_rising(mixed_candles):
-    assert movement.mean_rising(mixed_candles, "close") is True
+class TestLowest:
+    def test_lowest(self, indicator_candles):
+        assert movement.lowest(indicator_candles, "close") == 115
 
+    def test_lowest_two(self, indicator_candles):
+        assert movement.lowest(indicator_candles, "high") == 110
 
-def test_mean_rising_false(mixed_candles_two):
-    assert movement.mean_rising(mixed_candles_two, "close") is False
+    def test_lowest_missing(
+        self,
+    ):
+        assert movement.lowest([], "low") is False
 
+    def test_lowest_partial(self, indicator_candles_partial):
+        assert movement.lowest(indicator_candles_partial, "EMA_10") == 100
 
-def test_mean_rising_empty():
-    assert movement.mean_rising([], "close") is False
+    def test_lowest_partial_missing(self, indicator_candles_partial):
+        assert movement.lowest(indicator_candles_partial, "SMA_10") == 100
 
+    def test_lowest_length(self, indicator_candles):
+        assert movement.lowest(indicator_candles, "high", 100) == 100
 
-def test_mean_rising_partial(indicator_candles_partial):
-    assert movement.mean_rising(indicator_candles_partial, "EMA_10") is True
 
+class TestHighestBar:
+    def test_highestbar(self, indicator_candles):
+        assert movement.highestbar(indicator_candles, "close") == 2
 
-def test_mean_rising_partial_missing(indicator_candles_partial):
-    assert movement.mean_rising(indicator_candles_partial, "SMA_10") is False
+    def test_highestbar_two(self, indicator_candles):
+        assert movement.highestbar(indicator_candles, "low") == 2
 
+    def test_highestbar_missing(
+        self,
+    ):
+        assert movement.highestbar([], "close") is None
 
-def test_mean_rising_length(mixed_candles):
-    assert movement.mean_rising(mixed_candles, "close", 100) is True
+    def test_highestbar_partial(self, indicator_candles_partial):
+        assert movement.highestbar(indicator_candles_partial, "EMA_10") == 0
 
+    def test_highestbar_partial_missing(self, indicator_candles_partial):
+        assert movement.highestbar(indicator_candles_partial, "SMA_10") == 0
 
-def test_mean_falling(mixed_candles_two):
-    assert movement.mean_falling(mixed_candles_two, "close")
+    def test_highestbar_length(self, indicator_candles):
+        assert movement.highestbar(indicator_candles, "low", 100) == 2
 
 
-def test_mean_falling_false(mixed_candles):
-    assert not movement.mean_falling(mixed_candles, "close")
+class TestLowestBar:
+    def test_lowestbars(self, indicator_candles):
+        assert movement.lowestbar(indicator_candles, "open") == 2
 
+    def test_lowestbars_two(self, indicator_candles):
+        assert movement.lowestbar(indicator_candles, "close") == 1
 
-def test_highest(indicator_candles):
-    assert movement.highest(indicator_candles, "close") == 130
+    def test_lowestbars_missing(
+        self,
+    ):
+        assert movement.lowestbar([], "open") is None
 
+    def test_lowestbars_partial(self, indicator_candles_partial):
+        assert movement.lowestbar(indicator_candles_partial, "EMA_10") == 2
 
-def test_highest_two(indicator_candles):
-    assert movement.highest(indicator_candles, "low") == 120
+    def test_lowestbars_partial_missing(self, indicator_candles_partial):
+        assert movement.lowestbar(indicator_candles_partial, "SMA_10") == 0
 
-
-def test_highest_missing():
-    assert movement.highest([], "close") is False
-
-
-def test_highest_partial(indicator_candles_partial):
-    assert movement.highest(indicator_candles_partial, "EMA_10") == 140
-
-
-def test_highest_partial_missing(indicator_candles_partial):
-    assert movement.highest(indicator_candles_partial, "SMA_10") == 100
-
-
-def test_highest_length(indicator_candles):
-    assert movement.highest(indicator_candles, "open", 200) == 150
-
-
-def test_lowest(indicator_candles):
-    assert movement.lowest(indicator_candles, "close") == 115
-
-
-def test_lowest_two(indicator_candles):
-    assert movement.lowest(indicator_candles, "high") == 110
-
-
-def test_lowest_missing():
-    assert movement.lowest([], "low") is False
-
-
-def test_lowest_partial(indicator_candles_partial):
-    assert movement.lowest(indicator_candles_partial, "EMA_10") == 100
-
-
-def test_lowest_partial_missing(indicator_candles_partial):
-    assert movement.lowest(indicator_candles_partial, "SMA_10") == 100
-
-
-def test_lowest_length(indicator_candles):
-    assert movement.lowest(indicator_candles, "high", 100) == 100
-
-
-def test_highestbar(indicator_candles):
-    assert movement.highestbar(indicator_candles, "close") == 2
-
-
-def test_highestbar_two(indicator_candles):
-    assert movement.highestbar(indicator_candles, "low") == 2
-
-
-def test_highestbar_missing():
-    assert movement.highestbar([], "close") is None
-
-
-def test_highestbar_partial(indicator_candles_partial):
-    assert movement.highestbar(indicator_candles_partial, "EMA_10") == 0
-
-
-def test_highestbar_partial_missing(indicator_candles_partial):
-    assert movement.highestbar(indicator_candles_partial, "SMA_10") == 0
-
-
-def test_highestbar_length(indicator_candles):
-    assert movement.highestbar(indicator_candles, "low", 100) == 2
-
-
-def test_lowestbars(indicator_candles):
-    assert movement.lowestbar(indicator_candles, "open") == 2
-
-
-def test_lowestbars_two(indicator_candles):
-    assert movement.lowestbar(indicator_candles, "close") == 1
-
-
-def test_lowestbars_missing():
-    assert movement.lowestbar([], "open") is None
-
-
-def test_lowestbars_partial(indicator_candles_partial):
-    assert movement.lowestbar(indicator_candles_partial, "EMA_10") == 2
-
-
-def test_lowestbars_partial_missing(indicator_candles_partial):
-    assert movement.lowestbar(indicator_candles_partial, "SMA_10") == 0
-
-
-def test_lowestbars_length(indicator_candles):
-    assert movement.lowestbar(indicator_candles, "open", length=100) == 2
+    def test_lowestbars_length(self, indicator_candles):
+        assert movement.lowestbar(indicator_candles, "open", length=100) == 2
 
 
 class TestCrossMethods:
