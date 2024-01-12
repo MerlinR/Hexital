@@ -56,12 +56,17 @@ def below(candles: List[Candle], indicator: str, indicator_two: str, index: int 
     return False
 
 
-def value_range(candles: List[Candle], indicator: str, length: int = 4) -> float | None:
+def value_range(
+    candles: List[Candle], indicator: str, length: int = 4, index: int = -1
+) -> float | None:
     """Returns the difference between the min and max values in a indicator series.
     Length `includes` latest, if lenth is too long for amount of candles,
     will check all of them"""
-    end_index = absindex(-1, len(candles))
-    if end_index is None:
+    if not candles:
+        return None
+
+    index_ = absindex(index, len(candles))
+    if index_ is None:
         return None
 
     if not reading_period(candles, length, indicator):
@@ -71,8 +76,7 @@ def value_range(candles: List[Candle], indicator: str, length: int = 4) -> float
         return None
 
     readings = [
-        reading_by_candle(candle, indicator)
-        for candle in candles[end_index - length : end_index + 1]
+        reading_by_candle(candle, indicator) for candle in candles[index_ - length : index_ + 1]
     ]
 
     readings = [reading for reading in readings if isinstance(reading, (float, int))]
@@ -80,12 +84,15 @@ def value_range(candles: List[Candle], indicator: str, length: int = 4) -> float
     return abs(min(readings) - max(readings))
 
 
-def rising(candles: List[Candle], indicator: str, length: int = 4) -> bool:
+def rising(candles: List[Candle], indicator: str, length: int = 4, index: int = -1) -> bool:
     """True if current `indicator` is greater than any previous `indicator`
     for `length` bars back, False otherwise.
     Length `excludes` latest"""
-    end_index = absindex(-1, len(candles))
-    if end_index is None:
+    if not candles:
+        return False
+
+    index_ = absindex(index, len(candles))
+    if index_ is None:
         return False
 
     if not reading_period(candles, length, indicator):
@@ -99,19 +106,21 @@ def rising(candles: List[Candle], indicator: str, length: int = 4) -> bool:
     return all(
         val < newest_reading
         for val in [
-            reading_by_candle(candle, indicator)
-            for candle in candles[end_index - length : end_index]
+            reading_by_candle(candle, indicator) for candle in candles[index_ - length : index_]
         ]
         if val is not None
     )
 
 
-def falling(candles: List[Candle], indicator: str, length: int = 4) -> bool:
+def falling(candles: List[Candle], indicator: str, length: int = 4, index: int = -1) -> bool:
     """True if current `indicator` reading is less than any previous `indicator`
     reading for `length` bars back, False otherwise.
     Length `excludes` latest"""
-    end_index = absindex(-1, len(candles))
-    if end_index is None:
+    if not candles:
+        return False
+
+    index_ = absindex(index, len(candles))
+    if index_ is None:
         return False
 
     if not reading_period(candles, length, indicator):
@@ -125,21 +134,23 @@ def falling(candles: List[Candle], indicator: str, length: int = 4) -> bool:
     return any(
         val > newest_reading
         for val in [
-            reading_by_candle(candle, indicator)
-            for candle in candles[end_index - length : end_index]
+            reading_by_candle(candle, indicator) for candle in candles[index_ - length : index_]
         ]
         if val is not None
     )
 
 
-def mean_rising(candles: List[Candle], indicator: str, length: int = 4) -> bool:
+def mean_rising(candles: List[Candle], indicator: str, length: int = 4, index: int = -1) -> bool:
     """True if current `indicator` reading is greater than the avg of the previous
     `length` `indicator` reading bars back, False otherwise. Length `excludes` latest
 
     Calc:
         NewestCandle[indicator] > mean(Candles[newest] to Candles[length])"""
-    end_index = absindex(-1, len(candles))
-    if end_index is None:
+    if not candles:
+        return False
+
+    index_ = absindex(index, len(candles))
+    if index_ is None:
         return False
 
     if not reading_period(candles, length, indicator):
@@ -151,7 +162,7 @@ def mean_rising(candles: List[Candle], indicator: str, length: int = 4) -> bool:
     mean = (
         sum(
             reading_by_candle(candle, indicator)
-            for candle in candles[end_index - length : end_index]
+            for candle in candles[index_ - length : index_]
             if reading_by_candle(candle, indicator) is not None
         )
         / length
@@ -159,14 +170,17 @@ def mean_rising(candles: List[Candle], indicator: str, length: int = 4) -> bool:
     return round(mean, 2) < reading_by_candle(candles[-1], indicator)
 
 
-def mean_falling(candles: List[Candle], indicator: str, length: int = 4) -> bool:
+def mean_falling(candles: List[Candle], indicator: str, length: int = 4, index: int = -1) -> bool:
     """True if current `indicator` is less than the avg of the previous
     `length` `indicator` bars back, False otherwise. Length `excludes` latest
 
     Calc:
         NewestCandle[indicator] > mean(Candles[newest] to Candles[length])"""
-    end_index = absindex(-1, len(candles))
-    if end_index is None:
+    if not candles:
+        return False
+
+    index_ = absindex(index, len(candles))
+    if index_ is None:
         return False
 
     if not reading_period(candles, length, indicator):
@@ -178,7 +192,7 @@ def mean_falling(candles: List[Candle], indicator: str, length: int = 4) -> bool
     mean = (
         sum(
             reading_by_candle(candle, indicator)
-            for candle in candles[end_index - length : end_index]
+            for candle in candles[index_ - length : index_]
             if reading_by_candle(candle, indicator) is not None
         )
         / length
@@ -186,41 +200,66 @@ def mean_falling(candles: List[Candle], indicator: str, length: int = 4) -> bool
     return round(mean, 2) > reading_by_candle(candles[-1], indicator)
 
 
-def highest(candles: List[Candle], indicator: str, length: int = 4) -> float:
+def highest(candles: List[Candle], indicator: str, length: int = 4, index: int = -1) -> float:
     """Highest reading for a given number of bars back.
     Returns:
         Highest reading in the series.
     """
-    if not reading_period(candles, length, indicator):
+    if not candles:
+        return False
+
+    index_ = absindex(index, len(candles))
+    if index_ is None:
+        return False
+
+    if not reading_period(candles, length, indicator, index_):
         length = reading_count(candles, indicator)
 
     return max(
-        (reading_by_candle(candle, indicator) for candle in candles[-length:]),
+        (
+            reading_by_candle(candle, indicator)
+            for candle in candles[index_ - (length - 1) : index_ + 1]
+        ),
         default=False,
     )
 
 
-def lowest(candles: List[Candle], indicator: str, length: int = 4) -> float:
+def lowest(candles: List[Candle], indicator: str, length: int = 4, index: int = -1) -> float:
     """Lowest reading for a given number of bars back.
     Returns:
         Lowest reading in the series.
     """
+    if not candles:
+        return False
+
+    index_ = absindex(index, len(candles))
+    if index_ is None:
+        return 0
+
     if not reading_period(candles, length, indicator):
         length = reading_count(candles, indicator)
 
     return min(
-        (reading_by_candle(candle, indicator) for candle in candles[-length:]),
+        (
+            reading_by_candle(candle, indicator)
+            for candle in candles[index_ - (length - 1) : index_ + 1]
+        ),
         default=False,
     )
 
 
-def highestbar(candles: List[Candle], indicator: str, length: int = 4) -> int | None:
+def highestbar(
+    candles: List[Candle], indicator: str, length: int = 4, index: int = -1
+) -> int | None:
     """Highest reading offset for a given number of bars back.
     Returns:
         Offset to the lowest bar
     """
-    start_index = absindex(-1, len(candles))
-    if start_index is None:
+    if not candles:
+        return None
+
+    index_ = absindex(index, len(candles))
+    if index_ is None:
         return None
 
     if not reading_period(candles, length, indicator):
@@ -229,7 +268,7 @@ def highestbar(candles: List[Candle], indicator: str, length: int = 4) -> int | 
     high = None
     distance = 0
 
-    for dist, index in enumerate(range(start_index, start_index - length, -1)):
+    for dist, index in enumerate(range(index_, index_ - length, -1)):
         current = reading_by_index(candles, indicator, index)
 
         if isinstance(current, dict):
@@ -244,13 +283,18 @@ def highestbar(candles: List[Candle], indicator: str, length: int = 4) -> int | 
     return distance
 
 
-def lowestbar(candles: List[Candle], indicator: str, length: int = 4) -> int | None:
+def lowestbar(
+    candles: List[Candle], indicator: str, length: int = 4, index: int = -1
+) -> int | None:
     """Lowest reading offset for a given number of bars back.
     Returns:
         Offset to the lowest bar
     """
-    start_index = absindex(-1, len(candles))
-    if start_index is None:
+    if not candles:
+        return None
+
+    index_ = absindex(index, len(candles))
+    if index_ is None:
         return None
 
     if not reading_period(candles, length, indicator):
@@ -259,7 +303,7 @@ def lowestbar(candles: List[Candle], indicator: str, length: int = 4) -> int | N
     low = None
     distance = 0
 
-    for dist, index in enumerate(range(start_index, start_index - length, -1)):
+    for dist, index in enumerate(range(index_, index_ - length, -1)):
         current = reading_by_index(candles, indicator, index)
         if low and low > current:
             low = current
@@ -270,11 +314,16 @@ def lowestbar(candles: List[Candle], indicator: str, length: int = 4) -> int | N
     return distance
 
 
-def cross(candles: List[Candle], indicator_one: str, indicator_two: str, length: int = 1) -> bool:
+def cross(
+    candles: List[Candle], indicator_one: str, indicator_two: str, length: int = 1, index: int = -1
+) -> bool:
     """The `indicator_one` reading is defined as having crossed `indicator_two` reading.
     Either direction"""
-    start_index = absindex(-1, len(candles))
-    if start_index is None:
+    if not candles:
+        return False
+
+    index_ = absindex(index, len(candles))
+    if index_ is None:
         return False
 
     if not reading_period(candles, length, indicator_one) or not reading_period(
@@ -285,7 +334,7 @@ def cross(candles: List[Candle], indicator_one: str, indicator_two: str, length:
         )
         length -= 1
 
-    for index in range(start_index, start_index - length, -1):
+    for index in range(index_, index_ - length, -1):
         if (
             reading_by_index(candles, indicator_one, index)
             > reading_by_index(candles, indicator_two, index)
@@ -303,13 +352,16 @@ def cross(candles: List[Candle], indicator_one: str, indicator_two: str, length:
 
 
 def crossover(
-    candles: List[Candle], indicator_one: str, indicator_two: str, length: int = 1
+    candles: List[Candle], indicator_one: str, indicator_two: str, length: int = 1, index: int = -1
 ) -> bool:
     """The `indicator_one` reading is defined as having crossed over `indicator_two` reading,
     If  `indicator_two` is higher then `indicator_one` and in the last `length` it was under.
     Length is how far back to check, if length is greater then amount of candles, check all"""
-    start_index = absindex(-1, len(candles))
-    if start_index is None:
+    if not candles:
+        return False
+
+    index_ = absindex(index, len(candles))
+    if index_ is None:
         return False
 
     if not reading_period(candles, length, indicator_one) or not reading_period(
@@ -320,7 +372,7 @@ def crossover(
         )
         length -= 1
 
-    for index in range(start_index, start_index - length, -1):
+    for index in range(index_, index_ - length, -1):
         if above(candles, indicator_one, indicator_two, index) and below(
             candles, indicator_one, indicator_two, index - 1
         ):
@@ -330,13 +382,16 @@ def crossover(
 
 
 def crossunder(
-    candles: List[Candle], indicator_one: str, indicator_two: str, length: int = 1
+    candles: List[Candle], indicator_one: str, indicator_two: str, length: int = 1, index: int = -1
 ) -> bool:
     """The `indicator_one` reading is defined as having crossed under `indicator_two` reading,
     If `indicator_two` is lower then `indicator_one` and in the last `length` it was over.
     Length is how far back to check, if length is greater then amount of candles, check all"""
-    start_index = absindex(-1, len(candles))
-    if start_index is None:
+    if not candles:
+        return False
+
+    index_ = absindex(index, len(candles))
+    if index_ is None:
         return False
 
     if not reading_period(candles, length, indicator_one) or not reading_period(
@@ -347,7 +402,7 @@ def crossunder(
         )
         length -= 1
 
-    for index in range(start_index, start_index - length, -1):
+    for index in range(index_, index_ - length, -1):
         if below(candles, indicator_one, indicator_two, index) and above(
             candles, indicator_one, indicator_two, index - 1
         ):
