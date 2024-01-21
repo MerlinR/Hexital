@@ -217,14 +217,14 @@ class Hexital:
         self.calculate()
         self._candles_trim_lifespan()
 
-    def purge(self, name: Optional[str] = None) -> bool:
+    def purge(self, name: Optional[str] = None):
         """Takes Indicator name and removes all readings for said indicator.
         Indicator name must be exact"""
         for indicator_name, indicator in self._indicators.items():
-            if name is None or indicator_name == name:
+            if name is None:
                 indicator.purge()
-                return True
-        return False
+            elif name is not None and name in indicator_name:
+                indicator.purge()
 
     def calculate(self, name: Optional[str] = None):
         """Calculates all the missing indicator readings."""

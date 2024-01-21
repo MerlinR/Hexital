@@ -275,7 +275,10 @@ class Indicator(ABC):
         """Remove this indicator value from all Candles"""
         for candle in self.candles:
             candle.indicators.pop(self.name, None)
-            candle.sub_indicators.pop(self.name, None)
+            for indicator in self._sub_indicators:
+                candle.sub_indicators.pop(indicator.name, None)
+            for indicator in self._managed_indicators.values():
+                candle.sub_indicators.pop(indicator.name, None)
 
     def recalculate(self):
         """Re-calculate this indicator value for all Candles"""
