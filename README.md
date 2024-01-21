@@ -31,7 +31,7 @@ Example:
 ```python
 stratergy = Hexital("Test Stratergy", candles_1m, [RSI(), EMA(timeframe="T10")])
 # OR
-stratergy = Hexital("Test Stratergy", candles_tick, [RSI(timeframe="T1"), EMA(timeframe="T10")])
+stratergy = Hexital("Test Stratergy", candles_tick, [RSI(timeframe="T1"), EMA(timeframe=TimeFrame.MINUTE10)])
 ```
 
 ### Candlestick Movement

@@ -11,6 +11,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Updated collapse candle 'fill' to show essentially doji candle rather than copy prev
 - Added Patterns:
   - Hammer Candle
+- Added a TimeFrame Enum with common timeframes for easier usage
 - Renamed Pattern to Amorph and updated to only require either 'indicator' or 'analysis'
 - Updated Hexital/Amorph to accept patterns, movements and custom methods
 - Major Fix: Re-wrote collapse_candles_timeframe to correctly handle candles,gaps and appending
