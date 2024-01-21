@@ -235,7 +235,7 @@ def test_purge(minimal_candles: List[Candle]):
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_candle_timerange(minimal_candles):
-    test = FakeIndicator(candles=[], candles_timerange=timedelta(minutes=1))
+    test = FakeIndicator(candles=[], candles_lifespan=timedelta(minutes=1))
 
     test.append(minimal_candles)
 

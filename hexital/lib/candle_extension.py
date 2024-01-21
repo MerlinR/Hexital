@@ -217,3 +217,15 @@ def fill_missing_candles(candles: List[Candle], timeframe: timedelta) -> List[Ca
         if index >= len(candles):
             break
     return candles
+
+
+def trim_candles(candles: List[Candle], lifespan: Optional[timedelta] = None):
+    if lifespan is None or not candles:
+        return
+
+    latest = candles[-1].timestamp
+    if not latest:
+        return
+
+    while candles[0].timestamp and candles[0].timestamp < latest - lifespan:
+        candles.pop(0)

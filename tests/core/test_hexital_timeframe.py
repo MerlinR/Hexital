@@ -72,7 +72,7 @@ def test_hextial_multi_timeframes_timerange(candles, expected_ema, expected_sma_
         "Test Stratergy",
         [],
         [EMA(), SMA(timeframe="t5")],
-        candles_timerange=timedelta(hours=1),
+        candles_lifespan=timedelta(hours=1),
     )
     for candle in candles:
         strat.append(candle)

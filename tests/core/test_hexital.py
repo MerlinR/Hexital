@@ -274,7 +274,7 @@ def test_hextial_get_candles(candles):
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_hextial_timerange(minimal_candles):
-    strat = Hexital("Test Stratergy", [], candles_timerange=timedelta(minutes=1))
+    strat = Hexital("Test Stratergy", [], candles_lifespan=timedelta(minutes=1))
 
     strat.append(minimal_candles)
 

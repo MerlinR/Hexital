@@ -13,6 +13,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - Hammer Candle
 - Added a TimeFrame Enum with common timeframes for easier usage
 - Renamed Pattern to Amorph and updated to only require either 'indicator' or 'analysis'
+- Renamed candles_timerange to candles_lifespan, to be clearer of purpose and avoid confusion with candles_timeframe
 - Updated Hexital/Amorph to accept patterns, movements and custom methods
 - Major Fix: Re-wrote collapse_candles_timeframe to correctly handle candles,gaps and appending
 - Fixed Doji pattern

@@ -6,7 +6,7 @@ from typing import Callable, Dict, List, Optional
 from hexital.core.candle import Candle
 from hexital.core.indicator import Indicator
 from hexital.exceptions import InvalidIndicator, InvalidAnalysis
-from hexital.lib.candle_extension import collapse_candles_timeframe, reading_by_index
+from hexital.lib.candle_extension import collapse_candles_timeframe, reading_by_index, trim_candles
 
 DEFAULT = "default"
 
@@ -17,7 +17,7 @@ class Hexital:
     _indicators: Dict[str, Indicator]
     description: Optional[str] = None
     timeframe_fill: bool = False
-    candles_timerange: Optional[timedelta] = None
+    candles_lifespan: Optional[timedelta] = None
 
     def __init__(
         self,
@@ -26,16 +26,16 @@ class Hexital:
         indicators: Optional[List[dict | Indicator]] = None,
         description: Optional[str] = None,
         timeframe_fill: bool = False,
-        candles_timerange: Optional[timedelta] = None,
+        candles_lifespan: Optional[timedelta] = None,
     ):
         self.name = name
         self._candles = {DEFAULT: deepcopy(candles) if isinstance(candles, list) else []}
         self._indicators = self._validate_indicators(indicators)
         self.description = description
         self.timeframe_fill = timeframe_fill
-        self.candles_timerange = candles_timerange
+        self.candles_lifespan = candles_lifespan
         self._collapse_candles()
-        self._candles_timerange()
+        self._candles_trim_lifespan()
 
     def _validate_indicators(
         self, indicators: List[dict | Indicator] | List[dict] | List[Indicator] | None
@@ -109,20 +109,12 @@ class Hexital:
             if timeframe != DEFAULT:
                 candles.extend(collapse_candles_timeframe(candles, timeframe, self.timeframe_fill))
 
-    def _candles_timerange(self):
-        if self.candles_timerange is None:
+    def _candles_trim_lifespan(self):
+        if self.candles_lifespan is None:
             return
 
         for candles in self._candles.values():
-            if not candles:
-                return
-
-            latest = candles[-1].timestamp
-            if not latest:
-                return
-
-            while candles[0].timestamp and candles[0].timestamp < latest - self.candles_timerange:
-                candles.pop(0)
+            trim_candles(candles, self.candles_lifespan)
 
     def candles(self, timeframe: Optional[str] = None) -> List[Candle]:
         if timeframe is not None:
@@ -223,7 +215,7 @@ class Hexital:
 
         self._collapse_candles()
         self.calculate()
-        self._candles_timerange()
+        self._candles_trim_lifespan()
 
     def purge(self, name: Optional[str] = None) -> bool:
         """Takes Indicator name and removes all readings for said indicator.

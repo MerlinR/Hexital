@@ -18,7 +18,7 @@ class Indicator(ABC):
     round_value: int = 4
     timeframe: Optional[str | TimeFrame] = None
     timeframe_fill: bool = False
-    candles_timerange: Optional[timedelta] = None
+    candles_lifespan: Optional[timedelta] = None
     _output_name: str = ""
     _sub_indicators: List[Indicator] = field(default_factory=list)
     _managed_indicators: Dict[str, Indicator] = field(default_factory=dict)
@@ -30,14 +30,13 @@ class Indicator(ABC):
         self._validate_fields()
 
         if self.timeframe:
-            if isinstance(self.timeframe, TimeFrame):
-                self.timeframe = self.timeframe.value
-            self.timeframe = self.timeframe.upper()
+            if isinstance(self.timeframe, str):
+                self.timeframe = self.timeframe.upper()
             if self.candles:
                 self.candles = deepcopy(self.candles)
-                self._collapse_candles()
 
-        self._candles_timerange()
+        self._collapse_candles()
+        candle_extension.trim_candles(self.candles, self.candles_lifespan)
         self._internal_generate_name()
 
     def __str__(self):
@@ -95,10 +94,9 @@ class Indicator(ABC):
     @property
     def settings(self) -> dict:
         """Returns a dict format of how this indicator can be generated"""
-        settings = self.__dict__
         output = {"indicator": type(self).__name__}
 
-        for name, value in settings.items():
+        for name, value in self.__dict__.items():
             if name == "candles":
                 continue
             if name == "timeframe_fill" and self.timeframe is None:
@@ -144,7 +142,7 @@ class Indicator(ABC):
 
         self._collapse_candles()
         self.calculate()
-        self._candles_timerange()
+        candle_extension.trim_candles(self.candles, self.candles_lifespan)
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         pass
@@ -156,20 +154,6 @@ class Indicator(ABC):
                     self.candles, self.timeframe, self.timeframe_fill
                 )
             )
-
-    def _candles_timerange(self):
-        if self.candles_timerange is None or not self.candles:
-            return
-
-        latest = self.candles[-1].timestamp
-        if not latest:
-            return
-
-        while (
-            self.candles[0].timestamp
-            and self.candles[0].timestamp < latest - self.candles_timerange
-        ):
-            self.candles.pop(0)
 
     def calculate(self):
         """Calculate the TA values, will calculate for all the Candles,
