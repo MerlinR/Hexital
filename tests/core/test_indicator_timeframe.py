@@ -1,14 +1,15 @@
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Optional
 
 import pytest
 from hexital.core import Candle, Indicator
+from hexital import TimeFrame
 
 
 @dataclass(kw_only=True)
 class FakeIndicator(Indicator):
     candles: list = field(default_factory=list)
-    timeframe: str = None
+    timeframe: Optional[str | TimeFrame] = None
     indicator_name: str = "Fake"
     period: int = 10
     input_value: str = "close"
@@ -45,6 +46,26 @@ def test_collapse_candles_minutes_t10(
     test = FakeIndicator(candles=minimal_candles, timeframe="t10")
 
     assert test.candles == minimal_candles_t10
+
+
+@pytest.mark.usefixtures("minimal_candles", "minimal_candles_t10")
+def test_collapse_candles_minutes_t10_enum(
+    minimal_candles: List[Candle], minimal_candles_t10: List[Candle]
+):
+    minimal_candles = remove_indicators(minimal_candles)
+    test = FakeIndicator(candles=minimal_candles, timeframe=TimeFrame.MINUTE10)
+
+    assert test.candles == minimal_candles_t10
+
+
+@pytest.mark.usefixtures("minimal_candles", "minimal_candles_t10")
+def test_collapse_candles_minutes_t10_enum_name(
+    minimal_candles: List[Candle], minimal_candles_t10: List[Candle]
+):
+    minimal_candles = remove_indicators(minimal_candles)
+    test = FakeIndicator(candles=minimal_candles, timeframe=TimeFrame.MINUTE10)
+
+    assert test.name == "Fake_10_T10"
 
 
 @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t5")

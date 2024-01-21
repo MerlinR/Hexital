@@ -7,7 +7,7 @@ from datetime import timedelta
 from typing import Dict, List, Optional
 
 from hexital.core.candle import Candle
-from hexital.lib import candle_extension, utils
+from hexital.lib import candle_extension, utils, TimeFrame
 
 
 @dataclass(kw_only=True)
@@ -16,7 +16,7 @@ class Indicator(ABC):
     fullname_override: Optional[str] = None
     name_suffix: Optional[str] = None
     round_value: int = 4
-    timeframe: Optional[str] = None
+    timeframe: Optional[str | TimeFrame] = None
     timeframe_fill: bool = False
     candles_timerange: Optional[timedelta] = None
     _output_name: str = ""
@@ -28,11 +28,15 @@ class Indicator(ABC):
 
     def __post_init__(self):
         self._validate_fields()
-        if self.timeframe is not None:
+
+        if self.timeframe:
+            if isinstance(self.timeframe, TimeFrame):
+                self.timeframe = self.timeframe.value
             self.timeframe = self.timeframe.upper()
             if self.candles:
                 self.candles = deepcopy(self.candles)
                 self._collapse_candles()
+
         self._candles_timerange()
         self._internal_generate_name()
 
@@ -44,16 +48,17 @@ class Indicator(ABC):
 
     def _internal_generate_name(self):
         if self.fullname_override:
-            self._output_name = "{}{}".format(
-                self.fullname_override,
-                f"_{self.name_suffix}" if self.name_suffix else "",
-            )
+            self._output_name = self.fullname_override
         else:
-            self._output_name = "{}{}{}".format(
-                self._generate_name(),
-                f"_{self.timeframe}" if self.timeframe is not None else "",
-                f"_{self.name_suffix}" if self.name_suffix else "",
-            )
+            self._output_name = self._generate_name()
+            if self.timeframe:
+                if isinstance(self.timeframe, str):
+                    self._output_name += f"_{self.timeframe}"
+                else:
+                    self._output_name += f"_{self.timeframe.value}"
+
+        if self.name_suffix:
+            self._output_name += f"_{self.name_suffix}"
 
     def _initialise(self):
         pass
@@ -132,7 +137,7 @@ class Indicator(ABC):
         else:
             raise TypeError
 
-        if self.timeframe is not None:
+        if self.timeframe:
             self.candles.extend(deepcopy(candles_))
         else:
             self.candles.extend(candles_)
@@ -145,7 +150,7 @@ class Indicator(ABC):
         pass
 
     def _collapse_candles(self):
-        if self.timeframe is not None:
+        if self.timeframe:
             self.candles.extend(
                 candle_extension.collapse_candles_timeframe(
                     self.candles, self.timeframe, self.timeframe_fill

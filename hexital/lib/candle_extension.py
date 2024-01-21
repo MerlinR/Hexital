@@ -8,6 +8,7 @@ from hexital.lib.timeframe_utils import (
     timeframe_to_timedelta,
     clean_timestamp,
     on_timeframe,
+    TimeFrame,
 )
 from hexital.lib.utils import absindex, valid_index
 
@@ -132,7 +133,7 @@ def candles_sum(
 
 
 def collapse_candles_timeframe(
-    candles: List[Candle], timeframe: str, fill_missing: bool = False
+    candles: List[Candle], timeframe: str | TimeFrame, fill_missing: bool = False
 ) -> List[Candle]:
     """Collapses the given list of candles into specific timeframe candles.
     This can re-ran with same list to collapse latest candles.
