@@ -6,7 +6,12 @@ from typing import Callable, Dict, List, Optional
 from hexital.core.candle import Candle
 from hexital.core.indicator import Indicator
 from hexital.exceptions import InvalidIndicator, InvalidAnalysis
-from hexital.lib.candle_extension import collapse_candles_timeframe, reading_by_index, trim_candles
+from hexital.lib.candle_extension import (
+    collapse_candles_timeframe,
+    reading_by_index,
+    trim_candles,
+    multi_convert_candles,
+)
 
 DEFAULT = "default"
 
@@ -38,12 +43,12 @@ class Hexital:
         self._candles_trim_lifespan()
 
     def _validate_indicators(
-        self, indicators: List[dict | Indicator] | List[dict] | List[Indicator] | None
+        self, indicators: List[dict | Indicator] | None
     ) -> Dict[str, Indicator]:
         valid_indicators = {}
 
         if not indicators:
-            return valid_indicators
+            return {}
 
         indicator_module = importlib.import_module("hexital.indicators")
 
@@ -125,6 +130,10 @@ class Hexital:
         return self._candles
 
     @property
+    def timeframes(self) -> List[str]:
+        return list(self._candles.keys())
+
+    @property
     def indicators(self) -> Dict[str, Indicator]:
         """Simply get's a list of all the Indicators within Hexital strategy"""
         return self._indicators
@@ -150,13 +159,16 @@ class Hexital:
         """
         name = name if name else self.name
         reading = reading_by_index(self._candles[DEFAULT], name, index=index)
-        if reading is None:
-            for candles in self._candles.values():
-                reading = reading_by_index(candles, name, index=index)
-                if reading is not None:
-                    break
 
-        return reading
+        if reading is not None:
+            return reading
+
+        for candles in self._candles.values():
+            reading = reading_by_index(candles, name, index=index)
+            if reading is not None:
+                return reading
+
+        return None
 
     def prev_reading(self, name: Optional[str] = None) -> float | dict | None:
         return self.reading(name, index=-2)
@@ -169,15 +181,14 @@ class Hexital:
             return self._indicators[name].as_list
         return []
 
-    def add_indicator(self, indicator: Indicator | List[Indicator] | Dict[str, str | Callable]):
+    def add_indicator(self, indicator: Indicator | List[Indicator] | Dict[str, str]):
         """Add's a new indicator to `Hexital` strategy.
         This accept either `Indicator` datatypes or dict string versions to be packed.
         `add_indicator(SMA(period=10))` or `add_indicator({"indicator": "SMA", "period": 10})`
         Does not automatically calculates readings."""
-        if not isinstance(indicator, list):
-            indicator = [indicator]
+        indicators = indicator if isinstance(indicator, list) else [indicator]
 
-        for valid_indicator in self._validate_indicators(indicator).values():
+        for valid_indicator in self._validate_indicators(indicators).values():
             self._indicators[valid_indicator.name] = valid_indicator
         self._collapse_candles()
 
@@ -191,24 +202,7 @@ class Hexital:
         self._indicators.pop(name, None)
 
     def append(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
-        candles_ = []
-        if isinstance(candles, Candle):
-            candles_.append(candles)
-        elif isinstance(candles, dict):
-            candles_.append(Candle.from_dict(candles))
-        elif isinstance(candles, list):
-            if isinstance(candles[0], Candle):
-                candles_.extend(candles)
-            elif isinstance(candles[0], dict):
-                candles_.extend(Candle.from_dicts(candles))
-            elif isinstance(candles[0], (float, int)):
-                candles_.append(Candle.from_list(candles))
-            elif isinstance(candles[0], list):
-                candles_.extend(Candle.from_lists(candles))
-            else:
-                raise TypeError
-        else:
-            raise TypeError
+        candles_ = multi_convert_candles(candles)
 
         for existing_candles in self._candles.values():
             existing_candles.extend(deepcopy(candles_))
@@ -221,9 +215,7 @@ class Hexital:
         """Takes Indicator name and removes all readings for said indicator.
         Indicator name must be exact"""
         for indicator_name, indicator in self._indicators.items():
-            if name is None:
-                indicator.purge()
-            elif name is not None and name in indicator_name:
+            if name is None or (name and name in indicator_name):
                 indicator.purge()
 
     def calculate(self, name: Optional[str] = None):

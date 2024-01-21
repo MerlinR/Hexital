@@ -229,3 +229,29 @@ def trim_candles(candles: List[Candle], lifespan: Optional[timedelta] = None):
 
     while candles[0].timestamp and candles[0].timestamp < latest - lifespan:
         candles.pop(0)
+
+
+def multi_convert_candles(
+    candles: Candle | List[Candle] | dict | List[dict] | list | List[list],
+) -> List[Candle]:
+    candles_ = []
+
+    if isinstance(candles, Candle):
+        candles_.append(candles)
+    elif isinstance(candles, dict):
+        candles_.append(Candle.from_dict(candles))
+    elif isinstance(candles, list):
+        if isinstance(candles[0], Candle):
+            candles_.extend(candles)
+        elif isinstance(candles[0], dict):
+            candles_.extend(Candle.from_dicts(candles))
+        elif isinstance(candles[0], (float, int)):
+            candles_.append(Candle.from_list(candles))
+        elif isinstance(candles[0], list):
+            candles_.extend(Candle.from_lists(candles))
+        else:
+            raise TypeError
+    else:
+        raise TypeError
+
+    return candles_

@@ -7,7 +7,18 @@ from datetime import timedelta
 from typing import Dict, List, Optional
 
 from hexital.core.candle import Candle
-from hexital.lib import candle_extension, utils, TimeFrame
+from hexital.lib.candle_extension import (
+    TimeFrame,
+    multi_convert_candles,
+    trim_candles,
+    reading_as_list,
+    collapse_candles_timeframe,
+    reading_count,
+    reading_by_candle,
+    candles_sum,
+    reading_period,
+)
+from hexital.lib.utils import round_values
 
 
 @dataclass(kw_only=True)
@@ -36,7 +47,7 @@ class Indicator(ABC):
                 self.candles = deepcopy(self.candles)
 
         self._collapse_candles()
-        candle_extension.trim_candles(self.candles, self.candles_lifespan)
+        trim_candles(self.candles, self.candles_lifespan)
         self._internal_generate_name()
 
     def __str__(self):
@@ -82,7 +93,7 @@ class Indicator(ABC):
     @property
     def as_list(self) -> List[float | dict | None]:
         """Gathers the indicator for all candles as a list"""
-        return candle_extension.reading_as_list(self.candles, self.name)
+        return reading_as_list(self.candles, self.name)
 
     @property
     def has_reading(self) -> bool:
@@ -116,24 +127,7 @@ class Indicator(ABC):
             self.candles[index].indicators[self.name] = reading
 
     def append(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
-        candles_ = []
-        if isinstance(candles, Candle):
-            candles_.append(candles)
-        elif isinstance(candles, dict):
-            candles_.append(Candle.from_dict(candles))
-        elif isinstance(candles, list):
-            if isinstance(candles[0], Candle):
-                candles_.extend(candles)
-            elif isinstance(candles[0], dict):
-                candles_.extend(Candle.from_dicts(candles))
-            elif isinstance(candles[0], (float, int)):
-                candles_.append(Candle.from_list(candles))
-            elif isinstance(candles[0], list):
-                candles_.extend(Candle.from_lists(candles))
-            else:
-                raise TypeError
-        else:
-            raise TypeError
+        candles_ = multi_convert_candles(candles)
 
         if self.timeframe:
             self.candles.extend(deepcopy(candles_))
@@ -142,7 +136,7 @@ class Indicator(ABC):
 
         self._collapse_candles()
         self.calculate()
-        candle_extension.trim_candles(self.candles, self.candles_lifespan)
+        trim_candles(self.candles, self.candles_lifespan)
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         pass
@@ -150,9 +144,7 @@ class Indicator(ABC):
     def _collapse_candles(self):
         if self.timeframe:
             self.candles.extend(
-                candle_extension.collapse_candles_timeframe(
-                    self.candles, self.timeframe, self.timeframe_fill
-                )
+                collapse_candles_timeframe(self.candles, self.timeframe, self.timeframe_fill)
             )
 
     def calculate(self):
@@ -168,7 +160,7 @@ class Indicator(ABC):
         for index in range(self._find_calc_index(), len(self.candles)):
             self._set_index(index)
             if self.reading(index=index) is None:
-                reading = utils.round_values(
+                reading = round_values(
                     self._calculate_reading(index=index), round_by=self.round_value
                 )
                 self._set_reading(reading, index)
@@ -176,18 +168,16 @@ class Indicator(ABC):
     def calculate_index(self, start_index: int, end_index: Optional[int] = None):
         """Calculate the TA values, will calculate a index range the Candles"""
         end_index = end_index if end_index else start_index + 1
+
         for index in range(start_index, end_index):
             self._set_index(index)
-            reading = utils.round_values(
-                self._calculate_reading(index=index), round_by=self.round_value
-            )
+            reading = round_values(self._calculate_reading(index=index), round_by=self.round_value)
             self._set_reading(reading, index)
 
     def _find_calc_index(self) -> int:
         """Optimisation method, to find where to start calculating the indicator from
         Searches from newest to oldest to find the first candle without the indicator
         """
-
         if len(self.candles) == 0 or self.name not in self.candles[0].indicators:
             return 0
 
@@ -198,9 +188,11 @@ class Indicator(ABC):
 
     def _set_index(self, index: int):
         self._active_index = index
+
         for indicator in self._managed_indicators.values():
-            if hasattr(indicator, "set_active_index"):
-                indicator.set_active_index(index)
+            set_indicator_index = getattr(indicator, "set_active_index", None)
+            if callable(set_indicator_index):
+                set_indicator_index(index)
 
     def _add_sub_indicator(self, indicator: Indicator):
         """Adds sub indicator, this will auto calculate with indicator"""
@@ -221,15 +213,14 @@ class Indicator(ABC):
     def prev_reading(self, name: Optional[str] = None) -> float | dict | None:
         if len(self.candles) == 0 or self._active_index == 0:
             return None
-        name = name if name else self.name
-        return self.reading(name, index=self._active_index - 1)
+        return self.reading(name=name if name else self.name, index=self._active_index - 1)
 
     def reading(
         self, name: Optional[str] = None, index: Optional[int] = None
     ) -> float | dict | None:
         """Simple method to get an indicator reading from the index
         Name can use '.' to find nested reading, E.G 'MACD_12_26_9.MACD"""
-        return candle_extension.reading_by_candle(
+        return reading_by_candle(
             self.candles[index if index is not None else self._active_index],
             name if name else self.name,
         )
@@ -237,24 +228,18 @@ class Indicator(ABC):
     def read_candle(self, candle: Candle, name: Optional[str] = None) -> float | dict | None:
         """Simple method to get an indicator reading from a candle,
         regardless of it's location"""
-        return candle_extension.reading_by_candle(
-            candle,
-            name if name else self.name,
-        )
+        return reading_by_candle(candle, name if name else self.name)
 
     def reading_count(self, name: Optional[str] = None) -> int:
         """Returns how many instance of the given indicator exist"""
-        return candle_extension.reading_count(
-            self.candles,
-            name if name else self.name,
-        )
+        return reading_count(self.candles, name if name else self.name)
 
     def reading_period(
         self, period: int, name: Optional[str] = None, index: Optional[int] = None
     ) -> bool:
         """Will return True if the given indicator goes back as far as amount,
         It's true if exactly or more than. Period will be period -1"""
-        return candle_extension.reading_period(
+        return reading_period(
             self.candles,
             period=period,
             name=name if name else self.name,
@@ -264,7 +249,7 @@ class Indicator(ABC):
     def candles_sum(
         self, length: int = 1, name: Optional[str] = None, index: Optional[int] = None
     ) -> float | None:
-        return candle_extension.candles_sum(
+        return candles_sum(
             self.candles,
             name if name else self.name,
             length,
