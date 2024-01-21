@@ -13,19 +13,16 @@ class TimeFrame(Enum):
     SECOND10 = "S10"
     SECOND15 = "S15"
     SECOND30 = "S30"
-
     MINUTE = "T1"
     MINUTE5 = "T5"
     MINUTE10 = "T10"
     MINUTE15 = "T15"
     MINUTE30 = "T30"
     MINUTE45 = "T45"
-
     HOUR = "H1"
     HOUR2 = "H2"
     HOUR3 = "H3"
     HOUR4 = "H4"
-
     DAY = "D1"
     WEEK = "D7"
 
@@ -55,17 +52,12 @@ def clean_timestamp(timestamp: datetime) -> datetime:
 
 def timeframe_to_timedelta(timeframe: str | TimeFrame) -> timedelta:
     # https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases
-    timeframe_ = ""
 
-    if isinstance(timeframe, TimeFrame):
-        timeframe_ = timeframe.value
-    else:
-        timeframe_ = timeframe
+    timeframe_ = timeframe.value if isinstance(timeframe, TimeFrame) else timeframe.upper()
 
-    timeframe_ = timeframe_.upper()
     if not isinstance(timeframe_[0], str) or timeframe_[0] not in VALID_TIMEFRAME_PREFIXES:
         raise InvalidTimeFrame(
-            f"Invalid value: {timeframe_}, valid are: {VALID_TIMEFRAME_PREFIXES}"
+            f"Invalid value: {timeframe_}, valid are: {VALID_TIMEFRAME_PREFIXES}, E.G 'T10' 10 minutes"
         )
 
     if timeframe_.startswith("S"):

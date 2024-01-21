@@ -49,32 +49,27 @@ def reading_by_candle(candle: Candle, name: str) -> float | dict | None:
 
 def _nested_indicator(candle: Candle, name: str, nested_name: str) -> float | None:
     if name in candle.indicators:
-        if isinstance(candle.indicators[name], dict):
-            return candle.indicators[name].get(nested_name)
-        return candle.indicators[name]
+        val_ = candle.indicators[name]
+        return val_.get(nested_name) if isinstance(val_, dict) else val_
 
     if name in candle.sub_indicators:
-        if isinstance(candle.sub_indicators[name], dict):
-            return candle.sub_indicators[name].get(nested_name)
-        return candle.sub_indicators[name]
+        val_ = candle.sub_indicators[name]
+        return val_.get(nested_name) if isinstance(val_, dict) else val_
 
     for key, reading in chain(candle.indicators.items(), candle.sub_indicators.items()):
         if name in key:
-            if isinstance(reading, dict):
-                return reading.get(nested_name)
-            return reading
+            return reading.get(nested_name) if isinstance(reading, dict) else reading
+
     return None
 
 
 def reading_count(candles: List[Candle], name: str) -> int:
     """Returns how many instance of the given indicator exist"""
-    count = 0
-    for candle in reversed(candles):
+    for count, candle in enumerate(reversed(candles)):
         if not reading_by_candle(candle, name):
             return count
-        count += 1
 
-    return count
+    return len(candles)
 
 
 def reading_as_list(candles: List[Candle], name: str) -> List[float | dict | None]:
@@ -87,24 +82,24 @@ def reading_period(
 ) -> bool:
     """Will return True if the given indicator goes back as far as amount,
     It's true if exactly or more than. Period will be period-1"""
+    period -= 1
+
     if index is None:
         index = len(candles) - 1
-
-    period -= 1
 
     if (index - period) < 0:
         return False
 
     # Checks 3 points along period to verify values exist
     return all(
-        True
-        if reading_by_index(
-            candles,
-            name,
-            index - int(point),
+        bool(
+            reading_by_index(
+                candles,
+                name,
+                index - int(point),
+            )
+            is not None
         )
-        is not None
-        else False
         for point in [
             period,
             period / 2,
@@ -117,19 +112,16 @@ def candles_sum(
     candles: List[Candle], indicator: str, length: int, index: int = -1
 ) -> float | None:
     """Sum of `indicator` for `length` bars back. including index/latest"""
-    if not valid_index(index, len(candles)):
-        return None
+    index_ = absindex(index, len(candles))
+    if not index_:
+        return
 
-    index = absindex(index, len(candles)) + 1
+    index_ += 1
 
-    if length > len(candles):
-        length = len(candles)
+    length = len(candles) if length > len(candles) else length
+    values = [reading_by_candle(candle, indicator) for candle in candles[index_ - length : index_]]
 
-    return sum(
-        reading_by_candle(candle, indicator)
-        for candle in candles[index - length : index]
-        if reading_by_candle(candle, indicator) is not None
-    )
+    return sum(value for value in values if value and isinstance(value, (int, float)))
 
 
 def collapse_candles_timeframe(
@@ -163,6 +155,8 @@ def collapse_candles_timeframe(
 
         candle.timestamp = clean_timestamp(candle.timestamp)
 
+        next_candle = end_time + timeframe_
+
         if start_time < candle.timestamp <= end_time and prev_candle.timestamp == end_time:
             prev_candle.merge(candle)
         elif start_time < candle.timestamp <= end_time:
@@ -173,8 +167,8 @@ def collapse_candles_timeframe(
             and prev_candle.timestamp == start_time
         ):
             prev_candle.merge(candle)
-        elif end_time < candle.timestamp <= end_time + timeframe_:
-            candle.timestamp = end_time + timeframe_
+        elif end_time < candle.timestamp <= next_candle:
+            candle.timestamp = next_candle
             candles_.append(candle)
             start_time += timeframe_
             end_time += timeframe_
@@ -183,7 +177,7 @@ def collapse_candles_timeframe(
             end_time = start_time + timeframe_
             candle.timestamp = start_time
             candles_.append(candle)
-        elif end_time + timeframe_ < candle.timestamp:
+        elif next_candle < candle.timestamp:
             start_time = round_down_timestamp(candle.timestamp, timeframe_)
             end_time = start_time + timeframe_
             candle.timestamp = end_time
@@ -201,7 +195,11 @@ def collapse_candles_timeframe(
 
 
 def fill_missing_candles(candles: List[Candle], timeframe: timedelta) -> List[Candle]:
+    if len(candles) < 2:
+        return candles
+
     index = 1
+
     while True:
         prev_candle = candles[index - 1]
         if prev_candle.timestamp and candles[index].timestamp != prev_candle.timestamp + timeframe:

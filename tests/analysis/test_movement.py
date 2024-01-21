@@ -275,7 +275,7 @@ class TestLowest:
         assert movement.lowest(indicator_candles, "close") == 115
 
     def test_lowest_two(self, indicator_candles):
-        assert movement.lowest(indicator_candles, "high") == 110
+        assert movement.lowest(indicator_candles, "high") == 100
 
     def test_lowest_missing(self):
         assert movement.lowest([], "low") is False

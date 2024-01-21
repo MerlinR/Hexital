@@ -35,9 +35,8 @@ def doji(
 
         high_low_avg = utils.candle_high_low_avg(candles, length, indx)
 
-        if asint:
-            return int(body < 0.1 * high_low_avg)
-        return body < 0.1 * high_low_avg
+        is_doji = body < 0.1 * high_low_avg
+        return int(is_doji) if asint else is_doji
 
     if lookback is None:
         return _doji(index)
@@ -75,9 +74,7 @@ def hammer(
         ):
             is_hammer = True
 
-        if asint:
-            return int(is_hammer)
-        return is_hammer
+        return int(is_hammer) if asint else is_hammer
 
     if lookback is None:
         return _hammer(index)
