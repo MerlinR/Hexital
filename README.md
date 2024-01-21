@@ -8,6 +8,7 @@
 
 # `Alpha Development`❗
 Note: Extremely early stages and likely change drastically, including core functionality and methods.
+Will leave Alpha into Beta when Candlestick re-painting framework is in and happy with user interaction convenience. 
 
 # Hexital
 `Hexital` is a Python library implementing financial indicators for technical analysis. The distinctive feature of the library is its incremental computation of indicators which is designed to fit real-time applications or applications with iterative input in general.
@@ -151,6 +152,7 @@ print(my_ema.reading("high", index=-2)) # 6584
 
 Roughly ordered in priority
 
+- Modular framework (like indicators) to repaint candles, E.G as Renko, Range, etc 
 - More Indicators
 - More Movement methods
 - Pattern Candle recognition methods, detecting Doji, Hammer, etc

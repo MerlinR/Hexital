@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## 0.3.2
+## 0.4.0
 - Cleaned up code and some potential Bugs ruff/pyright
 - Added movement Above/Below and updated others to use it
 - Updated collapse candle 'fill' to show essentially doji candle rather than copy prev
