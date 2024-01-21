@@ -9,6 +9,18 @@ setup:
 format:
 	poetry run ruff format hex_*
 
+update:
+	@echo "Running setup"
+	poetry update
+
+lock:
+	@echo "Running setup"
+	poetry lock
+
+build:
+	@echo "Building package"
+	poetry build
+
 truth:
 	@echo "Generating source of truth"
 	poetry install --with truth
