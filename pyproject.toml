@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hexital"
-version = "0.3.1"
+version = "0.4.0"
 description = "Hex Incremental Technical Analysis Library"
 readme = "README.md"
 license = "MIT"
