@@ -1,16 +1,16 @@
 import importlib
 from copy import deepcopy
 from datetime import timedelta
-from typing import Callable, Dict, List, Optional
+from typing import Dict, List, Optional
 
 from hexital.core.candle import Candle
 from hexital.core.indicator import Indicator
-from hexital.exceptions import InvalidIndicator, InvalidAnalysis
-from hexital.lib.candle_extension import (
+from hexital.exceptions import InvalidAnalysis, InvalidIndicator
+from hexital.utils.candlesticks import (
     collapse_candles_timeframe,
+    multi_convert_candles,
     reading_by_index,
     trim_candles,
-    multi_convert_candles,
 )
 
 DEFAULT = "default"

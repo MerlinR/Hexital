@@ -1,4 +1,4 @@
-from hexital.lib.utils import absindex, round_values, valid_index
+from hexital.utils.indexing import absindex, round_values, valid_index
 
 
 def test_round_values_simple():

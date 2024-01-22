@@ -1,16 +1,17 @@
 from datetime import timedelta
 from itertools import chain
 from typing import List, Optional
-from hexital.exceptions import InvalidCandleOrder
+
 from hexital.core.candle import Candle
-from hexital.lib.timeframe_utils import (
-    round_down_timestamp,
-    timeframe_to_timedelta,
+from hexital.exceptions import InvalidCandleOrder
+from hexital.utils.indexing import absindex, valid_index
+from hexital.utils.timeframe import (
+    TimeFrame,
     clean_timestamp,
     on_timeframe,
-    TimeFrame,
+    round_down_timestamp,
+    timeframe_to_timedelta,
 )
-from hexital.lib.utils import absindex, valid_index
 
 
 def reading_by_index(candles: List[Candle], name: str, index: int = -1) -> float | dict | None:

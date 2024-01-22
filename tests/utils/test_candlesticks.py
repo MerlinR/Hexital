@@ -4,13 +4,13 @@ from typing import List
 
 import pytest
 from hexital.core import Candle
-from hexital.lib.candle_extension import (
+from hexital.utils.candlesticks import (
     candles_sum,
     collapse_candles_timeframe,
+    fill_missing_candles,
     reading_as_list,
     reading_by_index,
     reading_count,
-    fill_missing_candles,
     reading_period,
 )
 

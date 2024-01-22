@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from hexital.analysis import utils
 from hexital.core.candle import Candle
-from hexital.lib.utils import validate_index
+from hexital.utils.indexing import validate_index
 
 
 def doji(

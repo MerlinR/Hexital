@@ -1,13 +1,13 @@
 from typing import List
 
 from hexital.core.candle import Candle
-from hexital.lib.candle_extension import (
+from hexital.utils.candlesticks import (
     reading_by_candle,
     reading_by_index,
     reading_count,
     reading_period,
 )
-from hexital.lib.utils import absindex, valid_index
+from hexital.utils.indexing import absindex, valid_index
 
 
 def _get_clean_readings(

@@ -7,18 +7,18 @@ from datetime import timedelta
 from typing import Dict, List, Optional
 
 from hexital.core.candle import Candle
-from hexital.lib.candle_extension import (
+from hexital.utils.candlesticks import (
     TimeFrame,
-    multi_convert_candles,
-    trim_candles,
-    reading_as_list,
-    collapse_candles_timeframe,
-    reading_count,
-    reading_by_candle,
     candles_sum,
+    collapse_candles_timeframe,
+    multi_convert_candles,
+    reading_as_list,
+    reading_by_candle,
+    reading_count,
     reading_period,
+    trim_candles,
 )
-from hexital.lib.utils import round_values
+from hexital.utils.indexing import round_values
 
 
 @dataclass(kw_only=True)
