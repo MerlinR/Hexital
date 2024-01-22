@@ -1,4 +1,3 @@
-import pytest
 from hexital.lib.utils import absindex, round_values, valid_index
 
 

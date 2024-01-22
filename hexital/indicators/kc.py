@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Optional
 
 from hexital.core import Indicator
 from hexital.indicators import ATR, EMA

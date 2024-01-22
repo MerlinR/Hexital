@@ -63,15 +63,12 @@ class STOCH(Indicator):
         )
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-
         if self.reading_period(self.period, self.input_value):
             lowest = min(
-                self.reading("low", i)
-                for i in range(index - (self.period - 1), index + 1)
+                self.reading("low", i) for i in range(index - (self.period - 1), index + 1)
             )
             highest = max(
-                self.reading("high", i)
-                for i in range(index - (self.period - 1), index + 1)
+                self.reading("high", i) for i in range(index - (self.period - 1), index + 1)
             )
 
             stoch = ((self.reading(self.input_value) - lowest) / (highest - lowest)) * 100

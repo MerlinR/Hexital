@@ -20,20 +20,18 @@ def candle_shadow_lower(candle: Candle) -> float:
     return abs(candle.low - candle.close)
 
 
-def candle_high_low_diff(candle: Candle) -> float:
+def candle_high_low(candle: Candle) -> float:
     return abs(candle.high - candle.low)
 
 
-def candle_realbody_avg(
-    candles: List[Candle], length: int, index: Optional[int] = None
-) -> float:
+def candle_realbody_avg(candles: List[Candle], length: int, index: Optional[int] = None) -> float:
     if index is None:
         index = len(candles) - 1
 
     return (
         sum(
             candle_realbody(candles[i])
-            for i in range(len(candles) - length, len(candles))
+            for i in range(0 if index - length < 0 else index - length, index)
         )
         / length
     )
@@ -48,7 +46,7 @@ def candle_shadow_upper_avg(
     return (
         sum(
             candle_shadow_upper(candles[i])
-            for i in range(len(candles) - length, len(candles))
+            for i in range(0 if index - length < 0 else index - length, index)
         )
         / length
     )
@@ -63,22 +61,20 @@ def candle_shadow_lower_avg(
     return (
         sum(
             candle_shadow_lower(candles[i])
-            for i in range(len(candles) - length, len(candles))
+            for i in range(0 if index - length < 0 else index - length, index)
         )
         / length
     )
 
 
-def candle_high_low_diff_avg(
-    candles: List[Candle], length: int, index: Optional[int] = None
-) -> float:
+def candle_high_low_avg(candles: List[Candle], length: int, index: Optional[int] = None) -> float:
     if index is None:
         index = len(candles) - 1
 
     return (
         sum(
-            candle_high_low_diff(candles[i])
-            for i in range(len(candles) - length, len(candles))
+            candle_high_low(candles[i])
+            for i in range(0 if index - length < 0 else index - length, index)
         )
         / length
     )

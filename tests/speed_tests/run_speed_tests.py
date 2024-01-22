@@ -1,13 +1,11 @@
-import json
 import random
 import time
 from datetime import datetime
-from typing import Dict
 
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 import pandas_ta as ta
+
 from hexital.core import Candle, Hexital
 
 
@@ -38,7 +36,6 @@ def add_timestamp(candles: pd.DataFrame):
 
 
 def create_graph(data: dict, title: str):
-
     for key, val in data.items():
         if key == "amount":
             continue
@@ -84,9 +81,7 @@ def test_pandas_ta_incremental(candle_length: int, strat: list):
 
 
 def test_hexital_bulk(candle_length: int, strat: list):
-    hexitl = Hexital(
-        "test", Candle.from_dicts(generate_random_candles(candle_length)), strat
-    )
+    hexitl = Hexital("test", Candle.from_dicts(generate_random_candles(candle_length)), strat)
     start_time = time.time()
     hexitl.calculate()
     return time.time() - start_time

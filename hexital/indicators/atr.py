@@ -2,7 +2,6 @@ from dataclasses import dataclass
 
 from hexital.core import Indicator
 from hexital.indicators.tr import TR
-from hexital.lib import utils
 
 
 @dataclass(kw_only=True)

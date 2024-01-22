@@ -2,22 +2,22 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
 class Candle:
-    open: Optional[float] = None
-    high: Optional[float] = None
-    low: Optional[float] = None
-    close: Optional[float] = None
-    volume: Optional[int] = None
-    indicators: Dict[str, float | dict] = field(default_factory=dict)
-    sub_indicators: Dict[str, float | dict] = field(default_factory=dict)
+    open: float
+    high: float
+    low: float
+    close: float
+    volume: int
+    indicators: Dict[str, float | Dict[str, float | None] | None] = field(default_factory=dict)
+    sub_indicators: Dict[str, float | Dict[str, float | None] | None] = field(default_factory=dict)
     timestamp: Optional[datetime] = None
 
     @classmethod
-    def from_dict(cls, candle: Dict[str, float]) -> Candle:
+    def from_dict(cls, candle: Dict[str, Any]) -> Candle:
         """Expected dict with keys ['open', 'high', 'low', 'close', 'volume']
         with optional 'timestamp' key."""
         return cls(
@@ -25,7 +25,7 @@ class Candle:
             candle.get("high", candle.get("High", 0.0)),
             candle.get("low", candle.get("Low", 0.0)),
             candle.get("close", candle.get("Close", 0.0)),
-            candle.get("volume", candle.get("Volume", 0.0)),
+            candle.get("volume", candle.get("Volume", 0)),
             timestamp=candle.get("timestamp", candle.get("Timestamp")),
         )
 
@@ -36,9 +36,9 @@ class Candle:
         return [Candle.from_dict(candle) for candle in candles]
 
     @classmethod
-    def from_list(cls, candle: List[float]) -> Candle:
+    def from_list(cls, candle: list) -> Candle:
         """Expected list [open, high, low, close, volume]
-        with optional datetime at the begining or end."""
+        with optional datetime at the beginning or end."""
         timestamp = None
         if isinstance(candle[0], datetime):
             timestamp = candle.pop(0)

@@ -6,14 +6,13 @@ from hexital import indicators
 
 
 class TestIndicators:
-    def verfiy(
+    def verify(
         self,
         result: list,
         expected: list,
         amount: Optional[int] = None,
         verbose: bool = False,
     ) -> bool:
-
         if amount is not None:
             result = result[-abs(amount) :]
             expected = expected[-abs(amount) :]
@@ -34,9 +33,7 @@ class TestIndicators:
 
         return any([diff_result, correlation])
 
-    def correlation_validation(
-        self, result: list, expected: list, accuracy: float = 0.95
-    ):
+    def correlation_validation(self, result: list, expected: list, accuracy: float = 0.95):
         correlation = 0
 
         if isinstance(result[0], dict):
@@ -54,14 +51,13 @@ class TestIndicators:
         return correlation >= accuracy
 
     def correlation_coefficient(self, result: list, expected: list):
-
         # First establish the means and standard deviations for both lists.
         res_mean = self.calc_mean(result)
         exp_mean = self.calc_mean(expected)
         res_stand_deviation = self.standard_deviation(result)
         exp_stand_deviation = self.standard_deviation(expected)
 
-        if res_mean == None or exp_mean == None:
+        if res_mean is None or exp_mean is None:
             return 1.0
 
         # r numerator
@@ -116,73 +112,73 @@ class TestIndicators:
     def test_adx(self, candles, expected_adx):
         test = indicators.ADX(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_adx, amount=450)
+        assert self.verify(test.as_list, expected_adx, amount=450)
 
     @pytest.mark.usefixtures("candles", "expected_atr")
     def test_atr(self, candles, expected_atr):
         test = indicators.ATR(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_atr)
+        assert self.verify(test.as_list, expected_atr)
 
     @pytest.mark.usefixtures("candles", "expected_atr_20")
     def test_atr_20(self, candles, expected_atr_20):
         test = indicators.ATR(candles=candles, period=20)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_atr_20)
+        assert self.verify(test.as_list, expected_atr_20)
 
     @pytest.mark.usefixtures("candles", "expected_ema")
     def test_ema(self, candles, expected_ema):
         test = indicators.EMA(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_ema)
+        assert self.verify(test.as_list, expected_ema)
 
     @pytest.mark.usefixtures("candles", "expected_ema_t5")
     def test_ema_t5(self, candles, expected_ema_t5):
         test = indicators.EMA(candles=candles, timeframe="t5")
         test.calculate()
-        assert self.verfiy(test.as_list, expected_ema_t5)
+        assert self.verify(test.as_list, expected_ema_t5)
 
     @pytest.mark.usefixtures("candles", "expected_ema_t10")
     def test_ema_t10(self, candles, expected_ema_t10):
         test = indicators.EMA(candles=candles, timeframe="t10")
         test.calculate()
-        assert self.verfiy(test.as_list, expected_ema_t10)
+        assert self.verify(test.as_list, expected_ema_t10)
 
     @pytest.mark.usefixtures("candles", "expected_highlowaverage")
     def test_highlowaverage(self, candles, expected_highlowaverage):
         test = indicators.HighLowAverage(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_highlowaverage)
+        assert self.verify(test.as_list, expected_highlowaverage)
 
     @pytest.mark.usefixtures("candles", "expected_kc")
     def test_kc(self, candles, expected_kc):
         test = indicators.KC(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_kc)
+        assert self.verify(test.as_list, expected_kc)
 
     @pytest.mark.usefixtures("candles", "expected_macd")
     def test_macd(self, candles, expected_macd):
         test = indicators.MACD(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_macd)
+        assert self.verify(test.as_list, expected_macd)
 
     @pytest.mark.usefixtures("candles", "expected_obv")
     def test_obv(self, candles, expected_obv):
         test = indicators.OBV(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_obv)
+        assert self.verify(test.as_list, expected_obv)
 
     @pytest.mark.usefixtures("candles", "expected_obv_t5")
     def test_obv_t5(self, candles, expected_obv_t5):
         test = indicators.OBV(candles=candles, timeframe="t5")
         test.calculate()
-        assert self.verfiy(test.as_list, expected_obv_t5)
+        assert self.verify(test.as_list, expected_obv_t5)
 
     @pytest.mark.usefixtures("candles", "expected_obv_t10")
     def test_obv_t10(self, candles, expected_obv_t10):
         test = indicators.OBV(candles=candles, timeframe="t10")
         test.calculate()
-        assert self.verfiy(test.as_list, expected_obv_t10)
+        assert self.verify(test.as_list, expected_obv_t10)
 
     @pytest.mark.usefixtures("candles", "expected_obv_t10")
     def test_obv_t10_double_collapse(self, candles, expected_obv_t10):
@@ -190,88 +186,112 @@ class TestIndicators:
         test._collapse_candles()
         test.calculate()
 
-        assert self.verfiy(test.as_list, expected_obv_t10, verbose=True)
+        assert self.verify(test.as_list, expected_obv_t10, verbose=True)
 
     @pytest.mark.usefixtures("candles", "expected_rma")
     def test_rma(self, candles, expected_rma):
         test = indicators.RMA(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_rma)
+        assert self.verify(test.as_list, expected_rma)
 
     @pytest.mark.usefixtures("candles", "expected_rma_20")
     def test_rma_20(self, candles, expected_rma_20):
         test = indicators.RMA(candles=candles, period=20)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_rma_20)
+        assert self.verify(test.as_list, expected_rma_20)
 
     @pytest.mark.usefixtures("candles", "expected_roc")
     def test_roc(self, candles, expected_roc):
         test = indicators.ROC(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_roc)
+        assert self.verify(test.as_list, expected_roc)
 
     @pytest.mark.usefixtures("candles", "expected_rsi")
     def test_rsi(self, candles, expected_rsi):
         test = indicators.RSI(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_rsi)
+        assert self.verify(test.as_list, expected_rsi)
+
+    @pytest.mark.usefixtures("candles", "expected_rsi")
+    def test_append_rsi(self, candles, expected_rsi):
+        test = indicators.RSI(candles=[])
+        for candle in candles:
+            test.append(candle)
+            test.calculate()
+        assert self.verify(test.as_list, expected_rsi)
 
     @pytest.mark.usefixtures("candles", "expected_sma")
     def test_sma(self, candles, expected_sma):
         test = indicators.SMA(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_sma)
+        assert self.verify(test.as_list, expected_sma)
 
     @pytest.mark.usefixtures("candles", "expected_sma_3")
     def test_sma_3(self, candles, expected_sma_3):
         test = indicators.SMA(candles=candles, period=3)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_sma_3)
+        assert self.verify(test.as_list, expected_sma_3)
 
     @pytest.mark.usefixtures("candles", "expected_sma_t5")
     def test_sma_t5(self, candles, expected_sma_t5):
         test = indicators.SMA(candles=candles, timeframe="t5")
         test.calculate()
-        assert self.verfiy(test.as_list, expected_sma_t5)
+        assert self.verify(test.as_list, expected_sma_t5)
 
     @pytest.mark.usefixtures("candles", "expected_sma_t10")
     def test_sma_t10(self, candles, expected_sma_t10):
         test = indicators.SMA(candles=candles, timeframe="t10")
         test.calculate()
-        assert self.verfiy(test.as_list, expected_sma_t10)
+        assert self.verify(test.as_list, expected_sma_t10)
 
     @pytest.mark.usefixtures("candles", "expected_stoch")
     def test_stoch(self, candles, expected_stoch):
         test = indicators.STOCH(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_stoch)
+        assert self.verify(test.as_list, expected_stoch)
 
     @pytest.mark.usefixtures("candles", "expected_supertrend")
     def test_supertrend(self, candles, expected_supertrend):
         test = indicators.Supertrend(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_supertrend, amount=499)
+        assert self.verify(test.as_list, expected_supertrend, amount=499)
+
+    @pytest.mark.usefixtures("candles", "expected_supertrend")
+    def test_append_supertrend(self, candles, expected_supertrend):
+        test = indicators.Supertrend(candles=[])
+        for candle in candles:
+            test.append(candle)
+            test.calculate()
+        assert self.verify(test.as_list, expected_supertrend, amount=499)
 
     @pytest.mark.usefixtures("candles", "expected_tr")
     def test_tr(self, candles, expected_tr):
         test = indicators.TR(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_tr)
+        assert self.verify(test.as_list, expected_tr)
 
     @pytest.mark.usefixtures("candles", "expected_vwap")
     def test_vwap(self, candles, expected_vwap):
         test = indicators.VWAP(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_vwap)
+        assert self.verify(test.as_list, expected_vwap)
+
+    @pytest.mark.usefixtures("candles", "expected_vwap")
+    def test_vwap_append(self, candles, expected_vwap):
+        test = indicators.VWAP(candles=[])
+        for candle in candles:
+            test.append(candle)
+            test.calculate()
+        assert self.verify(test.as_list, expected_vwap)
 
     @pytest.mark.usefixtures("candles", "expected_vwma")
     def test_vwma(self, candles, expected_vwma):
         test = indicators.VWMA(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_vwma)
+        assert self.verify(test.as_list, expected_vwma)
 
     @pytest.mark.usefixtures("candles", "expected_wma")
     def test_wma(self, candles, expected_wma):
         test = indicators.WMA(candles=candles)
         test.calculate()
-        assert self.verfiy(test.as_list, expected_wma)
+        assert self.verify(test.as_list, expected_wma)

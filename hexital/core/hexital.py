@@ -1,93 +1,103 @@
 import importlib
 from copy import deepcopy
 from datetime import timedelta
-from typing import Dict, List, Optional
+from typing import Callable, Dict, List, Optional
 
 from hexital.core.candle import Candle
 from hexital.core.indicator import Indicator
-from hexital.exceptions import InvalidIndicator
-from hexital.lib.candle_extension import collapse_candles_timeframe, reading_by_index
+from hexital.exceptions import InvalidIndicator, InvalidAnalysis
+from hexital.lib.candle_extension import (
+    collapse_candles_timeframe,
+    reading_by_index,
+    trim_candles,
+    multi_convert_candles,
+)
 
 DEFAULT = "default"
 
 
 class Hexital:
-    name: str = None
-    _candles: Dict[str, List[Candle]] = None
-    _indicators: Dict[str, Indicator] = None
+    name: str
+    _candles: Dict[str, List[Candle]]
+    _indicators: Dict[str, Indicator]
     description: Optional[str] = None
     timeframe_fill: bool = False
-    candles_timerange: timedelta = None
+    candles_lifespan: Optional[timedelta] = None
 
     def __init__(
         self,
         name: str,
         candles: List[Candle],
-        indicators: List[dict | Indicator] = None,
+        indicators: Optional[List[dict | Indicator]] = None,
         description: Optional[str] = None,
         timeframe_fill: bool = False,
-        candles_timerange: timedelta = None,
+        candles_lifespan: Optional[timedelta] = None,
     ):
         self.name = name
         self._candles = {DEFAULT: deepcopy(candles) if isinstance(candles, list) else []}
         self._indicators = self._validate_indicators(indicators)
         self.description = description
         self.timeframe_fill = timeframe_fill
-        self.candles_timerange = candles_timerange
+        self.candles_lifespan = candles_lifespan
         self._collapse_candles()
-        self._candles_timerange()
+        self._candles_trim_lifespan()
 
     def _validate_indicators(
-        self, indicators: List[dict | Indicator]
+        self, indicators: List[dict | Indicator] | None
     ) -> Dict[str, Indicator]:
-        indicator_module = importlib.import_module("hexital.indicators")
-        pattern_module = importlib.import_module("hexital.analysis.patterns")
         valid_indicators = {}
 
         if not indicators:
             return {}
 
+        indicator_module = importlib.import_module("hexital.indicators")
+
         for indicator in indicators:
             if isinstance(indicator, Indicator):
                 valid_indicators[indicator.name] = indicator
-            elif isinstance(indicator, dict):
-                indicator_name = indicator.get("indicator")
-                pattern_name = indicator.get("pattern")
+                continue
 
-                if indicator_name is None and pattern_name is None:
-                    raise InvalidIndicator(
-                        f"Dict Indicator missing 'indicator' or 'pattern' name: {indicator}"
+            if not isinstance(indicator, dict):
+                raise InvalidIndicator(
+                    f"Indicator type invalid 'indicator' must be a dict or Indicator type: {indicator}"
+                )
+
+            amorph_class = getattr(indicator_module, "Amorph")
+
+            if indicator.get("indicator"):
+                indicator_name = indicator.pop("indicator")
+
+                try:
+                    indicator_class = getattr(indicator_module, indicator_name)
+                except AttributeError:
+                    raise InvalidIndicator(f"Indicator {indicator_name} does not exist")
+
+                new_indicator = indicator_class(**indicator)
+                valid_indicators[new_indicator.name] = new_indicator
+
+            elif indicator.get("analysis") and isinstance(indicator.get("analysis"), str):
+                name = indicator.pop("analysis")
+                pattern_module = importlib.import_module("hexital.analysis.patterns")
+                movement_module = importlib.import_module("hexital.analysis.movement")
+
+                pattern_func = getattr(pattern_module, name, None)
+                analysis_func = getattr(movement_module, name, pattern_func)
+                if not analysis_func:
+                    raise InvalidAnalysis(
+                        f"analysis {name} does not exist in patterns or movements"
                     )
 
-                if indicator_name:
-                    indicator_class = getattr(indicator_module, indicator_name, None)
-                    if indicator_class is not None:
-                        arguments = indicator.copy()
-                        arguments.pop("indicator")
-                        new_indicator = indicator_class(**arguments)
-                        valid_indicators[new_indicator.name] = new_indicator
-                    else:
-                        raise InvalidIndicator(
-                            f"Indicator {indicator_name} does not exist"
-                        )
-                elif pattern_name and isinstance(pattern_name, str):
-                    pattern_func = getattr(pattern_module, pattern_name, None)
-                    pattern_class = getattr(indicator_module, "Pattern", None)
-                    if pattern_func is not None:
-                        arguments = indicator.copy()
-                        arguments.pop("pattern")
-                        new_indicator = pattern_class(pattern=pattern_func, **arguments)
-                        valid_indicators[new_indicator.name] = new_indicator
-                    else:
-                        raise InvalidIndicator(f"Indicator {pattern_name} does not exist")
-                elif pattern_name and callable(pattern_name):
-                    pattern_class = getattr(indicator_module, "Pattern", None)
-                    arguments = indicator.copy()
-                    arguments.pop("pattern")
-                    new_indicator = pattern_class(pattern=pattern_name, **arguments)
-                    valid_indicators[new_indicator.name] = new_indicator
-                else:
-                    raise InvalidIndicator(f"Indicator {pattern_name} does not exist")
+                new_indicator = amorph_class(analysis=analysis_func, **indicator)
+                valid_indicators[new_indicator.name] = new_indicator
+
+            elif indicator.get("analysis") and callable(indicator.get("analysis")):
+                method_name = indicator.pop("analysis")
+                new_indicator = amorph_class(analysis=method_name, **indicator)
+                valid_indicators[new_indicator.name] = new_indicator
+            else:
+                raise InvalidAnalysis(
+                    f"Dict Indicator missing 'indicator' or 'analysis' name, not: {indicator}"
+                )
 
         for indicator in valid_indicators.values():
             if indicator.timeframe is not None:
@@ -101,28 +111,27 @@ class Hexital:
 
     def _collapse_candles(self):
         for timeframe, candles in self._candles.items():
-            if timeframe == DEFAULT:
-                continue
-            candles.extend(
-                collapse_candles_timeframe(candles, timeframe, self.timeframe_fill)
-            )
+            if timeframe != DEFAULT:
+                candles.extend(collapse_candles_timeframe(candles, timeframe, self.timeframe_fill))
 
-    def _candles_timerange(self):
-        if self.candles_timerange is None:
+    def _candles_trim_lifespan(self):
+        if self.candles_lifespan is None:
             return
 
         for candles in self._candles.values():
-            if not candles:
-                return
-            latest = candles[-1].timestamp
-            while candles[0].timestamp < latest - self.candles_timerange:
-                candles.pop(0)
+            trim_candles(candles, self.candles_lifespan)
 
-    def candles(self, timeframe: Optional[str] = DEFAULT) -> List[Candle]:
-        return self._candles.get(timeframe, DEFAULT)
+    def candles(self, timeframe: Optional[str] = None) -> List[Candle]:
+        if timeframe is not None:
+            return self._candles.get(timeframe, [])
+        return self._candles.get(DEFAULT, [])
 
     def candles_all(self) -> Dict[str, List[Candle]]:
         return self._candles
+
+    @property
+    def timeframes(self) -> List[str]:
+        return list(self._candles.keys())
 
     @property
     def indicators(self) -> Dict[str, Indicator]:
@@ -140,42 +149,46 @@ class Hexital:
                 return indicator
         return None
 
-    def has_reading(self, name: str) -> bool:
+    def has_reading(self, name: Optional[str]) -> bool:
         """Checks if the given Indicator has a valid reading in latest Candle"""
         return bool(self.reading(name))
 
-    def reading(self, name: str, index: int = -1) -> float | dict | None:
+    def reading(self, name: Optional[str], index: int = -1) -> float | dict | None:
         """Attempts to retrieve a reading with a given Indicator name.
         `name` can use '.' to find nested reading, E.G `MACD_12_26_9.MACD`
         """
+        name = name if name else self.name
         reading = reading_by_index(self._candles[DEFAULT], name, index=index)
-        if reading is None:
-            for candles in self._candles.values():
-                reading = reading_by_index(candles, name, index=index)
-                if reading is not None:
-                    break
 
-        return reading
+        if reading is not None:
+            return reading
 
-    def prev_reading(self, name: str = None) -> float | dict | None:
+        for candles in self._candles.values():
+            reading = reading_by_index(candles, name, index=index)
+            if reading is not None:
+                return reading
+
+        return None
+
+    def prev_reading(self, name: Optional[str] = None) -> float | dict | None:
         return self.reading(name, index=-2)
 
-    def reading_as_list(self, name: Optional[str] = None) -> List[float | dict]:
+    def reading_as_list(self, name: Optional[str] = None) -> List[float | dict | None]:
         """Find given indicator and returns the readings as a list
         Full Name of the indicator E.G EMA_12"""
+        name = name if name else self.name
         if self._indicators.get(name):
             return self._indicators[name].as_list
         return []
 
-    def add_indicator(self, indicator: Indicator | List[Indicator]):
+    def add_indicator(self, indicator: Indicator | List[Indicator] | Dict[str, str]):
         """Add's a new indicator to `Hexital` strategy.
         This accept either `Indicator` datatypes or dict string versions to be packed.
         `add_indicator(SMA(period=10))` or `add_indicator({"indicator": "SMA", "period": 10})`
         Does not automatically calculates readings."""
-        if not isinstance(indicator, list):
-            indicator = [indicator]
+        indicators = indicator if isinstance(indicator, list) else [indicator]
 
-        for valid_indicator in self._validate_indicators(indicator).values():
+        for valid_indicator in self._validate_indicators(indicators).values():
             self._indicators[valid_indicator.name] = valid_indicator
         self._collapse_candles()
 
@@ -188,44 +201,22 @@ class Hexital:
         self.purge(name)
         self._indicators.pop(name, None)
 
-    def append(
-        self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]
-    ):
-        candles_ = []
-        if isinstance(candles, Candle):
-            candles_.append(candles)
-        elif isinstance(candles, dict):
-            candles_.append(Candle.from_dict(candles))
-        elif isinstance(candles, list):
-            if isinstance(candles[0], Candle):
-                candles_.extend(candles)
-            elif isinstance(candles[0], dict):
-                candles_.extend(Candle.from_dicts(candles))
-            elif isinstance(candles[0], (float, int)):
-                candles_.append(Candle.from_list(candles))
-            elif isinstance(candles[0], list):
-                candles_.extend(Candle.from_lists(candles))
-            else:
-                raise TypeError
-        else:
-            raise TypeError
+    def append(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
+        candles_ = multi_convert_candles(candles)
 
         for existing_candles in self._candles.values():
             existing_candles.extend(deepcopy(candles_))
 
         self._collapse_candles()
-        self._candles_timerange()
-
         self.calculate()
+        self._candles_trim_lifespan()
 
-    def purge(self, name: Optional[str] = None) -> bool:
+    def purge(self, name: Optional[str] = None):
         """Takes Indicator name and removes all readings for said indicator.
         Indicator name must be exact"""
         for indicator_name, indicator in self._indicators.items():
-            if name is None or indicator_name == name:
+            if name is None or (name and name in indicator_name):
                 indicator.purge()
-                return True
-        return False
 
     def calculate(self, name: Optional[str] = None):
         """Calculates all the missing indicator readings."""

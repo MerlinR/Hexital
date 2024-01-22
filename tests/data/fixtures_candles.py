@@ -5,8 +5,8 @@ import pytest
 from hexital import Candle
 
 
-def load_json_candles() -> list:
-    csv_file = open("tests/data/test_candles.json")
+def load_json_candles(name: str) -> list:
+    csv_file = open(f"tests/data/{name}.json")
     raw_candles = json.load(csv_file)
     for candle in raw_candles:
         candle["timestamp"] = datetime.strptime(candle["timestamp"], "%Y-%m-%dT%H:%M:%S")
@@ -15,7 +15,17 @@ def load_json_candles() -> list:
 
 @pytest.fixture(name="candles")
 def fixture_candle_data():
-    return Candle.from_dicts(load_json_candles())
+    return Candle.from_dicts(load_json_candles("test_candles"))
+
+
+@pytest.fixture(name="candles_T5")
+def fixture_candle_data_T5():
+    return Candle.from_dicts(load_json_candles("test_candles_5T"))
+
+
+@pytest.fixture(name="candles_T10")
+def fixture_candle_data_T10():
+    return Candle.from_dicts(load_json_candles("test_candles_10T"))
 
 
 @pytest.fixture(name="minimal_candles")

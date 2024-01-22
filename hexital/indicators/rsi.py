@@ -46,12 +46,10 @@ class RSI(Indicator):
             change_loss = change if change > 0 else 0.0
 
             self._managed_indictor("RSI_gain").set_reading(
-                ((self.prev_reading("RSI_gain") * (self.period - 1)) + change_gain)
-                / self.period,
+                ((self.prev_reading("RSI_gain") * (self.period - 1)) + change_gain) / self.period,
             )
             self._managed_indictor("RSI_loss").set_reading(
-                ((self.prev_reading("RSI_loss") * (self.period - 1)) + change_loss)
-                / self.period,
+                ((self.prev_reading("RSI_loss") * (self.period - 1)) + change_loss) / self.period,
             )
         elif self.reading_period(self.period + 1, self.input_value):
             changes = [

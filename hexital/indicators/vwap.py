@@ -30,10 +30,7 @@ class VWAP(Indicator):
         )
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-
-        typical_price = (
-            self.reading("high") + self.reading("low") + self.reading("close")
-        ) / 3
+        typical_price = (self.reading("high") + self.reading("low") + self.reading("close")) / 3
 
         prev_pv = 0
         prev_vol = 0
@@ -45,5 +42,8 @@ class VWAP(Indicator):
             prev_pv + self.reading("volume") * typical_price
         )
         self._managed_indictor("VWAP_Vol").set_reading(prev_vol + self.reading("volume"))
+
+        if self.reading("VWAP_Vol") == 0:
+            return self.reading("VWAP_PV")
 
         return self.reading("VWAP_PV") / self.reading("VWAP_Vol")

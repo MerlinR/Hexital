@@ -7,7 +7,9 @@
 [![Unit Tests - Dev](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml/badge.svg?branch=development)](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml)
 
 # `Alpha Development`❗
-Note: Extremely early stages and likely change drastically, including core functionality and methods. Specifically until a basis for Patterns and Multi time TA are designed.
+Note: Extremely early stages and likely change drastically, including core functionality and methods.
+Will leave Alpha into Beta when Candlestick re-painting framework is in and happy with user interaction convenience. 
+
 # Hexital
 `Hexital` is a Python library implementing financial indicators for technical analysis. The distinctive feature of the library is its incremental computation of indicators which is designed to fit real-time applications or applications with iterative input in general.
 
@@ -30,7 +32,7 @@ Example:
 ```python
 stratergy = Hexital("Test Stratergy", candles_1m, [RSI(), EMA(timeframe="T10")])
 # OR
-stratergy = Hexital("Test Stratergy", candles_tick, [RSI(timeframe="T1"), EMA(timeframe="T10")])
+stratergy = Hexital("Test Stratergy", candles_tick, [RSI(timeframe="T1"), EMA(timeframe=TimeFrame.MINUTE10)])
 ```
 
 ### Candlestick Movement
@@ -58,6 +60,7 @@ Hexital also comes built with some candle utility methods, such as Rising Candle
 ## Candle Patterns
 Simple useful Candle pattern recognition, such as Doji, hammer, etc
 - Doji
+- Hammer
 
 ## Candlestick Movement
 Simple useful Candle Anaylsis methods such as those in [Pine Scripting](https://www.tradingview.com/pine-script-reference/v5/)
@@ -101,7 +104,7 @@ my_candles = [
 ]
 # Convert Basic candles
 candles = Candle.from_dicts(my_candles)
-my_ema = EMA(candles=parsed_candles, period=3)
+my_ema = EMA(candles=candles, period=3)
 my_ema.calculate()
 
 # Indicator name is generated based on Indicator and parameters
@@ -149,6 +152,7 @@ print(my_ema.reading("high", index=-2)) # 6584
 
 Roughly ordered in priority
 
+- Modular framework (like indicators) to repaint candles, E.G as Renko, Range, etc 
 - More Indicators
 - More Movement methods
 - Pattern Candle recognition methods, detecting Doji, Hammer, etc

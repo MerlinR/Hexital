@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 
 The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+
+## 0.4.0 0 - 2024-01-22
+- Cleaned up code and some potential Bugs ruff/pyright
+- Added movement Above/Below and updated others to use it
+- Updated collapse candle 'fill' to show essentially doji candle rather than copy prev
+- Added Patterns:
+  - Hammer Candle
+- Added a TimeFrame Enum with common timeframes for easier usage
+- Renamed Pattern to Amorph and updated to only require either 'indicator' or 'analysis'
+- Renamed candles_timerange to candles_lifespan, to be clearer of purpose and avoid confusion with candles_timeframe
+- Updated Hexital/Amorph to accept patterns, movements and custom methods
+- Major Fix: Re-wrote collapse_candles_timeframe to correctly handle candles,gaps and appending
+- Fixed Doji pattern
+- Fixed Supertrend Indicator
+- Fixed Timeframe bug with candles reference in indicator that use sub indicators
+- Fixed possible error in VWAP with no volumes traded
+- Fixed bug with nested Indicator returning None for valid 0 Value
+- Fixed purge not correctly purge sub and managed indicators
+
 ## 0.3.1 - 2023-10-09
 - Added candles_timerange to auto remove older than N candles
 - Added 'Settings' propety, to output Indicator in a dict format, that can be fed into back into Hexital

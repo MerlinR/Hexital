@@ -14,7 +14,7 @@ class Managed(Indicator):
 
     indicator_name: str = "MAN"
     _sub_indicator: bool = True
-    _active_index: bool = 0
+    _active_index: int = 0
 
     def _generate_name(self) -> str:
         return self.indicator_name

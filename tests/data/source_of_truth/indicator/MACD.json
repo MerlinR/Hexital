@@ -165,2338 +165,2338 @@
         "histogram": null
     },
     {
-        "MACD": 107.7785,
-        "signal": 1404.0537,
-        "histogram": -1296.2752
+        "MACD": -1.4184,
+        "signal": -0.1646,
+        "histogram": -1.2538
     },
     {
-        "MACD": -312.2386,
-        "signal": 1060.7953,
-        "histogram": -1373.0338
+        "MACD": -2.0472,
+        "signal": -0.5411,
+        "histogram": -1.5061
     },
     {
-        "MACD": 354.6112,
-        "signal": 919.5585,
-        "histogram": -564.9473
+        "MACD": -2.5644,
+        "signal": -0.9458,
+        "histogram": -1.6187
     },
     {
-        "MACD": 550.5919,
-        "signal": 845.7651,
-        "histogram": -295.1733
+        "MACD": -2.8926,
+        "signal": -1.3351,
+        "histogram": -1.5574
     },
     {
-        "MACD": 855.6526,
-        "signal": 847.7426,
-        "histogram": 7.91
+        "MACD": -3.1885,
+        "signal": -1.7058,
+        "histogram": -1.4827
     },
     {
-        "MACD": 618.8808,
-        "signal": 801.9703,
-        "histogram": -183.0894
+        "MACD": -3.4638,
+        "signal": -2.0574,
+        "histogram": -1.4064
     },
     {
-        "MACD": -124.902,
-        "signal": 616.5958,
-        "histogram": -741.4978
+        "MACD": -3.7676,
+        "signal": -2.3994,
+        "histogram": -1.3682
     },
     {
-        "MACD": -206.7614,
-        "signal": 451.9244,
-        "histogram": -658.6858
+        "MACD": -3.9149,
+        "signal": -2.7025,
+        "histogram": -1.2123
     },
     {
-        "MACD": -396.4147,
-        "signal": 282.2566,
-        "histogram": -678.6713
+        "MACD": -4.3765,
+        "signal": -3.0373,
+        "histogram": -1.3392
     },
     {
-        "MACD": 47.4343,
-        "signal": 235.2921,
-        "histogram": -187.8578
+        "MACD": -4.6564,
+        "signal": -3.3611,
+        "histogram": -1.2953
     },
     {
-        "MACD": -247.5265,
-        "signal": 138.7284,
-        "histogram": -386.2549
+        "MACD": -4.5354,
+        "signal": -3.596,
+        "histogram": -0.9395
     },
     {
-        "MACD": -116.9856,
-        "signal": 87.5856,
-        "histogram": -204.5712
+        "MACD": -4.1497,
+        "signal": -3.7067,
+        "histogram": -0.443
     },
     {
-        "MACD": 386.2814,
-        "signal": 147.3248,
-        "histogram": 238.9566
+        "MACD": -3.8879,
+        "signal": -3.743,
+        "histogram": -0.1449
     },
     {
-        "MACD": 348.4389,
-        "signal": 187.5476,
-        "histogram": 160.8913
+        "MACD": -3.83,
+        "signal": -3.7604,
+        "histogram": -0.0696
     },
     {
-        "MACD": 268.2325,
-        "signal": 203.6846,
-        "histogram": 64.548
+        "MACD": -3.4218,
+        "signal": -3.6927,
+        "histogram": 0.2708
     },
     {
-        "MACD": -96.57,
-        "signal": 143.6337,
-        "histogram": -240.2036
+        "MACD": -3.1029,
+        "signal": -3.5747,
+        "histogram": 0.4718
     },
     {
-        "MACD": -82.2179,
-        "signal": 98.4633,
-        "histogram": -180.6812
+        "MACD": -2.3072,
+        "signal": -3.3212,
+        "histogram": 1.014
     },
     {
-        "MACD": -390.082,
-        "signal": 0.7543,
-        "histogram": -390.8363
+        "MACD": -1.3703,
+        "signal": -2.931,
+        "histogram": 1.5607
     },
     {
-        "MACD": -196.5501,
-        "signal": -38.7066,
-        "histogram": -157.8435
+        "MACD": -0.4691,
+        "signal": -2.4386,
+        "histogram": 1.9696
     },
     {
-        "MACD": 360.8045,
-        "signal": 41.1956,
-        "histogram": 319.6089
+        "MACD": 0.37,
+        "signal": -1.8769,
+        "histogram": 2.2469
     },
     {
-        "MACD": 261.4464,
-        "signal": 85.2458,
-        "histogram": 176.2006
+        "MACD": 1.0391,
+        "signal": -1.2937,
+        "histogram": 2.3328
     },
     {
-        "MACD": 690.5255,
-        "signal": 206.3017,
-        "histogram": 484.2237
+        "MACD": 1.033,
+        "signal": -0.8284,
+        "histogram": 1.8614
     },
     {
-        "MACD": -224.2591,
-        "signal": 120.1896,
-        "histogram": -344.4486
+        "MACD": 0.9766,
+        "signal": -0.4674,
+        "histogram": 1.4439
     },
     {
-        "MACD": -798.1756,
-        "signal": -63.4835,
-        "histogram": -734.6922
+        "MACD": 0.7776,
+        "signal": -0.2184,
+        "histogram": 0.996
     },
     {
-        "MACD": -1267.0484,
-        "signal": -304.1965,
-        "histogram": -962.852
+        "MACD": 0.565,
+        "signal": -0.0617,
+        "histogram": 0.6267
     },
     {
-        "MACD": -1431.7773,
-        "signal": -529.7126,
-        "histogram": -902.0646
+        "MACD": 0.3521,
+        "signal": 0.0211,
+        "histogram": 0.3311
     },
     {
-        "MACD": -365.7298,
-        "signal": -496.9161,
-        "histogram": 131.1863
+        "MACD": 0.5962,
+        "signal": 0.1361,
+        "histogram": 0.4601
     },
     {
-        "MACD": 363.7346,
-        "signal": -324.7859,
-        "histogram": 688.5205
+        "MACD": 0.7327,
+        "signal": 0.2554,
+        "histogram": 0.4773
     },
     {
-        "MACD": 1090.5715,
-        "signal": -41.7144,
-        "histogram": 1132.2859
+        "MACD": 1.5413,
+        "signal": 0.5126,
+        "histogram": 1.0287
     },
     {
-        "MACD": 1145.1979,
-        "signal": 195.668,
-        "histogram": 949.5299
+        "MACD": 2.1333,
+        "signal": 0.8367,
+        "histogram": 1.2965
     },
     {
-        "MACD": 971.3673,
-        "signal": 350.8079,
-        "histogram": 620.5594
+        "MACD": 2.3733,
+        "signal": 1.144,
+        "histogram": 1.2293
     },
     {
-        "MACD": 1180.4474,
-        "signal": 516.7358,
-        "histogram": 663.7116
+        "MACD": 2.7976,
+        "signal": 1.4748,
+        "histogram": 1.3229
     },
     {
-        "MACD": 703.6362,
-        "signal": 554.1159,
-        "histogram": 149.5203
+        "MACD": 2.9546,
+        "signal": 1.7707,
+        "histogram": 1.1839
     },
     {
-        "MACD": 906.2184,
-        "signal": 624.5364,
-        "histogram": 281.682
+        "MACD": 3.2274,
+        "signal": 2.0621,
+        "histogram": 1.1653
     },
     {
-        "MACD": 1096.4099,
-        "signal": 718.9111,
-        "histogram": 377.4988
+        "MACD": 3.173,
+        "signal": 2.2842,
+        "histogram": 0.8887
     },
     {
-        "MACD": 742.3274,
-        "signal": 723.5943,
-        "histogram": 18.7331
+        "MACD": 3.1421,
+        "signal": 2.4558,
+        "histogram": 0.6863
     },
     {
-        "MACD": 149.9684,
-        "signal": 608.8692,
-        "histogram": -458.9007
+        "MACD": 3.0023,
+        "signal": 2.5651,
+        "histogram": 0.4372
     },
     {
-        "MACD": 754.622,
-        "signal": 638.0197,
-        "histogram": 116.6023
+        "MACD": 2.3799,
+        "signal": 2.5281,
+        "histogram": -0.1482
     },
     {
-        "MACD": 648.9048,
-        "signal": 640.1967,
-        "histogram": 8.708
+        "MACD": 1.8173,
+        "signal": 2.3859,
+        "histogram": -0.5686
     },
     {
-        "MACD": 593.9422,
-        "signal": 630.9458,
-        "histogram": -37.0036
+        "MACD": 1.1404,
+        "signal": 2.1368,
+        "histogram": -0.9964
     },
     {
-        "MACD": 887.7699,
-        "signal": 682.3106,
-        "histogram": 205.4593
+        "MACD": 0.6449,
+        "signal": 1.8384,
+        "histogram": -1.1935
     },
     {
-        "MACD": 1058.4808,
-        "signal": 757.5447,
-        "histogram": 300.9362
+        "MACD": -0.0777,
+        "signal": 1.4552,
+        "histogram": -1.5329
     },
     {
-        "MACD": 812.417,
-        "signal": 768.5191,
-        "histogram": 43.8978
+        "MACD": -0.5791,
+        "signal": 1.0484,
+        "histogram": -1.6274
     },
     {
-        "MACD": 767.9234,
-        "signal": 768.4,
-        "histogram": -0.4766
+        "MACD": -1.0531,
+        "signal": 0.6281,
+        "histogram": -1.6812
     },
     {
-        "MACD": 1129.9536,
-        "signal": 840.7107,
-        "histogram": 289.2429
+        "MACD": -1.4204,
+        "signal": 0.2184,
+        "histogram": -1.6388
     },
     {
-        "MACD": 876.1373,
-        "signal": 847.796,
-        "histogram": 28.3413
+        "MACD": -1.7718,
+        "signal": -0.1797,
+        "histogram": -1.5922
     },
     {
-        "MACD": 896.878,
-        "signal": 857.6124,
-        "histogram": 39.2655
+        "MACD": -1.8594,
+        "signal": -0.5156,
+        "histogram": -1.3438
     },
     {
-        "MACD": 1220.32,
-        "signal": 930.1539,
-        "histogram": 290.1661
+        "MACD": -1.3883,
+        "signal": -0.6902,
+        "histogram": -0.6982
     },
     {
-        "MACD": 1377.4177,
-        "signal": 1019.6067,
-        "histogram": 357.811
+        "MACD": -0.8599,
+        "signal": -0.7241,
+        "histogram": -0.1357
     },
     {
-        "MACD": 612.7345,
-        "signal": 938.2323,
-        "histogram": -325.4978
+        "MACD": -0.5955,
+        "signal": -0.6984,
+        "histogram": 0.1029
     },
     {
-        "MACD": 551.8034,
-        "signal": 860.9465,
-        "histogram": -309.1431
+        "MACD": -0.1982,
+        "signal": -0.5984,
+        "histogram": 0.4002
     },
     {
-        "MACD": 217.5377,
-        "signal": 732.2647,
-        "histogram": -514.7271
+        "MACD": 0.4185,
+        "signal": -0.395,
+        "histogram": 0.8135
     },
     {
-        "MACD": 259.7336,
-        "signal": 637.7585,
-        "histogram": -378.0249
+        "MACD": 1.1123,
+        "signal": -0.0935,
+        "histogram": 1.2058
     },
     {
-        "MACD": 732.8075,
-        "signal": 656.7683,
-        "histogram": 76.0392
+        "MACD": 1.5953,
+        "signal": 0.2442,
+        "histogram": 1.3511
     },
     {
-        "MACD": 887.691,
-        "signal": 702.9528,
-        "histogram": 184.7382
+        "MACD": 2.0034,
+        "signal": 0.5961,
+        "histogram": 1.4074
     },
     {
-        "MACD": 1136.7685,
-        "signal": 789.716,
-        "histogram": 347.0525
+        "MACD": 2.5955,
+        "signal": 0.996,
+        "histogram": 1.5996
     },
     {
-        "MACD": 1424.4187,
-        "signal": 916.6565,
-        "histogram": 507.7622
+        "MACD": 3.1734,
+        "signal": 1.4315,
+        "histogram": 1.742
     },
     {
-        "MACD": 1039.7297,
-        "signal": 941.2712,
-        "histogram": 98.4585
+        "MACD": 3.3427,
+        "signal": 1.8137,
+        "histogram": 1.529
     },
     {
-        "MACD": 1115.455,
-        "signal": 976.1079,
-        "histogram": 139.3471
+        "MACD": 3.5968,
+        "signal": 2.1703,
+        "histogram": 1.4265
     },
     {
-        "MACD": 124.7161,
-        "signal": 805.8295,
-        "histogram": -681.1135
+        "MACD": 4.3452,
+        "signal": 2.6053,
+        "histogram": 1.7399
     },
     {
-        "MACD": -435.3069,
-        "signal": 557.6023,
-        "histogram": -992.9092
+        "MACD": 4.8103,
+        "signal": 3.0463,
+        "histogram": 1.764
     },
     {
-        "MACD": -640.4838,
-        "signal": 317.985,
-        "histogram": -958.4688
+        "MACD": 4.6811,
+        "signal": 3.3733,
+        "histogram": 1.3078
     },
     {
-        "MACD": -1088.3747,
-        "signal": 36.7131,
-        "histogram": -1125.0878
+        "MACD": 4.2872,
+        "signal": 3.556,
+        "histogram": 0.7311
     },
     {
-        "MACD": -1287.3619,
-        "signal": -228.1019,
-        "histogram": -1059.26
+        "MACD": 3.6824,
+        "signal": 3.5813,
+        "histogram": 0.1011
     },
     {
-        "MACD": -1084.456,
-        "signal": -399.3727,
-        "histogram": -685.0833
+        "MACD": 2.7837,
+        "signal": 3.4218,
+        "histogram": -0.6381
     },
     {
-        "MACD": -1537.1029,
-        "signal": -626.9188,
-        "histogram": -910.1841
+        "MACD": 2.2234,
+        "signal": 3.1821,
+        "histogram": -0.9587
     },
     {
-        "MACD": -1816.3094,
-        "signal": -864.7969,
-        "histogram": -951.5125
+        "MACD": 1.424,
+        "signal": 2.8305,
+        "histogram": -1.4065
     },
     {
-        "MACD": -1876.197,
-        "signal": -1067.0769,
-        "histogram": -809.1201
+        "MACD": 0.1194,
+        "signal": 2.2883,
+        "histogram": -2.1689
     },
     {
-        "MACD": -1619.6622,
-        "signal": -1177.594,
-        "histogram": -442.0683
+        "MACD": -0.9999,
+        "signal": 1.6306,
+        "histogram": -2.6305
     },
     {
-        "MACD": -1680.9337,
-        "signal": -1278.2619,
-        "histogram": -402.6718
+        "MACD": -2.0249,
+        "signal": 0.8995,
+        "histogram": -2.9244
     },
     {
-        "MACD": -1244.7113,
-        "signal": -1271.5518,
-        "histogram": 26.8405
+        "MACD": -2.9645,
+        "signal": 0.1267,
+        "histogram": -3.0912
     },
     {
-        "MACD": -1185.2696,
-        "signal": -1254.2954,
-        "histogram": 69.0257
+        "MACD": -3.4355,
+        "signal": -0.5857,
+        "histogram": -2.8498
     },
     {
-        "MACD": -817.6698,
-        "signal": -1166.9703,
-        "histogram": 349.3004
+        "MACD": -3.7414,
+        "signal": -1.2168,
+        "histogram": -2.5246
     },
     {
-        "MACD": 14.3661,
-        "signal": -930.703,
-        "histogram": 945.0691
+        "MACD": -3.9783,
+        "signal": -1.7691,
+        "histogram": -2.2092
     },
     {
-        "MACD": -283.684,
-        "signal": -801.2992,
-        "histogram": 517.6152
+        "MACD": -4.0788,
+        "signal": -2.2311,
+        "histogram": -1.8477
     },
     {
-        "MACD": -565.3393,
-        "signal": -754.1072,
-        "histogram": 188.7679
+        "MACD": -4.3024,
+        "signal": -2.6453,
+        "histogram": -1.6571
     },
     {
-        "MACD": -1124.8204,
-        "signal": -828.2498,
-        "histogram": -296.5706
+        "MACD": -4.7956,
+        "signal": -3.0754,
+        "histogram": -1.7202
     },
     {
-        "MACD": -789.0769,
-        "signal": -820.4153,
-        "histogram": 31.3384
+        "MACD": -5.1672,
+        "signal": -3.4937,
+        "histogram": -1.6734
     },
     {
-        "MACD": -432.0006,
-        "signal": -742.7323,
-        "histogram": 310.7317
+        "MACD": -5.3436,
+        "signal": -3.8637,
+        "histogram": -1.4799
     },
     {
-        "MACD": -842.6901,
-        "signal": -762.7239,
-        "histogram": -79.9662
+        "MACD": -5.2294,
+        "signal": -4.1368,
+        "histogram": -1.0926
     },
     {
-        "MACD": -346.3621,
-        "signal": -679.4515,
-        "histogram": 333.0895
+        "MACD": -5.24,
+        "signal": -4.3575,
+        "histogram": -0.8825
     },
     {
-        "MACD": 344.1555,
-        "signal": -474.7301,
-        "histogram": 818.8856
+        "MACD": -5.1486,
+        "signal": -4.5157,
+        "histogram": -0.6329
     },
     {
-        "MACD": -375.7314,
-        "signal": -454.9304,
-        "histogram": 79.199
+        "MACD": -5.0902,
+        "signal": -4.6306,
+        "histogram": -0.4596
     },
     {
-        "MACD": -21.0361,
-        "signal": -368.1515,
-        "histogram": 347.1154
+        "MACD": -5.122,
+        "signal": -4.7289,
+        "histogram": -0.3931
     },
     {
-        "MACD": -396.5537,
-        "signal": -373.832,
-        "histogram": -22.7217
+        "MACD": -5.1843,
+        "signal": -4.8199,
+        "histogram": -0.3643
     },
     {
-        "MACD": -323.9187,
-        "signal": -363.8493,
-        "histogram": 39.9306
+        "MACD": -5.3495,
+        "signal": -4.9259,
+        "histogram": -0.4236
     },
     {
-        "MACD": -680.9264,
-        "signal": -427.2647,
-        "histogram": -253.6617
+        "MACD": -5.4578,
+        "signal": -5.0322,
+        "histogram": -0.4256
     },
     {
-        "MACD": -486.9247,
-        "signal": -439.1967,
-        "histogram": -47.728
+        "MACD": -5.5204,
+        "signal": -5.1299,
+        "histogram": -0.3905
     },
     {
-        "MACD": 139.2011,
-        "signal": -323.5171,
-        "histogram": 462.7183
+        "MACD": -5.714,
+        "signal": -5.2467,
+        "histogram": -0.4673
     },
     {
-        "MACD": 811.8045,
-        "signal": -96.4528,
-        "histogram": 908.2573
+        "MACD": -5.976,
+        "signal": -5.3926,
+        "histogram": -0.5834
     },
     {
-        "MACD": 7.2995,
-        "signal": -75.7024,
-        "histogram": 83.0018
+        "MACD": -6.1291,
+        "signal": -5.5399,
+        "histogram": -0.5892
     },
     {
-        "MACD": 453.7493,
-        "signal": 30.188,
-        "histogram": 423.5614
+        "MACD": -6.1792,
+        "signal": -5.6677,
+        "histogram": -0.5115
     },
     {
-        "MACD": 93.4152,
-        "signal": 42.8334,
-        "histogram": 50.5818
+        "MACD": -6.3316,
+        "signal": -5.8005,
+        "histogram": -0.5311
     },
     {
-        "MACD": 642.2997,
-        "signal": 162.7267,
-        "histogram": 479.573
+        "MACD": -6.275,
+        "signal": -5.8954,
+        "histogram": -0.3796
     },
     {
-        "MACD": -220.7487,
-        "signal": 86.0316,
-        "histogram": -306.7803
+        "MACD": -6.957,
+        "signal": -6.1077,
+        "histogram": -0.8493
     },
     {
-        "MACD": -703.835,
-        "signal": -71.9417,
-        "histogram": -631.8933
+        "MACD": -7.6832,
+        "signal": -6.4228,
+        "histogram": -1.2604
     },
     {
-        "MACD": -1121.6053,
-        "signal": -281.8744,
-        "histogram": -839.7309
+        "MACD": -8.2125,
+        "signal": -6.7808,
+        "histogram": -1.4317
     },
     {
-        "MACD": -557.2875,
-        "signal": -336.957,
-        "histogram": -220.3304
+        "MACD": -9.2356,
+        "signal": -7.2717,
+        "histogram": -1.9639
     },
     {
-        "MACD": -250.2431,
-        "signal": -319.6143,
-        "histogram": 69.3711
+        "MACD": -9.9,
+        "signal": -7.7974,
+        "histogram": -2.1026
     },
     {
-        "MACD": -415.4222,
-        "signal": -338.7758,
-        "histogram": -76.6463
+        "MACD": -10.4194,
+        "signal": -8.3218,
+        "histogram": -2.0976
     },
     {
-        "MACD": -451.0761,
-        "signal": -361.2359,
-        "histogram": -89.8402
+        "MACD": -10.7156,
+        "signal": -8.8005,
+        "histogram": -1.915
     },
     {
-        "MACD": -256.6503,
-        "signal": -340.3188,
-        "histogram": 83.6685
+        "MACD": -11.0409,
+        "signal": -9.2486,
+        "histogram": -1.7923
     },
     {
-        "MACD": -763.9845,
-        "signal": -425.0519,
-        "histogram": -338.9326
+        "MACD": -11.2417,
+        "signal": -9.6472,
+        "histogram": -1.5945
     },
     {
-        "MACD": -142.0499,
-        "signal": -368.4515,
-        "histogram": 226.4016
+        "MACD": -11.63,
+        "signal": -10.0438,
+        "histogram": -1.5862
     },
     {
-        "MACD": -808.4994,
-        "signal": -456.4611,
-        "histogram": -352.0383
+        "MACD": -11.4825,
+        "signal": -10.3315,
+        "histogram": -1.151
     },
     {
-        "MACD": -926.6408,
-        "signal": -550.497,
-        "histogram": -376.1438
+        "MACD": -11.3239,
+        "signal": -10.53,
+        "histogram": -0.7939
     },
     {
-        "MACD": -752.5733,
-        "signal": -590.9123,
-        "histogram": -161.661
+        "MACD": -10.9828,
+        "signal": -10.6206,
+        "histogram": -0.3622
     },
     {
-        "MACD": -527.8473,
-        "signal": -578.2993,
-        "histogram": 50.452
+        "MACD": -10.6223,
+        "signal": -10.6209,
+        "histogram": -0.0014
     },
     {
-        "MACD": -545.434,
-        "signal": -571.7262,
-        "histogram": 26.2922
+        "MACD": -10.4741,
+        "signal": -10.5915,
+        "histogram": 0.1174
     },
     {
-        "MACD": -153.8973,
-        "signal": -488.1605,
-        "histogram": 334.2631
+        "MACD": -11.3315,
+        "signal": -10.7395,
+        "histogram": -0.592
     },
     {
-        "MACD": -676.0506,
-        "signal": -525.7385,
-        "histogram": -150.3121
+        "MACD": -12.3288,
+        "signal": -11.0574,
+        "histogram": -1.2714
     },
     {
-        "MACD": -889.7371,
-        "signal": -598.5382,
-        "histogram": -291.1989
+        "MACD": -12.6825,
+        "signal": -11.3824,
+        "histogram": -1.3001
     },
     {
-        "MACD": -133.5458,
-        "signal": -505.5397,
-        "histogram": 371.9939
+        "MACD": -12.8071,
+        "signal": -11.6674,
+        "histogram": -1.1398
     },
     {
-        "MACD": 221.0377,
-        "signal": -360.2243,
-        "histogram": 581.2619
+        "MACD": -12.4397,
+        "signal": -11.8218,
+        "histogram": -0.6179
     },
     {
-        "MACD": 873.8078,
-        "signal": -113.4178,
-        "histogram": 987.2256
+        "MACD": -11.8984,
+        "signal": -11.8371,
+        "histogram": -0.0613
     },
     {
-        "MACD": 287.268,
-        "signal": -33.2807,
-        "histogram": 320.5487
+        "MACD": -10.8361,
+        "signal": -11.6369,
+        "histogram": 0.8008
     },
     {
-        "MACD": -401.4599,
-        "signal": -106.9165,
-        "histogram": -294.5434
+        "MACD": -10.0798,
+        "signal": -11.3255,
+        "histogram": 1.2457
     },
     {
-        "MACD": -806.6973,
-        "signal": -246.8727,
-        "histogram": -559.8247
+        "MACD": -9.0932,
+        "signal": -10.879,
+        "histogram": 1.7859
     },
     {
-        "MACD": -719.5677,
-        "signal": -341.4117,
-        "histogram": -378.156
+        "MACD": -8.7271,
+        "signal": -10.4487,
+        "histogram": 1.7215
     },
     {
-        "MACD": -230.6819,
-        "signal": -319.2657,
-        "histogram": 88.5838
+        "MACD": -8.3728,
+        "signal": -10.0335,
+        "histogram": 1.6607
     },
     {
-        "MACD": -634.4474,
-        "signal": -382.3021,
-        "histogram": -252.1453
+        "MACD": -8.0476,
+        "signal": -9.6363,
+        "histogram": 1.5887
     },
     {
-        "MACD": -755.2158,
-        "signal": -456.8848,
-        "histogram": -298.331
+        "MACD": -8.2196,
+        "signal": -9.353,
+        "histogram": 1.1334
     },
     {
-        "MACD": -888.6131,
-        "signal": -543.2305,
-        "histogram": -345.3826
+        "MACD": -8.2926,
+        "signal": -9.1409,
+        "histogram": 0.8483
     },
     {
-        "MACD": -1118.6923,
-        "signal": -658.3228,
-        "histogram": -460.3695
+        "MACD": -8.0559,
+        "signal": -8.9239,
+        "histogram": 0.868
     },
     {
-        "MACD": -599.2878,
-        "signal": -646.5158,
-        "histogram": 47.228
+        "MACD": -7.6271,
+        "signal": -8.6645,
+        "histogram": 1.0375
     },
     {
-        "MACD": -537.4719,
-        "signal": -624.707,
-        "histogram": 87.2352
+        "MACD": -7.3478,
+        "signal": -8.4012,
+        "histogram": 1.0534
     },
     {
-        "MACD": 398.8053,
-        "signal": -420.0046,
-        "histogram": 818.8098
+        "MACD": -6.9893,
+        "signal": -8.1188,
+        "histogram": 1.1295
     },
     {
-        "MACD": 549.224,
-        "signal": -226.1589,
-        "histogram": 775.3829
+        "MACD": -6.2141,
+        "signal": -7.7379,
+        "histogram": 1.5238
     },
     {
-        "MACD": 631.4584,
-        "signal": -54.6354,
-        "histogram": 686.0938
+        "MACD": -5.9427,
+        "signal": -7.3788,
+        "histogram": 1.4361
     },
     {
-        "MACD": 1166.8448,
-        "signal": 189.6606,
-        "histogram": 977.1841
+        "MACD": -6.0293,
+        "signal": -7.1089,
+        "histogram": 1.0796
     },
     {
-        "MACD": 297.2148,
-        "signal": 211.1715,
-        "histogram": 86.0433
+        "MACD": -6.0843,
+        "signal": -6.904,
+        "histogram": 0.8197
     },
     {
-        "MACD": -358.8681,
-        "signal": 97.1635,
-        "histogram": -456.0317
+        "MACD": -6.4409,
+        "signal": -6.8114,
+        "histogram": 0.3705
     },
     {
-        "MACD": -47.1511,
-        "signal": 68.3006,
-        "histogram": -115.4517
+        "MACD": -6.5113,
+        "signal": -6.7514,
+        "histogram": 0.24
     },
     {
-        "MACD": 639.1474,
-        "signal": 182.47,
-        "histogram": 456.6774
+        "MACD": -7.0507,
+        "signal": -6.8112,
+        "histogram": -0.2395
     },
     {
-        "MACD": -197.7315,
-        "signal": 106.4297,
-        "histogram": -304.1612
+        "MACD": -7.6083,
+        "signal": -6.9707,
+        "histogram": -0.6377
     },
     {
-        "MACD": -460.03,
-        "signal": -6.8623,
-        "histogram": -453.1677
+        "MACD": -8.2138,
+        "signal": -7.2193,
+        "histogram": -0.9945
     },
     {
-        "MACD": -1030.0356,
-        "signal": -211.4969,
-        "histogram": -818.5387
+        "MACD": -8.5387,
+        "signal": -7.4832,
+        "histogram": -1.0555
     },
     {
-        "MACD": -711.8345,
-        "signal": -311.5644,
-        "histogram": -400.27
+        "MACD": -9.015,
+        "signal": -7.7895,
+        "histogram": -1.2255
     },
     {
-        "MACD": -917.8155,
-        "signal": -432.8147,
-        "histogram": -485.0009
+        "MACD": -9.2775,
+        "signal": -8.0871,
+        "histogram": -1.1904
     },
     {
-        "MACD": -75.7344,
-        "signal": -361.3986,
-        "histogram": 285.6642
+        "MACD": -8.8589,
+        "signal": -8.2415,
+        "histogram": -0.6174
     },
     {
-        "MACD": 329.9273,
-        "signal": -223.1334,
-        "histogram": 553.0607
+        "MACD": -8.0949,
+        "signal": -8.2122,
+        "histogram": 0.1172
     },
     {
-        "MACD": -305.374,
-        "signal": -239.5815,
-        "histogram": -65.7925
+        "MACD": -7.4201,
+        "signal": -8.0538,
+        "histogram": 0.6336
     },
     {
-        "MACD": 432.682,
-        "signal": -105.1288,
-        "histogram": 537.8108
+        "MACD": -6.5994,
+        "signal": -7.7629,
+        "histogram": 1.1635
     },
     {
-        "MACD": 964.5186,
-        "signal": 108.8007,
-        "histogram": 855.718
+        "MACD": -5.7536,
+        "signal": -7.361,
+        "histogram": 1.6074
     },
     {
-        "MACD": 1351.8605,
-        "signal": 357.4126,
-        "histogram": 994.4479
+        "MACD": -5.2088,
+        "signal": -6.9306,
+        "histogram": 1.7218
     },
     {
-        "MACD": 1392.7938,
-        "signal": 564.4888,
-        "histogram": 828.3049
+        "MACD": -4.5392,
+        "signal": -6.4523,
+        "histogram": 1.9131
     },
     {
-        "MACD": 399.8749,
-        "signal": 531.5661,
-        "histogram": -131.6912
+        "MACD": -3.8591,
+        "signal": -5.9337,
+        "histogram": 2.0746
     },
     {
-        "MACD": 445.6635,
-        "signal": 514.3855,
-        "histogram": -68.722
+        "MACD": -3.9603,
+        "signal": -5.539,
+        "histogram": 1.5787
     },
     {
-        "MACD": 287.3194,
-        "signal": 468.9723,
-        "histogram": -181.6529
+        "MACD": -4.5848,
+        "signal": -5.3482,
+        "histogram": 0.7633
     },
     {
-        "MACD": 397.6274,
-        "signal": 454.7033,
-        "histogram": -57.076
+        "MACD": -4.639,
+        "signal": -5.2063,
+        "histogram": 0.5674
     },
     {
-        "MACD": 422.6421,
-        "signal": 448.2911,
-        "histogram": -25.649
+        "MACD": -4.812,
+        "signal": -5.1274,
+        "histogram": 0.3155
     },
     {
-        "MACD": 410.7005,
-        "signal": 440.773,
-        "histogram": -30.0725
+        "MACD": -5.2198,
+        "signal": -5.1459,
+        "histogram": -0.0739
     },
     {
-        "MACD": 983.1485,
-        "signal": 549.2481,
-        "histogram": 433.9004
+        "MACD": -5.5915,
+        "signal": -5.235,
+        "histogram": -0.3564
     },
     {
-        "MACD": 135.0762,
-        "signal": 466.4137,
-        "histogram": -331.3375
+        "MACD": -6.0263,
+        "signal": -5.3933,
+        "histogram": -0.6331
     },
     {
-        "MACD": 216.9559,
-        "signal": 416.5221,
-        "histogram": -199.5662
+        "MACD": -6.2505,
+        "signal": -5.5647,
+        "histogram": -0.6858
     },
     {
-        "MACD": 215.4548,
-        "signal": 376.3087,
-        "histogram": -160.8538
+        "MACD": -5.7248,
+        "signal": -5.5967,
+        "histogram": -0.128
     },
     {
-        "MACD": 470.285,
-        "signal": 395.1039,
-        "histogram": 75.181
+        "MACD": -5.0402,
+        "signal": -5.4854,
+        "histogram": 0.4453
     },
     {
-        "MACD": 411.6216,
-        "signal": 398.4075,
-        "histogram": 13.2141
+        "MACD": -4.4464,
+        "signal": -5.2776,
+        "histogram": 0.8312
     },
     {
-        "MACD": 1072.9352,
-        "signal": 533.313,
-        "histogram": 539.6222
+        "MACD": -4.1459,
+        "signal": -5.0513,
+        "histogram": 0.9054
     },
     {
-        "MACD": 1018.2728,
-        "signal": 630.305,
-        "histogram": 387.9678
+        "MACD": -3.4404,
+        "signal": -4.7291,
+        "histogram": 1.2887
     },
     {
-        "MACD": 1091.6368,
-        "signal": 722.5713,
-        "histogram": 369.0655
+        "MACD": -3.5265,
+        "signal": -4.4886,
+        "histogram": 0.9621
     },
     {
-        "MACD": 1544.55,
-        "signal": 886.9671,
-        "histogram": 657.5829
+        "MACD": -4.2,
+        "signal": -4.4309,
+        "histogram": 0.2309
     },
     {
-        "MACD": 450.2051,
-        "signal": 799.6147,
-        "histogram": -349.4096
+        "MACD": -4.4963,
+        "signal": -4.4439,
+        "histogram": -0.0523
     },
     {
-        "MACD": 489.3457,
-        "signal": 737.5609,
-        "histogram": -248.2152
+        "MACD": -4.5814,
+        "signal": -4.4714,
+        "histogram": -0.11
     },
     {
-        "MACD": 574.902,
-        "signal": 705.0291,
-        "histogram": -130.1271
+        "MACD": -4.2928,
+        "signal": -4.4357,
+        "histogram": 0.1429
     },
     {
-        "MACD": 802.1053,
-        "signal": 724.4444,
-        "histogram": 77.661
+        "MACD": -4.1773,
+        "signal": -4.384,
+        "histogram": 0.2067
     },
     {
-        "MACD": 484.2036,
-        "signal": 676.3962,
-        "histogram": -192.1926
+        "MACD": -3.4968,
+        "signal": -4.2066,
+        "histogram": 0.7098
     },
     {
-        "MACD": 881.5148,
-        "signal": 717.4199,
-        "histogram": 164.0949
+        "MACD": -2.7881,
+        "signal": -3.9229,
+        "histogram": 1.1348
     },
     {
-        "MACD": 959.0718,
-        "signal": 765.7503,
-        "histogram": 193.3215
+        "MACD": -2.1373,
+        "signal": -3.5658,
+        "histogram": 1.4285
     },
     {
-        "MACD": 329.4875,
-        "signal": 678.4977,
-        "histogram": -349.0103
+        "MACD": -1.7706,
+        "signal": -3.2067,
+        "histogram": 1.4361
     },
     {
-        "MACD": 424.856,
-        "signal": 627.7694,
-        "histogram": -202.9134
+        "MACD": -1.2317,
+        "signal": -2.8117,
+        "histogram": 1.58
     },
     {
-        "MACD": -297.8024,
-        "signal": 442.655,
-        "histogram": -740.4574
+        "MACD": -0.7636,
+        "signal": -2.4021,
+        "histogram": 1.6385
     },
     {
-        "MACD": -1037.2093,
-        "signal": 146.6822,
-        "histogram": -1183.8915
+        "MACD": 0.266,
+        "signal": -1.8685,
+        "histogram": 2.1345
     },
     {
-        "MACD": -1205.9161,
-        "signal": -123.8375,
-        "histogram": -1082.0786
+        "MACD": 1.0536,
+        "signal": -1.2841,
+        "histogram": 2.3377
     },
     {
-        "MACD": -625.4679,
-        "signal": -224.1636,
-        "histogram": -401.3043
+        "MACD": 1.1881,
+        "signal": -0.7896,
+        "histogram": 1.9777
     },
     {
-        "MACD": -120.5758,
-        "signal": -203.446,
-        "histogram": 82.8702
+        "MACD": 0.7693,
+        "signal": -0.4778,
+        "histogram": 1.2472
     },
     {
-        "MACD": 356.6994,
-        "signal": -91.4169,
-        "histogram": 448.1164
+        "MACD": 0.2251,
+        "signal": -0.3373,
+        "histogram": 0.5624
     },
     {
-        "MACD": 750.7391,
-        "signal": 77.0143,
-        "histogram": 673.7248
+        "MACD": -0.2517,
+        "signal": -0.3201,
+        "histogram": 0.0684
     },
     {
-        "MACD": 949.3543,
-        "signal": 251.4823,
-        "histogram": 697.872
+        "MACD": -0.4629,
+        "signal": -0.3487,
+        "histogram": -0.1142
     },
     {
-        "MACD": 203.0915,
-        "signal": 241.8041,
-        "histogram": -38.7126
+        "MACD": -0.5832,
+        "signal": -0.3956,
+        "histogram": -0.1876
     },
     {
-        "MACD": -655.2864,
-        "signal": 62.386,
-        "histogram": -717.6724
+        "MACD": -1.293,
+        "signal": -0.5751,
+        "histogram": -0.7179
     },
     {
-        "MACD": -1111.733,
-        "signal": -172.4378,
-        "histogram": -939.2952
+        "MACD": -2.1216,
+        "signal": -0.8844,
+        "histogram": -1.2372
     },
     {
-        "MACD": -443.5732,
-        "signal": -226.6649,
-        "histogram": -216.9083
+        "MACD": -3.3847,
+        "signal": -1.3844,
+        "histogram": -2.0003
     },
     {
-        "MACD": -1182.5297,
-        "signal": -417.8378,
-        "histogram": -764.6919
+        "MACD": -4.2561,
+        "signal": -1.9588,
+        "histogram": -2.2973
     },
     {
-        "MACD": -452.6691,
-        "signal": -424.8041,
-        "histogram": -27.865
+        "MACD": -4.4754,
+        "signal": -2.4621,
+        "histogram": -2.0133
     },
     {
-        "MACD": 12.1581,
-        "signal": -337.4117,
-        "histogram": 349.5697
+        "MACD": -5.2504,
+        "signal": -3.0197,
+        "histogram": -2.2306
     },
     {
-        "MACD": 286.6163,
-        "signal": -212.6061,
-        "histogram": 499.2224
+        "MACD": -5.7817,
+        "signal": -3.5721,
+        "histogram": -2.2096
     },
     {
-        "MACD": -386.5303,
-        "signal": -247.3909,
-        "histogram": -139.1394
+        "MACD": -7.2091,
+        "signal": -4.2995,
+        "histogram": -2.9096
     },
     {
-        "MACD": 67.6886,
-        "signal": -184.375,
-        "histogram": 252.0636
+        "MACD": -7.7826,
+        "signal": -4.9961,
+        "histogram": -2.7864
     },
     {
-        "MACD": 239.3109,
-        "signal": -99.6378,
-        "histogram": 338.9487
+        "MACD": -7.9836,
+        "signal": -5.5936,
+        "histogram": -2.39
     },
     {
-        "MACD": 700.6638,
-        "signal": 60.4225,
-        "histogram": 640.2413
+        "MACD": -7.1966,
+        "signal": -5.9142,
+        "histogram": -1.2824
     },
     {
-        "MACD": 132.212,
-        "signal": 74.7804,
-        "histogram": 57.4316
+        "MACD": -7.0245,
+        "signal": -6.1363,
+        "histogram": -0.8882
     },
     {
-        "MACD": -1.6373,
-        "signal": 59.4969,
-        "histogram": -61.1342
+        "MACD": -6.5464,
+        "signal": -6.2183,
+        "histogram": -0.328
     },
     {
-        "MACD": 41.092,
-        "signal": 55.8159,
-        "histogram": -14.7239
+        "MACD": -6.7273,
+        "signal": -6.3201,
+        "histogram": -0.4072
     },
     {
-        "MACD": 584.4031,
-        "signal": 161.5333,
-        "histogram": 422.8698
+        "MACD": -6.9121,
+        "signal": -6.4385,
+        "histogram": -0.4736
     },
     {
-        "MACD": -156.6312,
-        "signal": 97.9004,
-        "histogram": -254.5317
+        "MACD": -7.2015,
+        "signal": -6.5911,
+        "histogram": -0.6104
     },
     {
-        "MACD": 503.3519,
-        "signal": 178.9907,
-        "histogram": 324.3612
+        "MACD": -7.394,
+        "signal": -6.7517,
+        "histogram": -0.6423
     },
     {
-        "MACD": 784.3945,
-        "signal": 300.0715,
-        "histogram": 484.323
+        "MACD": -7.1734,
+        "signal": -6.836,
+        "histogram": -0.3373
     },
     {
-        "MACD": 11.7368,
-        "signal": 242.4045,
-        "histogram": -230.6678
+        "MACD": -7.1421,
+        "signal": -6.8972,
+        "histogram": -0.2449
     },
     {
-        "MACD": -90.0747,
-        "signal": 175.9087,
-        "histogram": -265.9834
+        "MACD": -7.2596,
+        "signal": -6.9697,
+        "histogram": -0.2899
     },
     {
-        "MACD": 574.7405,
-        "signal": 255.6751,
-        "histogram": 319.0655
+        "MACD": -7.261,
+        "signal": -7.028,
+        "histogram": -0.233
     },
     {
-        "MACD": 152.9321,
-        "signal": 235.1265,
-        "histogram": -82.1944
+        "MACD": -7.275,
+        "signal": -7.0774,
+        "histogram": -0.1976
     },
     {
-        "MACD": -698.9228,
-        "signal": 48.3166,
-        "histogram": -747.2394
+        "MACD": -7.251,
+        "signal": -7.1121,
+        "histogram": -0.1389
     },
     {
-        "MACD": -85.3627,
-        "signal": 21.5808,
-        "histogram": -106.9434
+        "MACD": -7.2851,
+        "signal": -7.1467,
+        "histogram": -0.1384
     },
     {
-        "MACD": -149.0821,
-        "signal": -12.5518,
-        "histogram": -136.5303
+        "MACD": -7.2049,
+        "signal": -7.1583,
+        "histogram": -0.0466
     },
     {
-        "MACD": -807.8015,
-        "signal": -171.6017,
-        "histogram": -636.1997
+        "MACD": -6.2303,
+        "signal": -6.9727,
+        "histogram": 0.7424
     },
     {
-        "MACD": 61.4617,
-        "signal": -124.9891,
-        "histogram": 186.4507
+        "MACD": -5.4915,
+        "signal": -6.6765,
+        "histogram": 1.185
     },
     {
-        "MACD": -783.1152,
-        "signal": -256.6143,
-        "histogram": -526.5009
+        "MACD": -4.5788,
+        "signal": -6.257,
+        "histogram": 1.6781
     },
     {
-        "MACD": -575.7938,
-        "signal": -320.4502,
-        "histogram": -255.3436
+        "MACD": -3.5005,
+        "signal": -5.7057,
+        "histogram": 2.2052
     },
     {
-        "MACD": -623.701,
-        "signal": -381.1003,
-        "histogram": -242.6006
+        "MACD": -2.2807,
+        "signal": -5.0207,
+        "histogram": 2.74
     },
     {
-        "MACD": -317.1701,
-        "signal": -368.3143,
-        "histogram": 51.1442
+        "MACD": -0.7167,
+        "signal": -4.1599,
+        "histogram": 3.4432
     },
     {
-        "MACD": -680.701,
-        "signal": -430.7916,
-        "histogram": -249.9094
+        "MACD": 0.6365,
+        "signal": -3.2006,
+        "histogram": 3.8371
     },
     {
-        "MACD": -6.958,
-        "signal": -346.0249,
-        "histogram": 339.0669
+        "MACD": 1.9766,
+        "signal": -2.1652,
+        "histogram": 4.1418
     },
     {
-        "MACD": 614.316,
-        "signal": -153.9567,
-        "histogram": 768.2727
+        "MACD": 2.5094,
+        "signal": -1.2303,
+        "histogram": 3.7397
     },
     {
-        "MACD": 146.5356,
-        "signal": -93.8582,
-        "histogram": 240.3939
+        "MACD": 2.6669,
+        "signal": -0.4508,
+        "histogram": 3.1178
     },
     {
-        "MACD": 19.6019,
-        "signal": -71.1662,
-        "histogram": 90.7681
+        "MACD": 2.5924,
+        "signal": 0.1578,
+        "histogram": 2.4346
     },
     {
-        "MACD": -430.8289,
-        "signal": -143.0988,
-        "histogram": -287.7301
+        "MACD": 1.7068,
+        "signal": 0.4676,
+        "histogram": 1.2392
     },
     {
-        "MACD": -787.1968,
-        "signal": -271.9184,
-        "histogram": -515.2784
+        "MACD": 1.3285,
+        "signal": 0.6398,
+        "histogram": 0.6887
     },
     {
-        "MACD": -734.1951,
-        "signal": -364.3737,
-        "histogram": -369.8214
+        "MACD": 0.8894,
+        "signal": 0.6897,
+        "histogram": 0.1997
     },
     {
-        "MACD": -387.7898,
-        "signal": -369.0569,
-        "histogram": -18.7328
+        "MACD": 0.3039,
+        "signal": 0.6126,
+        "histogram": -0.3087
     },
     {
-        "MACD": -404.4946,
-        "signal": -376.1444,
-        "histogram": -28.3501
+        "MACD": -0.5652,
+        "signal": 0.377,
+        "histogram": -0.9422
     },
     {
-        "MACD": 397.033,
-        "signal": -221.509,
-        "histogram": 618.5419
+        "MACD": -1.104,
+        "signal": 0.0808,
+        "histogram": -1.1848
     },
     {
-        "MACD": -359.651,
-        "signal": -249.1374,
-        "histogram": -110.5136
+        "MACD": -1.4179,
+        "signal": -0.2189,
+        "histogram": -1.1989
     },
     {
-        "MACD": 496.5157,
-        "signal": -100.0067,
-        "histogram": 596.5225
+        "MACD": -1.5678,
+        "signal": -0.4887,
+        "histogram": -1.0791
     },
     {
-        "MACD": 498.498,
-        "signal": 19.6942,
-        "histogram": 478.8038
+        "MACD": -1.468,
+        "signal": -0.6846,
+        "histogram": -0.7835
     },
     {
-        "MACD": 165.7092,
-        "signal": 48.8972,
-        "histogram": 116.812
+        "MACD": -1.1657,
+        "signal": -0.7808,
+        "histogram": -0.3849
     },
     {
-        "MACD": 306.7356,
-        "signal": 100.4649,
-        "histogram": 206.2707
+        "MACD": -1.1389,
+        "signal": -0.8524,
+        "histogram": -0.2865
     },
     {
-        "MACD": -409.916,
-        "signal": -1.6113,
-        "histogram": -408.3047
+        "MACD": -1.0491,
+        "signal": -0.8918,
+        "histogram": -0.1573
     },
     {
-        "MACD": -187.9089,
-        "signal": -38.8708,
-        "histogram": -149.0381
+        "MACD": -1.0306,
+        "signal": -0.9195,
+        "histogram": -0.1111
     },
     {
-        "MACD": -265.6651,
-        "signal": -84.2297,
-        "histogram": -181.4354
+        "MACD": -1.2596,
+        "signal": -0.9876,
+        "histogram": -0.2721
     },
     {
-        "MACD": 3.5079,
-        "signal": -66.6821,
-        "histogram": 70.1901
+        "MACD": -0.7626,
+        "signal": -0.9426,
+        "histogram": 0.18
     },
     {
-        "MACD": 739.6576,
-        "signal": 94.5858,
-        "histogram": 645.0718
+        "MACD": -0.3884,
+        "signal": -0.8317,
+        "histogram": 0.4433
     },
     {
-        "MACD": 814.9127,
-        "signal": 238.6512,
-        "histogram": 576.2615
+        "MACD": 0.2123,
+        "signal": -0.6229,
+        "histogram": 0.8352
     },
     {
-        "MACD": 1172.5067,
-        "signal": 425.4223,
-        "histogram": 747.0844
+        "MACD": 0.7762,
+        "signal": -0.3431,
+        "histogram": 1.1193
     },
     {
-        "MACD": 1482.2284,
-        "signal": 636.7835,
-        "histogram": 845.4449
+        "MACD": 1.6559,
+        "signal": 0.0567,
+        "histogram": 1.5992
     },
     {
-        "MACD": 692.0191,
-        "signal": 647.8306,
-        "histogram": 44.1885
+        "MACD": 3.6425,
+        "signal": 0.7739,
+        "histogram": 2.8687
     },
     {
-        "MACD": 1258.0145,
-        "signal": 769.8674,
-        "histogram": 488.1471
+        "MACD": 3.8811,
+        "signal": 1.3953,
+        "histogram": 2.4858
     },
     {
-        "MACD": 464.2159,
-        "signal": 708.7371,
-        "histogram": -244.5212
+        "MACD": 5.356,
+        "signal": 2.1875,
+        "histogram": 3.1686
     },
     {
-        "MACD": 346.827,
-        "signal": 636.3551,
-        "histogram": -289.5281
+        "MACD": 6.3708,
+        "signal": 3.0241,
+        "histogram": 3.3466
     },
     {
-        "MACD": -134.5554,
-        "signal": 482.173,
-        "histogram": -616.7284
+        "MACD": 7.875,
+        "signal": 3.9943,
+        "histogram": 3.8807
     },
     {
-        "MACD": -312.0197,
-        "signal": 323.3345,
-        "histogram": -635.3541
+        "MACD": 8.2458,
+        "signal": 4.8446,
+        "histogram": 3.4012
     },
     {
-        "MACD": -255.5712,
-        "signal": 207.5533,
-        "histogram": -463.1246
+        "MACD": 9.0486,
+        "signal": 5.6854,
+        "histogram": 3.3632
     },
     {
-        "MACD": -833.0481,
-        "signal": -0.567,
-        "histogram": -832.4812
+        "MACD": 10.2445,
+        "signal": 6.5972,
+        "histogram": 3.6473
     },
     {
-        "MACD": -873.0651,
-        "signal": -175.0666,
-        "histogram": -697.9985
+        "MACD": 10.9132,
+        "signal": 7.4604,
+        "histogram": 3.4528
     },
     {
-        "MACD": -1346.1375,
-        "signal": -409.2808,
-        "histogram": -936.8567
+        "MACD": 10.7543,
+        "signal": 8.1192,
+        "histogram": 2.6351
     },
     {
-        "MACD": -1379.7966,
-        "signal": -603.3839,
-        "histogram": -776.4127
+        "MACD": 11.5124,
+        "signal": 8.7978,
+        "histogram": 2.7146
     },
     {
-        "MACD": -1083.7199,
-        "signal": -699.4511,
-        "histogram": -384.2688
+        "MACD": 11.1216,
+        "signal": 9.2626,
+        "histogram": 1.859
     },
     {
-        "MACD": -335.8795,
-        "signal": -626.7368,
-        "histogram": 290.8573
+        "MACD": 10.1064,
+        "signal": 9.4314,
+        "histogram": 0.675
     },
     {
-        "MACD": -440.0743,
-        "signal": -589.4043,
-        "histogram": 149.33
+        "MACD": 9.9536,
+        "signal": 9.5358,
+        "histogram": 0.4178
     },
     {
-        "MACD": -819.9868,
-        "signal": -635.5208,
-        "histogram": -184.466
+        "MACD": 9.8002,
+        "signal": 9.5887,
+        "histogram": 0.2116
     },
     {
-        "MACD": -1279.4853,
-        "signal": -764.3137,
-        "histogram": -515.1716
+        "MACD": 9.7678,
+        "signal": 9.6245,
+        "histogram": 0.1433
     },
     {
-        "MACD": -557.5598,
-        "signal": -722.9629,
-        "histogram": 165.4031
+        "MACD": 8.7536,
+        "signal": 9.4503,
+        "histogram": -0.6967
     },
     {
-        "MACD": -22.6089,
-        "signal": -582.8921,
-        "histogram": 560.2832
+        "MACD": 7.5003,
+        "signal": 9.0603,
+        "histogram": -1.56
     },
     {
-        "MACD": 8.5988,
-        "signal": -464.5939,
-        "histogram": 473.1928
+        "MACD": 7.3343,
+        "signal": 8.7151,
+        "histogram": -1.3808
     },
     {
-        "MACD": -154.1142,
-        "signal": -402.498,
-        "histogram": 248.3838
+        "MACD": 8.9315,
+        "signal": 8.7584,
+        "histogram": 0.1731
     },
     {
-        "MACD": -323.7142,
-        "signal": -386.7412,
-        "histogram": 63.027
+        "MACD": 10.8628,
+        "signal": 9.1793,
+        "histogram": 1.6835
     },
     {
-        "MACD": -1003.0908,
-        "signal": -510.0111,
-        "histogram": -493.0796
+        "MACD": 13.4009,
+        "signal": 10.0236,
+        "histogram": 3.3773
     },
     {
-        "MACD": -658.9659,
-        "signal": -539.8021,
-        "histogram": -119.1638
+        "MACD": 14.5427,
+        "signal": 10.9274,
+        "histogram": 3.6153
     },
     {
-        "MACD": -1063.6548,
-        "signal": -644.5726,
-        "histogram": -419.0822
+        "MACD": 15.9895,
+        "signal": 11.9399,
+        "histogram": 4.0497
     },
     {
-        "MACD": -956.8139,
-        "signal": -707.0209,
-        "histogram": -249.793
+        "MACD": 17.6747,
+        "signal": 13.0868,
+        "histogram": 4.5879
     },
     {
-        "MACD": -101.5759,
-        "signal": -585.9319,
-        "histogram": 484.356
+        "MACD": 18.8175,
+        "signal": 14.233,
+        "histogram": 4.5846
     },
     {
-        "MACD": 678.6085,
-        "signal": -333.0238,
-        "histogram": 1011.6323
+        "MACD": 19.4746,
+        "signal": 15.2813,
+        "histogram": 4.1933
     },
     {
-        "MACD": 1313.7204,
-        "signal": -3.675,
-        "histogram": 1317.3954
+        "MACD": 19.3047,
+        "signal": 16.086,
+        "histogram": 3.2187
     },
     {
-        "MACD": 457.6888,
-        "signal": 88.5978,
-        "histogram": 369.091
+        "MACD": 18.824,
+        "signal": 16.6336,
+        "histogram": 2.1904
     },
     {
-        "MACD": -82.1957,
-        "signal": 54.4391,
-        "histogram": -136.6348
+        "MACD": 17.6744,
+        "signal": 16.8417,
+        "histogram": 0.8327
     },
     {
-        "MACD": 764.2104,
-        "signal": 196.3934,
-        "histogram": 567.8171
+        "MACD": 12.4402,
+        "signal": 15.9614,
+        "histogram": -3.5213
     },
     {
-        "MACD": 923.096,
-        "signal": 341.7339,
-        "histogram": 581.3621
+        "MACD": 9.075,
+        "signal": 14.5841,
+        "histogram": -5.5092
     },
     {
-        "MACD": 383.8856,
-        "signal": 350.1642,
-        "histogram": 33.7214
+        "MACD": 3.3834,
+        "signal": 12.344,
+        "histogram": -8.9606
     },
     {
-        "MACD": 557.0184,
-        "signal": 391.5351,
-        "histogram": 165.4833
+        "MACD": -1.5929,
+        "signal": 9.5566,
+        "histogram": -11.1495
     },
     {
-        "MACD": 130.5439,
-        "signal": 339.3368,
-        "histogram": -208.793
+        "MACD": -6.5266,
+        "signal": 6.34,
+        "histogram": -12.8666
     },
     {
-        "MACD": -294.6603,
-        "signal": 212.5374,
-        "histogram": -507.1977
+        "MACD": -10.2618,
+        "signal": 3.0196,
+        "histogram": -13.2814
     },
     {
-        "MACD": -498.7188,
-        "signal": 70.2862,
-        "histogram": -569.0049
+        "MACD": -13.8531,
+        "signal": -0.3549,
+        "histogram": -13.4982
     },
     {
-        "MACD": -347.2236,
-        "signal": -13.2158,
-        "histogram": -334.0078
+        "MACD": -16.9876,
+        "signal": -3.6815,
+        "histogram": -13.3061
     },
     {
-        "MACD": -337.5311,
-        "signal": -78.0789,
-        "histogram": -259.4523
+        "MACD": -19.9836,
+        "signal": -6.9419,
+        "histogram": -13.0417
     },
     {
-        "MACD": 397.5218,
-        "signal": 17.0413,
-        "histogram": 380.4805
+        "MACD": -22.4782,
+        "signal": -10.0492,
+        "histogram": -12.429
     },
     {
-        "MACD": 174.278,
-        "signal": 48.4886,
-        "histogram": 125.7894
+        "MACD": -23.6579,
+        "signal": -12.7709,
+        "histogram": -10.887
     },
     {
-        "MACD": 838.6623,
-        "signal": 206.5234,
-        "histogram": 632.1389
+        "MACD": -22.757,
+        "signal": -14.7681,
+        "histogram": -7.9889
     },
     {
-        "MACD": -9.6026,
-        "signal": 163.2982,
-        "histogram": -172.9008
+        "MACD": -22.1588,
+        "signal": -16.2463,
+        "histogram": -5.9126
     },
     {
-        "MACD": -102.3617,
-        "signal": 110.1662,
-        "histogram": -212.5279
+        "MACD": -22.0519,
+        "signal": -17.4074,
+        "histogram": -4.6445
     },
     {
-        "MACD": -659.7615,
-        "signal": -43.8194,
-        "histogram": -615.9421
+        "MACD": -22.9692,
+        "signal": -18.5198,
+        "histogram": -4.4495
     },
     {
-        "MACD": -469.3623,
-        "signal": -128.9279,
-        "histogram": -340.4343
+        "MACD": -25.8193,
+        "signal": -19.9797,
+        "histogram": -5.8397
     },
     {
-        "MACD": -245.279,
-        "signal": -152.1981,
-        "histogram": -93.0808
+        "MACD": -28.117,
+        "signal": -21.6071,
+        "histogram": -6.5099
     },
     {
-        "MACD": -372.9257,
-        "signal": -196.3436,
-        "histogram": -176.582
+        "MACD": -30.2749,
+        "signal": -23.3407,
+        "histogram": -6.9342
     },
     {
-        "MACD": -346.9517,
-        "signal": -226.4652,
-        "histogram": -120.4864
+        "MACD": -30.5835,
+        "signal": -24.7893,
+        "histogram": -5.7942
     },
     {
-        "MACD": -902.9099,
-        "signal": -361.7542,
-        "histogram": -541.1557
+        "MACD": -30.8357,
+        "signal": -25.9985,
+        "histogram": -4.8371
     },
     {
-        "MACD": 22.022,
-        "signal": -284.9989,
-        "histogram": 307.021
+        "MACD": -30.0517,
+        "signal": -26.8092,
+        "histogram": -3.2425
     },
     {
-        "MACD": -132.097,
-        "signal": -254.4186,
-        "histogram": 122.3215
+        "MACD": -28.5046,
+        "signal": -27.1483,
+        "histogram": -1.3564
     },
     {
-        "MACD": -203.7163,
-        "signal": -244.2781,
-        "histogram": 40.5618
+        "MACD": -27.6937,
+        "signal": -27.2573,
+        "histogram": -0.4363
     },
     {
-        "MACD": -857.1534,
-        "signal": -366.8532,
-        "histogram": -490.3003
+        "MACD": -27.4128,
+        "signal": -27.2884,
+        "histogram": -0.1243
     },
     {
-        "MACD": -1281.0013,
-        "signal": -549.6828,
-        "histogram": -731.3185
+        "MACD": -27.0638,
+        "signal": -27.2435,
+        "histogram": 0.1797
     },
     {
-        "MACD": -1405.1898,
-        "signal": -720.7842,
-        "histogram": -684.4056
+        "MACD": -25.2854,
+        "signal": -26.8519,
+        "histogram": 1.5665
     },
     {
-        "MACD": -929.0276,
-        "signal": -762.4329,
-        "histogram": -166.5947
+        "MACD": -23.2848,
+        "signal": -26.1385,
+        "histogram": 2.8537
     },
     {
-        "MACD": 49.4816,
-        "signal": -600.05,
-        "histogram": 649.5316
+        "MACD": -22.0503,
+        "signal": -25.3208,
+        "histogram": 3.2705
     },
     {
-        "MACD": 739.7724,
-        "signal": -332.0855,
-        "histogram": 1071.8579
+        "MACD": -21.3104,
+        "signal": -24.5187,
+        "histogram": 3.2083
     },
     {
-        "MACD": 1061.6496,
-        "signal": -53.3385,
-        "histogram": 1114.9881
+        "MACD": -20.7671,
+        "signal": -23.7684,
+        "histogram": 3.0013
     },
     {
-        "MACD": 609.7113,
-        "signal": 79.2715,
-        "histogram": 530.4398
+        "MACD": -19.5863,
+        "signal": -22.932,
+        "histogram": 3.3457
     },
     {
-        "MACD": 447.0734,
-        "signal": 152.8319,
-        "histogram": 294.2415
+        "MACD": -18.5736,
+        "signal": -22.0603,
+        "histogram": 3.4868
     },
     {
-        "MACD": 344.7893,
-        "signal": 191.2233,
-        "histogram": 153.5659
+        "MACD": -17.5684,
+        "signal": -21.1619,
+        "histogram": 3.5935
     },
     {
-        "MACD": -434.4907,
-        "signal": 66.0805,
-        "histogram": -500.5712
+        "MACD": -15.4878,
+        "signal": -20.0271,
+        "histogram": 4.5393
     },
     {
-        "MACD": -778.6731,
-        "signal": -102.8702,
-        "histogram": -675.8029
+        "MACD": -13.9764,
+        "signal": -18.817,
+        "histogram": 4.8406
     },
     {
-        "MACD": -542.9566,
-        "signal": -190.8875,
-        "histogram": -352.0691
+        "MACD": -11.7395,
+        "signal": -17.4015,
+        "histogram": 5.662
     },
     {
-        "MACD": -675.5666,
-        "signal": -287.8233,
-        "histogram": -387.7433
+        "MACD": -10.4116,
+        "signal": -16.0035,
+        "histogram": 5.5919
     },
     {
-        "MACD": -184.642,
-        "signal": -267.187,
-        "histogram": 82.545
+        "MACD": -9.7471,
+        "signal": -14.7522,
+        "histogram": 5.0051
     },
     {
-        "MACD": 99.6623,
-        "signal": -193.8172,
-        "histogram": 293.4795
+        "MACD": -10.328,
+        "signal": -13.8674,
+        "histogram": 3.5394
     },
     {
-        "MACD": 931.6083,
-        "signal": 31.2679,
-        "histogram": 900.3404
+        "MACD": -11.2796,
+        "signal": -13.3498,
+        "histogram": 2.0702
     },
     {
-        "MACD": 478.8069,
-        "signal": 120.7757,
-        "histogram": 358.0312
+        "MACD": -10.5246,
+        "signal": -12.7848,
+        "histogram": 2.2602
     },
     {
-        "MACD": 1166.0787,
-        "signal": 329.8363,
-        "histogram": 836.2424
+        "MACD": -9.3026,
+        "signal": -12.0883,
+        "histogram": 2.7858
     },
     {
-        "MACD": 1262.8747,
-        "signal": 516.444,
-        "histogram": 746.4307
+        "MACD": -9.4357,
+        "signal": -11.5578,
+        "histogram": 2.1221
     },
     {
-        "MACD": 1709.6195,
-        "signal": 755.0791,
-        "histogram": 954.5404
+        "MACD": -8.2758,
+        "signal": -10.9014,
+        "histogram": 2.6256
     },
     {
-        "MACD": 587.102,
-        "signal": 721.4837,
-        "histogram": -134.3817
+        "MACD": -7.2887,
+        "signal": -10.1789,
+        "histogram": 2.8902
     },
     {
-        "MACD": 936.6155,
-        "signal": 764.51,
-        "histogram": 172.1055
+        "MACD": -7.2698,
+        "signal": -9.597,
+        "histogram": 2.3272
     },
     {
-        "MACD": 556.6548,
-        "signal": 722.939,
-        "histogram": -166.2842
+        "MACD": -8.6879,
+        "signal": -9.4152,
+        "histogram": 0.7273
     },
     {
-        "MACD": -224.0969,
-        "signal": 533.5318,
-        "histogram": -757.6287
+        "MACD": -9.5244,
+        "signal": -9.4371,
+        "histogram": -0.0873
     },
     {
-        "MACD": -235.9895,
-        "signal": 379.6275,
-        "histogram": -615.6171
+        "MACD": -10.5578,
+        "signal": -9.6612,
+        "histogram": -0.8966
     },
     {
-        "MACD": -758.8229,
-        "signal": 151.9375,
-        "histogram": -910.7604
+        "MACD": -10.6569,
+        "signal": -9.8604,
+        "histogram": -0.7966
     },
     {
-        "MACD": -212.9081,
-        "signal": 78.9684,
-        "histogram": -291.8764
+        "MACD": -10.5732,
+        "signal": -10.0029,
+        "histogram": -0.5703
     },
     {
-        "MACD": 143.3604,
-        "signal": 91.8468,
-        "histogram": 51.5136
+        "MACD": -11.3842,
+        "signal": -10.2792,
+        "histogram": -1.1051
     },
     {
-        "MACD": 430.5865,
-        "signal": 159.5947,
-        "histogram": 270.9918
+        "MACD": -12.0894,
+        "signal": -10.6412,
+        "histogram": -1.4482
     },
     {
-        "MACD": 994.7712,
-        "signal": 326.63,
-        "histogram": 668.1412
+        "MACD": -11.85,
+        "signal": -10.883,
+        "histogram": -0.967
     },
     {
-        "MACD": 1195.1579,
-        "signal": 500.3356,
-        "histogram": 694.8223
+        "MACD": -11.639,
+        "signal": -11.0342,
+        "histogram": -0.6048
     },
     {
-        "MACD": 749.5787,
-        "signal": 550.1842,
-        "histogram": 199.3945
+        "MACD": -11.8436,
+        "signal": -11.1961,
+        "histogram": -0.6476
     },
     {
-        "MACD": 479.2066,
-        "signal": 535.9887,
-        "histogram": -56.7821
+        "MACD": -11.7892,
+        "signal": -11.3147,
+        "histogram": -0.4745
     },
     {
-        "MACD": 73.9726,
-        "signal": 443.5855,
-        "histogram": -369.6129
+        "MACD": -11.5564,
+        "signal": -11.363,
+        "histogram": -0.1934
     },
     {
-        "MACD": -370.88,
-        "signal": 280.6924,
-        "histogram": -651.5724
+        "MACD": -11.697,
+        "signal": -11.4298,
+        "histogram": -0.2672
     },
     {
-        "MACD": -1064.5863,
-        "signal": 11.6366,
-        "histogram": -1076.223
+        "MACD": -11.4984,
+        "signal": -11.4435,
+        "histogram": -0.0548
     },
     {
-        "MACD": -1224.9365,
-        "signal": -235.678,
-        "histogram": -989.2585
+        "MACD": -11.3393,
+        "signal": -11.4227,
+        "histogram": 0.0834
     },
     {
-        "MACD": -637.8042,
-        "signal": -316.1032,
-        "histogram": -321.7009
+        "MACD": -11.4365,
+        "signal": -11.4255,
+        "histogram": -0.011
     },
     {
-        "MACD": -598.4292,
-        "signal": -372.5684,
-        "histogram": -225.8608
+        "MACD": -12.5071,
+        "signal": -11.6418,
+        "histogram": -0.8653
     },
     {
-        "MACD": -968.3157,
-        "signal": -491.7179,
-        "histogram": -476.5978
+        "MACD": -12.629,
+        "signal": -11.8392,
+        "histogram": -0.7898
     },
     {
-        "MACD": -1205.9155,
-        "signal": -634.5574,
-        "histogram": -571.3581
+        "MACD": -12.788,
+        "signal": -12.029,
+        "histogram": -0.759
     },
     {
-        "MACD": -1227.3978,
-        "signal": -753.1255,
-        "histogram": -474.2723
+        "MACD": -12.5036,
+        "signal": -12.1239,
+        "histogram": -0.3797
     },
     {
-        "MACD": -1022.6743,
-        "signal": -807.0352,
-        "histogram": -215.639
+        "MACD": -12.5371,
+        "signal": -12.2065,
+        "histogram": -0.3306
     },
     {
-        "MACD": -848.3105,
-        "signal": -815.2903,
-        "histogram": -33.0202
+        "MACD": -11.3675,
+        "signal": -12.0387,
+        "histogram": 0.6712
     },
     {
-        "MACD": -842.0334,
-        "signal": -820.6389,
-        "histogram": -21.3945
+        "MACD": -10.2498,
+        "signal": -11.681,
+        "histogram": 1.4311
     },
     {
-        "MACD": -459.9299,
-        "signal": -748.4971,
-        "histogram": 288.5672
+        "MACD": -10.1189,
+        "signal": -11.3685,
+        "histogram": 1.2497
     },
     {
-        "MACD": -894.2484,
-        "signal": -777.6474,
-        "histogram": -116.601
+        "MACD": -9.9249,
+        "signal": -11.0798,
+        "histogram": 1.1549
     },
     {
-        "MACD": -1037.7487,
-        "signal": -829.6677,
-        "histogram": -208.0811
+        "MACD": -9.8353,
+        "signal": -10.8309,
+        "histogram": 0.9956
     },
     {
-        "MACD": -1260.5624,
-        "signal": -915.8466,
-        "histogram": -344.7158
+        "MACD": -9.1824,
+        "signal": -10.5012,
+        "histogram": 1.3188
     },
     {
-        "MACD": -456.4812,
-        "signal": -823.9735,
-        "histogram": 367.4923
+        "MACD": -8.8454,
+        "signal": -10.17,
+        "histogram": 1.3246
     },
     {
-        "MACD": -392.7084,
-        "signal": -737.7205,
-        "histogram": 345.0121
+        "MACD": -7.9381,
+        "signal": -9.7237,
+        "histogram": 1.7855
     },
     {
-        "MACD": 435.5206,
-        "signal": -503.0723,
-        "histogram": 938.5928
+        "MACD": -6.8177,
+        "signal": -9.1425,
+        "histogram": 2.3247
     },
     {
-        "MACD": 774.3265,
-        "signal": -247.5925,
-        "histogram": 1021.919
+        "MACD": -5.9739,
+        "signal": -8.5088,
+        "histogram": 2.5348
     },
     {
-        "MACD": 927.5638,
-        "signal": -12.5613,
-        "histogram": 940.1251
+        "MACD": -5.6755,
+        "signal": -7.9421,
+        "histogram": 2.2666
     },
     {
-        "MACD": 804.7548,
-        "signal": 150.9019,
-        "histogram": 653.8528
+        "MACD": -5.4568,
+        "signal": -7.4451,
+        "histogram": 1.9882
     },
     {
-        "MACD": 316.3003,
-        "signal": 183.9816,
-        "histogram": 132.3187
+        "MACD": -4.5851,
+        "signal": -6.8731,
+        "histogram": 2.288
     },
     {
-        "MACD": 215.109,
-        "signal": 190.2071,
-        "histogram": 24.9019
+        "MACD": -3.2995,
+        "signal": -6.1584,
+        "histogram": 2.8589
     },
     {
-        "MACD": 876.4535,
-        "signal": 327.4564,
-        "histogram": 548.9971
+        "MACD": -2.2227,
+        "signal": -5.3712,
+        "histogram": 3.1485
     },
     {
-        "MACD": 1384.932,
-        "signal": 538.9515,
-        "histogram": 845.9805
+        "MACD": -1.9121,
+        "signal": -4.6794,
+        "histogram": 2.7673
     },
     {
-        "MACD": 1668.8518,
-        "signal": 764.9315,
-        "histogram": 903.9202
+        "MACD": -2.5883,
+        "signal": -4.2612,
+        "histogram": 1.6729
     },
     {
-        "MACD": 1924.1296,
-        "signal": 996.7712,
-        "histogram": 927.3585
+        "MACD": -2.3069,
+        "signal": -3.8703,
+        "histogram": 1.5635
     },
     {
-        "MACD": 868.6906,
-        "signal": 971.155,
-        "histogram": -102.4645
+        "MACD": -2.8019,
+        "signal": -3.6566,
+        "histogram": 0.8547
     },
     {
-        "MACD": 600.5752,
-        "signal": 897.0391,
-        "histogram": -296.4639
+        "MACD": -3.3334,
+        "signal": -3.592,
+        "histogram": 0.2586
     },
     {
-        "MACD": -120.2511,
-        "signal": 693.581,
-        "histogram": -813.8321
+        "MACD": -3.624,
+        "signal": -3.5984,
+        "histogram": -0.0256
     },
     {
-        "MACD": -429.5566,
-        "signal": 468.9535,
-        "histogram": -898.5101
+        "MACD": -3.1802,
+        "signal": -3.5148,
+        "histogram": 0.3345
     },
     {
-        "MACD": -200.9662,
-        "signal": 334.9696,
-        "histogram": -535.9358
+        "MACD": -2.9797,
+        "signal": -3.4078,
+        "histogram": 0.428
     },
     {
-        "MACD": -579.1024,
-        "signal": 152.1552,
-        "histogram": -731.2575
+        "MACD": -2.1505,
+        "signal": -3.1563,
+        "histogram": 1.0058
     },
     {
-        "MACD": -782.5298,
-        "signal": -34.7818,
-        "histogram": -747.748
+        "MACD": -2.3698,
+        "signal": -2.999,
+        "histogram": 0.6292
     },
     {
-        "MACD": -956.6848,
-        "signal": -219.1624,
-        "histogram": -737.5224
+        "MACD": -3.2565,
+        "signal": -3.0505,
+        "histogram": -0.206
     },
     {
-        "MACD": -1441.6817,
-        "signal": -463.6663,
-        "histogram": -978.0154
+        "MACD": -4.289,
+        "signal": -3.2982,
+        "histogram": -0.9908
     },
     {
-        "MACD": -671.5946,
-        "signal": -505.2519,
-        "histogram": -166.3426
+        "MACD": -5.1129,
+        "signal": -3.6612,
+        "histogram": -1.4517
     },
     {
-        "MACD": 288.1671,
-        "signal": -346.5681,
-        "histogram": 634.7352
+        "MACD": -5.7959,
+        "signal": -4.0881,
+        "histogram": -1.7078
     },
     {
-        "MACD": -399.1441,
-        "signal": -357.0833,
-        "histogram": -42.0607
+        "MACD": -5.9697,
+        "signal": -4.4644,
+        "histogram": -1.5053
     },
     {
-        "MACD": 67.0155,
-        "signal": -272.2635,
-        "histogram": 339.2791
+        "MACD": -6.708,
+        "signal": -4.9131,
+        "histogram": -1.7949
     },
     {
-        "MACD": 318.5193,
-        "signal": -154.107,
-        "histogram": 472.6263
+        "MACD": -6.867,
+        "signal": -5.3039,
+        "histogram": -1.5631
     },
     {
-        "MACD": 185.8283,
-        "signal": -86.1199,
-        "histogram": 271.9482
+        "MACD": -6.307,
+        "signal": -5.5045,
+        "histogram": -0.8025
     },
     {
-        "MACD": -396.2496,
-        "signal": -148.1459,
-        "histogram": -248.1037
+        "MACD": -5.3337,
+        "signal": -5.4704,
+        "histogram": 0.1367
     },
     {
-        "MACD": -533.8747,
-        "signal": -225.2916,
-        "histogram": -308.5831
+        "MACD": -4.2152,
+        "signal": -5.2193,
+        "histogram": 1.0041
     },
     {
-        "MACD": 90.9475,
-        "signal": -162.0438,
-        "histogram": 252.9913
+        "MACD": -3.7057,
+        "signal": -4.9166,
+        "histogram": 1.2109
     },
     {
-        "MACD": -108.5901,
-        "signal": -151.3531,
-        "histogram": 42.763
+        "MACD": -2.8255,
+        "signal": -4.4984,
+        "histogram": 1.6729
     },
     {
-        "MACD": -722.7738,
-        "signal": -265.6372,
-        "histogram": -457.1366
+        "MACD": -2.3031,
+        "signal": -4.0593,
+        "histogram": 1.7562
     },
     {
-        "MACD": -167.8719,
-        "signal": -246.0842,
-        "histogram": 78.2123
+        "MACD": -1.6522,
+        "signal": -3.5779,
+        "histogram": 1.9257
     },
     {
-        "MACD": -60.9843,
-        "signal": -209.0642,
-        "histogram": 148.0799
+        "MACD": -1.2431,
+        "signal": -3.1109,
+        "histogram": 1.8678
     },
     {
-        "MACD": 317.5741,
-        "signal": -103.7365,
-        "histogram": 421.3106
+        "MACD": -1.3312,
+        "signal": -2.755,
+        "histogram": 1.4238
     },
     {
-        "MACD": -435.5847,
-        "signal": -170.1062,
-        "histogram": -265.4785
+        "MACD": -1.7201,
+        "signal": -2.548,
+        "histogram": 0.8279
     },
     {
-        "MACD": -694.5144,
-        "signal": -274.9878,
-        "histogram": -419.5266
+        "MACD": -2.0211,
+        "signal": -2.4426,
+        "histogram": 0.4215
     },
     {
-        "MACD": -393.0432,
-        "signal": -298.5989,
-        "histogram": -94.4443
+        "MACD": -1.5479,
+        "signal": -2.2637,
+        "histogram": 0.7158
     },
     {
-        "MACD": 489.4775,
-        "signal": -140.9836,
-        "histogram": 630.4611
+        "MACD": -1.9492,
+        "signal": -2.2008,
+        "histogram": 0.2516
     },
     {
-        "MACD": -138.6727,
-        "signal": -140.5214,
-        "histogram": 1.8487
+        "MACD": -1.9623,
+        "signal": -2.1531,
+        "histogram": 0.1908
     },
     {
-        "MACD": 229.6731,
-        "signal": -66.4825,
-        "histogram": 296.1556
+        "MACD": -2.5644,
+        "signal": -2.2353,
+        "histogram": -0.329
     },
     {
-        "MACD": -88.4682,
-        "signal": -70.8797,
-        "histogram": -17.5886
+        "MACD": -3.4855,
+        "signal": -2.4854,
+        "histogram": -1.0001
     },
     {
-        "MACD": 716.2754,
-        "signal": 86.5514,
-        "histogram": 629.7241
+        "MACD": -3.7925,
+        "signal": -2.7468,
+        "histogram": -1.0457
     },
     {
-        "MACD": 23.7267,
-        "signal": 73.9864,
-        "histogram": -50.2597
+        "MACD": -3.5671,
+        "signal": -2.9109,
+        "histogram": -0.6562
     },
     {
-        "MACD": 647.129,
-        "signal": 188.6149,
-        "histogram": 458.514
+        "MACD": -4.2911,
+        "signal": -3.1869,
+        "histogram": -1.1042
     },
     {
-        "MACD": 244.9384,
-        "signal": 199.8796,
-        "histogram": 45.0588
+        "MACD": -4.0676,
+        "signal": -3.363,
+        "histogram": -0.7045
     },
     {
-        "MACD": 1055.8154,
-        "signal": 371.0668,
-        "histogram": 684.7486
+        "MACD": -3.2079,
+        "signal": -3.332,
+        "histogram": 0.1241
     },
     {
-        "MACD": 934.7326,
-        "signal": 483.7999,
-        "histogram": 450.9326
+        "MACD": -2.3383,
+        "signal": -3.1333,
+        "histogram": 0.795
     },
     {
-        "MACD": 1385.4656,
-        "signal": 664.1331,
-        "histogram": 721.3325
+        "MACD": -0.7847,
+        "signal": -2.6635,
+        "histogram": 1.8788
     },
     {
-        "MACD": 1879.1685,
-        "signal": 907.1402,
-        "histogram": 972.0283
+        "MACD": 0.7525,
+        "signal": -1.9803,
+        "histogram": 2.7329
     },
     {
-        "MACD": 2101.6859,
-        "signal": 1146.0493,
-        "histogram": 955.6366
+        "MACD": 1.7409,
+        "signal": -1.2361,
+        "histogram": 2.977
     },
     {
-        "MACD": 1544.3342,
-        "signal": 1225.7063,
-        "histogram": 318.6279
+        "MACD": 3.2613,
+        "signal": -0.3366,
+        "histogram": 3.5979
     },
     {
-        "MACD": 1086.1546,
-        "signal": 1197.7959,
-        "histogram": -111.6414
+        "MACD": 4.1361,
+        "signal": 0.5579,
+        "histogram": 3.5781
     },
     {
-        "MACD": 90.3483,
-        "signal": 976.3064,
-        "histogram": -885.9582
+        "MACD": 5.3327,
+        "signal": 1.5129,
+        "histogram": 3.8198
     },
     {
-        "MACD": -678.8259,
-        "signal": 645.2799,
-        "histogram": -1324.1059
+        "MACD": 6.0898,
+        "signal": 2.4283,
+        "histogram": 3.6616
     },
     {
-        "MACD": -813.9131,
-        "signal": 353.4413,
-        "histogram": -1167.3544
+        "MACD": 6.0552,
+        "signal": 3.1537,
+        "histogram": 2.9016
     },
     {
-        "MACD": -600.2416,
-        "signal": 162.7048,
-        "histogram": -762.9464
+        "MACD": 5.656,
+        "signal": 3.6541,
+        "histogram": 2.0018
     },
     {
-        "MACD": 43.2245,
-        "signal": 138.8087,
-        "histogram": -95.5842
+        "MACD": 5.0952,
+        "signal": 3.9423,
+        "histogram": 1.1529
     },
     {
-        "MACD": -167.9655,
-        "signal": 77.4539,
-        "histogram": -245.4194
+        "MACD": 4.7574,
+        "signal": 4.1053,
+        "histogram": 0.652
     },
     {
-        "MACD": -637.9182,
-        "signal": -65.6205,
-        "histogram": -572.2977
+        "MACD": 4.9251,
+        "signal": 4.2693,
+        "histogram": 0.6558
     },
     {
-        "MACD": -1191.7339,
-        "signal": -290.8432,
-        "histogram": -900.8907
+        "MACD": 4.4978,
+        "signal": 4.315,
+        "histogram": 0.1828
     },
     {
-        "MACD": -384.1225,
-        "signal": -309.4991,
-        "histogram": -74.6234
+        "MACD": 4.8536,
+        "signal": 4.4227,
+        "histogram": 0.4309
     },
     {
-        "MACD": 7.2212,
-        "signal": -246.155,
-        "histogram": 253.3762
+        "MACD": 4.9973,
+        "signal": 4.5376,
+        "histogram": 0.4597
     },
     {
-        "MACD": -731.4266,
-        "signal": -343.2094,
-        "histogram": -388.2173
+        "MACD": 5.2683,
+        "signal": 4.6838,
+        "histogram": 0.5846
     },
     {
-        "MACD": -586.9663,
-        "signal": -391.9608,
-        "histogram": -195.0056
+        "MACD": 6.1705,
+        "signal": 4.9811,
+        "histogram": 1.1894
     },
     {
-        "MACD": -974.3668,
-        "signal": -508.442,
-        "histogram": -465.9248
+        "MACD": 6.2965,
+        "signal": 5.2442,
+        "histogram": 1.0523
     },
     {
-        "MACD": -1439.0894,
-        "signal": -694.5714,
-        "histogram": -744.518
+        "MACD": 6.6744,
+        "signal": 5.5302,
+        "histogram": 1.1442
     },
     {
-        "MACD": -1361.6033,
-        "signal": -827.9778,
-        "histogram": -533.6255
+        "MACD": 6.9024,
+        "signal": 5.8047,
+        "histogram": 1.0977
     },
     {
-        "MACD": -1069.6743,
-        "signal": -876.3171,
-        "histogram": -193.3571
+        "MACD": 6.6035,
+        "signal": 5.9644,
+        "histogram": 0.6391
     },
     {
-        "MACD": -457.5854,
-        "signal": -792.5708,
-        "histogram": 334.9854
+        "MACD": 5.6161,
+        "signal": 5.8948,
+        "histogram": -0.2787
     },
     {
-        "MACD": -724.1872,
-        "signal": -778.894,
-        "histogram": 54.7069
+        "MACD": 5.5203,
+        "signal": 5.8199,
+        "histogram": -0.2996
     },
     {
-        "MACD": -172.5597,
-        "signal": -657.6272,
-        "histogram": 485.0675
+        "MACD": 5.6216,
+        "signal": 5.7802,
+        "histogram": -0.1586
     },
     {
-        "MACD": -173.4833,
-        "signal": -560.7984,
-        "histogram": 387.3151
+        "MACD": 4.9988,
+        "signal": 5.6239,
+        "histogram": -0.6251
     },
     {
-        "MACD": 239.7131,
-        "signal": -400.6961,
-        "histogram": 640.4092
+        "MACD": 5.0522,
+        "signal": 5.5096,
+        "histogram": -0.4574
     },
     {
-        "MACD": 56.5511,
-        "signal": -309.2467,
-        "histogram": 365.7978
+        "MACD": 5.1162,
+        "signal": 5.4309,
+        "histogram": -0.3147
     },
     {
-        "MACD": 909.8738,
-        "signal": -65.4226,
-        "histogram": 975.2964
+        "MACD": 5.3872,
+        "signal": 5.4222,
+        "histogram": -0.035
     },
     {
-        "MACD": 529.5098,
-        "signal": 53.5639,
-        "histogram": 475.9459
+        "MACD": 5.7376,
+        "signal": 5.4852,
+        "histogram": 0.2523
     },
     {
-        "MACD": 908.0793,
-        "signal": 224.467,
-        "histogram": 683.6123
+        "MACD": 6.0265,
+        "signal": 5.5935,
+        "histogram": 0.433
     },
     {
-        "MACD": 554.4789,
-        "signal": 290.4694,
-        "histogram": 264.0095
+        "MACD": 6.2001,
+        "signal": 5.7148,
+        "histogram": 0.4853
     },
     {
-        "MACD": -216.2049,
-        "signal": 189.1345,
-        "histogram": -405.3394
+        "MACD": 6.09,
+        "signal": 5.7899,
+        "histogram": 0.3002
     },
     {
-        "MACD": 669.558,
-        "signal": 285.2192,
-        "histogram": 384.3388
+        "MACD": 5.8147,
+        "signal": 5.7948,
+        "histogram": 0.0199
     },
     {
-        "MACD": 1291.2861,
-        "signal": 486.4326,
-        "histogram": 804.8535
+        "MACD": 5.0221,
+        "signal": 5.6403,
+        "histogram": -0.6181
     },
     {
-        "MACD": 262.688,
-        "signal": 441.6837,
-        "histogram": -178.9957
+        "MACD": 3.7377,
+        "signal": 5.2598,
+        "histogram": -1.5221
     },
     {
-        "MACD": 664.9922,
-        "signal": 486.3454,
-        "histogram": 178.6469
+        "MACD": 2.9281,
+        "signal": 4.7934,
+        "histogram": -1.8653
     },
     {
-        "MACD": 904.1651,
-        "signal": 569.9093,
-        "histogram": 334.2558
+        "MACD": 2.9385,
+        "signal": 4.4225,
+        "histogram": -1.4839
     },
     {
-        "MACD": 1473.2475,
-        "signal": 750.577,
-        "histogram": 722.6705
+        "MACD": 3.1605,
+        "signal": 4.1701,
+        "histogram": -1.0096
     },
     {
-        "MACD": 806.8903,
-        "signal": 761.8396,
-        "histogram": 45.0507
+        "MACD": 3.1627,
+        "signal": 3.9686,
+        "histogram": -0.8059
     },
     {
-        "MACD": -18.4993,
-        "signal": 605.7718,
-        "histogram": -624.2712
+        "MACD": 3.8624,
+        "signal": 3.9474,
+        "histogram": -0.085
     },
     {
-        "MACD": 265.2609,
-        "signal": 537.6696,
-        "histogram": -272.4088
+        "MACD": 4.2389,
+        "signal": 4.0057,
+        "histogram": 0.2332
     },
     {
-        "MACD": 966.7794,
-        "signal": 623.4916,
-        "histogram": 343.2878
+        "MACD": 3.8234,
+        "signal": 3.9692,
+        "histogram": -0.1458
     },
     {
-        "MACD": 1523.0145,
-        "signal": 803.3962,
-        "histogram": 719.6183
+        "MACD": 3.2549,
+        "signal": 3.8264,
+        "histogram": -0.5714
     },
     {
-        "MACD": 1555.1186,
-        "signal": 953.7407,
-        "histogram": 601.378
+        "MACD": 2.1981,
+        "signal": 3.5007,
+        "histogram": -1.3026
     },
     {
-        "MACD": 1615.8371,
-        "signal": 1086.16,
-        "histogram": 529.6771
+        "MACD": 1.9114,
+        "signal": 3.1828,
+        "histogram": -1.2714
     },
     {
-        "MACD": 1046.7038,
-        "signal": 1078.2687,
-        "histogram": -31.5649
+        "MACD": 1.6491,
+        "signal": 2.8761,
+        "histogram": -1.227
     },
     {
-        "MACD": 1085.8535,
-        "signal": 1079.7857,
-        "histogram": 6.0678
+        "MACD": 1.4885,
+        "signal": 2.5986,
+        "histogram": -1.11
     },
     {
-        "MACD": 718.8528,
-        "signal": 1007.5991,
-        "histogram": -288.7463
+        "MACD": 1.5054,
+        "signal": 2.3799,
+        "histogram": -0.8746
     },
     {
-        "MACD": -132.807,
-        "signal": 779.5179,
-        "histogram": -912.3249
+        "MACD": 1.6928,
+        "signal": 2.2425,
+        "histogram": -0.5497
     },
     {
-        "MACD": -536.4972,
-        "signal": 516.3149,
-        "histogram": -1052.812
+        "MACD": 2.2113,
+        "signal": 2.2363,
+        "histogram": -0.025
     },
     {
-        "MACD": -335.884,
-        "signal": 345.8751,
-        "histogram": -681.7591
+        "MACD": 2.5046,
+        "signal": 2.2899,
+        "histogram": 0.2146
     },
     {
-        "MACD": -134.5959,
-        "signal": 249.7809,
-        "histogram": -384.3768
+        "MACD": 1.8921,
+        "signal": 2.2104,
+        "histogram": -0.3183
     },
     {
-        "MACD": 589.7478,
-        "signal": 317.7743,
-        "histogram": 271.9735
+        "MACD": 1.4226,
+        "signal": 2.0528,
+        "histogram": -0.6302
     },
     {
-        "MACD": 1095.8889,
-        "signal": 473.3972,
-        "histogram": 622.4917
+        "MACD": 0.8471,
+        "signal": 1.8117,
+        "histogram": -0.9646
     },
     {
-        "MACD": 389.0662,
-        "signal": 456.531,
-        "histogram": -67.4648
+        "MACD": 0.2829,
+        "signal": 1.5059,
+        "histogram": -1.2231
     },
     {
-        "MACD": 286.1132,
-        "signal": 422.4474,
-        "histogram": -136.3342
+        "MACD": -0.0587,
+        "signal": 1.193,
+        "histogram": -1.2517
     },
     {
-        "MACD": 264.8126,
-        "signal": 390.9205,
-        "histogram": -126.1079
+        "MACD": 0.9507,
+        "signal": 1.1445,
+        "histogram": -0.1939
     },
     {
-        "MACD": -461.6744,
-        "signal": 220.4015,
-        "histogram": -682.0759
+        "MACD": 1.1324,
+        "signal": 1.1421,
+        "histogram": -0.0097
     },
     {
-        "MACD": -70.3275,
-        "signal": 162.2557,
-        "histogram": -232.5832
+        "MACD": 0.9826,
+        "signal": 1.1102,
+        "histogram": -0.1276
     },
     {
-        "MACD": 328.8227,
-        "signal": 195.5691,
-        "histogram": 133.2536
+        "MACD": 2.2501,
+        "signal": 1.3382,
+        "histogram": 0.9119
     },
     {
-        "MACD": -90.8382,
-        "signal": 138.2876,
-        "histogram": -229.1258
+        "MACD": 3.2893,
+        "signal": 1.7284,
+        "histogram": 1.5609
     },
     {
-        "MACD": -234.3237,
-        "signal": 63.7654,
-        "histogram": -298.089
+        "MACD": 3.6672,
+        "signal": 2.1162,
+        "histogram": 1.551
     },
     {
-        "MACD": -170.2473,
-        "signal": 16.9628,
-        "histogram": -187.2102
+        "MACD": 4.0092,
+        "signal": 2.4948,
+        "histogram": 1.5144
     },
     {
-        "MACD": -20.0651,
-        "signal": 9.5573,
-        "histogram": -29.6223
+        "MACD": 4.1197,
+        "signal": 2.8198,
+        "histogram": 1.3
     },
     {
-        "MACD": -279.2548,
-        "signal": -48.2052,
-        "histogram": -231.0497
+        "MACD": 4.4785,
+        "signal": 3.1515,
+        "histogram": 1.327
     },
     {
-        "MACD": -378.469,
-        "signal": -114.2579,
-        "histogram": -264.2111
+        "MACD": 4.19,
+        "signal": 3.3592,
+        "histogram": 0.8308
     },
     {
-        "MACD": 287.8386,
-        "signal": -33.8386,
-        "histogram": 321.6772
+        "MACD": 2.9431,
+        "signal": 3.276,
+        "histogram": -0.3329
     },
     {
-        "MACD": 711.2667,
-        "signal": 115.1824,
-        "histogram": 596.0842
+        "MACD": 1.9485,
+        "signal": 3.0105,
+        "histogram": -1.062
     },
     {
-        "MACD": 204.1603,
-        "signal": 132.978,
-        "histogram": 71.1823
+        "MACD": 0.7083,
+        "signal": 2.5501,
+        "histogram": -1.8417
     },
     {
-        "MACD": 123.9355,
-        "signal": 131.1695,
-        "histogram": -7.234
+        "MACD": -0.2315,
+        "signal": 1.9937,
+        "histogram": -2.2252
     },
     {
-        "MACD": 676.8655,
-        "signal": 240.3087,
-        "histogram": 436.5568
+        "MACD": -1.6193,
+        "signal": 1.2711,
+        "histogram": -2.8905
     },
     {
-        "MACD": 867.59,
-        "signal": 365.7649,
-        "histogram": 501.825
+        "MACD": -2.2893,
+        "signal": 0.559,
+        "histogram": -2.8484
     },
     {
-        "MACD": 231.1879,
-        "signal": 338.8495,
-        "histogram": -107.6616
+        "MACD": -2.5489,
+        "signal": -0.0625,
+        "histogram": -2.4863
     },
     {
-        "MACD": -373.437,
-        "signal": 196.3922,
-        "histogram": -569.8292
+        "MACD": -3.0662,
+        "signal": -0.6633,
+        "histogram": -2.4029
     },
     {
-        "MACD": -527.8702,
-        "signal": 51.5397,
-        "histogram": -579.41
+        "MACD": -3.4924,
+        "signal": -1.2291,
+        "histogram": -2.2633
     },
     {
-        "MACD": 170.8258,
-        "signal": 75.397,
-        "histogram": 95.4289
+        "MACD": -4.0896,
+        "signal": -1.8012,
+        "histogram": -2.2884
     },
     {
-        "MACD": -444.8718,
-        "signal": -28.6568,
-        "histogram": -416.215
+        "MACD": -4.7104,
+        "signal": -2.383,
+        "histogram": -2.3273
     },
     {
-        "MACD": 1.016,
-        "signal": -22.7222,
-        "histogram": 23.7382
+        "MACD": -5.6456,
+        "signal": -3.0355,
+        "histogram": -2.6101
     },
     {
-        "MACD": 228.5348,
-        "signal": 27.5292,
-        "histogram": 201.0056
+        "MACD": -6.4895,
+        "signal": -3.7263,
+        "histogram": -2.7632
     },
     {
-        "MACD": -256.4865,
-        "signal": -29.274,
-        "histogram": -227.2125
+        "MACD": -7.8106,
+        "signal": -4.5432,
+        "histogram": -3.2674
     },
     {
-        "MACD": 351.3798,
-        "signal": 46.8568,
-        "histogram": 304.523
+        "MACD": -8.7806,
+        "signal": -5.3907,
+        "histogram": -3.3899
     }
 ]

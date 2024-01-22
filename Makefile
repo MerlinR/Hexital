@@ -6,8 +6,20 @@ setup:
 	@echo "Running setup"
 	poetry install
 
-lint:
-	pylint --disable=C0116,C0114,C0115,E0401 --max-line-length=90 ./hexital
+format:
+	poetry run ruff format hex_*
+
+update:
+	@echo "Running setup"
+	poetry update
+
+lock:
+	@echo "Running setup"
+	poetry lock
+
+build:
+	@echo "Building package"
+	poetry build
 
 truth:
 	@echo "Generating source of truth"
