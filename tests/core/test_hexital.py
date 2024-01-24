@@ -248,7 +248,9 @@ class TestHexitalCandleManagerInheritance:
         )
 
         assert strat.timeframe == "T10"
+        assert strat.candles_lifespan == timedelta(hours=1)
         assert strat.indicator("EMA_10").timeframe == "T10"
+        assert strat.indicator("EMA_10").candles_lifespan == timedelta(hours=1)
 
     @pytest.mark.usefixtures("candles")
     def test_hexital_inheritance_overriden(self, candles):
@@ -260,7 +262,7 @@ class TestHexitalCandleManagerInheritance:
         )
 
         assert strat.candles_lifespan == timedelta(hours=1)
-        assert strat.indicator("EMA_10").candles_lifespan == timedelta(minutes=30)
+        assert strat.indicator("EMA_10").candles_lifespan == timedelta(hours=1)
 
     @pytest.mark.usefixtures("candles")
     def test_hexital_inheritance_overriden_multi(self, candles):
@@ -274,5 +276,5 @@ class TestHexitalCandleManagerInheritance:
 
         assert strat.candles_lifespan == timedelta(hours=1)
         assert strat.timeframe == "T5"
-        assert strat.indicator("EMA_10").candles_lifespan == timedelta(minutes=30)
+        assert strat.indicator("EMA_10").candles_lifespan == timedelta(hours=1)
         assert strat.indicator("EMA_10").timeframe == "T10"

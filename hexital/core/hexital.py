@@ -4,15 +4,13 @@ from datetime import timedelta
 from typing import Dict, List, Optional, Set
 
 from hexital.core.candle import Candle
-from hexital.core.candle_manager import CandleManager
+from hexital.core.candle_manager import DEFAULT_CANDLES, CandleManager
 from hexital.core.indicator import Indicator
 from hexital.exceptions import InvalidAnalysis, InvalidIndicator
 from hexital.utils.candlesticks import (
     reading_by_index,
 )
 from hexital.utils.timeframe import TimeFrame
-
-DEFAULT_CANDLES = "default"
 
 
 class Hexital:
@@ -78,11 +76,9 @@ class Hexital:
         for indicator in valid_indicators.values():
             manager = CandleManager(
                 [],
-                indicator.candles_lifespan
-                if indicator.candles_lifespan
-                else self.candles_lifespan,
+                self.candles_lifespan,
                 indicator.timeframe if indicator.timeframe else self.timeframe,
-                indicator.timeframe_fill if indicator.timeframe_fill else self.timeframe_fill,
+                self.timeframe_fill,
             )
 
             if manager == self._candles[DEFAULT_CANDLES]:
@@ -130,9 +126,9 @@ class Hexital:
                 f"Dict Indicator missing 'indicator' or 'analysis' name, not: {raw_indicator}"
             )
 
-    def candles(self, name: Optional[str] = None) -> List[Candle]:
-        if name and self._candles.get(name, False):
-            return self._candles[name].candles
+    def candles(self, timeframe: Optional[str] = None) -> List[Candle]:
+        if timeframe and self._candles.get(timeframe, False):
+            return self._candles[timeframe].candles
         return self._candles[DEFAULT_CANDLES].candles
 
     def candles_all(self) -> Dict[str, List[Candle]]:

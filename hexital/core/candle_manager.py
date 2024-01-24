@@ -14,6 +14,7 @@ from hexital.utils.timeframe import (
     timeframe_to_timedelta,
 )
 
+DEFAULT_CANDLES = "default"
 _KEY_CONFIGS = ["candles_lifespan", "timeframe", "timeframe_fill"]
 
 
@@ -57,7 +58,7 @@ class CandleManager:
 
     @property
     def name(self) -> str:
-        return "_".join([str(getattr(self, key)) for key in _KEY_CONFIGS])
+        return self.timeframe if self.timeframe else DEFAULT_CANDLES
 
     def append(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
         candles_ = []
