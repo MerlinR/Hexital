@@ -6,6 +6,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ## 0.4.1
 - Added CandleManager to Manage timeframes and lifespan
+- Added better config inheritance from Hexital to Indicators
 
 ## 0.4.0 - 2024-01-22
 - Cleaned up code and some potential Bugs ruff/pyright
