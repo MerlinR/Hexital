@@ -7,7 +7,7 @@ from datetime import timedelta
 from typing import Dict, List, Optional
 
 from hexital.core.candle import Candle
-from hexital.core.candle_manager import DEFAULT_CANDLES, CandleManager
+from hexital.core.candle_manager import CandleManager
 from hexital.utils.candlesticks import (
     candles_sum,
     reading_as_list,
@@ -42,10 +42,11 @@ class Indicator(ABC):
 
         if isinstance(self.timeframe, str):
             self.timeframe = self.timeframe.upper()
+        elif isinstance(self.timeframe, TimeFrame):
+            self.timeframe = self.timeframe.value
 
         self._candles = CandleManager(
             self.candles,
-            DEFAULT_CANDLES,
             self.candles_lifespan,
             self.timeframe,
             self.timeframe_fill,

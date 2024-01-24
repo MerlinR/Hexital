@@ -80,33 +80,33 @@ class TestCandleAppending:
 
 class TestMergingCandlesTimeFrame:
     def test_collapse_candles_timeframe_empty(self):
-        manager = CandleManager([], "T10", None, "T10")
+        manager = CandleManager([], timeframe="T10")
         assert manager.candles == []
 
     @pytest.mark.usefixtures("candles", "candles_T5")
     def test_collapse_candles_first(self, candles: List[Candle], candles_T5: List[Candle]):
-        manager = CandleManager(candles, "T5", None, "T5")
+        manager = CandleManager(candles, timeframe="T5")
 
         assert manager.candles[0] == candles_T5[0]
 
     @pytest.mark.usefixtures("candles", "candles_T5")
     def test_collapse_candles_second(self, candles: List[Candle], candles_T5: List[Candle]):
-        manager = CandleManager(candles, "T5", None, "T5")
+        manager = CandleManager(candles, timeframe="T5")
         assert manager.candles[1] == candles_T5[1]
 
     @pytest.mark.usefixtures("candles", "candles_T5")
     def test_collapse_candles_last(self, candles: List[Candle], candles_T5: List[Candle]):
-        manager = CandleManager(candles, "T5", None, "T5")
+        manager = CandleManager(candles, timeframe="T5")
         assert manager.candles[-1] == candles_T5[-1]
 
     @pytest.mark.usefixtures("candles", "candles_T5")
     def test_collapse_candles_t5(self, candles: List[Candle], candles_T5: List[Candle]):
-        manager = CandleManager(candles, "T5", None, "T5")
+        manager = CandleManager(candles, timeframe="T5")
         assert manager.candles == candles_T5
 
     @pytest.mark.usefixtures("candles", "candles_T10")
     def test_collapse_candles_t10(self, candles: List[Candle], candles_T10: List[Candle]):
-        manager = CandleManager(candles, "T10", None, "T10")
+        manager = CandleManager(candles, timeframe="T10")
         assert manager.candles == candles_T10
 
     @pytest.mark.usefixtures("candles", "candles_T5")
@@ -121,7 +121,7 @@ class TestMergingCandlesTimeFrame:
         expected = copy.deepcopy(data_input)
         expected[-1].timestamp = datetime(2023, 10, 3, 9, 15)
 
-        manager = CandleManager([data_input[0]], "T5", None, "T5")
+        manager = CandleManager([data_input[0]], timeframe="T5")
 
         for candle in data_input[1:]:
             manager.append(candle)
@@ -141,14 +141,14 @@ class TestMergingCandlesTimeFrame:
         expected.append(copy.deepcopy(candles[20]))
         expected[-1].timestamp = datetime(2023, 10, 3, 9, 25)
 
-        manager = CandleManager(data_input, "T5", None, "T5")
+        manager = CandleManager(data_input, timeframe="T5")
         manager.append(copy.deepcopy(candles[20]))
 
         assert manager.candles == expected
 
     @pytest.mark.usefixtures("candles", "candles_T5")
     def test_collapse_candles_t5_appended(self, candles: List[Candle], candles_T5: List[Candle]):
-        manager = CandleManager([candles[0]], "T5", None, "T5")
+        manager = CandleManager([candles[0]], timeframe="T5")
         for candle in candles[1:]:
             manager.append(candle)
 
@@ -156,7 +156,7 @@ class TestMergingCandlesTimeFrame:
 
     @pytest.mark.usefixtures("candles", "candles_T10")
     def test_collapse_candles_t10_appended(self, candles: List[Candle], candles_T10: List[Candle]):
-        manager = CandleManager([candles[0]], "T10", None, "T10")
+        manager = CandleManager([candles[0]], timeframe="T10")
         for candle in candles[1:]:
             manager.append(candle)
 
@@ -166,7 +166,7 @@ class TestMergingCandlesTimeFrame:
     def test_collapse_candles_t5_multiple_collapse(
         self, candles: List[Candle], candles_T5: List[Candle]
     ):
-        manager = CandleManager(candles, "T5", None, "T5")
+        manager = CandleManager(candles, timeframe="T5")
         assert manager.candles == candles_T5
 
         manager.collapse_candles()
@@ -177,7 +177,7 @@ class TestMergingCandlesTimeFrame:
 
     @pytest.mark.usefixtures("candles", "candles_T5")
     def test_collapse_candles_t5_mixed_neat(self, candles: List[Candle], candles_T5: List[Candle]):
-        manager = CandleManager(candles[:10], "T5", None, "T5")
+        manager = CandleManager(candles[:10], timeframe="T5")
         assert manager.candles == candles_T5[:2]
 
         manager.append(candles[10:])
@@ -187,7 +187,7 @@ class TestMergingCandlesTimeFrame:
     def test_collapse_candles_t5_mixed_messy(
         self, candles: List[Candle], candles_T5: List[Candle]
     ):
-        manager = CandleManager(candles[:7], "T5", None, "T5")
+        manager = CandleManager(candles[:7], timeframe="T5")
         manager.append(candles[7:])
         assert manager.candles == candles_T5
 
@@ -196,7 +196,7 @@ class TestMergingCandlesTimeFrame:
         self, candles: List[Candle], candles_T5: List[Candle]
     ):
         cut_candles = candles[:5] + candles[-2:]
-        manager = CandleManager(cut_candles, "T5", None, "T5")
+        manager = CandleManager(cut_candles, timeframe="T5")
         assert manager.candles == [candles_T5[0], candles_T5[-1]]
 
     @pytest.mark.usefixtures("candles", "candles_T5")
@@ -204,7 +204,7 @@ class TestMergingCandlesTimeFrame:
         self, candles: List[Candle], candles_T5: List[Candle]
     ):
         cut_candles = candles[:5] + candles[10:15]
-        manager = CandleManager(cut_candles, "T5", None, "T5")
+        manager = CandleManager(cut_candles, timeframe="T5")
         assert manager.candles == [candles_T5[0], candles_T5[2]]
 
     @pytest.mark.usefixtures("candles", "candles_T5")
@@ -220,7 +220,7 @@ class TestMergingCandlesTimeFrame:
         expected = copy.deepcopy(data_input)
         expected[-1].timestamp = datetime(2023, 10, 3, 9, 25)
 
-        manager = CandleManager(data_input, "T5", None, "T5")
+        manager = CandleManager(data_input, timeframe="T5")
 
         assert manager.candles == expected
 
@@ -251,7 +251,7 @@ class TestMergingCandlesTimeFrame:
             ),
         ]
 
-        manager = CandleManager(data_input, "T5", None, "T5")
+        manager = CandleManager(data_input, timeframe="T5")
         assert manager.candles == expected
 
     @pytest.mark.usefixtures("candles", "candles_T5")
@@ -280,7 +280,7 @@ class TestMergingCandlesTimeFrame:
                 timestamp=datetime(2023, 10, 3, 3, 00),
             ),
         ]
-        manager = CandleManager([], "T5", None, "T5")
+        manager = CandleManager([], timeframe="T5")
 
         for candle in data_input:
             manager.append(candle)
@@ -301,7 +301,7 @@ def test_collapse_candles_t5_missing_section_fill(candles_T5: List[Candle]):
         timestamp=candles_T5[0].timestamp + timedelta(minutes=5),
     )
 
-    manager = CandleManager(cut_candles, "T5", None, "T5", True)
+    manager = CandleManager(cut_candles, timeframe="T5", timeframe_fill=True)
     assert manager.candles == [
         candles_T5[0],
         filler,
@@ -326,7 +326,7 @@ def test_collapse_candles_t5_missing_section_fill_all(candles_T5: List[Candle]):
             )
         )
 
-    manager = CandleManager(cut_candles, "T5", None, "T5", True)
+    manager = CandleManager(cut_candles, timeframe="T5", timeframe_fill=True)
 
     assert manager.candles == [candles_T5[0]] + filler_candles + [candles_T5[-1]]
 
@@ -348,6 +348,6 @@ def test_collapse_candles_t5_missing_section_fill_all_extra(
         blank_candle.timestamp += timedelta(minutes=5)
         filler_candles.append(copy.deepcopy(blank_candle))
 
-    manager = CandleManager(cut_candles, "T5", None, "T5", True)
+    manager = CandleManager(cut_candles, timeframe="T5", timeframe_fill=True)
 
     assert manager.candles == [candles_T5[0]] + filler_candles + [candles_T5[-1]]

@@ -14,11 +14,10 @@ from hexital.utils.timeframe import (
     timeframe_to_timedelta,
 )
 
-DEFAULT_CANDLES = "default"
+_KEY_CONFIGS = ["candles_lifespan", "timeframe", "timeframe_fill"]
 
 
 class CandleManager:
-    name: Optional[str] = DEFAULT_CANDLES
     candles: List[Candle]
     candles_lifespan: Optional[timedelta]
     timeframe: Optional[str] = None
@@ -27,7 +26,6 @@ class CandleManager:
     def __init__(
         self,
         candles: Optional[List[Candle]] = None,
-        name: Optional[str] = None,
         candles_lifespan: Optional[timedelta] = None,
         timeframe: Optional[str | TimeFrame] = None,
         timeframe_fill: bool = False,
@@ -37,7 +35,6 @@ class CandleManager:
         else:
             self.candles = []
 
-        self.name = name if name else self.name
         self.candles_lifespan = candles_lifespan
 
         if isinstance(timeframe, str):
@@ -48,6 +45,19 @@ class CandleManager:
 
         self.collapse_candles()
         self.trim_candles()
+
+    def __eq__(self, other) -> bool:
+        for key, val in self.__dict__.items():
+            if key not in _KEY_CONFIGS:
+                continue
+            if getattr(other, key) != val:
+                return False
+
+        return True
+
+    @property
+    def name(self) -> str:
+        return "_".join([str(getattr(self, key)) for key in _KEY_CONFIGS])
 
     def append(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
         candles_ = []
