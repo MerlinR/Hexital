@@ -5,6 +5,7 @@ import pytest
 from hexital.core import Candle, Hexital, Indicator
 from hexital.exceptions import InvalidAnalysis, InvalidIndicator
 from hexital.indicators import EMA, SMA
+from hexital.utils.timeframe import TimeFrame
 
 
 def fake_pattern(candles: List[Candle], index=-1):
@@ -226,3 +227,37 @@ def test_append_hexital_calc_sub_indicators(candles, expected_rsi):
         strat.append(candle)
         strat.calculate()
     assert pytest.approx(strat.indicator("RSI_14").as_list) == expected_rsi
+
+
+class TestHexitalCandleManagerInheritance:
+    @pytest.mark.usefixtures("candles", "expected_ema")
+    def test_hexital_inheritance(self, candles, expected_ema):
+        strat = Hexital("Test Stratergy", candles, [EMA()], candles_lifespan=timedelta(hours=1))
+
+        assert strat.candles_lifespan == timedelta(hours=1)
+        assert strat.indicator("EMA_10").candles_lifespan == timedelta(hours=1)
+
+    @pytest.mark.usefixtures("candles", "expected_ema")
+    def test_hexital_inheritance_two(self, candles, expected_ema):
+        strat = Hexital(
+            "Test Stratergy",
+            candles,
+            [EMA()],
+            candles_lifespan=timedelta(hours=1),
+            timeframe=TimeFrame.MINUTE10,
+        )
+
+        assert strat.timeframe == "T10"
+        assert strat.indicator("EMA_10").timeframe == "T10"
+
+    @pytest.mark.usefixtures("candles", "expected_ema")
+    def test_hexital_inheritance_not_req(self, candles, expected_ema):
+        strat = Hexital(
+            "Test Stratergy",
+            candles,
+            [EMA(candles_lifespan=timedelta(minutes=30))],
+            candles_lifespan=timedelta(hours=1),
+        )
+
+        assert strat.candles_lifespan == timedelta(hours=1)
+        assert strat.indicator("EMA_10").candles_lifespan == timedelta(minutes=30)

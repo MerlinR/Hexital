@@ -92,7 +92,10 @@ class Indicator(ABC):
         """The Candle Manager which controls TimeFrame, Trimming and collapsing,
         this will overwrite the Manager as well as the candles"""
         self._candles = manager
-        self.candles = self._candles.candles
+        self.candles = manager.candles
+        self.timeframe = manager.timeframe
+        self.timeframe_fill = manager.timeframe_fill
+        self.candles_lifespan = manager.candles_lifespan
 
     @property
     def name(self) -> str:

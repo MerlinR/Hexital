@@ -73,16 +73,17 @@ def reading_period(
     candles: List[Candle], period: int, name: str, index: Optional[int] = None
 ) -> bool:
     """Will return True if the given indicator goes back as far as amount,
-    It's true if exactly or more than. Period will be period-1"""
+    It's true if exactly or more than. Will ignore latest Candle"""
     period -= 1
 
     if index is None:
         index = len(candles) - 1
-
-    if (index - period) < 0:
+    elif not valid_index(index, len(candles)):
         return False
 
-    # Checks 3 points along period to verify values exist
+    if index - period < 0:
+        return False
+
     return all(
         bool(
             reading_by_index(

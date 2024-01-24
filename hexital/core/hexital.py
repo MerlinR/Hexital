@@ -10,6 +10,7 @@ from hexital.exceptions import InvalidAnalysis, InvalidIndicator
 from hexital.utils.candlesticks import (
     reading_by_index,
 )
+from hexital.utils.timeframe import TimeFrame
 
 
 class Hexital:
@@ -17,6 +18,7 @@ class Hexital:
     _candles: Dict[str, CandleManager]
     _indicators: Dict[str, Indicator]
     description: Optional[str] = None
+    timeframe: Optional[str] = None
     timeframe_fill: bool = False
     candles_lifespan: Optional[timedelta] = None
 
@@ -26,22 +28,29 @@ class Hexital:
         candles: List[Candle],
         indicators: Optional[List[dict | Indicator]] = None,
         description: Optional[str] = None,
+        timeframe: Optional[str | TimeFrame] = None,
         timeframe_fill: bool = False,
         candles_lifespan: Optional[timedelta] = None,
     ):
         self.name = name
+        self.description = description
+
+        if isinstance(timeframe, str):
+            self.timeframe = timeframe.upper()
+        elif isinstance(timeframe, TimeFrame):
+            self.timeframe = timeframe.value
+        self.timeframe_fill = timeframe_fill
+        self.candles_lifespan = candles_lifespan
 
         self._candles = {
             DEFAULT_CANDLES: CandleManager(
                 deepcopy(candles) if isinstance(candles, list) else [],
                 DEFAULT_CANDLES,
                 candles_lifespan=candles_lifespan,
+                timeframe=self.timeframe,
+                timeframe_fill=self.timeframe_fill,
             )
         }
-
-        self.description = description
-        self.timeframe_fill = timeframe_fill
-        self.candles_lifespan = candles_lifespan
 
         self._indicators = self._validate_indicators(indicators) if indicators else {}
 
@@ -196,7 +205,7 @@ class Hexital:
 
     def append(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
         for candle_manager in self._candles.values():
-            candle_manager.append(deepcopy(candles))
+            candle_manager.append(candles)
 
         self.calculate()
 

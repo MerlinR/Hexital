@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from copy import deepcopy
 from datetime import timedelta
 from typing import List, Optional, Set
 
@@ -15,7 +18,7 @@ DEFAULT_CANDLES = "default"
 
 
 class CandleManager:
-    name: Optional[str] = "default"
+    name: Optional[str] = DEFAULT_CANDLES
     candles: List[Candle]
     candles_lifespan: Optional[timedelta]
     timeframe: Optional[str] = None
@@ -69,7 +72,7 @@ class CandleManager:
         else:
             raise TypeError
 
-        self.candles.extend(candles_)
+        self.candles.extend(deepcopy(candles_))
         self.collapse_candles()
         self.trim_candles()
 
