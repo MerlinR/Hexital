@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from hexital import indicators
-from hexital.core import Indicator
+from hexital.core import Indicator, Managed
 
 
 @dataclass(kw_only=True)
@@ -19,29 +19,25 @@ class Supertrend(Indicator):
     def _initialise(self):
         self._add_sub_indicator(
             indicators.ATR(
-                candles=self.candles,
                 period=self.period,
                 fullname_override=f"{self.indicator_name}_atr",
             )
         )
         self._add_sub_indicator(
             indicators.HighLowAverage(
-                candles=self.candles,
                 fullname_override=f"{self.indicator_name}_HL",
             )
         )
 
         self._add_managed_indicator(
             "st_upper",
-            indicators.Managed(
-                candles=self.candles,
+            Managed(
                 fullname_override="ST_Upper",
             ),
         )
         self._add_managed_indicator(
             "st_lower",
-            indicators.Managed(
-                candles=self.candles,
+            Managed(
                 fullname_override="ST_Lower",
             ),
         )

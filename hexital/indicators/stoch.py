@@ -46,7 +46,6 @@ class STOCH(Indicator):
         self._add_managed_indicator(
             "k",
             SMA(
-                candles=self.candles,
                 input_value=f"{self.name}.stoch",
                 period=self.smoothing_k,
                 fullname_override=f"{self.indicator_name}_k",
@@ -55,7 +54,6 @@ class STOCH(Indicator):
         self._add_managed_indicator(
             "d",
             SMA(
-                candles=self.candles,
                 input_value=f"{self.name}.k",
                 period=self.slow_period,
                 fullname_override=f"{self.indicator_name}_d",

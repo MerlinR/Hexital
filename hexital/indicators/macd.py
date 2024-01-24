@@ -45,7 +45,6 @@ class MACD(Indicator):
     def _initialise(self):
         self._add_sub_indicator(
             EMA(
-                candles=self.candles,
                 input_value=self.input_value,
                 period=self.fast_period,
                 fullname_override=f"{self.indicator_name}_EMA_fast",
@@ -53,7 +52,6 @@ class MACD(Indicator):
         )
         self._add_sub_indicator(
             EMA(
-                candles=self.candles,
                 input_value=self.input_value,
                 period=self.slow_period,
                 fullname_override=f"{self.indicator_name}_EMA_slow",
@@ -63,7 +61,6 @@ class MACD(Indicator):
         self._add_managed_indicator(
             "signal",
             EMA(
-                candles=self.candles,
                 input_value=f"{self.name}.MACD",
                 period=self.signal_period,
                 fullname_override=f"{self.indicator_name}_signal_line",
@@ -72,7 +69,6 @@ class MACD(Indicator):
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         if self.reading(f"{self.indicator_name}_EMA_slow"):
-
             macd = self.reading(f"{self.indicator_name}_EMA_fast") - self.reading(
                 f"{self.indicator_name}_EMA_slow"
             )

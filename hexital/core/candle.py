@@ -56,8 +56,8 @@ class Candle:
 
     @staticmethod
     def from_lists(candles: List[List[float]]) -> List[Candle]:
-        """Expected list of the folling list [open, high, low, close, volume]
-        with optional datetime at the begining or end."""
+        """Expected list of the following list [open, high, low, close, volume]
+        with optional datetime at the beginning or end."""
         return [Candle.from_list(candle) for candle in candles]
 
     def merge(self, candle: Candle):

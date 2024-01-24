@@ -32,8 +32,7 @@ class EMA(Indicator):
         if self.prev_exists():
             alpha = float(self.smoothing / (self.period + 1.0))
             return float(
-                alpha * self.reading(self.input_value)
-                + (self.prev_reading() * (1.0 - alpha))
+                alpha * self.reading(self.input_value) + (self.prev_reading() * (1.0 - alpha))
             )
 
         if self.reading_period(self.period, self.input_value):

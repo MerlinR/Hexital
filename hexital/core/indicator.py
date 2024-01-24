@@ -7,18 +7,16 @@ from datetime import timedelta
 from typing import Dict, List, Optional
 
 from hexital.core.candle import Candle
+from hexital.core.candle_manager import DEFAULT_CANDLES, CandleManager
 from hexital.utils.candlesticks import (
-    TimeFrame,
     candles_sum,
-    collapse_candles_timeframe,
-    multi_convert_candles,
     reading_as_list,
     reading_by_candle,
     reading_count,
     reading_period,
-    trim_candles,
 )
 from hexital.utils.indexing import round_values
+from hexital.utils.timeframe import TimeFrame
 
 
 @dataclass(kw_only=True)
@@ -30,9 +28,11 @@ class Indicator(ABC):
     timeframe: Optional[str | TimeFrame] = None
     timeframe_fill: bool = False
     candles_lifespan: Optional[timedelta] = None
+
+    _candles: CandleManager = field(default_factory=CandleManager)
     _output_name: str = ""
     _sub_indicators: List[Indicator] = field(default_factory=list)
-    _managed_indicators: Dict[str, Indicator] = field(default_factory=dict)
+    _managed_indicators: Dict[str, Managed | Indicator] = field(default_factory=dict)
     _sub_indicator: bool = False
     _active_index: int = 0
     _initialised: bool = False
@@ -40,14 +40,19 @@ class Indicator(ABC):
     def __post_init__(self):
         self._validate_fields()
 
-        if self.timeframe:
-            if isinstance(self.timeframe, str):
-                self.timeframe = self.timeframe.upper()
-            if self.candles:
-                self.candles = deepcopy(self.candles)
+        if isinstance(self.timeframe, str):
+            self.timeframe = self.timeframe.upper()
 
-        self._collapse_candles()
-        trim_candles(self.candles, self.candles_lifespan)
+        self._candles = CandleManager(
+            self.candles,
+            DEFAULT_CANDLES,
+            self.candles_lifespan,
+            self.timeframe,
+            self.timeframe_fill,
+        )
+
+        self.candles = self._candles.candles
+
         self._internal_generate_name()
 
     def __str__(self):
@@ -62,10 +67,7 @@ class Indicator(ABC):
         else:
             self._output_name = self._generate_name()
             if self.timeframe:
-                if isinstance(self.timeframe, str):
-                    self._output_name += f"_{self.timeframe}"
-                else:
-                    self._output_name += f"_{self.timeframe.value}"
+                self._output_name += f"_{self._candles.timeframe}"
 
         if self.name_suffix:
             self._output_name += f"_{self.name_suffix}"
@@ -78,7 +80,19 @@ class Indicator(ABC):
 
     @abstractmethod
     def _generate_name(self) -> str:
-        pass
+        return ""
+
+    @property
+    def candle_manager(self) -> CandleManager:
+        """The Candle Manager which controls TimeFrame, Trimming and collapsing"""
+        return self._candles
+
+    @candle_manager.setter
+    def candle_manager(self, manager: CandleManager):
+        """The Candle Manager which controls TimeFrame, Trimming and collapsing,
+        this will overwrite the Manager as well as the candles"""
+        self._candles = manager
+        self.candles = self._candles.candles
 
     @property
     def name(self) -> str:
@@ -118,8 +132,7 @@ class Indicator(ABC):
         return output
 
     def _set_reading(self, reading: float | dict | None, index: Optional[int] = None):
-        if index is None:
-            index = self._active_index
+        index = index if index else self._active_index
 
         if self._sub_indicator:
             self.candles[index].sub_indicators[self.name] = reading
@@ -127,25 +140,11 @@ class Indicator(ABC):
             self.candles[index].indicators[self.name] = reading
 
     def append(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
-        candles_ = multi_convert_candles(candles)
-
-        if self.timeframe:
-            self.candles.extend(deepcopy(candles_))
-        else:
-            self.candles.extend(candles_)
-
-        self._collapse_candles()
+        self._candles.append(candles)
         self.calculate()
-        trim_candles(self.candles, self.candles_lifespan)
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         pass
-
-    def _collapse_candles(self):
-        if self.timeframe:
-            self.candles.extend(
-                collapse_candles_timeframe(self.candles, self.timeframe, self.timeframe_fill)
-            )
 
     def calculate(self):
         """Calculate the TA values, will calculate for all the Candles,
@@ -158,19 +157,20 @@ class Indicator(ABC):
             indicator.calculate()
 
         for index in range(self._find_calc_index(), len(self.candles)):
-            self._set_index(index)
-            if self.reading(index=index) is None:
-                reading = round_values(
-                    self._calculate_reading(index=index), round_by=self.round_value
-                )
-                self._set_reading(reading, index)
+            self._set_active_index(index)
+
+            if self.reading(index=index) is not None:
+                continue
+
+            reading = round_values(self._calculate_reading(index=index), round_by=self.round_value)
+            self._set_reading(reading, index)
 
     def calculate_index(self, start_index: int, end_index: Optional[int] = None):
-        """Calculate the TA values, will calculate a index range the Candles"""
+        """Calculate the TA values, will calculate a index range the Candles, will re-calculate"""
         end_index = end_index if end_index else start_index + 1
 
         for index in range(start_index, end_index):
-            self._set_index(index)
+            self._set_active_index(index)
             reading = round_values(self._calculate_reading(index=index), round_by=self.round_value)
             self._set_reading(reading, index)
 
@@ -186,25 +186,26 @@ class Indicator(ABC):
                 return index + 1
         return 0
 
-    def _set_index(self, index: int):
+    def _set_active_index(self, index: int):
         self._active_index = index
 
         for indicator in self._managed_indicators.values():
-            set_indicator_index = getattr(indicator, "set_active_index", None)
-            if callable(set_indicator_index):
-                set_indicator_index(index)
+            if isinstance(indicator, Managed):
+                indicator.set_active_index(index)
 
     def _add_sub_indicator(self, indicator: Indicator):
         """Adds sub indicator, this will auto calculate with indicator"""
         indicator._sub_indicator = True
+        indicator.candle_manager = self._candles
         self._sub_indicators.append(indicator)
 
-    def _add_managed_indicator(self, name: str, indicator: Indicator):
+    def _add_managed_indicator(self, name: str, indicator: Managed | Indicator):
         """Adds managed sub indicator, this will not auto calculate with indicator"""
         indicator._sub_indicator = True
+        indicator.candle_manager = self._candles
         self._managed_indicators[name] = indicator
 
-    def _managed_indictor(self, name: str) -> Indicator | None:
+    def _managed_indictor(self, name: str) -> Managed | Indicator | None:
         return self._managed_indicators.get(name)
 
     def prev_exists(self) -> bool:
@@ -258,14 +259,39 @@ class Indicator(ABC):
 
     def purge(self):
         """Remove this indicator value from all Candles"""
-        for candle in self.candles:
-            candle.indicators.pop(self.name, None)
-            for indicator in self._sub_indicators:
-                candle.sub_indicators.pop(indicator.name, None)
-            for indicator in self._managed_indicators.values():
-                candle.sub_indicators.pop(indicator.name, None)
+        self._candles.purge(
+            {self.name}
+            | {indicator.name for indicator in self._sub_indicators}
+            | {indicator.name for indicator in self._managed_indicators.values()}
+        )
 
     def recalculate(self):
         """Re-calculate this indicator value for all Candles"""
         self.purge()
         self.calculate()
+
+
+@dataclass(kw_only=True)
+class Managed(Indicator):
+    """Managed
+
+    Empty Indicator thats manually controlled and the reading manually set.
+
+    """
+
+    indicator_name: str = "MAN"
+    _sub_indicator: bool = True
+    _active_index: int = 0
+
+    def _generate_name(self) -> str:
+        return self.indicator_name
+
+    def set_reading(self, reading: float | dict, index: Optional[int] = None):
+        if index is None:
+            index = self._active_index
+        else:
+            self.set_active_index(index)
+        self._set_reading(reading, self._active_index)
+
+    def set_active_index(self, index: int):
+        self._active_index = index

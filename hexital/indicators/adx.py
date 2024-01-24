@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 from hexital import indicators
-from hexital.core import Indicator
+from hexital.core import Indicator, Managed
 
 
 @dataclass(kw_only=True)
@@ -36,7 +36,6 @@ class ADX(Indicator):
     def _initialise(self):
         self._add_sub_indicator(
             indicators.ATR(
-                candles=self.candles,
                 period=self.period,
                 fullname_override=f"{self.indicator_name}_atr",
             )
@@ -44,7 +43,6 @@ class ADX(Indicator):
         self._add_managed_indicator(
             "positive",
             indicators.RMA(
-                candles=self.candles,
                 fullname_override=f"{self.indicator_name}_pos",
                 period=self.period,
                 input_value=f"{self.indicator_name}_ppos",
@@ -52,15 +50,13 @@ class ADX(Indicator):
         )
         self._add_managed_indicator(
             "plain_positive",
-            indicators.Managed(
-                candles=self.candles,
+            Managed(
                 fullname_override=f"{self.indicator_name}_ppos",
             ),
         )
         self._add_managed_indicator(
             "negative",
             indicators.RMA(
-                candles=self.candles,
                 fullname_override=f"{self.indicator_name}_neg",
                 period=self.period,
                 input_value=f"{self.indicator_name}_pneg",
@@ -68,8 +64,7 @@ class ADX(Indicator):
         )
         self._add_managed_indicator(
             "plain_negative",
-            indicators.Managed(
-                candles=self.candles,
+            Managed(
                 fullname_override=f"{self.indicator_name}_pneg",
             ),
         )
@@ -77,7 +72,6 @@ class ADX(Indicator):
         self._add_managed_indicator(
             "dx",
             indicators.RMA(
-                candles=self.candles,
                 fullname_override=f"{self.indicator_name}_dx",
                 period=self.period_signal,
                 input_value=f"{self.indicator_name}_pdx",
@@ -85,8 +79,7 @@ class ADX(Indicator):
         )
         self._add_managed_indicator(
             "plain_dx",
-            indicators.Managed(
-                candles=self.candles,
+            Managed(
                 fullname_override=f"{self.indicator_name}_pdx",
             ),
         )

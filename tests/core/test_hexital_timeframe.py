@@ -1,8 +1,7 @@
-from copy import deepcopy
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 import pytest
-from hexital.core import Candle, Hexital
+from hexital.core import Hexital
 from hexital.indicators import EMA, OBV, SMA
 
 
@@ -40,8 +39,8 @@ def test_hextial_multi_timeframes_shared_candles(
 
     assert pytest.approx(strat.reading_as_list("EMA_10")) == expected_ema
     assert (
-        strat._candles["T10"][-1].indicators.get("SMA_10_T10") == expected_sma_t10[-1]
-        and strat._candles["T10"][-1].indicators.get("OBV_T10") == expected_obv_t10[-1]
+        strat._candles["T10"].candles[-1].indicators.get("SMA_10_T10") == expected_sma_t10[-1]
+        and strat._candles["T10"].candles[-1].indicators.get("OBV_T10") == expected_obv_t10[-1]
     )
 
 

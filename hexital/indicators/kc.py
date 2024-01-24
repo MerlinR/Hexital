@@ -24,7 +24,6 @@ class KC(Indicator):
     def _initialise(self):
         self._add_sub_indicator(
             ATR(
-                candles=self.candles,
                 period=self.period,
                 fullname_override=f"{self.indicator_name}_ATR",
             )
@@ -32,7 +31,6 @@ class KC(Indicator):
 
         self._add_sub_indicator(
             EMA(
-                candles=self.candles,
                 input_value=self.input_value,
                 period=self.period,
                 fullname_override=f"{self.indicator_name}_EMA",
