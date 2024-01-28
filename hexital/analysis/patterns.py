@@ -58,19 +58,19 @@ def hammer(
     def _hammer(indx: int):
         is_hammer = False
 
-        body = candles[index].realbody()
-        body_middle = candles[index].high - candles[index].low
+        body = candles[indx].realbody()
+        body_middle = candles[indx].high - candles[indx].low
 
-        body_average = utils.realbody_avg(candles, length, index)
+        body_average = utils.realbody_avg(candles, length, indx)
 
-        upper_shadow_avg = utils.shadow_upper_avg(candles, length, index)
-        lower_shadow_avg = utils.shadow_lower_avg(candles, length, index)
+        upper_shadow_avg = utils.shadow_upper_avg(candles, length, indx)
+        lower_shadow_avg = utils.shadow_lower_avg(candles, length, indx)
 
         if (
             body < body_average
-            and candles[index].shadow_lower() > lower_shadow_avg
-            and candles[index].shadow_lower() < upper_shadow_avg
-            and abs(body_middle - candles[index - 1].low) < 10
+            and candles[indx].shadow_lower() > lower_shadow_avg
+            and candles[indx].shadow_lower() < upper_shadow_avg
+            and abs(body_middle - candles[indx - 1].low) < 10
         ):
             is_hammer = True
 

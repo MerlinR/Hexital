@@ -7,6 +7,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 ## 0.4.1
 - Added CandleManager to Manage timeframes and lifespan
 - Added better config inheritance from Hexital to Indicators
+- Fixed Hammer index pattern working correctly
 
 ## 0.4.0 - 2024-01-22
 - Cleaned up code and some potential Bugs ruff/pyright
@@ -71,8 +72,9 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - VWAP
   - VMA
   - WMA
+  
 ## 0.1.1 - 2023-08-28
 - Nada
-## 0.1.0 - 2023-08-27
 
+## 0.1.0 - 2023-08-27
 - Alpha release `hexital`
