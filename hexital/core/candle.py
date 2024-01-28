@@ -16,6 +16,28 @@ class Candle:
     sub_indicators: Dict[str, float | Dict[str, float | None] | None] = field(default_factory=dict)
     timestamp: Optional[datetime] = None
 
+    def positive(self) -> bool:
+        return self.open < self.close
+
+    def negative(self) -> bool:
+        return self.open > self.close
+
+    def realbody(self) -> float:
+        return abs(self.open - self.close)
+
+    def shadow_upper(self) -> float:
+        if self.positive():
+            return abs(self.high - self.close)
+        return abs(self.high - self.open)
+
+    def shadow_lower(self) -> float:
+        if self.positive():
+            return abs(self.low - self.open)
+        return abs(self.low - self.close)
+
+    def high_low(self) -> float:
+        return abs(self.high - self.low)
+
     @classmethod
     def from_dict(cls, candle: Dict[str, Any]) -> Candle:
         """Expected dict with keys ['open', 'high', 'low', 'close', 'volume']

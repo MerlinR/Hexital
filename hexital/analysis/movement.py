@@ -26,20 +26,20 @@ def _get_clean_readings(
 
 def positive(candles: Candle | List[Candle], index: int = -1) -> bool:
     if isinstance(candles, Candle):
-        return candles.open < candles.close
+        return candles.positive()
 
     if not valid_index(index, len(candles)):
         return False
-    return candles[index].open < candles[index].close
+    return candles[index].positive()
 
 
 def negative(candles: Candle | List[Candle], index: int = -1) -> bool:
     if isinstance(candles, Candle):
-        return candles.open > candles.close
+        return candles.negative()
 
     if not valid_index(index, len(candles)):
         return False
-    return candles[index].open > candles[index].close
+    return candles[index].negative()
 
 
 def above(candles: List[Candle], indicator: str, indicator_two: str, index: int = -1) -> bool:

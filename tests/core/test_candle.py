@@ -4,6 +4,42 @@ import pytest
 from hexital.core import Candle
 
 
+@pytest.fixture(name="simple_candle_positive")
+def fixture_simple_candle_positive():
+    return Candle(100, 120, 70, 110, 1)
+
+
+@pytest.fixture(name="simple_candle")
+def fixture_simple_candle():
+    return Candle(100, 120, 70, 90, 1)
+
+
+class TestCoreCandle:
+    def test_positive(self, simple_candle_positive):
+        assert simple_candle_positive.positive()
+
+    def test_negative(self, simple_candle_positive):
+        assert simple_candle_positive.negative() is False
+
+    def test_realbody(self, simple_candle_positive):
+        assert simple_candle_positive.realbody() == 10
+
+    def test_shadow_upper(self, simple_candle_positive):
+        assert simple_candle_positive.shadow_upper() == 10
+
+    def test_shadow_upper_negative(self, simple_candle):
+        assert simple_candle.shadow_upper() == 20
+
+    def test_shadow_lower(self, simple_candle_positive):
+        assert simple_candle_positive.shadow_lower() == 30
+
+    def test_shadow_lower_negative(self, simple_candle):
+        assert simple_candle.shadow_lower() == 20
+
+    def test_high_low(self, simple_candle):
+        assert simple_candle.high_low() == 50
+
+
 @pytest.fixture(name="candle_dict")
 def fixture_candle_dict():
     return [

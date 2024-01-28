@@ -76,14 +76,6 @@ def fixture_indicator_candles_partial():
     ]
 
 
-def test_positive():
-    assert movement.positive(Candle(open=100, high=120, low=90, close=110, volume=10))
-
-
-def test_positive_false():
-    assert not movement.positive(Candle(open=100, high=120, low=90, close=90, volume=10))
-
-
 def test_positive_list():
     assert not movement.positive(
         [Candle(open=100, high=120, low=90, close=90, volume=10)], index=0
@@ -92,14 +84,6 @@ def test_positive_list():
 
 def test_positive_list_missing():
     assert not movement.positive([])
-
-
-def test_negative():
-    assert movement.negative(Candle(open=100, high=120, low=90, close=90, volume=10))
-
-
-def test_negative_false():
-    assert not movement.negative(Candle(open=100, high=120, low=90, close=110, volume=10))
 
 
 def test_negative_list():
