@@ -56,7 +56,7 @@ def above(candles: List[Candle], indicator: str, indicator_two: str, index: int 
 
 
 def below(candles: List[Candle], indicator: str, indicator_two: str, index: int = -1) -> bool:
-    """Check if indicator is a higher value than indicator_two"""
+    """Check if indicator is a lower value than indicator_two"""
     if not candles:
         return False
 

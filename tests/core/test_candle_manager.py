@@ -7,6 +7,27 @@ from hexital.core.candle import Candle
 from hexital.core.candle_manager import CandleManager
 
 
+class TestBasic:
+    def test_eq_same(self):
+        manager = CandleManager(timeframe="T5")
+        assert manager == manager
+
+    def test_eq(self):
+        manager = CandleManager(timeframe="T5")
+        manager_two = CandleManager(timeframe="T5")
+        assert manager == manager_two
+
+    def test_eq_diff(self):
+        manager = CandleManager(timeframe="T5")
+        manager_two = CandleManager(timeframe="T10")
+        assert manager != manager_two
+
+    def test_eq_diff_none(self):
+        manager = CandleManager()
+        manager_two = CandleManager(timeframe="T5")
+        assert manager != manager_two
+
+
 class TestCandleAppending:
     @pytest.mark.usefixtures("minimal_candles")
     def test_append_candle(self, minimal_candles):

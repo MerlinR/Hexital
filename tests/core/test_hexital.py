@@ -3,7 +3,7 @@ from typing import List
 
 import pytest
 from hexital.core import Candle, Hexital, Indicator
-from hexital.exceptions import InvalidAnalysis, InvalidIndicator
+from hexital.exceptions import InvalidAnalysis, InvalidIndicator, MissingIndicator, MixedTimeframes
 from hexital.indicators import EMA, SMA
 from hexital.utils.timeframe import TimeFrame
 
@@ -278,3 +278,31 @@ class TestHexitalCandleManagerInheritance:
         assert strat.timeframe == "T5"
         assert strat.indicator("EMA_10").candles_lifespan == timedelta(hours=1)
         assert strat.indicator("EMA_10").timeframe == "T10"
+
+
+class TestMovement:
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_movement(self, candles):
+        strat = Hexital("Test Stratergy", candles, [EMA(), SMA()])
+        strat.calculate()
+        assert strat.above("EMA_10", "SMA_10") is False
+
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_rising(self, candles):
+        strat = Hexital("Test Stratergy", candles, [EMA()])
+        strat.calculate()
+        assert strat.rising("EMA_10") is False
+
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_movement_verification_missing(self, candles):
+        strat = Hexital("Test Stratergy", candles, [EMA(), SMA()])
+        strat.calculate()
+        with pytest.raises(MissingIndicator):
+            assert strat.above("EMA_10", "FUCK_YOU") is False
+
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_movement_verification_mixed(self, candles):
+        strat = Hexital("Test Stratergy", candles, [EMA(), SMA(timeframe="T5")])
+        strat.calculate()
+        with pytest.raises(MixedTimeframes):
+            assert strat.above("EMA_10", "SMA_10_T5")

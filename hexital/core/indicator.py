@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from datetime import timedelta
 from typing import Dict, List, Optional
 
+from hexital.analysis import movement
 from hexital.core.candle import Candle
 from hexital.core.candle_manager import CandleManager
 from hexital.utils.candlesticks import (
@@ -273,6 +274,34 @@ class Indicator(ABC):
         """Re-calculate this indicator value for all Candles"""
         self.purge()
         self.calculate()
+
+    def rising(self, name: Optional[str] = None, length: int = 4, index: int = -1) -> bool:
+        return movement.rising(self.candles, name if name else self.name, length, index)
+
+    def falling(self, name: Optional[str] = None, length: int = 4, index: int = -1) -> bool:
+        return movement.falling(self.candles, name if name else self.name, length, index)
+
+    def mean_rising(self, name: Optional[str] = None, length: int = 4, index: int = -1) -> bool:
+        return movement.mean_rising(self.candles, name if name else self.name, length, index)
+
+    def mean_falling(self, name: Optional[str] = None, length: int = 4, index: int = -1) -> bool:
+        return movement.mean_falling(self.candles, name if name else self.name, length, index)
+
+    def highest(self, name: Optional[str] = None, length: int = 4, index: int = -1) -> float:
+        return movement.highest(self.candles, name if name else self.name, length, index)
+
+    def lowest(self, name: Optional[str] = None, length: int = 4, index: int = -1) -> float:
+        return movement.lowest(self.candles, name if name else self.name, length, index)
+
+    def highestbar(
+        self, name: Optional[str] = None, length: int = 4, index: int = -1
+    ) -> int | None:
+        return movement.highestbar(self.candles, name if name else self.name, length, index)
+
+    def lowestbar(
+        self, name: Optional[str] = None, length: int = 4, index: int = -1
+    ) -> int | None:
+        return movement.lowestbar(self.candles, name if name else self.name, length, index)
 
 
 @dataclass(kw_only=True)

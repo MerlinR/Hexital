@@ -3,10 +3,11 @@ from copy import deepcopy
 from datetime import timedelta
 from typing import Dict, List, Optional, Set
 
+from hexital.analysis import movement
 from hexital.core.candle import Candle
 from hexital.core.candle_manager import DEFAULT_CANDLES, CandleManager
 from hexital.core.indicator import Indicator
-from hexital.exceptions import InvalidAnalysis, InvalidIndicator
+from hexital.exceptions import InvalidAnalysis, InvalidIndicator, MissingIndicator, MixedTimeframes
 from hexital.utils.candlesticks import (
     reading_by_index,
 )
@@ -228,3 +229,82 @@ class Hexital:
         ideal for changing an indicator parameters midway."""
         self.purge(name)
         self.calculate(name)
+
+    def _verify_indicators(
+        self, indicator: str, indicator_two: Optional[str] = None
+    ) -> List[Candle]:
+        indicator_ = self._indicators.get(indicator.split(".")[0])
+
+        if not indicator_:
+            raise MissingIndicator(f"Cannot find {indicator}")
+
+        if not indicator_two:
+            return indicator_.candles
+
+        indicator_two_ = self._indicators.get(indicator_two.split(".")[0])
+
+        if not indicator_two_:
+            raise MissingIndicator(f"Cannot find {indicator_two}")
+
+        if indicator_.candle_manager != indicator_two_.candle_manager:
+            raise MixedTimeframes(
+                f"Cant use 'above' on {indicator}[{indicator_.timeframe}]-{indicator_two}[{indicator_two_.timeframe}] using different timeframes"
+            )
+
+        return indicator_two_.candles
+
+    def above(self, indicator: str, indicator_two: str, index: int = -1) -> bool:
+        candles = self._verify_indicators(indicator, indicator_two)
+        return movement.above(candles, indicator, indicator_two, index)
+
+    def below(self, indicator: str, indicator_two: str, index: int = -1) -> bool:
+        candles = self._verify_indicators(indicator, indicator_two)
+        return movement.below(candles, indicator, indicator_two, index)
+
+    def cross(self, indicator: str, indicator_two: str, length: int = 1, index: int = -1) -> bool:
+        candles = self._verify_indicators(indicator, indicator_two)
+        return movement.cross(candles, indicator, indicator_two, length, index)
+
+    def crossover(
+        self, indicator: str, indicator_two: str, length: int = 1, index: int = -1
+    ) -> bool:
+        candles = self._verify_indicators(indicator, indicator_two)
+        return movement.crossover(candles, indicator, indicator_two, length, index)
+
+    def crossunder(
+        self, indicator: str, indicator_two: str, length: int = 1, index: int = -1
+    ) -> bool:
+        candles = self._verify_indicators(indicator, indicator_two)
+        return movement.crossunder(candles, indicator, indicator_two, length, index)
+
+    def rising(self, name: str, length: int = 4, index: int = -1) -> bool:
+        candles = self._verify_indicators(name)
+        return movement.rising(candles, name, length, index)
+
+    def falling(self, name: str, length: int = 4, index: int = -1) -> bool:
+        candles = self._verify_indicators(name)
+        return movement.falling(candles, name, length, index)
+
+    def mean_rising(self, name: str, length: int = 4, index: int = -1) -> bool:
+        candles = self._verify_indicators(name)
+        return movement.mean_rising(candles, name, length, index)
+
+    def mean_falling(self, name: str, length: int = 4, index: int = -1) -> bool:
+        candles = self._verify_indicators(name)
+        return movement.mean_falling(candles, name, length, index)
+
+    def highest(self, name: str, length: int = 4, index: int = -1) -> float:
+        candles = self._verify_indicators(name)
+        return movement.highest(candles, name, length, index)
+
+    def lowest(self, name: str, length: int = 4, index: int = -1) -> float:
+        candles = self._verify_indicators(name)
+        return movement.lowest(candles, name, length, index)
+
+    def highestbar(self, name: str, length: int = 4, index: int = -1) -> int | None:
+        candles = self._verify_indicators(name)
+        return movement.highestbar(candles, name, length, index)
+
+    def lowestbar(self, name: str, length: int = 4, index: int = -1) -> int | None:
+        candles = self._verify_indicators(name)
+        return movement.lowestbar(candles, name, length, index)

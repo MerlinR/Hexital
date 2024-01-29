@@ -48,10 +48,10 @@ class CandleManager:
         self.trim_candles()
 
     def __eq__(self, other) -> bool:
-        for key, val in self.__dict__.items():
-            if key not in _KEY_CONFIGS:
-                continue
-            if getattr(other, key) != val:
+        if not isinstance(other, CandleManager):
+            return False
+        for key in _KEY_CONFIGS:
+            if getattr(self, key) != getattr(other, key):
                 return False
 
         return True
