@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from hexital.core import Indicator
 
@@ -12,11 +12,11 @@ class VWMA(Indicator):
 
     """
 
-    indicator_name: str = "VWMA"
+    _name: str = field(init=False, default="VWMA")
     period: int = 10
 
     def _generate_name(self) -> str:
-        return f"{self.indicator_name}_{self.period}"
+        return f"{self._name}_{self.period}"
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         if self.prev_exists() or self.reading_period(self.period, "close"):

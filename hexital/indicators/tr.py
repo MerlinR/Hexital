@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from hexital.core import Indicator
 
@@ -15,10 +15,10 @@ class TR(Indicator):
 
     """
 
-    indicator_name: str = "TR"
+    _name: str = field(init=False, default="TR")
 
     def _generate_name(self) -> str:
-        return self.indicator_name
+        return self._name
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         high = self.reading("high")

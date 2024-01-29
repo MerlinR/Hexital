@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from hexital.core import Indicator
 
@@ -20,12 +20,12 @@ class SMA(Indicator):
 
     """
 
-    indicator_name: str = "SMA"
+    _name: str = field(init=False, default="SMA")
     period: int = 10
     input_value: str = "close"
 
     def _generate_name(self) -> str:
-        return f"{self.indicator_name}_{self.period}"
+        return f"{self._name}_{self.period}"
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         if self.prev_exists():

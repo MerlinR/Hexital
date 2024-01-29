@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from hexital import indicators
 from hexital.core import Indicator, Managed
@@ -8,24 +8,24 @@ from hexital.core import Indicator, Managed
 class Supertrend(Indicator):
     """Supertrend"""
 
-    indicator_name: str = "Supertrend"
+    _name: str = field(init=False, default="Supertrend")
     period: int = 7
     multiplier: float = 3.0
     input_value: str = "close"
 
     def _generate_name(self) -> str:
-        return f"{self.indicator_name}_{self.period}"
+        return f"{self._name}_{self.period}"
 
     def _initialise(self):
         self._add_sub_indicator(
             indicators.ATR(
                 period=self.period,
-                fullname_override=f"{self.indicator_name}_atr",
+                fullname_override=f"{self._name}_atr",
             )
         )
         self._add_sub_indicator(
             indicators.HighLowAverage(
-                fullname_override=f"{self.indicator_name}_HL",
+                fullname_override=f"{self._name}_HL",
             )
         )
 
@@ -45,11 +45,11 @@ class Supertrend(Indicator):
     def _calculate_reading(self, index: int) -> float | dict | None:
         direction = 1
 
-        if self.reading(f"{self.indicator_name}_atr"):
-            mid_atr = self.multiplier * self.reading(f"{self.indicator_name}_atr")
+        if self.reading(f"{self._name}_atr"):
+            mid_atr = self.multiplier * self.reading(f"{self._name}_atr")
 
-            upper = self.reading(f"{self.indicator_name}_HL") + mid_atr
-            lower = self.reading(f"{self.indicator_name}_HL") - mid_atr
+            upper = self.reading(f"{self._name}_HL") + mid_atr
+            lower = self.reading(f"{self._name}_HL") - mid_atr
 
             if self.prev_reading("ST_Lower"):
                 if self.reading("close") > self.prev_reading("ST_Upper"):

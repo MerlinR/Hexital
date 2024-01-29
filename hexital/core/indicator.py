@@ -29,13 +29,13 @@ class Indicator(ABC):
     timeframe_fill: bool = False
     candles_lifespan: Optional[timedelta] = None
 
-    _candles: CandleManager = field(default_factory=CandleManager)
-    _output_name: str = ""
-    _sub_indicators: List[Indicator] = field(default_factory=list)
-    _managed_indicators: Dict[str, Managed | Indicator] = field(default_factory=dict)
-    _sub_indicator: bool = False
-    _active_index: int = 0
-    _initialised: bool = False
+    _candles: CandleManager = field(init=False, default_factory=CandleManager)
+    _output_name: str = field(init=False, default="")
+    _sub_indicators: List[Indicator] = field(init=False, default_factory=list)
+    _managed_indicators: Dict[str, Managed | Indicator] = field(init=False, default_factory=dict)
+    _sub_indicator: bool = field(init=False, default=False)
+    _active_index: int = field(init=False, default=0)
+    _initialised: bool = field(init=False, default=False)
 
     def __post_init__(self):
         self._validate_fields()

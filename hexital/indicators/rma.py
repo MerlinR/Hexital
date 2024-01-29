@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from hexital.core import Indicator
 
@@ -13,12 +13,12 @@ class RMA(Indicator):
 
     """
 
-    indicator_name: str = "RMA"
+    _name: str = field(init=False, default="RMA")
     period: int = 10
     input_value: str = "close"
 
     def _generate_name(self) -> str:
-        return f"{self.indicator_name}_{self.period}"
+        return f"{self._name}_{self.period}"
 
     def _initialise(self):
         return
@@ -28,8 +28,7 @@ class RMA(Indicator):
 
         if self.prev_exists():
             return float(
-                (alpha * self.reading(self.input_value))
-                + ((1.0 - alpha) * self.prev_reading())
+                (alpha * self.reading(self.input_value)) + ((1.0 - alpha) * self.prev_reading())
             )
 
         if self.reading_period(self.period, self.input_value):
@@ -41,9 +40,7 @@ class RMA(Indicator):
                 for py, i in enumerate(range(index, period_to, -1))
             )
 
-            divide_by = sum(
-                (1 - alpha) ** i for py, i in enumerate(range(index, period_to, -1))
-            )
+            divide_by = sum((1 - alpha) ** i for py, i in enumerate(range(index, period_to, -1)))
 
             return values / divide_by
 

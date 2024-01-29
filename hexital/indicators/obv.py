@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from hexital.core import Indicator
 
@@ -12,10 +12,10 @@ class OBV(Indicator):
 
     """
 
-    indicator_name: str = "OBV"
+    _name: str = field(init=False, default="OBV")
 
     def _generate_name(self) -> str:
-        return self.indicator_name
+        return self._name
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         if self.prev_exists():

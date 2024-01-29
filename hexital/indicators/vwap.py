@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from hexital.core import Indicator, Managed
 
@@ -12,11 +12,11 @@ class VWAP(Indicator):
 
     """
 
-    indicator_name: str = "VWAP"
+    _name: str = field(init=False, default="VWAP")
     period: int = 10
 
     def _generate_name(self) -> str:
-        return f"{self.indicator_name}_{self.period}"
+        return f"{self._name}_{self.period}"
 
     def _initialise(self):
         self._add_managed_indicator(

@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional
 
 from hexital import indicators
@@ -21,13 +21,13 @@ class ADX(Indicator):
 
     """
 
-    indicator_name: str = "ADX"
+    _name: str = field(init=False, default="ADX")
 
     period: int = 14
     period_signal: Optional[int] = None
 
     def _generate_name(self) -> str:
-        return f"{self.indicator_name}_{self.period}_{self.period_signal}"
+        return f"{self._name}_{self.period}_{self.period_signal}"
 
     def _validate_fields(self):
         if self.period_signal is None:
@@ -37,50 +37,50 @@ class ADX(Indicator):
         self._add_sub_indicator(
             indicators.ATR(
                 period=self.period,
-                fullname_override=f"{self.indicator_name}_atr",
+                fullname_override=f"{self._name}_atr",
             )
         )
         self._add_managed_indicator(
             "positive",
             indicators.RMA(
-                fullname_override=f"{self.indicator_name}_pos",
+                fullname_override=f"{self._name}_pos",
                 period=self.period,
-                input_value=f"{self.indicator_name}_ppos",
+                input_value=f"{self._name}_ppos",
             ),
         )
         self._add_managed_indicator(
             "plain_positive",
             Managed(
-                fullname_override=f"{self.indicator_name}_ppos",
+                fullname_override=f"{self._name}_ppos",
             ),
         )
         self._add_managed_indicator(
             "negative",
             indicators.RMA(
-                fullname_override=f"{self.indicator_name}_neg",
+                fullname_override=f"{self._name}_neg",
                 period=self.period,
-                input_value=f"{self.indicator_name}_pneg",
+                input_value=f"{self._name}_pneg",
             ),
         )
         self._add_managed_indicator(
             "plain_negative",
             Managed(
-                fullname_override=f"{self.indicator_name}_pneg",
+                fullname_override=f"{self._name}_pneg",
             ),
         )
 
         self._add_managed_indicator(
             "dx",
             indicators.RMA(
-                fullname_override=f"{self.indicator_name}_dx",
+                fullname_override=f"{self._name}_dx",
                 period=self.period_signal,
-                input_value=f"{self.indicator_name}_pdx",
+                input_value=f"{self._name}_pdx",
             ),
         )
         self._add_managed_indicator(
             "plain_dx",
             Managed(
-                fullname_override=f"{self.indicator_name}_pdx",
+                fullname_override=f"{self._name}_pdx",
             ),
         )
 
@@ -101,20 +101,18 @@ class ADX(Indicator):
             self._managed_indictor("positive").calculate_index(index)
             self._managed_indictor("negative").calculate_index(index)
 
-            if self.reading(f"{self.indicator_name}_atr") and self.reading(
-                f"{self.indicator_name}_pos"
-            ):
-                mod = 100 / self.reading(f"{self.indicator_name}_atr")
+            if self.reading(f"{self._name}_atr") and self.reading(f"{self._name}_pos"):
+                mod = 100 / self.reading(f"{self._name}_atr")
 
-                adx_positive = mod * self.reading(f"{self.indicator_name}_pos")
-                adx_negative = mod * self.reading(f"{self.indicator_name}_neg")
+                adx_positive = mod * self.reading(f"{self._name}_pos")
+                adx_negative = mod * self.reading(f"{self._name}_neg")
 
                 dx = 100 * abs(adx_positive - adx_negative) / (adx_positive + adx_negative)
 
                 self._managed_indictor("plain_dx").set_reading(dx)
                 self._managed_indictor("dx").calculate_index(index)
 
-                if self.reading(f"{self.indicator_name}_dx"):
-                    adx_final = self.reading(f"{self.indicator_name}_dx")
+                if self.reading(f"{self._name}_dx"):
+                    adx_final = self.reading(f"{self._name}_dx")
 
         return {"ADX": adx_final, "DM_Plus": adx_positive, "DM_Neg": adx_negative}

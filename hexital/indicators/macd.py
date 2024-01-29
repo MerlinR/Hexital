@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from hexital.core import Indicator
 from hexital.indicators import EMA
@@ -24,7 +24,7 @@ class MACD(Indicator):
 
     """
 
-    indicator_name: str = "MACD"
+    _name: str = field(init=False, default="MACD")
     fast_period: int = 12
     slow_period: int = 26
     signal_period: int = 9
@@ -32,7 +32,7 @@ class MACD(Indicator):
 
     def _generate_name(self) -> str:
         return "{}_{}_{}_{}".format(
-            self.indicator_name,
+            self._name,
             self.fast_period,
             self.slow_period,
             self.signal_period,
@@ -47,14 +47,14 @@ class MACD(Indicator):
             EMA(
                 input_value=self.input_value,
                 period=self.fast_period,
-                fullname_override=f"{self.indicator_name}_EMA_fast",
+                fullname_override=f"{self._name}_EMA_fast",
             )
         )
         self._add_sub_indicator(
             EMA(
                 input_value=self.input_value,
                 period=self.slow_period,
-                fullname_override=f"{self.indicator_name}_EMA_slow",
+                fullname_override=f"{self._name}_EMA_slow",
             )
         )
 
@@ -63,15 +63,13 @@ class MACD(Indicator):
             EMA(
                 input_value=f"{self.name}.MACD",
                 period=self.signal_period,
-                fullname_override=f"{self.indicator_name}_signal_line",
+                fullname_override=f"{self._name}_signal_line",
             ),
         )
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        if self.reading(f"{self.indicator_name}_EMA_slow"):
-            macd = self.reading(f"{self.indicator_name}_EMA_fast") - self.reading(
-                f"{self.indicator_name}_EMA_slow"
-            )
+        if self.reading(f"{self._name}_EMA_slow"):
+            macd = self.reading(f"{self._name}_EMA_fast") - self.reading(f"{self._name}_EMA_slow")
 
             # Temp manually inserting MACD to be used by signal EMA calc
             self.candles[index].indicators[self.name] = {"MACD": macd}

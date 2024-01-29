@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from hexital.core import Indicator
 
@@ -7,10 +7,10 @@ from hexital.core import Indicator
 class HighLowAverage(Indicator):
     """Supertrend"""
 
-    indicator_name: str = "HighLowAverage"
+    _name: str = field(init=False, default="HighLowAverage")
 
     def _generate_name(self) -> str:
-        return f"{self.indicator_name}"
+        return f"{self._name}"
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         return (self.reading("high") + self.reading("low")) / 2
