@@ -188,6 +188,9 @@ class Indicator(ABC):
         for index in range(len(self.candles) - 1, 0, -1):
             if self.name in self.candles[index].indicators:
                 return index + 1
+            elif self.name in self.candles[index].sub_indicators:
+                return index + 1
+
         return 0
 
     def _set_active_index(self, index: int):
