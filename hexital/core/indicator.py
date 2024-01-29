@@ -63,15 +63,18 @@ class Indicator(ABC):
         return str(data)
 
     def _internal_generate_name(self):
+        name = ""
         if self.fullname_override:
-            self._output_name = self.fullname_override
+            name = self.fullname_override
         else:
-            self._output_name = self._generate_name()
+            name = self._generate_name()
             if self.timeframe:
-                self._output_name += f"_{self._candles.timeframe}"
+                name += f"_{self._candles.timeframe}"
 
         if self.name_suffix:
-            self._output_name += f"_{self.name_suffix}"
+            name += f"_{self.name_suffix}"
+
+        self._output_name = self._sanitise_name(name)
 
     def _initialise(self):
         pass
@@ -82,6 +85,9 @@ class Indicator(ABC):
     @abstractmethod
     def _generate_name(self) -> str:
         return ""
+
+    def _sanitise_name(self, name: str) -> str:
+        return name.replace(".", ",")
 
     @property
     def candle_manager(self) -> CandleManager:

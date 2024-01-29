@@ -66,7 +66,7 @@ def reading_count(candles: List[Candle], name: str) -> int:
 
 def reading_as_list(candles: List[Candle], name: str) -> List[float | dict | None]:
     """Gathers the indicator for all candles as a list"""
-    return [candle.indicators.get(name) for candle in candles]
+    return [reading_by_candle(candle, name) for candle in candles]
 
 
 def reading_period(
