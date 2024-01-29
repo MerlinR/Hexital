@@ -4,7 +4,6 @@ import pytest
 from hexital.core import Candle
 from hexital.utils.candlesticks import (
     candles_sum,
-    reading_as_list,
     reading_by_index,
     reading_count,
     reading_period,
@@ -84,63 +83,6 @@ def test_reading_count(minimal_candles: List[Candle]):
 @pytest.mark.usefixtures("minimal_candles")
 def test_reading_count_limited(minimal_candles: List[Candle]):
     assert reading_count(minimal_candles, "MinTR") == 10
-
-
-@pytest.mark.usefixtures("minimal_candles")
-def test_reading_as_list_exp(minimal_candles: List[Candle]):
-    assert reading_as_list(minimal_candles, "ATR") == [
-        100,
-        200,
-        300,
-        400,
-        500,
-        600,
-        700,
-        800,
-        900,
-        1000,
-        1100,
-        1200,
-        1300,
-        1400,
-        1500,
-        1600,
-        1700,
-        1800,
-        1900,
-        2000,
-    ]
-
-
-@pytest.mark.usefixtures("minimal_candles")
-def test_reading_as_list_partial(minimal_candles: List[Candle]):
-    assert reading_as_list(minimal_candles, "MinTR") == [
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        None,
-        1102,
-        1202,
-        1302,
-        1402,
-        1502,
-        1602,
-        1702,
-        1802,
-        1902,
-        2002,
-    ]
-
-
-@pytest.mark.usefixtures("minimal_candles")
-def test_reading_as_list_no_indicator(minimal_candles: List[Candle]):
-    assert reading_as_list(minimal_candles, "FUCK") == [None] * 20
 
 
 @pytest.mark.usefixtures("minimal_candles")

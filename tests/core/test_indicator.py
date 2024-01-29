@@ -192,3 +192,63 @@ def test_candle_timerange(minimal_candles):
             timestamp=datetime(2023, 6, 1, 9, 19),
         ),
     ]
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_reading_as_list_exp(minimal_candles: List[Candle]):
+    test_indicator = FakeIndicator(candles=minimal_candles)
+    assert test_indicator.as_list("ATR") == [
+        100,
+        200,
+        300,
+        400,
+        500,
+        600,
+        700,
+        800,
+        900,
+        1000,
+        1100,
+        1200,
+        1300,
+        1400,
+        1500,
+        1600,
+        1700,
+        1800,
+        1900,
+        2000,
+    ]
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_reading_as_list_partial(minimal_candles: List[Candle]):
+    test_indicator = FakeIndicator(candles=minimal_candles)
+    assert test_indicator.as_list("MinTR") == [
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        1102,
+        1202,
+        1302,
+        1402,
+        1502,
+        1602,
+        1702,
+        1802,
+        1902,
+        2002,
+    ]
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_reading_as_list_no_indicator(minimal_candles: List[Candle]):
+    test_indicator = FakeIndicator(candles=minimal_candles)
+    assert test_indicator.as_list("FUCK") == [None] * 20

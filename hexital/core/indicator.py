@@ -10,7 +10,6 @@ from hexital.core.candle import Candle
 from hexital.core.candle_manager import CandleManager
 from hexital.utils.candlesticks import (
     candles_sum,
-    reading_as_list,
     reading_by_candle,
     reading_count,
     reading_period,
@@ -134,7 +133,7 @@ class Indicator(ABC):
     def as_list(self, name: Optional[str] = None) -> List[float | dict | None]:
         """Gathers the indicator for all candles as a list
         E.G `EMA_12` OR `MACD_12_26_9.MACD`"""
-        return reading_as_list(self.candles, name if name else self.name)
+        return [reading_by_candle(candle, name if name else self.name) for candle in self.candles]
 
     def _set_reading(self, reading: float | dict | None, index: Optional[int] = None):
         index = index if index else self._active_index
