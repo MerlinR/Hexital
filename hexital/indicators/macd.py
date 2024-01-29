@@ -75,7 +75,7 @@ class MACD(Indicator):
             self.candles[index].indicators[self.name] = {"MACD": macd}
             self._managed_indicators["signal"].calculate_index(index)
 
-            signal = self.reading("signal")
+            signal = self._managed_indicators["signal"].reading()
 
             histogram = None
             if macd is not None and signal is not None:

@@ -110,11 +110,6 @@ class Indicator(ABC):
         return self._output_name
 
     @property
-    def as_list(self) -> List[float | dict | None]:
-        """Gathers the indicator for all candles as a list"""
-        return reading_as_list(self.candles, self.name)
-
-    @property
     def has_reading(self) -> bool:
         """Simple boolean to state if values are being generated yet in the candles"""
         if len(self.candles) == 0:
@@ -135,6 +130,11 @@ class Indicator(ABC):
                 output[name] = deepcopy(value)
 
         return output
+
+    def as_list(self, name: Optional[str] = None) -> List[float | dict | None]:
+        """Gathers the indicator for all candles as a list
+        E.G `EMA_12` OR `MACD_12_26_9.MACD`"""
+        return reading_as_list(self.candles, name if name else self.name)
 
     def _set_reading(self, reading: float | dict | None, index: Optional[int] = None):
         index = index if index else self._active_index
@@ -164,7 +164,7 @@ class Indicator(ABC):
         for index in range(self._find_calc_index(), len(self.candles)):
             self._set_active_index(index)
 
-            if self.reading(index=index) is not None:
+            if self.candles[index].indicators.get(self.name) is not None:
                 continue
 
             reading = round_values(self._calculate_reading(index=index), round_by=self.round_value)

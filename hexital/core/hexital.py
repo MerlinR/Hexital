@@ -154,15 +154,14 @@ class Hexital:
                 return indicator
         return None
 
-    def has_reading(self, name: Optional[str]) -> bool:
+    def has_reading(self, name: str) -> bool:
         """Checks if the given Indicator has a valid reading in latest Candle"""
         return bool(self.reading(name))
 
-    def reading(self, name: Optional[str], index: int = -1) -> float | dict | None:
+    def reading(self, name: str, index: int = -1) -> float | dict | None:
         """Attempts to retrieve a reading with a given Indicator name.
         `name` can use '.' to find nested reading, E.G `MACD_12_26_9.MACD`
         """
-        name = name if name else self.name
         reading = reading_by_index(self._candles[DEFAULT_CANDLES].candles, name, index=index)
 
         if reading is not None:
@@ -175,15 +174,15 @@ class Hexital:
 
         return None
 
-    def prev_reading(self, name: Optional[str] = None) -> float | dict | None:
+    def prev_reading(self, name: str) -> float | dict | None:
         return self.reading(name, index=-2)
 
-    def reading_as_list(self, name: Optional[str] = None) -> List[float | dict | None]:
+    def reading_as_list(self, name: str) -> List[float | dict | None]:
         """Find given indicator and returns the readings as a list
-        Full Name of the indicator E.G EMA_12"""
-        name = name if name else self.name
-        if self._indicators.get(name):
-            return self._indicators[name].as_list
+        Full Name of the indicator E.G `EMA_12` OR `MACD_12_26_9.MACD`"""
+        primary_name = name.split(".")[0]
+        if self._indicators.get(primary_name):
+            return self._indicators[primary_name].as_list(name)
         return []
 
     def add_indicator(self, indicator: Indicator | List[Indicator] | Dict[str, str]):

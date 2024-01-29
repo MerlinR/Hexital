@@ -51,7 +51,8 @@ def reading_count(candles: List[Candle], name: str) -> int:
 
 
 def reading_as_list(candles: List[Candle], name: str) -> List[float | dict | None]:
-    """Gathers the indicator for all candles as a list"""
+    """Gathers the indicator for all candles as a list
+    E.G `EMA_12` OR `MACD_12_26_9.MACD`"""
     return [reading_by_candle(candle, name) for candle in candles]
 
 

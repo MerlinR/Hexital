@@ -8,6 +8,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added CandleManager to Manage timeframes and lifespan
 - Added better config inheritance from Hexital to Indicators
 - Fixed Hammer index pattern working correctly
+- Made 'as_list' property a method that can now take a nested indicator name
 
 ## 0.4.0 - 2024-01-22
 - Cleaned up code and some potential Bugs ruff/pyright
