@@ -144,6 +144,8 @@ print(my_ema.reading("high")) # 4837
 # Access other specific Readings (Older readings)
 print(my_ema.reading("high", index=-2)) # 6584
 
+# Easily view candlestick trends
+print(my_ema.falling()) # True
 ```
 
 
