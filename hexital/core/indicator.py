@@ -110,11 +110,6 @@ class Indicator(ABC):
         return self._output_name
 
     @property
-    def read(self) -> float | dict | None:
-        """Get's this newest reading of this indicator"""
-        return self.reading()
-
-    @property
     def as_list(self) -> List[float | dict | None]:
         """Gathers the indicator for all candles as a list"""
         return reading_as_list(self.candles, self.name)
@@ -217,9 +212,6 @@ class Indicator(ABC):
         indicator._sub_indicator = True
         indicator.candle_manager = self._candles
         self._managed_indicators[name] = indicator
-
-    def _managed_indictor(self, name: str) -> Managed | Indicator | None:
-        return self._managed_indicators.get(name)
 
     def prev_exists(self) -> bool:
         return self.prev_reading(self.name) is not None

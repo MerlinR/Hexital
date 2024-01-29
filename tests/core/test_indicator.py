@@ -85,9 +85,9 @@ def test_name_timeframe_suffix(minimal_candles: List[Candle]):
 @pytest.mark.usefixtures("minimal_candles")
 def test_read(minimal_candles: List[Candle]):
     test = FakeIndicator(candles=minimal_candles)
-    assert test.read is None
+    assert test.reading() is None
     test.calculate()
-    assert test.read == 100.0
+    assert test.reading() == 100.0
 
 
 @pytest.mark.usefixtures("minimal_candles")
@@ -102,9 +102,9 @@ def test_has_reading(minimal_candles: List[Candle]):
 def test_set_reading(minimal_candles: List[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     test.calculate()
-    assert test.read == 100
+    assert test.reading() == 100
     test._set_reading(420)
-    assert test.read == 420
+    assert test.reading() == 420
 
 
 @pytest.mark.usefixtures("minimal_candles")

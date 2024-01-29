@@ -73,7 +73,7 @@ class MACD(Indicator):
 
             # Temp manually inserting MACD to be used by signal EMA calc
             self.candles[index].indicators[self.name] = {"MACD": macd}
-            self._managed_indictor("signal").calculate_index(index)
+            self._managed_indicators["signal"].calculate_index(index)
 
             signal = self.reading("signal")
 

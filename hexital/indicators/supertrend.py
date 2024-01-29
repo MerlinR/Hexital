@@ -63,8 +63,8 @@ class Supertrend(Indicator):
                     if direction == -1 and upper > self.prev_reading("ST_Upper"):
                         upper = self.prev_reading("ST_Upper")
 
-            self._managed_indictor("st_upper").set_reading(upper)
-            self._managed_indictor("st_lower").set_reading(lower)
+            self._managed_indicators["st_upper"].set_reading(upper)
+            self._managed_indicators["st_lower"].set_reading(lower)
 
             return {
                 "trend": lower if direction == 1 else upper,

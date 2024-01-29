@@ -72,11 +72,11 @@ class STOCH(Indicator):
             stoch = ((self.reading(self.input_value) - lowest) / (highest - lowest)) * 100
 
             self.candles[index].indicators[self.name] = {"stoch": stoch}
-            self._managed_indictor("k").calculate_index(index)
+            self._managed_indicators["k"].calculate_index(index)
             k = self.reading(f"{self._name}_k")
 
             self.candles[index].indicators[self.name] = {"stoch": stoch, "k": k}
-            self._managed_indictor("d").calculate_index(index)
+            self._managed_indicators["d"].calculate_index(index)
             d = self.reading(f"{self._name}_d")
 
             return {"stoch": stoch, "k": k, "d": d}
