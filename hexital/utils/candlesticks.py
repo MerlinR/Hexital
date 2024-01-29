@@ -26,12 +26,6 @@ def reading_by_candle(candle: Candle, name: str) -> float | dict | None:
     if getattr(candle, name, None) is not None:
         return getattr(candle, name)
 
-    if name in candle.indicators:
-        return candle.indicators[name]
-
-    if name in candle.sub_indicators:
-        return candle.sub_indicators[name]
-
     for key, reading in chain(candle.indicators.items(), candle.sub_indicators.items()):
         if name in key:
             return reading
@@ -40,14 +34,6 @@ def reading_by_candle(candle: Candle, name: str) -> float | dict | None:
 
 
 def _nested_indicator(candle: Candle, name: str, nested_name: str) -> float | None:
-    if name in candle.indicators:
-        val_ = candle.indicators[name]
-        return val_.get(nested_name) if isinstance(val_, dict) else val_
-
-    if name in candle.sub_indicators:
-        val_ = candle.sub_indicators[name]
-        return val_.get(nested_name) if isinstance(val_, dict) else val_
-
     for key, reading in chain(candle.indicators.items(), candle.sub_indicators.items()):
         if name in key:
             return reading.get(nested_name) if isinstance(reading, dict) else reading
