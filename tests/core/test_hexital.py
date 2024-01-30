@@ -313,3 +313,15 @@ class TestMovement:
         strat.calculate()
 
         assert strat.above("EMA_10", "high")
+
+
+class TestChain:
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_movement(self, candles):
+        strat = Hexital(
+            "Test Stratergy",
+            candles,
+            [EMA(), EMA(input_value="EMA_10", fullname_override="Chained")],
+        )
+        strat.calculate()
+        assert strat.has_reading("EMA_10") and strat.has_reading("Chained")
