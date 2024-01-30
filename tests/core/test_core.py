@@ -20,28 +20,26 @@ class InheritedCandle(Candle):
     timestamp: datetime = field(default_factory=datetime.now)
 
 
-@pytest.fixture(name="candles_30")
-@pytest.mark.usefixtures("candles")
+@pytest.fixture
 def fixture_candles_30(candles):
     return candles[0:30]
 
 
-@pytest.fixture(name="candles_31st")
-@pytest.mark.usefixtures("candles")
+@pytest.fixture
 def fixture_candles_31st(candles):
     return candles[30]
 
 
-def test_data(candles_30, expected_ema):
-    test = EMA(candles=candles_30, input_value="close")
+def test_data(fixture_candles_30, expected_ema):
+    test = EMA(candles=fixture_candles_30, input_value="close")
     test.calculate()
     assert pytest.approx(test.as_list()) == expected_ema[0:30]
 
 
-def test_data_append(candles_30, candles_31st, expected_ema):
-    test = EMA(candles=candles_30, input_value="close")
+def test_data_append(fixture_candles_30, fixture_candles_31st, expected_ema):
+    test = EMA(candles=fixture_candles_30, input_value="close")
     test.calculate()
-    candles_30.append(candles_31st)
+    fixture_candles_30.append(fixture_candles_31st)
     test.calculate()
 
     assert pytest.approx(test.as_list()) == expected_ema[0:31]

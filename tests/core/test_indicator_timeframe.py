@@ -2,8 +2,8 @@ from dataclasses import dataclass, field
 from typing import List, Optional
 
 import pytest
-from hexital.core import Candle, Indicator
 from hexital import TimeFrame
+from hexital.core import Candle, Indicator
 
 
 @dataclass(kw_only=True)
