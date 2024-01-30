@@ -1,6 +1,5 @@
 import json
-from datetime import datetime
-from typing import Dict, Optional, List
+from typing import Dict, List, Optional
 
 import numpy as np
 import pandas as pd
@@ -8,6 +7,7 @@ import pandas_ta as ta
 
 PATH_INDICATOR = "source_of_truth/indicator"
 PATH_PATTERN = "source_of_truth/pattern"
+PATH_CANDLES = "source_of_truth/candles"
 PATH_DATA = "."
 
 
@@ -22,14 +22,6 @@ def save_json_result(data: list, filename: str, path: Optional[str] = None):
         json.dump(data, json_file, indent=4, default=str)
 
 
-def add_timestamp(candles: pd.DataFrame):
-    candles["timestamp"] = pd.date_range(
-        start=datetime(2032, 1, 1), periods=candles.shape[0], freq="min"
-    )
-    candles.set_index(pd.DatetimeIndex(candles["timestamp"]), inplace=True)
-    return candles.drop("timestamp", axis=1)
-
-
 def round_values(values: float | Dict[str, float]) -> float | Dict[str, float]:
     if isinstance(values, dict):
         for key, val in values.items():
@@ -39,6 +31,13 @@ def round_values(values: float | Dict[str, float]) -> float | Dict[str, float]:
         values = round(values, 4)
 
     return values
+
+
+def print_new(df: pd.DataFrame):
+    for col in df.columns:
+        if col in ["open", "high", "low", "close", "volume", "timestamp"]:
+            continue
+        print(f"Column: {col}")
 
 
 def candle_compress_dataframe(data: pd.DataFrame, freq: str = "5T"):
@@ -64,7 +63,7 @@ def candle_compress_dataframe(data: pd.DataFrame, freq: str = "5T"):
 def generate_indicators():
     print("Generating Indicators")
     df = pd.DataFrame.from_dict(load_json_candles())
-    df = add_timestamp(df)
+    df.set_index(pd.DatetimeIndex(df["timestamp"]), inplace=True)
 
     MyStrategy = ta.Strategy(
         name="Truth Source",
@@ -95,10 +94,7 @@ def generate_indicators():
     df.ta.strategy(MyStrategy)
     df = df.astype(object).replace(np.nan, None)
 
-    for col in df.columns:
-        if col in ["open", "high", "low", "close", "volume"]:
-            continue
-        print(f"Generated: {col}")
+    print_new(df)
 
     save_json_result([round_values(value) for value in df["RMA_10"].tolist()], "RMA")
     save_json_result([round_values(value) for value in df["RMA_20"].tolist()], "RMA_20")
@@ -114,37 +110,41 @@ def generate_indicators():
     save_json_result([round_values(value) for value in df["OBV"].tolist()], "OBV")
     save_json_result([round_values(value) for value in df["HL2"].tolist()], "HL2")
     save_json_result([round_values(value) for value in df["ROC_10"].tolist()], "ROC")
-
-    kc_l = [round_values(value) for value in df["KCLe_20_2"].tolist()]
-    kc_b = [round_values(value) for value in df["KCBe_20_2"].tolist()]
-    kc_u = [round_values(value) for value in df["KCUe_20_2"].tolist()]
-    kc_data = []
-    for kc in zip(kc_l, kc_b, kc_u):
-        kc_data.append({"lower": kc[0], "band": kc[1], "upper": kc[2]})
-    save_json_result(kc_data, "KC")
     save_json_result([round_values(value) for value in df["ATRr_20"].tolist()], "ATR_20")
 
-    stochk = [round_values(value) for value in df["STOCHk_14_3_3"].tolist()]
-    stochd = [round_values(value) for value in df["STOCHd_14_3_3"].tolist()]
+    kc_data = []
+    for kc in zip(
+        [round_values(value) for value in df["KCLe_20_2"].tolist()],
+        [round_values(value) for value in df["KCBe_20_2"].tolist()],
+        [round_values(value) for value in df["KCUe_20_2"].tolist()],
+    ):
+        kc_data.append({"lower": kc[0], "band": kc[1], "upper": kc[2]})
+    save_json_result(kc_data, "KC")
+
     stoch_data = []
-    for stoch in zip(stochk, stochd):
+    for stoch in zip(
+        [round_values(value) for value in df["STOCHk_14_3_3"].tolist()],
+        [round_values(value) for value in df["STOCHd_14_3_3"].tolist()],
+    ):
         stoch_data.append({"k": stoch[0], "d": stoch[1]})
     save_json_result(stoch_data, "STOCH")
 
-    macd = [round_values(value) for value in df["MACD_12_26_9"].tolist()]
-    macd_h = [round_values(value) for value in df["MACDh_12_26_9"].tolist()]
-    macd_s = [round_values(value) for value in df["MACDs_12_26_9"].tolist()]
     macd_data = []
-    for macd in zip(macd, macd_s, macd_h):
+    for macd in zip(
+        [round_values(value) for value in df["MACD_12_26_9"].tolist()],
+        [round_values(value) for value in df["MACDs_12_26_9"].tolist()],
+        [round_values(value) for value in df["MACDh_12_26_9"].tolist()],
+    ):
         macd_data.append({"MACD": macd[0], "signal": macd[1], "histogram": macd[2]})
     save_json_result(macd_data, "MACD")
 
-    supertrend = [round_values(value) for value in df["SUPERT_7_3.0"].tolist()]
-    supertrendd = [round_values(value) for value in df["SUPERTd_7_3.0"].tolist()]
-    supertrendl = [round_values(value) for value in df["SUPERTl_7_3.0"].tolist()]
-    supertrends = [round_values(value) for value in df["SUPERTs_7_3.0"].tolist()]
     supertrend_data = []
-    for trend in zip(supertrend, supertrendd, supertrendl, supertrends):
+    for trend in zip(
+        [round_values(value) for value in df["SUPERT_7_3.0"].tolist()],
+        [round_values(value) for value in df["SUPERTd_7_3.0"].tolist()],
+        [round_values(value) for value in df["SUPERTl_7_3.0"].tolist()],
+        [round_values(value) for value in df["SUPERTs_7_3.0"].tolist()],
+    ):
         supertrend_data.append(
             {
                 "trend": trend[0],
@@ -155,11 +155,12 @@ def generate_indicators():
         )
     save_json_result(supertrend_data, "SUPERTREND")
 
-    adx = [round_values(value) for value in df["ADX_14"].tolist()]
-    adx_p = [round_values(value) for value in df["DMP_14"].tolist()]
-    adx_n = [round_values(value) for value in df["DMN_14"].tolist()]
     adx_data = []
-    for adx_row in zip(adx, adx_p, adx_n):
+    for adx_row in zip(
+        [round_values(value) for value in df["ADX_14"].tolist()],
+        [round_values(value) for value in df["DMP_14"].tolist()],
+        [round_values(value) for value in df["DMN_14"].tolist()],
+    ):
         adx_data.append({"ADX": adx_row[0], "DM_Plus": adx_row[1], "DM_Neg": adx_row[2]})
     save_json_result(adx_data, "ADX")
 
@@ -181,10 +182,7 @@ def generate_indicators_timeframe(frame: str):
     df.ta.strategy(MyStrategy)
     df = df.astype(object).replace(np.nan, None)
 
-    for col in df.columns:
-        if col in ["open", "high", "low", "close", "volume"]:
-            continue
-        print(f"Generated: {col}")
+    print_new(df)
 
     save_json_result([round_values(value) for value in df["EMA_10"].tolist()], f"EMA_{frame}")
     save_json_result([round_values(value) for value in df["SMA_10"].tolist()], f"SMA_{frame}")
@@ -194,22 +192,39 @@ def generate_indicators_timeframe(frame: str):
 def generate_patterns():
     print("Generating Patterns")
     df = pd.DataFrame.from_dict(load_json_candles())
-    df = add_timestamp(df)
 
     df = df.ta.cdl_pattern(name=["doji", "hammer"])
     df = df.astype(object).replace(np.nan, None)
 
-    for col in df.columns:
-        if col in ["open", "high", "low", "close", "volume"]:
-            continue
-        print(f"Generated: {col}")
+    print_new(df)
 
     save_json_result(
-        [bool(value) for value in df["CDL_DOJI_10_0.1"].tolist()],
-        "DOJI",
-        PATH_PATTERN,
+        [bool(value) for value in df["CDL_DOJI_10_0.1"].tolist()], "DOJI", PATH_PATTERN
     )
     save_json_result([bool(value) for value in df["CDL_HAMMER"].tolist()], "HAMMER", PATH_PATTERN)
+
+
+def generate_heikin_candles():
+    print("Generating Candles")
+    df = pd.DataFrame.from_dict(load_json_candles())
+
+    dfha = ta.ha(df["open"], df["high"], df["low"], df["close"])
+    df = pd.merge(df, dfha, right_index=True, left_index=True)
+    df = df.astype(object).replace(np.nan, None)
+    print_new(df)
+
+    df.drop(columns=["open", "high", "low", "close"], axis=1, inplace=True)
+    df.rename(
+        columns={
+            "HA_open": "open",
+            "HA_high": "high",
+            "HA_low": "low",
+            "HA_close": "close",
+        },
+        inplace=True,
+    )
+
+    save_json_result(df.to_dict("records"), "test_candles_heikin_ashi", PATH_CANDLES)
 
 
 def generate_timeframe_candles(frame: str):
@@ -224,13 +239,15 @@ def generate_timeframe_candles(frame: str):
     for row in df.to_dict("records"):
         row["timestamp"] = row["timestamp"].to_pydatetime().isoformat(timespec="seconds")
         output.append(row)
-    save_json_result(output, f"test_candles_{frame}", PATH_DATA)
+
+    save_json_result(output, f"test_candles_{frame}", PATH_CANDLES)
 
 
 if __name__ == "__main__":
-    generate_timeframe_candles("5T")
-    generate_timeframe_candles("10T")
     generate_indicators()
-    generate_patterns()
     generate_indicators_timeframe("5T")
     generate_indicators_timeframe("10T")
+    generate_patterns()
+    generate_timeframe_candles("5T")
+    generate_timeframe_candles("10T")
+    generate_heikin_candles()
