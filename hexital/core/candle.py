@@ -1,20 +1,112 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
+KEY_KEYS = [
+    "open",
+    "high",
+    "low",
+    "close",
+    "volume",
+    "timestamp",
+    "indicators",
+    "sub_indicators",
+]
 
-@dataclass
+
 class Candle:
-    open: float
-    high: float
-    low: float
-    close: float
-    volume: int
-    indicators: Dict[str, float | Dict[str, float | None] | None] = field(default_factory=dict)
-    sub_indicators: Dict[str, float | Dict[str, float | None] | None] = field(default_factory=dict)
+    _open: float
+    _high: float
+    _low: float
+    _close: float
+    _volume: int
     timestamp: Optional[datetime] = None
+    indicators: Dict[str, float | Dict[str, float | None] | None]
+    sub_indicators: Dict[str, float | Dict[str, float | None] | None]
+
+    def __init__(
+        self,
+        open: float,
+        high: float,
+        low: float,
+        close: float,
+        volume: int,
+        timestamp: Optional[datetime] = None,
+        indicators: Optional[Dict[str, float | Dict[str, float | None] | None]] = None,
+        sub_indicators: Optional[Dict[str, float | Dict[str, float | None] | None]] = None,
+    ):
+        self._open = open
+        self._high = high
+        self._low = low
+        self._close = close
+        self._volume = volume
+        self.timestamp = timestamp
+
+        self.indicators = indicators if indicators else {}
+        self.sub_indicators = sub_indicators if sub_indicators else {}
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, Candle):
+            return False
+        for key in KEY_KEYS:
+            if getattr(self, key) != getattr(other, key):
+                return False
+        return True
+
+    def __repr__(self) -> str:
+        return str(
+            {
+                "open": self._open,
+                "high": self._high,
+                "low": self._low,
+                "close": self._close,
+                "volume": self._volume,
+                "timestamp": self.timestamp,
+                "indicators": self.indicators,
+                "sub_indicators": self.sub_indicators,
+            }
+        )
+
+    @property
+    def open(self) -> float:
+        return self._open
+
+    @open.setter
+    def open(self, open: float):
+        self._open = open
+
+    @property
+    def high(self) -> float:
+        return self._high
+
+    @high.setter
+    def high(self, high: float):
+        self._high = high
+
+    @property
+    def low(self) -> float:
+        return self._low
+
+    @low.setter
+    def low(self, low: float):
+        self._low = low
+
+    @property
+    def close(self) -> float:
+        return self._close
+
+    @close.setter
+    def close(self, close: float):
+        self._close = close
+
+    @property
+    def volume(self) -> float:
+        return self._volume
+
+    @volume.setter
+    def volume(self, volume: int):
+        self._volume = volume
 
     def positive(self) -> bool:
         return self.open < self.close
@@ -85,19 +177,10 @@ class Candle:
     def merge(self, candle: Candle):
         """Merge candle into existing candle, will use the merged into
         Candle for any already calc indicators"""
-        ignored_keys = ["timestamp", "open"]
 
-        for key, val in vars(candle).items():
-            if key in ignored_keys:
-                continue
-
-            if key == "high":
-                self.high = max(self.high, val)
-            elif key == "low":
-                self.low = min(self.low, val)
-            elif key == "volume":
-                self.volume += val
-            elif isinstance(val, dict):
-                setattr(self, key, {})
-            elif val is not None:
-                setattr(self, key, val)
+        self._high = max(self.high, candle.high)
+        self._low = min(self.low, candle.low)
+        self._close = candle.close
+        self._volume += candle.volume
+        self.indicators = {}
+        self.sub_indicators = {}
