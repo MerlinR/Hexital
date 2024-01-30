@@ -6,6 +6,7 @@ from typing import List, Optional, Set
 
 from hexital.core.candle import Candle
 from hexital.exceptions import InvalidCandleOrder
+from hexital.utils.candlesticks import reading_by_candle
 from hexital.utils.timeframe import (
     TimeFrame,
     clean_timestamp,
@@ -59,6 +60,12 @@ class CandleManager:
     @property
     def name(self) -> str:
         return self.timeframe if self.timeframe else DEFAULT_CANDLES
+
+    def find_indicator(self, name: str) -> bool:
+        for candle in reversed(self.candles):
+            if reading_by_candle(candle, name):
+                return True
+        return False
 
     def append(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
         candles_ = []

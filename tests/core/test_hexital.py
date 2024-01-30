@@ -306,3 +306,10 @@ class TestMovement:
         strat.calculate()
         with pytest.raises(MixedTimeframes):
             assert strat.above("EMA_10", "SMA_10_T5")
+
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_movement_verification_candle(self, candles):
+        strat = Hexital("Test Stratergy", candles, [EMA(), SMA(timeframe="T5")])
+        strat.calculate()
+
+        assert strat.above("EMA_10", "high")

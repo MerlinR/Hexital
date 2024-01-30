@@ -260,3 +260,9 @@ class TestMovement:
         test_indicator = FakeIndicator(candles=minimal_candles)
         test_indicator.calculate()
         assert test_indicator.rising("MinTR") is True
+
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_indicator_movement_candle(self, minimal_candles):
+        test_indicator = FakeIndicator(candles=minimal_candles)
+        test_indicator.calculate()
+        assert test_indicator.rising("close") is False

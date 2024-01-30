@@ -186,7 +186,9 @@ class Hexital:
             return self._indicators[primary_name].as_list(name)
         return []
 
-    def add_indicator(self, indicator: Indicator | List[Indicator] | Dict[str, str]):
+    def add_indicator(
+        self, indicator: Indicator | List[Indicator | Dict[str, str]] | Dict[str, str]
+    ):
         """Add's a new indicator to `Hexital` strategy.
         This accept either `Indicator` datatypes or dict string versions to be packed.
         `add_indicator(SMA(period=10))` or `add_indicator({"indicator": "SMA", "period": 10})`
@@ -233,25 +235,31 @@ class Hexital:
     def _verify_indicators(
         self, indicator: str, indicator_two: Optional[str] = None
     ) -> List[Candle]:
-        indicator_ = self._indicators.get(indicator.split(".")[0])
+        manager_one = None
+        manager_two = None
 
-        if not indicator_:
+        for manager in self._candles.values():
+            if not manager_one and manager.find_indicator(indicator):
+                manager_one = manager
+            if indicator_two and not manager_two and manager.find_indicator(indicator_two):
+                manager_two = manager
+
+        if not manager_one:
             raise MissingIndicator(f"Cannot find {indicator}")
 
-        if not indicator_two:
-            return indicator_.candles
-
-        indicator_two_ = self._indicators.get(indicator_two.split(".")[0])
-
-        if not indicator_two_:
+        if indicator_two and not manager_two:
             raise MissingIndicator(f"Cannot find {indicator_two}")
 
-        if indicator_.candle_manager != indicator_two_.candle_manager:
+        if not indicator_two:
+            return manager_one.candles
+
+        if manager_one != manager_two:
             raise MixedTimeframes(
-                f"Cant use 'above' on {indicator}[{indicator_.timeframe}]-{indicator_two}[{indicator_two_.timeframe}] using different timeframes"
+                "Cant use 'above' on {%s}[{%s}]-{%s}[{%s}] using different timeframes"
+                % (indicator, manager_one.timeframe, indicator_two, manager_two.timeframe)
             )
 
-        return indicator_two_.candles
+        return manager_two.candles
 
     def above(self, indicator: str, indicator_two: str, index: int = -1) -> bool:
         candles = self._verify_indicators(indicator, indicator_two)
