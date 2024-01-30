@@ -21,7 +21,7 @@ For most libraries such as [Pandas-TA](https://github.com/twopirllc/pandas-ta) w
 ### Indicators
 Hexital comes with a growing selection of available Indicators to compute. These can be used individually to calculate a single indicator, or used with the `Hexital` class to automatically compute multiple indicators with an incremental candle list; which is easily parsable.
 
-### Candle Patterns
+### Candlestick Patterns
 Hexital also supports detecting candle patterns, such as Doji, etc. This can be achieved easily by calling the Pattern function with the candles, or used automatically as an indicator where it would be computed alongside Indicators.
 
 ### Multi-Timeframes
@@ -137,6 +137,8 @@ print(my_ema.reading()) # None
 my_ema.recalculate()
 print(my_ema.reading()) # 7319.8776
 
+# Recalculate latest
+my_ema.calculate_index("EMA_3")
 
 # Access other Readings (Reading get's the latest readings)
 print(my_ema.reading("high")) # 4837

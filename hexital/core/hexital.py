@@ -226,6 +226,12 @@ class Hexital:
             if name is None or indicator_name == name:
                 indicator.calculate()
 
+    def calculate_index(self, name: Optional[str] = None, index: int = -1):
+        """Calculate specific index for all or specific indicator readings."""
+        for indicator_name, indicator in self._indicators.items():
+            if name is None or indicator_name == name:
+                indicator.calculate_index(index)
+
     def recalculate(self, name: Optional[str] = None):
         """Purge's all indicator reading's and re-calculates them all,
         ideal for changing an indicator parameters midway."""
