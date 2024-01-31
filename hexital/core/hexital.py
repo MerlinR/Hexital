@@ -253,11 +253,11 @@ class Hexital:
         if not manager_one:
             raise MissingIndicator(f"Cannot find {indicator}")
 
-        if indicator_two and not manager_two:
-            raise MissingIndicator(f"Cannot find {indicator_two}")
-
         if not indicator_two:
             return manager_one.candles
+
+        if not manager_two:
+            raise MissingIndicator(f"Cannot find {indicator_two}")
 
         if manager_one != manager_two:
             raise MixedTimeframes(
