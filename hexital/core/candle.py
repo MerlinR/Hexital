@@ -3,6 +3,8 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
+from hexital.exceptions import CandleAlreadyTagged
+
 KEY_KEYS = [
     "open",
     "high",
@@ -16,12 +18,14 @@ KEY_KEYS = [
 
 
 class Candle:
-    _open: float
-    _high: float
-    _low: float
-    _close: float
-    _volume: int
+    open: float
+    high: float
+    low: float
+    close: float
+    volume: int
     timestamp: Optional[datetime] = None
+    clean_values: Dict[str, float | int]
+    _tag: Optional[str] = None
     indicators: Dict[str, float | Dict[str, float | None] | None]
     sub_indicators: Dict[str, float | Dict[str, float | None] | None]
 
@@ -36,13 +40,14 @@ class Candle:
         indicators: Optional[Dict[str, float | Dict[str, float | None] | None]] = None,
         sub_indicators: Optional[Dict[str, float | Dict[str, float | None] | None]] = None,
     ):
-        self._open = open
-        self._high = high
-        self._low = low
-        self._close = close
-        self._volume = volume
+        self.open = open
+        self.high = high
+        self.low = low
+        self.close = close
+        self.volume = volume
         self.timestamp = timestamp
 
+        self.clean_values = {}
         self.indicators = indicators if indicators else {}
         self.sub_indicators = sub_indicators if sub_indicators else {}
 
@@ -57,56 +62,28 @@ class Candle:
     def __repr__(self) -> str:
         return str(
             {
-                "open": self._open,
-                "high": self._high,
-                "low": self._low,
-                "close": self._close,
-                "volume": self._volume,
+                "open": self.open,
+                "high": self.high,
+                "low": self.low,
+                "close": self.close,
+                "volume": self.volume,
                 "timestamp": self.timestamp,
                 "indicators": self.indicators,
                 "sub_indicators": self.sub_indicators,
+                "tag": self.tag,
             }
         )
 
     @property
-    def open(self) -> float:
-        return self._open
+    def tag(self) -> str | None:
+        return self._tag
 
-    @open.setter
-    def open(self, open: float):
-        self._open = open
-
-    @property
-    def high(self) -> float:
-        return self._high
-
-    @high.setter
-    def high(self, high: float):
-        self._high = high
-
-    @property
-    def low(self) -> float:
-        return self._low
-
-    @low.setter
-    def low(self, low: float):
-        self._low = low
-
-    @property
-    def close(self) -> float:
-        return self._close
-
-    @close.setter
-    def close(self, close: float):
-        self._close = close
-
-    @property
-    def volume(self) -> float:
-        return self._volume
-
-    @volume.setter
-    def volume(self, volume: int):
-        self._volume = volume
+    @tag.setter
+    def tag(self, tag: str):
+        if not self._tag:
+            self._tag = tag
+            return
+        raise CandleAlreadyTagged(f"Candle already tagged as {self._tag} - [{self}]")
 
     def positive(self) -> bool:
         return self.open < self.close
@@ -174,13 +151,39 @@ class Candle:
         with optional datetime at the beginning or end."""
         return [Candle.from_list(candle) for candle in candles]
 
-    def merge(self, candle: Candle):
-        """Merge candle into existing candle, will use the merged into
-        Candle for any already calc indicators"""
+    def save_clean_values(self):
+        self.clean_values = {
+            "open": self.open,
+            "high": self.high,
+            "low": self.low,
+            "close": self.close,
+            "volume": self.volume,
+        }
 
-        self._high = max(self.high, candle.high)
-        self._low = min(self.low, candle.low)
-        self._close = candle.close
-        self._volume += candle.volume
+    def recover_clean_values(self):
+        if self.clean_values:
+            self.open = self.clean_values["open"]
+            self.high = self.clean_values["high"]
+            self.low = self.clean_values["low"]
+            self.close = self.clean_values["close"]
+            self.volume = int(self.clean_values["volume"])
+
+    def reset_candle(self):
         self.indicators = {}
         self.sub_indicators = {}
+        self._tag = None
+
+    def merge(self, candle: Candle):
+        """Merge candle into existing candle, will use the merged into
+        Candle for any already calc indicators.
+        All indicators will be wiped due to new values, and any conversion removed"""
+
+        self.recover_clean_values()
+
+        self.high = max(self.high, candle.high)
+        self.low = min(self.low, candle.low)
+        self.volume += candle.volume
+        self.close = candle.close
+
+        self.clean_values = {}
+        self.reset_candle()

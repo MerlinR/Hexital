@@ -6,11 +6,13 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ## 0.4.1
 - Added CandleManager to Manage timeframes and lifespan
+- Added CandlestickType, modular parent to convert candlesticks to alt types,
+  - E.G Auto convert candles to heikin-ashi
 - Added better config inheritance from Hexital to Indicators
-- Fixed Hammer index pattern working correctly
 - Made 'as_list' property a method that can now take a nested indicator name
 - Added ability to call the movement methods from Hexital and Indicator for easier usage
 - Added calculate_index to hexital
+- Fixed Hammer index pattern working correctly
 
 ## 0.4.0 - 2024-01-22
 - Cleaned up code and some potential Bugs ruff/pyright
