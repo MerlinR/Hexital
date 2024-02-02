@@ -31,6 +31,11 @@ def fixture_candle_data_T10():
     return Candle.from_dicts(load_json_candles("test_candles_10T", PATH_EXTRA))
 
 
+@pytest.fixture(name="candles_heikinashi")
+def fixture_candle_data_heikinashi():
+    return Candle.from_dicts(load_json_candles("test_candles_heikin_ashi", PATH_EXTRA))
+
+
 @pytest.fixture(name="minimal_candles")
 def fixture_minimal_candles():
     candles = [

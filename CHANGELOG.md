@@ -8,6 +8,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added CandleManager to Manage timeframes and lifespan
 - Added CandlestickType, modular parent to convert candlesticks to alt types,
   - E.G Auto convert candles to heikin-ashi
+- Added Heikin-Ashi candlestick conversion
 - Added better config inheritance from Hexital to Indicators
 - Made 'as_list' property a method that can now take a nested indicator name
 - Added ability to call the movement methods from Hexital and Indicator for easier usage
