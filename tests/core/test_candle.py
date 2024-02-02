@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import pytest
-from hexital.core import Candle
+from hexital import Candle
 
 
 @pytest.fixture(name="simple_candle_positive")

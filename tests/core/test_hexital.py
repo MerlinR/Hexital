@@ -2,10 +2,10 @@ from datetime import datetime, timedelta
 from typing import List
 
 import pytest
-from hexital.core import Candle, Hexital, Indicator
+from hexital import Candle, Hexital, TimeFrame
+from hexital.core.indicator import Indicator
 from hexital.exceptions import InvalidAnalysis, InvalidIndicator, MissingIndicator, MixedTimeframes
 from hexital.indicators import EMA, SMA
-from hexital.utils.timeframe import TimeFrame
 
 
 def fake_pattern(candles: List[Candle], index=-1):

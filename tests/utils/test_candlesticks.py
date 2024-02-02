@@ -1,7 +1,7 @@
 from typing import List
 
 import pytest
-from hexital.core import Candle
+from hexital.core.candle import Candle
 from hexital.utils.candlesticks import (
     candles_sum,
     reading_by_index,

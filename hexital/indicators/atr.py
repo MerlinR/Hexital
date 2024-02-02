@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from hexital.core import Indicator
+from hexital.core.indicator import Indicator
 from hexital.indicators.tr import TR
 
 

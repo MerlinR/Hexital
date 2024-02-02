@@ -5,8 +5,7 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import pandas as pd
 import pandas_ta as ta
-
-from hexital.core import Candle, Hexital
+from hexital import Candle, Hexital
 
 
 def generate_random_candles(amount: int) -> list:

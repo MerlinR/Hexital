@@ -1,11 +1,11 @@
 from dataclasses import dataclass, field
 
-from hexital.core import Indicator
+from hexital.core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
 class HighLowAverage(Indicator):
-    """Supertrend"""
+    """HighLowAverage"""
 
     _name: str = field(init=False, default="HighLowAverage")
 

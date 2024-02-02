@@ -3,7 +3,8 @@ from datetime import datetime, timedelta
 from typing import List, Optional
 
 import pytest
-from hexital.core import Candle, Indicator
+from hexital import Candle
+from hexital.core.indicator import Indicator
 from hexital.indicators.amorph import Amorph
 
 

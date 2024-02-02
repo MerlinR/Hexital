@@ -3,7 +3,8 @@ from typing import List, Optional
 
 import pytest
 from hexital import TimeFrame
-from hexital.core import Candle, Indicator
+from hexital.core.candle import Candle
+from hexital.core.indicator import Indicator
 
 
 @dataclass(kw_only=True)

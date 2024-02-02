@@ -3,7 +3,7 @@ import inspect
 from copy import deepcopy
 from typing import Callable, Optional
 
-from hexital.core import Indicator
+from hexital.core.indicator import Indicator
 from hexital.exceptions import InvalidAnalysis
 
 

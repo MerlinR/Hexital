@@ -1,17 +1,15 @@
-import importlib
 from copy import deepcopy
 from datetime import timedelta
 from typing import Dict, List, Optional, Set
 
-from hexital.analysis import movement
+from hexital.analysis import MOVEMENT_MAP, PATTERN_MAP, movement
 from hexital.core.candle import Candle
 from hexital.core.candle_manager import DEFAULT_CANDLES, CandleManager
 from hexital.core.candlestick_type import CandlestickType
 from hexital.core.indicator import Indicator
 from hexital.exceptions import InvalidAnalysis, InvalidIndicator, MissingIndicator, MixedTimeframes
-from hexital.utils.candlesticks import (
-    reading_by_index,
-)
+from hexital.indicators import INDICATOR_MAP
+from hexital.utils.candlesticks import reading_by_index
 from hexital.utils.timeframe import TimeFrame
 
 
@@ -100,30 +98,26 @@ class Hexital:
         return valid_indicators
 
     def _build_indicator(self, raw_indicator: dict) -> Indicator:
-        indicator_module = importlib.import_module("hexital.indicators")
-        amorph_class = getattr(indicator_module, "Amorph")
+        analysis_map = PATTERN_MAP | MOVEMENT_MAP
+        amorph_class = INDICATOR_MAP["Amorph"]
 
         if raw_indicator.get("indicator"):
             indicator_name = raw_indicator.pop("indicator")
 
-            try:
-                indicator_class = getattr(indicator_module, indicator_name)
-            except AttributeError:
+            if INDICATOR_MAP.get(indicator_name):
+                indicator_class = INDICATOR_MAP[indicator_name]
+                return indicator_class(**raw_indicator)
+            else:
                 raise InvalidIndicator(f"Indicator {indicator_name} does not exist")
 
-            return indicator_class(**raw_indicator)
-
         elif raw_indicator.get("analysis") and isinstance(raw_indicator.get("analysis"), str):
-            name = raw_indicator.pop("analysis")
-            pattern_module = importlib.import_module("hexital.analysis.patterns")
-            movement_module = importlib.import_module("hexital.analysis.movement")
+            analysis_name = raw_indicator.pop("analysis")
+            if not analysis_map.get(analysis_name):
+                raise InvalidAnalysis(
+                    f"analysis {analysis_name} does not exist in patterns or movements"
+                )
 
-            pattern_func = getattr(pattern_module, name, None)
-            analysis_func = getattr(movement_module, name, pattern_func)
-            if not analysis_func:
-                raise InvalidAnalysis(f"analysis {name} does not exist in patterns or movements")
-
-            return amorph_class(analysis=analysis_func, **raw_indicator)
+            return amorph_class(analysis=analysis_map[analysis_name], **raw_indicator)
 
         elif raw_indicator.get("analysis") and callable(raw_indicator.get("analysis")):
             method_name = raw_indicator.pop("analysis")

@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from typing import List
 
 import pytest
-from hexital.core.candle import Candle
+from hexital import Candle
 from hexital.core.candle_manager import CandleManager
 from test_candlestick import FakeType
 

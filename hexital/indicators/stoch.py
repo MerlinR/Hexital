@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
-from hexital.core import Indicator
-from hexital.indicators import SMA
+from hexital.core.indicator import Indicator
+from hexital.indicators.sma import SMA
 
 
 @dataclass(kw_only=True)

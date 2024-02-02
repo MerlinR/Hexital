@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from hexital.core import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed
 
 
 @dataclass(kw_only=True)

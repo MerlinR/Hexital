@@ -1,9 +1,9 @@
-import pytest
-from hexital import patterns, movement
-from hexital.indicators import Amorph
-from hexital.core import Candle
-from hexital.exceptions import InvalidAnalysis
 from typing import List
+
+import pytest
+from hexital import Candle, movement, patterns
+from hexital.exceptions import InvalidAnalysis
+from hexital.indicators import Amorph
 
 
 def fake_pattern(candles: List[Candle], index=-1):

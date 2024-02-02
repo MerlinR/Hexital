@@ -16,3 +16,24 @@ from .tr import TR
 from .vwap import VWAP
 from .vwma import VWMA
 from .wma import WMA
+
+INDICATOR_MAP = {
+    "Amorph": Amorph,
+    "ADX": ADX,
+    "ATR": ATR,
+    "EMA": EMA,
+    "HLA": HighLowAverage,
+    "KC": KC,
+    "MACD": MACD,
+    "OBV": OBV,
+    "RMA": RMA,
+    "ROC": ROC,
+    "RSI": RSI,
+    "SMA": SMA,
+    "STOCH": STOCH,
+    "Supertrend": Supertrend,
+    "TR": TR,
+    "VWAP": VWAP,
+    "VWMA": VWMA,
+    "WMA": WMA,
+}

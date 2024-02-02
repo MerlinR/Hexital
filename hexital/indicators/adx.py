@@ -1,8 +1,9 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from hexital import indicators
-from hexital.core import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed
+from hexital.indicators.atr import ATR
+from hexital.indicators.rma import RMA
 
 
 @dataclass(kw_only=True)
@@ -35,14 +36,14 @@ class ADX(Indicator):
 
     def _initialise(self):
         self._add_sub_indicator(
-            indicators.ATR(
+            ATR(
                 period=self.period,
                 fullname_override=f"{self._name}_atr",
             )
         )
         self._add_managed_indicator(
             "positive",
-            indicators.RMA(
+            RMA(
                 fullname_override=f"{self._name}_pos",
                 period=self.period,
                 input_value=f"{self._name}_ppos",
@@ -56,7 +57,7 @@ class ADX(Indicator):
         )
         self._add_managed_indicator(
             "negative",
-            indicators.RMA(
+            RMA(
                 fullname_override=f"{self._name}_neg",
                 period=self.period,
                 input_value=f"{self._name}_pneg",
@@ -71,7 +72,7 @@ class ADX(Indicator):
 
         self._add_managed_indicator(
             "dx",
-            indicators.RMA(
+            RMA(
                 fullname_override=f"{self._name}_dx",
                 period=self.period_signal,
                 input_value=f"{self._name}_pdx",
