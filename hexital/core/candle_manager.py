@@ -5,6 +5,7 @@ from datetime import timedelta
 from typing import List, Optional, Set
 
 from hexital.core.candle import Candle
+from hexital.core.candlestick_type import CandlestickType
 from hexital.exceptions import InvalidCandleOrder
 from hexital.utils.candlesticks import reading_by_candle
 from hexital.utils.timeframe import (
@@ -24,6 +25,7 @@ class CandleManager:
     candles_lifespan: Optional[timedelta]
     timeframe: Optional[str] = None
     timeframe_fill: bool = False
+    candlestick_type: Optional[CandlestickType] = None
 
     def __init__(
         self,
@@ -31,6 +33,7 @@ class CandleManager:
         candles_lifespan: Optional[timedelta] = None,
         timeframe: Optional[str | TimeFrame] = None,
         timeframe_fill: bool = False,
+        candlestick_type: Optional[CandlestickType] = None,
     ):
         if candles:
             self.candles = candles
@@ -44,9 +47,9 @@ class CandleManager:
         elif isinstance(timeframe, TimeFrame):
             self.timeframe = timeframe.value
         self.timeframe_fill = timeframe_fill
+        self.candlestick_type = candlestick_type
 
-        self.collapse_candles()
-        self.trim_candles()
+        self._tasks()
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, CandleManager):
@@ -60,6 +63,11 @@ class CandleManager:
     @property
     def name(self) -> str:
         return self.timeframe if self.timeframe else DEFAULT_CANDLES
+
+    def _tasks(self):
+        self.collapse_candles()
+        self.convert_candles()
+        self.trim_candles()
 
     def find_indicator(self, name: str) -> bool:
         for candle in reversed(self.candles):
@@ -91,8 +99,7 @@ class CandleManager:
             raise TypeError
 
         self.candles.extend(deepcopy(candles_))
-        self.collapse_candles()
-        self.trim_candles()
+        self._tasks()
 
     def trim_candles(self):
         if self.candles_lifespan is None or not self.candles:
@@ -201,6 +208,12 @@ class CandleManager:
             if index >= len(candles):
                 break
         return candles
+
+    def convert_candles(self):
+        if not self.candles or not self.candlestick_type:
+            return
+
+        self.candlestick_type.conversion(self.candles)
 
     def purge(self, indicator: str | Set[str]):
         """Remove this indicator value from all Candles"""

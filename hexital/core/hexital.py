@@ -6,6 +6,7 @@ from typing import Dict, List, Optional, Set
 from hexital.analysis import movement
 from hexital.core.candle import Candle
 from hexital.core.candle_manager import DEFAULT_CANDLES, CandleManager
+from hexital.core.candlestick_type import CandlestickType
 from hexital.core.indicator import Indicator
 from hexital.exceptions import InvalidAnalysis, InvalidIndicator, MissingIndicator, MixedTimeframes
 from hexital.utils.candlesticks import (
@@ -22,6 +23,7 @@ class Hexital:
     timeframe: Optional[str] = None
     timeframe_fill: bool = False
     candles_lifespan: Optional[timedelta] = None
+    candlestick_type: Optional[CandlestickType] = None
 
     def __init__(
         self,
@@ -32,6 +34,7 @@ class Hexital:
         timeframe: Optional[str | TimeFrame] = None,
         timeframe_fill: bool = False,
         candles_lifespan: Optional[timedelta] = None,
+        candlestick_type: Optional[CandlestickType] = None,
     ):
         self.name = name
         self.description = description
@@ -43,6 +46,7 @@ class Hexital:
 
         self.timeframe_fill = timeframe_fill
         self.candles_lifespan = candles_lifespan
+        self.candlestick_type = candlestick_type
 
         self._candles = {
             DEFAULT_CANDLES: CandleManager(
@@ -50,6 +54,7 @@ class Hexital:
                 candles_lifespan=candles_lifespan,
                 timeframe=self.timeframe,
                 timeframe_fill=timeframe_fill,
+                candlestick_type=candlestick_type,
             )
         }
 
@@ -77,9 +82,10 @@ class Hexital:
         for indicator in valid_indicators.values():
             manager = CandleManager(
                 [],
-                self.candles_lifespan,
-                indicator.timeframe if indicator.timeframe else self.timeframe,
-                self.timeframe_fill,
+                candles_lifespan=self.candles_lifespan,
+                timeframe=indicator.timeframe if indicator.timeframe else self.timeframe,
+                timeframe_fill=self.timeframe_fill,
+                candlestick_type=self.candlestick_type,
             )
 
             if manager == self._candles[DEFAULT_CANDLES]:

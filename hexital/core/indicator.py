@@ -9,6 +9,7 @@ from typing import Dict, List, Optional
 from hexital.analysis import movement
 from hexital.core.candle import Candle
 from hexital.core.candle_manager import CandleManager
+from hexital.core.candlestick_type import CandlestickType
 from hexital.utils.candlesticks import (
     candles_sum,
     reading_by_candle,
@@ -28,6 +29,7 @@ class Indicator(ABC):
     timeframe: Optional[str | TimeFrame] = None
     timeframe_fill: bool = False
     candles_lifespan: Optional[timedelta] = None
+    candlestick_type: Optional[CandlestickType] = None
 
     _candles: CandleManager = field(init=False, default_factory=CandleManager)
     _output_name: str = field(init=False, default="")
@@ -50,6 +52,7 @@ class Indicator(ABC):
             self.candles_lifespan,
             self.timeframe,
             self.timeframe_fill,
+            self.candlestick_type,
         )
 
         self.candles = self._candles.candles
@@ -77,14 +80,14 @@ class Indicator(ABC):
         self._output_name = self._sanitise_name(name)
 
     def _initialise(self):
-        pass
+        return
 
     def _validate_fields(self):
-        pass
+        return
 
     @abstractmethod
     def _generate_name(self) -> str:
-        return ""
+        ...
 
     def _sanitise_name(self, name: str) -> str:
         return name.replace(".", ",")
@@ -103,6 +106,7 @@ class Indicator(ABC):
         self.timeframe = manager.timeframe
         self.timeframe_fill = manager.timeframe_fill
         self.candles_lifespan = manager.candles_lifespan
+        self.candlestick_type = manager.candlestick_type
 
     @property
     def name(self) -> str:
@@ -192,7 +196,7 @@ class Indicator(ABC):
             elif self.name in self.candles[index].sub_indicators:
                 return index + 1
 
-        return 0
+        return len(self.candles) - 1
 
     def _set_active_index(self, index: int):
         self._active_index = index

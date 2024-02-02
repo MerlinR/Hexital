@@ -5,6 +5,7 @@ from typing import List
 import pytest
 from hexital.core.candle import Candle
 from hexital.core.candle_manager import CandleManager
+from test_candlestick import FakeType
 
 
 class TestBasic:
@@ -372,3 +373,35 @@ def test_collapse_candles_t5_missing_section_fill_all_extra(
     manager = CandleManager(cut_candles, timeframe="T5", timeframe_fill=True)
 
     assert manager.candles == [candles_T5[0]] + filler_candles + [candles_T5[-1]]
+
+
+class TestCandleConverstion:
+    @pytest.mark.usefixtures("candles", "minimal_conv_candles_t5_expected")
+    def test_conversion_manager_timeframe(
+        self, minimal_candles: List[Candle], minimal_conv_candles_t5_expected: List[Candle]
+    ):
+        manager = CandleManager(minimal_candles, timeframe="t5", candlestick_type=FakeType())
+        manager._tasks()
+
+        assert manager.candles == minimal_conv_candles_t5_expected
+
+    @pytest.mark.usefixtures("candles", "minimal_conv_candles_t5_expected")
+    def test_conversion_manager_timeframe_multi_convert(
+        self, minimal_candles: List[Candle], minimal_conv_candles_t5_expected: List[Candle]
+    ):
+        manager = CandleManager(minimal_candles, timeframe="t5", candlestick_type=FakeType())
+        manager.convert_candles()
+        manager.convert_candles()
+        manager.convert_candles()
+
+        assert manager.candles == minimal_conv_candles_t5_expected
+
+    @pytest.mark.usefixtures("candles", "minimal_conv_candles_t5_expected")
+    def test_conversion_manager_timeframe_merge_messy(
+        self, minimal_candles: List[Candle], minimal_conv_candles_t5_expected: List[Candle]
+    ):
+        manager = CandleManager(minimal_candles[:3], timeframe="t5", candlestick_type=FakeType())
+        manager._tasks()
+        manager.append(minimal_candles[3:])
+
+        assert manager.candles == minimal_conv_candles_t5_expected

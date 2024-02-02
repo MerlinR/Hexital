@@ -99,8 +99,6 @@ def test_candle_from_dict(candle_dict):
         low=12202.410156,
         close=12536.019531,
         volume=4918240000,
-        indicators={},
-        sub_indicators={},
     )
 
 
@@ -111,8 +109,6 @@ def test_candle_from_dict_datetime(candle_dict_datetime):
         low=12202.410156,
         close=12536.019531,
         volume=4918240000,
-        indicators={},
-        sub_indicators={},
         timestamp=datetime(2023, 8, 30),
     )
 
@@ -125,8 +121,6 @@ def test_candle_from_dicts(candle_dict):
             low=12202.410156,
             close=12536.019531,
             volume=4918240000,
-            indicators={},
-            sub_indicators={},
         ),
         Candle(
             open=12511.459961,
@@ -134,8 +128,6 @@ def test_candle_from_dicts(candle_dict):
             low=12460.990234,
             close=12563.759766,
             volume=4547280000,
-            indicators={},
-            sub_indicators={},
         ),
     ]
 
@@ -147,8 +139,6 @@ def test_candle_from_list(candle_list):
         low=12202.410156,
         close=12536.019531,
         volume=4918240000,
-        indicators={},
-        sub_indicators={},
     )
 
 
@@ -159,8 +149,6 @@ def test_candle_from_list_datetime(candle_list_datetime):
         low=12202.410156,
         close=12536.019531,
         volume=4918240000,
-        indicators={},
-        sub_indicators={},
         timestamp=datetime(2023, 8, 30),
     )
 
@@ -173,8 +161,6 @@ def test_candle_from_lists(candle_list):
             low=12202.410156,
             close=12536.019531,
             volume=4918240000,
-            indicators={},
-            sub_indicators={},
         ),
         Candle(
             open=12511.459961,
@@ -182,7 +168,5 @@ def test_candle_from_lists(candle_list):
             low=12460.990234,
             close=12563.759766,
             volume=4547280000,
-            indicators={},
-            sub_indicators={},
         ),
     ]
