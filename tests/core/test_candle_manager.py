@@ -136,11 +136,11 @@ class TestMergingCandlesTimeFrame:
         self, candles: List[Candle], candles_T5: List[Candle]
     ):
         data_input = []
-        data_input.append(copy.deepcopy(candles_T5[0]))
-        data_input.append(copy.deepcopy(candles_T5[1]))
-        data_input.append(copy.deepcopy(candles[10]))
+        data_input.append(candles_T5[0])
+        data_input.append(candles_T5[1])
+        data_input.append(candles[10])
 
-        expected = copy.deepcopy(data_input)
+        expected = data_input
         expected[-1].timestamp = datetime(2023, 10, 3, 9, 15)
 
         manager = CandleManager([data_input[0]], timeframe="T5")
@@ -155,16 +155,16 @@ class TestMergingCandlesTimeFrame:
         self, candles: List[Candle], candles_T5: List[Candle]
     ):
         data_input = []
-        data_input.append(copy.deepcopy(candles_T5[0]))
-        data_input.append(copy.deepcopy(candles_T5[1]))
-        data_input.append(copy.deepcopy(candles_T5[2]))
+        data_input.append(candles_T5[0])
+        data_input.append(candles_T5[1])
+        data_input.append(candles_T5[2])
 
-        expected = copy.deepcopy(data_input)
-        expected.append(copy.deepcopy(candles[20]))
+        expected = data_input
+        expected.append(candles[20])
         expected[-1].timestamp = datetime(2023, 10, 3, 9, 25)
 
         manager = CandleManager(data_input, timeframe="T5")
-        manager.append(copy.deepcopy(candles[20]))
+        manager.append(candles[20])
 
         assert manager.candles == expected
 
@@ -234,12 +234,12 @@ class TestMergingCandlesTimeFrame:
         self, candles: List[Candle], candles_T5: List[Candle]
     ):
         data_input = []
-        data_input.append(copy.deepcopy(candles_T5[0]))
-        data_input.append(copy.deepcopy(candles_T5[1]))
-        data_input.append(copy.deepcopy(candles_T5[2]))
-        data_input.append(copy.deepcopy(candles[20]))
+        data_input.append(candles_T5[0])
+        data_input.append(candles_T5[1])
+        data_input.append(candles_T5[2])
+        data_input.append(candles[20])
 
-        expected = copy.deepcopy(data_input)
+        expected = data_input
         expected[-1].timestamp = datetime(2023, 10, 3, 9, 25)
 
         manager = CandleManager(data_input, timeframe="T5")

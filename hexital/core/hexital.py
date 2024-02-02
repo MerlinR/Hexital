@@ -48,7 +48,7 @@ class Hexital:
 
         self._candles = {
             DEFAULT_CANDLES: CandleManager(
-                deepcopy(candles) if isinstance(candles, list) else [],
+                candles if isinstance(candles, list) else [],
                 candles_lifespan=candles_lifespan,
                 timeframe=self.timeframe,
                 timeframe_fill=timeframe_fill,

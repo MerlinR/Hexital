@@ -79,7 +79,7 @@ def test_hextial_multi_timeframe_reading(candles, expected_sma_t10):
 
 
 @pytest.mark.usefixtures("candles", "expected_ema", "expected_sma_t5")
-def test_hextial_multi_timeframes_timerange(candles, expected_ema, expected_sma_t5):
+def test_hextial_multi_timeframes_lifespan(candles, expected_ema, expected_sma_t5):
     strat = Hexital(
         "Test Stratergy",
         [],
