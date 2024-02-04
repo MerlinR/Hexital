@@ -4,16 +4,28 @@ All notable changes to this project will be documented in this file.
 
 The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.4.1
-- Added CandleManager to Manage timeframes and lifespan
-- Added CandlestickType, modular parent to convert candlesticks to alt types,
+## 0.5.0 - TBD
+- Added CandleManager
+  - CandleManger replaces List[Candle] to manage Candles and controls CandlestickTypes, timeframes and lifespan
+- Added CandlestickType
+  - CandlestickType modular parent to convert candlesticks to alt types,
   - E.G Auto convert candles to heikin-ashi
+- Converted Candle to Class from Dataclass
+- Added Many Candle anaylsis methods to Candle:
+  - Positive, Negative, realbody, shadow_upper, shadow_lower, high_low
+- Added Tag and 'clean_values' to Candle to support conversion of Candlesticks
+- Added Pattern_map, Movment_map, Indicator_map and Candlestick_map for easier control and possible modular altering
 - Added Heikin-Ashi candlestick conversion
 - Added better config inheritance from Hexital to Indicators
-- Made 'as_list' property a method that can now take a nested indicator name
-- Added ability to call the movement methods from Hexital and Indicator for easier usage
 - Added calculate_index to hexital
+- Added ability to call the movement methods from Hexital and Indicator for easier usage
+  - above, below, cross, crossover, etc..
+- Added sanitise_name to convert '.' to ',' to support name nesting
+- Added more Exceptions to improve error's
 - Fixed Hammer index pattern working correctly
+- CHanged Sub/managed indicators to auto populate candles field
+- Changed 'as_list' property a method that can now take a nested indicator name
+- Removed read propety
 
 ## 0.4.0 - 2024-01-22
 - Cleaned up code and some potential Bugs ruff/pyright
