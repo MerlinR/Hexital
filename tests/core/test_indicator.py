@@ -4,7 +4,9 @@ from typing import List, Optional
 
 import pytest
 from hexital import Candle
+from hexital.candlesticks.heikinashi import HeikinAshi
 from hexital.core.indicator import Indicator
+from hexital.exceptions import InvalidCandlestickType
 from hexital.indicators.amorph import Amorph
 
 
@@ -267,3 +269,17 @@ class TestMovement:
         test_indicator = FakeIndicator(candles=minimal_candles)
         test_indicator.calculate()
         assert test_indicator.rising("close") is False
+
+
+class TestCandlestickType:
+    def test_indicator_candlestick_type(self):
+        test_indicator = FakeIndicator(candles=[], candlestick_type=HeikinAshi())
+        assert isinstance(test_indicator.candlestick_type, HeikinAshi)
+
+    def test_indicator_candlestick_type_str(self):
+        test_indicator = FakeIndicator(candles=[], candlestick_type="ha")
+        assert isinstance(test_indicator.candlestick_type, HeikinAshi)
+
+    def test_indicator_candlestick_type_error(self):
+        with pytest.raises(InvalidCandlestickType):
+            test_indicator = FakeIndicator(candles=[], candlestick_type="FUCK")

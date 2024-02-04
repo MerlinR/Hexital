@@ -10,6 +10,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added CandlestickType
   - CandlestickType modular parent to convert candlesticks to alt types,
   - E.G Auto convert candles to heikin-ashi
+  - Can be added as str 'candlestick_type="ha"' for heikin-ashi
 - Converted Candle to Class from Dataclass
 - Added Many Candle anaylsis methods to Candle:
   - Positive, Negative, realbody, shadow_upper, shadow_lower, high_low

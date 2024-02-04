@@ -31,3 +31,8 @@ class MissingIndicator(Exception):
 class CandleAlreadyTagged(Exception):
     def __init__(self, message):
         super().__init__(message)
+
+
+class InvalidCandlestickType(Exception):
+    def __init__(self, message):
+        super().__init__(message)

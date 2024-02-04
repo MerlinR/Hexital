@@ -15,6 +15,7 @@ from hexital.utils.candlesticks import (
     reading_by_candle,
     reading_count,
     reading_period,
+    verify_candlesticktype,
 )
 from hexital.utils.indexing import round_values
 from hexital.utils.timeframe import TimeFrame
@@ -29,7 +30,7 @@ class Indicator(ABC):
     timeframe: Optional[str | TimeFrame] = None
     timeframe_fill: bool = False
     candles_lifespan: Optional[timedelta] = None
-    candlestick_type: Optional[CandlestickType] = None
+    candlestick_type: Optional[CandlestickType | str] = None
 
     _candles: CandleManager = field(init=False, default_factory=CandleManager)
     _output_name: str = field(init=False, default="")
@@ -47,12 +48,15 @@ class Indicator(ABC):
         elif isinstance(self.timeframe, TimeFrame):
             self.timeframe = self.timeframe.value
 
+        if self.candlestick_type:
+            self.candlestick_type = verify_candlesticktype(self.candlestick_type)
+
         self._candles = CandleManager(
             self.candles,
             self.candles_lifespan,
             self.timeframe,
             self.timeframe_fill,
-            self.candlestick_type,
+            self.candlestick_type if self.candlestick_type else None,
         )
 
         self.candles = self._candles.candles

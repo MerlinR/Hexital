@@ -3,8 +3,15 @@ from typing import List
 
 import pytest
 from hexital import Candle, Hexital, TimeFrame
+from hexital.candlesticks.heikinashi import HeikinAshi
 from hexital.core.indicator import Indicator
-from hexital.exceptions import InvalidAnalysis, InvalidIndicator, MissingIndicator, MixedTimeframes
+from hexital.exceptions import (
+    InvalidAnalysis,
+    InvalidCandlestickType,
+    InvalidIndicator,
+    MissingIndicator,
+    MixedTimeframes,
+)
 from hexital.indicators import EMA, SMA
 
 
@@ -325,3 +332,20 @@ class TestChain:
         )
         strat.calculate()
         assert strat.has_reading("EMA_10") and strat.has_reading("Chained")
+
+
+class TestCandlestickType:
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_candlestick_type(self, candles):
+        strat = Hexital("Test Stratergy", candles, [EMA()], candlestick_type=HeikinAshi())
+        assert isinstance(strat.candlestick_type, HeikinAshi)
+
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_candlestick_type_str(self, candles):
+        strat = Hexital("Test Stratergy", candles, [EMA()], candlestick_type="ha")
+        assert isinstance(strat.candlestick_type, HeikinAshi)
+
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_candlestick_type_error(self, candles):
+        with pytest.raises(InvalidCandlestickType):
+            strat = Hexital("Test Stratergy", candles, [EMA()], candlestick_type="FUCK")
