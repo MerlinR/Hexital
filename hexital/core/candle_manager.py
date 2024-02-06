@@ -7,7 +7,7 @@ from typing import List, Optional, Set
 from hexital.core.candle import Candle
 from hexital.core.candlestick_type import CandlestickType
 from hexital.exceptions import InvalidCandleOrder
-from hexital.utils.candlesticks import reading_by_candle
+from hexital.utils.candles import reading_by_candle
 from hexital.utils.timeframe import (
     TimeFrame,
     clean_timestamp,

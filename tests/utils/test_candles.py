@@ -2,7 +2,7 @@ from typing import List
 
 import pytest
 from hexital.core.candle import Candle
-from hexital.utils.candlesticks import (
+from hexital.utils.candles import (
     candles_sum,
     reading_by_index,
     reading_count,

@@ -10,7 +10,7 @@ from hexital.analysis import movement
 from hexital.core.candle import Candle
 from hexital.core.candle_manager import CandleManager
 from hexital.core.candlestick_type import CandlestickType
-from hexital.utils.candlesticks import (
+from hexital.utils.candles import (
     candles_sum,
     reading_by_candle,
     reading_count,

@@ -1,7 +1,7 @@
 from typing import List
 
 from hexital.core.candle import Candle
-from hexital.utils.candlesticks import (
+from hexital.utils.candles import (
     reading_by_candle,
     reading_by_index,
     reading_count,
