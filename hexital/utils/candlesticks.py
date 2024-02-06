@@ -8,8 +8,8 @@ from hexital.exceptions import InvalidCandlestickType
 from hexital.utils.indexing import absindex, valid_index
 
 
-def verify_candlesticktype(
-    candlestick_type: CandlestickType | str | None,
+def validate_candlesticktype(
+    candlestick_type: CandlestickType | str,
 ) -> CandlestickType | None:
     if isinstance(candlestick_type, CandlestickType):
         return candlestick_type

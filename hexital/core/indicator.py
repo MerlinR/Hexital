@@ -15,10 +15,10 @@ from hexital.utils.candlesticks import (
     reading_by_candle,
     reading_count,
     reading_period,
-    verify_candlesticktype,
+    validate_candlesticktype,
 )
 from hexital.utils.indexing import round_values
-from hexital.utils.timeframe import TimeFrame
+from hexital.utils.timeframe import TimeFrame, validate_timeframe
 
 
 @dataclass(kw_only=True)
@@ -43,13 +43,11 @@ class Indicator(ABC):
     def __post_init__(self):
         self._validate_fields()
 
-        if isinstance(self.timeframe, str):
-            self.timeframe = self.timeframe.upper()
-        elif isinstance(self.timeframe, TimeFrame):
-            self.timeframe = self.timeframe.value
+        if self.timeframe:
+            self.timeframe = validate_timeframe(self.timeframe)
 
         if self.candlestick_type:
-            self.candlestick_type = verify_candlesticktype(self.candlestick_type)
+            self.candlestick_type = validate_candlesticktype(self.candlestick_type)
 
         self._candles = CandleManager(
             self.candles,

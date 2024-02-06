@@ -9,8 +9,8 @@ from hexital.core.candlestick_type import CandlestickType
 from hexital.core.indicator import Indicator
 from hexital.exceptions import InvalidAnalysis, InvalidIndicator, MissingIndicator, MixedTimeframes
 from hexital.indicators import INDICATOR_MAP
-from hexital.utils.candlesticks import reading_by_index, verify_candlesticktype
-from hexital.utils.timeframe import TimeFrame
+from hexital.utils.candlesticks import reading_by_index, validate_candlesticktype
+from hexital.utils.timeframe import TimeFrame, validate_timeframe
 
 
 class Hexital:
@@ -37,16 +37,12 @@ class Hexital:
         self.name = name
         self.description = description
 
-        if isinstance(timeframe, str):
-            self.timeframe = timeframe.upper()
-        elif isinstance(timeframe, TimeFrame):
-            self.timeframe = timeframe.value
-
+        if timeframe:
+            self.timeframe = validate_timeframe(timeframe)
         self.timeframe_fill = timeframe_fill
         self.candles_lifespan = candles_lifespan
-
         if candlestick_type:
-            self.candlestick_type = verify_candlesticktype(candlestick_type)
+            self.candlestick_type = validate_candlesticktype(candlestick_type)
 
         self._candles = {
             DEFAULT_CANDLES: CandleManager(

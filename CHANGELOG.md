@@ -12,10 +12,10 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - E.G Auto convert candles to heikin-ashi
   - Can be added as str 'candlestick_type="ha"' for heikin-ashi
 - Converted Candle to Class from Dataclass
-- Added Many Candle anaylsis methods to Candle:
+- Added Many Candle analysis methods to Candle:
   - Positive, Negative, realbody, shadow_upper, shadow_lower, high_low
 - Added Tag and 'clean_values' to Candle to support conversion of Candlesticks
-- Added Pattern_map, Movment_map, Indicator_map and Candlestick_map for easier control and possible modular altering
+- Added Pattern_map, Movement_map, Indicator_map and Candlestick_map for easier control and possible modular altering
 - Added Heikin-Ashi candlestick conversion
 - Added better config inheritance from Hexital to Indicators
 - Added calculate_index to hexital
@@ -24,9 +24,9 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added sanitise_name to convert '.' to ',' to support name nesting
 - Added more Exceptions to improve error's
 - Fixed Hammer index pattern working correctly
-- CHanged Sub/managed indicators to auto populate candles field
+- Changed Sub/managed indicators to auto populate candles field
 - Changed 'as_list' property a method that can now take a nested indicator name
-- Removed read propety
+- Removed read property
 
 ## 0.4.0 - 2024-01-22
 - Cleaned up code and some potential Bugs ruff/pyright
