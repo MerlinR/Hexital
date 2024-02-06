@@ -24,6 +24,9 @@ Hexital comes with a growing selection of available Indicators to compute. These
 ### Candlestick Patterns
 Hexital also supports detecting candle patterns, such as Doji, etc. This can be achieved easily by calling the Pattern function with the candles, or used automatically as an indicator where it would be computed alongside Indicators.
 
+### Candlestick Types
+Hexital also has the feature to automatically convert Candlesticks from the standard type into alternative formats, such as 'Heikin-Ashi'. This will mean prior to generating indicators it will automatically convert the Candlesticks to the desired type and then calculate indicators on this new candlestick type. This works in conjunction with all other features.
+
 ### Multi-Timeframes
 Hexital has a key feature of supporting indicator and pattern computation on multiple candle timeframes with a single set of candles. For instance an indicator can be given second candlesticks and can calculate EMA on 1m candlesticks or 10m candlesticks, the indicator will automatically merge these candles into the required timeframes and compute the indicator value. * Cant go down, for obv reasons.
 
@@ -60,6 +63,10 @@ Hexital also comes built with some candle utility methods, to easily take the ca
 Simple useful Candle pattern recognition, such as Doji, hammer, etc
 - Doji
 - Hammer
+
+## Candlestick Types
+Hexital can also automatically convert Candlesticks into specific types, such as:
+- Heikin-Ashi
 
 ## Candlestick Movements
 Simple useful Candle Anaylsis methods such as those in [Pine Scripting](https://www.tradingview.com/pine-script-reference/v5/)
