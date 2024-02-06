@@ -9,7 +9,8 @@ from hexital.core.candlestick_type import CandlestickType
 from hexital.core.indicator import Indicator
 from hexital.exceptions import InvalidAnalysis, InvalidIndicator, MissingIndicator, MixedTimeframes
 from hexital.indicators import INDICATOR_MAP
-from hexital.utils.candles import reading_by_index, validate_candlesticktype
+from hexital.utils.candles import reading_by_index
+from hexital.utils.candlesticks import validate_candlesticktype
 from hexital.utils.timeframe import TimeFrame, validate_timeframe
 
 

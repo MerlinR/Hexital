@@ -15,8 +15,8 @@ from hexital.utils.candles import (
     reading_by_candle,
     reading_count,
     reading_period,
-    validate_candlesticktype,
 )
+from hexital.utils.candlesticks import validate_candlesticktype
 from hexital.utils.indexing import round_values
 from hexital.utils.timeframe import TimeFrame, validate_timeframe
 
