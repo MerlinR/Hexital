@@ -26,7 +26,7 @@ class TimeFrame(Enum):
     WEEK = "D7"
 
 
-def validate_timeframe(timeframe: str | TimeFrame) -> str:
+def validate_timeframe(timeframe: str | TimeFrame | None) -> str | None:
     if isinstance(timeframe, str):
         timeframe = timeframe.upper()
         if not isinstance(timeframe[0], str) or timeframe[0] not in VALID_TIMEFRAME_PREFIXES:

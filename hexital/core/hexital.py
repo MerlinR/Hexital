@@ -37,13 +37,10 @@ class Hexital:
     ):
         self.name = name
         self.description = description
-
-        if timeframe:
-            self.timeframe = validate_timeframe(timeframe)
+        self.timeframe = validate_timeframe(timeframe)
         self.timeframe_fill = timeframe_fill
         self.candles_lifespan = candles_lifespan
-        if candlestick_type:
-            self.candlestick_type = validate_candlesticktype(candlestick_type)
+        self.candlestick_type = validate_candlesticktype(candlestick_type)
 
         self._candles = {
             DEFAULT_CANDLES: CandleManager(

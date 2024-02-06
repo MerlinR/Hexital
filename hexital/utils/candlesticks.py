@@ -4,7 +4,7 @@ from hexital.exceptions import InvalidCandlestickType
 
 
 def validate_candlesticktype(
-    candlestick_type: CandlestickType | str,
+    candlestick_type: CandlestickType | str | None,
 ) -> CandlestickType | None:
     if isinstance(candlestick_type, CandlestickType):
         return candlestick_type

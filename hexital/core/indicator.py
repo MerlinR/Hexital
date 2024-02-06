@@ -43,18 +43,15 @@ class Indicator(ABC):
     def __post_init__(self):
         self._validate_fields()
 
-        if self.timeframe:
-            self.timeframe = validate_timeframe(self.timeframe)
-
-        if self.candlestick_type:
-            self.candlestick_type = validate_candlesticktype(self.candlestick_type)
+        self.timeframe = validate_timeframe(self.timeframe)
+        self.candlestick_type = validate_candlesticktype(self.candlestick_type)
 
         self._candles = CandleManager(
             self.candles,
             self.candles_lifespan,
             self.timeframe,
             self.timeframe_fill,
-            self.candlestick_type if self.candlestick_type else None,
+            self.candlestick_type,
         )
 
         self.candles = self._candles.candles
