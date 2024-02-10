@@ -2,7 +2,7 @@ from .adx import ADX
 from .amorph import Amorph
 from .atr import ATR
 from .ema import EMA
-from .hl import HighLowAverage
+from .hla import HighLowAverage
 from .kc import KC
 from .macd import MACD
 from .obv import OBV

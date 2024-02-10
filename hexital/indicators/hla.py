@@ -7,7 +7,7 @@ from hexital.core.indicator import Indicator
 class HighLowAverage(Indicator):
     """HighLowAverage"""
 
-    _name: str = field(init=False, default="HighLowAverage")
+    _name: str = field(init=False, default="HLA")
 
     def _generate_name(self) -> str:
         return f"{self._name}"
