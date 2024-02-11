@@ -3,14 +3,18 @@ from datetime import datetime, timedelta
 from typing import List, Optional
 
 import pytest
-from hexital.core import Candle, Indicator
+from hexital import Candle
+from hexital.analysis.patterns import doji
+from hexital.candlesticks.heikinashi import HeikinAshi
+from hexital.core.indicator import Indicator
+from hexital.exceptions import InvalidCandlestickType
 from hexital.indicators.amorph import Amorph
 
 
 @dataclass(kw_only=True)
 class FakeIndicator(Indicator):
     candles: List[Candle] = field(default_factory=list)
-    indicator_name: str = "Fake"
+    _name: str = field(init=False, default="Fake")
     fullname_override: Optional[str] = None
     name_suffix: Optional[str] = None
     round_value: int = 4
@@ -19,7 +23,7 @@ class FakeIndicator(Indicator):
     input_value: str = "close"
 
     def _generate_name(self) -> str:
-        return f"{self.indicator_name}_{self.period}"
+        return f"{self._name}_{self.period}"
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         return 100.0
@@ -85,9 +89,9 @@ def test_name_timeframe_suffix(minimal_candles: List[Candle]):
 @pytest.mark.usefixtures("minimal_candles")
 def test_read(minimal_candles: List[Candle]):
     test = FakeIndicator(candles=minimal_candles)
-    assert test.read is None
+    assert test.reading() is None
     test.calculate()
-    assert test.read == 100.0
+    assert test.reading() == 100.0
 
 
 @pytest.mark.usefixtures("minimal_candles")
@@ -102,9 +106,9 @@ def test_has_reading(minimal_candles: List[Candle]):
 def test_set_reading(minimal_candles: List[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     test.calculate()
-    assert test.read == 100
+    assert test.reading() == 100
     test._set_reading(420)
-    assert test.read == 420
+    assert test.reading() == 420
 
 
 @pytest.mark.usefixtures("minimal_candles")
@@ -128,99 +132,44 @@ def test_reading_period(minimal_candles: List[Candle]):
 def test_settings(minimal_candles: List[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     assert test.settings == {
-        "indicator": "FakeIndicator",
+        "indicator": "Fake",
         "round_value": 4,
-        "indicator_name": "Fake",
         "input_value": "close",
         "period": 10,
     }
 
 
-def test_settings_analysis():
-    test = Amorph(analysis="doji")
+@pytest.mark.usefixtures("minimal_candles")
+def test_settings_timeframe(minimal_candles: List[Candle]):
+    test = FakeIndicator(candles=minimal_candles, timeframe="T5")
     assert test.settings == {
-        "analysis": "doji",
+        "indicator": "Fake",
         "round_value": 4,
+        "input_value": "close",
+        "period": 10,
+        "timeframe": "T5",
+        "timeframe_fill": False,
     }
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_append_candle(minimal_candles):
-    new_candle = minimal_candles.pop()
-    new_candle.indicators["Fake_10"] = 100.0
-
-    test = FakeIndicator(candles=[])
-    test.append(new_candle)
-
-    assert test.candles == [new_candle]
-
-
-@pytest.mark.usefixtures("minimal_candles")
-def test_append_candle_list(minimal_candles):
-    test = FakeIndicator(candles=[])
-
-    test.append(minimal_candles)
-
-    for candle in minimal_candles:
-        candle.indicators["Fake_10"] = 100.0
-
-    assert test.candles == minimal_candles
+def test_settings_candlestick_types(minimal_candles: List[Candle]):
+    test = FakeIndicator(candles=minimal_candles, candlestick_type="HA")
+    assert test.settings == {
+        "indicator": "Fake",
+        "round_value": 4,
+        "input_value": "close",
+        "period": 10,
+        "candlestick_type": "HA",
+    }
 
 
-def test_append_dict():
-    test = FakeIndicator(candles=[])
-
-    test.append(
-        {
-            "open": 17213,
-            "high": 2395,
-            "low": 7813,
-            "close": 3615,
-            "volume": 19661,
-        }
-    )
-    assert test.candles == [Candle(17213, 2395, 7813, 3615, 19661, indicators={"Fake_10": 100.0})]
-
-
-def test_append_dict_list():
-    test = FakeIndicator(candles=[])
-
-    test.append(
-        [
-            {"open": 17213, "high": 2395, "low": 7813, "close": 3615, "volume": 19661},
-            {"open": 1301, "high": 3007, "low": 11626, "close": 19048, "volume": 28909},
-        ]
-    )
-
-    assert test.candles == [
-        Candle(17213, 2395, 7813, 3615, 19661, indicators={"Fake_10": 100.0}),
-        Candle(1301, 3007, 11626, 19048, 28909, indicators={"Fake_10": 100.0}),
-    ]
-
-
-def test_append_list():
-    test = FakeIndicator(candles=[])
-
-    test.append([17213, 2395, 7813, 3615, 19661])
-
-    assert test.candles == [Candle(17213, 2395, 7813, 3615, 19661, indicators={"Fake_10": 100.0})]
-
-
-def test_append_list_list():
-    test = FakeIndicator(candles=[])
-
-    test.append([[17213, 2395, 7813, 3615, 19661], [1301, 3007, 11626, 19048, 28909]])
-
-    assert test.candles == [
-        Candle(17213, 2395, 7813, 3615, 19661, indicators={"Fake_10": 100.0}),
-        Candle(1301, 3007, 11626, 19048, 28909, indicators={"Fake_10": 100.0}),
-    ]
-
-
-def test_append_invalid():
-    test = FakeIndicator(candles=[])
-    with pytest.raises(TypeError):
-        test.append(["Fuck", 2, 3])
+def test_settings_analysis():
+    test = Amorph(analysis=doji)
+    assert test.settings == {
+        "analysis": "doji",
+        "round_value": 4,
+    }
 
 
 @pytest.mark.usefixtures("minimal_candles")
@@ -271,3 +220,91 @@ def test_candle_timerange(minimal_candles):
             timestamp=datetime(2023, 6, 1, 9, 19),
         ),
     ]
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_reading_as_list_exp(minimal_candles: List[Candle]):
+    test_indicator = FakeIndicator(candles=minimal_candles)
+    assert test_indicator.as_list("ATR") == [
+        100,
+        200,
+        300,
+        400,
+        500,
+        600,
+        700,
+        800,
+        900,
+        1000,
+        1100,
+        1200,
+        1300,
+        1400,
+        1500,
+        1600,
+        1700,
+        1800,
+        1900,
+        2000,
+    ]
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_reading_as_list_partial(minimal_candles: List[Candle]):
+    test_indicator = FakeIndicator(candles=minimal_candles)
+    assert test_indicator.as_list("MinTR") == [
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        1102,
+        1202,
+        1302,
+        1402,
+        1502,
+        1602,
+        1702,
+        1802,
+        1902,
+        2002,
+    ]
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_reading_as_list_no_indicator(minimal_candles: List[Candle]):
+    test_indicator = FakeIndicator(candles=minimal_candles)
+    assert test_indicator.as_list("FUCK") == [None] * 20
+
+
+class TestMovement:
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_indicator_movement(self, minimal_candles):
+        test_indicator = FakeIndicator(candles=minimal_candles)
+        test_indicator.calculate()
+        assert test_indicator.rising("MinTR") is True
+
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_indicator_movement_candle(self, minimal_candles):
+        test_indicator = FakeIndicator(candles=minimal_candles)
+        test_indicator.calculate()
+        assert test_indicator.rising("close") is False
+
+
+class TestCandlestickType:
+    def test_indicator_candlestick_type(self):
+        test_indicator = FakeIndicator(candles=[], candlestick_type=HeikinAshi())
+        assert isinstance(test_indicator.candlestick_type, HeikinAshi)
+
+    def test_indicator_candlestick_type_str(self):
+        test_indicator = FakeIndicator(candles=[], candlestick_type="HA")
+        assert isinstance(test_indicator.candlestick_type, HeikinAshi)
+
+    def test_indicator_candlestick_type_error(self):
+        with pytest.raises(InvalidCandlestickType):
+            test_indicator = FakeIndicator(candles=[], candlestick_type="FUCK")

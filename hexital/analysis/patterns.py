@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from hexital.analysis import utils
 from hexital.core.candle import Candle
-from hexital.lib.utils import validate_index
+from hexital.utils.indexing import validate_index
 
 
 def doji(
@@ -31,9 +31,9 @@ def doji(
         return False
 
     def _doji(indx: int):
-        body = utils.candle_realbody(candles[indx])
+        body = candles[indx].realbody()
 
-        high_low_avg = utils.candle_high_low_avg(candles, length, indx)
+        high_low_avg = utils.high_low_avg(candles, length, indx)
 
         is_doji = body < 0.1 * high_low_avg
         return int(is_doji) if asint else is_doji
@@ -58,19 +58,19 @@ def hammer(
     def _hammer(indx: int):
         is_hammer = False
 
-        body = utils.candle_realbody(candles[index])
-        body_middle = candles[index].high - candles[index].low
+        body = candles[indx].realbody()
+        body_middle = candles[indx].high - candles[indx].low
 
-        body_average = utils.candle_realbody_avg(candles, length, index)
+        body_average = utils.realbody_avg(candles, length, indx)
 
-        upper_shadow_avg = utils.candle_shadow_upper_avg(candles, length, index)
-        lower_shadow_avg = utils.candle_shadow_lower_avg(candles, length, index)
+        upper_shadow_avg = utils.shadow_upper_avg(candles, length, indx)
+        lower_shadow_avg = utils.shadow_lower_avg(candles, length, indx)
 
         if (
             body < body_average
-            and utils.candle_shadow_lower(candles[index]) > lower_shadow_avg
-            and utils.candle_shadow_upper(candles[index]) < upper_shadow_avg
-            and abs(body_middle - candles[index - 1].low) < 10
+            and candles[indx].shadow_lower() > lower_shadow_avg
+            and candles[indx].shadow_lower() < upper_shadow_avg
+            and abs(body_middle - candles[indx - 1].low) < 10
         ):
             is_hammer = True
 

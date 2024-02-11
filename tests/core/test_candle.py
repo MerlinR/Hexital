@@ -1,7 +1,43 @@
 from datetime import datetime
 
 import pytest
-from hexital.core import Candle
+from hexital import Candle
+
+
+@pytest.fixture(name="simple_candle_positive")
+def fixture_simple_candle_positive():
+    return Candle(100, 120, 70, 110, 1)
+
+
+@pytest.fixture(name="simple_candle")
+def fixture_simple_candle():
+    return Candle(100, 120, 70, 90, 1)
+
+
+class TestCoreCandle:
+    def test_positive(self, simple_candle_positive):
+        assert simple_candle_positive.positive()
+
+    def test_negative(self, simple_candle_positive):
+        assert simple_candle_positive.negative() is False
+
+    def test_realbody(self, simple_candle_positive):
+        assert simple_candle_positive.realbody() == 10
+
+    def test_shadow_upper(self, simple_candle_positive):
+        assert simple_candle_positive.shadow_upper() == 10
+
+    def test_shadow_upper_negative(self, simple_candle):
+        assert simple_candle.shadow_upper() == 20
+
+    def test_shadow_lower(self, simple_candle_positive):
+        assert simple_candle_positive.shadow_lower() == 30
+
+    def test_shadow_lower_negative(self, simple_candle):
+        assert simple_candle.shadow_lower() == 20
+
+    def test_high_low(self, simple_candle):
+        assert simple_candle.high_low() == 50
 
 
 @pytest.fixture(name="candle_dict")
@@ -36,6 +72,53 @@ def fixture_candle_dict_datetime():
     }
 
 
+@pytest.fixture(name="candle_dicts_numpy")
+def fixture_candle_dicts_numpy():
+    # dicts = df.to_dict("records")
+    return [
+        {
+            "open": 14851.6,
+            "high": 14854.1,
+            "low": 14847.2,
+            "close": 14848.1,
+            "volume": 247,
+            "timestamp": "2023-10-03T09:01:00",
+        },
+        {
+            "open": 14848.2,
+            "high": 14848.2,
+            "low": 14843.6,
+            "close": 14844.7,
+            "volume": 332,
+            "timestamp": "2023-10-03T09:02:00",
+        },
+        {
+            "open": 14844.6,
+            "high": 14846.6,
+            "low": 14842.4,
+            "close": 14842.6,
+            "volume": 196,
+            "timestamp": "2023-10-03T09:03:00",
+        },
+        {
+            "open": 14842.5,
+            "high": 14842.9,
+            "low": 14831.7,
+            "close": 14835.6,
+            "volume": 540,
+            "timestamp": "2023-10-03T09:04:00",
+        },
+        {
+            "open": 14835.5,
+            "high": 14842.1,
+            "low": 14835.4,
+            "close": 14839.7,
+            "volume": 171,
+            "timestamp": "2023-10-03T09:05:00",
+        },
+    ]
+
+
 @pytest.fixture(name="candle_list")
 def fixture_candle_list():
     return [
@@ -63,8 +146,6 @@ def test_candle_from_dict(candle_dict):
         low=12202.410156,
         close=12536.019531,
         volume=4918240000,
-        indicators={},
-        sub_indicators={},
     )
 
 
@@ -75,8 +156,6 @@ def test_candle_from_dict_datetime(candle_dict_datetime):
         low=12202.410156,
         close=12536.019531,
         volume=4918240000,
-        indicators={},
-        sub_indicators={},
         timestamp=datetime(2023, 8, 30),
     )
 
@@ -89,8 +168,6 @@ def test_candle_from_dicts(candle_dict):
             low=12202.410156,
             close=12536.019531,
             volume=4918240000,
-            indicators={},
-            sub_indicators={},
         ),
         Candle(
             open=12511.459961,
@@ -98,8 +175,51 @@ def test_candle_from_dicts(candle_dict):
             low=12460.990234,
             close=12563.759766,
             volume=4547280000,
-            indicators={},
-            sub_indicators={},
+        ),
+    ]
+
+
+def test_candle_from_dicts_numpy(candle_dicts_numpy):
+    assert Candle.from_dicts(candle_dicts_numpy) == [
+        Candle(
+            open=14851.6,
+            high=14854.1,
+            low=14847.2,
+            close=14848.1,
+            volume=247,
+            timestamp=datetime(2023, 10, 3, 9, 1),
+        ),
+        Candle(
+            open=14848.2,
+            high=14848.2,
+            low=14843.6,
+            close=14844.7,
+            volume=332,
+            timestamp=datetime(2023, 10, 3, 9, 2),
+        ),
+        Candle(
+            open=14844.6,
+            high=14846.6,
+            low=14842.4,
+            close=14842.6,
+            volume=196,
+            timestamp=datetime(2023, 10, 3, 9, 3),
+        ),
+        Candle(
+            open=14842.5,
+            high=14842.9,
+            low=14831.7,
+            close=14835.6,
+            volume=540,
+            timestamp=datetime(2023, 10, 3, 9, 4),
+        ),
+        Candle(
+            open=14835.5,
+            high=14842.1,
+            low=14835.4,
+            close=14839.7,
+            volume=171,
+            timestamp=datetime(2023, 10, 3, 9, 5),
         ),
     ]
 
@@ -111,8 +231,6 @@ def test_candle_from_list(candle_list):
         low=12202.410156,
         close=12536.019531,
         volume=4918240000,
-        indicators={},
-        sub_indicators={},
     )
 
 
@@ -123,8 +241,6 @@ def test_candle_from_list_datetime(candle_list_datetime):
         low=12202.410156,
         close=12536.019531,
         volume=4918240000,
-        indicators={},
-        sub_indicators={},
         timestamp=datetime(2023, 8, 30),
     )
 
@@ -137,8 +253,6 @@ def test_candle_from_lists(candle_list):
             low=12202.410156,
             close=12536.019531,
             volume=4918240000,
-            indicators={},
-            sub_indicators={},
         ),
         Candle(
             open=12511.459961,
@@ -146,7 +260,5 @@ def test_candle_from_lists(candle_list):
             low=12460.990234,
             close=12563.759766,
             volume=4547280000,
-            indicators={},
-            sub_indicators={},
         ),
     ]

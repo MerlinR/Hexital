@@ -1,9 +1,9 @@
 from datetime import datetime, timedelta
 
 import pytest
-from hexital.exceptions import InvalidTimeFrame
-from hexital.lib.timeframe_utils import round_down_timestamp, timeframe_to_timedelta
 from hexital import TimeFrame
+from hexital.exceptions import InvalidTimeFrame
+from hexital.utils.timeframe import round_down_timestamp, timeframe_to_timedelta
 
 
 def test_timeframe_to_delta_min():

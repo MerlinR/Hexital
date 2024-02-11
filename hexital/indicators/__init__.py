@@ -1,11 +1,10 @@
-from .amorph import Amorph
 from .adx import ADX
+from .amorph import Amorph
 from .atr import ATR
 from .ema import EMA
-from .hl import HighLowAverage
+from .hla import HighLowAverage
 from .kc import KC
 from .macd import MACD
-from .managed import Managed
 from .obv import OBV
 from .rma import RMA
 from .roc import ROC
@@ -17,3 +16,24 @@ from .tr import TR
 from .vwap import VWAP
 from .vwma import VWMA
 from .wma import WMA
+
+INDICATOR_MAP = {
+    "Amorph": Amorph,
+    "ADX": ADX,
+    "ATR": ATR,
+    "EMA": EMA,
+    "HLA": HighLowAverage,
+    "KC": KC,
+    "MACD": MACD,
+    "OBV": OBV,
+    "RMA": RMA,
+    "ROC": ROC,
+    "RSI": RSI,
+    "SMA": SMA,
+    "STOCH": STOCH,
+    "Supertrend": Supertrend,
+    "TR": TR,
+    "VWAP": VWAP,
+    "VWMA": VWMA,
+    "WMA": WMA,
+}

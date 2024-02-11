@@ -2,8 +2,15 @@ from datetime import datetime, timedelta
 from typing import List
 
 import pytest
-from hexital.core import Candle, Hexital, Indicator
-from hexital.exceptions import InvalidAnalysis, InvalidIndicator
+from hexital import Candle, Hexital, TimeFrame
+from hexital.candlesticks.heikinashi import HeikinAshi
+from hexital.core.indicator import Indicator
+from hexital.exceptions import (
+    InvalidAnalysis,
+    InvalidCandlestickType,
+    InvalidIndicator,
+    MixedTimeframes,
+)
 from hexital.indicators import EMA, SMA
 
 
@@ -147,100 +154,6 @@ def test_hextial_indicator_selection(candles):
     assert isinstance(strat.indicator("SMA"), Indicator)
 
 
-@pytest.mark.usefixtures("minimal_candles")
-def test_hextial_append_candle(minimal_candles):
-    new_candle = minimal_candles.pop(0)
-    strat = Hexital("Test Stratergy", [])
-
-    strat.append(new_candle)
-
-    assert strat.candles() == [new_candle]
-
-
-@pytest.mark.usefixtures("minimal_candles")
-def test_hextial_append_candle_list(minimal_candles):
-    strat = Hexital("Test Stratergy", [])
-
-    strat.append(minimal_candles)
-
-    assert strat.candles() == minimal_candles
-
-
-def test_hextial_append_dict():
-    strat = Hexital("Test Stratergy", [])
-
-    strat.append(
-        {
-            "open": 17213,
-            "high": 2395,
-            "low": 7813,
-            "close": 3615,
-            "volume": 19661,
-        }
-    )
-    assert strat.candles() == [Candle(17213, 2395, 7813, 3615, 19661)]
-
-
-@pytest.mark.usefixtures("candles")
-def test_hextial_append_dict_list(candles):
-    strat = Hexital("Test Stratergy", [])
-
-    strat.append(
-        [
-            {
-                "open": 17213,
-                "high": 2395,
-                "low": 7813,
-                "close": 3615,
-                "volume": 19661,
-            },
-            {
-                "open": 1301,
-                "high": 3007,
-                "low": 11626,
-                "close": 19048,
-                "volume": 28909,
-            },
-        ]
-    )
-
-    assert strat.candles() == [
-        Candle(17213, 2395, 7813, 3615, 19661),
-        Candle(1301, 3007, 11626, 19048, 28909),
-    ]
-
-
-def test_hextial_append_list():
-    strat = Hexital("Test Stratergy", [])
-
-    strat.append([17213, 2395, 7813, 3615, 19661])
-
-    assert strat.candles() == [Candle(17213, 2395, 7813, 3615, 19661)]
-
-
-def test_hextial_append_list_list():
-    strat = Hexital("Test Stratergy", [])
-
-    strat.append(
-        [
-            [17213, 2395, 7813, 3615, 19661],
-            [1301, 3007, 11626, 19048, 28909],
-        ]
-    )
-
-    assert strat.candles() == [
-        Candle(17213, 2395, 7813, 3615, 19661),
-        Candle(1301, 3007, 11626, 19048, 28909),
-    ]
-
-
-@pytest.mark.usefixtures("candles")
-def test_hextial_append_invalid(candles):
-    strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
-    with pytest.raises(TypeError):
-        strat.append(["Fuck", 2, 3])
-
-
 @pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
 def test_hextial_purge(candles, expected_ema, expected_sma):
     strat = Hexital("Test Stratergy", candles, [EMA(), {"indicator": "SMA"}])
@@ -309,7 +222,7 @@ def test_append_hexital_calc(candles, expected_ema):
         strat.append(candle)
         strat.calculate()
 
-    assert pytest.approx(strat.indicator("EMA_10").as_list) == expected_ema
+    assert pytest.approx(strat.indicator("EMA_10").as_list()) == expected_ema
 
 
 @pytest.mark.usefixtures("candles", "expected_rsi")
@@ -319,4 +232,119 @@ def test_append_hexital_calc_sub_indicators(candles, expected_rsi):
     for candle in candles:
         strat.append(candle)
         strat.calculate()
-    assert pytest.approx(strat.indicator("RSI_14").as_list) == expected_rsi
+    assert pytest.approx(strat.indicator("RSI_14").as_list()) == expected_rsi
+
+
+class TestHexitalCandleManagerInheritance:
+    @pytest.mark.usefixtures("candles")
+    def test_hexital_inheritance(self, candles):
+        strat = Hexital("Test Stratergy", candles, [EMA()], candles_lifespan=timedelta(hours=1))
+
+        assert strat.candles_lifespan == timedelta(hours=1)
+        assert strat.indicator("EMA_10").candles_lifespan == timedelta(hours=1)
+
+    @pytest.mark.usefixtures("candles")
+    def test_hexital_inheritance_multi(self, candles):
+        strat = Hexital(
+            "Test Stratergy",
+            candles,
+            [EMA()],
+            candles_lifespan=timedelta(hours=1),
+            timeframe=TimeFrame.MINUTE10,
+        )
+
+        assert strat.timeframe == "T10"
+        assert strat.candles_lifespan == timedelta(hours=1)
+        assert strat.indicator("EMA_10").timeframe == "T10"
+        assert strat.indicator("EMA_10").candles_lifespan == timedelta(hours=1)
+
+    @pytest.mark.usefixtures("candles")
+    def test_hexital_inheritance_overriden(self, candles):
+        strat = Hexital(
+            "Test Stratergy",
+            candles,
+            [EMA(candles_lifespan=timedelta(minutes=30))],
+            candles_lifespan=timedelta(hours=1),
+        )
+
+        assert strat.candles_lifespan == timedelta(hours=1)
+        assert strat.indicator("EMA_10").candles_lifespan == timedelta(hours=1)
+
+    @pytest.mark.usefixtures("candles")
+    def test_hexital_inheritance_overriden_multi(self, candles):
+        strat = Hexital(
+            "Test Stratergy",
+            candles,
+            [EMA(timeframe="T10", candles_lifespan=timedelta(minutes=30))],
+            candles_lifespan=timedelta(hours=1),
+            timeframe="T5",
+        )
+
+        assert strat.candles_lifespan == timedelta(hours=1)
+        assert strat.timeframe == "T5"
+        assert strat.indicator("EMA_10").candles_lifespan == timedelta(hours=1)
+        assert strat.indicator("EMA_10").timeframe == "T10"
+
+
+class TestMovement:
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_movement(self, candles):
+        strat = Hexital("Test Stratergy", candles, [EMA(), SMA()])
+        strat.calculate()
+        assert strat.above("EMA_10", "SMA_10") is False
+
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_rising(self, candles):
+        strat = Hexital("Test Stratergy", candles, [EMA()])
+        strat.calculate()
+        assert strat.rising("EMA_10") is False
+
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_movement_verification_missing(self, candles):
+        strat = Hexital("Test Stratergy", candles, [EMA(), SMA()])
+        strat.calculate()
+        with pytest.raises(MixedTimeframes):
+            assert strat.above("EMA_10", "FUCK_YOU") is False
+
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_movement_verification_mixed(self, candles):
+        strat = Hexital("Test Stratergy", candles, [EMA(), SMA(timeframe="T5")])
+        strat.calculate()
+        with pytest.raises(MixedTimeframes):
+            assert strat.above("EMA_10", "SMA_10_T5")
+
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_movement_verification_candle(self, candles):
+        strat = Hexital("Test Stratergy", candles, [EMA(), SMA(timeframe="T5")])
+        strat.calculate()
+
+        assert strat.above("EMA_10", "high")
+
+
+class TestChain:
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_movement(self, candles):
+        strat = Hexital(
+            "Test Stratergy",
+            candles,
+            [EMA(), EMA(input_value="EMA_10", fullname_override="Chained")],
+        )
+        strat.calculate()
+        assert strat.has_reading("EMA_10") and strat.has_reading("Chained")
+
+
+class TestCandlestickType:
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_candlestick_type(self, candles):
+        strat = Hexital("Test Stratergy", candles, [EMA()], candlestick_type=HeikinAshi())
+        assert isinstance(strat.candlestick_type, HeikinAshi)
+
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_candlestick_type_str(self, candles):
+        strat = Hexital("Test Stratergy", candles, [EMA()], candlestick_type="HA")
+        assert isinstance(strat.candlestick_type, HeikinAshi)
+
+    @pytest.mark.usefixtures("candles")
+    def test_hextial_candlestick_type_error(self, candles):
+        with pytest.raises(InvalidCandlestickType):
+            strat = Hexital("Test Stratergy", candles, [EMA()], candlestick_type="FUCK")

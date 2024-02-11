@@ -19,24 +19,26 @@ For most libraries such as [Pandas-TA](https://github.com/twopirllc/pandas-ta) w
 ## Features
 
 ### Indicators
-Hexital comes with a growing selection of available Indicators to compute. These can be used individually to calculate a single indicator, or used with the `Hexital` class to automatically compute multiple indicators with a single incremental candle list; which is easily parsable.
+Hexital comes with a growing selection of available Indicators to compute. These can be used individually to calculate a single indicator, or used with the `Hexital` class to automatically compute multiple indicators with an incremental candle list; which is easily parsable.
 
-### Candle Patterns
+### Candlestick Patterns
 Hexital also supports detecting candle patterns, such as Doji, etc. This can be achieved easily by calling the Pattern function with the candles, or used automatically as an indicator where it would be computed alongside Indicators.
 
-### Multi-Timeframes
-Hexital has a key feature of supporting indicator and pattern computation on multiple candle timeframes with a single set of candles. For instance an indicator can be given 1m or second candles and given a timeframe of 10 minutes, the indicator will automatically collapse these candles into 10m candle and compute the indicator value.
+### Candlestick Types
+Hexital also has the feature to automatically convert Candlesticks from the standard type into alternative formats, such as 'Heikin-Ashi'. This will mean prior to generating indicators it will automatically convert the Candlesticks to the desired type and then calculate indicators on this new candlestick type. This works in conjunction with all other features.
 
-This can also be mixed within the `Hexital` class, allowing you to automatically compute a multiple incremental indictors and patterns of which consistent of multiple timeframes by appending a single candle of any timeframe. E.G By appending 1m candles  into `Hexital` you can automatically compute an RSI using the 1 minute candles and computing an EMA using the 10 minute candles.
+### Multi-Timeframes
+Hexital has a key feature of supporting indicator and pattern computation on multiple candle timeframes with a single set of candles. For instance an indicator can be given second candlesticks and can calculate EMA on 1m candlesticks or 10m candlesticks, the indicator will automatically merge these candles into the required timeframes and compute the indicator value. * Cant go down, for obv reasons.
+
+This can also be mixed within the `Hexital` class, allowing you to automatically compute a multiple incremental indictors and patterns of which consistent of multiple timeframes by appending a single candle of any timeframe. E.G By appending 1m candles  into `Hexital` you can automatically compute an RSI using the 5 minute candles and computing an EMA using the 10 minute candles, at the same time automatically while only adding 1m candlesticks.
+
 Example:
 ```python
-stratergy = Hexital("Test Stratergy", candles_1m, [RSI(), EMA(timeframe="T10")])
-# OR
-stratergy = Hexital("Test Stratergy", candles_tick, [RSI(timeframe="T1"), EMA(timeframe=TimeFrame.MINUTE10)])
+stratergy = Hexital("Test Stratergy", candlesticks_1m, [RSI(timeframe="T5"), EMA(timeframe=TimeFrame.MINUTE10)])
 ```
 
-### Candlestick Movement
-Hexital also comes built with some candle utility methods, such as Rising Candles, Cross overs, etc, these are designed to be simple to make using the candles and common features easy,  many of these are also found in pine scripting. 
+### Candlestick Movements
+Hexital also comes built with some candle utility methods, to easily take the candles list and detect movements such as Rising Candles, indicator Cross overs, etc, these are designed to be simple to make using the candles and common features easy,  many of these are also found in pine scripting. 
 
 ## Indicators
 - ADX
@@ -57,12 +59,16 @@ Hexital also comes built with some candle utility methods, such as Rising Candle
 - VWMA
 - WMA
 
-## Candle Patterns
+## Candlestick Patterns
 Simple useful Candle pattern recognition, such as Doji, hammer, etc
 - Doji
 - Hammer
 
-## Candlestick Movement
+## Candlestick Types
+Hexital can also automatically convert Candlesticks into specific types, such as:
+- Heikin-Ashi
+
+## Candlestick Movements
 Simple useful Candle Anaylsis methods such as those in [Pine Scripting](https://www.tradingview.com/pine-script-reference/v5/)
 - Positive/Negative Candle
 - Rising/Falling Indicator
@@ -89,6 +95,7 @@ pip install git+https://github.com/merlinr/hexital.git@development
 ### Single Indicator
 ```python
 from hexital import EMA, Candle
+import pandas as pd
 
 my_candles = [
     {"open": 17213, "high": 2395, "low": 7813, "close": 3615, "volume": 19661},
@@ -104,6 +111,10 @@ my_candles = [
 ]
 # Convert Basic candles
 candles = Candle.from_dicts(my_candles)
+# Or directly from a Numpy Dataframe
+# df = pd.read_csv("path/to/symbol.csv", sep=",")
+# candles = Candle.from_dicts(df.to_dict("records"))
+
 my_ema = EMA(candles=candles, period=3)
 my_ema.calculate()
 
@@ -117,11 +128,11 @@ print(my_ema.has_reading) # True
 # Latest
 print(my_ema.reading()) # 8408.7552
 # All
-print(my_ema.as_list) # [None, None, 8004.6667, 4108.3333, 5708.1667, 7063.0833, 12414.0416, 15606.0208, 8518.5104, 8408.7552]
+print(my_ema.as_list()) # [None, None, 8004.6667, 4108.3333, 5708.1667, 7063.0833, 12414.0416, 15606.0208, 8518.5104, 8408.7552]
 
 # Add new
 my_ema.append(Candle.from_dict({'open': 19723, 'high': 4837, 'low': 11631, 'close': 6231, 'volume': 38993}))
-print(my_ema.as_list) # [None, None, 8004.6667, 4108.3333, 5708.1667, 7063.0833, 12414.0416, 15606.0208, 8518.5104, 8408.7552, 7319.8776]
+print(my_ema.as_list()) # [None, None, 8004.6667, 4108.3333, 5708.1667, 7063.0833, 12414.0416, 15606.0208, 8518.5104, 8408.7552, 7319.8776]
 
 # Check Reading and Prev Reading
 print(my_ema.reading()) # 7319.8776
@@ -138,6 +149,8 @@ print(my_ema.reading()) # None
 my_ema.recalculate()
 print(my_ema.reading()) # 7319.8776
 
+# Recalculate latest
+my_ema.calculate_index("EMA_3")
 
 # Access other Readings (Reading get's the latest readings)
 print(my_ema.reading("high")) # 4837
@@ -145,6 +158,8 @@ print(my_ema.reading("high")) # 4837
 # Access other specific Readings (Older readings)
 print(my_ema.reading("high", index=-2)) # 6584
 
+# Easily view candlestick trends
+print(my_ema.falling()) # True
 ```
 
 
@@ -155,7 +170,7 @@ Roughly ordered in priority
 - Modular framework (like indicators) to repaint candles, E.G as Renko, Range, etc 
 - More Indicators
 - More Movement methods
-- Pattern Candle recognition methods, detecting Doji, Hammer, etc
+- More Patterns
 - Indicator Pluggability, to allow easy extension of this library
   - Allowing custom Indictors to be added
 - Multiprocessing, of indictors stored within hexial Class.

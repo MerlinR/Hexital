@@ -1,20 +1,115 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
+from hexital.exceptions import CandleAlreadyTagged
 
-@dataclass
+KEY_KEYS = [
+    "open",
+    "high",
+    "low",
+    "close",
+    "volume",
+    "timestamp",
+    "indicators",
+    "sub_indicators",
+]
+
+
 class Candle:
     open: float
     high: float
     low: float
     close: float
     volume: int
-    indicators: Dict[str, float | Dict[str, float | None] | None] = field(default_factory=dict)
-    sub_indicators: Dict[str, float | Dict[str, float | None] | None] = field(default_factory=dict)
     timestamp: Optional[datetime] = None
+    clean_values: Dict[str, float | int]
+    _tag: Optional[str] = None
+    indicators: Dict[str, float | Dict[str, float | None] | None]
+    sub_indicators: Dict[str, float | Dict[str, float | None] | None]
+
+    def __init__(
+        self,
+        open: float,
+        high: float,
+        low: float,
+        close: float,
+        volume: int,
+        timestamp: Optional[datetime | str] = None,
+        indicators: Optional[Dict[str, float | Dict[str, float | None] | None]] = None,
+        sub_indicators: Optional[Dict[str, float | Dict[str, float | None] | None]] = None,
+    ):
+        self.open = open
+        self.high = high
+        self.low = low
+        self.close = close
+        self.volume = volume
+
+        if isinstance(timestamp, datetime):
+            self.timestamp = timestamp
+        elif isinstance(timestamp, str):
+            self.timestamp = datetime.fromisoformat(timestamp)
+
+        self.clean_values = {}
+        self.indicators = indicators if indicators else {}
+        self.sub_indicators = sub_indicators if sub_indicators else {}
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, Candle):
+            return False
+        for key in KEY_KEYS:
+            if getattr(self, key) != getattr(other, key):
+                return False
+        return True
+
+    def __repr__(self) -> str:
+        return str(
+            {
+                "open": self.open,
+                "high": self.high,
+                "low": self.low,
+                "close": self.close,
+                "volume": self.volume,
+                "timestamp": self.timestamp,
+                "indicators": self.indicators,
+                "sub_indicators": self.sub_indicators,
+                "tag": self.tag,
+            }
+        )
+
+    @property
+    def tag(self) -> str | None:
+        return self._tag
+
+    @tag.setter
+    def tag(self, tag: str):
+        if not self._tag:
+            self._tag = tag
+            return
+        raise CandleAlreadyTagged(f"Candle already tagged as {self._tag} - [{self}]")
+
+    def positive(self) -> bool:
+        return self.open < self.close
+
+    def negative(self) -> bool:
+        return self.open > self.close
+
+    def realbody(self) -> float:
+        return abs(self.open - self.close)
+
+    def shadow_upper(self) -> float:
+        if self.positive():
+            return abs(self.high - self.close)
+        return abs(self.high - self.open)
+
+    def shadow_lower(self) -> float:
+        if self.positive():
+            return abs(self.low - self.open)
+        return abs(self.low - self.close)
+
+    def high_low(self) -> float:
+        return abs(self.high - self.low)
 
     @classmethod
     def from_dict(cls, candle: Dict[str, Any]) -> Candle:
@@ -56,26 +151,43 @@ class Candle:
 
     @staticmethod
     def from_lists(candles: List[List[float]]) -> List[Candle]:
-        """Expected list of the folling list [open, high, low, close, volume]
-        with optional datetime at the begining or end."""
+        """Expected list of the following list [open, high, low, close, volume]
+        with optional datetime at the beginning or end."""
         return [Candle.from_list(candle) for candle in candles]
+
+    def save_clean_values(self):
+        self.clean_values = {
+            "open": self.open,
+            "high": self.high,
+            "low": self.low,
+            "close": self.close,
+            "volume": self.volume,
+        }
+
+    def recover_clean_values(self):
+        if self.clean_values:
+            self.open = self.clean_values["open"]
+            self.high = self.clean_values["high"]
+            self.low = self.clean_values["low"]
+            self.close = self.clean_values["close"]
+            self.volume = int(self.clean_values["volume"])
+
+    def reset_candle(self):
+        self.indicators = {}
+        self.sub_indicators = {}
+        self._tag = None
 
     def merge(self, candle: Candle):
         """Merge candle into existing candle, will use the merged into
-        Candle for any already calc indicators"""
-        ignored_keys = ["timestamp", "open"]
+        Candle for any already calc indicators.
+        All indicators will be wiped due to new values, and any conversion removed"""
 
-        for key, val in vars(candle).items():
-            if key in ignored_keys:
-                continue
+        self.recover_clean_values()
 
-            if key == "high":
-                self.high = max(self.high, val)
-            elif key == "low":
-                self.low = min(self.low, val)
-            elif key == "volume":
-                self.volume += val
-            elif isinstance(val, dict):
-                setattr(self, key, {})
-            elif val is not None:
-                setattr(self, key, val)
+        self.high = max(self.high, candle.high)
+        self.low = min(self.low, candle.low)
+        self.volume += candle.volume
+        self.close = candle.close
+
+        self.clean_values = {}
+        self.reset_candle()

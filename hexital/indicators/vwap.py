@@ -1,7 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
-from hexital.core import Indicator
-from hexital.indicators import Managed
+from hexital.core.indicator import Indicator, Managed
 
 
 @dataclass(kw_only=True)
@@ -13,11 +12,11 @@ class VWAP(Indicator):
 
     """
 
-    indicator_name: str = "VWAP"
+    _name: str = field(init=False, default="VWAP")
     period: int = 10
 
     def _generate_name(self) -> str:
-        return f"{self.indicator_name}_{self.period}"
+        return f"{self._name}_{self.period}"
 
     def _initialise(self):
         self._add_managed_indicator(
@@ -38,10 +37,10 @@ class VWAP(Indicator):
             prev_pv = self.prev_reading("VWAP_PV")
             prev_vol = self.prev_reading("VWAP_Vol")
 
-        self._managed_indictor("VWAP_PV").set_reading(
+        self._managed_indicators["VWAP_PV"].set_reading(
             prev_pv + self.reading("volume") * typical_price
         )
-        self._managed_indictor("VWAP_Vol").set_reading(prev_vol + self.reading("volume"))
+        self._managed_indicators["VWAP_Vol"].set_reading(prev_vol + self.reading("volume"))
 
         if self.reading("VWAP_Vol") == 0:
             return self.reading("VWAP_PV")

@@ -1,13 +1,13 @@
 from typing import List
 
 from hexital.core.candle import Candle
-from hexital.lib.candle_extension import (
+from hexital.utils.candles import (
     reading_by_candle,
     reading_by_index,
     reading_count,
     reading_period,
 )
-from hexital.lib.utils import absindex, valid_index
+from hexital.utils.indexing import absindex, valid_index
 
 
 def _get_clean_readings(
@@ -26,20 +26,20 @@ def _get_clean_readings(
 
 def positive(candles: Candle | List[Candle], index: int = -1) -> bool:
     if isinstance(candles, Candle):
-        return candles.open < candles.close
+        return candles.positive()
 
     if not valid_index(index, len(candles)):
         return False
-    return candles[index].open < candles[index].close
+    return candles[index].positive()
 
 
 def negative(candles: Candle | List[Candle], index: int = -1) -> bool:
     if isinstance(candles, Candle):
-        return candles.open > candles.close
+        return candles.negative()
 
     if not valid_index(index, len(candles)):
         return False
-    return candles[index].open > candles[index].close
+    return candles[index].negative()
 
 
 def above(candles: List[Candle], indicator: str, indicator_two: str, index: int = -1) -> bool:
@@ -56,7 +56,7 @@ def above(candles: List[Candle], indicator: str, indicator_two: str, index: int 
 
 
 def below(candles: List[Candle], indicator: str, indicator_two: str, index: int = -1) -> bool:
-    """Check if indicator is a higher value than indicator_two"""
+    """Check if indicator is a lower value than indicator_two"""
     if not candles:
         return False
 

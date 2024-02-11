@@ -1,4 +1,5 @@
-from .analysis import movement, patterns  # noqa F401
-from .core import Candle, Hexital  # noqa F401
-from .indicators import *  # noqa F401
-from .lib import TimeFrame
+from hexital.analysis import movement, patterns  # noqa F401
+from hexital.core.candle import Candle  # noqa F401
+from hexital.core.hexital import Hexital
+from hexital.indicators import *  # noqa F401
+from hexital.utils import TimeFrame  # noqa F401

@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 from enum import Enum
 
-
 from hexital.exceptions import InvalidTimeFrame
 
 VALID_TIMEFRAME_PREFIXES = ["S", "T", "H", "D"]
@@ -25,6 +24,19 @@ class TimeFrame(Enum):
     HOUR4 = "H4"
     DAY = "D1"
     WEEK = "D7"
+
+
+def validate_timeframe(timeframe: str | TimeFrame) -> str:
+    if isinstance(timeframe, str):
+        timeframe = timeframe.upper()
+        if not isinstance(timeframe[0], str) or timeframe[0] not in VALID_TIMEFRAME_PREFIXES:
+            raise InvalidTimeFrame(
+                f"Invalid value: {timeframe}, valid are: {VALID_TIMEFRAME_PREFIXES}, E.G 'T10' 10 minutes"
+            )
+    elif isinstance(timeframe, TimeFrame):
+        timeframe = timeframe.value
+
+    return timeframe
 
 
 def round_down_timestamp(timestamp: datetime, timeframe: timedelta) -> datetime:

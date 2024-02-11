@@ -1,8 +1,7 @@
-from copy import deepcopy
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 import pytest
-from hexital.core import Candle, Hexital
+from hexital.core.hexital import DEFAULT_CANDLES, Hexital
 from hexital.indicators import EMA, OBV, SMA
 
 
@@ -38,10 +37,18 @@ def test_hextial_multi_timeframes_shared_candles(
     )
     strat.calculate()
 
+    candles_name = None
+    for key in strat._candles.keys():
+        if key != DEFAULT_CANDLES:
+            candles_name = key
+
+    assert len(strat._candles.keys()) == 2
     assert pytest.approx(strat.reading_as_list("EMA_10")) == expected_ema
     assert (
-        strat._candles["T10"][-1].indicators.get("SMA_10_T10") == expected_sma_t10[-1]
-        and strat._candles["T10"][-1].indicators.get("OBV_T10") == expected_obv_t10[-1]
+        strat._candles[candles_name].candles[-1].indicators.get("SMA_10_T10")
+        == expected_sma_t10[-1]
+        and strat._candles[candles_name].candles[-1].indicators.get("OBV_T10")
+        == expected_obv_t10[-1]
     )
 
 
@@ -54,9 +61,14 @@ def test_hextial_multi_timeframes_get_candles(candles):
     )
     strat.calculate()
 
-    assert strat.candles("T10")[-1].indicators.get("SMA_10_T10") and strat.candles("T10")[
-        -1
-    ].indicators.get("OBV_T10")
+    candles_name = None
+    for key in strat._candles.keys():
+        if key != DEFAULT_CANDLES:
+            candles_name = key
+
+    assert strat.candles(candles_name)[-1].indicators.get("SMA_10_T10") and strat.candles(
+        candles_name
+    )[-1].indicators.get("OBV_T10")
 
 
 @pytest.mark.usefixtures("candles", "expected_sma_t10")
@@ -67,7 +79,7 @@ def test_hextial_multi_timeframe_reading(candles, expected_sma_t10):
 
 
 @pytest.mark.usefixtures("candles", "expected_ema", "expected_sma_t5")
-def test_hextial_multi_timeframes_timerange(candles, expected_ema, expected_sma_t5):
+def test_hextial_multi_timeframes_lifespan(candles, expected_ema, expected_sma_t5):
     strat = Hexital(
         "Test Stratergy",
         [],

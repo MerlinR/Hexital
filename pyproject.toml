@@ -34,20 +34,20 @@ deepdiff = "*"
 optional = true
 
 [tool.poetry.group.truth.dependencies]
-pandas = "*"
-numpy = "*"
+pandas = "^1.2.0"
+numpy = "^1.22.0"
 ta-lib = "*"
-pandas-ta = { git = "https://github.com/twopirllc/pandas-ta.git" }
+pandas-ta = { git = "https://github.com/twopirllc/pandas-ta.git#develop" }
 
 [tool.poetry.group.speed_tests]
 optional = true
 
 [tool.poetry.group.speed_tests.dependencies]
 matplotlib = "*"
-pandas = "*"
-numpy = "*"
+pandas = "^1.2.0"
+numpy = "^1.22.0"
 ta-lib = "*"
-pandas-ta = { git = "https://github.com/twopirllc/pandas-ta.git" }
+pandas-ta = { git = "https://github.com/twopirllc/pandas-ta.git#develop" }
 
 [build-system]
 requires = ["setuptools", "poetry-core>=1.0.0"]

@@ -1,7 +1,7 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
-from hexital.core import Indicator
-from hexital.indicators import SMA
+from hexital.core.indicator import Indicator
+from hexital.indicators.sma import SMA
 
 
 @dataclass(kw_only=True)
@@ -30,14 +30,14 @@ class STOCH(Indicator):
 
     """
 
-    indicator_name: str = "STOCH"
+    _name: str = field(init=False, default="STOCH")
     period: int = 14
     slow_period: int = 3
     smoothing_k: int = 3
     input_value: str = "close"
 
     def _generate_name(self) -> str:
-        return f"{self.indicator_name}_{self.period}"
+        return f"{self._name}_{self.period}"
 
     def _validate_fields(self):
         return
@@ -46,19 +46,17 @@ class STOCH(Indicator):
         self._add_managed_indicator(
             "k",
             SMA(
-                candles=self.candles,
                 input_value=f"{self.name}.stoch",
                 period=self.smoothing_k,
-                fullname_override=f"{self.indicator_name}_k",
+                fullname_override=f"{self._name}_k",
             ),
         )
         self._add_managed_indicator(
             "d",
             SMA(
-                candles=self.candles,
                 input_value=f"{self.name}.k",
                 period=self.slow_period,
-                fullname_override=f"{self.indicator_name}_d",
+                fullname_override=f"{self._name}_d",
             ),
         )
 
@@ -74,12 +72,12 @@ class STOCH(Indicator):
             stoch = ((self.reading(self.input_value) - lowest) / (highest - lowest)) * 100
 
             self.candles[index].indicators[self.name] = {"stoch": stoch}
-            self._managed_indictor("k").calculate_index(index)
-            k = self.reading(f"{self.indicator_name}_k")
+            self._managed_indicators["k"].calculate_index(index)
+            k = self.reading(f"{self._name}_k")
 
             self.candles[index].indicators[self.name] = {"stoch": stoch, "k": k}
-            self._managed_indictor("d").calculate_index(index)
-            d = self.reading(f"{self.indicator_name}_d")
+            self._managed_indicators["d"].calculate_index(index)
+            d = self.reading(f"{self._name}_d")
 
             return {"stoch": stoch, "k": k, "d": d}
 
