@@ -72,6 +72,53 @@ def fixture_candle_dict_datetime():
     }
 
 
+@pytest.fixture(name="candle_dicts_numpy")
+def fixture_candle_dicts_numpy():
+    # dicts = df.to_dict("records")
+    return [
+        {
+            "open": 14851.6,
+            "high": 14854.1,
+            "low": 14847.2,
+            "close": 14848.1,
+            "volume": 247,
+            "timestamp": "2023-10-03T09:01:00",
+        },
+        {
+            "open": 14848.2,
+            "high": 14848.2,
+            "low": 14843.6,
+            "close": 14844.7,
+            "volume": 332,
+            "timestamp": "2023-10-03T09:02:00",
+        },
+        {
+            "open": 14844.6,
+            "high": 14846.6,
+            "low": 14842.4,
+            "close": 14842.6,
+            "volume": 196,
+            "timestamp": "2023-10-03T09:03:00",
+        },
+        {
+            "open": 14842.5,
+            "high": 14842.9,
+            "low": 14831.7,
+            "close": 14835.6,
+            "volume": 540,
+            "timestamp": "2023-10-03T09:04:00",
+        },
+        {
+            "open": 14835.5,
+            "high": 14842.1,
+            "low": 14835.4,
+            "close": 14839.7,
+            "volume": 171,
+            "timestamp": "2023-10-03T09:05:00",
+        },
+    ]
+
+
 @pytest.fixture(name="candle_list")
 def fixture_candle_list():
     return [
@@ -128,6 +175,51 @@ def test_candle_from_dicts(candle_dict):
             low=12460.990234,
             close=12563.759766,
             volume=4547280000,
+        ),
+    ]
+
+
+def test_candle_from_dicts_numpy(candle_dicts_numpy):
+    assert Candle.from_dicts(candle_dicts_numpy) == [
+        Candle(
+            open=14851.6,
+            high=14854.1,
+            low=14847.2,
+            close=14848.1,
+            volume=247,
+            timestamp=datetime(2023, 10, 3, 9, 1),
+        ),
+        Candle(
+            open=14848.2,
+            high=14848.2,
+            low=14843.6,
+            close=14844.7,
+            volume=332,
+            timestamp=datetime(2023, 10, 3, 9, 2),
+        ),
+        Candle(
+            open=14844.6,
+            high=14846.6,
+            low=14842.4,
+            close=14842.6,
+            volume=196,
+            timestamp=datetime(2023, 10, 3, 9, 3),
+        ),
+        Candle(
+            open=14842.5,
+            high=14842.9,
+            low=14831.7,
+            close=14835.6,
+            volume=540,
+            timestamp=datetime(2023, 10, 3, 9, 4),
+        ),
+        Candle(
+            open=14835.5,
+            high=14842.1,
+            low=14835.4,
+            close=14839.7,
+            volume=171,
+            timestamp=datetime(2023, 10, 3, 9, 5),
         ),
     ]
 

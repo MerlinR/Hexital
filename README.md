@@ -95,6 +95,7 @@ pip install git+https://github.com/merlinr/hexital.git@development
 ### Single Indicator
 ```python
 from hexital import EMA, Candle
+import pandas as pd
 
 my_candles = [
     {"open": 17213, "high": 2395, "low": 7813, "close": 3615, "volume": 19661},
@@ -110,6 +111,10 @@ my_candles = [
 ]
 # Convert Basic candles
 candles = Candle.from_dicts(my_candles)
+# Or directly from a Numpy Dataframe
+# df = pd.read_csv("path/to/symbol.csv", sep=",")
+# candles = Candle.from_dicts(df.to_dict("records"))
+
 my_ema = EMA(candles=candles, period=3)
 my_ema.calculate()
 

@@ -23,6 +23,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - above, below, cross, crossover, etc..
 - Added sanitise_name to convert '.' to ',' to support name nesting
 - Added more Exceptions to improve error's
+- Added Candle ability to accept json str timestamp, therefore allowing direct conversion from Pandas -> Hexital
 - Fixed Hammer index pattern working correctly
 - Changed Sub/managed indicators to auto populate candles field
 - Changed 'as_list' property a method that can now take a nested indicator name

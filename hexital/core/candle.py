@@ -36,7 +36,7 @@ class Candle:
         low: float,
         close: float,
         volume: int,
-        timestamp: Optional[datetime] = None,
+        timestamp: Optional[datetime | str] = None,
         indicators: Optional[Dict[str, float | Dict[str, float | None] | None]] = None,
         sub_indicators: Optional[Dict[str, float | Dict[str, float | None] | None]] = None,
     ):
@@ -45,7 +45,11 @@ class Candle:
         self.low = low
         self.close = close
         self.volume = volume
-        self.timestamp = timestamp
+
+        if isinstance(timestamp, datetime):
+            self.timestamp = timestamp
+        elif isinstance(timestamp, str):
+            self.timestamp = datetime.fromisoformat(timestamp)
 
         self.clean_values = {}
         self.indicators = indicators if indicators else {}
