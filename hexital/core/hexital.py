@@ -247,31 +247,19 @@ class Hexital:
     def _verify_indicators(
         self, indicator: str, indicator_two: Optional[str] = None
     ) -> List[Candle]:
-        manager_one = None
-        manager_two = None
-
-        for manager in self._candles.values():
-            if not manager_one and manager.find_indicator(indicator):
-                manager_one = manager
-            if indicator_two and not manager_two and manager.find_indicator(indicator_two):
-                manager_two = manager
-
-        if not manager_one:
+        if indicator and not indicator_two:
+            for manager in self._candles.values():
+                if manager.find_indicator(indicator):
+                    return manager.candles
             raise MissingIndicator(f"Cannot find {indicator}")
 
-        if not indicator_two:
-            return manager_one.candles
+        for manager in self._candles.values():
+            if manager.find_indicator(indicator) and manager.find_indicator(indicator_two):
+                return manager.candles
 
-        if not manager_two:
-            raise MissingIndicator(f"Cannot find {indicator_two}")
-
-        if manager_one != manager_two:
-            raise MixedTimeframes(
-                "Cant use 'above' on {%s}[{%s}]-{%s}[{%s}] using different timeframes"
-                % (indicator, manager_one.timeframe, indicator_two, manager_two.timeframe)
-            )
-
-        return manager_two.candles
+        raise MixedTimeframes(
+            "Cannot find {%s} and {%s} within same timeframe" % (indicator, indicator_two)
+        )
 
     def above(self, indicator: str, indicator_two: str, index: int = -1) -> bool:
         candles = self._verify_indicators(indicator, indicator_two)

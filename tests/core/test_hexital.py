@@ -9,7 +9,6 @@ from hexital.exceptions import (
     InvalidAnalysis,
     InvalidCandlestickType,
     InvalidIndicator,
-    MissingIndicator,
     MixedTimeframes,
 )
 from hexital.indicators import EMA, SMA
@@ -304,7 +303,7 @@ class TestMovement:
     def test_hextial_movement_verification_missing(self, candles):
         strat = Hexital("Test Stratergy", candles, [EMA(), SMA()])
         strat.calculate()
-        with pytest.raises(MissingIndicator):
+        with pytest.raises(MixedTimeframes):
             assert strat.above("EMA_10", "FUCK_YOU") is False
 
     @pytest.mark.usefixtures("candles")
