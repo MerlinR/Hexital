@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from datetime import timedelta
 from typing import Dict, List, Optional
 
-from hexital.analysis import movement
+from hexital.analysis import movement, patterns
 from hexital.core.candle import Candle
 from hexital.core.candle_manager import CandleManager
 from hexital.core.candlestick_type import CandlestickType
@@ -32,8 +32,9 @@ class Indicator(ABC):
     candles_lifespan: Optional[timedelta] = None
     candlestick_type: Optional[CandlestickType | str] = None
 
-    _candles: CandleManager = field(init=False, default_factory=CandleManager)
+    _name: str = field(init=False, default="")
     _output_name: str = field(init=False, default="")
+    _candles: CandleManager = field(init=False, default_factory=CandleManager)
     _sub_indicators: List[Indicator] = field(init=False, default_factory=list)
     _managed_indicators: Dict[str, Managed | Indicator] = field(init=False, default_factory=dict)
     _sub_indicator: bool = field(init=False, default=False)
@@ -43,8 +44,11 @@ class Indicator(ABC):
     def __post_init__(self):
         self._validate_fields()
 
-        self.timeframe = validate_timeframe(self.timeframe)
-        self.candlestick_type = validate_candlesticktype(self.candlestick_type)
+        if self.timeframe is not None:
+            self.timeframe = validate_timeframe(self.timeframe)
+
+        if self.candlestick_type is not None:
+            self.candlestick_type = validate_candlesticktype(self.candlestick_type)
 
         self._candles = CandleManager(
             self.candles,
@@ -122,14 +126,17 @@ class Indicator(ABC):
     @property
     def settings(self) -> dict:
         """Returns a dict format of how this indicator can be generated"""
-        output = {"indicator": type(self).__name__}
+        output = {"indicator": self._name if self._name else type(self).__name__}
 
         for name, value in self.__dict__.items():
             if name == "candles":
                 continue
             if name == "timeframe_fill" and self.timeframe is None:
                 continue
-            if not name.startswith("_") and value is not None:
+
+            if name == "candlestick_type" and value:
+                output[name] = value.minimal_name
+            elif not name.startswith("_") and value is not None:
                 output[name] = deepcopy(value)
 
         return output
@@ -305,6 +312,28 @@ class Indicator(ABC):
         self, name: Optional[str] = None, length: int = 4, index: int = -1
     ) -> int | None:
         return movement.lowestbar(self.candles, name if name else self.name, length, index)
+
+    def doji(
+        self,
+        length: int = 10,
+        lookback: Optional[int] = None,
+        asint: bool = False,
+        index: Optional[int] = None,
+    ) -> bool | int:
+        return patterns.doji(
+            self.candles, length=length, lookback=lookback, asint=asint, index=index
+        )
+
+    def hammer(
+        self,
+        length: int = 10,
+        lookback: Optional[int] = None,
+        asint: bool = False,
+        index: Optional[int] = None,
+    ) -> bool | int:
+        return patterns.hammer(
+            self.candles, length=length, lookback=lookback, asint=asint, index=index
+        )
 
 
 @dataclass(kw_only=True)

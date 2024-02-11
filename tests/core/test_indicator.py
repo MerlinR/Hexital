@@ -4,6 +4,7 @@ from typing import List, Optional
 
 import pytest
 from hexital import Candle
+from hexital.analysis.patterns import doji
 from hexital.candlesticks.heikinashi import HeikinAshi
 from hexital.core.indicator import Indicator
 from hexital.exceptions import InvalidCandlestickType
@@ -13,7 +14,7 @@ from hexital.indicators.amorph import Amorph
 @dataclass(kw_only=True)
 class FakeIndicator(Indicator):
     candles: List[Candle] = field(default_factory=list)
-    indicator_name: str = "Fake"
+    _name: str = field(init=False, default="Fake")
     fullname_override: Optional[str] = None
     name_suffix: Optional[str] = None
     round_value: int = 4
@@ -22,7 +23,7 @@ class FakeIndicator(Indicator):
     input_value: str = "close"
 
     def _generate_name(self) -> str:
-        return f"{self.indicator_name}_{self.period}"
+        return f"{self._name}_{self.period}"
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         return 100.0
@@ -131,16 +132,40 @@ def test_reading_period(minimal_candles: List[Candle]):
 def test_settings(minimal_candles: List[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     assert test.settings == {
-        "indicator": "FakeIndicator",
+        "indicator": "Fake",
         "round_value": 4,
-        "indicator_name": "Fake",
         "input_value": "close",
         "period": 10,
     }
 
 
+@pytest.mark.usefixtures("minimal_candles")
+def test_settings_timeframe(minimal_candles: List[Candle]):
+    test = FakeIndicator(candles=minimal_candles, timeframe="T5")
+    assert test.settings == {
+        "indicator": "Fake",
+        "round_value": 4,
+        "input_value": "close",
+        "period": 10,
+        "timeframe": "T5",
+        "timeframe_fill": False,
+    }
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_settings_candlestick_types(minimal_candles: List[Candle]):
+    test = FakeIndicator(candles=minimal_candles, candlestick_type="HA")
+    assert test.settings == {
+        "indicator": "Fake",
+        "round_value": 4,
+        "input_value": "close",
+        "period": 10,
+        "candlestick_type": "HA",
+    }
+
+
 def test_settings_analysis():
-    test = Amorph(analysis="doji")
+    test = Amorph(analysis=doji)
     assert test.settings == {
         "analysis": "doji",
         "round_value": 4,
@@ -277,7 +302,7 @@ class TestCandlestickType:
         assert isinstance(test_indicator.candlestick_type, HeikinAshi)
 
     def test_indicator_candlestick_type_str(self):
-        test_indicator = FakeIndicator(candles=[], candlestick_type="ha")
+        test_indicator = FakeIndicator(candles=[], candlestick_type="HA")
         assert isinstance(test_indicator.candlestick_type, HeikinAshi)
 
     def test_indicator_candlestick_type_error(self):

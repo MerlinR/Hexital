@@ -2,12 +2,18 @@ from copy import deepcopy
 from datetime import timedelta
 from typing import Dict, List, Optional, Set
 
-from hexital.analysis import MOVEMENT_MAP, PATTERN_MAP, movement
+from hexital.analysis import MOVEMENT_MAP, PATTERN_MAP, movement, patterns
 from hexital.core.candle import Candle
 from hexital.core.candle_manager import DEFAULT_CANDLES, CandleManager
 from hexital.core.candlestick_type import CandlestickType
 from hexital.core.indicator import Indicator
-from hexital.exceptions import InvalidAnalysis, InvalidIndicator, MissingIndicator, MixedTimeframes
+from hexital.exceptions import (
+    InvalidAnalysis,
+    InvalidIndicator,
+    InvalidTimeFrame,
+    MissingIndicator,
+    MixedTimeframes,
+)
 from hexital.indicators import INDICATOR_MAP
 from hexital.utils.candles import reading_by_index
 from hexital.utils.candlesticks import validate_candlesticktype
@@ -37,10 +43,14 @@ class Hexital:
     ):
         self.name = name
         self.description = description
-        self.timeframe = validate_timeframe(timeframe)
+
+        if timeframe:
+            self.timeframe = validate_timeframe(timeframe)
         self.timeframe_fill = timeframe_fill
         self.candles_lifespan = candles_lifespan
-        self.candlestick_type = validate_candlesticktype(candlestick_type)
+
+        if candlestick_type:
+            self.candlestick_type = validate_candlesticktype(candlestick_type)
 
         self._candles = {
             DEFAULT_CANDLES: CandleManager(
@@ -318,3 +328,33 @@ class Hexital:
     def lowestbar(self, name: str, length: int = 4, index: int = -1) -> int | None:
         candles = self._verify_indicators(name)
         return movement.lowestbar(candles, name, length, index)
+
+    def doji(
+        self,
+        timeframe: str | TimeFrame,
+        length: int = 10,
+        lookback: Optional[int] = None,
+        asint: bool = False,
+        index: Optional[int] = None,
+    ) -> bool | int:
+        manager = self._candles.get(validate_timeframe(timeframe))
+        if not manager:
+            raise InvalidTimeFrame(f"Timeframe {timeframe} not found")
+        return patterns.doji(
+            manager.candles, length=length, lookback=lookback, asint=asint, index=index
+        )
+
+    def hammer(
+        self,
+        timeframe: str | TimeFrame,
+        length: int = 10,
+        lookback: Optional[int] = None,
+        asint: bool = False,
+        index: Optional[int] = None,
+    ) -> bool | int:
+        manager = self._candles.get(validate_timeframe(timeframe))
+        if not manager:
+            raise InvalidTimeFrame(f"Timeframe {timeframe} not found")
+        return patterns.hammer(
+            manager.candles, length=length, lookback=lookback, asint=asint, index=index
+        )

@@ -6,6 +6,7 @@ from hexital.core.candlestick_type import CandlestickType
 
 class HeikinAshi(CandlestickType):
     name: str = "Heikin-Ashi"
+    minimal_name: str = "HA"
 
     def convert_candle(self, candle: Candle, candles: List[Candle], index: int):
         new_close = (candle.open + candle.high + candle.low + candle.close) / 4

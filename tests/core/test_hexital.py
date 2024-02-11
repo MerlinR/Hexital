@@ -342,7 +342,7 @@ class TestCandlestickType:
 
     @pytest.mark.usefixtures("candles")
     def test_hextial_candlestick_type_str(self, candles):
-        strat = Hexital("Test Stratergy", candles, [EMA()], candlestick_type="ha")
+        strat = Hexital("Test Stratergy", candles, [EMA()], candlestick_type="HA")
         assert isinstance(strat.candlestick_type, HeikinAshi)
 
     @pytest.mark.usefixtures("candles")

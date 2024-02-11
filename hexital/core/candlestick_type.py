@@ -6,6 +6,7 @@ from hexital.core.candle import Candle
 
 class CandlestickType(ABC):
     name: str = "N/A"
+    minimal_name: str = "NA"
 
     def __init__(self):
         return
