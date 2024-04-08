@@ -244,14 +244,32 @@ class Hexital:
         self.purge(name)
         self.calculate(name)
 
+    def _find_indicator(self, indicator: str) -> CandleManager | None:
+        for manager in self._candles.values():
+            if not manager.candles:
+                return manager
+            elif manager.find_indicator(indicator):
+                return manager
+
+        return None
+
     def _verify_indicators(
         self, indicator: str, indicator_two: Optional[str] = None
     ) -> List[Candle]:
-        if indicator and not indicator_two:
-            for manager in self._candles.values():
-                if manager.find_indicator(indicator):
-                    return manager.candles
-            raise MissingIndicator(f"Cannot find {indicator}")
+        manager = self._find_indicator(indicator)
+
+        if not manager and indicator in self._indicators:
+            return []
+        elif manager and not indicator_two:
+            return manager.candles
+
+        if not indicator_two or not manager:
+            raise MissingIndicator("Cannot find Indicator: %s" % indicator)
+
+        manager_two = self._find_indicator(indicator_two)
+
+        if not manager_two:
+            raise MissingIndicator("Cannot find Indicator: %s" % indicator_two)
 
         for manager in self._candles.values():
             if manager.find_indicator(indicator) and manager.find_indicator(indicator_two):
