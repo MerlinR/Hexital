@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file.
 
 The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 0.5.0 - TBD
+## 1.0.0 - 2024-02-11
+- Moving Into BETA
 - Added CandleManager
   - CandleManger replaces List[Candle] to manage Candles and controls CandlestickTypes, timeframes and lifespan
 - Added CandlestickType
@@ -19,8 +20,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added Heikin-Ashi candlestick conversion
 - Added better config inheritance from Hexital to Indicators
 - Added calculate_index to hexital
-- Added ability to call the movement methods from Hexital and Indicator for easier usage
-  - above, below, cross, crossover, etc..
+- Added ability to call the movement and pattern methods from Hexital and Indicator for easier usage
+  - above, below, cross, crossover, doji, hammer, etc..
 - Added sanitise_name to convert '.' to ',' to support name nesting
 - Added more Exceptions to improve error's
 - Added Candle ability to accept json str timestamp, therefore allowing direct conversion from Pandas -> Hexital

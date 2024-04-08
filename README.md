@@ -6,9 +6,8 @@
 [![Unit Tests - Master](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml/badge.svg?branch=master)](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml)
 [![Unit Tests - Dev](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml/badge.svg?branch=development)](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml)
 
-# `Alpha Development`❗
-Note: Extremely early stages and likely change drastically, including core functionality and methods.
-Will leave Alpha into Beta when Candlestick re-painting framework is in and happy with user interaction convenience. 
+# `Beta`
+Note: Hexital has entered Beta mode, being all Major features are implemented and not expected to have drastic changes. Future changes would include bug fixes, QOL additions and implementation of new Indicators, Candlestick patterns, movements and Candlestick types.
 
 # Hexital
 `Hexital` is a Python library implementing financial indicators for technical analysis. The distinctive feature of the library is its incremental computation of indicators which is designed to fit real-time applications or applications with iterative input in general.
