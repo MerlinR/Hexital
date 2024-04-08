@@ -1,6 +1,7 @@
 from .adx import ADX
 from .amorph import Amorph
 from .atr import ATR
+from .counter import Counter
 from .ema import EMA
 from .hla import HighLowAverage
 from .kc import KC
@@ -19,6 +20,7 @@ from .wma import WMA
 
 INDICATOR_MAP = {
     "Amorph": Amorph,
+    "Counter": Counter,
     "ADX": ADX,
     "ATR": ATR,
     "EMA": EMA,

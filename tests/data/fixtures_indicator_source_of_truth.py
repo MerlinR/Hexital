@@ -3,6 +3,7 @@ import json
 import pytest
 
 SOURCE_OF_TRUTH_PATH = "tests/data/source_of_truth/indicator"
+SOURCE_OF_TRUTH_HEX_PATH = "tests/data/source_of_truth/hex_indicators"
 
 
 @pytest.fixture(name="expected_adx")
@@ -158,4 +159,16 @@ def fixture_expected_wma():
 @pytest.fixture(name="expected_vwma")
 def fixture_expected_vwma():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/VWMA.json")
+    return json.load(csv_files)
+
+
+@pytest.fixture(name="expected_counter_bear")
+def fixture_expected_counter_bear():
+    csv_files = open(f"{SOURCE_OF_TRUTH_HEX_PATH}/COUNTER_supertrend_bear.json")
+    return json.load(csv_files)
+
+
+@pytest.fixture(name="expected_counter_bull")
+def fixture_expected_counter_bull():
+    csv_files = open(f"{SOURCE_OF_TRUTH_HEX_PATH}/COUNTER_supertrend_bull.json")
     return json.load(csv_files)

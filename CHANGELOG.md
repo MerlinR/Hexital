@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.1.0 - TBD
+- Added Counter Indicator
+
 ## 1.0.1 - 2024-04-08
 - Fixed #12 Inaccurate verify_indicators method in Hexital
 
