@@ -89,8 +89,7 @@ class Indicator(ABC):
         return
 
     @abstractmethod
-    def _generate_name(self) -> str:
-        ...
+    def _generate_name(self) -> str: ...
 
     def _sanitise_name(self, name: str) -> str:
         return name.replace(".", ",")
@@ -259,7 +258,7 @@ class Indicator(ABC):
             self.candles,
             period=period,
             name=name if name else self.name,
-            index=index if index else self._active_index,
+            index=index if index is not None else self._active_index,
         )
 
     def candles_sum(
