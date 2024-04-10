@@ -1,3 +1,4 @@
+import math
 from typing import Optional
 
 import deepdiff
@@ -41,7 +42,7 @@ class IndicatorTestBase:
                     [row[key] for row in result], [row[key] for row in expected]
                 )
 
-            correlation = correlations / len(expected[0].keys())
+            correlation = round(correlations / len(expected[0].keys()), 4)
         else:
             correlation = self.correlation_coefficient(result, expected)
 
@@ -49,49 +50,37 @@ class IndicatorTestBase:
         return correlation >= accuracy
 
     def correlation_coefficient(self, result: list, expected: list):
-        # First establish the means and standard deviations for both lists.
-        res_mean = self.calc_mean(result)
-        exp_mean = self.calc_mean(expected)
-        res_stand_deviation = self.standard_deviation(result)
-        exp_stand_deviation = self.standard_deviation(expected)
+        # https://stackoverflow.com/questions/3949226/calculating-pearson-correlation-and-significance-in-python
+        if len(result) != len(expected):
+            return 0
 
-        if res_mean is None or exp_mean is None:
-            return 1.0
+        result_mean = self.calc_mean(result)
+        expected_means = self.calc_mean(expected)
 
-        # r numerator
-        r_numerator = 0.0
-        for index, _ in enumerate(result):
-            if result[index] is not None and expected[index] is not None:
-                r_numerator += (result[index] - res_mean) * (expected[index] - exp_mean)
+        numerator = 0
+        x = 0
+        y = 0
 
-        # r denominator
-        r_denominator = res_stand_deviation * exp_stand_deviation
+        for i in range(len(expected)):
+            r_diff = result[i] if result[i] is not None else 0 - result_mean
+            e_diff = expected[i] if expected[i] is not None else 0 - expected_means
+            numerator += r_diff * e_diff
+            x += r_diff * r_diff
+            y += e_diff * e_diff
 
-        if r_denominator == 0:
-            return 1.0
+        denominator = math.sqrt(x * y)
 
-        correlation = r_numerator / r_denominator
-        return round(correlation, 4)
+        if denominator == 0:
+            return 0
+
+        return numerator / denominator
 
     def calc_mean(self, data: list):
         total = 0
-        length = 0
         for value in data:
             if value is not None:
-                length += 1
                 total += float(value)
-        if length == 0:
-            return None
-        return total / length
-
-    def standard_deviation(self, data: list):
-        data_mean = self.calc_mean(data)
-        dev = 0.0
-        for val in data:
-            if data_mean is not None and val is not None:
-                dev += (val - data_mean) ** 2
-        dev = dev ** (1 / 2.0)
-        return dev
+        return total / len(data)
 
     def show_results(self, result: list, expected: list, verbose: bool):
         for i, (res, exp) in enumerate(zip(result, expected)):
