@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-SOURCE_OF_TRUTH_PATH = "tests/data/source_of_truth/indicator"
+SOURCE_OF_TRUTH_PATH = "tests/data/source_of_truth/indicators"
 SOURCE_OF_TRUTH_HEX_PATH = "tests/data/source_of_truth/hex_indicators"
 
 

@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import pandas_ta as ta
 
-PATH_INDICATOR = "source_of_truth/indicator"
+PATH_INDICATOR = "source_of_truth/indicators"
 PATH_PATTERN = "source_of_truth/pattern"
 PATH_CANDLES = "source_of_truth/candles"
 PATH_DATA = "."
@@ -17,7 +17,7 @@ def load_json_candles() -> List[dict]:
 
 
 def save_json_result(data: list, filename: str, path: Optional[str] = None):
-    path = path if path is not None else "source_of_truth/indicator"
+    path = path if path is not None else PATH_INDICATOR
     with open(f"tests/data/{path}/{filename}.json", "w") as json_file:
         json.dump(data, json_file, indent=4, default=str)
 
