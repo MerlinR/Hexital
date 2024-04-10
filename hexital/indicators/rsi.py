@@ -28,14 +28,8 @@ class RSI(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self._add_managed_indicator(
-            "RSI_gain",
-            Managed(indicator_name="RSI_gain", candles=self.candles),
-        )
-        self._add_managed_indicator(
-            "RSI_loss",
-            Managed(indicator_name="RSI_loss", candles=self.candles),
-        )
+        self._add_managed_indicator("RSI_gain", Managed(indicator_name="RSI_gain"))
+        self._add_managed_indicator("RSI_loss", Managed(indicator_name="RSI_loss"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         if self.prev_exists():
