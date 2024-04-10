@@ -6,6 +6,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ## 1.1.0 - TBD
 - Corrected correlation_coefficient
+- Altered Indicator name reading, to avoid issue's such as "TR" in "ATR" 
 - Added Counter Indicator
 
 ## 1.0.1 - 2024-04-08
