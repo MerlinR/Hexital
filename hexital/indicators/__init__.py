@@ -4,6 +4,7 @@ from .atr import ATR
 from .counter import Counter
 from .ema import EMA
 from .hla import HighLowAverage
+from .hma import HMA
 from .kc import KC
 from .macd import MACD
 from .obv import OBV
@@ -25,6 +26,7 @@ INDICATOR_MAP = {
     "ATR": ATR,
     "EMA": EMA,
     "HLA": HighLowAverage,
+    "HMA": HMA,
     "KC": KC,
     "MACD": MACD,
     "OBV": OBV,

@@ -192,3 +192,9 @@ class TestIndicators(IndicatorTestBase):
         test = indicators.WMA(candles=candles)
         test.calculate()
         assert self.verify(test.as_list(), expected_wma)
+
+    @pytest.mark.usefixtures("candles", "expected_hma")
+    def test_hma(self, candles, expected_hma):
+        test = indicators.HMA(candles=candles)
+        test.calculate()
+        assert self.verify(test.as_list(), expected_hma)
