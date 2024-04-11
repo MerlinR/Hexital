@@ -28,8 +28,7 @@ class RSI(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self._add_managed_indicator("RSI_gain", Managed(indicator_name="RSI_gain"))
-        self._add_managed_indicator("RSI_loss", Managed(indicator_name="RSI_loss"))
+        self._add_managed_indicator("RSI_data", Managed(indicator_name="RSI_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         if self.prev_exists():
@@ -38,29 +37,35 @@ class RSI(Indicator):
             change_gain = -1 * change if change < 0 else 0.0
             change_loss = change if change > 0 else 0.0
 
-            self._managed_indicators["RSI_gain"].set_reading(
-                ((self.prev_reading("RSI_gain") * (self.period - 1)) + change_gain) / self.period,
+            self._managed_indicators["RSI_data"].set_reading(
+                {
+                    "gain": (
+                        (self.prev_reading("RSI_data.gain") * (self.period - 1)) + change_gain
+                    )
+                    / self.period,
+                    "loss": (
+                        (self.prev_reading("RSI_data.loss") * (self.period - 1)) + change_loss
+                    )
+                    / self.period,
+                }
             )
-            self._managed_indicators["RSI_loss"].set_reading(
-                ((self.prev_reading("RSI_loss") * (self.period - 1)) + change_loss) / self.period,
-            )
+
         elif self.reading_period(self.period + 1, self.input_value):
             changes = [
                 self.reading(self.input_value, i) - self.reading(self.input_value, i - 1)
                 for i in range(index - (self.period - 1), index + 1)
             ]
-            self._managed_indicators["RSI_gain"].set_reading(
-                sum(chng for chng in changes if chng > 0) / self.period,
-            )
-            self._managed_indicators["RSI_loss"].set_reading(
-                sum(abs(chng) for chng in changes if chng < 0) / self.period,
+            self._managed_indicators["RSI_data"].set_reading(
+                {
+                    "gain": sum(chng for chng in changes if chng > 0) / self.period,
+                    "loss": sum(abs(chng) for chng in changes if chng < 0) / self.period,
+                }
             )
 
-        if self.reading("RSI_gain"):
-            rs = self.reading("RSI_gain") / self.reading("RSI_loss")
+        if self.reading("RSI_data"):
+            rs = self.reading("RSI_data.gain") / self.reading("RSI_data.loss")
             rsi = 100.0 - (100.0 / (1.0 + rs))
             return rsi
 
-        self._managed_indicators["RSI_gain"].set_reading(None)
-        self._managed_indicators["RSI_loss"].set_reading(None)
+        self._managed_indicators["RSI_data"].set_reading(None)
         return None
