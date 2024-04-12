@@ -48,6 +48,12 @@ def fixture_expected_highlowaverage():
     return json.load(csv_files)
 
 
+@pytest.fixture(name="expected_hma")
+def fixture_expected_hma():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/HMA.json")
+    return json.load(csv_files)
+
+
 @pytest.fixture(name="expected_kc")
 def fixture_expected_kc():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/KC.json")
@@ -126,6 +132,12 @@ def fixture_expected_sma_t10():
     return json.load(csv_files)
 
 
+@pytest.fixture(name="expected_stdev")
+def fixture_expected_stdev():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/STDEV.json")
+    return json.load(csv_files)
+
+
 @pytest.fixture(name="expected_stoch")
 def fixture_expected_stoch():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/STOCH.json")
@@ -159,12 +171,6 @@ def fixture_expected_wma():
 @pytest.fixture(name="expected_vwma")
 def fixture_expected_vwma():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/VWMA.json")
-    return json.load(csv_files)
-
-
-@pytest.fixture(name="expected_hma")
-def fixture_expected_hma():
-    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/HMA.json")
     return json.load(csv_files)
 
 

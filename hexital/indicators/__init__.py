@@ -12,6 +12,7 @@ from .rma import RMA
 from .roc import ROC
 from .rsi import RSI
 from .sma import SMA
+from .stdev import STDEV
 from .stoch import STOCH
 from .supertrend import Supertrend
 from .tr import TR
@@ -34,6 +35,7 @@ INDICATOR_MAP = {
     "ROC": ROC,
     "RSI": RSI,
     "SMA": SMA,
+    "STDEV": STDEV,
     "STOCH": STOCH,
     "Supertrend": Supertrend,
     "TR": TR,

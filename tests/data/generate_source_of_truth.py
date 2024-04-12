@@ -89,6 +89,7 @@ def generate_indicators():
             {"kind": "roc"},
             {"kind": "adx"},
             {"kind": "hma"},
+            {"kind": "stdev"},
         ],
     )
 
@@ -113,6 +114,7 @@ def generate_indicators():
     save_json_result([round_values(value) for value in df["ROC_10"].tolist()], "ROC")
     save_json_result([round_values(value) for value in df["ATRr_20"].tolist()], "ATR_20")
     save_json_result([round_values(value) for value in df["HMA_10"].tolist()], "HMA")
+    save_json_result([round_values(value) for value in df["STDEV_30"].tolist()], "STDEV")
 
     kc_data = []
     for kc in zip(

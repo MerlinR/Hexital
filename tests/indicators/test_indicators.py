@@ -47,6 +47,12 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.as_list(), expected_highlowaverage)
 
+    @pytest.mark.usefixtures("candles", "expected_hma")
+    def test_hma(self, candles, expected_hma):
+        test = indicators.HMA(candles=candles)
+        test.calculate()
+        assert self.verify(test.as_list(), expected_hma)
+
     @pytest.mark.usefixtures("candles", "expected_kc")
     def test_kc(self, candles, expected_kc):
         test = indicators.KC(candles=candles)
@@ -141,6 +147,12 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.as_list(), expected_sma_t10)
 
+    @pytest.mark.usefixtures("candles", "expected_stdev")
+    def test_stdev(self, candles, expected_stdev):
+        test = indicators.STDEV(candles=candles)
+        test.calculate()
+        assert self.verify(test.as_list(), expected_stdev)
+
     @pytest.mark.usefixtures("candles", "expected_stoch")
     def test_stoch(self, candles, expected_stoch):
         test = indicators.STOCH(candles=candles)
@@ -192,9 +204,3 @@ class TestIndicators(IndicatorTestBase):
         test = indicators.WMA(candles=candles)
         test.calculate()
         assert self.verify(test.as_list(), expected_wma)
-
-    @pytest.mark.usefixtures("candles", "expected_hma")
-    def test_hma(self, candles, expected_hma):
-        test = indicators.HMA(candles=candles)
-        test.calculate()
-        assert self.verify(test.as_list(), expected_hma)
