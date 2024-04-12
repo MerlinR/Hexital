@@ -156,6 +156,12 @@ def fixture_expected_tr():
     return json.load(csv_files)
 
 
+@pytest.fixture(name="expected_tsi")
+def fixture_expected_tsi():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/TSI.json")
+    return json.load(csv_files)
+
+
 @pytest.fixture(name="expected_vwap")
 def fixture_expected_vwap():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/VWAP.json")

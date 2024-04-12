@@ -16,6 +16,7 @@ from .stdev import STDEV
 from .stoch import STOCH
 from .supertrend import Supertrend
 from .tr import TR
+from .tsi import TSI
 from .vwap import VWAP
 from .vwma import VWMA
 from .wma import WMA
@@ -39,6 +40,7 @@ INDICATOR_MAP = {
     "STOCH": STOCH,
     "Supertrend": Supertrend,
     "TR": TR,
+    "TSI": TSI,
     "VWAP": VWAP,
     "VWMA": VWMA,
     "WMA": WMA,

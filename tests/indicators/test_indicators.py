@@ -179,6 +179,12 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.as_list(), expected_tr)
 
+    @pytest.mark.usefixtures("candles", "expected_tsi")
+    def test_tsi(self, candles, expected_tsi):
+        test = indicators.TSI(candles=candles)
+        test.calculate()
+        assert self.verify(test.as_list(), expected_tsi)
+
     @pytest.mark.usefixtures("candles", "expected_vwap")
     def test_vwap(self, candles, expected_vwap):
         test = indicators.VWAP(candles=candles)
