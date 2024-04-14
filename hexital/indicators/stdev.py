@@ -19,11 +19,10 @@ class STDEV(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self._add_managed_indicator("STDEV_data", Managed(fullname_override=f"{self.name}_data"))
+        self.add_managed_indicator("STDEV_data", Managed(fullname_override=f"{self.name}_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         old_mean = 0
-        new_mean = 0
         variance = 0
         removed_val = 0
         in_calc_range = False
@@ -46,9 +45,7 @@ class STDEV(Indicator):
             / (self.period)
         )
 
-        self._managed_indicators["STDEV_data"].set_reading(
-            {"mean": new_mean, "variance": variance}
-        )
+        self.managed_indicators["STDEV_data"].set_reading({"mean": new_mean, "variance": variance})
 
         if in_calc_range:
             return sqrt(variance)

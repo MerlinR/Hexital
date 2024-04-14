@@ -43,7 +43,7 @@ class STOCH(Indicator):
         return
 
     def _initialise(self):
-        self._add_managed_indicator(
+        self.add_managed_indicator(
             "k",
             SMA(
                 input_value=f"{self.name}.stoch",
@@ -51,7 +51,7 @@ class STOCH(Indicator):
                 fullname_override=f"{self._name}_k",
             ),
         )
-        self._add_managed_indicator(
+        self.add_managed_indicator(
             "d",
             SMA(
                 input_value=f"{self.name}.k",
@@ -61,6 +61,10 @@ class STOCH(Indicator):
         )
 
     def _calculate_reading(self, index: int) -> float | dict | None:
+        stoch = None
+        k = None
+        d = None
+
         if self.reading_period(self.period, self.input_value):
             lowest = min(
                 self.reading("low", i) for i in range(index - (self.period - 1), index + 1)
@@ -72,13 +76,11 @@ class STOCH(Indicator):
             stoch = ((self.reading(self.input_value) - lowest) / (highest - lowest)) * 100
 
             self.candles[index].indicators[self.name] = {"stoch": stoch}
-            self._managed_indicators["k"].calculate_index(index)
+            self.managed_indicators["k"].calculate_index(index)
             k = self.reading(f"{self._name}_k")
 
             self.candles[index].indicators[self.name] = {"stoch": stoch, "k": k}
-            self._managed_indicators["d"].calculate_index(index)
+            self.managed_indicators["d"].calculate_index(index)
             d = self.reading(f"{self._name}_d")
 
-            return {"stoch": stoch, "k": k, "d": d}
-
-        return {"stoch": None, "k": None, "d": None}
+        return {"stoch": stoch, "k": k, "d": d}

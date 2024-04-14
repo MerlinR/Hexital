@@ -32,12 +32,14 @@ class Indicator(ABC):
     candles_lifespan: Optional[timedelta] = None
     candlestick_type: Optional[CandlestickType | str] = None
 
+    sub_indicators: Dict[str, Indicator] = field(init=False, default_factory=dict)
+    managed_indicators: Dict[str, Managed | Indicator] = field(init=False, default_factory=dict)
+    _sub_indicator: bool = field(init=False, default=False)
+    _sub_calc_prior: bool = field(init=False, default=True)
+
     _name: str = field(init=False, default="")
     _output_name: str = field(init=False, default="")
     _candles: CandleManager = field(init=False, default_factory=CandleManager)
-    _sub_indicators: List[Indicator] = field(init=False, default_factory=list)
-    _managed_indicators: Dict[str, Managed | Indicator] = field(init=False, default_factory=dict)
-    _sub_indicator: bool = field(init=False, default=False)
     _active_index: int = field(init=False, default=0)
     _initialised: bool = field(init=False, default=False)
 
@@ -128,7 +130,7 @@ class Indicator(ABC):
         output = {"indicator": self._name if self._name else type(self).__name__}
 
         for name, value in self.__dict__.items():
-            if name == "candles":
+            if name in ["candles", "managed_indicators", "sub_indicators"]:
                 continue
             if name == "timeframe_fill" and self.timeframe is None:
                 continue
@@ -160,6 +162,19 @@ class Indicator(ABC):
     def _calculate_reading(self, index: int) -> float | dict | None:
         pass
 
+    def _calculate_sub_indicators(
+        self,
+        prior_calc: bool = True,
+        start_index: Optional[int] = None,
+        end_index: Optional[int] = None,
+    ):
+        for indicator in self.sub_indicators.values():
+            if indicator.prior_calc == prior_calc:
+                if start_index and end_index:
+                    indicator.calculate_index(start_index, end_index)
+                else:
+                    indicator.calculate()
+
     def calculate(self):
         """Calculate the TA values, will calculate for all the Candles,
         where this indicator is missing"""
@@ -167,8 +182,7 @@ class Indicator(ABC):
             self._initialise()
             self._initialised = True
 
-        for indicator in self._sub_indicators:
-            indicator.calculate()
+        self._calculate_sub_indicators(prior_calc=True)
 
         for index in range(self._find_calc_index(), len(self.candles)):
             self._set_active_index(index)
@@ -179,14 +193,20 @@ class Indicator(ABC):
             reading = round_values(self._calculate_reading(index=index), round_by=self.round_value)
             self._set_reading(reading, index)
 
+        self._calculate_sub_indicators(prior_calc=False)
+
     def calculate_index(self, start_index: int, end_index: Optional[int] = None):
         """Calculate the TA values, will calculate a index range the Candles, will re-calculate"""
         end_index = end_index if end_index else start_index + 1
+
+        self._calculate_sub_indicators(True, start_index, end_index)
 
         for index in range(start_index, end_index):
             self._set_active_index(index)
             reading = round_values(self._calculate_reading(index=index), round_by=self.round_value)
             self._set_reading(reading, index)
+
+        self._calculate_sub_indicators(False, start_index, end_index)
 
     def _find_calc_index(self) -> int:
         """Optimisation method, to find where to start calculating the indicator from
@@ -205,22 +225,28 @@ class Indicator(ABC):
 
     def _set_active_index(self, index: int):
         self._active_index = index
-
-        for indicator in self._managed_indicators.values():
+        for indicator in self.managed_indicators.values():
             if isinstance(indicator, Managed):
                 indicator.set_active_index(index)
 
-    def _add_sub_indicator(self, indicator: Indicator):
+    @property
+    def prior_calc(self) -> bool:
+        if self._sub_indicator and self._sub_calc_prior:
+            return True
+        return False
+
+    def add_sub_indicator(self, indicator: Indicator, prior_calc: bool = True):
         """Adds sub indicator, this will auto calculate with indicator"""
         indicator._sub_indicator = True
+        indicator._sub_calc_prior = prior_calc
         indicator.candle_manager = self._candles
-        self._sub_indicators.append(indicator)
+        self.sub_indicators[indicator.name] = indicator
 
-    def _add_managed_indicator(self, name: str, indicator: Managed | Indicator):
+    def add_managed_indicator(self, name: str, indicator: Managed | Indicator):
         """Adds managed sub indicator, this will not auto calculate with indicator"""
         indicator._sub_indicator = True
         indicator.candle_manager = self._candles
-        self._managed_indicators[name] = indicator
+        self.managed_indicators[name] = indicator
 
     def prev_exists(self) -> bool:
         return self.prev_reading(self.name) is not None
@@ -275,8 +301,8 @@ class Indicator(ABC):
         """Remove this indicator value from all Candles"""
         self._candles.purge(
             {self.name}
-            | {indicator.name for indicator in self._sub_indicators}
-            | {indicator.name for indicator in self._managed_indicators.values()}
+            | {indicator.name for indicator in self.sub_indicators.values()}
+            | {indicator.name for indicator in self.managed_indicators.values()}
         )
 
     def recalculate(self):

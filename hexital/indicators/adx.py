@@ -35,17 +35,17 @@ class ADX(Indicator):
             self.period_signal = self.period
 
     def _initialise(self):
-        self._add_sub_indicator(
+        self.add_sub_indicator(
             ATR(
                 period=self.period,
                 fullname_override=f"{self._name}_atr",
             )
         )
-        self._add_managed_indicator(
+        self.add_managed_indicator(
             "ADX_data",
             Managed(fullname_override="ADX_data"),
         )
-        self._add_managed_indicator(
+        self.add_managed_indicator(
             "positive",
             RMA(
                 fullname_override=f"{self._name}_pos",
@@ -53,7 +53,7 @@ class ADX(Indicator):
                 input_value="ADX_data.pos",
             ),
         )
-        self._add_managed_indicator(
+        self.add_managed_indicator(
             "negative",
             RMA(
                 fullname_override=f"{self._name}_neg",
@@ -61,7 +61,7 @@ class ADX(Indicator):
                 input_value="ADX_data.neg",
             ),
         )
-        self._add_managed_indicator(
+        self.add_managed_indicator(
             "dx",
             RMA(
                 fullname_override=f"{self._name}_dx",
@@ -81,9 +81,9 @@ class ADX(Indicator):
 
             positive = up if up > down and up > 0 else 0
             negative = down if down > up and down > 0 else 0
-            self._managed_indicators["ADX_data"].set_reading({"pos": positive, "neg": negative})
-            self._managed_indicators["positive"].calculate_index(index)
-            self._managed_indicators["negative"].calculate_index(index)
+            self.managed_indicators["ADX_data"].set_reading({"pos": positive, "neg": negative})
+            self.managed_indicators["positive"].calculate_index(index)
+            self.managed_indicators["negative"].calculate_index(index)
 
             if self.reading(f"{self._name}_atr") and self.reading(f"{self._name}_pos"):
                 mod = 100 / self.reading(f"{self._name}_atr")
@@ -93,10 +93,10 @@ class ADX(Indicator):
 
                 dx = 100 * abs(adx_positive - adx_negative) / (adx_positive + adx_negative)
 
-                self._managed_indicators["ADX_data"].set_reading(
+                self.managed_indicators["ADX_data"].set_reading(
                     {"pos": positive, "neg": negative, "dx": dx}
                 )
-                self._managed_indicators["dx"].calculate_index(index)
+                self.managed_indicators["dx"].calculate_index(index)
 
                 if self.reading(f"{self._name}_dx"):
                     adx_final = self.reading(f"{self._name}_dx")

@@ -22,14 +22,14 @@ class KC(Indicator):
         return f"{self._name}_{self.period}_{self.multiplier}"
 
     def _initialise(self):
-        self._add_sub_indicator(
+        self.add_sub_indicator(
             ATR(
                 period=self.period,
                 fullname_override=f"{self._name}_ATR",
             )
         )
 
-        self._add_sub_indicator(
+        self.add_sub_indicator(
             EMA(
                 input_value=self.input_value,
                 period=self.period,

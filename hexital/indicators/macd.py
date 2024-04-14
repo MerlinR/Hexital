@@ -43,14 +43,14 @@ class MACD(Indicator):
             self.fast_period, self.slow_period = self.slow_period, self.fast_period
 
     def _initialise(self):
-        self._add_sub_indicator(
+        self.add_sub_indicator(
             EMA(
                 input_value=self.input_value,
                 period=self.fast_period,
                 fullname_override=f"{self._name}_EMA_fast",
             )
         )
-        self._add_sub_indicator(
+        self.add_sub_indicator(
             EMA(
                 input_value=self.input_value,
                 period=self.slow_period,
@@ -58,7 +58,7 @@ class MACD(Indicator):
             )
         )
 
-        self._add_managed_indicator(
+        self.add_managed_indicator(
             "signal",
             EMA(
                 input_value=f"{self.name}.MACD",
@@ -68,19 +68,20 @@ class MACD(Indicator):
         )
 
     def _calculate_reading(self, index: int) -> float | dict | None:
+        macd = None
+        signal = None
+        histogram = None
+
         if self.reading(f"{self._name}_EMA_slow"):
             macd = self.reading(f"{self._name}_EMA_fast") - self.reading(f"{self._name}_EMA_slow")
 
             # Temp manually inserting MACD to be used by signal EMA calc
             self.candles[index].indicators[self.name] = {"MACD": macd}
-            self._managed_indicators["signal"].calculate_index(index)
+            self.managed_indicators["signal"].calculate_index(index)
 
-            signal = self._managed_indicators["signal"].reading()
+            signal = self.managed_indicators["signal"].reading()
 
-            histogram = None
             if macd is not None and signal is not None:
                 histogram = macd - signal
 
-            return {"MACD": macd, "signal": signal, "histogram": histogram}
-
-        return {"MACD": None, "signal": None, "histogram": None}
+        return {"MACD": macd, "signal": signal, "histogram": histogram}
