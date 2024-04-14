@@ -27,15 +27,18 @@ class TSI(Indicator):
             self.smooth_period = int(self.period / 2) + (self.period % 2 > 0)
 
     def _initialise(self):
-        self.add_managed_indicator(
-            "TSI_first",
+        self.add_managed_indicator("TSI_data", Managed(fullname_override="TSI_data"))
+
+        self.managed_indicators["TSI_data"].add_sub_indicator(
             EMA(
                 input_value="TSI_data.price",
                 period=self.period,
                 fullname_override="TSI_first",
             ),
+            False,
         )
-        self.managed_indicators["TSI_first"].add_sub_indicator(
+
+        self.managed_indicators["TSI_data"].sub_indicators["TSI_first"].add_sub_indicator(
             EMA(
                 input_value="TSI_first",
                 period=self.smooth_period,
@@ -44,15 +47,15 @@ class TSI(Indicator):
             False,
         )
 
-        self.add_managed_indicator(
-            "TSI_abs_first",
+        self.managed_indicators["TSI_data"].add_sub_indicator(
             EMA(
                 input_value="TSI_data.abs_price",
                 period=self.period,
                 fullname_override="TSI_abs_first",
             ),
+            False,
         )
-        self.managed_indicators["TSI_abs_first"].add_sub_indicator(
+        self.managed_indicators["TSI_data"].sub_indicators["TSI_abs_first"].add_sub_indicator(
             EMA(
                 input_value="TSI_abs_first",
                 period=self.smooth_period,
@@ -60,8 +63,6 @@ class TSI(Indicator):
             ),
             False,
         )
-
-        self.add_managed_indicator("TSI_data", Managed(fullname_override="TSI_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         if not self.reading_period(2, self.input_value):
@@ -75,9 +76,6 @@ class TSI(Indicator):
                 ),
             }
         )
-
-        self.managed_indicators["TSI_first"].calculate_index(index)
-        self.managed_indicators["TSI_abs_first"].calculate_index(index)
 
         if self.reading("TSI_abs_second"):
             return 100 * (self.reading("TSI_second") / self.reading("TSI_abs_second"))

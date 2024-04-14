@@ -381,7 +381,10 @@ class Managed(Indicator):
             index = self._active_index
         else:
             self.set_active_index(index)
+
+        self._calculate_sub_indicators(True, index, index + 1)
         self._set_reading(reading, self._active_index)
+        self._calculate_sub_indicators(False, index, index + 1)
 
     def set_active_index(self, index: int):
         self._active_index = index

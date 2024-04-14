@@ -24,7 +24,7 @@ class TR(Indicator):
         high = self.reading("high")
         low = self.reading("low")
 
-        if index > 0:
+        if self.reading_period(2, "close"):
             close = self.prev_reading("close")
             return max(
                 high - low,

@@ -23,25 +23,24 @@ class HMA(Indicator):
 
     def _initialise(self):
         self.add_sub_indicator(WMA(period=self.period, fullname_override=f"{self._name}_WMA"))
-
         self.add_sub_indicator(
             WMA(period=int(self.period / 2), fullname_override=f"{self._name}_WMAh")
         )
+
         self.add_managed_indicator("raw_HMA", Managed(fullname_override="raw_HMA"))
-        self.add_managed_indicator(
-            "smoothed_HMA",
+        self.managed_indicators["raw_HMA"].add_sub_indicator(
             WMA(
                 input_value="raw_HMA",
                 period=int(math.sqrt(self.period)),
                 fullname_override="smoothed_HMA",
             ),
+            False,
         )
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         if self.reading(f"{self._name}_WMA"):
             raw_hma = (2 * self.reading(f"{self._name}_WMAh")) - self.reading(f"{self._name}_WMA")
             self.managed_indicators["raw_HMA"].set_reading(raw_hma)
-            self.managed_indicators["smoothed_HMA"].calculate_index(index)
             return self.reading("smoothed_HMA")
 
         return None

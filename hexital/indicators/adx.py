@@ -41,25 +41,24 @@ class ADX(Indicator):
                 fullname_override=f"{self._name}_atr",
             )
         )
-        self.add_managed_indicator(
-            "ADX_data",
-            Managed(fullname_override="ADX_data"),
-        )
-        self.add_managed_indicator(
-            "positive",
+        data_indicator = Managed(fullname_override="ADX_data")
+        self.add_managed_indicator("ADX_data", data_indicator)
+
+        data_indicator.add_sub_indicator(
             RMA(
                 fullname_override=f"{self._name}_pos",
                 period=self.period,
                 input_value="ADX_data.pos",
             ),
+            False,
         )
-        self.add_managed_indicator(
-            "negative",
+        data_indicator.add_sub_indicator(
             RMA(
                 fullname_override=f"{self._name}_neg",
                 period=self.period,
                 input_value="ADX_data.neg",
             ),
+            False,
         )
         self.add_managed_indicator(
             "dx",
@@ -82,8 +81,6 @@ class ADX(Indicator):
             positive = up if up > down and up > 0 else 0
             negative = down if down > up and down > 0 else 0
             self.managed_indicators["ADX_data"].set_reading({"pos": positive, "neg": negative})
-            self.managed_indicators["positive"].calculate_index(index)
-            self.managed_indicators["negative"].calculate_index(index)
 
             if self.reading(f"{self._name}_atr") and self.reading(f"{self._name}_pos"):
                 mod = 100 / self.reading(f"{self._name}_atr")
