@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator
+from hexital.core.indicator import Indicator, Managed
 from hexital.indicators.sma import SMA
 
 
@@ -43,18 +43,19 @@ class STOCH(Indicator):
         return
 
     def _initialise(self):
-        self.add_managed_indicator(
-            "STOCH_k",
+        self.add_managed_indicator("STOCH_data", Managed(fullname_override="STOCH_data"))
+        self.managed_indicators["STOCH_data"].add_sub_indicator(
             SMA(
-                input_value=f"{self.name}.stoch",
+                input_value="STOCH_data.stoch",
                 period=self.smoothing_k,
                 fullname_override="STOCH_k",
             ),
+            False,
         )
         self.add_managed_indicator(
             "STOCH_d",
             SMA(
-                input_value=f"{self.name}.k",
+                input_value="STOCH_data.k",
                 period=self.slow_period,
                 fullname_override="STOCH_d",
             ),
@@ -75,11 +76,10 @@ class STOCH(Indicator):
 
             stoch = ((self.reading(self.input_value) - lowest) / (highest - lowest)) * 100
 
-            self.candles[index].indicators[self.name] = {"stoch": stoch}
-            self.managed_indicators["STOCH_k"].calculate_index(index)
+            self.managed_indicators["STOCH_data"].set_reading({"stoch": stoch})
             k = self.reading("STOCH_k")
 
-            self.candles[index].indicators[self.name] = {"stoch": stoch, "k": k}
+            self.managed_indicators["STOCH_data"].set_reading({"stoch": stoch, "k": k})
             self.managed_indicators["STOCH_d"].calculate_index(index)
             d = self.reading("STOCH_d")
 
