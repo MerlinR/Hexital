@@ -47,14 +47,14 @@ class MACD(Indicator):
             EMA(
                 input_value=self.input_value,
                 period=self.fast_period,
-                fullname_override=f"{self._name}_EMA_fast",
+                fullname_override=f"{self.name}_EMA_fast",
             )
         )
         self.add_sub_indicator(
             EMA(
                 input_value=self.input_value,
                 period=self.slow_period,
-                fullname_override=f"{self._name}_EMA_slow",
+                fullname_override=f"{self.name}_EMA_slow",
             )
         )
 
@@ -63,7 +63,7 @@ class MACD(Indicator):
             EMA(
                 input_value=f"{self.name}.MACD",
                 period=self.signal_period,
-                fullname_override=f"{self._name}_signal_line",
+                fullname_override=f"{self.name}_signal_line",
             ),
         )
 
@@ -72,8 +72,8 @@ class MACD(Indicator):
         signal = None
         histogram = None
 
-        if self.reading(f"{self._name}_EMA_slow"):
-            macd = self.reading(f"{self._name}_EMA_fast") - self.reading(f"{self._name}_EMA_slow")
+        if self.reading(f"{self.name}_EMA_slow"):
+            macd = self.reading(f"{self.name}_EMA_fast") - self.reading(f"{self.name}_EMA_slow")
 
             # Temp manually inserting MACD to be used by signal EMA calc
             self.candles[index].indicators[self.name] = {"MACD": macd}

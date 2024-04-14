@@ -28,7 +28,7 @@ class RSI(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_managed_indicator("RSI_data", Managed(indicator_name="RSI_data"))
+        self.add_managed_indicator("RSI_data", Managed(fullname_override=f"{self.name}_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         if self.prev_exists():
@@ -40,11 +40,13 @@ class RSI(Indicator):
             self.managed_indicators["RSI_data"].set_reading(
                 {
                     "gain": (
-                        (self.prev_reading("RSI_data.gain") * (self.period - 1)) + change_gain
+                        (self.prev_reading(f"{self.name}_data.gain") * (self.period - 1))
+                        + change_gain
                     )
                     / self.period,
                     "loss": (
-                        (self.prev_reading("RSI_data.loss") * (self.period - 1)) + change_loss
+                        (self.prev_reading(f"{self.name}_data.loss") * (self.period - 1))
+                        + change_loss
                     )
                     / self.period,
                 }
@@ -62,8 +64,8 @@ class RSI(Indicator):
                 }
             )
 
-        if self.reading("RSI_data"):
-            rs = self.reading("RSI_data.gain") / self.reading("RSI_data.loss")
+        if self.reading(f"{self.name}_data"):
+            rs = self.reading(f"{self.name}_data.gain") / self.reading(f"{self.name}_data.loss")
             rsi = 100.0 - (100.0 / (1.0 + rs))
             return rsi
 

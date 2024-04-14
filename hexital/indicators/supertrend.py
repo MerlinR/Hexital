@@ -20,15 +20,15 @@ class Supertrend(Indicator):
         self.add_sub_indicator(
             indicators.ATR(
                 period=self.period,
-                fullname_override=f"{self._name}_atr",
+                fullname_override=f"{self.name}_atr",
             )
         )
         self.add_sub_indicator(
             indicators.HighLowAverage(
-                fullname_override=f"{self._name}_HL",
+                fullname_override=f"{self.name}_HL",
             )
         )
-        self.add_managed_indicator("ST_data", Managed(fullname_override="ST_data"))
+        self.add_managed_indicator("ST_data", Managed(fullname_override=f"{self.name}_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         direction = 1
@@ -36,23 +36,23 @@ class Supertrend(Indicator):
         long = None
         short = None
 
-        if self.reading(f"{self._name}_atr"):
-            mid_atr = self.multiplier * self.reading(f"{self._name}_atr")
+        if self.reading(f"{self.name}_atr"):
+            mid_atr = self.multiplier * self.reading(f"{self.name}_atr")
 
-            upper = self.reading(f"{self._name}_HL") + mid_atr
-            lower = self.reading(f"{self._name}_HL") - mid_atr
+            upper = self.reading(f"{self.name}_HL") + mid_atr
+            lower = self.reading(f"{self.name}_HL") - mid_atr
 
-            if self.prev_reading("ST_data.lower"):
-                if self.reading("close") > self.prev_reading("ST_data.upper"):
+            if self.prev_reading(f"{self.name}_data.lower"):
+                if self.reading("close") > self.prev_reading(f"{self.name}_data.upper"):
                     direction = 1
-                elif self.reading("close") < self.prev_reading("ST_data.lower"):
+                elif self.reading("close") < self.prev_reading(f"{self.name}_data.lower"):
                     direction = -1
                 else:
                     direction = self.prev_reading(f"{self.name}.direction")
-                    if direction == 1 and lower < self.prev_reading("ST_data.lower"):
-                        lower = self.prev_reading("ST_data.lower")
-                    if direction == -1 and upper > self.prev_reading("ST_data.upper"):
-                        upper = self.prev_reading("ST_data.upper")
+                    if direction == 1 and lower < self.prev_reading(f"{self.name}_data.lower"):
+                        lower = self.prev_reading(f"{self.name}_data.lower")
+                    if direction == -1 and upper > self.prev_reading(f"{self.name}_data.upper"):
+                        upper = self.prev_reading(f"{self.name}_data.upper")
 
             self.managed_indicators["ST_data"].set_reading({"upper": upper, "lower": lower})
 

@@ -27,39 +27,41 @@ class TSI(Indicator):
             self.smooth_period = int(self.period / 2) + (self.period % 2 > 0)
 
     def _initialise(self):
-        self.add_managed_indicator("TSI_data", Managed(fullname_override="TSI_data"))
+        self.add_managed_indicator("TSI_data", Managed(fullname_override=f"{self.name}_data"))
 
         self.managed_indicators["TSI_data"].add_sub_indicator(
             EMA(
-                input_value="TSI_data.price",
+                input_value=f"{self.name}_data.price",
                 period=self.period,
-                fullname_override="TSI_first",
+                fullname_override=f"{self.name}_first",
             ),
             False,
         )
 
-        self.managed_indicators["TSI_data"].sub_indicators["TSI_first"].add_sub_indicator(
+        self.managed_indicators["TSI_data"].sub_indicators[f"{self.name}_first"].add_sub_indicator(
             EMA(
-                input_value="TSI_first",
+                input_value=f"{self.name}_first",
                 period=self.smooth_period,
-                fullname_override="TSI_second",
+                fullname_override=f"{self.name}_second",
             ),
             False,
         )
 
         self.managed_indicators["TSI_data"].add_sub_indicator(
             EMA(
-                input_value="TSI_data.abs_price",
+                input_value=f"{self.name}_data.abs_price",
                 period=self.period,
-                fullname_override="TSI_abs_first",
+                fullname_override=f"{self.name}_abs_first",
             ),
             False,
         )
-        self.managed_indicators["TSI_data"].sub_indicators["TSI_abs_first"].add_sub_indicator(
+        self.managed_indicators["TSI_data"].sub_indicators[
+            f"{self.name}_abs_first"
+        ].add_sub_indicator(
             EMA(
-                input_value="TSI_abs_first",
+                input_value=f"{self.name}_abs_first",
                 period=self.smooth_period,
-                fullname_override="TSI_abs_second",
+                fullname_override=f"{self.name}_abs_second",
             ),
             False,
         )
@@ -77,7 +79,9 @@ class TSI(Indicator):
             }
         )
 
-        if self.reading("TSI_abs_second"):
-            return 100 * (self.reading("TSI_second") / self.reading("TSI_abs_second"))
+        if self.reading(f"{self.name}_abs_second"):
+            return 100 * (
+                self.reading(f"{self.name}_second") / self.reading(f"{self.name}_abs_second")
+            )
 
         return None

@@ -43,21 +43,21 @@ class STOCH(Indicator):
         return
 
     def _initialise(self):
-        self.add_managed_indicator("STOCH_data", Managed(fullname_override="STOCH_data"))
+        self.add_managed_indicator("STOCH_data", Managed(fullname_override=f"{self.name}_data"))
         self.managed_indicators["STOCH_data"].add_sub_indicator(
             SMA(
-                input_value="STOCH_data.stoch",
+                input_value=f"{self.name}_data.stoch",
                 period=self.smoothing_k,
-                fullname_override="STOCH_k",
+                fullname_override=f"{self.name}_k",
             ),
             False,
         )
         self.add_managed_indicator(
             "STOCH_d",
             SMA(
-                input_value="STOCH_data.k",
+                input_value=f"{self.name}_data.k",
                 period=self.slow_period,
-                fullname_override="STOCH_d",
+                fullname_override=f"{self.name}_d",
             ),
         )
 
@@ -77,10 +77,10 @@ class STOCH(Indicator):
             stoch = ((self.reading(self.input_value) - lowest) / (highest - lowest)) * 100
 
             self.managed_indicators["STOCH_data"].set_reading({"stoch": stoch})
-            k = self.reading("STOCH_k")
+            k = self.reading(f"{self.name}_k")
 
             self.managed_indicators["STOCH_data"].set_reading({"stoch": stoch, "k": k})
             self.managed_indicators["STOCH_d"].calculate_index(index)
-            d = self.reading("STOCH_d")
+            d = self.reading(f"{self.name}_d")
 
         return {"stoch": stoch, "k": k, "d": d}

@@ -25,7 +25,7 @@ class KC(Indicator):
         self.add_sub_indicator(
             ATR(
                 period=self.period,
-                fullname_override=f"{self._name}_ATR",
+                fullname_override=f"{self.name}_ATR",
             )
         )
 
@@ -33,29 +33,29 @@ class KC(Indicator):
             EMA(
                 input_value=self.input_value,
                 period=self.period,
-                fullname_override=f"{self._name}_EMA",
+                fullname_override=f"{self.name}_EMA",
             )
         )
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         if not all(
             [
-                self.reading(f"{self._name}_EMA"),
-                self.reading(f"{self._name}_ATR"),
+                self.reading(f"{self.name}_EMA"),
+                self.reading(f"{self.name}_ATR"),
             ]
         ):
             return {"lower": None, "band": None, "upper": None}
 
-        lower = self.reading(f"{self._name}_EMA") - (
-            self.multiplier * self.reading(f"{self._name}_ATR")
+        lower = self.reading(f"{self.name}_EMA") - (
+            self.multiplier * self.reading(f"{self.name}_ATR")
         )
 
-        upper = self.reading(f"{self._name}_EMA") + (
-            self.multiplier * self.reading(f"{self._name}_ATR")
+        upper = self.reading(f"{self.name}_EMA") + (
+            self.multiplier * self.reading(f"{self.name}_ATR")
         )
 
         return {
             "lower": lower,
-            "band": self.reading(f"{self._name}_EMA"),
+            "band": self.reading(f"{self.name}_EMA"),
             "upper": upper,
         }

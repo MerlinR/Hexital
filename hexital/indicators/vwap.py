@@ -19,16 +19,16 @@ class VWAP(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_managed_indicator("VWAP_data", Managed(indicator_name="VWAP_data"))
+        self.add_managed_indicator("VWAP_data", Managed(fullname_override=f"{self.name}_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         typical_price = (self.reading("high") + self.reading("low") + self.reading("close")) / 3
 
         prev_pv = 0
         prev_vol = 0
-        if self.prev_reading("VWAP_data.pv"):
-            prev_pv = self.prev_reading("VWAP_data.pv")
-            prev_vol = self.prev_reading("VWAP_data.vol")
+        if self.prev_reading(f"{self.name}_data.pv"):
+            prev_pv = self.prev_reading(f"{self.name}_data.pv")
+            prev_vol = self.prev_reading(f"{self.name}_data.vol")
 
         self.managed_indicators["VWAP_data"].set_reading(
             {
@@ -37,6 +37,6 @@ class VWAP(Indicator):
             }
         )
 
-        if self.reading("VWAP_data.vol") == 0:
-            return self.reading("VWAP_data.pv")
-        return self.reading("VWAP_data.pv") / self.reading("VWAP_data.vol")
+        if self.reading(f"{self.name}_data.vol") == 0:
+            return self.reading(f"{self.name}_data.pv")
+        return self.reading(f"{self.name}_data.pv") / self.reading(f"{self.name}_data.vol")
