@@ -17,7 +17,6 @@ from hexital.utils.timeframe import (
 )
 
 DEFAULT_CANDLES = "default"
-_KEY_CONFIGS = ["candles_lifespan", "timeframe", "timeframe_fill"]
 
 
 class CandleManager:
@@ -54,7 +53,8 @@ class CandleManager:
     def __eq__(self, other) -> bool:
         if not isinstance(other, CandleManager):
             return False
-        for key in _KEY_CONFIGS:
+
+        for key in ["candles_lifespan", "timeframe", "timeframe_fill"]:
             if getattr(self, key) != getattr(other, key):
                 return False
 
@@ -84,7 +84,7 @@ class CandleManager:
             candles_.append(Candle.from_dict(candles))
         elif isinstance(candles, list):
             if not candles:
-                pass
+                return
             elif isinstance(candles[0], Candle):
                 candles_.extend(candles)
             elif isinstance(candles[0], dict):
@@ -205,8 +205,10 @@ class CandleManager:
                 candles.insert(index, fill_candle)
 
             index += 1
+
             if index >= len(candles):
                 break
+
         return candles
 
     def convert_candles(self):

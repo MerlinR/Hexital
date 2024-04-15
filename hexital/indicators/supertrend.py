@@ -42,7 +42,7 @@ class Supertrend(Indicator):
             upper = self.reading(f"{self.name}_HL") + mid_atr
             lower = self.reading(f"{self.name}_HL") - mid_atr
 
-            if self.prev_reading(f"{self.name}_data.lower"):
+            if self.prev_exists(f"{self.name}_data.lower"):
                 if self.reading("close") > self.prev_reading(f"{self.name}_data.upper"):
                     direction = 1
                 elif self.reading("close") < self.prev_reading(f"{self.name}_data.lower"):

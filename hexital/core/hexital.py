@@ -135,7 +135,7 @@ class Hexital:
             return self._candles[timeframe].candles
         return self._candles[DEFAULT_CANDLES].candles
 
-    def candles_all(self) -> Dict[str, List[Candle]]:
+    def get_candles(self) -> Dict[str, List[Candle]]:
         return {name: manager.candles for name, manager in self._candles.items()}
 
     @property
@@ -147,16 +147,14 @@ class Hexital:
         """Simply get's a list of all the Indicators within Hexital strategy"""
         return self._indicators
 
+    def indicator(self, name: str) -> Indicator:
+        """Searches hexital's indicator's and Returns the Indicator object itself."""
+        return self._indicators[name]
+
     @property
     def indicator_settings(self) -> List[dict]:
         """Simply get's a list of all the Indicators within Hexital strategy"""
         return [indicator.settings for indicator in self._indicators.values()]
-
-    def indicator(self, name: str) -> Indicator | None:
-        for indicator_name, indicator in self._indicators.items():
-            if name in indicator_name:
-                return indicator
-        return None
 
     def has_reading(self, name: str) -> bool:
         """Checks if the given Indicator has a valid reading in latest Candle"""
@@ -200,10 +198,6 @@ class Hexital:
 
         for valid_indicator in self._validate_indicators(indicators).values():
             self._indicators[valid_indicator.name] = valid_indicator
-
-    def get_indicator(self, name: str) -> Indicator | None:
-        """Searches hexital's indicator's and Returns the Indicator object itself."""
-        return self._indicators.get(name)
 
     def remove_indicator(self, name: str):
         """Removes an indicator from running within hexital"""

@@ -31,12 +31,12 @@ class STDEV(Indicator):
             removed_val = self.reading(self.input_value, index - self.period)
             in_calc_range = True
 
-        if self.prev_reading(f"{self.name}_data.mean") is not None:
+        if self.prev_exists(f"{self.name}_data.mean"):
             old_mean = self.prev_reading(f"{self.name}_data.mean")
 
         new_mean = old_mean + (self.reading(self.input_value) - removed_val) / self.period
 
-        if self.prev_reading(f"{self.name}_data.variance"):
+        if self.prev_exists(f"{self.name}_data.variance"):
             variance = self.prev_reading(f"{self.name}_data.variance")
 
         variance += (

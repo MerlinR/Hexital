@@ -51,7 +51,7 @@ class TestIndicatorPattern:
     @pytest.mark.usefixtures("candles")
     def test_hextial_dict_arguments(self, candles):
         strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 20}])
-        assert strat.get_indicator("SMA_20")
+        assert strat.indicator("SMA_20")
 
     @pytest.mark.usefixtures("candles")
     def test_hextial_dict_invalid(self, candles):
@@ -173,7 +173,7 @@ def test_hextial_remove_indicator(candles, expected_ema, expected_sma):
 
     strat.remove_indicator("SMA_10")
 
-    assert not strat.indicator("SMA_10")
+    assert not strat.indicators.get("SMA_10")
 
 
 @pytest.mark.usefixtures("candles")
@@ -281,8 +281,8 @@ class TestHexitalCandleManagerInheritance:
 
         assert strat.candles_lifespan == timedelta(hours=1)
         assert strat.timeframe == "T5"
-        assert strat.indicator("EMA_10").candles_lifespan == timedelta(hours=1)
-        assert strat.indicator("EMA_10").timeframe == "T10"
+        assert strat.indicator("EMA_10_T10").candles_lifespan == timedelta(hours=1)
+        assert strat.indicator("EMA_10_T10").timeframe == "T10"
 
 
 class TestChain:

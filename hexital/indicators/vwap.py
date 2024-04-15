@@ -26,7 +26,7 @@ class VWAP(Indicator):
 
         prev_pv = 0
         prev_vol = 0
-        if self.prev_reading(f"{self.name}_data.pv"):
+        if self.prev_exists(f"{self.name}_data.pv"):
             prev_pv = self.prev_reading(f"{self.name}_data.pv")
             prev_vol = self.prev_reading(f"{self.name}_data.vol")
 

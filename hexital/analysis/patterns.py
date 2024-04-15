@@ -31,7 +31,7 @@ def doji(
         return False
 
     def _doji(indx: int):
-        body = candles[indx].realbody()
+        body = candles[indx].realbody
 
         high_low_avg = utils.high_low_avg(candles, length, indx)
 
@@ -58,7 +58,7 @@ def hammer(
     def _hammer(indx: int):
         is_hammer = False
 
-        body = candles[indx].realbody()
+        body = candles[indx].realbody
         body_middle = candles[indx].high - candles[indx].low
 
         body_average = utils.realbody_avg(candles, length, indx)
@@ -68,8 +68,8 @@ def hammer(
 
         if (
             body < body_average
-            and candles[indx].shadow_lower() > lower_shadow_avg
-            and candles[indx].shadow_lower() < upper_shadow_avg
+            and candles[indx].shadow_lower > lower_shadow_avg
+            and candles[indx].shadow_lower < upper_shadow_avg
             and abs(body_middle - candles[indx - 1].low) < 10
         ):
             is_hammer = True

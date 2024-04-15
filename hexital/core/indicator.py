@@ -71,6 +71,7 @@ class Indicator(ABC):
 
     def _internal_generate_name(self):
         name = ""
+
         if self.fullname_override:
             name = self.fullname_override
         else:
@@ -121,7 +122,13 @@ class Indicator(ABC):
         """Simple boolean to state if values are being generated yet in the candles"""
         if len(self.candles) == 0:
             return False
-        return self.reading(index=-1) is not None
+        return self.reading(index=self._active_index) is not None
+
+    @property
+    def prior_calc(self) -> bool:
+        if self._sub_indicator and self._sub_calc_prior:
+            return True
+        return False
 
     @property
     def settings(self) -> dict:
@@ -215,9 +222,10 @@ class Indicator(ABC):
             return 0
 
         for index in range(len(self.candles) - 1, 0, -1):
-            if self.name in self.candles[index].indicators:
-                return index + 1
-            elif self.name in self.candles[index].sub_indicators:
+            if (
+                self.name in self.candles[index].indicators
+                or self.name in self.candles[index].sub_indicators
+            ):
                 return index + 1
 
         return len(self.candles) - 1
@@ -227,12 +235,6 @@ class Indicator(ABC):
         for indicator in self.managed_indicators.values():
             if isinstance(indicator, Managed):
                 indicator.set_active_index(index)
-
-    @property
-    def prior_calc(self) -> bool:
-        if self._sub_indicator and self._sub_calc_prior:
-            return True
-        return False
 
     def add_sub_indicator(self, indicator: Indicator, prior_calc: bool = True):
         """Adds sub indicator, this will auto calculate with indicator"""
@@ -247,8 +249,8 @@ class Indicator(ABC):
         indicator.candle_manager = self._candles
         self.managed_indicators[name] = indicator
 
-    def prev_exists(self) -> bool:
-        return self.prev_reading(self.name) is not None
+    def prev_exists(self, name: Optional[str] = None) -> bool:
+        return self.prev_reading(self.name if not name else name) is not None
 
     def prev_reading(self, name: Optional[str] = None) -> float | dict | None:
         if len(self.candles) == 0 or self._active_index == 0:

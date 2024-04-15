@@ -16,6 +16,8 @@ KEY_KEYS = [
     "sub_indicators",
 ]
 
+IGNORE_CLEAN = ["clean_values", "indicators", "sub_indicators"]
+
 
 class Candle:
     open: float
@@ -64,19 +66,7 @@ class Candle:
         return True
 
     def __repr__(self) -> str:
-        return str(
-            {
-                "open": self.open,
-                "high": self.high,
-                "low": self.low,
-                "close": self.close,
-                "volume": self.volume,
-                "timestamp": self.timestamp,
-                "indicators": self.indicators,
-                "sub_indicators": self.sub_indicators,
-                "tag": self.tag,
-            }
-        )
+        return str({name: value for name, value in vars(self).items() if not name.startswith("_")})
 
     @property
     def tag(self) -> str | None:
@@ -89,25 +79,31 @@ class Candle:
             return
         raise CandleAlreadyTagged(f"Candle already tagged as {self._tag} - [{self}]")
 
+    @property
     def positive(self) -> bool:
         return self.open < self.close
 
+    @property
     def negative(self) -> bool:
         return self.open > self.close
 
+    @property
     def realbody(self) -> float:
         return abs(self.open - self.close)
 
+    @property
     def shadow_upper(self) -> float:
-        if self.positive():
+        if self.positive:
             return abs(self.high - self.close)
         return abs(self.high - self.open)
 
+    @property
     def shadow_lower(self) -> float:
-        if self.positive():
+        if self.positive:
             return abs(self.low - self.open)
         return abs(self.low - self.close)
 
+    @property
     def high_low(self) -> float:
         return abs(self.high - self.low)
 
@@ -157,20 +153,15 @@ class Candle:
 
     def save_clean_values(self):
         self.clean_values = {
-            "open": self.open,
-            "high": self.high,
-            "low": self.low,
-            "close": self.close,
-            "volume": self.volume,
+            name: value
+            for name, value in vars(self).items()
+            if not name.startswith("_") or name in IGNORE_CLEAN
         }
 
     def recover_clean_values(self):
         if self.clean_values:
-            self.open = self.clean_values["open"]
-            self.high = self.clean_values["high"]
-            self.low = self.clean_values["low"]
-            self.close = self.clean_values["close"]
-            self.volume = int(self.clean_values["volume"])
+            for name, value in self.clean_values.items():
+                self.__setattr__(name, value)
 
     def reset_candle(self):
         self.indicators = {}
