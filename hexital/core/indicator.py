@@ -6,7 +6,6 @@ from dataclasses import dataclass, field
 from datetime import timedelta
 from typing import Dict, List, Optional
 
-from hexital.analysis import movement, patterns
 from hexital.core.candle import Candle
 from hexital.core.candle_manager import CandleManager
 from hexital.core.candlestick_type import CandlestickType
@@ -309,56 +308,6 @@ class Indicator(ABC):
         """Re-calculate this indicator value for all Candles"""
         self.purge()
         self.calculate()
-
-    def rising(self, name: Optional[str] = None, length: int = 4, index: int = -1) -> bool:
-        return movement.rising(self.candles, name if name else self.name, length, index)
-
-    def falling(self, name: Optional[str] = None, length: int = 4, index: int = -1) -> bool:
-        return movement.falling(self.candles, name if name else self.name, length, index)
-
-    def mean_rising(self, name: Optional[str] = None, length: int = 4, index: int = -1) -> bool:
-        return movement.mean_rising(self.candles, name if name else self.name, length, index)
-
-    def mean_falling(self, name: Optional[str] = None, length: int = 4, index: int = -1) -> bool:
-        return movement.mean_falling(self.candles, name if name else self.name, length, index)
-
-    def highest(self, name: Optional[str] = None, length: int = 4, index: int = -1) -> float:
-        return movement.highest(self.candles, name if name else self.name, length, index)
-
-    def lowest(self, name: Optional[str] = None, length: int = 4, index: int = -1) -> float:
-        return movement.lowest(self.candles, name if name else self.name, length, index)
-
-    def highestbar(
-        self, name: Optional[str] = None, length: int = 4, index: int = -1
-    ) -> int | None:
-        return movement.highestbar(self.candles, name if name else self.name, length, index)
-
-    def lowestbar(
-        self, name: Optional[str] = None, length: int = 4, index: int = -1
-    ) -> int | None:
-        return movement.lowestbar(self.candles, name if name else self.name, length, index)
-
-    def doji(
-        self,
-        length: int = 10,
-        lookback: Optional[int] = None,
-        asint: bool = False,
-        index: Optional[int] = None,
-    ) -> bool | int:
-        return patterns.doji(
-            self.candles, length=length, lookback=lookback, asint=asint, index=index
-        )
-
-    def hammer(
-        self,
-        length: int = 10,
-        lookback: Optional[int] = None,
-        asint: bool = False,
-        index: Optional[int] = None,
-    ) -> bool | int:
-        return patterns.hammer(
-            self.candles, length=length, lookback=lookback, asint=asint, index=index
-        )
 
 
 @dataclass(kw_only=True)

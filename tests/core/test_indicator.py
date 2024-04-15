@@ -282,20 +282,6 @@ def test_reading_as_list_no_indicator(minimal_candles: List[Candle]):
     assert test_indicator.as_list("FUCK") == [None] * 20
 
 
-class TestMovement:
-    @pytest.mark.usefixtures("minimal_candles")
-    def test_indicator_movement(self, minimal_candles):
-        test_indicator = FakeIndicator(candles=minimal_candles)
-        test_indicator.calculate()
-        assert test_indicator.rising("MinTR") is True
-
-    @pytest.mark.usefixtures("minimal_candles")
-    def test_indicator_movement_candle(self, minimal_candles):
-        test_indicator = FakeIndicator(candles=minimal_candles)
-        test_indicator.calculate()
-        assert test_indicator.rising("close") is False
-
-
 class TestCandlestickType:
     def test_indicator_candlestick_type(self):
         test_indicator = FakeIndicator(candles=[], candlestick_type=HeikinAshi())

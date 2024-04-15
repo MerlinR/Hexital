@@ -9,8 +9,6 @@ from hexital.exceptions import (
     InvalidAnalysis,
     InvalidCandlestickType,
     InvalidIndicator,
-    MissingIndicator,
-    MixedTimeframes,
 )
 from hexital.indicators import EMA, SMA
 
@@ -287,41 +285,6 @@ class TestHexitalCandleManagerInheritance:
         assert strat.indicator("EMA_10").timeframe == "T10"
 
 
-class TestMovement:
-    @pytest.mark.usefixtures("candles")
-    def test_hextial_movement(self, candles):
-        strat = Hexital("Test Stratergy", candles, [EMA(), SMA()])
-        strat.calculate()
-        assert strat.above("EMA_10", "SMA_10") is False
-
-    @pytest.mark.usefixtures("candles")
-    def test_hextial_rising(self, candles):
-        strat = Hexital("Test Stratergy", candles, [EMA()])
-        strat.calculate()
-        assert strat.rising("EMA_10") is False
-
-    @pytest.mark.usefixtures("candles")
-    def test_hextial_movement_verification_missing(self, candles):
-        strat = Hexital("Test Stratergy", candles, [EMA(), SMA()])
-        strat.calculate()
-        with pytest.raises(MissingIndicator):
-            assert strat.above("EMA_10", "FUCK_YOU") is False
-
-    @pytest.mark.usefixtures("candles")
-    def test_hextial_movement_verification_mixed(self, candles):
-        strat = Hexital("Test Stratergy", candles, [EMA(), SMA(timeframe="T5")])
-        strat.calculate()
-        with pytest.raises(MixedTimeframes):
-            assert strat.above("EMA_10", "SMA_10_T5")
-
-    @pytest.mark.usefixtures("candles")
-    def test_hextial_movement_verification_candle(self, candles):
-        strat = Hexital("Test Stratergy", candles, [EMA(), SMA(timeframe="T5")])
-        strat.calculate()
-
-        assert strat.above("EMA_10", "high")
-
-
 class TestChain:
     @pytest.mark.usefixtures("candles")
     def test_hextial_movement(self, candles):
@@ -349,65 +312,3 @@ class TestCandlestickType:
     def test_hextial_candlestick_type_error(self, candles):
         with pytest.raises(InvalidCandlestickType):
             Hexital("Test Stratergy", candles, [EMA()], candlestick_type="FUCK")
-
-
-def test_verify_indicators_empty():
-    strat = Hexital("Test Stratergy", [], [EMA(), SMA()])
-    assert strat.rising("high") is False
-
-
-def test_verify_indicators_not_enough_candles(minimal_candles):
-    strat = Hexital("Test Stratergy", minimal_candles, [EMA(period=200)])
-    strat.calculate()
-    assert strat.rising("EMA_200") is False
-
-
-def test_verify_indicators_standard(candles):
-    strat = Hexital("Test Stratergy", candles, [EMA(), SMA()])
-    strat.calculate()
-    assert strat.rising("high") is False
-
-
-def test_verify_indicators_indicator(candles):
-    strat = Hexital("Test Stratergy", candles, [EMA(), SMA()])
-    strat.calculate()
-    assert strat.rising("EMA_10") is False
-
-
-def test_verify_indicators_duo_indicators(candles):
-    strat = Hexital("Test Stratergy", candles, [EMA(), SMA()])
-    strat.calculate()
-    assert strat.above("EMA_10", "SMA_10") is False
-
-
-def test_verify_indicators_duo_indicators_rev(candles):
-    strat = Hexital("Test Stratergy", candles, [EMA(), SMA()])
-    strat.calculate()
-    assert strat.below("high", "EMA_10") is True
-
-
-def test_verify_indicators_duo_indicators_missing(candles):
-    strat = Hexital("Test Stratergy", candles, [EMA(), SMA()])
-    strat.calculate()
-    with pytest.raises(MissingIndicator):
-        assert strat.above("EMA_10", "SMA_100") is False
-
-
-def test_verify_indicators_missing(candles):
-    strat = Hexital("Test Stratergy", candles, [EMA()])
-    strat.calculate()
-    with pytest.raises(MissingIndicator):
-        strat.rising("FUCK_10")
-
-
-def test_verify_indicators_mixed_indicators(candles):
-    strat = Hexital("Test Stratergy", candles, [EMA(), SMA(timeframe="T5")])
-    strat.calculate()
-    with pytest.raises(MixedTimeframes):
-        strat.above("EMA_10", "SMA_10_T5")
-
-
-def test_verify_indicators_mixed_indicators_two(candles):
-    strat = Hexital("Test Stratergy", candles, [EMA(), SMA(timeframe="T5")])
-    strat.calculate()
-    assert strat.above("SMA_10_T5", "high") is True

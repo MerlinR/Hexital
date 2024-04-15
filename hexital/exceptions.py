@@ -18,16 +18,6 @@ class InvalidCandleOrder(Exception):
         super().__init__(message)
 
 
-class MixedTimeframes(Exception):
-    def __init__(self, message):
-        super().__init__(message)
-
-
-class MissingIndicator(Exception):
-    def __init__(self, message):
-        super().__init__(message)
-
-
 class CandleAlreadyTagged(Exception):
     def __init__(self, message):
         super().__init__(message)

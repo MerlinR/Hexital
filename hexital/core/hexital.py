@@ -2,7 +2,7 @@ from copy import deepcopy
 from datetime import timedelta
 from typing import Dict, List, Optional, Set
 
-from hexital.analysis import MOVEMENT_MAP, PATTERN_MAP, movement, patterns
+from hexital.analysis import MOVEMENT_MAP, PATTERN_MAP
 from hexital.core.candle import Candle
 from hexital.core.candle_manager import DEFAULT_CANDLES, CandleManager
 from hexital.core.candlestick_type import CandlestickType
@@ -10,9 +10,6 @@ from hexital.core.indicator import Indicator
 from hexital.exceptions import (
     InvalidAnalysis,
     InvalidIndicator,
-    InvalidTimeFrame,
-    MissingIndicator,
-    MixedTimeframes,
 )
 from hexital.indicators import INDICATOR_MAP
 from hexital.utils.candles import reading_by_index
@@ -243,124 +240,3 @@ class Hexital:
         ideal for changing an indicator parameters midway."""
         self.purge(name)
         self.calculate(name)
-
-    def _find_indicator(self, indicator: str) -> CandleManager | None:
-        for manager in self._candles.values():
-            if not manager.candles:
-                return manager
-            elif manager.find_indicator(indicator):
-                return manager
-
-        return None
-
-    def _verify_indicators(
-        self, indicator: str, indicator_two: Optional[str] = None
-    ) -> List[Candle]:
-        manager = self._find_indicator(indicator)
-
-        if not manager and indicator in self._indicators:
-            return []
-        elif manager and not indicator_two:
-            return manager.candles
-
-        if not indicator_two or not manager:
-            raise MissingIndicator("Cannot find Indicator: %s" % indicator)
-
-        manager_two = self._find_indicator(indicator_two)
-
-        if not manager_two:
-            raise MissingIndicator("Cannot find Indicator: %s" % indicator_two)
-
-        for manager in self._candles.values():
-            if manager.find_indicator(indicator) and manager.find_indicator(indicator_two):
-                return manager.candles
-
-        raise MixedTimeframes(
-            "Cannot find {%s} and {%s} within same timeframe" % (indicator, indicator_two)
-        )
-
-    def above(self, indicator: str, indicator_two: str, index: int = -1) -> bool:
-        candles = self._verify_indicators(indicator, indicator_two)
-        return movement.above(candles, indicator, indicator_two, index)
-
-    def below(self, indicator: str, indicator_two: str, index: int = -1) -> bool:
-        candles = self._verify_indicators(indicator, indicator_two)
-        return movement.below(candles, indicator, indicator_two, index)
-
-    def cross(self, indicator: str, indicator_two: str, length: int = 1, index: int = -1) -> bool:
-        candles = self._verify_indicators(indicator, indicator_two)
-        return movement.cross(candles, indicator, indicator_two, length, index)
-
-    def crossover(
-        self, indicator: str, indicator_two: str, length: int = 1, index: int = -1
-    ) -> bool:
-        candles = self._verify_indicators(indicator, indicator_two)
-        return movement.crossover(candles, indicator, indicator_two, length, index)
-
-    def crossunder(
-        self, indicator: str, indicator_two: str, length: int = 1, index: int = -1
-    ) -> bool:
-        candles = self._verify_indicators(indicator, indicator_two)
-        return movement.crossunder(candles, indicator, indicator_two, length, index)
-
-    def rising(self, name: str, length: int = 4, index: int = -1) -> bool:
-        candles = self._verify_indicators(name)
-        return movement.rising(candles, name, length, index)
-
-    def falling(self, name: str, length: int = 4, index: int = -1) -> bool:
-        candles = self._verify_indicators(name)
-        return movement.falling(candles, name, length, index)
-
-    def mean_rising(self, name: str, length: int = 4, index: int = -1) -> bool:
-        candles = self._verify_indicators(name)
-        return movement.mean_rising(candles, name, length, index)
-
-    def mean_falling(self, name: str, length: int = 4, index: int = -1) -> bool:
-        candles = self._verify_indicators(name)
-        return movement.mean_falling(candles, name, length, index)
-
-    def highest(self, name: str, length: int = 4, index: int = -1) -> float:
-        candles = self._verify_indicators(name)
-        return movement.highest(candles, name, length, index)
-
-    def lowest(self, name: str, length: int = 4, index: int = -1) -> float:
-        candles = self._verify_indicators(name)
-        return movement.lowest(candles, name, length, index)
-
-    def highestbar(self, name: str, length: int = 4, index: int = -1) -> int | None:
-        candles = self._verify_indicators(name)
-        return movement.highestbar(candles, name, length, index)
-
-    def lowestbar(self, name: str, length: int = 4, index: int = -1) -> int | None:
-        candles = self._verify_indicators(name)
-        return movement.lowestbar(candles, name, length, index)
-
-    def doji(
-        self,
-        timeframe: str | TimeFrame,
-        length: int = 10,
-        lookback: Optional[int] = None,
-        asint: bool = False,
-        index: Optional[int] = None,
-    ) -> bool | int:
-        manager = self._candles.get(validate_timeframe(timeframe))
-        if not manager:
-            raise InvalidTimeFrame(f"Timeframe {timeframe} not found")
-        return patterns.doji(
-            manager.candles, length=length, lookback=lookback, asint=asint, index=index
-        )
-
-    def hammer(
-        self,
-        timeframe: str | TimeFrame,
-        length: int = 10,
-        lookback: Optional[int] = None,
-        asint: bool = False,
-        index: Optional[int] = None,
-    ) -> bool | int:
-        manager = self._candles.get(validate_timeframe(timeframe))
-        if not manager:
-            raise InvalidTimeFrame(f"Timeframe {timeframe} not found")
-        return patterns.hammer(
-            manager.candles, length=length, lookback=lookback, asint=asint, index=index
-        )
