@@ -53,9 +53,9 @@ def hammer(
         candle = candles[indx]
 
         if (
-            candle.realbody < utils.realbody_avg(candles, 10, indx)
-            and candle.shadow_lower > candle.realbody
-            and candle.shadow_upper < utils.shadow_very_short(candles, indx)
+            candle.realbody < utils.candle_bodyshort(candles, indx)
+            and candle.shadow_lower > utils.candle_shadow_long(candles, indx)
+            and candle.shadow_upper < utils.candle_shadow_veryshort(candles, indx)
             and min(candle.close, candle.open)
             <= candles[indx - 1].low + utils.candle_near(candles, indx - 1)
         ):
