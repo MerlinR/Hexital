@@ -80,7 +80,8 @@ class IndicatorTestBase:
         for value in data:
             if value is not None:
                 total += float(value)
-        return total / len(data)
+
+        return total / len([v for v in data if v is not None])
 
     def show_results(self, result: list, expected: list, verbose: bool):
         for i, (res, exp) in enumerate(zip(result, expected)):

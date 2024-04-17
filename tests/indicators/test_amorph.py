@@ -18,16 +18,16 @@ def test_method_amorph(candles):
 
 @pytest.mark.usefixtures("candles")
 def test_amorph_multi_arguments(candles):
-    test = Amorph(analysis=patterns.doji, candles=candles, length=20)
+    test = Amorph(analysis=patterns.doji, candles=candles, lookback=20)
     test.calculate()
-    assert test.name == "doji_20"
+    assert test.name == "doji"
 
 
 @pytest.mark.usefixtures("candles")
 def test_amorph_dict_arguments(candles):
-    test = Amorph(analysis=patterns.doji, candles=candles, args={"length": 20})
+    test = Amorph(analysis=patterns.doji, candles=candles, args={"lookback": 20})
     test.calculate()
-    assert test.name == "doji_20"
+    assert test.name == "doji"
 
 
 @pytest.mark.usefixtures("candles")
@@ -35,7 +35,7 @@ def test_amorph_merged_aguments(candles):
     test = Amorph(
         analysis=patterns.doji,
         candles=candles,
-        length=20,
+        lookback=20,
         fullname_override="MERGED_ARGS",
     )
     test.calculate()

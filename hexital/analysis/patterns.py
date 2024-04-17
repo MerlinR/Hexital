@@ -7,11 +7,9 @@ from hexital.utils.indexing import validate_index
 
 def doji(
     candles: List[Candle],
-    length: int = 10,
     lookback: Optional[int] = None,
-    asint: bool = False,
     index: Optional[int] = None,
-) -> bool | int:
+) -> bool:
     """Doji Pattern
     A candle body is Doji when it's shorter than 10% of the average of the
     n(10) previous candles' high-low range.
@@ -20,23 +18,19 @@ def doji(
         candles (List[Candle]): Candles to use to find Doji Candle
         length (int, optional): Check for the average. Defaults to 10.
         lookback (Optional[int], optional): Lookback allows detecting ant Doji candles N back. Defaults to None.
-        asint (bool, optional): Use Integers or Bools. Defaults to False.
         index (_type_, optional): Index of Candle to check. Defaults to None/Latest.
 
     Returns:
-        bool | int: If The given Candle is Doji bool or 1/2
+        bool: If The given Candle is Doji bool or 1/2
     """
     index = validate_index(index, len(candles), -1)
     if index is None:
         return False
 
     def _doji(indx: int):
-        body = candles[indx].realbody
-
-        high_low_avg = utils.high_low_avg(candles, length, indx)
-
-        is_doji = body < 0.1 * high_low_avg
-        return int(is_doji) if asint else is_doji
+        if indx < 10:
+            return False
+        return candles[indx].realbody < utils.candle_doji(candles, indx)
 
     if lookback is None:
         return _doji(index)
@@ -46,9 +40,7 @@ def doji(
 
 def hammer(
     candles: List[Candle],
-    length: int = 10,
     lookback: Optional[int] = None,
-    asint: bool = False,
     index: Optional[int] = None,
 ) -> bool | int:
     index = validate_index(index, len(candles), -1)
@@ -56,25 +48,20 @@ def hammer(
         return False
 
     def _hammer(indx: int):
-        is_hammer = False
-
-        body = candles[indx].realbody
-        body_middle = candles[indx].high - candles[indx].low
-
-        body_average = utils.realbody_avg(candles, length, indx)
-
-        upper_shadow_avg = utils.shadow_upper_avg(candles, length, indx)
-        lower_shadow_avg = utils.shadow_lower_avg(candles, length, indx)
+        if indx < 10:
+            return False
+        candle = candles[indx]
 
         if (
-            body < body_average
-            and candles[indx].shadow_lower > lower_shadow_avg
-            and candles[indx].shadow_lower < upper_shadow_avg
-            and abs(body_middle - candles[indx - 1].low) < 10
+            candle.realbody < utils.realbody_avg(candles, 10, indx)
+            and candle.shadow_lower > candle.realbody
+            and candle.shadow_upper < utils.shadow_very_short(candles, indx)
+            and min(candle.close, candle.open)
+            <= candles[indx - 1].low + utils.candle_near(candles, indx - 1)
         ):
-            is_hammer = True
+            return True
 
-        return int(is_hammer) if asint else is_hammer
+        return False
 
     if lookback is None:
         return _hammer(index)
