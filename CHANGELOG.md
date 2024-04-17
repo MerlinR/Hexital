@@ -7,15 +7,18 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 ## 1.1.0 - TBD
 
 - Removed Movement/Patterns from Hexital/Indicator
+- Removed get_indicator from Hexital as indicator already exists
+- Renamed candles_all to get_candles
+- Updated prev_exists to accept optional Indicator to be more useful
+- Altered Indicator name reading, to avoid issue's such as "TR" in "ATR"
 - Changed several methods to properties in Candle (positive, realbody, etc)
 - Updated Candle to be more flexible with values
-- Renamed candles_all to get_candles
-- Removed get_indicator from Hexital as indicator already exists
-- Updated prev_exists to accept optional Indicator to be more useful
-- Corrected correlation_coefficient
-- Altered Indicator name reading, to avoid issue's such as "TR" in "ATR"
-- Added Counter Indicator
-- Added HMA Indicator
+- Corrected correlation_coefficient for unit testing
+- Added Indicators
+  - Counter
+  - Hull Moving Average (HMA)
+  - True Strength Index (TSI)
+  - Standard Deviation (STDEV)
 
 ## 1.0.1 - 2024-04-08
 
