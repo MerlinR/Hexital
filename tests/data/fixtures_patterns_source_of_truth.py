@@ -11,6 +11,12 @@ def fixture_expected_doji():
     return json.load(csv_files)
 
 
+@pytest.fixture(name="expected_dojistar")
+def fixture_expected_dojistar():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/DOJISTAR.json")
+    return json.load(csv_files)
+
+
 @pytest.fixture(name="expected_hammer")
 def fixture_expected_hammer():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/HAMMER.json")
