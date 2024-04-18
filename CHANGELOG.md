@@ -19,6 +19,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - Hull Moving Average (HMA)
   - True Strength Index (TSI)
   - Standard Deviation (STDEV)
+- Added Patterns
+  - Inverted Hammer
 
 ## 1.0.1 - 2024-04-08
 

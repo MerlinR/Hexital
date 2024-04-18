@@ -14,7 +14,7 @@ from .movement import (  # noqa F401
     rising,
     value_range,
 )
-from .patterns import doji, hammer  # noqa F401
+from .patterns import doji, hammer, inverted_hammer  # noqa F401
 
 MOVEMENT_MAP = {
     "cross": cross,
@@ -36,4 +36,5 @@ MOVEMENT_MAP = {
 PATTERN_MAP = {
     "doji": doji,
     "hammer": hammer,
+    "inv_hammer": inverted_hammer,
 }

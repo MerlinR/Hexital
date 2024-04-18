@@ -15,3 +15,9 @@ def fixture_expected_doji():
 def fixture_expected_hammer():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/HAMMER.json")
     return json.load(csv_files)
+
+
+@pytest.fixture(name="expected_inverted_hammer")
+def fixture_expected_inverted_hammer():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/INVERTEDHAMMER.json")
+    return json.load(csv_files)

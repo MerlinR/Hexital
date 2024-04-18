@@ -16,3 +16,9 @@ class TestAmorphPatterns(IndicatorTestBase):
         test = indicators.Amorph(analysis=patterns.hammer, candles=candles)
         test.calculate()
         assert self.verify(test.as_list(), expected_hammer)
+
+    @pytest.mark.usefixtures("candles", "expected_inverted_hammer")
+    def test_inverted_hammer(self, candles, expected_inverted_hammer):
+        test = indicators.Amorph(analysis=patterns.inverted_hammer, candles=candles)
+        test.calculate()
+        assert self.verify(test.as_list(), expected_inverted_hammer)

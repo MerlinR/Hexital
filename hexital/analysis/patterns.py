@@ -67,3 +67,34 @@ def hammer(
         return _hammer(index)
 
     return any(_hammer(i) for i in range(len(candles) - lookback, len(candles)))
+
+
+def inverted_hammer(
+    candles: List[Candle],
+    lookback: Optional[int] = None,
+    index: Optional[int] = None,
+) -> bool | int:
+    index = validate_index(index, len(candles), -1)
+    if index is None:
+        return False
+
+    def _invhammer(indx: int):
+        if indx < 10:
+            return False
+        candle = candles[indx]
+        prev_candle = candles[indx - 1]
+
+        if (
+            candle.realbody < utils.candle_bodyshort(candles, indx)
+            and candle.shadow_upper > utils.candle_shadow_long(candles, indx)
+            and candle.shadow_lower < utils.candle_shadow_veryshort(candles, indx)
+            and utils.realbody_gap(candle, prev_candle)
+        ):
+            return True
+
+        return False
+
+    if lookback is None:
+        return _invhammer(index)
+
+    return any(_invhammer(i) for i in range(len(candles) - lookback, len(candles)))
