@@ -21,6 +21,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - Standard Deviation (STDEV)
 - Added Patterns
   - Inverted Hammer
+  - Dojistar
 
 ## 1.0.1 - 2024-04-08
 

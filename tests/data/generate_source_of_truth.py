@@ -199,13 +199,23 @@ def generate_patterns():
     print("Generating Patterns")
     df = pd.DataFrame.from_dict(load_json_candles())
 
-    df = df.ta.cdl_pattern(name=["doji", "hammer", "invertedhammer"])
+    df = df.ta.cdl_pattern(
+        name=[
+            "doji",
+            "dojistar",
+            "hammer",
+            "invertedhammer",
+        ]
+    )
     df = df.astype(object).replace(np.nan, None)
 
     print_new(df)
 
     save_json_result(
         [bool(value) for value in df["CDL_DOJI_10_0.1"].tolist()], "DOJI", PATH_PATTERN
+    )
+    save_json_result(
+        [bool(value) for value in df["CDL_DOJISTAR"].tolist()], "DOJISTAR", PATH_PATTERN
     )
     save_json_result([bool(value) for value in df["CDL_HAMMER"].tolist()], "HAMMER", PATH_PATTERN)
     save_json_result(

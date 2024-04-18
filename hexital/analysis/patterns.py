@@ -38,6 +38,38 @@ def doji(
     return any(_doji(i) for i in range(len(candles) - lookback, len(candles)))
 
 
+def dojistar(
+    candles: List[Candle],
+    lookback: Optional[int] = None,
+    index: Optional[int] = None,
+) -> bool:
+    index = validate_index(index, len(candles), -1)
+    if index is None:
+        return False
+
+    def _dojistar(indx: int):
+        if indx < 10:
+            return False
+        candle = candles[indx]
+        prev_candle = candles[indx - 1]
+
+        if (
+            prev_candle.realbody > utils.candle_bodylong(candles, indx - 1)
+            and candle.realbody <= utils.candle_doji(candles, indx)
+            and (
+                (prev_candle.positive and utils.realbody_gapup(candle, prev_candle))
+                or (prev_candle.negative and utils.realbody_gapdown(candle, prev_candle))
+            )
+        ):
+            return True
+        return False
+
+    if lookback is None:
+        return _dojistar(index)
+
+    return any(_dojistar(i) for i in range(len(candles) - lookback, len(candles)))
+
+
 def hammer(
     candles: List[Candle],
     lookback: Optional[int] = None,
