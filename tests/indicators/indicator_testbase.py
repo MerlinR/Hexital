@@ -73,7 +73,7 @@ class IndicatorTestBase:
         if denominator == 0:
             return 0
 
-        return numerator / denominator
+        return round(numerator / denominator, 2)
 
     def calc_mean(self, data: list):
         total = 0
