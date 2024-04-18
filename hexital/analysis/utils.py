@@ -43,11 +43,11 @@ def shadow_lower_avg(candles: List[Candle], length: int, index: Optional[int] = 
     return sum(candles[i].shadow_lower for i in range(start_index, index)) / length
 
 
-def realbody_gapdown(candle: Candle, candle_two: Candle) -> bool:
+def realbody_gapup(candle: Candle, candle_two: Candle) -> bool:
     return min(candle.open, candle.close) > max(candle_two.open, candle_two.close)
 
 
-def realbody_gapup(candle: Candle, candle_two: Candle) -> bool:
+def realbody_gapdown(candle: Candle, candle_two: Candle) -> bool:
     return max(candle.open, candle.close) < min(candle_two.open, candle_two.close)
 
 

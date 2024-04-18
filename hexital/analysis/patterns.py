@@ -88,7 +88,7 @@ def inverted_hammer(
             candle.realbody < utils.candle_bodyshort(candles, indx)
             and candle.shadow_upper > utils.candle_shadow_long(candles, indx)
             and candle.shadow_lower < utils.candle_shadow_veryshort(candles, indx)
-            and utils.realbody_gap(candle, prev_candle)
+            and utils.realbody_gapdown(candle, prev_candle)
         ):
             return True
 
