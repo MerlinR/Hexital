@@ -91,6 +91,7 @@ def generate_indicators():
             {"kind": "hma"},
             {"kind": "stdev"},
             {"kind": "tsi"},
+            {"kind": "bbands"},
         ],
     )
 
@@ -169,6 +170,21 @@ def generate_indicators():
     ):
         adx_data.append({"ADX": adx_row[0], "DM_Plus": adx_row[1], "DM_Neg": adx_row[2]})
     save_json_result(adx_data, "ADX")
+
+    bbands_data = []
+    for bbands_row in zip(
+        [round_values(value) for value in df["BBL_5_2.0"].tolist()],
+        [round_values(value) for value in df["BBM_5_2.0"].tolist()],
+        [round_values(value) for value in df["BBU_5_2.0"].tolist()],
+    ):
+        bbands_data.append(
+            {
+                "BBL": bbands_row[0],
+                "BBM": bbands_row[1],
+                "BBU": bbands_row[2],
+            }
+        )
+    save_json_result(bbands_data, "BBANDS")
 
 
 def generate_indicators_timeframe(frame: str):

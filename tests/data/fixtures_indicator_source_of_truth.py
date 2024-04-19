@@ -24,6 +24,12 @@ def fixture_expected_atr_20():
     return json.load(csv_files)
 
 
+@pytest.fixture(name="expected_bbands")
+def fixture_expected_bbands():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/BBANDS.json")
+    return json.load(csv_files)
+
+
 @pytest.fixture(name="expected_ema")
 def fixture_expected_ema():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/EMA.json")

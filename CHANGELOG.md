@@ -19,6 +19,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - Hull Moving Average (HMA)
   - True Strength Index (TSI)
   - Standard Deviation (STDEV)
+  - Bollinger Bands (BBANDS)
 - Added Patterns
   - Inverted Hammer
   - Dojistar

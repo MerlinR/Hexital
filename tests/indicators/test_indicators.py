@@ -23,6 +23,12 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.as_list(), expected_atr_20)
 
+    @pytest.mark.usefixtures("candles", "expected_bbands")
+    def test_bbands(self, candles, expected_bbands):
+        test = indicators.BBANDS(candles=candles)
+        test.calculate()
+        assert self.verify(test.as_list(), expected_bbands)
+
     @pytest.mark.usefixtures("candles", "expected_ema")
     def test_ema(self, candles, expected_ema):
         test = indicators.EMA(candles=candles)

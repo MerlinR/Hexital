@@ -1,6 +1,7 @@
 from .adx import ADX
 from .amorph import Amorph
 from .atr import ATR
+from .bbands import BBANDS
 from .counter import Counter
 from .ema import EMA
 from .hla import HighLowAverage
@@ -26,6 +27,7 @@ INDICATOR_MAP = {
     "Counter": Counter,
     "ADX": ADX,
     "ATR": ATR,
+    "BBANDS": BBANDS,
     "EMA": EMA,
     "HLA": HighLowAverage,
     "HMA": HMA,
