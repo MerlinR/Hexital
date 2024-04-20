@@ -92,6 +92,7 @@ def generate_indicators():
             {"kind": "stdev"},
             {"kind": "tsi"},
             {"kind": "bbands"},
+            {"kind": "aroon"},
         ],
     )
 
@@ -185,6 +186,17 @@ def generate_indicators():
             }
         )
     save_json_result(bbands_data, "BBANDS")
+
+    aroon_data = []
+    for aroon_row in zip(
+        [round_values(value) for value in df["AROONU_14"].tolist()],
+        [round_values(value) for value in df["AROOND_14"].tolist()],
+        [round_values(value) for value in df["AROONOSC_14"].tolist()],
+    ):
+        aroon_data.append(
+            {"AROONU": aroon_row[0], "AROOND": aroon_row[1], "AROONOSC": aroon_row[2]}
+        )
+    save_json_result(aroon_data, "AROON")
 
 
 def generate_indicators_timeframe(frame: str):

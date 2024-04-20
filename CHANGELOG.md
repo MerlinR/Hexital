@@ -16,6 +16,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Corrected correlation_coefficient for unit testing
 - Added Indicators
   - Counter
+  - Aroon (aroon)
   - Hull Moving Average (HMA)
   - True Strength Index (TSI)
   - Standard Deviation (STDEV)

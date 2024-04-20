@@ -1,5 +1,6 @@
 from .adx import ADX
 from .amorph import Amorph
+from .aroon import AROON
 from .atr import ATR
 from .bbands import BBANDS
 from .counter import Counter
@@ -25,6 +26,7 @@ from .wma import WMA
 INDICATOR_MAP = {
     "Amorph": Amorph,
     "Counter": Counter,
+    "aroon": AROON,
     "ADX": ADX,
     "ATR": ATR,
     "BBANDS": BBANDS,

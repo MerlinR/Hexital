@@ -24,6 +24,12 @@ def fixture_expected_atr_20():
     return json.load(csv_files)
 
 
+@pytest.fixture(name="expected_aroon")
+def fixture_expected_aroon():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/AROON.json")
+    return json.load(csv_files)
+
+
 @pytest.fixture(name="expected_bbands")
 def fixture_expected_bbands():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/BBANDS.json")

@@ -245,7 +245,7 @@ def highestbar(
     for dist, index in enumerate(range(index_, index_ - length, -1)):
         current = reading_by_index(candles, indicator, index)
         if current is None or isinstance(current, dict):
-            break
+            continue
 
         if high and high < current:
             high = current
@@ -276,7 +276,7 @@ def lowestbar(
     for dist, index in enumerate(range(index_, index_ - length, -1)):
         current = reading_by_index(candles, indicator, index)
         if current is None or isinstance(current, dict):
-            break
+            continue
 
         if low and low > current:
             low = current

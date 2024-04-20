@@ -23,6 +23,12 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.as_list(), expected_atr_20)
 
+    @pytest.mark.usefixtures("candles", "expected_aroon")
+    def test_aroon(self, candles, expected_aroon):
+        test = indicators.AROON(candles=candles)
+        test.calculate()
+        assert self.verify(test.as_list(), expected_aroon)
+
     @pytest.mark.usefixtures("candles", "expected_bbands")
     def test_bbands(self, candles, expected_bbands):
         test = indicators.BBANDS(candles=candles)
