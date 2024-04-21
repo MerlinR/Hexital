@@ -4,6 +4,7 @@ from .aroon import AROON
 from .atr import ATR
 from .bbands import BBANDS
 from .counter import Counter
+from .donchian import Donchian
 from .ema import EMA
 from .hla import HighLowAverage
 from .hma import HMA
@@ -30,6 +31,7 @@ INDICATOR_MAP = {
     "ADX": ADX,
     "ATR": ATR,
     "BBANDS": BBANDS,
+    "donchian": Donchian,
     "EMA": EMA,
     "HLA": HighLowAverage,
     "HMA": HMA,

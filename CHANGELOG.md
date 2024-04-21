@@ -17,6 +17,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added Indicators
   - Counter
   - Aroon (aroon)
+  - Donchian Channels (donchian)
   - Hull Moving Average (HMA)
   - True Strength Index (TSI)
   - Standard Deviation (STDEV)

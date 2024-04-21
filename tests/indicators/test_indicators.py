@@ -35,6 +35,12 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.as_list(), expected_bbands)
 
+    @pytest.mark.usefixtures("candles", "expected_donchian")
+    def test_donchian(self, candles, expected_donchian):
+        test = indicators.Donchian(candles=candles)
+        test.calculate()
+        assert self.verify(test.as_list(), expected_donchian)
+
     @pytest.mark.usefixtures("candles", "expected_ema")
     def test_ema(self, candles, expected_ema):
         test = indicators.EMA(candles=candles)

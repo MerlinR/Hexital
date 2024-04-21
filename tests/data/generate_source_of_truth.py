@@ -93,6 +93,7 @@ def generate_indicators():
             {"kind": "tsi"},
             {"kind": "bbands"},
             {"kind": "aroon"},
+            {"kind": "donchian"},
         ],
     )
 
@@ -197,6 +198,17 @@ def generate_indicators():
             {"AROONU": aroon_row[0], "AROOND": aroon_row[1], "AROONOSC": aroon_row[2]}
         )
     save_json_result(aroon_data, "AROON")
+
+    donchian_data = []
+    for donchian_row in zip(
+        [round_values(value) for value in df["DCL_20_20"].tolist()],
+        [round_values(value) for value in df["DCM_20_20"].tolist()],
+        [round_values(value) for value in df["DCU_20_20"].tolist()],
+    ):
+        donchian_data.append(
+            {"DCL": donchian_row[0], "DCM": donchian_row[1], "DCU": donchian_row[2]}
+        )
+    save_json_result(donchian_data, "DONCHIAN")
 
 
 def generate_indicators_timeframe(frame: str):
