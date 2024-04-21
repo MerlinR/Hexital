@@ -11,33 +11,37 @@
 
 # `Beta`
 
-Note: Hexital has entered Beta mode, being all Major features are implemented and not expected to have drastic changes. Future changes would include bug fixes, QOL additions and implementation of new Indicators, Candlestick patterns, movements and Candlestick types.
+Note: Hexital is in Beta, all Major features are implemented and not expected to have drastic changes.
 
 # Hexital
 
-`Hexital` is a Python library implementing financial indicators for technical analysis. The distinctive feature of the library is its incremental computation of indicators which is designed to fit real-time applications or applications with iterative input in general.
+`Hexital` is a Python library designed for technical analysis in financial markets, offering a range of indicators commonly used in trading strategies. What sets Hexital apart is its innovative approach to computation, specifically tailored for real-time or iterative applications.
 
-For most libraries such as [Pandas-TA](https://github.com/twopirllc/pandas-ta) which is fantastic for generating Indicators for a large set of data, it's incredibly slow when computing real-time/incremental data sets. The entire input vector is always used to calculate new values of indicators, which is a major cause of this speed issue. Despite the fact that these indicator values will remain unchanged and/or you don't want past data points to be changed by new data. `Hexital` resolves this by using an incremental approach, only calculating new/missing indicator value's, this implies it requires O(1) time to produce new indicator values in comparison to O(n) (or worse) required by other libraries.
+While libraries like [Pandas-TA](https://github.com/twopirllc/pandas-ta) excel at generating indicators for large datasets, they often struggle with real-time or incremental data processing due to their reliance on recalculating the entire input vector. This inefficiency can significantly impact speed, as each new data point triggers a full recalculation of all indicators.
+
+`Hexital` addresses this issue by employing an incremental computation method. Rather than reevaluating all data points, it selectively computes only the new or missing indicator values. This optimized approach ensures that generating new indicator values requires constant time complexity O(1), a stark contrast to the linear time complexity (O(n)) or worse exhibited by other libraries.
+
+With Hexital, users can enjoy swift and efficient computation of indicators, making it ideal for applications requiring real-time analysis or iterative data processing.
 
 ## Features
 
 ### Indicators
 
-Hexital comes with a growing selection of available Indicators to compute. These can be used individually to calculate a single indicator, or used with the `Hexital` class to automatically compute multiple indicators with an incremental candle list; which is easily parsable.
+Hexital offers a diverse range of indicators for technical analysis. These can be utilized individually to compute a single indicator or, with the Hexital class, multiple indicators can be automatically calculated using an incremental candle list, which is easily parsed.
 
 ### Candlestick Patterns
 
-Hexital also supports detecting candle patterns, such as Doji, etc. This can be achieved easily by calling the Pattern function with the candles, or used automatically as an indicator where it would be computed alongside Indicators.
+Hexital supports the detection of candle patterns, such as Doji, among others. This functionality can be easily accessed by calling the Pattern function with the candle data, or it can be automatically computed alongside other indicators.
 
 ### Candlestick Types
 
-Hexital also has the feature to automatically convert Candlesticks from the standard type into alternative formats, such as 'Heikin-Ashi'. This will mean prior to generating indicators it will automatically convert the Candlesticks to the desired type and then calculate indicators on this new candlestick type. This works in conjunction with all other features.
+Hexital provides the capability to automatically convert candlesticks from the standard type into alternative formats, such as 'Heikin-Ashi'. Prior to generating indicators, candlesticks are automatically converted to the desired type, enabling indicator calculations on this new candlestick type. This feature seamlessly integrates with all other functionalities.
 
 ### Multi-Timeframes
 
-Hexital has a key feature of supporting indicator and pattern computation on multiple candle timeframes with a single set of candles. For instance an indicator can be given second candlesticks and can calculate EMA on 1m candlesticks or 10m candlesticks, the indicator will automatically merge these candles into the required timeframes and compute the indicator value. \* Cant go down, for obv reasons.
+Hexital boasts a key feature of supporting indicator and pattern computation on multiple candle timeframes using a single set of candles. For example, an indicator can be applied to second candlesticks to calculate EMA on 1m or 10m candlesticks. The indicator automatically merges these candles into the required timeframes and computes the indicator value.
 
-This can also be mixed within the `Hexital` class, allowing you to automatically compute a multiple incremental indictors and patterns of which consistent of multiple timeframes by appending a single candle of any timeframe. E.G By appending 1m candles into `Hexital` you can automatically compute an RSI using the 5 minute candles and computing an EMA using the 10 minute candles, at the same time automatically while only adding 1m candlesticks.
+This functionality can also be leveraged within the `Hexital` class, enabling the automatic computation of multiple incremental indicators and patterns across multiple timeframes by appending a single candle of any timeframe. For instance, by appending 1m candles into Hexital, you can automatically compute an RSI using 5-minute candles and an EMA using 10-minute candles, all while only adding 1m candlesticks.
 
 Example:
 
@@ -47,7 +51,7 @@ stratergy = Hexital("Test Stratergy", candlesticks_1m, [RSI(timeframe="T5"), EMA
 
 ### Candlestick Movements
 
-Hexital also comes built with some candle utility methods, to easily take the candles list and detect movements such as Rising Candles, indicator Cross overs, etc, these are designed to be simple to make using the candles and common features easy, many of these are also found in pine scripting.
+Hexital includes built-in candle utility methods for detecting movements such as Rising Candles and indicator crossovers. These methods are designed to simplify the process of analyzing candle data and common features. Many of these functionalities are inspired by those found in Pine Scripting.
 
 ## Indicators
 
@@ -62,7 +66,7 @@ Hexital also comes built with some candle utility methods, to easily take the ca
 - Hull Moving Average (HMA)
 - Keltner Channel (KC)
 - Moving Average Convergence/Divergence (MACD)
-- On Balance Volum (OBV)
+- On Balance Volume (OBV)
 - Relative Moving Average (RMA)
 - Rate of Change (ROC)
 - Relative strength index (RSI)
@@ -74,7 +78,7 @@ Hexital also comes built with some candle utility methods, to easily take the ca
 - True Strength Index (TSI)
 - Volume Weighted Average Price (VWAP)
 - Volume Weighed Moving Averge (VWMA)
-- Weighed Moving Averge (WMA)
+- Weighed Moving Average (WMA)
 
 ## Candlestick Patterns
 
@@ -127,6 +131,7 @@ pip install git+https://github.com/merlinr/hexital.git@development
 
 ```python
 from hexital import EMA, Candle
+from hexital.analysis import movement
 import pandas as pd
 
 my_candles = [
@@ -147,79 +152,64 @@ candles = Candle.from_dicts(my_candles)
 # df = pd.read_csv("path/to/symbol.csv", sep=",")
 # candles = Candle.from_dicts(df.to_dict("records"))
 
-my_ema = EMA(candles=candles, period=3)
-my_ema.calculate()
-
-# Indicator name is generated based on Indicator and parameters
-print(my_ema.name) # EMA_3
-
-# Check if started generating Readings
-print(my_ema.has_reading) # True
-
-# Get EMA indicator readings
-# Latest
-print(my_ema.reading()) # 8408.7552
-# All
-print(my_ema.as_list()) # [None, None, 8004.6667, 4108.3333, 5708.1667, 7063.0833, 12414.0416, 15606.0208, 8518.5104, 8408.7552]
+print("Indicator name:", my_ema.name)  # EMA_3
+print("Has reading:", my_ema.has_reading)  # True
+print("Latest EMA reading:", my_ema.reading())  # 8408.7552
+print("All EMA readings:", my_ema.as_list())
+# [None, None, 8004.6667, 4108.3333, 5708.1667, 7063.0833, 12414.0416, 15606.0208, 8518.5104, 8408.7552]
 
 # Add new
 my_ema.append(Candle.from_dict({'open': 19723, 'high': 4837, 'low': 11631, 'close': 6231, 'volume': 38993}))
-print(my_ema.as_list()) # [None, None, 8004.6667, 4108.3333, 5708.1667, 7063.0833, 12414.0416, 15606.0208, 8518.5104, 8408.7552, 7319.8776]
+print("EMA readings after appending new candle:", my_ema.as_list())
+ # [None, None, 8004.6667, 4108.3333, 5708.1667, 7063.0833, 12414.0416, 15606.0208, 8518.5104, 8408.7552, 7319.8776]
 
 # Check Reading and Prev Reading
-print(my_ema.reading()) # 7319.8776
-print(my_ema.prev_reading()) # 8408.7552
+print("EMA reading:", my_ema.reading())  # 7319.8776
+print("Previouse EMA reading:", my_ema.prev_reading())  # 8408.7552
 
 # How many EMA readings been generated
 print(my_ema.reading_count()) # 9
 
 # Purge Readings
 my_ema.purge()
-print(my_ema.reading()) # None
-
-# Purge and Re-calculate
+print("EMA reading after purging:", my_ema.reading())  # None
 my_ema.recalculate()
-print(my_ema.reading()) # 7319.8776
+print("EMA reading after recalculation:", my_ema.reading())  # 7319.8776
 
 # Recalculate latest
 my_ema.calculate_index("EMA_3")
 
-# Access other Readings (Reading get's the latest readings)
-print(my_ema.reading("high")) # 4837
+# Access specific readings
+print("Latest high reading:", my_ema.reading("high"))  # 4837
+print("High reading at index -2:", my_ema.reading("high", index=-2))  # 6584
 
-# Access other specific Readings (Older readings)
-print(my_ema.reading("high", index=-2)) # 6584
-
-# Easily view candlestick trends
-print(my_ema.falling()) # True
 ```
 
 ## Upcoming Features
 
 Roughly ordered in priority
 
-- Modular framework (like indicators) to repaint candles, E.G as Renko, Range, etc
 - More Indicators
 - More Movement methods
 - More Patterns
 - Indicator Pluggability, to allow easy extension of this library
-  - Allowing custom Indictors to be added
+  - Allowing easier custom Indictors to be added
 - Multiprocessing, of indictors stored within hexial Class.
   - Likely wont see increase in performance
 
 ## Testing
 
-Testing is a huge part of this library as it's incredibly difficult to ensure the accuracy of the indicator values being generated. In order to solve this this I rely on [Pandas-TA](https://github.com/twopirllc/pandas-ta) as my source of truth for the indicator values. Each indicator added to this library requires a test that uses the Pandas-TA lib indicator output as the expected result. Due to some difference's in the calculations done withinin Numpy, not all values are exactly identical, therefore if there are differences outside of the given 1 decimal place, than a pearson correlation coefficient is calculated to ensure correct correlation with the givne output.
+Testing is a critical aspect of this library due to the complexity of ensuring the accuracy of generated indicator values. To achieve this, I rely on [Pandas-TA](https://github.com/twopirllc/pandas-ta) as the source of truth for indicator values. Each indicator added to this library undergoes testing, where the output is compared against the corresponding indicator output from Pandas-TA. Due to slight differences in calculations, particularly within NumPy, not all values are exactly identical. Therefore, if differences exceed a given threshold (usually beyond one decimal place), a Pearson correlation coefficient is calculated to ensure correct correlation with the expected output.
 
 ### Speed Tests
 
-The following charts indicate the results and speed of Pandas-TA and Hexital both Bulk and Incremental calculations these are the following results of running Pandas-TA and hexital both in Bulk (_all candles calculated at once_) and incremental (_Caluclating after each new candle is added_); charts _1 and 2_.
+The following charts illustrate the results and speed of Pandas-TA and Hexital in both bulk and incremental calculations. These results are obtained from running Pandas-TA and Hexital in bulk (_all candles calculated at once_) and incremental(_Caluclating after each new candle is added_) modes; charts _1 and 2_.
 
-The incremental chart's here are calculating the TA, adding one, re-calculating up to N amount. Pandas-TA/Pandas/Numpy for incremental data is clearly a slow process, this from my understanding due to the underlying way numpy will append/concat data, having to re-create the memory rather than resize. This is why Numpy/Panda's recommend gathering all the data prior to running calculations on it. Whereby the bulk calculating in Pandas-TA is consistent with a small time increase with the amount of data. While `Hexital` running purely pythonic can run in quickly in bulk and incremental, with little to no extra overhead time; clearly performing far faster than Pandas-TA Incremental and even faster than Pandas-TA with smaller set of data.
+The incremental charts demonstrate the process of calculating technical analysis, adding one candle at a time, and recalculating up to a specified number of candles. It's evident that using Pandas-TA, Pandas, and NumPy for incremental data processing incurs significant performance overhead. This is primarily due to the underlying behavior of NumPy, which involves reallocating memory when appending or concatenating data, rather than resizing it. As a result, it's recommended in NumPy and Pandas documentation to gather all data prior to running calculations. On the other hand, Hexital, being purely Pythonic, exhibits efficient performance both in bulk and incremental processing, with minimal to no additional overhead time. It significantly outperforms Pandas-TA in incremental processing and even surpasses Pandas-TA in speed, especially with smaller datasets.
 
 ![EMA 10 test results.](tests/speed_tests/EMA_10.png)
 
-From chart _(3)_ you can clearly see that with bulk calculations with an extremely large dataset, Pandas-Ta performs better than `Hexital` in large Bulk data. Bulk calculations Pandas-TA going from 0.08 for 1,000 and staying there for 10,000, While Hexital Goes from 0.005 seconds for 1,000 to 0.05 seconds for 10,000. While Hexital is faster, there is a clear growth in process time. Therefore for backtesting with a large dataset, Pandas-TA will give you the best performance, whereas Hexital will continue to slow down.
+From chart _(3)_, it's evident that in bulk calculations with an extremely large dataset, Pandas-TA outperforms Hexital. Pandas-TA maintains consistent performance, with processing times starting at 0.08 seconds for 1,000 candles and remaining stable at this level for 10,000 candles. In contrast, Hexital exhibits faster processing times, starting at 0.005 seconds for 1,000 candles but increasing to 0.05 seconds for 10,000 candles. While Hexital is initially faster, there is a noticeable growth in processing time as the dataset size increases. Therefore, for backtesting with a large dataset, Pandas-TA offers superior performance, while Hexital may experience slowdowns.
 
 ![EMA 10 Bulk test results.](tests/speed_tests/EMA_10%20Bulk%20Calculations.png)
 
@@ -235,4 +225,4 @@ The code that produces these charts is: `tests/speed_tests/run_speed_test.py` an
 
 ## Inspiration
 
-This library was was inspired by [TALIpp](https://github.com/nardew/talipp) which is another Incremental Technical Analysis Library, however I disliked the seperate input lists rather then an entire candle, and futhermore outputs are seperated entities requiring lots of managing. Whereas Hexital stores all data within the Candles making easier usage.
+This library was inspired by [TALIpp](https://github.com/nardew/talipp), another Incremental Technical Analysis Library. However, I found the separate input lists rather cumbersome compared to working with an entire candle. Additionally, in TALIpp, outputs are separate entities, requiring extensive management. In contrast, Hexital stores all data within the candle, simplifying usage and management.

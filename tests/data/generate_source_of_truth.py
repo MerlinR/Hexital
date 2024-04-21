@@ -40,7 +40,7 @@ def print_new(df: pd.DataFrame):
         print(f"Column: {col}")
 
 
-def candle_compress_dataframe(data: pd.DataFrame, freq: str = "5T"):
+def candle_compress_dataframe(data: pd.DataFrame, freq: str = "5min"):
     data.set_index(pd.DatetimeIndex(data["timestamp"]), inplace=True)
     data.drop("timestamp", axis=1, inplace=True)
 
@@ -229,7 +229,7 @@ def generate_indicators_timeframe(frame: str):
     df = df.astype(object).replace(np.nan, None)
 
     print_new(df)
-
+    frame = frame.replace("min", "T")
     save_json_result([round_values(value) for value in df["EMA_10"].tolist()], f"EMA_{frame}")
     save_json_result([round_values(value) for value in df["SMA_10"].tolist()], f"SMA_{frame}")
     save_json_result([round_values(value) for value in df["OBV"].tolist()], f"OBV_{frame}")
@@ -301,14 +301,14 @@ def generate_timeframe_candles(frame: str):
         row["timestamp"] = row["timestamp"].to_pydatetime().isoformat(timespec="seconds")
         output.append(row)
 
-    save_json_result(output, f"test_candles_{frame}", PATH_CANDLES)
+    save_json_result(output, f"test_candles_{frame.replace('min','T')}", PATH_CANDLES)
 
 
 if __name__ == "__main__":
     generate_indicators()
-    generate_indicators_timeframe("5T")
-    generate_indicators_timeframe("10T")
+    generate_indicators_timeframe("5min")
+    generate_indicators_timeframe("10min")
     generate_patterns()
-    generate_timeframe_candles("5T")
-    generate_timeframe_candles("10T")
+    generate_timeframe_candles("5min")
+    generate_timeframe_candles("10min")
     generate_heikin_candles()

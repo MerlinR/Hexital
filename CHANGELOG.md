@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 1.1.0 - TBD
+## 1.1.0 - 2024-04-21
 
 - Removed Movement/Patterns from Hexital/Indicator
 - Removed get_indicator from Hexital as indicator already exists

@@ -25,17 +25,17 @@ include = ["CHANGELOG.md"]
 python = "^3.10"
 
 [tool.poetry.group.dev.dependencies]
-coverage = "*"
-pytest = "*"
-pytest-cov = "*"
-deepdiff = "*"
+coverage = "^7.4.4"
+pytest = "^8.1.1"
+pytest-cov = "^5.0.0"
+deepdiff = "^7.0.1"
 
 [tool.poetry.group.truth]
 optional = true
 
 [tool.poetry.group.truth.dependencies]
-pandas = "^1.2.0"
-numpy = "^1.22.0"
+pandas = "^2.2.2"
+numpy = "^1.26.4"
 ta-lib = "*"
 pandas-ta = { git = "https://github.com/twopirllc/pandas-ta.git#develop" }
 
@@ -43,10 +43,10 @@ pandas-ta = { git = "https://github.com/twopirllc/pandas-ta.git#develop" }
 optional = true
 
 [tool.poetry.group.speed_tests.dependencies]
-matplotlib = "*"
-pandas = "^1.2.0"
-numpy = "^1.22.0"
-ta-lib = "*"
+matplotlib = "^3.8.4"
+pandas = "^2.2.2"
+numpy = "^1.26.4"
+ta-lib = "^0.4.28"
 pandas-ta = { git = "https://github.com/twopirllc/pandas-ta.git#develop" }
 
 [build-system]
