@@ -4,6 +4,8 @@ on:
   release:
     types:
       - published
+  workflow_dispatch:
+    branches: ["master"]
 
 permissions:
   contents: read
@@ -19,24 +21,24 @@ jobs:
       id-token: write
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.10'
-    - name: Install and configure Poetry
-      uses: snok/install-poetry@v1.3.4
-      with:
-        version: 1.5.1
-    - name: Load cached venv
-      id: cached-poetry-dependencies
-      uses: actions/cache@v3
-      with:
-        path: .venv
-        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-    - name: Install dependencies
-      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-      run: poetry install --no-interaction --no-root
-    - run: poetry config pypi-token.pypi "${{ secrets.PYPI_TOKEN }}"
-    - name: Build and Publish package to PyPI
-      run: poetry publish --build
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+      - name: Install and configure Poetry
+        uses: snok/install-poetry@v1.3.4
+        with:
+          version: 1.5.1
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
+      - run: poetry config pypi-token.pypi "${{ secrets.PYPI_TOKEN }}"
+      - name: Build and Publish package to PyPI
+        run: poetry publish --build
