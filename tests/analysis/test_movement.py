@@ -168,7 +168,10 @@ class TestRising:
         assert movement.rising(indicator_candles_partial, "EMA_10") is True
 
     def test_basic_rising_partial_missing(self, indicator_candles_partial):
-        assert movement.rising(indicator_candles_partial, "SMA_10") is False
+        assert movement.rising(indicator_candles_partial, "SMA_10") is True
+
+    def test_basic_rising_partial_missing_long(self, indicator_candles_partial):
+        assert movement.rising(indicator_candles_partial, "SMA_10", length=4) is False
 
     def test_basic_rising_length(self, rising_candles):
         assert movement.rising(rising_candles, "close", 100) is True
@@ -188,7 +191,10 @@ class TestFalling:
         assert movement.falling(indicator_candles_partial, "EMA_10") is False
 
     def test_basic_falling_partial_missing(self, indicator_candles_partial):
-        assert movement.falling(indicator_candles_partial, "SMA_10") is False
+        assert movement.falling(indicator_candles_partial, "SMA_10") is True
+
+    def test_basic_falling_partial_missing_long(self, indicator_candles_partial):
+        assert movement.falling(indicator_candles_partial, "SMA_10", length=4) is False
 
     def test_basic_falling_length(self, fallling_candles):
         assert movement.falling(fallling_candles, "close", 100) is True

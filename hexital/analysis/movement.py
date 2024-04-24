@@ -89,7 +89,7 @@ def value_range(
     return abs(min(readings) - max(readings))
 
 
-def rising(candles: List[Candle], indicator: str, length: int = 4, index: int = -1) -> bool:
+def rising(candles: List[Candle], indicator: str, length: int = 1, index: int = -1) -> bool:
     """True if current `indicator` is greater than all previous `indicator`
     for `length` bars back, False otherwise.
     Length `excludes` latest"""
@@ -112,7 +112,7 @@ def rising(candles: List[Candle], indicator: str, length: int = 4, index: int = 
     return all(reading < latest_reading for reading in readings)
 
 
-def falling(candles: List[Candle], indicator: str, length: int = 4, index: int = -1) -> bool:
+def falling(candles: List[Candle], indicator: str, length: int = 1, index: int = -1) -> bool:
     """True if current `indicator` reading is less than all previous `indicator`
     reading for `length` bars back, False otherwise.
     Length `excludes` latest"""
