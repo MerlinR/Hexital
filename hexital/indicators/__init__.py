@@ -6,6 +6,7 @@ from .bbands import BBANDS
 from .counter import Counter
 from .donchian import Donchian
 from .ema import EMA
+from .highest_lowest import HighestLowest
 from .hla import HighLowAverage
 from .hma import HMA
 from .kc import KC
@@ -33,6 +34,7 @@ INDICATOR_MAP = {
     "BBANDS": BBANDS,
     "donchian": Donchian,
     "EMA": EMA,
+    "HL": HighestLowest,
     "HLA": HighLowAverage,
     "HMA": HMA,
     "KC": KC,

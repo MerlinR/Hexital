@@ -7,6 +7,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 ## 1.1.1
 - Changed Movement rising/falling default length from 4 to 1
 - Added better exceptions to Hexital verifying dict indicators
+- Added HighestLowest indicator
 
 ## 1.1.0 - 2024-04-21
 
