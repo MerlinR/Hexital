@@ -167,7 +167,7 @@ class TestIndicators(IndicatorTestBase):
 
     @pytest.mark.usefixtures("candles", "expected_stdev")
     def test_stdev(self, candles, expected_stdev):
-        test = indicators.STDEV(candles=candles)
+        test = indicators.StandardDeviation(candles=candles)
         test.calculate()
         assert self.verify(test.as_list(), expected_stdev)
 

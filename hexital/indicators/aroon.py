@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from hexital.analysis import movement
 from hexital.core.indicator import Indicator
 from hexital.indicators.sma import SMA
-from hexital.indicators.stdev import STDEV
+from hexital.indicators.stdev import StandardDeviation
 
 
 @dataclass(kw_only=True)
@@ -20,7 +20,7 @@ class AROON(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_sub_indicator(STDEV(period=self.period))
+        self.add_sub_indicator(StandardDeviation(period=self.period))
         self.add_sub_indicator(SMA(period=self.period))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
