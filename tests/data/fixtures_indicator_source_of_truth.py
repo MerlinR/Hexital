@@ -207,6 +207,12 @@ def fixture_expected_stdevthres():
     return json.load(csv_files)
 
 
+@pytest.fixture(name="expected_highestlowest")
+def fixture_expected_highestlowest():
+    csv_files = open(f"{SOURCE_OF_TRUTH_HEX_PATH}/HIGHESTLOWEST.json")
+    return json.load(csv_files)
+
+
 @pytest.fixture(name="expected_counter_bear")
 def fixture_expected_counter_bear():
     csv_files = open(f"{SOURCE_OF_TRUTH_HEX_PATH}/COUNTER_supertrend_bear.json")
