@@ -189,7 +189,7 @@ def mean_falling(candles: List[Candle], indicator: str, length: int = 4, index: 
 
 def highest(
     candles: List[Candle], indicator: str, length: int = 4, index: int = -1
-) -> float | bool:
+) -> float | None:
     """Highest reading for a given number of bars back.
     Returns:
         Highest reading in the series.
@@ -203,12 +203,13 @@ def highest(
 
     readings = _get_clean_readings(candles, indicator, length, index_, True)
 
-    return max([reading for reading in readings], default=False)
+    max_reading = max([reading for reading in readings], default=False)
+    return max_reading if max_reading else None
 
 
 def lowest(
     candles: List[Candle], indicator: str, length: int = 4, index: int = -1
-) -> float | bool:
+) -> float | None:
     """Lowest reading for a given number of bars back.
     Returns:
         Lowest reading in the series.
@@ -222,7 +223,9 @@ def lowest(
 
     readings = _get_clean_readings(candles, indicator, length, index_, True)
 
-    return min([reading for reading in readings], default=False)
+    min_reading = min([reading for reading in readings], default=False)
+
+    return min_reading if min_reading else None
 
 
 def highestbar(
