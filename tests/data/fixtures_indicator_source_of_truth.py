@@ -198,6 +198,15 @@ def fixture_expected_vwma():
     return json.load(csv_files)
 
 
+# Hex Indicator
+
+
+@pytest.fixture(name="expected_stdevthres")
+def fixture_expected_stdevthres():
+    csv_files = open(f"{SOURCE_OF_TRUTH_HEX_PATH}/STDEVTHRES.json")
+    return json.load(csv_files)
+
+
 @pytest.fixture(name="expected_counter_bear")
 def fixture_expected_counter_bear():
     csv_files = open(f"{SOURCE_OF_TRUTH_HEX_PATH}/COUNTER_supertrend_bear.json")

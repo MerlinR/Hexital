@@ -17,6 +17,7 @@ from .roc import ROC
 from .rsi import RSI
 from .sma import SMA
 from .stdev import StandardDeviation
+from .stdevthres import StandardDeviationThreshold
 from .stoch import STOCH
 from .supertrend import Supertrend
 from .tr import TR
@@ -45,6 +46,7 @@ INDICATOR_MAP = {
     "RSI": RSI,
     "SMA": SMA,
     "STDEV": StandardDeviation,
+    "STDEVTHRES": StandardDeviationThreshold,
     "STOCH": STOCH,
     "Supertrend": Supertrend,
     "TR": TR,
