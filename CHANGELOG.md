@@ -8,6 +8,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Changed Movement rising/falling default length from 4 to 1
 - Added better exceptions to Hexital verifying dict indicators
 - Mass Indicator clean up to fix, unused/unended input_value's and unused sub indicators
+- Fixed minor donchian error
 - Added Indicators
   - Added HighestLowest (HL)
   - Added Standard Deviation Threshold (STDEVTHRES)

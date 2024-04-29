@@ -28,7 +28,9 @@ class Donchian(Indicator):
     def _calculate_reading(self, index: int) -> float | dict | None:
         donchian = {"DCL": None, "DCM": None, "DCU": None}
 
-        if self.prev_exists() or self.reading_period(self.period, "high", index):
+        if self.prev_reading(f"{self.name}.DCU") is not None or self.reading_period(
+            self.period, "high", index
+        ):
             donchian["DCU"] = movement.highest(self.candles, "high", self.period - 1, index)
             donchian["DCL"] = movement.lowest(self.candles, "low", self.period - 1, index)
             donchian["DCM"] = (donchian["DCU"] + donchian["DCL"]) / 2
