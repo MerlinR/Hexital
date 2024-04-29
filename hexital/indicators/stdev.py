@@ -27,6 +27,9 @@ class StandardDeviation(Indicator):
         removed_val = 0
         in_calc_range = False
 
+        if self.reading(self.input_value) is None:
+            return None
+
         if self.reading_period(self.period + 1, self.input_value, index):
             removed_val = self.reading(self.input_value, index - self.period)
             in_calc_range = True

@@ -39,9 +39,6 @@ class STOCH(Indicator):
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
-    def _validate_fields(self):
-        return
-
     def _initialise(self):
         self.add_managed_indicator("STOCH_data", Managed(fullname_override=f"{self.name}_data"))
         self.managed_indicators["STOCH_data"].add_sub_indicator(

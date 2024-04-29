@@ -20,9 +20,6 @@ class RMA(Indicator):
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
-    def _initialise(self):
-        return
-
     def _calculate_reading(self, index: int) -> float | dict | None:
         alpha = float(1.0 / self.period)
 

@@ -2,8 +2,6 @@ from dataclasses import dataclass, field
 
 from hexital.analysis import movement
 from hexital.core.indicator import Indicator
-from hexital.indicators.sma import SMA
-from hexital.indicators.stdev import StandardDeviation
 
 
 @dataclass(kw_only=True)
@@ -14,14 +12,9 @@ class AROON(Indicator):
 
     _name: str = field(init=False, default="AROON")
     period: int = 14
-    input_value: str = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
-
-    def _initialise(self):
-        self.add_sub_indicator(StandardDeviation(period=self.period))
-        self.add_sub_indicator(SMA(period=self.period))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         aroon = {
@@ -29,7 +22,7 @@ class AROON(Indicator):
             "AROOND": None,
             "AROONOSC": None,
         }
-        if self.reading_period(self.period + 1, self.input_value):
+        if self.reading_period(self.period + 1, "high"):
             aroon["AROONU"] = (
                 (self.period - movement.highestbar(self.candles, "high", self.period + 1, index))
                 / self.period

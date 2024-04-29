@@ -23,9 +23,9 @@ class StandardDeviationThreshold(Indicator):
     def _initialise(self):
         self.add_sub_indicator(
             StandardDeviation(
-                fullname_override=f"{self.name}_stdev",
                 input_value=self.input_value,
                 period=self.period,
+                fullname_override=f"{self.name}_stdev",
             )
         )
 

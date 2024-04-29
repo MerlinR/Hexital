@@ -21,7 +21,6 @@ class Donchian(Indicator):
 
     _name: str = field(init=False, default="DONCHIAN")
     period: int = 20
-    input_value: str = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"

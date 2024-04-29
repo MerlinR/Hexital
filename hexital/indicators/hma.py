@@ -22,9 +22,19 @@ class HMA(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_sub_indicator(WMA(period=self.period, fullname_override=f"{self.name}_WMA"))
         self.add_sub_indicator(
-            WMA(period=int(self.period / 2), fullname_override=f"{self.name}_WMAh")
+            WMA(
+                input_value=self.input_value,
+                period=self.period,
+                fullname_override=f"{self.name}_WMA",
+            )
+        )
+        self.add_sub_indicator(
+            WMA(
+                input_value=self.input_value,
+                period=int(self.period / 2),
+                fullname_override=f"{self.name}_WMAh",
+            )
         )
 
         self.add_managed_indicator("raw_HMA", Managed(fullname_override=f"{self.name}_HMAr"))

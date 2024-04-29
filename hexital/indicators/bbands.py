@@ -20,8 +20,8 @@ class BBANDS(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_sub_indicator(StandardDeviation(period=self.period))
-        self.add_sub_indicator(SMA(period=self.period))
+        self.add_sub_indicator(StandardDeviation(input_value=self.input_value, period=self.period))
+        self.add_sub_indicator(SMA(input_value=self.input_value, period=self.period))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         bbands = {
