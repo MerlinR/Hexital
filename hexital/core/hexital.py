@@ -1,4 +1,4 @@
-from copy import deepcopy
+from copy import copy, deepcopy
 from datetime import timedelta
 from typing import Dict, List, Optional, Set
 
@@ -81,21 +81,19 @@ class Hexital:
             valid_indicators[new_indicator.name] = new_indicator
 
         for indicator in valid_indicators.values():
-            manager = CandleManager(
-                [],
-                candles_lifespan=self.candles_lifespan,
-                timeframe=indicator.timeframe if indicator.timeframe else self.timeframe,
-                timeframe_fill=self.timeframe_fill,
-                candlestick_type=self.candlestick_type,
-            )
-
-            if manager == self._candles[DEFAULT_CANDLES]:
+            if not indicator.timeframe:
                 indicator.candle_manager = self._candles[DEFAULT_CANDLES]
-            elif manager.name in self._candles:
-                indicator.candle_manager = self._candles[manager.name]
+            elif indicator.timeframe and indicator.timeframe in self._candles:
+                indicator.candle_manager = self._candles[indicator.timeframe]
             else:
+                manager = CandleManager(
+                    deepcopy(self._candles[DEFAULT_CANDLES]).candles,
+                    candles_lifespan=self.candles_lifespan,
+                    timeframe=indicator.timeframe if indicator.timeframe else self.timeframe,
+                    timeframe_fill=self.timeframe_fill,
+                    candlestick_type=self.candlestick_type,
+                )
                 self._candles[manager.name] = manager
-                manager.append(deepcopy(self._candles[DEFAULT_CANDLES]).candles)
                 indicator.candle_manager = self._candles[manager.name]
 
         return valid_indicators
@@ -103,7 +101,7 @@ class Hexital:
     def _build_indicator(self, raw_indicator: dict) -> Indicator:
         analysis_map = PATTERN_MAP | MOVEMENT_MAP
         amorph_class = INDICATOR_MAP["Amorph"]
-        indicator = deepcopy(raw_indicator)
+        indicator = copy(raw_indicator)
 
         if indicator.get("indicator"):
             indicator_name = indicator.pop("indicator")

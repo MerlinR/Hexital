@@ -9,6 +9,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Fixed Major incremental calculate flaw with sub indicators
   - Causing sub indicators to almost always re-calc entire set rather than latest (incrementally)
 - Optimised Analysis and Movement functions for less calls and less loops
+- Removed Deepcopies on Candles unless being added to Extra timeframes to speed up appending
 
 ## 1.1.1 - 2024-05-01
 
