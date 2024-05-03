@@ -98,7 +98,11 @@ class CandleManager:
         else:
             raise TypeError
 
-        self.candles.extend(deepcopy(candles_))
+        if self.name == DEFAULT_CANDLES:
+            self.candles.extend(candles_)
+        else:
+            self.candles.extend(deepcopy(candles_))
+
         self._tasks()
 
     def trim_candles(self):
