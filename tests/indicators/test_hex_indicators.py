@@ -33,7 +33,6 @@ class TestHexPatterns(IndicatorTestBase):
     def test_highest_lowest(self, candles, expected_highestlowest):
         test = indicators.HighestLowest(candles=candles)
         test.calculate()
-        print(test.as_list())
         assert self.verify(test.as_list(), expected_highestlowest)
 
     @pytest.mark.usefixtures("candles", "expected_stdevthres")

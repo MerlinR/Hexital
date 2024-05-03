@@ -1,4 +1,3 @@
-from itertools import chain
 from typing import List, Optional
 
 from hexital.core.candle import Candle
@@ -20,22 +19,33 @@ def reading_by_candle(candle: Candle, name: str) -> float | dict | None:
     if "." in name:
         main_name, nested_name = name.split(".")
         reading = _nested_indicator(candle, main_name, nested_name)
-        if reading is not None:
-            return reading
+        return reading
 
-    if getattr(candle, name, None) is not None:
-        return getattr(candle, name)
+    attr = getattr(candle, name, None)
 
-    for key, reading in chain(candle.indicators.items(), candle.sub_indicators.items()):
+    if attr is not None:
+        return attr
+
+    for key in candle.indicators:
         if key == name:
-            return reading
+            return candle.indicators[key]
+
+    for key in candle.sub_indicators:
+        if key == name:
+            return candle.sub_indicators[key]
 
     return None
 
 
 def _nested_indicator(candle: Candle, name: str, nested_name: str) -> float | None:
-    for key, reading in chain(candle.indicators.items(), candle.sub_indicators.items()):
+    for key in candle.indicators:
         if key == name:
+            reading = candle.indicators[key]
+            return reading.get(nested_name) if isinstance(reading, dict) else reading
+
+    for key in candle.sub_indicators:
+        if key == name:
+            reading = candle.sub_indicators[key]
             return reading.get(nested_name) if isinstance(reading, dict) else reading
 
     return None
@@ -44,7 +54,7 @@ def _nested_indicator(candle: Candle, name: str, nested_name: str) -> float | No
 def reading_count(candles: List[Candle], name: str) -> int:
     """Returns how many instance of the given indicator exist"""
     for count, candle in enumerate(reversed(candles)):
-        if not reading_by_candle(candle, name):
+        if reading_by_candle(candle, name) is None:
             return count
 
     return len(candles)
@@ -65,21 +75,21 @@ def reading_period(
     if index - period < 0:
         return False
 
-    return all(
-        bool(
+    for point in [
+        period,
+        period / 2,
+        0,
+    ]:
+        if (
             reading_by_index(
                 candles,
                 name,
                 index - int(point),
             )
-            is not None
-        )
-        for point in [
-            period,
-            period / 2,
-            0,
-        ]
-    )
+            is None
+        ):
+            return False
+    return True
 
 
 def candles_sum(
@@ -95,4 +105,4 @@ def candles_sum(
     length = len(candles) if length > len(candles) else length
     values = [reading_by_candle(candle, indicator) for candle in candles[index_ - length : index_]]
 
-    return sum(value for value in values if value and isinstance(value, (int, float)))
+    return sum(value for value in values if value is not None)
