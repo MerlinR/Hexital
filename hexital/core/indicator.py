@@ -188,9 +188,11 @@ class Indicator(ABC):
             self._initialise()
             self._initialised = True
 
+        start_index = self._active_index if self._active_index > 0 else self._find_calc_index()
+
         self._calculate_sub_indicators(prior_calc=True)
 
-        for index in range(self._find_calc_index(), len(self.candles)):
+        for index in range(start_index, len(self.candles)):
             self._set_active_index(index)
 
             if self.candles[index].indicators.get(self.name) is not None:
@@ -218,7 +220,10 @@ class Indicator(ABC):
         """Optimisation method, to find where to start calculating the indicator from
         Searches from newest to oldest to find the first candle without the indicator
         """
-        if len(self.candles) == 0 or self.name not in self.candles[0].indicators:
+        if len(self.candles) == 0 or (
+            self.name not in self.candles[0].indicators
+            and self.name not in self.candles[0].sub_indicators
+        ):
             return 0
 
         for index in range(len(self.candles) - 1, 0, -1):
@@ -228,7 +233,7 @@ class Indicator(ABC):
             ):
                 return index + 1
 
-        return len(self.candles) - 1
+        return 0
 
     def _set_active_index(self, index: int):
         self._active_index = index

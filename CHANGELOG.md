@@ -4,7 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.1.2
+
+- Fixed Major incremental calculate flaw with sub indicators
+  - Causing sub indicators to almost always re-calc entire set rather than latest (incrementally)
+
+
 ## 1.1.1 - 2024-05-01
+
 - Changed Movement rising/falling default length from 4 to 1
 - Added better exceptions to Hexital verifying dict indicators
 - Mass Indicator clean up to fix, unused/unended input_value's and unused sub indicators

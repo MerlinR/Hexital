@@ -183,6 +183,14 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.as_list(), expected_supertrend)
 
+    @pytest.mark.usefixtures("candles", "expected_supertrend")
+    def test_append_supertrend(self, candles, expected_supertrend):
+        test = indicators.Supertrend(candles=[])
+        for candle in candles:
+            test.append(candle)
+            test.calculate()
+        assert self.verify(test.as_list(), expected_supertrend)
+
     @pytest.mark.usefixtures("candles", "expected_tr")
     def test_tr(self, candles, expected_tr):
         test = indicators.TR(candles=candles)
