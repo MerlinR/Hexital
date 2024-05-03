@@ -188,11 +188,9 @@ class Indicator(ABC):
             self._initialise()
             self._initialised = True
 
-        start_index = self._active_index if self._active_index > 0 else self._find_calc_index()
-
         self._calculate_sub_indicators(prior_calc=True)
 
-        for index in range(start_index, len(self.candles)):
+        for index in range(self._find_calc_index(), len(self.candles)):
             self._set_active_index(index)
 
             if self.candles[index].indicators.get(self.name) is not None:
