@@ -203,25 +203,25 @@ Testing is a critical aspect of this library due to the complexity of ensuring t
 
 ### Speed Tests
 
-The following charts illustrate the results and speed of Pandas-TA and Hexital in both bulk and incremental calculations. These results are obtained from running Pandas-TA and Hexital in bulk (_all candles calculated at once_) and incremental(_Caluclating after each new candle is added_) modes; charts _1 and 2_.
+The following charts illustrate the results and speed of Pandas-TA and Hexital in both bulk and incremental calculations. These results are obtained from running Pandas-TA and Hexital in bulk (_all candles calculated at once_) and incremental(_Caluclating after each new candle is added_) modes; chart _1_.
 
 The incremental charts demonstrate the process of calculating technical analysis, adding one candle at a time, and recalculating up to a specified number of candles. It's evident that using Pandas-TA, Pandas, and NumPy for incremental data processing incurs significant performance overhead. This is primarily due to the underlying behavior of NumPy, which involves reallocating memory when appending or concatenating data, rather than resizing it. As a result, it's recommended in NumPy and Pandas documentation to gather all data prior to running calculations. On the other hand, Hexital, being purely Pythonic, exhibits efficient performance both in bulk and incremental processing, with minimal to no additional overhead time. It significantly outperforms Pandas-TA in incremental processing and even surpasses Pandas-TA in speed, especially with smaller datasets.
 
-![EMA 10 test results.](tests/speed_tests/EMA_10.png)
+![EMA 10 test results.](tests/extra/speed_tests/EMA_10.png)
 
-From chart _(3)_, it's evident that in bulk calculations with an extremely large dataset, Pandas-TA outperforms Hexital. Pandas-TA maintains consistent performance, with processing times starting at 0.08 seconds for 1,000 candles and remaining stable at this level for 10,000 candles. In contrast, Hexital exhibits faster processing times, starting at 0.005 seconds for 1,000 candles but increasing to 0.05 seconds for 10,000 candles. While Hexital is initially faster, there is a noticeable growth in processing time as the dataset size increases. Therefore, for backtesting with a large dataset, Pandas-TA offers superior performance, while Hexital may experience slowdowns.
+From chart _(2)_, it's evident that in bulk calculations with an extremely large dataset, Pandas-TA outperforms Hexital. Pandas-TA maintains consistent performance, with processing times starting at 0.08 seconds for 1,000 candles and remaining stable at this level for 10,000 candles. In contrast, Hexital exhibits faster processing times, starting at 0.025 seconds for 2,000 candles but increasing to 0.16 seconds for 10,000 candles. While Hexital is initially faster, there is a noticeable growth in processing time as the dataset size increases. Therefore, for backtesting with a large dataset, Pandas-TA offers superior performance, while Hexital may experience slowdowns.
 
-![EMA 10 Bulk test results.](tests/speed_tests/EMA_10%20Bulk%20Calculations.png)
+![MACD 26 Bulk test results.](tests/extra/speed_tests/MACD_26_12_Bulk_Calculations.png)
 
-However referencing chart _(4)_ being an example of using both these libraries for a live application, whereby at n candles we incrementing a dataset with a candle and calculating the new TA; `Hexital` is far quicker. This is due to the speed that python can increment a list of data rather than Panda, as well as `Hexital` only needing to calculate the newest candle rather than having to re-calculate the entire dataset. Chart _3_ clearly shows the speed benefits it has over Pandas-TA and other Panda based Technical Analysis tools for incremental data sets.
+However referencing chart _(3)_ being an example of using both these libraries for a live incremental application, whereby at n candles we incrementing a dataset with a candle and calculating the new TA; `Hexital` is far quicker. This is due to the speed that python can increment a list of data rather than Panda, as well as `Hexital` only needing to calculate the newest candle rather than having to re-calculate the entire dataset. Chart _3_ clearly shows the speed benefits it has over Pandas-TA and other Panda based Technical Analysis tools for incremental data sets.
 
-![EMA 10 Real world usage.](tests/speed_tests/EMA_10_real_world.png)
+![MACD 26 Real world usage.](tests/extra/speed_tests/MACD_26_12_real_world.png)
 
 For reference, if using seconds Candle with 10,000 candles that is around 2 Hours 46 minutes.
 
 #### Note
 
-The code that produces these charts is: `tests/speed_tests/run_speed_test.py` and can be ran by calling `make speed-test`. Some noise is seen due to running on personal laptop while in use.
+The code that produces these charts is: `tests/extra/speed_tests/run_speed_test.py` and can be ran by calling `make speed-test`. Some noise is seen due to running on personal laptop while in use.
 
 ## Inspiration
 

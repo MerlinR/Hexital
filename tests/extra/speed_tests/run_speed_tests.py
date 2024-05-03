@@ -10,10 +10,10 @@ from hexital import Candle, Hexital
 PATH = "tests/extra/speed_tests/"
 
 
-def generate_random_candles(amount: int) -> list:
+def generate_random_candles(count: int) -> list:
     data = []
 
-    for i in range(amount):
+    for i in range(count):
         data.append(
             {
                 "open": random.randint(0, 9000000),
@@ -38,11 +38,11 @@ def add_timestamp(candles: pd.DataFrame):
 
 def create_graph(data: dict, title: str):
     for key, val in data.items():
-        if key == "amount":
+        if key == "count":
             continue
-        plt.plot(data["amount"], val, label=key)
+        plt.plot(data["count"], val, label=key)
 
-    plt.xlabel("Candles Amount")
+    plt.xlabel("Candles Count")
     plt.ylabel("Time (Seconds)")
 
     plt.title(title)
@@ -103,7 +103,7 @@ def run_test_ema(candle_count: int, steps: int):
     hex_strat = [{"indicator": "EMA"}]
     pd_strat = [{"kind": "ema"}]
     results = {
-        "amount": [],
+        "count": [],
         "Hexital Bulk": [],
         "Hexital Incremental": [],
         "Pandas_TA Bulk": [],
@@ -114,7 +114,7 @@ def run_test_ema(candle_count: int, steps: int):
         if i == 0:
             continue
         print(f"Candles: {i}")
-        results["amount"].append(i)
+        results["count"].append(i)
         hb1 = test_hexital_bulk(i, hex_strat)
         hb2 = test_hexital_bulk(i, hex_strat)
         results["Hexital Bulk"].append(round((hb1 + hb2) / 2, 4))
@@ -135,11 +135,11 @@ def run_test_ema(candle_count: int, steps: int):
     create_graph(results, "EMA_10")
 
 
-def run_test_macd(candle_count: int, steps: int):
-    hex_strat = [{"indicator": "MACD"}]
-    pd_strat = [{"kind": "macd"}]
+def run_test_supertrend(candle_count: int, steps: int):
+    hex_strat = [{"indicator": "Supertrend"}]
+    pd_strat = [{"kind": "supertrend"}]
     results = {
-        "amount": [],
+        "count": [],
         "Hexital Bulk": [],
         "Hexital Incremental": [],
         "Pandas_TA Bulk": [],
@@ -150,7 +150,7 @@ def run_test_macd(candle_count: int, steps: int):
         if i == 0:
             continue
         print(f"Candles: {i}")
-        results["amount"].append(i)
+        results["count"].append(i)
         hb1 = test_hexital_bulk(i, hex_strat)
         hb2 = test_hexital_bulk(i, hex_strat)
         results["Hexital Bulk"].append(round((hb1 + hb2) / 2, 4))
@@ -166,16 +166,15 @@ def run_test_macd(candle_count: int, steps: int):
         pi1 = test_pandas_ta_incremental(i, pd_strat)
         pi2 = test_pandas_ta_incremental(i, pd_strat)
         results["Pandas_TA Incremental"].append(round((pi1 + pi2) / 2, 4))
-        print(f"Time: {results['Pandas_TA Incremental'][-1]}")
 
-    create_graph(results, "MACD_10")
+    create_graph(results, "Supertrend_7")
 
 
-def run_test_ema_bulk_only(candle_count: int, steps: int):
-    hex_strat = [{"indicator": "EMA"}]
-    pd_strat = [{"kind": "ema"}]
+def run_test_macd_bulk_only(candle_count: int, steps: int, smooth: int):
+    hex_strat = [{"indicator": "MACD"}]
+    pd_strat = [{"kind": "macd"}]
     results = {
-        "amount": [],
+        "count": [],
         "Hexital Bulk": [],
         "Pandas_TA Bulk": [],
     }
@@ -184,25 +183,28 @@ def run_test_ema_bulk_only(candle_count: int, steps: int):
         if i == 0:
             continue
         print(f"Candles: {i}")
-        results["amount"].append(i)
-        hb1 = test_hexital_bulk(i, hex_strat)
-        hb2 = test_hexital_bulk(i, hex_strat)
-        hb3 = test_hexital_bulk(i, hex_strat)
-        results["Hexital Bulk"].append(round((hb1 + hb2 + hb3) / 3, 4))
+        results["count"].append(i)
 
-        pb1 = test_pandas_ta_bulk(i, pd_strat)
-        pb2 = test_pandas_ta_bulk(i, pd_strat)
-        pb3 = test_pandas_ta_bulk(i, pd_strat)
-        results["Pandas_TA Bulk"].append(round((pb1 + pb2 + pb3) / 3, 4))
+        vals = 0
+        for idx in range(smooth):
+            vals += test_hexital_bulk(i, hex_strat)
 
-    create_graph(results, "EMA_10 Bulk Calculations")
+        results["Hexital Bulk"].append(round(vals / smooth, 4))
+
+        vals = 0
+        for idx in range(smooth):
+            vals += test_pandas_ta_bulk(i, pd_strat)
+
+        results["Pandas_TA Bulk"].append(round(vals / smooth, 4))
+
+    create_graph(results, "MACD_26_12 Bulk Calculations")
 
 
 def run_test_real_usage(candle_count: int, steps: int):
-    hex_strat = [{"indicator": "EMA"}]
-    pd_strat = [{"kind": "ema"}]
+    hex_strat = [{"indicator": "MACD"}]
+    pd_strat = [{"kind": "macd"}]
     results = {
-        "amount": [],
+        "count": [],
         "Hexital Incremental": [],
         "Pandas_TA Incremental": [],
     }
@@ -211,7 +213,7 @@ def run_test_real_usage(candle_count: int, steps: int):
         if i == 0:
             continue
         print(f"Candles: {i}")
-        results["amount"].append(i)
+        results["count"].append(i)
 
         candles = Candle.from_dicts(generate_random_candles(i))
         hexitl = Hexital("Test Stratergy", candles, hex_strat)
@@ -236,24 +238,24 @@ def run_test_real_usage(candle_count: int, steps: int):
         results["Pandas_TA Incremental"].append(round(time.time() - start_time, 4))
 
     for key, val in results.items():
-        if key == "amount":
+        if key == "count":
             continue
-        plt.plot(results["amount"], val, label=key)
+        plt.plot(results["count"], val, label=key)
 
     plt.xlabel("Adding n Candle")
     plt.ylabel("Time (Seconds)")
 
-    plt.title("EMA_10 Real World Incremental Usage")
+    plt.title("MACD_26_12 Real World Incremental Usage")
     plt.legend()
 
-    plt.savefig(f"{PATH}/EMA_10_real_world.png")
+    plt.savefig(f"{PATH}/MACD_26_12_real_world.png")
 
 
 def run_tests():
     steps = 10
-    run_test_ema(1000, steps)
-    run_test_macd(1000, steps)
-    run_test_ema_bulk_only(10000, steps)
+    run_test_ema(500, steps)
+    run_test_supertrend(500, steps)
+    run_test_macd_bulk_only(10000, steps, 6)
     run_test_real_usage(10000, steps)
 
 
