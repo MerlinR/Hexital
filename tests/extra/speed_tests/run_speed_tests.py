@@ -7,6 +7,8 @@ import pandas as pd
 import pandas_ta as ta
 from hexital import Candle, Hexital
 
+PATH = "tests/extra/speed_tests/"
+
 
 def generate_random_candles(amount: int) -> list:
     data = []
@@ -46,7 +48,7 @@ def create_graph(data: dict, title: str):
     plt.title(title)
     plt.legend()
 
-    plt.savefig(f"tests/speed_tests/{title}.png")
+    plt.savefig(f"{PATH}/{title}.png")
 
 
 def test_pandas_ta_bulk(candle_length: int, strat: list):
@@ -244,7 +246,7 @@ def run_test_real_usage(candle_count: int, steps: int):
     plt.title("EMA_10 Real World Incremental Usage")
     plt.legend()
 
-    plt.savefig("tests/speed_tests/EMA_10_real_world.png")
+    plt.savefig(f"{PATH}/EMA_10_real_world.png")
 
 
 def run_tests():

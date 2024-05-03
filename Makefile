@@ -30,7 +30,7 @@ truth:
 speed_test:
 	@echo "Running Speed tests"
 	poetry install --with speed_tests
-	poetry run python tests/speed_tests/run_speed_tests.py 
+	poetry run python tests/extra/speed_tests/run_speed_tests.py 
 
 
 new-test-candles:
@@ -46,3 +46,7 @@ test-all:
 	@echo "Running Tests"
 	poetry run coverage run --omit="tests/*" -m pytest -vv --durations=0
 	poetry run coverage report -m
+
+profile:
+	poetry run python3 tests/extra/profiling/calc_supertrend.py
+	poetry run snakeviz prof/
