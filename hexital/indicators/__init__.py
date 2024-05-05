@@ -13,6 +13,7 @@ from .hlca import HighLowCloseAverage
 from .hma import HMA
 from .kc import KC
 from .macd import MACD
+from .mfi import MFI
 from .obv import OBV
 from .rma import RMA
 from .roc import ROC
@@ -44,6 +45,7 @@ INDICATOR_MAP = {
     "HMA": HMA,
     "KC": KC,
     "MACD": MACD,
+    "MFI": MFI,
     "OBV": OBV,
     "RMA": RMA,
     "ROC": ROC,

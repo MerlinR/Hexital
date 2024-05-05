@@ -96,6 +96,12 @@ def fixture_expected_macd():
     return json.load(csv_files)
 
 
+@pytest.fixture(name="expected_mfi")
+def fixture_expected_mfi():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/MFI.json")
+    return json.load(csv_files)
+
+
 @pytest.fixture(name="expected_obv")
 def fixture_expected_OBV():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/OBV.json")

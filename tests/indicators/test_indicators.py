@@ -95,6 +95,12 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.as_list(), expected_macd)
 
+    @pytest.mark.usefixtures("candles", "expected_mfi")
+    def test_mfi(self, candles, expected_mfi):
+        test = indicators.MFI(candles=candles)
+        test.calculate()
+        assert self.verify(test.as_list(), expected_mfi)
+
     @pytest.mark.usefixtures("candles", "expected_obv")
     def test_obv(self, candles, expected_obv):
         test = indicators.OBV(candles=candles)
