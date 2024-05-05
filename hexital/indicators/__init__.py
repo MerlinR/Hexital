@@ -3,6 +3,7 @@ from .amorph import Amorph
 from .aroon import AROON
 from .atr import ATR
 from .bbands import BBANDS
+from .cmo import CMO
 from .counter import Counter
 from .donchian import Donchian
 from .ema import EMA
@@ -33,6 +34,7 @@ INDICATOR_MAP = {
     "ADX": ADX,
     "ATR": ATR,
     "BBANDS": BBANDS,
+    "CMO": CMO,
     "donchian": Donchian,
     "EMA": EMA,
     "HL": HighestLowest,

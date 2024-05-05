@@ -35,6 +35,12 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.as_list(), expected_bbands)
 
+    @pytest.mark.usefixtures("candles", "expected_cmo")
+    def test_cmo(self, candles, expected_cmo):
+        test = indicators.CMO(candles=candles)
+        test.calculate()
+        assert self.verify(test.as_list(), expected_cmo)
+
     @pytest.mark.usefixtures("candles", "expected_donchian")
     def test_donchian(self, candles, expected_donchian):
         test = indicators.Donchian(candles=candles)

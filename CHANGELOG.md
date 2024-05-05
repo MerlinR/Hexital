@@ -4,7 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 1.1.2
+## 1.1.3
+- Added Indicators
+  - Chande Momentum Oscillator (CMO)
+
+## 1.1.2 - 2024-05-03
 
 - Fixed Major incremental calculate flaw with sub indicators
   - Causing sub indicators to almost always re-calc entire set rather than latest (incrementally)

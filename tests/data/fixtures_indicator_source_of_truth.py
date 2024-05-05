@@ -36,6 +36,12 @@ def fixture_expected_bbands():
     return json.load(csv_files)
 
 
+@pytest.fixture(name="expected_cmo")
+def fixture_expected_cmo():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/CMO.json")
+    return json.load(csv_files)
+
+
 @pytest.fixture(name="expected_donchian")
 def fixture_expected_donchian():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/DONCHIAN.json")
