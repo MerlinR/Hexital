@@ -72,6 +72,12 @@ def fixture_expected_highlowaverage():
     return json.load(csv_files)
 
 
+@pytest.fixture(name="expected_highlowcloseaverage")
+def fixture_expected_highlowcloseaverage():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/HLC.json")
+    return json.load(csv_files)
+
+
 @pytest.fixture(name="expected_hma")
 def fixture_expected_hma():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/HMA.json")

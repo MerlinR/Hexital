@@ -7,6 +7,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 ## 1.1.3
 - Added Indicators
   - Chande Momentum Oscillator (CMO)
+  - High Low Close Average (HLCA) 
 
 ## 1.1.2 - 2024-05-03
 

@@ -86,6 +86,7 @@ def generate_indicators():
             {"kind": "obv"},
             {"kind": "kc"},
             {"kind": "hl2"},
+            {"kind": "hlc3"},
             {"kind": "roc"},
             {"kind": "adx"},
             {"kind": "hma"},
@@ -116,6 +117,7 @@ def generate_indicators():
     save_json_result([round_values(value) for value in df["VWAP_D"].tolist()], "VWAP")
     save_json_result([round_values(value) for value in df["OBV"].tolist()], "OBV")
     save_json_result([round_values(value) for value in df["HL2"].tolist()], "HL2")
+    save_json_result([round_values(value) for value in df["HLC3"].tolist()], "HLC")
     save_json_result([round_values(value) for value in df["ROC_10"].tolist()], "ROC")
     save_json_result([round_values(value) for value in df["ATRr_20"].tolist()], "ATR_20")
     save_json_result([round_values(value) for value in df["HMA_10"].tolist()], "HMA")

@@ -9,6 +9,7 @@ from .donchian import Donchian
 from .ema import EMA
 from .highest_lowest import HighestLowest
 from .hla import HighLowAverage
+from .hlca import HighLowCloseAverage
 from .hma import HMA
 from .kc import KC
 from .macd import MACD
@@ -39,6 +40,7 @@ INDICATOR_MAP = {
     "EMA": EMA,
     "HL": HighestLowest,
     "HLA": HighLowAverage,
+    "HLCA": HighLowCloseAverage,
     "HMA": HMA,
     "KC": KC,
     "MACD": MACD,
