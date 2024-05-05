@@ -1,28 +1,8 @@
 from typing import List
 
 from hexital.core.candle import Candle
-from hexital.utils.candles import (
-    reading_by_candle,
-    reading_by_index,
-)
+from hexital.utils.candles import get_readings_period, reading_by_candle, reading_by_index
 from hexital.utils.indexing import absindex, valid_index
-
-
-def _get_clean_readings(
-    candles: List[Candle], indicator: str, length: int, index: int, include_latest: bool = False
-) -> List[float | int]:
-    """Goes through from index-length to index and returns a list of values, removes dict's and None values
-    Returns from newest at the front (reversed)"""
-    to_index = index
-    if include_latest:
-        to_index += 1
-
-    start = index - length
-    if start < 0:
-        start = 0
-
-    readings = [reading_by_candle(candle, indicator) for candle in candles[start:to_index]]
-    return [reading for reading in reversed(readings) if isinstance(reading, (float, int))]
 
 
 def positive(candles: Candle | List[Candle], index: int = -1) -> bool:
@@ -79,7 +59,7 @@ def value_range(
     if index_ is None or length < 2:
         return None
 
-    readings = _get_clean_readings(candles, indicator, length, index_, True)
+    readings = get_readings_period(candles, indicator, length, index_, True)
 
     if len(readings) < 2:
         return None
@@ -100,7 +80,7 @@ def rising(candles: List[Candle], indicator: str, length: int = 1, index: int = 
     if latest_reading is None or isinstance(latest_reading, dict):
         return False
 
-    readings = _get_clean_readings(candles, indicator, length, index_)
+    readings = get_readings_period(candles, indicator, length, index_)
     if not readings:
         return False
 
@@ -122,7 +102,7 @@ def falling(candles: List[Candle], indicator: str, length: int = 1, index: int =
     if latest_reading is None or isinstance(latest_reading, dict):
         return False
 
-    readings = _get_clean_readings(candles, indicator, length, index_)
+    readings = get_readings_period(candles, indicator, length, index_)
     if not readings:
         return False
 
@@ -146,7 +126,7 @@ def mean_rising(candles: List[Candle], indicator: str, length: int = 4, index: i
     if latest_reading is None or isinstance(latest_reading, dict):
         return False
 
-    readings = _get_clean_readings(candles, indicator, length, index_)
+    readings = get_readings_period(candles, indicator, length, index_)
     if not readings:
         return False
 
@@ -167,7 +147,7 @@ def mean_falling(candles: List[Candle], indicator: str, length: int = 4, index: 
     if latest_reading is None or isinstance(latest_reading, dict):
         return False
 
-    readings = _get_clean_readings(candles, indicator, length, index_)
+    readings = get_readings_period(candles, indicator, length, index_)
     if not readings:
         return False
 
@@ -177,7 +157,7 @@ def mean_falling(candles: List[Candle], indicator: str, length: int = 4, index: 
 def highest(
     candles: List[Candle], indicator: str, length: int = 4, index: int = -1
 ) -> float | None:
-    """Highest reading for a given number of bars back.
+    """Highest reading for a given number of bars back. Includes latest
     Returns:
         Highest reading in the series.
     """
@@ -185,7 +165,7 @@ def highest(
     if index_ is None or length < 1 or not len(candles):
         return False
 
-    readings = _get_clean_readings(candles, indicator, length, index_, True)
+    readings = get_readings_period(candles, indicator, length, index_, True)
 
     max_reading = max(readings, default=False)
     return max_reading if max_reading is not False else None
@@ -194,7 +174,7 @@ def highest(
 def lowest(
     candles: List[Candle], indicator: str, length: int = 4, index: int = -1
 ) -> float | None:
-    """Lowest reading for a given number of bars back.
+    """Lowest reading for a given number of bars back. Includes latest
     Returns:
         Lowest reading in the series.
     """
@@ -202,7 +182,7 @@ def lowest(
     if index_ is None or length < 1 or not len(candles):
         return False
 
-    readings = _get_clean_readings(candles, indicator, length, index_, True)
+    readings = get_readings_period(candles, indicator, length, index_, True)
 
     min_reading = min(readings, default=False)
 

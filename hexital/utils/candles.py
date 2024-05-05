@@ -92,17 +92,27 @@ def reading_period(
     return True
 
 
+def get_readings_period(
+    candles: List[Candle], indicator: str, length: int, index: int, include_latest: bool = False
+) -> List[float | int]:
+    """Goes through from index-length to index and returns a list of values, removes dict's and None values
+    Returns from newest at the front (reversed)"""
+    index_ = absindex(index, len(candles))
+    index_ = len(candles) - 1 if index_ is None else index_
+
+    to_index = index_
+    to_index = to_index + 1 if include_latest else to_index
+
+    start = to_index - length
+    start = 0 if start < 0 else start
+
+    readings = [reading_by_candle(candle, indicator) for candle in candles[start:to_index]]
+    return [reading for reading in reversed(readings) if isinstance(reading, (float, int))]
+
+
 def candles_sum(
     candles: List[Candle], indicator: str, length: int, index: int = -1
 ) -> float | None:
     """Sum of `indicator` for `length` bars back. including index/latest"""
-    index_ = absindex(index, len(candles))
-    if not index_:
-        return
-
-    index_ += 1
-
-    length = len(candles) if length > len(candles) else length
-    values = [reading_by_candle(candle, indicator) for candle in candles[index_ - length : index_]]
-
-    return sum(value for value in values if value is not None)
+    readings = get_readings_period(candles, indicator, length, index, True)
+    return sum(readings)

@@ -122,9 +122,9 @@ def test_candle_sum_reg_indicator_inverse_length(minimal_candles):
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_candle_sum_reg_indicator_insane_index(minimal_candles):
-    assert candles_sum(minimal_candles, "ATR", length=3, index=100) is None
+    assert candles_sum(minimal_candles, "ATR", length=3, index=100) == 5700
 
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_candle_sum_reg_indicator_insane_index_and_length(minimal_candles):
-    assert candles_sum(minimal_candles, "ATR", length=100, index=100) is None
+    assert candles_sum(minimal_candles, "ATR", length=100, index=100) == 21000

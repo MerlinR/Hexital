@@ -142,7 +142,7 @@ class TestBelow:
 
 class TestValueRange:
     def test_value_range(self, rising_candles):
-        assert movement.value_range(rising_candles, "close") == 40
+        assert movement.value_range(rising_candles, "close") == 30
 
     def test_value_range_missing(self):
         assert movement.value_range([], "close") is None
@@ -265,7 +265,7 @@ class TestLowest:
         assert movement.lowest(indicator_candles, "close") == 115
 
     def test_lowest_two(self, indicator_candles):
-        assert movement.lowest(indicator_candles, "high") == 100
+        assert movement.lowest(indicator_candles, "high") == 110
 
     def test_lowest_missing(self):
         assert movement.lowest([], "low") is False
