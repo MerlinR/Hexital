@@ -13,4 +13,4 @@ class HighLowAverage(Indicator):
         return f"{self._name}"
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        return (self.candles[index].high + self.candles[index].low) / 3
+        return (self.candles[index].high + self.candles[index].low) / 2
