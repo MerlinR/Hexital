@@ -51,4 +51,4 @@ class StandardDeviation(Indicator):
         self.managed_indicators["STDEV_data"].set_reading({"mean": new_mean, "variance": variance})
 
         if in_calc_range:
-            return sqrt(variance)
+            return sqrt(variance) if variance > 0 else 0
