@@ -102,6 +102,12 @@ def fixture_expected_mfi():
     return json.load(csv_files)
 
 
+@pytest.fixture(name="expected_midpoint")
+def fixture_expected_midpoint():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/MIDPOINT.json")
+    return json.load(csv_files)
+
+
 @pytest.fixture(name="expected_obv")
 def fixture_expected_OBV():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/OBV.json")

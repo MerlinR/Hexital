@@ -14,6 +14,7 @@ from .hma import HMA
 from .kc import KC
 from .macd import MACD
 from .mfi import MFI
+from .midpoint import MOP
 from .obv import OBV
 from .rma import RMA
 from .roc import ROC
@@ -46,6 +47,7 @@ INDICATOR_MAP = {
     "KC": KC,
     "MACD": MACD,
     "MFI": MFI,
+    "MOP": MOP,
     "OBV": OBV,
     "RMA": RMA,
     "ROC": ROC,

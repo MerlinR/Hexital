@@ -8,9 +8,9 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 - Added Indicators
   - Chande Momentum Oscillator (CMO)
-  - High Low Close Average (HLCA) 
+  - High Low Close Average (HLCA)
   - Money Flow Index (MFI)
-
+  - Midpoint Over Period (MOP)
 
 ## 1.1.2 - 2024-05-03
 

@@ -101,6 +101,12 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.as_list(), expected_mfi)
 
+    @pytest.mark.usefixtures("candles", "expected_midpoint")
+    def test_mop(self, candles, expected_midpoint):
+        test = indicators.MOP(candles=candles)
+        test.calculate()
+        assert self.verify(test.as_list(), expected_midpoint)
+
     @pytest.mark.usefixtures("candles", "expected_obv")
     def test_obv(self, candles, expected_obv):
         test = indicators.OBV(candles=candles)
