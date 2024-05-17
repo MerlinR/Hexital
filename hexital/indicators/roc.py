@@ -18,5 +18,8 @@ class ROC(Indicator):
         if self.prev_exists() or self.reading_period(self.period + 1, self.input_value):
             period_n_back = self.reading(self.input_value, index - self.period)
 
+            if period_n_back == 0:
+                return -100
+
             return ((self.reading(self.input_value) - period_n_back) / period_n_back) * 100
         return None
