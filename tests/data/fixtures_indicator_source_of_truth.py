@@ -247,3 +247,9 @@ def fixture_expected_counter_bear():
 def fixture_expected_counter_bull():
     csv_files = open(f"{SOURCE_OF_TRUTH_HEX_PATH}/COUNTER_supertrend_bull.json")
     return json.load(csv_files)
+
+
+@pytest.fixture(name="expected_pivotpoints")
+def fixture_expected_pivotpoints():
+    csv_files = open(f"{SOURCE_OF_TRUTH_HEX_PATH}/PIVOTPOINTS.json")
+    return json.load(csv_files)

@@ -11,6 +11,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - High Low Close Average (HLCA)
   - Money Flow Index (MFI)
   - Midpoint Over Period (MOP)
+  - Pivot Points (PP)
 
 ## 1.1.2 - 2024-05-03
 

@@ -16,6 +16,7 @@ from .macd import MACD
 from .mfi import MFI
 from .midpoint import MOP
 from .obv import OBV
+from .pivot_points import PivotPoints
 from .rma import RMA
 from .roc import ROC
 from .rsi import RSI
@@ -49,6 +50,7 @@ INDICATOR_MAP = {
     "MFI": MFI,
     "MOP": MOP,
     "OBV": OBV,
+    "PP": PivotPoints,
     "RMA": RMA,
     "ROC": ROC,
     "RSI": RSI,

@@ -40,3 +40,9 @@ class TestHexPatterns(IndicatorTestBase):
         test = indicators.StandardDeviationThreshold(candles=candles)
         test.calculate()
         assert self.verify(test.as_list(), expected_stdevthres)
+
+    @pytest.mark.usefixtures("candles", "expected_pivotpoints")
+    def test_pivot_points(self, candles, expected_pivotpoints):
+        test = indicators.PivotPoints(candles=candles)
+        test.calculate()
+        assert self.verify(test.as_list(), expected_pivotpoints)
