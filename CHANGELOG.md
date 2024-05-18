@@ -6,6 +6,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ## 1.1.3
 
+- Added Movements
+  - Added flipped, to detect changes in bool's or solid values
 - Added Indicators
   - Chande Momentum Oscillator (CMO)
   - High Low Close Average (HLCA)

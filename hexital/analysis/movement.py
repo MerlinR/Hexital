@@ -306,3 +306,20 @@ def crossunder(
             return True
 
     return False
+
+
+def flipped(candles: List[Candle], indicator: str, length: int = 1, index: int = -1) -> bool:
+    """The `indicator` reading is defined as having flipped if reading if it's different to it's
+    previous reading and in the last `length` it was over.
+    Length is how far back to check, if length is greater then amount of candles, check all"""
+    index_ = absindex(index, len(candles))
+    if index_ is None:
+        return False
+
+    for idx in range(index_, index_ - length, -1):
+        if reading_by_index(candles, indicator, idx) != reading_by_index(
+            candles, indicator, idx - 1
+        ):
+            return True
+
+    return False

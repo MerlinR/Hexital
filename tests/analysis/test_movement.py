@@ -368,3 +368,17 @@ class TestCrossMethods:
 
     def test_crossunder_length(self, indicator_candles):
         assert movement.crossunder(indicator_candles, "close", "EMA_10", length=10) is True
+
+
+class TestFlipped:
+    def test_flipped(self, indicator_candles):
+        assert movement.flipped(indicator_candles, "dir") is False
+
+    def test_flipped_length(self, indicator_candles):
+        assert movement.flipped(indicator_candles, "dir", 8) is True
+
+    def test_flipped_bool(self, indicator_candles):
+        assert movement.flipped(indicator_candles, "rising") is True
+
+    def test_flipped_index(self, indicator_candles):
+        assert movement.flipped(indicator_candles, "rising", -2) is False
