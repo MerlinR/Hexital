@@ -50,11 +50,46 @@ def fixture_mixed_candles_two():
 @pytest.fixture(name="indicator_candles")
 def fixture_indicator_candles():
     return [
-        Candle(open=130, high=100, low=120, close=120, volume=10, indicators={"EMA_10": 100}),
-        Candle(open=120, high=110, low=110, close=120, volume=10, indicators={"EMA_10": 100}),
-        Candle(open=110, high=150, low=120, close=130, volume=10, indicators={"EMA_10": 100}),
-        Candle(open=150, high=120, low=90, close=115, volume=10, indicators={"EMA_10": 110}),
-        Candle(open=115, high=140, low=110, close=120, volume=10, indicators={"EMA_10": 140}),
+        Candle(
+            open=130,
+            high=100,
+            low=120,
+            close=120,
+            volume=10,
+            indicators={"EMA_10": 100, "dir": -1, "rising": True},
+        ),
+        Candle(
+            open=120,
+            high=110,
+            low=110,
+            close=120,
+            volume=10,
+            indicators={"EMA_10": 100, "dir": -1, "rising": True},
+        ),
+        Candle(
+            open=110,
+            high=150,
+            low=120,
+            close=130,
+            volume=10,
+            indicators={"EMA_10": 100, "dir": 1, "rising": True},
+        ),
+        Candle(
+            open=150,
+            high=120,
+            low=90,
+            close=115,
+            volume=10,
+            indicators={"EMA_10": 110, "dir": 1, "rising": True},
+        ),
+        Candle(
+            open=115,
+            high=140,
+            low=110,
+            close=120,
+            volume=10,
+            indicators={"EMA_10": 140, "dir": 1, "rising": False},
+        ),
     ]
 
 
