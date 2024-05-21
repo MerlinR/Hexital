@@ -416,4 +416,4 @@ class TestFlipped:
         assert movement.flipped(indicator_candles, "rising") is True
 
     def test_flipped_index(self, indicator_candles):
-        assert movement.flipped(indicator_candles, "rising", -2) is False
+        assert movement.flipped(indicator_candles, "rising", 1, -2) is False
