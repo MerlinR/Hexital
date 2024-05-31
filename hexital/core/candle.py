@@ -16,7 +16,7 @@ KEY_KEYS = [
     "sub_indicators",
 ]
 
-IGNORE_CLEAN = ["clean_values", "indicators", "sub_indicators"]
+IGNORE_CLEAN = ["indicators", "sub_indicators"]
 
 
 class Candle:
@@ -26,7 +26,7 @@ class Candle:
     close: float
     volume: int
     timestamp: Optional[datetime] = None
-    clean_values: Dict[str, float | int]
+    _clean_values: Dict[str, float | int]
     _tag: Optional[str] = None
     indicators: Dict[str, float | Dict[str, float | None] | None]
     sub_indicators: Dict[str, float | Dict[str, float | None] | None]
@@ -53,7 +53,7 @@ class Candle:
         elif isinstance(timestamp, str):
             self.timestamp = datetime.fromisoformat(timestamp)
 
-        self.clean_values = {}
+        self._clean_values = {}
         self.indicators = indicators if indicators else {}
         self.sub_indicators = sub_indicators if sub_indicators else {}
 
@@ -152,15 +152,15 @@ class Candle:
         return [Candle.from_list(candle) for candle in candles]
 
     def save_clean_values(self):
-        self.clean_values = {
+        self._clean_values = {
             name: value
             for name, value in vars(self).items()
             if not name.startswith("_") or name in IGNORE_CLEAN
         }
 
     def recover_clean_values(self):
-        if self.clean_values:
-            for name, value in self.clean_values.items():
+        if self._clean_values:
+            for name, value in self._clean_values.items():
                 self.__setattr__(name, value)
 
     def reset_candle(self):
@@ -180,5 +180,5 @@ class Candle:
         self.volume += candle.volume
         self.close = candle.close
 
-        self.clean_values = {}
+        self._clean_values = {}
         self.reset_candle()
