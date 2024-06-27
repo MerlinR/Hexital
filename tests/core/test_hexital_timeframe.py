@@ -42,6 +42,9 @@ def test_hextial_multi_timeframes_shared_candles(
         if key != DEFAULT_CANDLES:
             candles_name = key
 
+    if not candles_name:
+        assert False
+
     assert len(strat._candles.keys()) == 2
     assert pytest.approx(strat.reading_as_list("EMA_10")) == expected_ema
     assert (

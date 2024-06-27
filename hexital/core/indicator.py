@@ -17,7 +17,7 @@ from hexital.utils.candles import (
 )
 from hexital.utils.candlesticks import validate_candlesticktype
 from hexital.utils.indexing import round_values
-from hexital.utils.timeframe import TimeFrame, validate_timeframe
+from hexital.utils.timeframe import TimeFrame, convert_timeframe_to_timedelta, timedelta_to_str
 
 
 @dataclass(kw_only=True)
@@ -26,7 +26,7 @@ class Indicator(ABC):
     fullname_override: Optional[str] = None
     name_suffix: Optional[str] = None
     round_value: int = 4
-    timeframe: Optional[str | TimeFrame] = None
+    timeframe: Optional[str | TimeFrame | timedelta | int] = None
     timeframe_fill: bool = False
     candles_lifespan: Optional[timedelta] = None
     candlestick_type: Optional[CandlestickType | str] = None
@@ -37,6 +37,7 @@ class Indicator(ABC):
     _sub_calc_prior: bool = field(init=False, default=True)
 
     _name: str = field(init=False, default="")
+    _timeframe: Optional[timedelta] = None
     _output_name: str = field(init=False, default="")
     _candles: CandleManager = field(init=False, default_factory=CandleManager)
     _active_index: int = field(init=False, default=0)
@@ -45,8 +46,8 @@ class Indicator(ABC):
     def __post_init__(self):
         self._validate_fields()
 
-        if self.timeframe is not None:
-            self.timeframe = validate_timeframe(self.timeframe)
+        self._timeframe = convert_timeframe_to_timedelta(self.timeframe)
+        self.timeframe = timedelta_to_str(self._timeframe) if self._timeframe else None
 
         if self.candlestick_type is not None:
             self.candlestick_type = validate_candlesticktype(self.candlestick_type)
@@ -54,7 +55,7 @@ class Indicator(ABC):
         self._candles = CandleManager(
             self.candles,
             self.candles_lifespan,
-            self.timeframe,
+            self._timeframe,
             self.timeframe_fill,
             self.candlestick_type,
         )
@@ -76,8 +77,8 @@ class Indicator(ABC):
             name = self.fullname_override
         else:
             name = self._generate_name()
-            if self.timeframe:
-                name += f"_{self._candles.timeframe}"
+            if self._candles.timeframe:
+                name += f"_{self._candles.name}"
 
         if self.name_suffix:
             name += f"_{self.name_suffix}"
@@ -107,7 +108,8 @@ class Indicator(ABC):
         this will overwrite the Manager as well as the candles"""
         self._candles = manager
         self.candles = manager.candles
-        self.timeframe = manager.timeframe
+        self.timeframe = timedelta_to_str(manager.timeframe) if manager.timeframe else None
+        self._timeframe = manager.timeframe
         self.timeframe_fill = manager.timeframe_fill
         self.candles_lifespan = manager.candles_lifespan
         self.candlestick_type = manager.candlestick_type
@@ -138,11 +140,13 @@ class Indicator(ABC):
         for name, value in self.__dict__.items():
             if name in ["candles", "managed_indicators", "sub_indicators"]:
                 continue
-            if name == "timeframe_fill" and self.timeframe is None:
+            if name == "timeframe_fill" and self._timeframe is None:
                 continue
 
             if name == "candlestick_type" and value:
                 output[name] = value.minimal_name
+            elif name == "timeframe" and self._candles.timeframe is not None:
+                output[name] = timedelta_to_str(self._candles.timeframe)
             elif not name.startswith("_") and value is not None:
                 output[name] = deepcopy(value)
 

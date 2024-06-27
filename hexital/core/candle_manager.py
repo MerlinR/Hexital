@@ -9,11 +9,10 @@ from hexital.core.candlestick_type import CandlestickType
 from hexital.exceptions import InvalidCandleOrder
 from hexital.utils.candles import reading_by_candle
 from hexital.utils.timeframe import (
-    TimeFrame,
     clean_timestamp,
     on_timeframe,
     round_down_timestamp,
-    timeframe_to_timedelta,
+    timedelta_to_str,
 )
 
 DEFAULT_CANDLES = "default"
@@ -22,7 +21,7 @@ DEFAULT_CANDLES = "default"
 class CandleManager:
     candles: List[Candle]
     candles_lifespan: Optional[timedelta]
-    timeframe: Optional[str] = None
+    timeframe: Optional[timedelta] = None
     timeframe_fill: bool = False
     candlestick_type: Optional[CandlestickType] = None
 
@@ -30,7 +29,7 @@ class CandleManager:
         self,
         candles: Optional[List[Candle]] = None,
         candles_lifespan: Optional[timedelta] = None,
-        timeframe: Optional[str | TimeFrame] = None,
+        timeframe: Optional[timedelta] = None,
         timeframe_fill: bool = False,
         candlestick_type: Optional[CandlestickType] = None,
     ):
@@ -40,11 +39,7 @@ class CandleManager:
             self.candles = []
 
         self.candles_lifespan = candles_lifespan
-
-        if isinstance(timeframe, str):
-            self.timeframe = timeframe.upper()
-        elif isinstance(timeframe, TimeFrame):
-            self.timeframe = timeframe.value
+        self.timeframe = timeframe
         self.timeframe_fill = timeframe_fill
         self.candlestick_type = candlestick_type
 
@@ -62,7 +57,7 @@ class CandleManager:
 
     @property
     def name(self) -> str:
-        return self.timeframe if self.timeframe else DEFAULT_CANDLES
+        return timedelta_to_str(self.timeframe) if self.timeframe else DEFAULT_CANDLES
 
     def _tasks(self):
         self.collapse_candles()
@@ -126,17 +121,16 @@ class CandleManager:
         if not self.candles or not self.timeframe:
             return
 
-        timeframe_ = timeframe_to_timedelta(self.timeframe)
         candles_ = [self.candles.pop(0)]
         init_candle = candles_[0]
 
         if init_candle.timestamp is None:
             return
 
-        start_time = round_down_timestamp(init_candle.timestamp, timeframe_)
-        end_time = start_time + timeframe_
+        start_time = round_down_timestamp(init_candle.timestamp, self.timeframe)
+        end_time = start_time + self.timeframe
 
-        if not on_timeframe(init_candle.timestamp, timeframe_):
+        if not on_timeframe(init_candle.timestamp, self.timeframe):
             init_candle.timestamp = end_time
 
         while self.candles:
@@ -148,7 +142,7 @@ class CandleManager:
 
             candle.timestamp = clean_timestamp(candle.timestamp)
 
-            next_candle = end_time + timeframe_
+            next_candle = end_time + self.timeframe
 
             if start_time < candle.timestamp <= end_time and prev_candle.timestamp == end_time:
                 prev_candle.merge(candle)
@@ -156,23 +150,23 @@ class CandleManager:
                 candle.timestamp = end_time
                 candles_.append(candle)
             elif (
-                start_time - timeframe_ < candle.timestamp <= start_time
+                start_time - self.timeframe < candle.timestamp <= start_time
                 and prev_candle.timestamp == start_time
             ):
                 prev_candle.merge(candle)
             elif end_time < candle.timestamp <= next_candle:
                 candle.timestamp = next_candle
                 candles_.append(candle)
-                start_time += timeframe_
-                end_time += timeframe_
-            elif start_time < candle.timestamp and on_timeframe(candle.timestamp, timeframe_):
-                start_time = round_down_timestamp(candle.timestamp, timeframe_)
-                end_time = start_time + timeframe_
+                start_time += self.timeframe
+                end_time += self.timeframe
+            elif start_time < candle.timestamp and on_timeframe(candle.timestamp, self.timeframe):
+                start_time = round_down_timestamp(candle.timestamp, self.timeframe)
+                end_time = start_time + self.timeframe
                 candle.timestamp = start_time
                 candles_.append(candle)
             elif next_candle < candle.timestamp:
-                start_time = round_down_timestamp(candle.timestamp, timeframe_)
-                end_time = start_time + timeframe_
+                start_time = round_down_timestamp(candle.timestamp, self.timeframe)
+                end_time = start_time + self.timeframe
                 candle.timestamp = end_time
                 candles_.append(candle)
             else:
@@ -182,7 +176,7 @@ class CandleManager:
                 )
 
         if self.timeframe_fill:
-            candles_ = self.fill_missing_candles(candles_, timeframe_)
+            candles_ = self.fill_missing_candles(candles_, self.timeframe)
 
         self.candles.extend(candles_)
 

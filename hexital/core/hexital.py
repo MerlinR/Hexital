@@ -14,7 +14,7 @@ from hexital.exceptions import (
 from hexital.indicators import INDICATOR_MAP
 from hexital.utils.candles import reading_by_index
 from hexital.utils.candlesticks import validate_candlesticktype
-from hexital.utils.timeframe import TimeFrame, validate_timeframe
+from hexital.utils.timeframe import TimeFrame, convert_timeframe_to_timedelta, timedelta_to_str
 
 
 class Hexital:
@@ -22,7 +22,7 @@ class Hexital:
     _candles: Dict[str, CandleManager]
     _indicators: Dict[str, Indicator]
     description: Optional[str] = None
-    timeframe: Optional[str] = None
+    _timeframe: Optional[timedelta] = None
     timeframe_fill: bool = False
     candles_lifespan: Optional[timedelta] = None
     candlestick_type: Optional[CandlestickType] = None
@@ -33,7 +33,7 @@ class Hexital:
         candles: List[Candle],
         indicators: Optional[List[dict | Indicator]] = None,
         description: Optional[str] = None,
-        timeframe: Optional[str | TimeFrame] = None,
+        timeframe: Optional[str | TimeFrame | timedelta | int] = None,
         timeframe_fill: bool = False,
         candles_lifespan: Optional[timedelta] = None,
         candlestick_type: Optional[CandlestickType | str] = None,
@@ -41,8 +41,7 @@ class Hexital:
         self.name = name
         self.description = description
 
-        if timeframe:
-            self.timeframe = validate_timeframe(timeframe)
+        self._timeframe = convert_timeframe_to_timedelta(timeframe)
         self.timeframe_fill = timeframe_fill
         self.candles_lifespan = candles_lifespan
 
@@ -53,7 +52,7 @@ class Hexital:
             DEFAULT_CANDLES: CandleManager(
                 candles if isinstance(candles, list) else [],
                 candles_lifespan=self.candles_lifespan,
-                timeframe=self.timeframe,
+                timeframe=self._timeframe,
                 timeframe_fill=self.timeframe_fill,
                 candlestick_type=self.candlestick_type,
             )
@@ -89,7 +88,7 @@ class Hexital:
                 manager = CandleManager(
                     deepcopy(self._candles[DEFAULT_CANDLES]).candles,
                     candles_lifespan=self.candles_lifespan,
-                    timeframe=indicator.timeframe if indicator.timeframe else self.timeframe,
+                    timeframe=indicator._timeframe if indicator._timeframe else self._timeframe,
                     timeframe_fill=self.timeframe_fill,
                     candlestick_type=self.candlestick_type,
                 )
@@ -138,8 +137,12 @@ class Hexital:
         return {name: manager.candles for name, manager in self._candles.items()}
 
     @property
+    def timeframe(self) -> str | None:
+        return timedelta_to_str(self._timeframe) if self._timeframe else None
+
+    @property
     def timeframes(self) -> Set[str]:
-        return {str(manager.timeframe) for manager in self._candles.values()}
+        return {manager.name for manager in self._candles.values()}
 
     @property
     def indicators(self) -> Dict[str, Indicator]:
