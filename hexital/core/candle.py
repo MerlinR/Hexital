@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any, Dict, List, Optional
 
 from hexital.exceptions import CandleAlreadyTagged
@@ -25,7 +25,7 @@ class Candle:
     low: float
     close: float
     volume: int
-    timestamp: Optional[datetime] = None
+    timestamp: datetime
     _clean_values: Dict[str, float | int]
     _tag: Optional[str] = None
     indicators: Dict[str, float | Dict[str, float | None] | None]
@@ -52,6 +52,8 @@ class Candle:
             self.timestamp = timestamp
         elif isinstance(timestamp, str):
             self.timestamp = datetime.fromisoformat(timestamp)
+        else:
+            self.timestamp = datetime.now(UTC)
 
         self._clean_values = {}
         self.indicators = indicators if indicators else {}
@@ -110,7 +112,7 @@ class Candle:
     @classmethod
     def from_dict(cls, candle: Dict[str, Any]) -> Candle:
         """Expected dict with keys ['open', 'high', 'low', 'close', 'volume']
-        with optional 'timestamp' key."""
+        with optional timestamp."""
         return cls(
             candle.get("open", candle.get("Open", 0.0)),
             candle.get("high", candle.get("High", 0.0)),
@@ -122,19 +124,16 @@ class Candle:
 
     @staticmethod
     def from_dicts(candles: List[Dict[str, float]]) -> List[Candle]:
-        """Expected list of dict's with keys ['open', 'high', 'low', 'close', 'volume']
-        with optional 'timestamp' key."""
+        """Expected list of dict's with keys ['timestamp', 'open', 'high', 'low', 'close', 'volume']"""
         return [Candle.from_dict(candle) for candle in candles]
 
     @classmethod
     def from_list(cls, candle: list) -> Candle:
-        """Expected list [open, high, low, close, volume]
-        with optional datetime at the beginning or end."""
+        """Expected list [timestamp, open, high, low, close, volume]
+        with optional datetime at the beginning."""
         timestamp = None
-        if isinstance(candle[0], datetime):
+        if len(candle) > 5:
             timestamp = candle.pop(0)
-        elif isinstance(candle[-1], datetime):
-            timestamp = candle.pop(-1)
 
         return cls(
             open=candle[0],
@@ -147,8 +146,7 @@ class Candle:
 
     @staticmethod
     def from_lists(candles: List[List[float]]) -> List[Candle]:
-        """Expected list of the following list [open, high, low, close, volume]
-        with optional datetime at the beginning or end."""
+        """Expected list of the following list [timestamp, open, high, low, close, volume]"""
         return [Candle.from_list(candle) for candle in candles]
 
     def save_clean_values(self):

@@ -39,43 +39,88 @@ class TestCandleAppending:
                 "low": 7813,
                 "close": 3615,
                 "volume": 19661,
+                "timestamp": datetime(2023, 10, 3, 9, 0),
             }
         )
 
-        assert manager.candles == [Candle(17213, 2395, 7813, 3615, 19661)]
+        assert manager.candles == [
+            Candle(
+                17213,
+                2395,
+                7813,
+                3615,
+                19661,
+                timestamp=datetime(2023, 10, 3, 9, 0),
+            )
+        ]
 
     def test_append_dict_list(self):
         manager = CandleManager()
         manager.append(
             [
-                {"open": 17213, "high": 2395, "low": 7813, "close": 3615, "volume": 19661},
-                {"open": 1301, "high": 3007, "low": 11626, "close": 19048, "volume": 28909},
+                {
+                    "open": 17213,
+                    "high": 2395,
+                    "low": 7813,
+                    "close": 3615,
+                    "volume": 19661,
+                    "timestamp": datetime(2023, 10, 3, 9, 0),
+                },
+                {
+                    "open": 1301,
+                    "high": 3007,
+                    "low": 11626,
+                    "close": 19048,
+                    "volume": 28909,
+                    "timestamp": datetime(2023, 10, 3, 9, 5),
+                },
             ]
         )
 
         assert manager.candles == [
-            Candle(17213, 2395, 7813, 3615, 19661),
-            Candle(1301, 3007, 11626, 19048, 28909),
+            Candle(
+                17213,
+                2395,
+                7813,
+                3615,
+                19661,
+                timestamp=datetime(2023, 10, 3, 9, 0),
+            ),
+            Candle(
+                1301,
+                3007,
+                11626,
+                19048,
+                28909,
+                timestamp=datetime(2023, 10, 3, 9, 5),
+            ),
         ]
 
     def test_append_list(self):
         manager = CandleManager()
-        manager.append([17213, 2395, 7813, 3615, 19661])
+        manager.append([datetime(2023, 10, 3, 9, 0), 17213, 2395, 7813, 3615, 19661])
 
-        assert manager.candles == [Candle(17213, 2395, 7813, 3615, 19661)]
+        assert manager.candles == [
+            Candle(17213, 2395, 7813, 3615, 19661, timestamp=datetime(2023, 10, 3, 9, 0))
+        ]
 
     def test_append_list_list(self):
         manager = CandleManager()
-        manager.append([[17213, 2395, 7813, 3615, 19661], [1301, 3007, 11626, 19048, 28909]])
+        manager.append(
+            [
+                [datetime(2023, 10, 3, 9, 0), 17213, 2395, 7813, 3615, 19661],
+                [datetime(2023, 10, 3, 9, 5), 1301, 3007, 11626, 19048, 28909],
+            ]
+        )
 
         assert manager.candles == [
-            Candle(17213, 2395, 7813, 3615, 19661),
-            Candle(1301, 3007, 11626, 19048, 28909),
+            Candle(17213, 2395, 7813, 3615, 19661, timestamp=datetime(2023, 10, 3, 9, 0)),
+            Candle(1301, 3007, 11626, 19048, 28909, timestamp=datetime(2023, 10, 3, 9, 5)),
         ]
 
     def test_append_invalid(self):
         manager = CandleManager()
-        with pytest.raises(TypeError):
+        with pytest.raises(IndexError):
             manager.append(["Fuck", 2, 3])
 
 

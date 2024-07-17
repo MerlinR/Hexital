@@ -49,6 +49,7 @@ def fixture_candle_dict():
             "low": 12202.410156,
             "close": 12536.019531,
             "volume": 4918240000,
+            "timestamp": datetime(2023, 8, 30),
         },
         {
             "open": 12511.459961,
@@ -56,6 +57,7 @@ def fixture_candle_dict():
             "low": 12460.990234,
             "close": 12563.759766,
             "volume": 4547280000,
+            "timestamp": datetime(2023, 8, 30),
         },
     ]
 
@@ -122,20 +124,15 @@ def fixture_candle_dicts_numpy():
 @pytest.fixture(name="candle_list")
 def fixture_candle_list():
     return [
-        [12331.69043, 12542.540039, 12202.410156, 12536.019531, 4918240000],
-        [12511.459961, 12645.830078, 12460.990234, 12563.759766, 4547280000],
-    ]
-
-
-@pytest.fixture(name="candle_list_datetime")
-def fixture_candle_list_datetime():
-    return [
-        12331.69043,
-        12542.540039,
-        12202.410156,
-        12536.019531,
-        4918240000,
-        datetime(2023, 8, 30),
+        ["2023-10-03T09:00:00", 12331.69043, 12542.540039, 12202.410156, 12536.019531, 4918240000],
+        [
+            "2023-10-03T09:05:00",
+            12511.459961,
+            12645.830078,
+            12460.990234,
+            12563.759766,
+            4547280000,
+        ],
     ]
 
 
@@ -146,6 +143,7 @@ def test_candle_from_dict(candle_dict):
         low=12202.410156,
         close=12536.019531,
         volume=4918240000,
+        timestamp=datetime(2023, 8, 30),
     )
 
 
@@ -168,6 +166,7 @@ def test_candle_from_dicts(candle_dict):
             low=12202.410156,
             close=12536.019531,
             volume=4918240000,
+            timestamp=datetime(2023, 8, 30),
         ),
         Candle(
             open=12511.459961,
@@ -175,6 +174,7 @@ def test_candle_from_dicts(candle_dict):
             low=12460.990234,
             close=12563.759766,
             volume=4547280000,
+            timestamp=datetime(2023, 8, 30),
         ),
     ]
 
@@ -231,17 +231,7 @@ def test_candle_from_list(candle_list):
         low=12202.410156,
         close=12536.019531,
         volume=4918240000,
-    )
-
-
-def test_candle_from_list_datetime(candle_list_datetime):
-    assert Candle.from_list(candle_list_datetime) == Candle(
-        open=12331.69043,
-        high=12542.540039,
-        low=12202.410156,
-        close=12536.019531,
-        volume=4918240000,
-        timestamp=datetime(2023, 8, 30),
+        timestamp=datetime(2023, 10, 3, 9, 0),
     )
 
 
@@ -253,6 +243,7 @@ def test_candle_from_lists(candle_list):
             low=12202.410156,
             close=12536.019531,
             volume=4918240000,
+            timestamp=datetime(2023, 10, 3, 9, 0),
         ),
         Candle(
             open=12511.459961,
@@ -260,5 +251,6 @@ def test_candle_from_lists(candle_list):
             low=12460.990234,
             close=12563.759766,
             volume=4547280000,
+            timestamp=datetime(2023, 10, 3, 9, 5),
         ),
     ]

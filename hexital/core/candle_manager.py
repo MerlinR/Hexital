@@ -80,18 +80,16 @@ class CandleManager:
         elif isinstance(candles, list):
             if not candles:
                 return
-            elif isinstance(candles[0], Candle):
+            elif isinstance(candles[1], Candle):
                 candles_.extend(candles)
-            elif isinstance(candles[0], dict):
+            elif isinstance(candles[1], dict):
                 candles_.extend(Candle.from_dicts(candles))
-            elif isinstance(candles[0], (float, int)):
+            elif isinstance(candles[1], (float, int)):
                 candles_.append(Candle.from_list(candles))
-            elif isinstance(candles[0], list):
+            elif isinstance(candles[1], list):
                 candles_.extend(Candle.from_lists(candles))
             else:
                 raise TypeError
-        else:
-            raise TypeError
 
         if self.name == DEFAULT_CANDLES:
             self.candles.extend(candles_)
@@ -105,8 +103,6 @@ class CandleManager:
             return
 
         latest = self.candles[-1].timestamp
-        if not latest:
-            return
 
         while (
             self.candles[0].timestamp
@@ -124,9 +120,6 @@ class CandleManager:
         candles_ = [self.candles.pop(0)]
         init_candle = candles_[0]
 
-        if init_candle.timestamp is None:
-            return
-
         start_time = round_down_timestamp(init_candle.timestamp, self.timeframe)
         end_time = start_time + self.timeframe
 
@@ -136,9 +129,6 @@ class CandleManager:
         while self.candles:
             candle = self.candles.pop(0)
             prev_candle = candles_[-1]
-
-            if not candle.timestamp or not prev_candle.timestamp:
-                continue
 
             candle.timestamp = clean_timestamp(candle.timestamp)
 
@@ -188,10 +178,7 @@ class CandleManager:
 
         while True:
             prev_candle = candles[index - 1]
-            if (
-                prev_candle.timestamp
-                and candles[index].timestamp != prev_candle.timestamp + timeframe
-            ):
+            if candles[index].timestamp != prev_candle.timestamp + timeframe:
                 fill_candle = Candle(
                     open=prev_candle.close,
                     close=prev_candle.close,
