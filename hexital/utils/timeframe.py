@@ -107,9 +107,14 @@ def round_down_timestamp(timestamp: datetime, timeframe: timedelta) -> datetime:
     Note: This method also calls clean_timestamp, removing microseconds
     """
     timestamp = clean_timestamp(timestamp)
-    return datetime.fromtimestamp(
-        timestamp.timestamp() // timeframe.total_seconds() * timeframe.total_seconds()
-    )
+    if timeframe < timedelta(days=1):
+        return datetime.fromtimestamp(
+            timestamp.timestamp() // timeframe.total_seconds() * timeframe.total_seconds()
+        )
+    elif timeframe < timedelta(days=7):
+        return timestamp.replace(hour=0, minute=0, second=0)
+    else:
+        return timestamp.replace(day=0, hour=0, minute=0, second=0)
 
 
 def on_timeframe(timestamp: datetime, timeframe: timedelta) -> bool:

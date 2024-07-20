@@ -7,6 +7,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 ## 1.2.0
 
 - Candle's now require a timestamp, a single candle added will use the current UTC time.
+- Fixed Timeframe rounding to correctly handle days
 - Added Movements
   - Added flipped, to detect changes in bool's or solid values
 - Added Indicators
