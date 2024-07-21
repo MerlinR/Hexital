@@ -57,6 +57,7 @@ class Hexital:
                 candlestick_type=self.candlestick_type,
             )
         }
+        self._candles[DEFAULT_CANDLES].name = DEFAULT_CANDLES
 
         self._indicators = self._validate_indicators(indicators) if indicators else {}
 

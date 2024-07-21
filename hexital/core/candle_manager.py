@@ -19,6 +19,7 @@ DEFAULT_CANDLES = "default"
 
 
 class CandleManager:
+    _name: Optional[str] = None
     candles: List[Candle]
     candles_lifespan: Optional[timedelta]
     timeframe: Optional[timedelta] = None
@@ -57,7 +58,16 @@ class CandleManager:
 
     @property
     def name(self) -> str:
-        return timedelta_to_str(self.timeframe) if self.timeframe else DEFAULT_CANDLES
+        if self._name:
+            return self._name
+        elif self.timeframe:
+            return timedelta_to_str(self.timeframe)
+        else:
+            return DEFAULT_CANDLES
+
+    @name.setter
+    def name(self, name: str):
+        self._name = name
 
     def _tasks(self):
         self.collapse_candles()
