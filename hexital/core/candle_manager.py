@@ -113,7 +113,7 @@ class CandleManager:
         for candle in candles_:
             if last_timestamp and candle.timestamp < last_timestamp:
                 to_sort = True
-            if not candle.timeframe:
+            if not candle.timeframe or not self.timeframe:
                 self.candles.append(deepcopy(candle))
             elif candle.timeframe <= self.timeframe:
                 self.candles.append(deepcopy(candle))

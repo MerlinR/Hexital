@@ -356,6 +356,25 @@ class TestCandleSort:
             Candle(14842, 14842, 14831, 14835, 540, timestamp=datetime(2023, 10, 3, 9, 10)),
         ]
 
+    def test_sort_candles_append_timeframed_on_untimeframed(self):
+        manager = CandleManager([])
+
+        manager.append(
+            Candle(
+                1301,
+                3007,
+                7813,
+                3615,
+                48570,
+                timestamp=datetime(2023, 10, 3, 9, 5),
+                timeframe=timedelta(minutes=5),
+            )
+        )
+
+        assert manager.candles == [
+            Candle(1301, 3007, 7813, 3615, 48570, timestamp=datetime(2023, 10, 3, 9, 5)),
+        ]
+
 
 class TestMergingCandlesTimeFrame:
     def test_collapse_candles_timeframe_empty(self):
