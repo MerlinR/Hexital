@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytest
 from hexital import Candle
@@ -12,6 +12,28 @@ def fixture_simple_candle_positive():
 @pytest.fixture(name="simple_candle")
 def fixture_simple_candle():
     return Candle(100, 120, 70, 90, 1)
+
+
+@pytest.fixture(name="merge_candles")
+def fixture_simple_candle_merge():
+    return [
+        Candle(
+            open=12331.69,
+            high=12542.540,
+            low=12202.410,
+            close=12536.019,
+            volume=500,
+            timestamp=datetime(2023, 10, 3, 9, 0, 30),
+        ),
+        Candle(
+            open=12500.69,
+            high=12542.540,
+            low=11202.410,
+            close=11536.019,
+            volume=600,
+            timestamp=datetime(2023, 10, 3, 9, 1),
+        ),
+    ]
 
 
 class TestCoreCandle:
@@ -71,6 +93,19 @@ def fixture_candle_dict_datetime():
         "close": 12536.019531,
         "volume": 4918240000,
         "timestamp": datetime(2023, 8, 30),
+    }
+
+
+@pytest.fixture(name="candle_dict_timeframe")
+def fixture_candle_dict_timeframe():
+    return {
+        "open": 12331.69043,
+        "high": 12542.540039,
+        "low": 12202.410156,
+        "close": 12536.019531,
+        "volume": 4918240000,
+        "timestamp": datetime(2023, 8, 30),
+        "timeframe": timedelta(minutes=5),
     }
 
 
@@ -136,6 +171,30 @@ def fixture_candle_list():
     ]
 
 
+@pytest.fixture(name="candle_list_timeframe")
+def fixture_candle_list_timeframe():
+    return [
+        [
+            "2023-10-03T09:00:00",
+            12331.69043,
+            12542.540039,
+            12202.410156,
+            12536.019531,
+            4918240000,
+            timedelta(minutes=5),
+        ],
+        [
+            "2023-10-03T09:05:00",
+            12511.459961,
+            12645.830078,
+            12460.990234,
+            12563.759766,
+            4547280000,
+            timedelta(minutes=5),
+        ],
+    ]
+
+
 def test_candle_from_dict(candle_dict):
     assert Candle.from_dict(candle_dict[0]) == Candle(
         open=12331.69043,
@@ -155,6 +214,18 @@ def test_candle_from_dict_datetime(candle_dict_datetime):
         close=12536.019531,
         volume=4918240000,
         timestamp=datetime(2023, 8, 30),
+    )
+
+
+def test_candle_from_dict_timeframe(candle_dict_timeframe):
+    assert Candle.from_dict(candle_dict_timeframe) == Candle(
+        open=12331.69043,
+        high=12542.540039,
+        low=12202.410156,
+        close=12536.019531,
+        volume=4918240000,
+        timestamp=datetime(2023, 8, 30),
+        timeframe="T5",
     )
 
 
@@ -235,6 +306,18 @@ def test_candle_from_list(candle_list):
     )
 
 
+def test_candle_from_list_timeframe(candle_list_timeframe):
+    assert Candle.from_list(candle_list_timeframe[0]) == Candle(
+        open=12331.69043,
+        high=12542.540039,
+        low=12202.410156,
+        close=12536.019531,
+        volume=4918240000,
+        timestamp=datetime(2023, 10, 3, 9, 0),
+        timeframe=timedelta(minutes=5),
+    )
+
+
 def test_candle_from_lists(candle_list):
     assert Candle.from_lists(candle_list) == [
         Candle(
@@ -254,3 +337,53 @@ def test_candle_from_lists(candle_list):
             timestamp=datetime(2023, 10, 3, 9, 5),
         ),
     ]
+
+
+class TestCandleCollapsedTimestamp:
+    def test_candle_merge_collapse_timestamp(self, merge_candles):
+        main_candle = merge_candles[0]
+        main_candle.set_collapsed_timestamp(datetime(2023, 10, 3, 9, 5))
+
+        assert main_candle.timestamp == datetime(2023, 10, 3, 9, 5)
+        assert main_candle._start_timestamp == datetime(2023, 10, 3, 9, 0, 30)
+
+
+class TestCandleMerge:
+    def test_candle_merge_basic(self, merge_candles):
+        main_candle = merge_candles[0]
+        second_candle = merge_candles[1]
+
+        main_candle.merge(second_candle)
+
+        assert main_candle == Candle(
+            open=12331.69,
+            high=12542.540,
+            low=11202.410,
+            close=11536.019,
+            volume=1100,
+            timestamp=datetime(2023, 10, 3, 9, 0, 30),
+        )
+        assert main_candle._start_timestamp is None
+
+    def test_candle_merge_basic_collapse(self, merge_candles):
+        main_candle = merge_candles[0]
+        main_candle.set_collapsed_timestamp(datetime(2023, 10, 3, 9, 5))
+
+        second_candle = merge_candles[1]
+
+        main_candle.merge(second_candle)
+
+        assert main_candle._start_timestamp == datetime(2023, 10, 3, 9, 0, 30)
+        assert main_candle._end_timestamp == datetime(2023, 10, 3, 9, 1)
+
+    def test_candle_merge_wrongorder(self, merge_candles):
+        main_candle = merge_candles[1]
+        main_candle.set_collapsed_timestamp(datetime(2023, 10, 3, 9, 5))
+
+        second_candle = merge_candles[0]
+
+        main_candle.merge(second_candle)
+
+        assert main_candle.timestamp == datetime(2023, 10, 3, 9, 5)
+        assert main_candle._start_timestamp == datetime(2023, 10, 3, 9, 0, 30)
+        assert main_candle._end_timestamp == datetime(2023, 10, 3, 9, 1)
