@@ -28,18 +28,21 @@ class MFI(Indicator):
         self.add_managed_indicator("MFI_Data", Managed(fullname_override=f"{self.name}_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        hlca = (self.candles[index].high + self.candles[index].low + self.candles[index].close) / 3
-        raw_money_flow = hlca * self.candles[index].volume
+        hlca = self.reading("HLCA")
         prev_hlca = self.prev_reading("HLCA")
 
-        if prev_hlca and prev_hlca < hlca:
+        money_flow = hlca * self.candles[index].volume
+
+        if prev_hlca and hlca > prev_hlca:
             self.managed_indicators["MFI_Data"].set_reading(
-                {"positive": raw_money_flow, "negative": 0}
+                {"positive": money_flow, "negative": 0}
             )
-        if prev_hlca and prev_hlca >= hlca:
+        elif prev_hlca and hlca < prev_hlca:
             self.managed_indicators["MFI_Data"].set_reading(
-                {"positive": 0, "negative": raw_money_flow}
+                {"positive": 0, "negative": money_flow}
             )
+        elif prev_hlca and hlca == prev_hlca:
+            self.managed_indicators["MFI_Data"].set_reading({"positive": 0, "negative": 0})
 
         if not self.prev_exists() and not self.reading_period(self.period + 1, "HLCA", index):
             return None
@@ -48,7 +51,6 @@ class MFI(Indicator):
         neg_money = self.candles_sum(self.period, f"{self.name}_data.negative")
 
         if pos_money and neg_money:
-            ratio = pos_money / neg_money
-            return 100 - 100 / (1 + ratio)
+            return 100 * (pos_money / (pos_money + neg_money))
 
         return 0
