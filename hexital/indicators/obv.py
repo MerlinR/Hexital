@@ -19,7 +19,7 @@ class OBV(Indicator):
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         if self.prev_exists():
-            if self.reading("volume") == self.prev_reading("volume"):
+            if self.reading("close") == self.prev_reading("close"):
                 return self.prev_reading()
             elif self.reading("close") > self.prev_reading("close"):
                 return self.prev_reading() + self.reading("volume")

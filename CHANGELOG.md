@@ -21,6 +21,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - Money Flow Index (MFI)
   - Midpoint Over Period (MOP)
   - Pivot Points (PP)
+- Fixes
+  - Fixed OBV
 
 ## 1.1.2 - 2024-05-03
 
