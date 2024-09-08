@@ -8,7 +8,6 @@ class HighLowCloseAverage(Indicator):
     """HighLowCloseAverage (HLCA)"""
 
     _name: str = field(init=False, default="HLCA")
-    round_value: int = 16
 
     def _generate_name(self) -> str:
         return f"{self._name}"
