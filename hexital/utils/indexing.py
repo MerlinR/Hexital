@@ -29,8 +29,11 @@ def valid_index(index: int, length: int) -> bool:
 
 
 def round_values(
-    value: float | Dict[str, float | None] | None, round_by: int = 4
+    value: float | Dict[str, float | None] | None, round_by: int | None = 4
 ) -> float | Dict[str, float | None] | None:
+    if not round_by:
+        return value
+
     if isinstance(value, float):
         return round(value, round_by)
 

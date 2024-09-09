@@ -24,7 +24,7 @@ class MFI(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_sub_indicator(HighLowCloseAverage(round_value=16))
+        self.add_sub_indicator(HighLowCloseAverage())
         self.add_managed_indicator("MFI_Data", Managed(fullname_override=f"{self.name}_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:

@@ -25,11 +25,11 @@ class Indicator(ABC):
     candles: List[Candle] = field(default_factory=list)
     fullname_override: Optional[str] = None
     name_suffix: Optional[str] = None
-    round_value: int = 4
     timeframe: Optional[str | TimeFrame | timedelta | int] = None
     timeframe_fill: bool = False
     candles_lifespan: Optional[timedelta] = None
     candlestick_type: Optional[CandlestickType | str] = None
+    round_value: Optional[int] = 4
 
     sub_indicators: Dict[str, Indicator] = field(init=False, default_factory=dict)
     managed_indicators: Dict[str, Managed | Indicator] = field(init=False, default_factory=dict)
@@ -248,12 +248,14 @@ class Indicator(ABC):
         indicator._sub_indicator = True
         indicator._sub_calc_prior = prior_calc
         indicator.candle_manager = self._candles
+        indicator.round_value = None
         self.sub_indicators[indicator.name] = indicator
 
     def add_managed_indicator(self, name: str, indicator: Managed | Indicator):
         """Adds managed sub indicator, this will not auto calculate with indicator"""
         indicator._sub_indicator = True
         indicator.candle_manager = self._candles
+        indicator.round_value = None
         self.managed_indicators[name] = indicator
 
     def prev_exists(self, name: Optional[str] = None) -> bool:
