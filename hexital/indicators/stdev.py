@@ -24,31 +24,33 @@ class StandardDeviation(Indicator):
     def _calculate_reading(self, index: int) -> float | dict | None:
         old_mean = 0
         variance = 0
-        removed_val = 0
-        in_calc_range = False
+        popped_reading = 0
 
-        if self.reading(self.input_value) is None:
+        reading = self.reading(self.input_value)
+
+        if reading is None:
             return None
 
         if self.reading_period(self.period + 1, self.input_value, index):
-            removed_val = self.reading(self.input_value, index - self.period)
-            in_calc_range = True
+            popped_reading = self.reading(self.input_value, index - self.period)
 
         if self.prev_exists(f"{self.name}_data.mean"):
             old_mean = self.prev_reading(f"{self.name}_data.mean")
 
-        new_mean = old_mean + (self.reading(self.input_value) - removed_val) / self.period
+        mean_ = old_mean + (reading - popped_reading) / self.period
 
         if self.prev_exists(f"{self.name}_data.variance"):
             variance = self.prev_reading(f"{self.name}_data.variance")
 
         variance += (
-            (self.reading(self.input_value) - removed_val)
-            * (self.reading(self.input_value) - new_mean + removed_val - old_mean)
+            (reading - popped_reading)
+            * (reading - mean_ + popped_reading - old_mean)
             / (self.period)
         )
 
-        self.managed_indicators["STDEV_data"].set_reading({"mean": new_mean, "variance": variance})
+        self.managed_indicators["STDEV_data"].set_reading({"mean": mean_, "variance": variance})
 
-        if in_calc_range:
+        if self.prev_exists(self.name) or self.reading_period(
+            self.period, self.input_value, index
+        ):
             return sqrt(variance) if variance > 0 else 0
