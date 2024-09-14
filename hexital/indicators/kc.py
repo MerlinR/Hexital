@@ -38,13 +38,8 @@ class KC(Indicator):
         )
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        if not all(
-            [
-                self.reading(f"{self.name}_EMA"),
-                self.reading(f"{self.name}_ATR"),
-            ]
-        ):
-            return {"lower": None, "band": None, "upper": None}
+        if self.reading(f"{self.name}_ATR") is None:
+            return {"lower": None, "band": self.reading(f"{self.name}_EMA"), "upper": None}
 
         lower = self.reading(f"{self.name}_EMA") - (
             self.multiplier * self.reading(f"{self.name}_ATR")

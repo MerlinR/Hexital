@@ -8,7 +8,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 - Candle's now require a timestamp, a single candle added will use the current UTC time
 - Candle timeframe attribute:
-  - Candle's now have a timeframe attribute, this shows the resolution of the Candle
+  - Candle's now have a timeframe attribute, this shows the resolution of the Candle, this is optional for new Candle's
   - Merging Candle's now take into account first and last Candles for accurate Open/Close value updates
   - Appending Candles will now be sorted, allowing to say Append missing or back data
   - Improved the speed of Candle timeframe collapsing
@@ -26,6 +26,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - No rounding for sub/managed indicators
   - Fixed STDEV/bbands
     - Corrected when start calculation
+  - Fixed KC
 
 ## 1.1.2 - 2024-05-03
 
