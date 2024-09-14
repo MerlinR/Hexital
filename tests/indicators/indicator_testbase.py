@@ -1,8 +1,10 @@
 import math
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
-# math.isclose to 0.5%
-ACCURACY_PER = 0.005
+# math.isclose to 99.5%
+ACCURACY_PER = 99.5
+# relative tolerance math.isclose, to set a tolerance of 5%, pass rel_tol=0.05
+MATH_REF = (100 - ACCURACY_PER) / 100
 
 
 class IndicatorTestBase:
@@ -18,16 +20,16 @@ class IndicatorTestBase:
             result = result[-abs(amount) :]
             expected = expected[-abs(amount) :]
 
-        diff_results = self.deepdiff(result, expected)
+        differences, results = self.deepdiff(result, expected)
 
-        self.show_results(diff_results, acceptable_diff, verbose)
+        self.show_results(differences, results, acceptable_diff, verbose)
 
-        return diff_results.get("differences") <= acceptable_diff
+        return differences <= acceptable_diff
 
-    def show_results(self, results: Dict[str, int | list], acceptable_diff: int, verbose: bool):
-        print(f"Differences: {results['differences']}")
+    def show_results(self, differences: int, results: list, acceptable_diff: int, verbose: bool):
+        print(f"Differences: {differences}")
 
-        for row in results["results"]:
+        for row in results:
             if row[-1] is False:
                 print("\033[91m" + f"{row[0]}: {row[1]}\t!=\t{row[2]}" + "\033[0m")
             elif verbose:
@@ -37,7 +39,7 @@ class IndicatorTestBase:
         self,
         result: List[dict | float | bool] | dict | float | bool,
         expected: List[dict | float | bool] | dict | float | bool,
-    ) -> Dict[str, int | list]:
+    ) -> Tuple[int, list]:
         differences = 0
         results = []
 
@@ -60,7 +62,7 @@ class IndicatorTestBase:
                     differences += 1
                     results[-1][-1] = False
             elif isinstance(res, (float, int)) and isinstance(exp, (float, int)):
-                if not math.isclose(res, exp, rel_tol=ACCURACY_PER):
+                if not math.isclose(res, exp, rel_tol=MATH_REF):
                     differences += 1
                     results[-1][-1] = False
             elif isinstance(res, dict) and isinstance(exp, dict):
@@ -68,7 +70,7 @@ class IndicatorTestBase:
                     differences += 1
                     results[-1][-1] = False
 
-        return {"differences": differences, "results": results}
+        return differences, results
 
     @staticmethod
     def compare_dict(
@@ -90,7 +92,7 @@ class IndicatorTestBase:
                 if res != exp:
                     return False
             elif isinstance(res, (float, int)) and isinstance(exp, (float, int)):
-                if not math.isclose(res, exp, rel_tol=ACCURACY_PER):
+                if not math.isclose(res, exp, rel_tol=MATH_REF):
                     return False
 
         return True
