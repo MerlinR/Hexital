@@ -1,7 +1,8 @@
 import math
-from typing import Optional
+from typing import Dict, List
 
-import deepdiff
+# math.isclose to 0.5%
+ACCURACY_PER = 0.005
 
 
 class IndicatorTestBase:
@@ -9,89 +10,87 @@ class IndicatorTestBase:
         self,
         result: list,
         expected: list,
-        amount: Optional[int] = None,
+        amount: int = 0,
+        acceptable_diff: int = 0,
         verbose: bool = False,
     ) -> bool:
         if amount is not None:
             result = result[-abs(amount) :]
             expected = expected[-abs(amount) :]
 
-        self.show_results(result, expected, verbose)
+        diff_results = self.deepdiff(result, expected)
 
-        diff_result = not deepdiff.DeepDiff(
-            result,
-            expected,
-            significant_digits=1,
-            number_format_notation="e",
-            ignore_numeric_type_changes=True,
-        )
+        self.show_results(diff_results, acceptable_diff, verbose)
 
-        correlation = False
-        if not diff_result:
-            correlation = self.correlation_validation(result, expected)
+        return diff_results.get("differences") <= acceptable_diff
 
-        return any([diff_result, correlation])
+    def show_results(self, results: Dict[str, int | list], acceptable_diff: int, verbose: bool):
+        print(f"Differences: {results['differences']}")
 
-    def correlation_validation(self, result: list, expected: list, accuracy: float = 0.95):
-        correlation = 0
-
-        if isinstance(result[0], dict):
-            correlations = 0.0
-            for key in expected[0].keys():
-                correlations += self.correlation_coefficient(
-                    [row[key] for row in result], [row[key] for row in expected]
-                )
-
-            correlation = round(correlations / len(expected[0].keys()), 4)
-        else:
-            correlation = self.correlation_coefficient(result, expected)
-
-        print(f"Correlation: {correlation}")
-        return correlation >= accuracy
-
-    def correlation_coefficient(self, result: list, expected: list):
-        # https://stackoverflow.com/questions/3949226/calculating-pearson-correlation-and-significance-in-python
-        if len(result) != len(expected):
-            return 0
-
-        result_mean = self.calc_mean(result)
-        expected_means = self.calc_mean(expected)
-
-        numerator = 0
-        x = 0
-        y = 0
-
-        for i in range(len(expected)):
-            r_diff = result[i] if result[i] is not None else 0 - result_mean
-            e_diff = expected[i] if expected[i] is not None else 0 - expected_means
-            numerator += r_diff * e_diff
-            x += r_diff * r_diff
-            y += e_diff * e_diff
-
-        denominator = math.sqrt(x * y)
-
-        if denominator == 0:
-            return 0
-
-        return round(numerator / denominator, 2)
-
-    def calc_mean(self, data: list):
-        total = 0
-        for value in data:
-            if value is not None:
-                total += float(value)
-
-        return total / len([v for v in data if v is not None])
-
-    def show_results(self, result: list, expected: list, verbose: bool):
-        for i, (res, exp) in enumerate(zip(result, expected)):
-            if deepdiff.DeepDiff(
-                res,
-                exp,
-                significant_digits=1,
-                number_format_notation="e",
-                ignore_numeric_type_changes=True,
-            ):
-                print("\033[91m" + f"{i}: {res} != {exp}" + "\033[0m")
+        for row in results["results"]:
+            if row[-1] is False:
+                print("\033[91m" + f"{row[0]}: {row[1]}\t!=\t{row[2]}" + "\033[0m")
             elif verbose:
-                print("\033[92m" + f"{i}: {res} == {exp}" + "\033[0m")
+                print("\033[92m" + f"{row[0]}: {row[1]}\t==\t{row[2]}" + "\033[0m")
+
+    def deepdiff(
+        self,
+        result: List[dict | float | bool] | dict | float | bool,
+        expected: List[dict | float | bool] | dict | float | bool,
+    ) -> Dict[str, int | list]:
+        differences = 0
+        results = []
+
+        if not isinstance(result, list):
+            result = [result]
+        if not isinstance(expected, list):
+            expected = [expected]
+
+        for i, (res, exp) in enumerate(zip(result, expected)):
+            results.append([i, res, exp, True])
+
+            if res is None or exp is None:
+                if (res is None and exp == 0) or res == 0 and exp is None:
+                    continue
+                elif res != exp:
+                    differences += 1
+                    results[-1][-1] = False
+            elif isinstance(res, bool):
+                if res != exp:
+                    differences += 1
+                    results[-1][-1] = False
+            elif isinstance(res, (float, int)) and isinstance(exp, (float, int)):
+                if not math.isclose(res, exp, rel_tol=ACCURACY_PER):
+                    differences += 1
+                    results[-1][-1] = False
+            elif isinstance(res, dict) and isinstance(exp, dict):
+                if not self.compare_dict(res, exp):
+                    differences += 1
+                    results[-1][-1] = False
+
+        return {"differences": differences, "results": results}
+
+    @staticmethod
+    def compare_dict(
+        value_a: Dict[str, int | float | bool | None],
+        value_b: Dict[str, int | float | bool | None],
+    ) -> bool:
+        fields = [field for field in value_a.keys() if field in value_b.keys()]
+        fields = [field for field in value_b.keys() if field in fields]
+
+        for field in fields:
+            res = value_a[field]
+            exp = value_b[field]
+            if res is None or exp is None:
+                if (res is None and exp == 0) or res == 0 and exp is None:
+                    continue
+                elif res != exp:
+                    return False
+            elif isinstance(res, bool):
+                if res != exp:
+                    return False
+            elif isinstance(res, (float, int)) and isinstance(exp, (float, int)):
+                if not math.isclose(res, exp, rel_tol=ACCURACY_PER):
+                    return False
+
+        return True

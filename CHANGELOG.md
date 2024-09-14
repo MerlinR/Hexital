@@ -12,7 +12,10 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - Merging Candle's now take into account first and last Candles for accurate Open/Close value updates
   - Appending Candles will now be sorted, allowing to say Append missing or back data
   - Improved the speed of Candle timeframe collapsing
-- Fixed Timeframe rounding to correctly handle days
+- Re-wrote Testing method
+  - Removed unreliable deepdiff rounding
+  - Removed soft Correlation Coefficient
+  - Custom accuracy none rounding driven custom diff check
 - Added Movements
   - Added flipped, to detect changes in bool's or solid values
 - Added Indicators
@@ -22,6 +25,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - Midpoint Over Period (MOP)
   - Pivot Points (PP)
 - Fixes
+  - Fixed Timeframe rounding to correctly handle days
   - Fixed OBV
     - No rounding for sub/managed indicators
   - Fixed STDEV/bbands

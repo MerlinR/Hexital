@@ -9,7 +9,7 @@ class TestIndicators(IndicatorTestBase):
     def test_adx(self, candles, expected_adx):
         test = indicators.ADX(candles=candles)
         test.calculate()
-        assert self.verify(test.as_list(), expected_adx, amount=450)
+        assert self.verify(test.as_list(), expected_adx)
 
     @pytest.mark.usefixtures("candles", "expected_atr")
     def test_atr(self, candles, expected_atr):
@@ -205,6 +205,7 @@ class TestIndicators(IndicatorTestBase):
     def test_supertrend(self, candles, expected_supertrend):
         test = indicators.Supertrend(candles=candles)
         test.calculate()
+
         assert self.verify(test.as_list(), expected_supertrend)
 
     @pytest.mark.usefixtures("candles", "expected_supertrend")
@@ -240,6 +241,12 @@ class TestIndicators(IndicatorTestBase):
             test.append(candle)
             test.calculate()
         assert self.verify(test.as_list(), expected_vwap)
+
+    @pytest.mark.usefixtures("candles", "expected_vwap_h")
+    def test_vwap_anchor(self, candles, expected_vwap_h):
+        test = indicators.VWAP(candles=candles, anchor="T30")
+        test.calculate()
+        assert self.verify(test.as_list(), expected_vwap_h)
 
     @pytest.mark.usefixtures("candles", "expected_vwma")
     def test_vwma(self, candles, expected_vwma):
