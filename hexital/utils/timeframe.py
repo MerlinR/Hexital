@@ -51,14 +51,17 @@ def timeframe_to_timedelta(timeframe: str | TimeFrame) -> timedelta:
             f"Invalid value: {timeframe_}, valid are: {VALID_TIMEFRAME_PREFIXES}, E.G 'T10' 10 minutes"
         )
 
-    if timeframe_.startswith("S"):
-        return timedelta(seconds=int(timeframe_[1:]))
-    if timeframe_.startswith("T"):
-        return timedelta(minutes=int(timeframe_[1:]))
-    if timeframe_.startswith("H"):
-        return timedelta(hours=int(timeframe_[1:]))
-    if timeframe_.startswith("D"):
-        return timedelta(days=int(timeframe_[1:]))
+    letter = timeframe_[0]
+    time = 1 if len(timeframe_) == 1 else int(timeframe_[1:])
+
+    if letter == "S":
+        return timedelta(seconds=time)
+    if letter == "T":
+        return timedelta(minutes=time)
+    if letter == "H":
+        return timedelta(hours=time)
+    if letter == "D":
+        return timedelta(days=time)
 
     raise InvalidTimeFrame(f"Invalid value: {timeframe_}, somehow")
 
