@@ -5,6 +5,8 @@ import pytest
 from hexital.core.candle import Candle
 from hexital.utils.candles import (
     candles_sum,
+    get_candles_timeframe,
+    get_readings_period,
     get_readings_timeframe,
     reading_by_index,
     reading_count,
@@ -132,21 +134,57 @@ def test_candle_sum_reg_indicator_insane_index_and_length(minimal_candles):
     assert candles_sum(minimal_candles, "ATR", length=100, index=100) == 21000
 
 
+class TestReadingsPeriod:
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_basic(self, minimal_candles: List[Candle]):
+        assert get_readings_period(minimal_candles, "high", 5, -1) == [
+            4309,
+            11555,
+            3624,
+            1398,
+            5167,
+        ]
+
+    def test_basic_with_latest(self, minimal_candles: List[Candle]):
+        assert get_readings_period(minimal_candles, "high", 5, -1, True) == [
+            10767,
+            4309,
+            11555,
+            3624,
+            1398,
+        ]
+
+
 class TestReadingsTimeframe:
     @pytest.mark.usefixtures("minimal_candles")
     def test_basic(self, minimal_candles: List[Candle]):
         assert get_readings_timeframe(minimal_candles, "high", timedelta(minutes=4), -1) == [
-            1398,
-            3624,
-            11555,
             4309,
+            11555,
+            3624,
+            1398,
         ]
 
     def test_basic_with_latest(self, minimal_candles: List[Candle]):
         assert get_readings_timeframe(minimal_candles, "high", timedelta(minutes=4), -1, True) == [
-            1398,
-            3624,
-            11555,
-            4309,
             10767,
+            4309,
+            11555,
+            3624,
+            1398,
         ]
+
+
+class TestCandleTimeframe:
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_basic(self, minimal_candles: List[Candle]):
+        assert (
+            get_candles_timeframe(minimal_candles, timedelta(minutes=4), -1)
+            == minimal_candles[-2:-6:-1]
+        )
+
+    def test_basic_with_latest(self, minimal_candles: List[Candle]):
+        assert (
+            get_candles_timeframe(minimal_candles, timedelta(minutes=4), -1, True)
+            == minimal_candles[-1:-6:-1]
+        )
