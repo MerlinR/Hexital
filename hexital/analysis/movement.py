@@ -31,7 +31,7 @@ def above(candles: List[Candle], indicator: str, indicator_two: str, index: int 
     reading_one = reading_by_index(candles, indicator, index)
     reading_two = reading_by_index(candles, indicator_two, index)
 
-    if reading_one is not None and reading_two is not None:
+    if isinstance(reading_one, (float, int)) and isinstance(reading_two, (float, int)):
         return reading_one > reading_two
     return False
 
@@ -205,7 +205,7 @@ def highestbar(
 
     for idx, index in enumerate(range(index_, index_ - length, -1)):
         current = reading_by_index(candles, indicator, index)
-        if current is None:
+        if not isinstance(current, (float, int)):
             continue
 
         if high is None:
@@ -234,7 +234,7 @@ def lowestbar(
 
     for idx, index in enumerate(range(index_, index_ - length, -1)):
         current = reading_by_index(candles, indicator, index)
-        if current is None:
+        if not isinstance(current, (float, int)):
             continue
 
         if low is None:
