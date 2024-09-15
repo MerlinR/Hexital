@@ -242,11 +242,11 @@ class TestIndicators(IndicatorTestBase):
             test.calculate()
         assert self.verify(test.as_list(), expected_vwap)
 
-    @pytest.mark.usefixtures("candles", "expected_vwap_h")
-    def test_vwap_anchor(self, candles, expected_vwap_h):
+    @pytest.mark.usefixtures("candles", "expected_vwap_t30")
+    def test_vwap_anchor(self, candles, expected_vwap_t30):
         test = indicators.VWAP(candles=candles, anchor="T30")
         test.calculate()
-        assert self.verify(test.as_list(), expected_vwap_h)
+        assert self.verify(test.as_list(), expected_vwap_t30)
 
     @pytest.mark.usefixtures("candles", "expected_vwma")
     def test_vwma(self, candles, expected_vwma):

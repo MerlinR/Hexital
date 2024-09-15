@@ -31,6 +31,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - Fixed STDEV/bbands
     - Corrected when start calculation
   - Fixed KC
+- Alterations
+  - Added Anchor to VWAP
 
 ## 1.1.2 - 2024-05-03
 
