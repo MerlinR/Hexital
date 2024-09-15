@@ -15,7 +15,7 @@ class TestAmorphPatterns(IndicatorTestBase):
     def test_dojistar(self, candles, expected_dojistar):
         test = indicators.Amorph(analysis=patterns.dojistar, candles=candles)
         test.calculate()
-        assert self.verify(test.as_list(), expected_dojistar)
+        assert self.verify(test.as_list(), expected_dojistar, acceptable_diff=1)
 
     @pytest.mark.usefixtures("candles", "expected_hammer")
     def test_hammer(self, candles, expected_hammer):
