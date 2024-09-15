@@ -74,28 +74,32 @@ class ADX(Indicator):
         adx_positive = None
         adx_negative = None
 
-        if self.reading("high"):
-            up = self.reading("high") - self.reading("high", index - 1)
-            down = self.reading("low", index - 1) - self.reading("low")
+        if self.prev_exists("high"):
+            up = self.reading("high") - self.prev_reading("high")
+            down = self.prev_reading("low") - self.reading("low")
+        else:
+            up = self.reading("high") - self.reading("close")
+            down = self.reading("low") - self.reading("close")
 
-            positive = up if up > down and up > 0 else 0
-            negative = down if down > up and down > 0 else 0
-            self.managed_indicators["ADX_data"].set_reading({"pos": positive, "neg": negative})
+        positive = up if up > down and up > 0.0 else 0.0
+        negative = down if down > up and down > 0.0 else 0.0
 
-            if self.reading(f"{self.name}_atr") and self.reading(f"{self.name}_pos"):
-                mod = 100 / self.reading(f"{self.name}_atr")
+        self.managed_indicators["ADX_data"].set_reading({"pos": positive, "neg": negative})
 
-                adx_positive = mod * self.reading(f"{self.name}_pos")
-                adx_negative = mod * self.reading(f"{self.name}_neg")
+        if self.reading(f"{self.name}_atr"):
+            mod = 100 / self.reading(f"{self.name}_atr")
 
-                dx = 100 * abs(adx_positive - adx_negative) / (adx_positive + adx_negative)
+            adx_positive = mod * self.reading(f"{self.name}_pos")
+            adx_negative = mod * self.reading(f"{self.name}_neg")
 
-                self.managed_indicators["ADX_data"].set_reading(
-                    {"pos": positive, "neg": negative, "dx": dx}
-                )
-                self.managed_indicators["dx"].calculate_index(index)
+            dx = 100 * abs(adx_positive - adx_negative) / (adx_positive + adx_negative)
 
-                if self.reading(f"{self.name}_dx"):
-                    adx_final = self.reading(f"{self.name}_dx")
+            self.managed_indicators["ADX_data"].set_reading(
+                {"pos": positive, "neg": negative, "dx": dx}
+            )
+            self.managed_indicators["dx"].calculate_index(index)
+
+            if self.reading(f"{self.name}_dx"):
+                adx_final = self.reading(f"{self.name}_dx")
 
         return {"ADX": adx_final, "DM_Plus": adx_positive, "DM_Neg": adx_negative}
