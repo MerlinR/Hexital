@@ -210,9 +210,9 @@ def fixture_expected_vwap():
     return json.load(csv_files)
 
 
-@pytest.fixture(name="expected_vwap_t30")
+@pytest.fixture(name="expected_vwap_h1")
 def fixture_expected_vwap_h():
-    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/VWAP_T30.json")
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/VWAP_H1.json")
     return json.load(csv_files)
 
 

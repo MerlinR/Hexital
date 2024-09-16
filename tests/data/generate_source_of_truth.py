@@ -83,7 +83,7 @@ def generate_indicators():
             {"kind": "wma"},
             {"kind": "vwma"},
             {"kind": "vwap"},
-            {"kind": "vwap", "anchor": "30min"},
+            {"kind": "vwap", "anchor": "1h"},
             {"kind": "obv"},
             {"kind": "kc"},
             {"kind": "hl2"},
@@ -118,7 +118,7 @@ def generate_indicators():
     save_json_result([round_values(value) for value in df["WMA_10"].tolist()], "WMA")
     save_json_result([round_values(value) for value in df["VWMA_10"].tolist()], "VWMA")
     save_json_result([round_values(value) for value in df["VWAP_D"].tolist()], "VWAP")
-    save_json_result([round_values(value) for value in df["VWAP_30MIN"].tolist()], "VWAP_T30")
+    save_json_result([round_values(value) for value in df["VWAP_1H"].tolist()], "VWAP_H1")
     save_json_result([round_values(value) for value in df["OBV"].tolist()], "OBV")
     save_json_result([round_values(value) for value in df["HL2"].tolist()], "HL2")
     save_json_result([round_values(value) for value in df["HLC3"].tolist()], "HLC")
