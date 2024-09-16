@@ -66,7 +66,6 @@ def candle_gapdown(candle: Candle, candle_two: Candle) -> bool:
 def _realbody_percentage(
     candles: List[Candle], index: Optional[int] = None, percentage: float = 1.0, length: int = 10
 ) -> float:
-    """real body is like doji's body when it's shorter than 10% the average of the 10 previous candles' high-low range"""
     if index is None:
         index = len(candles) - 1
 
@@ -76,7 +75,6 @@ def _realbody_percentage(
 def _high_low_percentage(
     candles: List[Candle], index: Optional[int] = None, percentage: float = 1.0, length: int = 10
 ) -> float:
-    """real body is like doji's body when it's shorter than 10% the average of the 10 previous candles' high-low range"""
     if index is None:
         index = len(candles) - 1
 
@@ -96,7 +94,7 @@ def candle_bodylong(candles: List[Candle], index: Optional[int] = None, length: 
 def candle_bodyverylong(
     candles: List[Candle], index: Optional[int] = None, length: int = 10
 ) -> float:
-    """real body is long when it's longer than the average of the 10 previous candles' real body"""
+    """real body is very long when it's longer than 3 times the average of the 10 previous candles' real body"""
     return _realbody_percentage(candles, index=index, length=length, percentage=3)
 
 
@@ -124,7 +122,7 @@ def candle_shadow_short(
 def candle_shadow_long(candles: List[Candle], index: Optional[int] = None) -> float:
     """shadow is long when it's longer than the real body"""
     if index is None:
-        index = len(candles) - 1
+        index = -1
 
     return candles[index].realbody
 
@@ -132,7 +130,7 @@ def candle_shadow_long(candles: List[Candle], index: Optional[int] = None) -> fl
 def candle_shadow_verylong(candles: List[Candle], index: Optional[int] = None) -> float:
     """shadow is very long when it's longer than 2 times the real body"""
     if index is None:
-        index = len(candles) - 1
+        index = -1
 
     return candles[index].realbody * 2
 
