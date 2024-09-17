@@ -3,7 +3,7 @@ from typing import Dict, List, Tuple
 
 # math.isclose to 99.5%
 ACCURACY_PER = 99.5
-# relative tolerance math.isclose, to set a tolerance of 5%, pass rel_tol=0.05
+# relative tolerance math.isclose, to set a tolerance of 0.5%, pass rel_tol=0.05
 MATH_REF = (100 - ACCURACY_PER) / 100
 
 

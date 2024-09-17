@@ -26,6 +26,7 @@ class ADX(Indicator):
 
     period: int = 14
     period_signal: Optional[int] = None
+    multiplier: int = 100
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}_{self.period_signal}"
@@ -78,24 +79,24 @@ class ADX(Indicator):
             up = self.reading("high") - self.prev_reading("high")
             down = self.prev_reading("low") - self.reading("low")
         else:
-            up = self.reading("high") - self.reading("close")
-            down = self.reading("low") - self.reading("close")
+            up = self.reading("high") - self.reading("low")
+            down = self.reading("low") - self.reading("low")
 
-        positive = up if up > down and up > 0.0 else 0.0
-        negative = down if down > up and down > 0.0 else 0.0
+        dm_plus = up if up > down and up > 0.0 else 0.0
+        dm_neg = down if down > up and down > 0.0 else 0.0
 
-        self.managed_indicators["ADX_data"].set_reading({"pos": positive, "neg": negative})
+        self.managed_indicators["ADX_data"].set_reading({"pos": dm_plus, "neg": dm_neg})
 
         if self.reading(f"{self.name}_atr"):
-            mod = 100 / self.reading(f"{self.name}_atr")
+            mod = self.multiplier / self.reading(f"{self.name}_atr")
 
             adx_positive = mod * self.reading(f"{self.name}_pos")
             adx_negative = mod * self.reading(f"{self.name}_neg")
 
-            dx = 100 * abs(adx_positive - adx_negative) / (adx_positive + adx_negative)
+            dx = self.multiplier * abs(adx_positive - adx_negative) / (adx_positive + adx_negative)
 
             self.managed_indicators["ADX_data"].set_reading(
-                {"pos": positive, "neg": negative, "dx": dx}
+                {"pos": dm_plus, "neg": dm_neg, "dx": dx}
             )
             self.managed_indicators["dx"].calculate_index(index)
 

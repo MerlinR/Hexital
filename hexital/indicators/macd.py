@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator
+from hexital.core.indicator import Indicator, Managed
 from hexital.indicators import EMA
 
 
@@ -17,18 +17,18 @@ class MACD(Indicator):
         https://www.investopedia.com/ask/answers/122314/what-exponential-moving-average-ema-formula-and-how-ema-calculated.asp
 
     Args:
-        Input value (str): Default Close
+        input_value (str): Default Close
         fast_period (int) Default: 12
         slow_period (int) Default: 26
-        signal_period (int) Default: 19
+        signal_period (int) Default: 9
 
     """
 
     _name: str = field(init=False, default="MACD")
+    input_value: str = "close"
     fast_period: int = 12
     slow_period: int = 26
     signal_period: int = 9
-    input_value: str = "close"
 
     def _generate_name(self) -> str:
         return "{}_{}_{}_{}".format(
@@ -43,6 +43,8 @@ class MACD(Indicator):
             self.fast_period, self.slow_period = self.slow_period, self.fast_period
 
     def _initialise(self):
+        self.add_managed_indicator("MACD", Managed(fullname_override=f"{self.name}_macd"))
+
         self.add_sub_indicator(
             EMA(
                 input_value=self.input_value,
@@ -57,31 +59,27 @@ class MACD(Indicator):
                 fullname_override=f"{self.name}_EMA_slow",
             )
         )
-
         self.add_managed_indicator(
             "signal",
             EMA(
-                input_value=f"{self.name}.MACD",
+                input_value=f"{self.name}_macd",
                 period=self.signal_period,
                 fullname_override=f"{self.name}_signal_line",
             ),
         )
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        macd = None
-        signal = None
-        histogram = None
+        ema_slow = self.reading(f"{self.name}_EMA_slow")
 
-        if self.reading(f"{self.name}_EMA_slow"):
-            macd = self.reading(f"{self.name}_EMA_fast") - self.reading(f"{self.name}_EMA_slow")
+        if ema_slow is not None:
+            macd = self.reading(f"{self.name}_EMA_fast") - ema_slow
 
-            # Temp manually inserting MACD to be used by signal EMA calc
-            self.candles[index].indicators[self.name] = {"MACD": macd}
+            self.managed_indicators["MACD"].set_reading(macd)
             self.managed_indicators["signal"].calculate_index(index)
-
             signal = self.managed_indicators["signal"].reading()
 
-            if macd is not None and signal is not None:
+            if signal is not None:
                 histogram = macd - signal
+                return {"MACD": macd, "signal": signal, "histogram": histogram}
 
-        return {"MACD": macd, "signal": signal, "histogram": histogram}
+        return {"MACD": None, "signal": None, "histogram": None}

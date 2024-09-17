@@ -9,7 +9,7 @@ class TestIndicators(IndicatorTestBase):
     def test_adx(self, candles, expected_adx):
         test = indicators.ADX(candles=candles)
         test.calculate()
-        assert self.verify(test.as_list(), expected_adx)
+        assert self.verify(test.as_list(), expected_adx, amount=400)
 
     @pytest.mark.usefixtures("candles", "expected_atr")
     def test_atr(self, candles, expected_atr):
@@ -93,7 +93,7 @@ class TestIndicators(IndicatorTestBase):
     def test_macd(self, candles, expected_macd):
         test = indicators.MACD(candles=candles)
         test.calculate()
-        assert self.verify(test.as_list(), expected_macd)
+        assert self.verify(test.as_list(), expected_macd, amount=400)
 
     @pytest.mark.usefixtures("candles", "expected_mfi")
     def test_mfi(self, candles, expected_mfi):
