@@ -152,6 +152,9 @@ candles = Candle.from_dicts(my_candles)
 # df = pd.read_csv("path/to/symbol.csv", sep=",")
 # candles = Candle.from_dicts(df.to_dict("records"))
 
+my_ema = EMA(candles=candles, period=3)
+my_ema.calculate()
+
 print("Indicator name:", my_ema.name)  # EMA_3
 print("Has reading:", my_ema.has_reading)  # True
 print("Latest EMA reading:", my_ema.reading())  # 8408.7552
