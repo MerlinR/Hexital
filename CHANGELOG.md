@@ -4,11 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## 1.2.0
+## 2.0.0
 
 - Candle's now require a timestamp, a single candle added will use the current UTC time
 - Candle timeframe attribute:
-  - Candle's now have a timeframe attribute, this shows the resolution of the Candle, this is optional for new Candle's
+  - Candle's now have a timeframe attribute, this shows the resolution of the Candle, this is optional for Candle's
   - Merging Candle's now take into account first and last Candles for accurate Open/Close value updates
   - Appending Candles will now be sorted, allowing to say Append missing or back data
   - Improved the speed of Candle timeframe collapsing
@@ -23,7 +23,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - High Low Close Average (HLCA)
   - Money Flow Index (MFI)
   - Midpoint Over Period (MOP)
-  - Pivot Points (PP)
+  - Pivot Points (PivotPoints)
 - Fixes
   - Fixed Timeframe rounding to correctly handle days
   - Fixed OBV
@@ -33,6 +33,11 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - Fixed KC
 - Alterations
   - Added Anchor to VWAP
+  - Renamed several Indicators Internal:
+    - HighestLowest -> HL
+    - HighLowAverage -> HLA
+    - StandardDeviation -> STDEV
+    - StandardDeviationThreshold -> STDEVT
 
 ## 1.1.2 - 2024-05-03
 
@@ -163,7 +168,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - Multiple Method's renamed/argument re-ordered
 - Added Indicators:
   - ADX
-  - HighLowAverage
+  - HLA
   - KC
   - OBV
   - RMA

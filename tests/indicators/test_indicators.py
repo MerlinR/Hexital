@@ -67,13 +67,13 @@ class TestIndicators(IndicatorTestBase):
 
     @pytest.mark.usefixtures("candles", "expected_highlowaverage")
     def test_highlowaverage(self, candles, expected_highlowaverage):
-        test = indicators.HighLowAverage(candles=candles)
+        test = indicators.HLA(candles=candles)
         test.calculate()
         assert self.verify(test.as_list(), expected_highlowaverage)
 
     @pytest.mark.usefixtures("candles", "expected_highlowcloseaverage")
     def test_highlowcloseaverage(self, candles, expected_highlowcloseaverage):
-        test = indicators.HighLowCloseAverage(candles=candles)
+        test = indicators.HLCA(candles=candles)
         test.calculate()
         assert self.verify(test.as_list(), expected_highlowcloseaverage)
 
@@ -191,7 +191,7 @@ class TestIndicators(IndicatorTestBase):
 
     @pytest.mark.usefixtures("candles", "expected_stdev")
     def test_stdev(self, candles, expected_stdev):
-        test = indicators.StandardDeviation(candles=candles)
+        test = indicators.STDEV(candles=candles)
         test.calculate()
         assert self.verify(test.as_list(), expected_stdev)
 

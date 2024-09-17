@@ -231,9 +231,9 @@ def fixture_expected_vwma():
 # Hex Indicator
 
 
-@pytest.fixture(name="expected_stdevthres")
-def fixture_expected_stdevthres():
-    csv_files = open(f"{SOURCE_OF_TRUTH_HEX_PATH}/STDEVTHRES.json")
+@pytest.fixture(name="expected_stdevt")
+def fixture_expected_stdevt():
+    csv_files = open(f"{SOURCE_OF_TRUTH_HEX_PATH}/STDEVT.json")
     return json.load(csv_files)
 
 

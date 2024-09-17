@@ -4,8 +4,8 @@ from hexital.core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
-class HighLowAverage(Indicator):
-    """HighLowAverage"""
+class HLA(Indicator):
+    """HLA"""
 
     _name: str = field(init=False, default="HLA")
 

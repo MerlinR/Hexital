@@ -15,27 +15,3 @@ from .movement import (  # noqa F401
     value_range,
 )
 from .patterns import doji, dojistar, hammer, inverted_hammer  # noqa F401
-
-MOVEMENT_MAP = {
-    "cross": cross,
-    "crossover": crossover,
-    "crossunder": crossunder,
-    "falling": falling,
-    "highest": highest,
-    "highestbar": highestbar,
-    "lowest": lowest,
-    "lowestbar": lowestbar,
-    "mean_falling": mean_falling,
-    "mean_rising": mean_rising,
-    "negative": negative,
-    "positive": positive,
-    "rising": rising,
-    "value_range": value_range,
-}
-
-PATTERN_MAP = {
-    "doji": doji,
-    "dojistar": dojistar,
-    "hammer": hammer,
-    "inv_hammer": inverted_hammer,
-}

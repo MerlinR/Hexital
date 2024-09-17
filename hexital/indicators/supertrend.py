@@ -18,16 +18,9 @@ class Supertrend(Indicator):
 
     def _initialise(self):
         self.add_sub_indicator(
-            indicators.ATR(
-                period=self.period,
-                fullname_override=f"{self.name}_atr",
-            )
+            indicators.ATR(period=self.period, fullname_override=f"{self.name}_atr")
         )
-        self.add_sub_indicator(
-            indicators.HighLowAverage(
-                fullname_override=f"{self.name}_HL",
-            )
-        )
+        self.add_sub_indicator(indicators.HLA(fullname_override=f"{self.name}_HL"))
         self.add_managed_indicator("ST_data", Managed(fullname_override=f"{self.name}_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:

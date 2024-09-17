@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 from hexital.core.indicator import Indicator
 from hexital.indicators.sma import SMA
-from hexital.indicators.stdev import StandardDeviation
+from hexital.indicators.stdev import STDEV
 
 
 @dataclass(kw_only=True)
@@ -20,7 +20,7 @@ class BBANDS(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_sub_indicator(StandardDeviation(input_value=self.input_value, period=self.period))
+        self.add_sub_indicator(STDEV(input_value=self.input_value, period=self.period))
         self.add_sub_indicator(SMA(input_value=self.input_value, period=self.period))
 
     def _calculate_reading(self, index: int) -> float | dict | None:

@@ -1,8 +1,8 @@
 from copy import copy, deepcopy
 from datetime import timedelta
+from importlib import import_module
 from typing import Dict, List, Optional, Set
 
-from hexital.analysis import MOVEMENT_MAP, PATTERN_MAP
 from hexital.core.candle import Candle
 from hexital.core.candle_manager import DEFAULT_CANDLES, CandleManager
 from hexital.core.candlestick_type import CandlestickType
@@ -11,7 +11,7 @@ from hexital.exceptions import (
     InvalidAnalysis,
     InvalidIndicator,
 )
-from hexital.indicators import INDICATOR_MAP
+from hexital.indicators.amorph import Amorph
 from hexital.utils.candles import reading_by_index
 from hexital.utils.candlesticks import validate_candlesticktype
 from hexital.utils.timeframe import TimeFrame, convert_timeframe_to_timedelta, timedelta_to_str
@@ -99,31 +99,31 @@ class Hexital:
         return valid_indicators
 
     def _build_indicator(self, raw_indicator: dict) -> Indicator:
-        analysis_map = PATTERN_MAP | MOVEMENT_MAP
-        amorph_class = INDICATOR_MAP["Amorph"]
         indicator = copy(raw_indicator)
 
         if indicator.get("indicator"):
             indicator_name = indicator.pop("indicator")
+            indicator_class = getattr(import_module("hexital.indicators"), indicator_name, None)
 
-            if INDICATOR_MAP.get(indicator_name):
-                indicator_class = INDICATOR_MAP[indicator_name]
+            if indicator_class:
                 return indicator_class(**indicator)
             else:
                 raise InvalidIndicator(f"Indicator {indicator_name} does not exist. [{indicator}]")
 
         elif indicator.get("analysis") and isinstance(indicator.get("analysis"), str):
             analysis_name = indicator.pop("analysis")
-            if not analysis_map.get(analysis_name):
+            analysis_class = getattr(import_module("hexital.analysis"), analysis_name, None)
+
+            if not analysis_class:
                 raise InvalidAnalysis(
                     f"analysis {analysis_name} does not exist in patterns or movements. [{indicator}]"
                 )
 
-            return amorph_class(analysis=analysis_map[analysis_name], **indicator)
+            return Amorph(analysis=analysis_class, **indicator)
 
         elif indicator.get("analysis") and callable(indicator.get("analysis")):
             method_name = indicator.pop("analysis")
-            return amorph_class(analysis=method_name, **indicator)
+            return Amorph(analysis=method_name, **indicator)
         else:
             raise InvalidAnalysis(
                 f"Dict Indicator missing 'indicator' or 'analysis' name, not: {raw_indicator}"

@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
 from hexital.core.indicator import Indicator, Managed
-from hexital.indicators.hlca import HighLowCloseAverage
+from hexital.indicators.hlca import HLCA
 
 
 @dataclass(kw_only=True)
@@ -24,7 +24,7 @@ class MFI(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_sub_indicator(HighLowCloseAverage())
+        self.add_sub_indicator(HLCA())
         self.add_managed_indicator("MFI_Data", Managed(fullname_override=f"{self.name}_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:

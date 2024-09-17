@@ -5,7 +5,7 @@ from hexital.core.indicator import Indicator, Managed
 
 
 @dataclass(kw_only=True)
-class StandardDeviation(Indicator):
+class STDEV(Indicator):
     """Rolling Standard Deviation
 
     https://jonisalonen.com/2014/efficient-and-accurate-rolling-standard-deviation/

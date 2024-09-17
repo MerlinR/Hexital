@@ -49,6 +49,11 @@ class TestIndicatorPattern:
         )
 
     @pytest.mark.usefixtures("candles")
+    def test_hextial_dict_diff_name(self, candles):
+        strat = Hexital("Test Stratergy", candles, [{"indicator": "STDEV"}])
+        assert strat.indicator("STDEV_30")
+
+    @pytest.mark.usefixtures("candles")
     def test_hextial_dict_arguments(self, candles):
         strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 20}])
         assert strat.indicator("SMA_20")

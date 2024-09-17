@@ -46,7 +46,7 @@ This functionality can also be leveraged within the `Hexital` class, enabling th
 Example:
 
 ```python
-stratergy = Hexital("Test Stratergy", candlesticks_1m, [RSI(timeframe="T5"), EMA(timeframe=TimeFrame.MINUTE10)])
+stratergy = Hexital("Test Strategy", candlesticks_1m, [RSI(timeframe="T5"), EMA(timeframe=TimeFrame.MINUTE10)])
 ```
 
 ### Candlestick Movements
@@ -55,30 +55,38 @@ Hexital includes built-in candle utility methods for detecting movements such as
 
 ## Indicators
 
-- Average Directional Index(ADX)
+- Average Directional Index (**ADX**)
 - Aroon
-- Average True Range (ATR)
-- Bollinger Bands (BBANDS)
-- Counter
-- Donchian Channels (donchian)
-- Exponential Moving Average (EMA)
-- High Low Average
-- Hull Moving Average (HMA)
-- Keltner Channel (KC)
-- Moving Average Convergence/Divergence (MACD)
-- On Balance Volume (OBV)
-- Relative Moving Average (RMA)
-- Rate of Change (ROC)
-- Relative strength index (RSI)
-- Simple Moving Average(SMA)
-- Standard Deviation (STDEV)
-- Stochastic Oscillator (STOCH)
-- Supertrend
-- True Range (TR)
-- True Strength Index (TSI)
-- Volume Weighted Average Price (VWAP)
-- Volume Weighed Moving Averge (VWMA)
-- Weighed Moving Average (WMA)
+- Average True Range (**ATR**)
+- Bollinger Bands (**BBANDS**)
+- Counter (**Counter**)
+- Chande Momentum Oscillator - (**CMO**)
+- Donchian Channels (**Donchian**)
+- Exponential Moving Average (**EMA**)
+- High Low (**HL**)
+- High Low Average (**HLA**)
+- High Low Close (**HLC**)
+- High Low Close Average (**HLCA**)
+- Hull Moving Average (**HMA**)
+- Keltner Channel (**KC**)
+- Moving Average Convergence/Divergence (**MACD**)
+- Money Flow Index (**MFI**)
+- Midpoint Over Period (**MOP**)
+- On Balance Volume (**OBV**)
+- Pivot Points (**PivotPoints**)
+- Relative Moving Average (**RMA**)
+- Rate of Change (**ROC**)
+- Relative strength index (**RSI**)
+- Simple Moving Average(**SMA**)
+- Standard Deviation (**STDEV**)
+- Standard Deviation Threshold (**STDEVT**)
+- Stochastic Oscillator (**STOCH**)
+- SuperTrend (**Supertrend**)
+- True Range (**TR**)
+- True Strength Index (**TSI**)
+- Volume Weighted Average Price (**VWAP**)
+- Volume Weighed Moving Averge (**VWMA**)
+- Weighed Moving Average (**WMA**)
 
 ## Candlestick Patterns
 
@@ -97,7 +105,7 @@ Hexital can also automatically convert Candlesticks into specific types, such as
 
 ## Candlestick Movements
 
-Simple useful Candle Anaylsis methods such as those in [Pine Scripting](https://www.tradingview.com/pine-script-reference/v5/)
+Simple useful Candle Analysis methods such as those in [Pine Scripting](https://www.tradingview.com/pine-script-reference/v5/)
 
 - Positive/Negative Candle
 - Rising/Falling Indicator

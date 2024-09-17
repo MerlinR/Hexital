@@ -31,15 +31,15 @@ class TestHexPatterns(IndicatorTestBase):
 
     @pytest.mark.usefixtures("candles", "expected_highestlowest")
     def test_highest_lowest(self, candles, expected_highestlowest):
-        test = indicators.HighestLowest(candles=candles)
+        test = indicators.HL(candles=candles)
         test.calculate()
         assert self.verify(test.as_list(), expected_highestlowest)
 
-    @pytest.mark.usefixtures("candles", "expected_stdevthres")
-    def test_stdevthres(self, candles, expected_stdevthres):
-        test = indicators.StandardDeviationThreshold(candles=candles)
+    @pytest.mark.usefixtures("candles", "expected_stdevt")
+    def test_stdevthres(self, candles, expected_stdevt):
+        test = indicators.STDEVT(candles=candles)
         test.calculate()
-        assert self.verify(test.as_list(), expected_stdevthres)
+        assert self.verify(test.as_list(), expected_stdevt)
 
     @pytest.mark.usefixtures("candles", "expected_pivotpoints")
     def test_pivot_points(self, candles, expected_pivotpoints):

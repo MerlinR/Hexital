@@ -1,18 +1,18 @@
 from dataclasses import dataclass, field
 
 from hexital.core.indicator import Indicator
-from hexital.indicators.stdev import StandardDeviation
+from hexital.indicators.stdev import STDEV
 
 
 @dataclass(kw_only=True)
-class StandardDeviationThreshold(Indicator):
-    """Standard Deviation Threshold
+class STDEVT(Indicator):
+    """Standard Deviation Threshold (STDEVT)
 
     Standard Deviation while calculating threshold returning boolean signal
     if change to input is higher than threshold
     """
 
-    _name: str = field(init=False, default="STDEVTHRES")
+    _name: str = field(init=False, default="STDEVT")
     period: int = 10
     multiplier: float = 2.0
     input_value: str = "close"
@@ -22,7 +22,7 @@ class StandardDeviationThreshold(Indicator):
 
     def _initialise(self):
         self.add_sub_indicator(
-            StandardDeviation(
+            STDEV(
                 input_value=self.input_value,
                 period=self.period,
                 fullname_override=f"{self.name}_stdev",

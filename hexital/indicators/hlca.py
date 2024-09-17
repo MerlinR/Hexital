@@ -4,8 +4,8 @@ from hexital.core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
-class HighLowCloseAverage(Indicator):
-    """HighLowCloseAverage (HLCA)"""
+class HLCA(Indicator):
+    """Highest Lowest Close Average (HLCA)"""
 
     _name: str = field(init=False, default="HLCA")
 

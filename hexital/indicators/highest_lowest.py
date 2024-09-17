@@ -5,7 +5,7 @@ from hexital.core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
-class HighestLowest(Indicator):
+class HL(Indicator):
     """Highest Lowest
 
     Simple utility indicator to record and display the highest and lowest values N periods back."""

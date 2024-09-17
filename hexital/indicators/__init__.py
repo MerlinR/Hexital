@@ -7,9 +7,9 @@ from .cmo import CMO
 from .counter import Counter
 from .donchian import Donchian
 from .ema import EMA
-from .highest_lowest import HighestLowest
-from .hla import HighLowAverage
-from .hlca import HighLowCloseAverage
+from .highest_lowest import HL
+from .hla import HLA
+from .hlca import HLCA
 from .hma import HMA
 from .kc import KC
 from .macd import MACD
@@ -21,8 +21,8 @@ from .rma import RMA
 from .roc import ROC
 from .rsi import RSI
 from .sma import SMA
-from .stdev import StandardDeviation
-from .stdevthres import StandardDeviationThreshold
+from .stdev import STDEV
+from .stdevthres import STDEVT
 from .stoch import STOCH
 from .supertrend import Supertrend
 from .tr import TR
@@ -30,38 +30,3 @@ from .tsi import TSI
 from .vwap import VWAP
 from .vwma import VWMA
 from .wma import WMA
-
-INDICATOR_MAP = {
-    "Amorph": Amorph,
-    "Counter": Counter,
-    "aroon": AROON,
-    "ADX": ADX,
-    "ATR": ATR,
-    "BBANDS": BBANDS,
-    "CMO": CMO,
-    "donchian": Donchian,
-    "EMA": EMA,
-    "HL": HighestLowest,
-    "HLA": HighLowAverage,
-    "HLCA": HighLowCloseAverage,
-    "HMA": HMA,
-    "KC": KC,
-    "MACD": MACD,
-    "MFI": MFI,
-    "MOP": MOP,
-    "OBV": OBV,
-    "PP": PivotPoints,
-    "RMA": RMA,
-    "ROC": ROC,
-    "RSI": RSI,
-    "SMA": SMA,
-    "STDEV": StandardDeviation,
-    "STDEVTHRES": StandardDeviationThreshold,
-    "STOCH": STOCH,
-    "Supertrend": Supertrend,
-    "TR": TR,
-    "TSI": TSI,
-    "VWAP": VWAP,
-    "VWMA": VWMA,
-    "WMA": WMA,
-}
