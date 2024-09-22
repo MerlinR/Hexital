@@ -84,10 +84,14 @@ def reading_period(
 
 
 def candles_sum(
-    candles: List[Candle], indicator: str, length: int, index: int = -1
+    candles: List[Candle],
+    indicator: str,
+    length: int,
+    index: int = -1,
+    include_latest: bool = True,
 ) -> float | None:
     """Sum of `indicator` for `length` bars back. including index/latest"""
-    return sum(get_readings_period(candles, indicator, length, index, True))
+    return sum(get_readings_period(candles, indicator, length, index, include_latest))
 
 
 def get_readings_period(

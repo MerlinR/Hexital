@@ -314,13 +314,18 @@ class Indicator(ABC):
         )
 
     def candles_sum(
-        self, length: int = 1, name: Optional[str] = None, index: Optional[int] = None
+        self,
+        length: int = 1,
+        name: Optional[str] = None,
+        index: Optional[int] = None,
+        include_latest: bool = True,
     ) -> float | None:
         return candles_sum(
             self.candles,
             name if name else self.name,
             length,
             index if index is not None else self._active_index,
+            include_latest,
         )
 
     def get_readings_period(
