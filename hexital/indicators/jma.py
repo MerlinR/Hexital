@@ -71,13 +71,10 @@ class JMA(Indicator):
         self.managed_indicators["data"].set_reading({"volty": volty})
 
         # Relative Price Volatility
-        volty_sums = self.get_readings_period(10, f"{self.name}_data.volty")
-        vsums = sum(volty_sums) / len(volty_sums) if volty_sums else 0
+        vsums = self.candles_average(10, f"{self.name}_data.volty")
         self.managed_indicators["data"].set_reading({"vsums": vsums, "volty": volty})
 
-        avg_volty = self.get_readings_period(65, f"{self.name}_data.vsums")
-        avg_volty = sum(avg_volty) / len(avg_volty) if avg_volty else 0
-
+        avg_volty = self.candles_average(65, f"{self.name}_data.vsums")
         d_volty = 0 if avg_volty == 0 else volty / avg_volty
         r_volt = max(1.0, min(pow(self._length_1, 1 / self._power_1), d_volty))
 

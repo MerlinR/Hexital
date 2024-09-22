@@ -90,8 +90,21 @@ def candles_sum(
     index: int = -1,
     include_latest: bool = True,
 ) -> float | None:
-    """Sum of `indicator` for `length` bars back. including index/latest"""
+    """Sum of `indicator` for `length` bars back. If not enough Candles, sum's what's available"""
     return sum(get_readings_period(candles, indicator, length, index, include_latest))
+
+
+def candles_average(
+    candles: List[Candle],
+    indicator: str,
+    length: int,
+    index: int = -1,
+    include_latest: bool = True,
+) -> float | None:
+    """Averages period of `indicator` for `length` bars back.
+    If not enough Candles, sum's what's available"""
+    values = get_readings_period(candles, indicator, length, index, include_latest)
+    return sum(values) / len(values) if values else 0
 
 
 def get_readings_period(
