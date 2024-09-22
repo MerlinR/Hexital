@@ -137,6 +137,13 @@ class Hexital:
     def get_candles(self) -> Dict[str, List[Candle]]:
         return {name: manager.candles for name, manager in self._candles.items()}
 
+    def candles_by_indicator(self, name: str) -> List[Candle]:
+        """Returns the Candle's associated with the given indicator name."""
+        for manager in self._candles.values():
+            if manager.find_indicator(name):
+                return manager.candles
+        return self._candles[DEFAULT_CANDLES].candles
+
     @property
     def timeframe(self) -> str | None:
         return timedelta_to_str(self._timeframe) if self._timeframe else None
