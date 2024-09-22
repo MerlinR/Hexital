@@ -99,6 +99,8 @@ def generate_indicators():
             {"kind": "cmo"},
             {"kind": "mfi"},
             {"kind": "midpoint"},
+            {"kind": "jma"},
+            {"kind": "jma", "length": 10, "phase": 80.0},
         ],
     )
 
@@ -130,6 +132,8 @@ def generate_indicators():
     save_json_result([round_values(value) for value in df["CMO_14"].tolist()], "CMO")
     save_json_result([round_values(value) for value in df["MFI_14"].tolist()], "MFI")
     save_json_result([round_values(value) for value in df["MIDPOINT_2"].tolist()], "MIDPOINT")
+    save_json_result([round_values(value) for value in df["JMA_7_0"].tolist()], "JMA")
+    save_json_result([round_values(value) for value in df["JMA_10_80.0"].tolist()], "JMA_extra")
 
     kc_data = []
     for kc in zip(

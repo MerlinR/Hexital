@@ -83,6 +83,18 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.as_list(), expected_hma)
 
+    @pytest.mark.usefixtures("candles", "expected_jma")
+    def test_jma(self, candles, expected_jma):
+        test = indicators.JMA(candles=candles)
+        test.calculate()
+        assert self.verify(test.as_list(), expected_jma, acceptable_diff=6)
+
+    @pytest.mark.usefixtures("candles", "expected_jma_extra")
+    def test_jma_extra(self, candles, expected_jma_extra):
+        test = indicators.JMA(candles=candles, period=10, phase=80.0)
+        test.calculate()
+        assert self.verify(test.as_list(), expected_jma_extra, acceptable_diff=9)
+
     @pytest.mark.usefixtures("candles", "expected_kc")
     def test_kc(self, candles, expected_kc):
         test = indicators.KC(candles=candles)

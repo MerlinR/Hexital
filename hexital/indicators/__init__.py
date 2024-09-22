@@ -11,6 +11,7 @@ from .highest_lowest import HL
 from .hla import HLA
 from .hlca import HLCA
 from .hma import HMA
+from .jma import JMA
 from .kc import KC
 from .macd import MACD
 from .mfi import MFI

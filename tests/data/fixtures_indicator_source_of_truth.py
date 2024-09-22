@@ -84,6 +84,18 @@ def fixture_expected_hma():
     return json.load(csv_files)
 
 
+@pytest.fixture(name="expected_jma")
+def fixture_expected_jma():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/JMA.json")
+    return json.load(csv_files)
+
+
+@pytest.fixture(name="expected_jma_extra")
+def fixture_expected_jma_extra():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/JMA_extra.json")
+    return json.load(csv_files)
+
+
 @pytest.fixture(name="expected_kc")
 def fixture_expected_kc():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/KC.json")
