@@ -11,6 +11,7 @@ from hexital.core.candle_manager import CandleManager
 from hexital.core.candlestick_type import CandlestickType
 from hexital.utils.candles import (
     candles_sum,
+    get_readings_period,
     reading_by_candle,
     reading_count,
     reading_period,
@@ -320,6 +321,21 @@ class Indicator(ABC):
             name if name else self.name,
             length,
             index if index is not None else self._active_index,
+        )
+
+    def get_readings_period(
+        self,
+        length: int = 1,
+        name: Optional[str] = None,
+        index: Optional[int] = None,
+        include_latest: bool = False,
+    ) -> List[float | int]:
+        return get_readings_period(
+            self.candles,
+            name if name else self.name,
+            length,
+            index if index is not None else self._active_index,
+            include_latest,
         )
 
     def purge(self):
