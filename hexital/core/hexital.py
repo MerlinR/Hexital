@@ -214,9 +214,24 @@ class Hexital:
         self.purge(name)
         self._indicators.pop(name, None)
 
-    def append(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
-        for candle_manager in self._candles.values():
-            candle_manager.append(candles)
+    def append(
+        self,
+        candles: Candle | List[Candle] | dict | List[dict] | list | List[list],
+        timeframe: Optional[str | TimeFrame | timedelta | int] = None,
+    ):
+        name = None
+
+        if timeframe and timeframe == DEFAULT_CANDLES:
+            name = DEFAULT_CANDLES
+        elif timeframe:
+            name = convert_timeframe_to_timedelta(timeframe)
+            name = timedelta_to_str(name) if name else None
+
+        if name and self._candles.get(name):
+            self._candles[name].append(candles)
+        else:
+            for candle_manager in self._candles.values():
+                candle_manager.append(candles)
 
         self.calculate()
 

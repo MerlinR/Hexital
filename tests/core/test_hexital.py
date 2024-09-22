@@ -97,6 +97,19 @@ class TestIndicatorPattern:
         assert strat.reading("fake_pattern") is not None
 
 
+class TestAppend:
+    @pytest.mark.usefixtures("candles")
+    def test_append_timeframes(self, candles):
+        strat = Hexital("Test Stratergy", [])
+        strat.add_indicator([EMA(), EMA(timeframe="T5")])
+        strat.append(candles[0])
+        assert len(strat.candles("default")) == 1 and len(strat.candles("T5")) == 1
+        strat.append(candles[-1], "T5")
+        assert len(strat.candles("default")) == 1 and len(strat.candles("T5")) == 2
+        strat.append(candles[-1], "default")
+        assert len(strat.candles("default")) == 2 and len(strat.candles("T5")) == 2
+
+
 @pytest.mark.usefixtures("candles", "expected_ema")
 def test_hextial_single(candles, expected_ema):
     strat = Hexital("Test Stratergy", candles)
