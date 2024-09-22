@@ -7,6 +7,14 @@ ACCURACY_PER = 99.5
 MATH_REF = (100 - ACCURACY_PER) / 100
 
 
+class bcolors:
+    GOOD = "\033[92m"
+    INFO = "\033[94m"
+    WARNING = "\033[93m"
+    FAIL = "\033[91m"
+    CLEAR = "\033[0m"
+
+
 class IndicatorTestBase:
     def verify(
         self,
@@ -27,13 +35,13 @@ class IndicatorTestBase:
         return differences <= acceptable_diff
 
     def show_results(self, differences: int, results: list, acceptable_diff: int, verbose: bool):
-        print(f"Differences: {differences}")
-
         for row in results:
             if row[-1] is False:
-                print("\033[91m" + f"{row[0]}: {row[1]}\t!=\t{row[2]}" + "\033[0m")
+                print(f"{bcolors.FAIL}{row[0]}: {row[1]}\t!=\t{row[2]}{bcolors.CLEAR}")
             elif verbose:
-                print("\033[92m" + f"{row[0]}: {row[1]}\t==\t{row[2]}" + "\033[0m")
+                print(f"{bcolors.GOOD}{row[0]}: {row[1]}\t==\t{row[2]}{bcolors.CLEAR}")
+
+        print(f"Differences: {bcolors.WARNING}{differences}{bcolors.CLEAR}")
 
     def deepdiff(
         self,
