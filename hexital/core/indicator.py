@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from copy import deepcopy
 from dataclasses import dataclass, field
 from datetime import timedelta
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, TypeVar
 
 from hexital.core.candle import Candle
 from hexital.core.candle_manager import CandleManager
@@ -18,6 +18,8 @@ from hexital.utils.candles import (
 from hexital.utils.candlesticks import validate_candlesticktype
 from hexital.utils.indexing import round_values
 from hexital.utils.timeframe import TimeFrame, convert_timeframe_to_timedelta, timedelta_to_str
+
+T = TypeVar("T")
 
 
 @dataclass(kw_only=True)
@@ -261,25 +263,38 @@ class Indicator(ABC):
     def prev_exists(self, name: Optional[str] = None) -> bool:
         return self.prev_reading(self.name if not name else name) is not None
 
-    def prev_reading(self, name: Optional[str] = None) -> float | dict | None:
+    def prev_reading(
+        self, name: Optional[str] = None, default: Optional[T] = None
+    ) -> float | dict | None | T:
         if len(self.candles) == 0 or self._active_index == 0:
-            return None
-        return self.reading(name=name if name else self.name, index=self._active_index - 1)
+            return default
+        value = self.reading(name=name if name else self.name, index=self._active_index - 1)
+        return value if value is not None else default
 
     def reading(
-        self, name: Optional[str] = None, index: Optional[int] = None
-    ) -> float | dict | None:
+        self,
+        name: Optional[str] = None,
+        index: Optional[int] = None,
+        default: Optional[T] = None,
+    ) -> float | dict | None | T:
         """Simple method to get an indicator reading from the index
         Name can use '.' to find nested reading, E.G 'MACD_12_26_9.MACD"""
-        return reading_by_candle(
+        value = reading_by_candle(
             self.candles[index if index is not None else self._active_index],
             name if name else self.name,
         )
+        return value if value is not None else default
 
-    def read_candle(self, candle: Candle, name: Optional[str] = None) -> float | dict | None:
+    def read_candle(
+        self,
+        candle: Candle,
+        name: Optional[str] = None,
+        default: Optional[T] = None,
+    ) -> float | dict | None | T:
         """Simple method to get an indicator reading from a candle,
         regardless of it's location"""
-        return reading_by_candle(candle, name if name else self.name)
+        value = reading_by_candle(candle, name if name else self.name)
+        return value if value is not None else default
 
     def reading_count(self, name: Optional[str] = None) -> int:
         """Returns how many instance of the given indicator exist"""
