@@ -1,12 +1,13 @@
 from dataclasses import dataclass, field
 
+from hexital.analysis import movement
 from hexital.core.indicator import Indicator, Managed
 from hexital.indicators.sma import SMA
 
 
 @dataclass(kw_only=True)
 class STOCH(Indicator):
-    """Stochastic (STOCH)
+    """Stochastic - STOCH
 
     The Stochastic Oscillator (STOCH) was developed by George Lane in the 1950's.
     He believed this indicator was a good way to measure momentum because changes in
@@ -23,11 +24,13 @@ class STOCH(Indicator):
     Sources:
         https://www.tradingview.com/wiki/Stochastic_(STOCH)
 
-    Args:
-        period (int) Default: 14
-        slow (int) Default: 3
-        smoothing (int) Default: 3
+    Output type: `Dict["stoch": float, "k": float, "d": float]`
 
+    Args:
+        period: How many Periods to use
+        slow_period: How many Periods to use on smoothing d
+        smoothing_k: How many Periods to use on smoothing K
+        input_value: Which input field to calculate the Indicator
     """
 
     _name: str = field(init=False, default="STOCH")
@@ -40,8 +43,8 @@ class STOCH(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_managed_indicator("STOCH_data", Managed(fullname_override=f"{self.name}_data"))
-        self.managed_indicators["STOCH_data"].add_sub_indicator(
+        self.add_managed_indicator("data", Managed(fullname_override=f"{self.name}_data"))
+        self.managed_indicators["data"].add_sub_indicator(
             SMA(
                 input_value=f"{self.name}_data.stoch",
                 period=self.smoothing_k,
@@ -64,19 +67,15 @@ class STOCH(Indicator):
         d = None
 
         if self.reading_period(self.period, self.input_value):
-            lowest = min(
-                self.reading("low", i) for i in range(index - (self.period - 1), index + 1)
-            )
-            highest = max(
-                self.reading("high", i) for i in range(index - (self.period - 1), index + 1)
-            )
+            lowest = movement.lowest(self.candles, "low", self.period, index)
+            highest = movement.highest(self.candles, "high", self.period, index)
 
             stoch = ((self.reading(self.input_value) - lowest) / (highest - lowest)) * 100
 
-            self.managed_indicators["STOCH_data"].set_reading({"stoch": stoch})
+            self.managed_indicators["data"].set_reading({"stoch": stoch})
             k = self.reading(f"{self.name}_k")
 
-            self.managed_indicators["STOCH_data"].set_reading({"stoch": stoch, "k": k})
+            self.managed_indicators["data"].set_reading({"stoch": stoch, "k": k})
             self.managed_indicators["STOCH_d"].calculate_index(index)
             d = self.reading(f"{self.name}_d")
 

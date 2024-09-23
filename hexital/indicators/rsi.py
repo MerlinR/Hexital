@@ -5,7 +5,7 @@ from hexital.core.indicator import Indicator, Managed
 
 @dataclass(kw_only=True)
 class RSI(Indicator):
-    """Relative Strength Index (RSI)
+    """Relative Strength Index - RSI
 
     The Relative Strength Index is popular momentum oscillator used to measure the
     velocity as well as the magnitude of directional price movements.
@@ -13,11 +13,11 @@ class RSI(Indicator):
     Sources:
         https://www.tradingview.com/support/solutions/43000502338-relative-strength-index-rsi/
 
+    Output type: `float`
+
     Args:
-        Input value (str): Default Close
-        period (int) Default: 14
-
-
+        period: How many Periods to use
+        input_value: Which input field to calculate the Indicator
     """
 
     _name: str = field(init=False, default="RSI")
@@ -28,7 +28,7 @@ class RSI(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_managed_indicator("RSI_data", Managed(fullname_override=f"{self.name}_data"))
+        self.add_managed_indicator("data", Managed(fullname_override=f"{self.name}_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         gains = None
@@ -47,9 +47,6 @@ class RSI(Indicator):
             losses = (
                 (self.prev_reading(f"{self.name}_data.loss") * (self.period - 1)) + change_loss
             ) / self.period
-
-            self.managed_indicators["RSI_data"].set_reading({"gain": gains, "loss": losses})
-
         elif self.reading_period(self.period + 1, self.input_value):
             changes = [
                 self.reading(self.input_value, i) - self.reading(self.input_value, i - 1)
@@ -58,12 +55,10 @@ class RSI(Indicator):
 
             gains = sum(chng for chng in changes if chng > 0) / self.period
             losses = sum(abs(chng) for chng in changes if chng < 0) / self.period
-            self.managed_indicators["RSI_data"].set_reading({"gain": gains, "loss": losses})
+
+        self.managed_indicators["data"].set_reading({"gain": gains, "loss": losses})
 
         if gains is not None and losses is not None:
-            rs = gains / losses
-            rsi = 100.0 - (100.0 / (1.0 + rs))
-            return rsi
+            return 100.0 - (100.0 / (1.0 + (gains / losses)))
 
-        self.managed_indicators["RSI_data"].set_reading(None)
         return None

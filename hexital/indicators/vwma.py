@@ -5,11 +5,19 @@ from hexital.core.indicator import Indicator
 
 @dataclass(kw_only=True)
 class VWMA(Indicator):
-    """Volume Weighted Moving Average
+    """Volume Weighted Moving Average - VWMA
+
+    VWMA is the ratio of the value of a security or financial asset traded to the total
+    volume of transactions during a trading session. It is a measure of the average
+    trading price for the period.
 
     Sources:
         https://www.investopedia.com/ask/answers/071414/whats-difference-between-moving-average-and-weighted-moving-average.asp
 
+    Output type: `float`
+
+    Args:
+        period: How many Periods to use
     """
 
     _name: str = field(init=False, default="VWMA")

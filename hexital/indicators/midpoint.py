@@ -6,9 +6,21 @@ from hexital.core.indicator import Indicator
 
 @dataclass(kw_only=True)
 class MOP(Indicator):
-    """Midpoint Over Period (MOP)
+    """Midpoint Over Period - MOP
 
-    A technical analysis tool that evaluates the average price movement by calculating the midpoint between the highest and lowest points over a specified period. This indicator aims to provide a smoother representation of price action, avoiding the choppiness of extreme highs and lows.
+    A technical analysis tool that evaluates the average price movement by calculating
+    the midpoint between the highest and lowest points over a specified period.
+    This indicator aims to provide a smoother representation of price action,
+    avoiding the choppiness of extreme highs and lows.
+
+    sources:
+        https://trendspider.com/learning-center/understanding-and-applying-the-midpoint-over-period-indicator-in-trading/
+
+    Output type: `float`
+
+    Args:
+        period: How many Periods to use
+        input_value: Which input field to calculate the Indicator
     """
 
     _name: str = field(init=False, default="MOP")

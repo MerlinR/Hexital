@@ -6,31 +6,34 @@ from hexital.core.indicator import Indicator, Managed
 
 @dataclass(kw_only=True)
 class JMA(Indicator):
-    """Jurik Moving Average Average (JMA)
+    """Jurik Moving Average Average - JMA
 
-    Mark Jurik's Moving Average (JMA)
+    The JMA is an adaptive moving average that aims to reduce lag and improve responsiveness
+    to price changes compared to traditional moving averages.
+    By incorporating volatility and phase shift components, the JMA seeks to provide traders
+    with a more accurate and timely representation of market trends.
 
     Sources:
         https://c.mql5.com/forextsd/forum/164/jurik_1.pdf
 
     Args:
-        Input value (str): Default Close
-        period (int) Default: 7
-        phase (float) Default: 0
+        period: How many Periods to use
+        input_value: Which input field to calculate the Indicator
+        phase: How heavy/light the average is [-100, 100]
 
     """
 
     _name: str = field(init=False, default="JMA")
-    input_value: str = "close"
     period: int = 7
+    input_value: str = "close"
     phase: float = 0.0
 
-    _phase_ratio: float = 0
-    _beta: float = 0
-    _length_1: float = 0
-    _length_2: float = 0
-    _power_1: float = 0
-    _bet: float = 0
+    _phase_ratio: float = field(init=False, default=0)
+    _beta: float = field(init=False, default=0)
+    _length_1: float = field(init=False, default=0)
+    _length_2: float = field(init=False, default=0)
+    _power_1: float = field(init=False, default=0)
+    _bet: float = field(init=False, default=0)
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}_{self.phase}"

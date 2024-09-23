@@ -6,7 +6,7 @@ from hexital.indicators import EMA
 
 @dataclass(kw_only=True)
 class MACD(Indicator):
-    """Moving Average Convergence Divergence (MACD)
+    """Moving Average Convergence Divergence - MACD
 
     The MACD is a popular indicator to that is used to identify a security's trend.
     While APO and MACD are the same calculation, MACD also returns two more series
@@ -16,12 +16,13 @@ class MACD(Indicator):
     Sources:
         https://www.investopedia.com/ask/answers/122314/what-exponential-moving-average-ema-formula-and-how-ema-calculated.asp
 
-    Args:
-        input_value (str): Default Close
-        fast_period (int) Default: 12
-        slow_period (int) Default: 26
-        signal_period (int) Default: 9
+    Output type: `Dict["MACD": float, "signal": float, "histogram": float]`
 
+    Args:
+        input_value: Which input field to calculate the Indicator
+        fast_period: How many Periods to use for fast EMA
+        slow_period: How many Periods to use for slow EMA
+        signal_period: How many Periods to use for MACD signal
     """
 
     _name: str = field(init=False, default="MACD")

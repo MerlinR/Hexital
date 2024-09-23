@@ -7,8 +7,20 @@ from hexital.indicators.stdev import STDEV
 
 @dataclass(kw_only=True)
 class BBANDS(Indicator):
-    """Bollinger Bands (BBANDS)
-    Source: https://www.britannica.com/money/bollinger-bands-indicator
+    """Bollinger Bands - BBANDS
+
+    Bollinger Bands are a type of statistical chart characterizing
+    the prices and volatility over time of a financial instrument or commodity,
+    using a formulaic method.
+
+    Source:
+        https://www.britannica.com/money/bollinger-bands-indicator
+
+    Output type: `Dict["BBL": float, "BBM": float, "BBU": float]`
+
+    Args:
+        period: How many Periods to use
+        input_value: Which input field to calculate the Indicator
     """
 
     _name: str = field(init=False, default="BBANDS")
@@ -29,9 +41,8 @@ class BBANDS(Indicator):
             "BBM": None,
             "BBU": None,
         }
-        if (
-            self.reading(f"SMA_{self.period}") is not None
-            and self.reading(f"STDEV_{self.period}") is not None
+        if self.prev_exists() or (
+            self.exists(f"SMA_{self.period}") and self.exists(f"STDEV_{self.period}")
         ):
             sma = self.reading(f"SMA_{self.period}")
             stdev = self.reading(f"STDEV_{self.period}")

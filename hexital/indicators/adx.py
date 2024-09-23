@@ -8,18 +8,19 @@ from hexital.indicators.rma import RMA
 
 @dataclass(kw_only=True)
 class ADX(Indicator):
-    """Average Directional Index (ADX)
+    """Average Directional Index - ADX
 
-    he trend can be either up or down, and this is shown by two accompanying indicators,
-    the negative directional indicator (-DI) and the positive directional indicator (+DI).
-    Therefore, the ADX commonly includes three separate lines. These are used to help
-    assess whether a trade should be taken long or short,
-    or if a trade should be taken at all.
+    ADX is a trend strength in a series of prices of a financial instrument.
 
     Sources:
-        https://www.investopedia.com/terms/a/adx.asp
+        https://en.wikipedia.org/wiki/Average_directional_movement_index
 
+    Output type: `Dict["ADX": float, "DM_Plus": float, "DM_Neg": float]`
 
+    Args:
+        period: How many Periods to use
+        period_signal:  Average Directional Index period, defaults same as period
+        multiplier: ADX smoothing multiplier
     """
 
     _name: str = field(init=False, default="ADX")
@@ -43,21 +44,21 @@ class ADX(Indicator):
             )
         )
         data_indicator = Managed(fullname_override=f"{self.name}_data")
-        self.add_managed_indicator("ADX_data", data_indicator)
+        self.add_managed_indicator("data", data_indicator)
 
         data_indicator.add_sub_indicator(
             RMA(
-                fullname_override=f"{self.name}_pos",
+                fullname_override=f"{self.name}_positive",
                 period=self.period,
-                input_value=f"{self.name}_data.pos",
+                input_value=f"{self.name}_data.positive",
             ),
             False,
         )
         data_indicator.add_sub_indicator(
             RMA(
-                fullname_override=f"{self.name}_neg",
+                fullname_override=f"{self.name}_negative",
                 period=self.period,
-                input_value=f"{self.name}_data.neg",
+                input_value=f"{self.name}_data.negative",
             ),
             False,
         )
@@ -76,31 +77,30 @@ class ADX(Indicator):
         adx_negative = None
 
         if self.prev_exists("high"):
-            up = self.reading("high") - self.prev_reading("high")
-            down = self.prev_reading("low") - self.reading("low")
+            up = self.candles[index].high - self.candles[index - 1].high
+            down = self.candles[index - 1].low - self.candles[index].low
         else:
-            up = self.reading("high") - self.reading("low")
-            down = self.reading("low") - self.reading("low")
+            up = self.candles[index].high - self.candles[index].low
+            down = 0
 
         dm_plus = up if up > down and up > 0.0 else 0.0
         dm_neg = down if down > up and down > 0.0 else 0.0
 
-        self.managed_indicators["ADX_data"].set_reading({"pos": dm_plus, "neg": dm_neg})
+        self.managed_indicators["data"].set_reading({"positive": dm_plus, "negative": dm_neg})
 
-        if self.reading(f"{self.name}_atr"):
+        if self.exists(f"{self.name}_atr"):
             mod = self.multiplier / self.reading(f"{self.name}_atr")
 
-            adx_positive = mod * self.reading(f"{self.name}_pos")
-            adx_negative = mod * self.reading(f"{self.name}_neg")
+            adx_positive = mod * self.reading(f"{self.name}_positive")
+            adx_negative = mod * self.reading(f"{self.name}_negative")
 
             dx = self.multiplier * abs(adx_positive - adx_negative) / (adx_positive + adx_negative)
 
-            self.managed_indicators["ADX_data"].set_reading(
-                {"pos": dm_plus, "neg": dm_neg, "dx": dx}
+            self.managed_indicators["data"].set_reading(
+                {"positive": dm_plus, "negative": dm_neg, "dx": dx}
             )
             self.managed_indicators["dx"].calculate_index(index)
 
-            if self.reading(f"{self.name}_dx"):
-                adx_final = self.reading(f"{self.name}_dx")
+            adx_final = self.reading(f"{self.name}_dx")
 
         return {"ADX": adx_final, "DM_Plus": adx_positive, "DM_Neg": adx_negative}

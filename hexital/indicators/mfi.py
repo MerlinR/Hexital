@@ -6,14 +6,19 @@ from hexital.indicators.hlca import HLCA
 
 @dataclass(kw_only=True)
 class MFI(Indicator):
-    """Money Flow Index (MFI)
+    """Money Flow Index - MFI
+
+    The money flow index (MFI) is an oscillator that ranges from 0 to 100.
+    It is used to show the money flow over several days.
 
     Sources:
         https://www.tradingview.com/wiki/Money_Flow_(MFI)
 
+    Output type: `float`
+
     Args:
-        Input value (str): Default Close
-        period (int) Default: 14
+        period: How many Periods to use
+        input_value: Which input field to calculate the Indicator
     """
 
     _name: str = field(init=False, default="MFI")
@@ -25,7 +30,7 @@ class MFI(Indicator):
 
     def _initialise(self):
         self.add_sub_indicator(HLCA())
-        self.add_managed_indicator("MFI_Data", Managed(fullname_override=f"{self.name}_data"))
+        self.add_managed_indicator("data", Managed(fullname_override=f"{self.name}_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         hlca = self.reading("HLCA")
@@ -34,23 +39,19 @@ class MFI(Indicator):
         money_flow = hlca * self.candles[index].volume
 
         if prev_hlca and hlca > prev_hlca:
-            self.managed_indicators["MFI_Data"].set_reading(
-                {"positive": money_flow, "negative": 0}
-            )
+            self.managed_indicators["data"].set_reading({"positive": money_flow, "negative": 0})
         elif prev_hlca and hlca < prev_hlca:
-            self.managed_indicators["MFI_Data"].set_reading(
-                {"positive": 0, "negative": money_flow}
-            )
+            self.managed_indicators["data"].set_reading({"positive": 0, "negative": money_flow})
         elif prev_hlca and hlca == prev_hlca:
-            self.managed_indicators["MFI_Data"].set_reading({"positive": 0, "negative": 0})
+            self.managed_indicators["data"].set_reading({"positive": 0, "negative": 0})
 
-        if not self.prev_exists() and not self.reading_period(self.period + 1, "HLCA", index):
-            return None
+        if self.prev_exists() or self.reading_period(self.period + 1, "HLCA", index):
+            pos_money = self.candles_sum(self.period, f"{self.name}_data.positive")
+            neg_money = self.candles_sum(self.period, f"{self.name}_data.negative")
 
-        pos_money = self.candles_sum(self.period, f"{self.name}_data.positive")
-        neg_money = self.candles_sum(self.period, f"{self.name}_data.negative")
+            if pos_money and neg_money:
+                return 100 * (pos_money / (pos_money + neg_money))
 
-        if pos_money and neg_money:
-            return 100 * (pos_money / (pos_money + neg_money))
+            return 0
 
-        return 0
+        return None

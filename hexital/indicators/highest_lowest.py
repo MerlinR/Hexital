@@ -6,9 +6,15 @@ from hexital.core.indicator import Indicator
 
 @dataclass(kw_only=True)
 class HL(Indicator):
-    """Highest Lowest
+    """Highest Lowest - HL
 
-    Simple utility indicator to record and display the highest and lowest values N periods back."""
+    Simple utility indicator to record and display the highest and lowest values N periods back.
+
+    Output type: `Dict["low": float, "high": float]`
+
+    Args:
+        period: How many Periods to use
+    """
 
     _name: str = field(init=False, default="HL")
     period: int = 100

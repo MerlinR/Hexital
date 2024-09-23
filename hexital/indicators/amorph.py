@@ -10,12 +10,16 @@ class Amorph(Indicator):
 
     Flexible Skeleton Indicator that will use a method
     to generate readings on every Candle like indicators.
-    The given Method is expected to have 'candles' and 'index' as named arguments
 
-    Arguments:
-    All of Indicator Arguments and All of the given Amorph Arguments as keyword arguments
-    or use args as a dict of keyword arguments for called analysis
+    The given Method is expected to have 'candles' and 'index' as named arguments, EG:
 
+    Input type Example: [Doji][hexital.analysis.patterns.doji]
+
+    Output type: Based on analysis method
+
+    Args:
+        analysis: Period to index back in
+        args: All of the Arguments as keyword arguments as a dict of keyword arguments for called analysis
     """
 
     _analysis_method: Callable
@@ -57,9 +61,8 @@ class Amorph(Indicator):
 
     def _generate_name(self) -> str:
         name = self._analysis_method.__name__
-        length = self._analysis_kwargs.get("length")
-        name = name + f"_{length}" if length else name
-        return name
+        period = self._analysis_kwargs.get("period")
+        return f"{name}_{period}" if period else name
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         return self._analysis_method(candles=self.candles, index=index, **self._analysis_kwargs)

@@ -5,7 +5,7 @@ from hexital.core.indicator import Indicator
 
 @dataclass(kw_only=True)
 class SMA(Indicator):
-    """Simple Moving Average (SMA)
+    """Simple Moving Average - SMA
 
     The Simple Moving Average is the classic moving average that is the equally
     weighted average over n periods.
@@ -13,11 +13,11 @@ class SMA(Indicator):
     Sources:
         https://www.investopedia.com/terms/s/sma.asp
 
+    Output type: `float`
+
     Args:
-        Input value (str): Default Close
-        period (int) Default: 10
-
-
+        period: How many Periods to use
+        input_value: Which input field to calculate the Indicator
     """
 
     _name: str = field(init=False, default="SMA")
@@ -39,6 +39,6 @@ class SMA(Indicator):
             )
 
         if self.reading_period(self.period, self.input_value):
-            return self.candles_sum(self.period, self.input_value) / self.period
+            return self.candles_average(self.period, self.input_value)
 
         return None

@@ -6,8 +6,20 @@ from hexital.core.indicator import Indicator
 
 @dataclass(kw_only=True)
 class AROON(Indicator):
-    """Aroon (aroon)
-    Source: https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/aroon-indicator
+    """Aroon - AROON
+
+    The Aroon indicator, indicates if a price is trending or is in a trading range.
+    It can also reveal the beginning of a new trend, its strength and can help anticipate
+    changes from trading ranges to trends.
+
+    Source:
+        https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/aroon-indicator
+
+
+    Output type: `Dict["AROONU": float, "AROOND": float, "AROONOSC": float]`
+
+     Args:
+        period: How many Periods to use
     """
 
     _name: str = field(init=False, default="AROON")
@@ -22,7 +34,7 @@ class AROON(Indicator):
             "AROOND": None,
             "AROONOSC": None,
         }
-        if self.reading_period(self.period + 1, "high"):
+        if self.prev_exists() or self.reading_period(self.period + 1, "high"):
             aroon["AROONU"] = (
                 (self.period - movement.highestbar(self.candles, "high", self.period + 1, index))
                 / self.period

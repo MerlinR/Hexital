@@ -5,7 +5,24 @@ from hexital.core.indicator import Indicator
 
 @dataclass(kw_only=True)
 class ROC(Indicator):
-    """Rate Of Change"""
+    """Rate Of Change - ROC
+
+    The Price Rate of Change (ROC) indicator in trading refers to the percentage change
+    between the current price and the price of a set number of periods ago.
+    It is used to identify the momentum of price movement and help traders make informed
+    decisions regarding buying or selling assets. This indicator is calculated by dividing
+    the difference between the current price and the price of a set number of periods ago
+    by the previous price and multiplying by 100.
+
+    sources:
+        https://en.wikipedia.org/wiki/Momentum_(technical_analysis)
+
+    Output type: `float`
+
+    Args:
+        period: How many Periods to use
+        input_value: Which input field to calculate the Indicator
+    """
 
     _name: str = field(init=False, default="ROC")
     period: int = 10

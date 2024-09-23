@@ -7,10 +7,19 @@ from hexital.indicators.wma import WMA
 
 @dataclass(kw_only=True)
 class HMA(Indicator):
-    """Hull Moving Average
+    """Hull Moving Average - HMA
+
+    It is a combination of weighted moving averages designed
+    to be more responsive to current price fluctuations while still smoothing prices.
 
     Sources:
         https://school.stockcharts.com/doku.php?id=technical_indicators:hull_moving_average
+
+    Output type: `float`
+
+    Args:
+        period: How many Periods to use
+        input_value: Which input field to calculate the Indicator
 
     """
 
@@ -48,9 +57,11 @@ class HMA(Indicator):
         )
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        if self.reading(f"{self.name}_WMA"):
-            raw_hma = (2 * self.reading(f"{self.name}_WMAh")) - self.reading(f"{self.name}_WMA")
-            self.managed_indicators["raw_HMA"].set_reading(raw_hma)
-            return self.reading(f"{self.name}_HMAs")
+        raw_hma = None
+        wma = self.reading(f"{self.name}_WMA")
 
-        return None
+        if wma is not None:
+            raw_hma = (2 * self.reading(f"{self.name}_WMAh")) - wma
+
+        self.managed_indicators["raw_HMA"].set_reading(raw_hma)
+        return self.reading(f"{self.name}_HMAs")

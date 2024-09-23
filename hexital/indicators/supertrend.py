@@ -6,12 +6,25 @@ from hexital.core.indicator import Indicator, Managed
 
 @dataclass(kw_only=True)
 class Supertrend(Indicator):
-    """Supertrend"""
+    """Supertrend
+
+    It is used to identify market trends and potential entry and exit points in trading.
+    The indicator is based on two dynamic values, period and multiplier, and incorporates
+    the concept of Average True Range (ATR) to measure market volatility.
+    The SuperTrend Indicator generates buy and sell signals by plotting a line on the price chart.
+
+    Output type: `Dict["trend": float, "direction": int, "short": float]`
+
+    Args:
+        period: How many Periods to use
+        input_value: Which input field to calculate the Indicator
+        multiplier: A positive float to multiply the ATR
+    """
 
     _name: str = field(init=False, default="Supertrend")
     period: int = 7
-    multiplier: float = 3.0
     input_value: str = "close"
+    multiplier: float = 3.0
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
@@ -21,7 +34,7 @@ class Supertrend(Indicator):
             indicators.ATR(period=self.period, fullname_override=f"{self.name}_atr")
         )
         self.add_sub_indicator(indicators.HLA(fullname_override=f"{self.name}_HL"))
-        self.add_managed_indicator("ST_data", Managed(fullname_override=f"{self.name}_data"))
+        self.add_managed_indicator("data", Managed(fullname_override=f"{self.name}_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         direction = 1
@@ -29,25 +42,30 @@ class Supertrend(Indicator):
         long = None
         short = None
 
-        if self.reading(f"{self.name}_atr"):
-            mid_atr = self.multiplier * self.reading(f"{self.name}_atr")
+        atr_ = self.reading(f"{self.name}_atr")
+
+        if atr_ is not None:
+            mid_atr = self.multiplier * atr_
 
             upper = self.reading(f"{self.name}_HL") + mid_atr
             lower = self.reading(f"{self.name}_HL") - mid_atr
 
+            prev_upper = self.prev_reading(f"{self.name}_data.upper")
+            prev_lower = self.prev_reading(f"{self.name}_data.lower")
+
             if self.prev_exists(f"{self.name}_data.lower"):
-                if self.reading("close") > self.prev_reading(f"{self.name}_data.upper"):
+                if self.candles[index].close > prev_upper:
                     direction = 1
-                elif self.reading("close") < self.prev_reading(f"{self.name}_data.lower"):
+                elif self.candles[index].close < prev_lower:
                     direction = -1
                 else:
                     direction = self.prev_reading(f"{self.name}.direction")
-                    if direction == 1 and lower < self.prev_reading(f"{self.name}_data.lower"):
-                        lower = self.prev_reading(f"{self.name}_data.lower")
-                    if direction == -1 and upper > self.prev_reading(f"{self.name}_data.upper"):
-                        upper = self.prev_reading(f"{self.name}_data.upper")
+                    if direction == 1 and lower < prev_lower:
+                        lower = prev_lower
+                    if direction == -1 and upper > prev_upper:
+                        upper = prev_upper
 
-            self.managed_indicators["ST_data"].set_reading({"upper": upper, "lower": lower})
+            self.managed_indicators["data"].set_reading({"upper": upper, "lower": lower})
 
             trend = lower if direction == 1 else upper
             long = lower if direction == 1 else None

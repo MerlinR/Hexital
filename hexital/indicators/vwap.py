@@ -9,11 +9,18 @@ from hexital.utils.timeframe import TimeFrame, convert_timeframe_to_timedelta, r
 
 @dataclass(kw_only=True)
 class VWAP(Indicator):
-    """Volume-Weighted Average Price
+    """Volume-Weighted Average Price - VWAP
+
+    The volume-weighted average price is a technical analysis indicator
+    used on intraday charts that resets at the start of every new trading session.
 
     Sources:
         https://www.investopedia.com/terms/v/vwap.asp
 
+    Output type: `float`
+
+    Args:
+        anchor: How to anchor VWAP, Depends on the index values, uses [TimeFrame][hexital.utils.timeframe.Timeframe]
     """
 
     _name: str = field(init=False, default="VWAP")
@@ -38,12 +45,12 @@ class VWAP(Indicator):
         prev_anchor = self.prev_reading(f"{self.name}_data.active_anchor")
         typical_price = (candle.high + candle.low + candle.close) / 3.0
 
-        if prev_anchor and prev_anchor == current_anchor:
-            pv = self.prev_reading(f"{self.name}_data.pv")
-            vol = self.prev_reading(f"{self.name}_data.vol")
-        else:
+        if prev_anchor != current_anchor:
             pv = 0
             vol = 0
+        else:
+            pv = self.prev_reading(f"{self.name}_data.pv", 0.0)
+            vol = self.prev_reading(f"{self.name}_data.vol", 0.0)
 
         pv = pv + (candle.volume * typical_price)
         vol = vol + candle.volume

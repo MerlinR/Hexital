@@ -5,11 +5,20 @@ from hexital.core.indicator import Indicator
 
 @dataclass(kw_only=True)
 class OBV(Indicator):
-    """On-Balance Volume
+    """On-Balance Volume - OBC
+
+    On-balance volume (OBV) is a technical analysis indicator intended
+    to relate price and volume in the stock market.
+    OBV is based on a cumulative total volume.
 
     Sources:
-       https://www.investopedia.com/terms/o/onbalancevolume.asp
+       https://en.wikipedia.org/wiki/On-balance_volume
 
+    Output type: `float`
+
+    Args:
+        period: How many Periods to use
+        input_value: Which input field to calculate the Indicator
     """
 
     _name: str = field(init=False, default="OBV")

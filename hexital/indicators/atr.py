@@ -6,18 +6,18 @@ from hexital.indicators.tr import TR
 
 @dataclass(kw_only=True)
 class ATR(Indicator):
-    """Average True Range (ATR)
+    """Average True Range - ATR
 
-    Averge True Range is used to measure volatility, especially volatility caused by
+    Average True Range is used to measure volatility, especially volatility caused by
     gaps or limit moves.
 
     Sources:
         https://www.tradingview.com/wiki/Average_True_Range_(ATR)
 
-    Args:
-        period (int) Default: 14
-        percentage (bool) Default: False
+    Output type: `float`
 
+    Args:
+        period: How many Periods to use
     """
 
     _name: str = field(init=False, default="ATR")
@@ -34,6 +34,6 @@ class ATR(Indicator):
             return (self.prev_reading() * (self.period - 1) + self.reading("TR")) / self.period
 
         if self.reading_period(self.period, "TR"):
-            return self.candles_sum(self.period, "TR") / self.period
+            return self.candles_average(self.period, "TR")
 
         return None

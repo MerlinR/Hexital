@@ -5,16 +5,26 @@ from hexital.core.indicator import Indicator
 
 @dataclass(kw_only=True)
 class WMA(Indicator):
-    """Weighted Moving Average
+    """Weighted Moving Average - WMA
+
+    A Weighted Moving Average puts more weight on recent data and less on past data.
+    This is done by multiplying each bar's price by a weighting factor.
+    Because of its unique calculation, WMA will follow prices more closely
+    than a corresponding Simple Moving Average.
 
     Sources:
         https://www.investopedia.com/ask/answers/071414/whats-difference-between-moving-average-and-weighted-moving-average.asp
 
+    Output type: `float`
+
+    Args:
+        period: How many Periods to use
+        input_value: Which input field to calculate the Indicator
     """
 
     _name: str = field(init=False, default="WMA")
-    input_value: str = "close"
     period: int = 10
+    input_value: str = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
