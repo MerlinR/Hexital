@@ -179,7 +179,10 @@ class Hexital:
 
     def has_reading(self, name: str) -> bool:
         """Checks if the given Indicator has a valid reading in latest Candle"""
-        return bool(self.reading(name))
+        value = self.reading(name)
+        if isinstance(value, dict):
+            return any(v is not None for v in value.values())
+        return value is not None
 
     def reading(self, name: str, index: int = -1) -> float | dict | None:
         """Attempts to retrieve a reading with a given Indicator name.

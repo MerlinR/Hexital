@@ -128,7 +128,7 @@ class Indicator(ABC):
         """Simple boolean to state if values are being generated yet in the candles"""
         if len(self.candles) == 0:
             return False
-        return self.reading(index=self._active_index) is not None
+        return self.exists(self.name)
 
     @property
     def prior_calc(self) -> bool:
