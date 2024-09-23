@@ -11,6 +11,7 @@ from hexital.exceptions import (
     InvalidIndicator,
 )
 from hexital.indicators import EMA, SMA
+from hexital.indicators.rma import RMA
 
 
 def fake_pattern(candles: List[Candle], index=-1):
@@ -108,6 +109,43 @@ class TestAppend:
         assert len(strat.candles("default")) == 1 and len(strat.candles("T5")) == 2
         strat.append(candles[-1], "default")
         assert len(strat.candles("default")) == 2 and len(strat.candles("T5")) == 2
+
+
+class TestGetCandles:
+    @pytest.mark.usefixtures("candles")
+    def test_default(self, candles):
+        strat = Hexital("Test Stratergy", [])
+        strat.add_indicator([RMA(), EMA(timeframe="T5")])
+        strat.append(candles)
+        assert "RMA_10" in strat.candles()[-1].indicators
+
+    @pytest.mark.usefixtures("candles")
+    def test_default_specific(self, candles):
+        strat = Hexital("Test Stratergy", [])
+        strat.add_indicator([RMA(), EMA(timeframe="T5")])
+        strat.append(candles)
+        assert "RMA_10" in strat.candles("default")[-1].indicators
+
+    @pytest.mark.usefixtures("candles")
+    def test_by_indicator(self, candles):
+        strat = Hexital("Test Stratergy", [])
+        strat.add_indicator([RMA(), EMA(timeframe="T5")])
+        strat.append(candles)
+        assert "RMA_10" in strat.candles("RMA_10")[-1].indicators
+
+    @pytest.mark.usefixtures("candles")
+    def test_by_timeframe(self, candles):
+        strat = Hexital("Test Stratergy", [])
+        strat.add_indicator([RMA(), EMA(timeframe="T5")])
+        strat.append(candles)
+        assert "EMA_10_T5" in strat.candles("T5")[-1].indicators
+
+    @pytest.mark.usefixtures("candles")
+    def test_by_timeframe_timedelta(self, candles):
+        strat = Hexital("Test Stratergy", [])
+        strat.add_indicator([RMA(), EMA(timeframe="T5")])
+        strat.append(candles)
+        assert "EMA_10_T5" in strat.candles(timedelta(minutes=5))[-1].indicators
 
 
 @pytest.mark.usefixtures("candles", "expected_ema")

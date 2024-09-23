@@ -16,9 +16,9 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - Removed unreliable deepdiff rounding
   - Removed soft Correlation Coefficient
   - Custom accuracy none rounding driven custom diff check
-- Added 'candles_by_indicator' to Hexital method to find correct Candles list in Hexital
 - Added 'candles_average' method to Indicator
 - Updated Hexital Append with optional 'timeframe' to select specific Candle's to append too
+- Updated 'candles' in Hexital method to accept timeframe's or indicators
 - Added Movements
   - Added flipped, to detect changes in bool's or solid values
 - Added Indicators

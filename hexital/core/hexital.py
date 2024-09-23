@@ -14,7 +14,12 @@ from hexital.exceptions import (
 from hexital.indicators.amorph import Amorph
 from hexital.utils.candles import reading_by_index
 from hexital.utils.candlesticks import validate_candlesticktype
-from hexital.utils.timeframe import TimeFrame, convert_timeframe_to_timedelta, timedelta_to_str
+from hexital.utils.timeframe import (
+    TimeFrame,
+    convert_timeframe_to_timedelta,
+    timedelta_to_str,
+    timeframe_validation,
+)
 
 
 class Hexital:
@@ -129,20 +134,26 @@ class Hexital:
                 f"Dict Indicator missing 'indicator' or 'analysis' name, not: {raw_indicator}"
             )
 
-    def candles(self, timeframe: Optional[str] = None) -> List[Candle]:
-        if timeframe and self._candles.get(timeframe, False):
-            return self._candles[timeframe].candles
+    def candles(self, name: Optional[str | TimeFrame | timedelta | int] = None) -> List[Candle]:
+        """Get a set of candles by using either a Timeframe or Indicator name"""
+        name_ = DEFAULT_CANDLES if name == DEFAULT_CANDLES else None
+
+        if name and not name_:
+            if timeframe_validation(name):
+                name_ = convert_timeframe_to_timedelta(name)
+            name_ = timedelta_to_str(name_) if name_ else name
+
+        if isinstance(name_, str) and self._candles.get(name_, False):
+            return self._candles[name_].candles
+        elif isinstance(name_, str):
+            for manager in self._candles.values():
+                if manager.find_indicator(name_):
+                    return manager.candles
+
         return self._candles[DEFAULT_CANDLES].candles
 
     def get_candles(self) -> Dict[str, List[Candle]]:
         return {name: manager.candles for name, manager in self._candles.items()}
-
-    def candles_by_indicator(self, name: str) -> List[Candle]:
-        """Returns the Candle's associated with the given indicator name."""
-        for manager in self._candles.values():
-            if manager.find_indicator(name):
-                return manager.candles
-        return self._candles[DEFAULT_CANDLES].candles
 
     @property
     def timeframe(self) -> str | None:

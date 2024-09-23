@@ -27,18 +27,28 @@ class TimeFrame(Enum):
     WEEK = "D7"
 
 
+def timeframe_validation(timeframe: Optional[str | TimeFrame | timedelta | int] = None) -> bool:
+    if isinstance(timeframe, str):
+        timeframe_ = timeframe.upper()
+        if isinstance(timeframe_[0], str) and timeframe_[0] in VALID_TIMEFRAME_PREFIXES:
+            return True
+    elif isinstance(timeframe, (int, timedelta, TimeFrame)):
+        return True
+
+    return False
+
+
 def convert_timeframe_to_timedelta(
     timeframe: Optional[str | TimeFrame | timedelta | int] = None,
 ) -> timedelta | None:
-    if not timeframe:
-        return None
-
     if isinstance(timeframe, (str, TimeFrame)):
         return timeframe_to_timedelta(validate_timeframe(timeframe))
     elif isinstance(timeframe, int):
         return timedelta(seconds=timeframe)
-    else:
+    elif isinstance(timeframe, timedelta):
         return timeframe
+
+    return None
 
 
 def timeframe_to_timedelta(timeframe: str | TimeFrame) -> timedelta:
@@ -46,7 +56,7 @@ def timeframe_to_timedelta(timeframe: str | TimeFrame) -> timedelta:
 
     timeframe_ = timeframe.value if isinstance(timeframe, TimeFrame) else timeframe.upper()
 
-    if not isinstance(timeframe_[0], str) or timeframe_[0] not in VALID_TIMEFRAME_PREFIXES:
+    if not timeframe_validation(timeframe_):
         raise InvalidTimeFrame(
             f"Invalid value: {timeframe_}, valid are: {VALID_TIMEFRAME_PREFIXES}, E.G 'T10' 10 minutes"
         )
