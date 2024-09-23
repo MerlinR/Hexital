@@ -169,6 +169,12 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.as_list(), expected_rsi)
 
+    @pytest.mark.usefixtures("candles", "expected_rvi")
+    def test_rvi(self, candles, expected_rvi):
+        test = indicators.RVI(candles=candles)
+        test.calculate()
+        assert self.verify(test.as_list(), expected_rvi)
+
     @pytest.mark.usefixtures("candles", "expected_rsi")
     def test_append_rsi(self, candles, expected_rsi):
         test = indicators.RSI(candles=[])

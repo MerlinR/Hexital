@@ -29,6 +29,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - Midpoint Over Period (MOP)
   - Pivot Points (PivotPoints)
   - Jurik Moving Average Average (JMA)
+  - Added Relative Vigor Index (RVI)
 - Fixes
   - Fixed Timeframe rounding to correctly handle days
   - Fixed OBV

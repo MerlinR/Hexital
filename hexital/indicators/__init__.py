@@ -21,6 +21,7 @@ from .pivot_points import PivotPoints
 from .rma import RMA
 from .roc import ROC
 from .rsi import RSI
+from .rvi import RVI
 from .sma import SMA
 from .stdev import STDEV
 from .stdevthres import STDEVT
