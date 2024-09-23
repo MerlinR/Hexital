@@ -262,8 +262,17 @@ class Indicator(ABC):
         indicator.round_value = None
         self.managed_indicators[name] = indicator
 
+    def exists(self, name: Optional[str] = None) -> bool:
+        value = self.reading(self.name if not name else name)
+        if isinstance(value, dict):
+            return any(v is not None for v in value.values())
+        return value is not None
+
     def prev_exists(self, name: Optional[str] = None) -> bool:
-        return self.prev_reading(self.name if not name else name) is not None
+        value = self.prev_reading(self.name if not name else name)
+        if isinstance(value, dict):
+            return any(v is not None for v in value.values())
+        return value is not None
 
     def prev_reading(
         self, name: Optional[str] = None, default: Optional[T] = None

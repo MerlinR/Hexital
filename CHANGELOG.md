@@ -19,6 +19,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added 'candles_average' method to Indicator
 - Updated Hexital Append with optional 'timeframe' to select specific Candle's to append too
 - Updated 'candles' in Hexital method to accept timeframe's or indicators
+- Updated 'prev_exists' to correctly handle Dict's and added 'exists' to do same for current handling dict's
 - Added Movements
   - Added flipped, to detect changes in bool's or solid values
 - Added Indicators
