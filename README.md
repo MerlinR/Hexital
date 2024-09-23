@@ -56,18 +56,19 @@ Hexital includes built-in candle utility methods for detecting movements such as
 ## Indicators
 
 - Average Directional Index (**ADX**)
-- Aroon
+- Aroon (**AROON**)
 - Average True Range (**ATR**)
 - Bollinger Bands (**BBANDS**)
 - Counter (**Counter**)
 - Chande Momentum Oscillator - (**CMO**)
 - Donchian Channels (**Donchian**)
 - Exponential Moving Average (**EMA**)
-- High Low (**HL**)
+- Highest Lowest (**HL**)
 - High Low Average (**HLA**)
 - High Low Close (**HLC**)
 - High Low Close Average (**HLCA**)
 - Hull Moving Average (**HMA**)
+- Jurik Moving Average Average (**JMA**)
 - Keltner Channel (**KC**)
 - Moving Average Convergence/Divergence (**MACD**)
 - Money Flow Index (**MFI**)
