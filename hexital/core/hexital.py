@@ -242,7 +242,7 @@ class Hexital:
             name = timedelta_to_str(name) if name else None
 
         if name and self._candles.get(name):
-            self._candles[name].append(candles)
+            self._candles[name].append(deepcopy(candles))
         else:
             for candle_manager in self._candles.values():
                 candle_manager.append(candles)
