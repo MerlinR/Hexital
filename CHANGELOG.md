@@ -12,6 +12,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - Merging Candle's now take into account first and last Candles for accurate Open/Close value updates
   - Appending Candles will now be sorted, allowing to say Append missing or back data
   - Improved the speed of Candle timeframe collapsing
+- Candle now accepts either 'timestamp' or 'time' for time in 'from_dict(s)'
 - Re-wrote Testing method
   - Removed unreliable deepdiff rounding
   - Removed soft Correlation Coefficient

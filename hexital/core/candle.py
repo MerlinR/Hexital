@@ -122,14 +122,15 @@ class Candle:
     @classmethod
     def from_dict(cls, candle: Dict[str, Any]) -> Candle:
         """Expected dict with keys ['open', 'high', 'low', 'close', 'volume']
-        with optional 'timestamp' and 'timeframe' keys."""
+        with optional 'timestamp' or 'time' and 'timeframe' keys."""
+        time = [v for k, v in candle.items() if k in ["timestamp", "Timestamp", "time", "Time"]]
         return cls(
             candle.get("open", candle.get("Open", 0.0)),
             candle.get("high", candle.get("High", 0.0)),
             candle.get("low", candle.get("Low", 0.0)),
             candle.get("close", candle.get("Close", 0.0)),
             candle.get("volume", candle.get("Volume", 0)),
-            timestamp=candle.get("timestamp", candle.get("Timestamp")),
+            timestamp=time[0] if time else None,
             timeframe=candle.get("timeframe", candle.get("Timeframe")),
         )
 
