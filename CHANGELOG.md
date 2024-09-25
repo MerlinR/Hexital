@@ -17,6 +17,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - Removed soft Correlation Coefficient
   - Custom accuracy none rounding driven custom diff check
 - Added 'candles_average' method to Indicator
+- Updated 'reading_count' to accept an index to count from
 - Updated Hexital Append with optional 'timeframe' to select specific Candle's to append too
 - Updated 'candles' in Hexital method to accept timeframe's or indicators
 - Updated 'prev_exists' to correctly handle Dict's and added 'exists' to do same for current handling dict's

@@ -53,13 +53,18 @@ def _nested_indicator(candle: Candle, name: str, nested_name: str) -> float | No
     return None
 
 
-def reading_count(candles: List[Candle], name: str) -> int:
+def reading_count(candles: List[Candle], name: str, index: Optional[int] = None) -> int:
     """Returns how many instance of the given indicator exist"""
-    for count, candle in enumerate(reversed(candles)):
-        if reading_by_candle(candle, name) is None:
+    if index is None:
+        index = len(candles) - 1
+    elif not valid_index(index, len(candles)):
+        index = len(candles) - 1
+
+    for count, idx in enumerate(range(index, -1, -1)):
+        if reading_by_candle(candles[idx], name) is None:
             return count
 
-    return len(candles)
+    return index + 1
 
 
 def reading_period(

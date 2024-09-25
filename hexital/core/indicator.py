@@ -307,9 +307,13 @@ class Indicator(ABC):
         value = reading_by_candle(candle, name if name else self.name)
         return value if value is not None else default
 
-    def reading_count(self, name: Optional[str] = None) -> int:
+    def reading_count(self, name: Optional[str] = None, index: Optional[int] = None) -> int:
         """Returns how many instance of the given indicator exist"""
-        return reading_count(self.candles, name if name else self.name)
+        return reading_count(
+            self.candles,
+            name=name if name else self.name,
+            index=index if index is not None else self._active_index,
+        )
 
     def reading_period(
         self, period: int, name: Optional[str] = None, index: Optional[int] = None

@@ -91,6 +91,16 @@ def test_reading_count_limited(minimal_candles: List[Candle]):
 
 
 @pytest.mark.usefixtures("minimal_candles")
+def test_reading_count_index(minimal_candles: List[Candle]):
+    assert reading_count(minimal_candles, "open", 1) == 2
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_reading_count_index_two(minimal_candles: List[Candle]):
+    assert reading_count(minimal_candles, "MinTR", 5) == 0
+
+
+@pytest.mark.usefixtures("minimal_candles")
 def test_reading_period(minimal_candles: List[Candle]):
     assert reading_period(minimal_candles, 5, "MinTR") is True
 
