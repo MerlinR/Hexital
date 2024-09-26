@@ -266,6 +266,11 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.as_list(), expected_vwap_h1)
 
+    @pytest.mark.usefixtures("candles", "expected_vwap_h1")
+    def test_vwap_anchor_invalid(self, candles, expected_vwap_h1):
+        with pytest.raises(exceptions.InvalidConfiguration):
+            test = indicators.VWAP(candles=candles, anchor="1")
+
     @pytest.mark.usefixtures("candles", "expected_vwma")
     def test_vwma(self, candles, expected_vwma):
         test = indicators.VWMA(candles=candles)

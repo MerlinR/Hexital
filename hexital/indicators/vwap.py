@@ -4,7 +4,12 @@ from typing import Optional
 
 from hexital.core.indicator import Indicator, Managed
 from hexital.exceptions import InvalidConfiguration
-from hexital.utils.timeframe import TimeFrame, convert_timeframe_to_timedelta, round_down_timestamp
+from hexital.utils.timeframe import (
+    TimeFrame,
+    convert_timeframe_to_timedelta,
+    round_down_timestamp,
+    timeframe_validation,
+)
 
 
 @dataclass(kw_only=True)
@@ -30,10 +35,10 @@ class VWAP(Indicator):
         return f"{self._name}_{self.anchor}"
 
     def _validate_fields(self):
-        anchor = convert_timeframe_to_timedelta(self.anchor)
-        if not anchor:
-            raise InvalidConfiguration(f"Anchor is Invalid: {anchor}")
-        self.anchor = anchor
+        if not timeframe_validation(self.anchor):
+            raise InvalidConfiguration(f"Anchor is Invalid: {self.anchor}")
+
+        self.anchor = convert_timeframe_to_timedelta(self.anchor)
 
     def _initialise(self):
         self.add_managed_indicator("VWAP_data", Managed(fullname_override=f"{self.name}_data"))
