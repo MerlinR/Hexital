@@ -166,9 +166,7 @@ def highest(
         return False
 
     readings = get_readings_period(candles, indicator, length, index_, True)
-
-    max_reading = max(readings, default=False)
-    return max_reading if max_reading is not False else None
+    return max(readings, default=None)
 
 
 def lowest(
@@ -183,10 +181,7 @@ def lowest(
         return False
 
     readings = get_readings_period(candles, indicator, length, index_, True)
-
-    min_reading = min(readings, default=False)
-
-    return min_reading if min_reading is not False else None
+    return min(readings, default=None)
 
 
 def highestbar(

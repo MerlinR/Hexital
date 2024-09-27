@@ -10,8 +10,7 @@ from hexital.exceptions import (
     InvalidCandlestickType,
     InvalidIndicator,
 )
-from hexital.indicators import EMA, SMA
-from hexital.indicators.rma import RMA
+from hexital.indicators import EMA, RMA, SMA
 
 
 def fake_pattern(candles: List[Candle], index=-1):
