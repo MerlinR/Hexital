@@ -10,7 +10,7 @@ class TestHexPatterns(IndicatorTestBase):
         strat = Hexital(
             "Test counter",
             candles,
-            [indicators.Supertrend(), indicators.Counter(input_value="Supertrend_7.direction")],
+            [indicators.Supertrend(), indicators.Counter(source="Supertrend_7.direction")],
         )
         strat.calculate()
         assert self.verify(strat.indicators["COUNT_Supertrend_7"].as_list(), expected_counter_bull)
@@ -22,7 +22,7 @@ class TestHexPatterns(IndicatorTestBase):
             candles,
             [
                 indicators.Supertrend(),
-                indicators.Counter(input_value="Supertrend_7.direction", count_value=-1),
+                indicators.Counter(source="Supertrend_7.direction", count_value=-1),
             ],
         )
         strat.calculate()

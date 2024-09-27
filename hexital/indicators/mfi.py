@@ -18,19 +18,19 @@ class MFI(Indicator):
 
     Args:
         period: How many Periods to use
-        input_value: Which input field to calculate the Indicator
+        source: Which input field to calculate the Indicator
     """
 
     _name: str = field(init=False, default="MFI")
     period: int = 14
-    input_value: str = "close"
+    source: str = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
         self.add_sub_indicator(HLCA())
-        self.add_managed_indicator("data", Managed(fullname_override=f"{self.name}_data"))
+        self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         hlca = self.reading("HLCA")

@@ -6,14 +6,13 @@ from hexital.core.candle import Candle
 
 class CandlestickType(ABC):
     name: str = "N/A"
-    minimal_name: str = "NA"
+    acronym: str = "NA"
 
     def __init__(self):
         return
 
     @abstractmethod
-    def convert_candle(self, candle: Candle, candles: List[Candle], index: int):
-        ...
+    def convert_candle(self, candle: Candle, candles: List[Candle], index: int): ...
 
     def conversion(self, candles: List[Candle]):
         for index in range(self._find_conv_index(candles), len(candles)):

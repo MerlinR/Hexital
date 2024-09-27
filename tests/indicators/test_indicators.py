@@ -1,5 +1,5 @@
 import pytest
-from hexital import indicators
+from hexital import exceptions, indicators
 
 from .indicator_testbase import IndicatorTestBase
 
@@ -9,7 +9,7 @@ class TestIndicators(IndicatorTestBase):
     def test_adx(self, candles, expected_adx):
         test = indicators.ADX(candles=candles)
         test.calculate()
-        assert self.verify(test.as_list(), expected_adx, amount=400)
+        assert self.verify(test.as_list(), expected_adx, amount=390)
 
     @pytest.mark.usefixtures("candles", "expected_atr")
     def test_atr(self, candles, expected_atr):

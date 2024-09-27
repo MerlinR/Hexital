@@ -87,7 +87,7 @@ def test_hextial_multi_timeframes_lifespan(candles, expected_ema, expected_sma_t
         "Test Strategy",
         [],
         [EMA(), SMA(timeframe="t5")],
-        candles_lifespan=timedelta(hours=1),
+        candle_life=timedelta(hours=1),
     )
 
     for candle in candles:

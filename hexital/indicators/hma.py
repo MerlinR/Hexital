@@ -19,13 +19,13 @@ class HMA(Indicator):
 
     Args:
         period: How many Periods to use
-        input_value: Which input field to calculate the Indicator
+        source: Which input field to calculate the Indicator
 
     """
 
     _name: str = field(init=False, default="HMA")
     period: int = 10
-    input_value: str = "close"
+    source: str = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
@@ -33,25 +33,25 @@ class HMA(Indicator):
     def _initialise(self):
         self.add_sub_indicator(
             WMA(
-                input_value=self.input_value,
+                source=self.source,
                 period=self.period,
-                fullname_override=f"{self.name}_WMA",
+                name=f"{self.name}_WMA",
             )
         )
         self.add_sub_indicator(
             WMA(
-                input_value=self.input_value,
+                source=self.source,
                 period=int(self.period / 2),
-                fullname_override=f"{self.name}_WMAh",
+                name=f"{self.name}_WMAh",
             )
         )
 
-        self.add_managed_indicator("raw_HMA", Managed(fullname_override=f"{self.name}_HMAr"))
+        self.add_managed_indicator("raw_HMA", Managed(name=f"{self.name}_HMAr"))
         self.managed_indicators["raw_HMA"].add_sub_indicator(
             WMA(
-                input_value=f"{self.name}_HMAr",
+                source=f"{self.name}_HMAr",
                 period=int(math.sqrt(self.period)),
-                fullname_override=f"{self.name}_HMAs",
+                name=f"{self.name}_HMAs",
             ),
             False,
         )

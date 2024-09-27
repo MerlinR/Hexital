@@ -21,22 +21,22 @@ class ROC(Indicator):
 
     Args:
         period: How many Periods to use
-        input_value: Which input field to calculate the Indicator
+        source: Which input field to calculate the Indicator
     """
 
     _name: str = field(init=False, default="ROC")
     period: int = 10
-    input_value: str = "close"
+    source: str = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}"
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        if self.prev_exists() or self.reading_period(self.period + 1, self.input_value):
-            period_n_back = self.reading(self.input_value, index - self.period)
+        if self.prev_exists() or self.reading_period(self.period + 1, self.source):
+            period_n_back = self.reading(self.source, index - self.period)
 
             if period_n_back == 0:
                 return -100
 
-            return ((self.reading(self.input_value) - period_n_back) / period_n_back) * 100
+            return ((self.reading(self.source) - period_n_back) / period_n_back) * 100
         return None

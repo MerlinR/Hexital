@@ -657,7 +657,7 @@ class TestCandleConversion:
         self, minimal_candles: List[Candle], minimal_conv_candles_t5_expected: List[Candle]
     ):
         manager = CandleManager(
-            minimal_candles, timeframe=timedelta(minutes=5), candlestick_type=FakeType()
+            minimal_candles, timeframe=timedelta(minutes=5), candlestick=FakeType()
         )
         manager._tasks()
 
@@ -668,7 +668,7 @@ class TestCandleConversion:
         self, minimal_candles: List[Candle], minimal_conv_candles_t5_expected: List[Candle]
     ):
         manager = CandleManager(
-            minimal_candles, timeframe=timedelta(minutes=5), candlestick_type=FakeType()
+            minimal_candles, timeframe=timedelta(minutes=5), candlestick=FakeType()
         )
         manager.convert_candles()
         manager.convert_candles()
@@ -681,7 +681,7 @@ class TestCandleConversion:
         self, minimal_candles: List[Candle], minimal_conv_candles_t5_expected: List[Candle]
     ):
         manager = CandleManager(
-            minimal_candles[:3], timeframe=timedelta(minutes=5), candlestick_type=FakeType()
+            minimal_candles[:3], timeframe=timedelta(minutes=5), candlestick=FakeType()
         )
 
         manager._tasks()

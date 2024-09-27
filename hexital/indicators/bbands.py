@@ -20,20 +20,20 @@ class BBANDS(Indicator):
 
     Args:
         period: How many Periods to use
-        input_value: Which input field to calculate the Indicator
+        source: Which input field to calculate the Indicator
     """
 
     _name: str = field(init=False, default="BBANDS")
     period: int = 5
-    input_value: str = "close"
+    source: str = "close"
     _std: float = field(init=False, default=2.0)
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_sub_indicator(STDEV(input_value=self.input_value, period=self.period))
-        self.add_sub_indicator(SMA(input_value=self.input_value, period=self.period))
+        self.add_sub_indicator(STDEV(source=self.source, period=self.period))
+        self.add_sub_indicator(SMA(source=self.source, period=self.period))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         bbands = {

@@ -19,14 +19,14 @@ class MACD(Indicator):
     Output type: `Dict["MACD": float, "signal": float, "histogram": float]`
 
     Args:
-        input_value: Which input field to calculate the Indicator
+        source: Which input field to calculate the Indicator
         fast_period: How many Periods to use for fast EMA
         slow_period: How many Periods to use for slow EMA
         signal_period: How many Periods to use for MACD signal
     """
 
     _name: str = field(init=False, default="MACD")
-    input_value: str = "close"
+    source: str = "close"
     fast_period: int = 12
     slow_period: int = 26
     signal_period: int = 9
@@ -44,28 +44,28 @@ class MACD(Indicator):
             self.fast_period, self.slow_period = self.slow_period, self.fast_period
 
     def _initialise(self):
-        self.add_managed_indicator("MACD", Managed(fullname_override=f"{self.name}_macd"))
+        self.add_managed_indicator("MACD", Managed(name=f"{self.name}_macd"))
 
         self.add_sub_indicator(
             EMA(
-                input_value=self.input_value,
+                source=self.source,
                 period=self.fast_period,
-                fullname_override=f"{self.name}_EMA_fast",
+                name=f"{self.name}_EMA_fast",
             )
         )
         self.add_sub_indicator(
             EMA(
-                input_value=self.input_value,
+                source=self.source,
                 period=self.slow_period,
-                fullname_override=f"{self.name}_EMA_slow",
+                name=f"{self.name}_EMA_slow",
             )
         )
         self.add_managed_indicator(
             "signal",
             EMA(
-                input_value=f"{self.name}_macd",
+                source=f"{self.name}_macd",
                 period=self.signal_period,
-                fullname_override=f"{self.name}_signal_line",
+                name=f"{self.name}_signal_line",
             ),
         )
 

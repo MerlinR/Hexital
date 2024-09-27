@@ -17,25 +17,25 @@ class RSI(Indicator):
 
     Args:
         period: How many Periods to use
-        input_value: Which input field to calculate the Indicator
+        source: Which input field to calculate the Indicator
     """
 
     _name: str = field(init=False, default="RSI")
     period: int = 14
-    input_value: str = "close"
+    source: str = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_managed_indicator("data", Managed(fullname_override=f"{self.name}_data"))
+        self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         gains = None
         losses = None
 
         if self.prev_exists():
-            change = self.prev_reading(self.input_value) - self.reading(self.input_value)
+            change = self.prev_reading(self.source) - self.reading(self.source)
 
             change_gain = -1 * change if change < 0 else 0.0
             change_loss = change if change > 0 else 0.0
@@ -47,9 +47,9 @@ class RSI(Indicator):
             losses = (
                 (self.prev_reading(f"{self.name}_data.loss") * (self.period - 1)) + change_loss
             ) / self.period
-        elif self.reading_period(self.period + 1, self.input_value):
+        elif self.reading_period(self.period + 1, self.source):
             changes = [
-                self.reading(self.input_value, i) - self.reading(self.input_value, i - 1)
+                self.reading(self.source, i) - self.reading(self.source, i - 1)
                 for i in range(index - (self.period - 1), index + 1)
             ]
 

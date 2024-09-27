@@ -27,13 +27,12 @@ T = TypeVar("T")
 @dataclass(kw_only=True)
 class Indicator(ABC):
     candles: List[Candle] = field(default_factory=list)
-    fullname_override: Optional[str] = None
-    name_suffix: Optional[str] = None
+    name: str = ""
     timeframe: Optional[str | TimeFrame | timedelta | int] = None
     timeframe_fill: bool = False
-    candles_lifespan: Optional[timedelta] = None
-    candlestick_type: Optional[CandlestickType | str] = None
-    round_value: Optional[int] = 4
+    candle_life: Optional[timedelta] = None
+    candlestick: Optional[CandlestickType | str] = None
+    rounding: Optional[int] = 4
 
     sub_indicators: Dict[str, Indicator] = field(init=False, default_factory=dict)
     managed_indicators: Dict[str, Managed | Indicator] = field(init=False, default_factory=dict)
@@ -41,9 +40,8 @@ class Indicator(ABC):
     _sub_calc_prior: bool = field(init=False, default=True)
 
     _name: str = field(init=False, default="")
-    _timeframe: Optional[timedelta] = None
-    _output_name: str = field(init=False, default="")
-    _candles: CandleManager = field(init=False, default_factory=CandleManager)
+    _timeframe: Optional[timedelta] = field(init=False)
+    _candles: CandleManager = field(init=False)
     _active_index: int = field(init=False, default=0)
     _initialised: bool = field(init=False, default=False)
 
@@ -53,15 +51,15 @@ class Indicator(ABC):
         self._timeframe = convert_timeframe_to_timedelta(self.timeframe)
         self.timeframe = timedelta_to_str(self._timeframe) if self._timeframe else None
 
-        if self.candlestick_type is not None:
-            self.candlestick_type = validate_candlesticktype(self.candlestick_type)
+        if self.candlestick is not None:
+            self.candlestick = validate_candlesticktype(self.candlestick)
 
         self._candles = CandleManager(
             self.candles,
-            self.candles_lifespan,
+            self.candle_life,
             self._timeframe,
             self.timeframe_fill,
-            self.candlestick_type,
+            self.candlestick,
         )
 
         self.candles = self._candles.candles
@@ -71,23 +69,19 @@ class Indicator(ABC):
     def __str__(self):
         data = vars(self)
         data.pop("candles")
-        data["name"] = data["_output_name"]
         return str(data)
 
     def _internal_generate_name(self):
         name = ""
 
-        if self.fullname_override:
-            name = self.fullname_override
+        if self.name:
+            name = self.name
         else:
             name = self._generate_name()
             if self._candles.timeframe:
                 name += f"_{self._candles.name}"
 
-        if self.name_suffix:
-            name += f"_{self.name_suffix}"
-
-        self._output_name = self._sanitise_name(name)
+        self.name = self._sanitise_name(name)
 
     def _initialise(self):
         return
@@ -115,13 +109,8 @@ class Indicator(ABC):
         self.timeframe = timedelta_to_str(manager.timeframe) if manager.timeframe else None
         self._timeframe = manager.timeframe
         self.timeframe_fill = manager.timeframe_fill
-        self.candles_lifespan = manager.candles_lifespan
-        self.candlestick_type = manager.candlestick_type
-
-    @property
-    def name(self) -> str:
-        """The indicator name that will be saved into the Candles"""
-        return self._output_name
+        self.candle_life = manager.candle_life
+        self.candlestick = manager.candlestick
 
     @property
     def has_reading(self) -> bool:
@@ -147,8 +136,8 @@ class Indicator(ABC):
             if name == "timeframe_fill" and self._timeframe is None:
                 continue
 
-            if name == "candlestick_type" and value:
-                output[name] = value.minimal_name
+            if name == "candlestick" and value:
+                output[name] = value.acronym if value.acronym else value.name
             elif name == "timeframe" and self._candles.timeframe is not None:
                 output[name] = timedelta_to_str(self._candles.timeframe)
             elif not name.startswith("_") and value is not None:
@@ -204,7 +193,7 @@ class Indicator(ABC):
             if self.candles[index].indicators.get(self.name) is not None:
                 continue
 
-            reading = round_values(self._calculate_reading(index=index), round_by=self.round_value)
+            reading = round_values(self._calculate_reading(index=index), round_by=self.rounding)
             self._set_reading(reading, index)
 
         self._calculate_sub_indicators(prior_calc=False)
@@ -217,7 +206,7 @@ class Indicator(ABC):
 
         for index in range(start_index, end_index):
             self._set_active_index(index)
-            reading = round_values(self._calculate_reading(index=index), round_by=self.round_value)
+            reading = round_values(self._calculate_reading(index=index), round_by=self.rounding)
             self._set_reading(reading, index)
 
         self._calculate_sub_indicators(False, start_index, end_index)
@@ -252,14 +241,14 @@ class Indicator(ABC):
         indicator._sub_indicator = True
         indicator._sub_calc_prior = prior_calc
         indicator.candle_manager = self._candles
-        indicator.round_value = None
+        indicator.rounding = None
         self.sub_indicators[indicator.name] = indicator
 
     def add_managed_indicator(self, name: str, indicator: Managed | Indicator):
         """Adds managed sub indicator, this will not auto calculate with indicator"""
         indicator._sub_indicator = True
         indicator.candle_manager = self._candles
-        indicator.round_value = None
+        indicator.rounding = None
         self.managed_indicators[name] = indicator
 
     def exists(self, name: Optional[str] = None) -> bool:

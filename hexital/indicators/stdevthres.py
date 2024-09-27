@@ -18,13 +18,13 @@ class STDEVT(Indicator):
 
     Args:
         period: How many Periods to use
-        input_value: Which input field to calculate the Indicator
+        source: Which input field to calculate the Indicator
         multiplier: A positive float to multiply the Deviation
     """
 
     _name: str = field(init=False, default="STDEVT")
     period: int = 10
-    input_value: str = "close"
+    source: str = "close"
     multiplier: float = 2.0
 
     def _generate_name(self) -> str:
@@ -33,9 +33,9 @@ class STDEVT(Indicator):
     def _initialise(self):
         self.add_sub_indicator(
             STDEV(
-                input_value=self.input_value,
+                source=self.source,
                 period=self.period,
-                fullname_override=f"{self.name}_stdev",
+                name=f"{self.name}_stdev",
             )
         )
 
@@ -44,6 +44,6 @@ class STDEVT(Indicator):
             return False
 
         return (
-            abs(self.reading(self.input_value) - self.prev_reading(self.input_value))
+            abs(self.reading(self.source) - self.prev_reading(self.source))
             > self.reading(f"{self.name}_stdev") * self.multiplier
         )

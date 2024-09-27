@@ -18,13 +18,13 @@ class EMA(Indicator):
 
     Args:
         period: How many Periods to use
-        input_value: Which input field to calculate the Indicator
+        source: Which input field to calculate the Indicator
         smoothing: Smoothing multiplier for EMA
     """
 
     _name: str = field(init=False, default="EMA")
     period: int = 10
-    input_value: str = "close"
+    source: str = "close"
     smoothing: float = 2.0
     _alpha: float = field(init=False, default=0)
 
@@ -38,10 +38,10 @@ class EMA(Indicator):
         prev_ema = self.prev_reading()
         if prev_ema is not None:
             return float(
-                self._alpha * self.reading(self.input_value) + (prev_ema * (1.0 - self._alpha))
+                self._alpha * self.reading(self.source) + (prev_ema * (1.0 - self._alpha))
             )
 
-        if self.reading_period(self.period, self.input_value):
-            return self.candles_average(self.period, self.input_value)
+        if self.reading_period(self.period, self.source):
+            return self.candles_average(self.period, self.source)
 
         return None

@@ -22,28 +22,28 @@ DEFAULT_CANDLES = "default"
 class CandleManager:
     _name: Optional[str] = None
     candles: List[Candle]
-    candles_lifespan: Optional[timedelta]
+    candle_life: Optional[timedelta]
     timeframe: Optional[timedelta] = None
     timeframe_fill: bool = False
-    candlestick_type: Optional[CandlestickType] = None
+    candlestick: Optional[CandlestickType] = None
 
     def __init__(
         self,
         candles: Optional[List[Candle]] = None,
-        candles_lifespan: Optional[timedelta] = None,
+        candle_life: Optional[timedelta] = None,
         timeframe: Optional[timedelta] = None,
         timeframe_fill: bool = False,
-        candlestick_type: Optional[CandlestickType] = None,
+        candlestick: Optional[CandlestickType] = None,
     ):
         if candles:
             self.candles = candles
         else:
             self.candles = []
 
-        self.candles_lifespan = candles_lifespan
+        self.candle_life = candle_life
         self.timeframe = timeframe
         self.timeframe_fill = timeframe_fill
-        self.candlestick_type = candlestick_type
+        self.candlestick = candlestick
 
         self._tasks(True)
 
@@ -51,7 +51,7 @@ class CandleManager:
         if not isinstance(other, CandleManager):
             return False
 
-        for key in ["candles_lifespan", "timeframe", "timeframe_fill"]:
+        for key in ["candle_life", "timeframe", "timeframe_fill"]:
             if getattr(self, key) != getattr(other, key):
                 return False
 
@@ -156,15 +156,12 @@ class CandleManager:
         return int(time_one - time_two)
 
     def trim_candles(self):
-        if self.candles_lifespan is None or not self.candles:
+        if self.candle_life is None or not self.candles:
             return
 
         latest = self.candles[-1].timestamp
 
-        while (
-            self.candles[0].timestamp
-            and self.candles[0].timestamp < latest - self.candles_lifespan
-        ):
+        while self.candles[0].timestamp and self.candles[0].timestamp < latest - self.candle_life:
             self.candles.pop(0)
 
     def collapse_candles(self):
@@ -259,8 +256,8 @@ class CandleManager:
         return candles
 
     def convert_candles(self):
-        if self.candles and self.candlestick_type:
-            self.candlestick_type.conversion(self.candles)
+        if self.candles and self.candlestick:
+            self.candlestick.conversion(self.candles)
 
     def purge(self, indicator: str | Set[str]):
         """Remove this indicator value from all Candles"""

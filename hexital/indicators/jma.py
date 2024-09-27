@@ -18,14 +18,14 @@ class JMA(Indicator):
 
     Args:
         period: How many Periods to use
-        input_value: Which input field to calculate the Indicator
+        source: Which input field to calculate the Indicator
         phase: How heavy/light the average is [-100, 100]
 
     """
 
     _name: str = field(init=False, default="JMA")
     period: int = 7
-    input_value: str = "close"
+    source: str = "close"
     phase: float = 0.0
 
     _phase_ratio: float = field(init=False, default=0)
@@ -39,7 +39,7 @@ class JMA(Indicator):
         return f"{self._name}_{self.period}_{self.phase}"
 
     def _initialise(self):
-        self.add_managed_indicator("data", Managed(fullname_override=f"{self.name}_data"))
+        self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
 
     def _validate_fields(self):
         if self.phase > 100:
@@ -58,7 +58,7 @@ class JMA(Indicator):
         self._bet = self._length_2 / (self._length_2 + 1)
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        price = self.reading(self.input_value)
+        price = self.reading(self.source)
         uband = self.prev_reading(f"{self.name}_data.uband", price)
         lband = self.prev_reading(f"{self.name}_data.lband", price)
         vsums = self.prev_reading(f"{self.name}_data.vsums", 0)

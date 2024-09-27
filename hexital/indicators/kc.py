@@ -19,13 +19,13 @@ class KC(Indicator):
 
     Args:
         period: How many Periods to use
-        input_value: Which input field to calculate the Indicator
+        source: Which input field to calculate the Indicator
         multiplier: A positive float to multiply the bands
     """
 
     _name: str = field(init=False, default="KC")
     period: int = 20
-    input_value: str = "close"
+    source: str = "close"
     multiplier: float = 2.0
 
     def _generate_name(self) -> str:
@@ -35,15 +35,15 @@ class KC(Indicator):
         self.add_sub_indicator(
             ATR(
                 period=self.period,
-                fullname_override=f"{self.name}_ATR",
+                name=f"{self.name}_ATR",
             )
         )
 
         self.add_sub_indicator(
             EMA(
-                input_value=self.input_value,
+                source=self.source,
                 period=self.period,
-                fullname_override=f"{self.name}_EMA",
+                name=f"{self.name}_EMA",
             )
         )
 

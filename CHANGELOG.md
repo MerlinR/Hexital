@@ -6,22 +6,37 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ## 2.0.0
 
-- Candle's now require a timestamp, a single candle added will use the current UTC time
-- Candle timeframe attribute:
-  - Candle's now have a timeframe attribute, this shows the resolution of the Candle, this is optional for Candle's
-  - Merging Candle's now take into account first and last Candles for accurate Open/Close value updates
-  - Appending Candles will now be sorted, allowing to say Append missing or back data
-  - Improved the speed of Candle timeframe collapsing
-- Candle now accepts either 'timestamp' or 'time' for time in 'from_dict(s)'
+- Non-backward compatible changes:
+
+  - Re-named several Hexital arguments
+    - candles_lifespan -> candle_life
+    - candlestick_type -> candlestick
+  - Re-named several Indicator arguments
+    - input_value -> source
+    - fullname_override -> name
+    - candles_lifespan -> candle_life
+    - candlestick_type -> candlestick
+    - rounding_value -> rounding
+  - Candle's now require a timestamp, a single candle added will use the current UTC time
+  - Candle timeframe attribute:
+    - Candle's now have a timeframe attribute, this shows the resolution of the Candle, this is optional for Candle's
+    - Merging Candle's now take into account first and last Candles for accurate Open/Close value updates
+    - Appending Candles will now be sorted, allowing to say Append missing or back data
+    - Improved the speed of Candle timeframe collapsing
+
 - Re-wrote Testing method
   - Removed unreliable deepdiff rounding
   - Removed soft Correlation Coefficient
   - Custom accuracy none rounding driven custom diff check
 - Added 'candles_average' method to Indicator
+- Added 'exists' to do same as prev_exists for correct handling dict's
+- Updated Candle to now accept either 'timestamp' or 'time' for time's in 'from_dict(s)'
 - Updated 'reading_count' to accept an index to count from
-- Updated Hexital Append with optional 'timeframe' to select specific Candle's to append too
+- Updated Hexital append with optional 'timeframe' to select specific Candle's to append too
 - Updated 'candles' in Hexital method to accept timeframe's or indicators
-- Updated 'prev_exists' to correctly handle Dict's and added 'exists' to do same for current handling dict's
+- Updated 'prev_exists' to correctly handle Dict's
+- Updated Rounding to accept 'None' to indicate no rounding, default is still 4
+
 - Added Movements
   - Added flipped, to detect changes in bool's or solid values
 - Added Indicators
@@ -32,13 +47,6 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - Pivot Points (PivotPoints)
   - Jurik Moving Average Average (JMA)
   - Added Relative Vigor Index (RVI)
-- Fixes
-  - Fixed Timeframe rounding to correctly handle days
-  - Fixed OBV
-    - No rounding for sub/managed indicators
-  - Fixed STDEV/bbands
-    - Corrected when start calculation
-  - Fixed KC
 - Alterations
   - Added Anchor to VWAP
   - Renamed several Indicators Internal:
@@ -46,6 +54,13 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - HighLowAverage -> HLA
     - StandardDeviation -> STDEV
     - StandardDeviationThreshold -> STDEVT
+- Fixes
+  - Fixed Timeframe rounding to correctly handle days
+  - Fixed OBV
+    - No rounding for sub/managed indicators
+  - Fixed STDEV/bbands
+    - Corrected when start calculation
+  - Fixed KC
 
 ## 1.1.2 - 2024-05-03
 

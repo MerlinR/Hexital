@@ -36,7 +36,7 @@ def test_amorph_merged_aguments(candles):
         analysis=patterns.doji,
         candles=candles,
         lookback=20,
-        fullname_override="MERGED_ARGS",
+        name="MERGED_ARGS",
     )
     test.calculate()
     assert test.name == "MERGED_ARGS"
@@ -51,7 +51,7 @@ def test_movement_amorph(candles):
 
 @pytest.mark.usefixtures("candles")
 def test_movement_amorph_args(candles):
-    test = Amorph(analysis=movement.positive, candles=candles, fullname_override="boobies")
+    test = Amorph(analysis=movement.positive, candles=candles, name="boobies")
     test.calculate()
     assert test.reading("boobies") is not None
 

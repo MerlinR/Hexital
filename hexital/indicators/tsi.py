@@ -19,14 +19,14 @@ class TSI(Indicator):
     Args:
         period: How many Periods to use
         smooth_period: How much to smooth with EMA defaults: (period / 2) + (period % 2 > 0)
-        input_value: Which input field to calculate the Indicator
+        source: Which input field to calculate the Indicator
 
     """
 
     _name: str = field(init=False, default="TSI")
     period: int = 25
     smooth_period: Optional[int] = None
-    input_value: str = "close"
+    source: str = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}_{self.smooth_period}"
@@ -36,54 +36,54 @@ class TSI(Indicator):
             self.smooth_period = int(int(self.period / 2) + (self.period % 2 > 0))
 
     def _initialise(self):
-        self.add_managed_indicator("data", Managed(fullname_override=f"{self.name}_data"))
+        self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
 
         self.managed_indicators["data"].add_sub_indicator(
             EMA(
-                input_value=f"{self.name}_data.price",
+                source=f"{self.name}_data.price",
                 period=self.period,
-                fullname_override=f"{self.name}_first",
+                name=f"{self.name}_first",
             ),
             False,
         )
 
         self.managed_indicators["data"].sub_indicators[f"{self.name}_first"].add_sub_indicator(
             EMA(
-                input_value=f"{self.name}_first",
+                source=f"{self.name}_first",
                 period=self.smooth_period,
-                fullname_override=f"{self.name}_second",
+                name=f"{self.name}_second",
             ),
             False,
         )
 
         self.managed_indicators["data"].add_sub_indicator(
             EMA(
-                input_value=f"{self.name}_data.abs_price",
+                source=f"{self.name}_data.abs_price",
                 period=self.period,
-                fullname_override=f"{self.name}_abs_first",
+                name=f"{self.name}_abs_first",
             ),
             False,
         )
         self.managed_indicators["data"].sub_indicators[f"{self.name}_abs_first"].add_sub_indicator(
             EMA(
-                input_value=f"{self.name}_abs_first",
+                source=f"{self.name}_abs_first",
                 period=self.smooth_period,
-                fullname_override=f"{self.name}_abs_second",
+                name=f"{self.name}_abs_second",
             ),
             False,
         )
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        prev_reading = self.prev_reading(self.input_value)
+        prev_reading = self.prev_reading(self.source)
         if prev_reading is None:
             return None
 
-        input_value = self.reading(self.input_value)
+        source = self.reading(self.source)
 
         self.managed_indicators["data"].set_reading(
             {
-                "price": input_value - prev_reading,
-                "abs_price": abs(input_value - prev_reading),
+                "price": source - prev_reading,
+                "abs_price": abs(source - prev_reading),
             }
         )
 

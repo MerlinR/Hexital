@@ -17,12 +17,12 @@ class SMA(Indicator):
 
     Args:
         period: How many Periods to use
-        input_value: Which input field to calculate the Indicator
+        source: Which input field to calculate the Indicator
     """
 
     _name: str = field(init=False, default="SMA")
     period: int = 10
-    input_value: str = "close"
+    source: str = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
@@ -31,14 +31,11 @@ class SMA(Indicator):
         if self.prev_exists():
             return (
                 self.prev_reading()
-                - (
-                    self.reading(self.input_value, index - self.period)
-                    - self.reading(self.input_value)
-                )
+                - (self.reading(self.source, index - self.period) - self.reading(self.source))
                 / self.period
             )
 
-        if self.reading_period(self.period, self.input_value):
-            return self.candles_average(self.period, self.input_value)
+        if self.reading_period(self.period, self.source):
+            return self.candles_average(self.period, self.source)
 
         return None

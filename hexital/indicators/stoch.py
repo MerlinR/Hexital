@@ -30,34 +30,34 @@ class STOCH(Indicator):
         period: How many Periods to use
         slow_period: How many Periods to use on smoothing d
         smoothing_k: How many Periods to use on smoothing K
-        input_value: Which input field to calculate the Indicator
+        source: Which input field to calculate the Indicator
     """
 
     _name: str = field(init=False, default="STOCH")
     period: int = 14
     slow_period: int = 3
     smoothing_k: int = 3
-    input_value: str = "close"
+    source: str = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_managed_indicator("data", Managed(fullname_override=f"{self.name}_data"))
+        self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
         self.managed_indicators["data"].add_sub_indicator(
             SMA(
-                input_value=f"{self.name}_data.stoch",
+                source=f"{self.name}_data.stoch",
                 period=self.smoothing_k,
-                fullname_override=f"{self.name}_k",
+                name=f"{self.name}_k",
             ),
             False,
         )
         self.add_managed_indicator(
             "STOCH_d",
             SMA(
-                input_value=f"{self.name}_data.k",
+                source=f"{self.name}_data.k",
                 period=self.slow_period,
-                fullname_override=f"{self.name}_d",
+                name=f"{self.name}_d",
             ),
         )
 
@@ -66,11 +66,11 @@ class STOCH(Indicator):
         k = None
         d = None
 
-        if self.reading_period(self.period, self.input_value):
+        if self.reading_period(self.period, self.source):
             lowest = movement.lowest(self.candles, "low", self.period, index)
             highest = movement.highest(self.candles, "high", self.period, index)
 
-            stoch = ((self.reading(self.input_value) - lowest) / (highest - lowest)) * 100
+            stoch = ((self.reading(self.source) - lowest) / (highest - lowest)) * 100
 
             self.managed_indicators["data"].set_reading({"stoch": stoch})
             k = self.reading(f"{self.name}_k")

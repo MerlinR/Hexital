@@ -19,29 +19,29 @@ class STDEV(Indicator):
 
     Args:
         period: How many Periods to use
-        input_value: Which input field to calculate the Indicator
+        source: Which input field to calculate the Indicator
     """
 
     _name: str = field(init=False, default="STDEV")
     period: int = 30
-    input_value: str = "close"
+    source: str = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_managed_indicator("data", Managed(fullname_override=f"{self.name}_data"))
+        self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         popped_reading = 0
 
-        reading = self.reading(self.input_value)
+        reading = self.reading(self.source)
 
         if reading is None:
             return None
 
-        if self.reading_period(self.period + 1, self.input_value, index):
-            popped_reading = self.reading(self.input_value, index - self.period)
+        if self.reading_period(self.period + 1, self.source, index):
+            popped_reading = self.reading(self.source, index - self.period)
 
         old_mean = self.prev_reading(f"{self.name}_data.mean", 0.0)
         variance = self.prev_reading(f"{self.name}_data.variance", 0.0)
@@ -56,5 +56,5 @@ class STDEV(Indicator):
 
         self.managed_indicators["data"].set_reading({"mean": mean_, "variance": variance})
 
-        if self.prev_exists() or self.reading_period(self.period, self.input_value, index):
+        if self.prev_exists() or self.reading_period(self.period, self.source, index):
             return sqrt(variance) if variance > 0 else 0

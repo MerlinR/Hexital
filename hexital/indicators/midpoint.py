@@ -20,20 +20,20 @@ class MOP(Indicator):
 
     Args:
         period: How many Periods to use
-        input_value: Which input field to calculate the Indicator
+        source: Which input field to calculate the Indicator
     """
 
     _name: str = field(init=False, default="MOP")
     period: int = 2
-    input_value: str = "close"
+    source: str = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        if self.prev_exists() or self.reading_period(self.period, self.input_value, index):
+        if self.prev_exists() or self.reading_period(self.period, self.source, index):
             return (
-                lowest(self.candles, self.input_value, self.period, index)
-                + highest(self.candles, self.input_value, self.period, index)
+                lowest(self.candles, self.source, self.period, index)
+                + highest(self.candles, self.source, self.period, index)
             ) * 0.5
         return None

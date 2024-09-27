@@ -20,12 +20,12 @@ class RVI(Indicator):
 
     Args:
         period: How many Periods to use
-        input_value: Which input field to calculate the Indicator
+        source: Which input field to calculate the Indicator
     """
 
     _name: str = field(init=False, default="RVI")
     period: int = 14
-    input_value: str = "close"
+    source: str = "close"
     _scalar: float = field(init=False, default=100.0)
 
     def _generate_name(self) -> str:
@@ -34,26 +34,26 @@ class RVI(Indicator):
     def _initialise(self):
         self.add_sub_indicator(
             STDEV(
-                input_value=self.input_value,
+                source=self.source,
                 period=self.period,
-                fullname_override=f"{self._name}_stdev",
+                name=f"{self._name}_stdev",
             ),
         )
-        self.add_managed_indicator("data", Managed(fullname_override=f"{self._name}_data"))
+        self.add_managed_indicator("data", Managed(name=f"{self._name}_data"))
         self.add_managed_indicator(
             "pos_ema",
             EMA(
                 period=self.period,
-                input_value=f"{self._name}_data.pos",
-                fullname_override=f"{self._name}_pos_ema",
+                source=f"{self._name}_data.pos",
+                name=f"{self._name}_pos_ema",
             ),
         )
         self.add_managed_indicator(
             "neg_ema",
             EMA(
                 period=self.period,
-                input_value=f"{self._name}_data.neg",
-                fullname_override=f"{self._name}_neg_ema",
+                source=f"{self._name}_data.neg",
+                name=f"{self._name}_neg_ema",
             ),
         )
 
@@ -61,12 +61,12 @@ class RVI(Indicator):
         stdev_reading = self.reading(f"{self._name}_stdev")
 
         if stdev_reading is not None:
-            prev_reading = self.prev_reading(self.input_value)
+            prev_reading = self.prev_reading(self.source)
 
             if prev_reading is None:
                 return None
 
-            cur_reading = self.reading(self.input_value)
+            cur_reading = self.reading(self.source)
 
             pos = 0 if cur_reading <= prev_reading else 1
             neg = 0 if cur_reading >= prev_reading else 1

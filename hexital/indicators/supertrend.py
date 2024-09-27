@@ -17,24 +17,22 @@ class Supertrend(Indicator):
 
     Args:
         period: How many Periods to use
-        input_value: Which input field to calculate the Indicator
+        source: Which input field to calculate the Indicator
         multiplier: A positive float to multiply the ATR
     """
 
     _name: str = field(init=False, default="Supertrend")
     period: int = 7
-    input_value: str = "close"
+    source: str = "close"
     multiplier: float = 3.0
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_sub_indicator(
-            indicators.ATR(period=self.period, fullname_override=f"{self.name}_atr")
-        )
-        self.add_sub_indicator(indicators.HLA(fullname_override=f"{self.name}_HL"))
-        self.add_managed_indicator("data", Managed(fullname_override=f"{self.name}_data"))
+        self.add_sub_indicator(indicators.ATR(period=self.period, name=f"{self.name}_atr"))
+        self.add_sub_indicator(indicators.HLA(name=f"{self.name}_HL"))
+        self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         direction = 1

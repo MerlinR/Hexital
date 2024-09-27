@@ -4,13 +4,13 @@ from hexital.exceptions import InvalidCandlestickType
 
 
 def validate_candlesticktype(
-    candlestick_type: CandlestickType | str,
+    candlestick: CandlestickType | str,
 ) -> CandlestickType:
-    if isinstance(candlestick_type, CandlestickType):
-        return candlestick_type
+    if isinstance(candlestick, CandlestickType):
+        return candlestick
 
-    if not CANDLESTICK_MAP.get(candlestick_type):
-        raise InvalidCandlestickType(f"Candlestick type {candlestick_type} is Invalid")
+    if not CANDLESTICK_MAP.get(candlestick):
+        raise InvalidCandlestickType(f"Candlestick type {candlestick} is Invalid")
 
-    requested_candlesticks = CANDLESTICK_MAP[candlestick_type]
+    requested_candlesticks = CANDLESTICK_MAP[candlestick]
     return requested_candlesticks()

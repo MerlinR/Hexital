@@ -27,7 +27,7 @@ class ADX(Indicator):
 
     period: int = 14
     period_signal: Optional[int] = None
-    multiplier: int = 100
+    multiplier: float = 100.0
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}_{self.period_signal}"
@@ -40,39 +40,38 @@ class ADX(Indicator):
         self.add_sub_indicator(
             ATR(
                 period=self.period,
-                fullname_override=f"{self.name}_atr",
+                name=f"{self.name}_atr",
             )
         )
-        data_indicator = Managed(fullname_override=f"{self.name}_data")
+        data_indicator = Managed(name=f"{self.name}_data")
         self.add_managed_indicator("data", data_indicator)
 
         data_indicator.add_sub_indicator(
             RMA(
-                fullname_override=f"{self.name}_positive",
+                name=f"{self.name}_positive",
                 period=self.period,
-                input_value=f"{self.name}_data.positive",
+                source=f"{self.name}_data.positive",
             ),
             False,
         )
         data_indicator.add_sub_indicator(
             RMA(
-                fullname_override=f"{self.name}_negative",
+                name=f"{self.name}_negative",
                 period=self.period,
-                input_value=f"{self.name}_data.negative",
+                source=f"{self.name}_data.negative",
             ),
             False,
         )
         self.add_managed_indicator(
             "dx",
             RMA(
-                fullname_override=f"{self.name}_dx",
+                name=f"{self.name}_dx",
                 period=self.period_signal,
-                input_value=f"{self.name}_data.dx",
+                source=f"{self.name}_data.dx",
             ),
         )
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        adx_final = None
         adx_positive = None
         adx_negative = None
 
@@ -80,16 +79,18 @@ class ADX(Indicator):
             up = self.candles[index].high - self.candles[index - 1].high
             down = self.candles[index - 1].low - self.candles[index].low
         else:
-            up = self.candles[index].high - self.candles[index].low
+            up = 0
             down = 0
 
-        dm_plus = up if up > down and up > 0.0 else 0.0
-        dm_neg = down if down > up and down > 0.0 else 0.0
+        dm_plus = ((up > down) & (up > 0)) * up
+        dm_neg = ((down > up) & (down > 0)) * down
 
         self.managed_indicators["data"].set_reading({"positive": dm_plus, "negative": dm_neg})
 
-        if self.exists(f"{self.name}_atr"):
-            mod = self.multiplier / self.reading(f"{self.name}_atr")
+        atr_ = self.reading(f"{self.name}_atr")
+
+        if self.exists(f"{self.name}_positive") and atr_ is not None:
+            mod = self.multiplier / atr_
 
             adx_positive = mod * self.reading(f"{self.name}_positive")
             adx_negative = mod * self.reading(f"{self.name}_negative")
@@ -101,6 +102,8 @@ class ADX(Indicator):
             )
             self.managed_indicators["dx"].calculate_index(index)
 
-            adx_final = self.reading(f"{self.name}_dx")
-
-        return {"ADX": adx_final, "DM_Plus": adx_positive, "DM_Neg": adx_negative}
+        return {
+            "ADX": self.reading(f"{self.name}_dx"),
+            "DM_Plus": adx_positive,
+            "DM_Neg": adx_negative,
+        }

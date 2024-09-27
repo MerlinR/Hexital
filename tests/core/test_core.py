@@ -31,13 +31,13 @@ def fixture_candles_31st(candles):
 
 
 def test_data(fixture_candles_30, expected_ema):
-    test = EMA(candles=fixture_candles_30, input_value="close")
+    test = EMA(candles=fixture_candles_30, source="close")
     test.calculate()
     assert pytest.approx(test.as_list()) == expected_ema[0:30]
 
 
 def test_data_append(fixture_candles_30, fixture_candles_31st, expected_ema):
-    test = EMA(candles=fixture_candles_30, input_value="close")
+    test = EMA(candles=fixture_candles_30, source="close")
     test.calculate()
     fixture_candles_30.append(fixture_candles_31st)
     test.calculate()
