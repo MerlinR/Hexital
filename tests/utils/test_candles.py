@@ -116,6 +116,21 @@ def test_reading_period_over_indexed(minimal_candles: List[Candle]):
 
 
 @pytest.mark.usefixtures("minimal_candles")
+def test_reading_period_over_none(minimal_candles: List[Candle]):
+    assert reading_period(minimal_candles, 6, "NoneATR", 5) is True
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_reading_period_over_none_nested(minimal_candles: List[Candle]):
+    assert reading_period(minimal_candles, 6, "NoneATR.nested", 5) is False
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_reading_period_over_none_nested_two(minimal_candles: List[Candle]):
+    assert reading_period(minimal_candles, 5, "NoneATR.nested", 5) is True
+
+
+@pytest.mark.usefixtures("minimal_candles")
 def test_candle_sum_reg_close(minimal_candles):
     assert candles_sum(minimal_candles, "close", length=2) == 19904
 
