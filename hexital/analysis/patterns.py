@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from hexital.analysis import utils
 from hexital.core.candle import Candle
-from hexital.utils.indexing import validate_index
+from hexital.utils.indexing import absindex
 
 
 def doji(
@@ -23,9 +23,7 @@ def doji(
     Returns:
         bool: If The given Candle is Doji bool or 1/2
     """
-    index = validate_index(index, len(candles), -1)
-    if index is None:
-        return False
+    index_ = absindex(index, len(candles))
 
     def _doji(indx: int):
         if indx < 10:
@@ -33,7 +31,7 @@ def doji(
         return candles[indx].realbody < utils.candle_doji(candles, indx)
 
     if lookback is None:
-        return _doji(index)
+        return _doji(index_)
 
     return any(_doji(i) for i in range(len(candles) - lookback, len(candles)))
 
@@ -43,9 +41,7 @@ def dojistar(
     lookback: Optional[int] = None,
     index: Optional[int] = None,
 ) -> bool:
-    index = validate_index(index, len(candles), -1)
-    if index is None:
-        return False
+    index_ = absindex(index, len(candles))
 
     def _dojistar(indx: int):
         if indx < 10:
@@ -65,7 +61,7 @@ def dojistar(
         return False
 
     if lookback is None:
-        return _dojistar(index)
+        return _dojistar(index_)
 
     return any(_dojistar(i) for i in range(len(candles) - lookback, len(candles)))
 
@@ -75,9 +71,7 @@ def hammer(
     lookback: Optional[int] = None,
     index: Optional[int] = None,
 ) -> bool | int:
-    index = validate_index(index, len(candles), -1)
-    if index is None:
-        return False
+    index_ = absindex(index, len(candles))
 
     def _hammer(indx: int):
         if indx < 10:
@@ -96,7 +90,7 @@ def hammer(
         return False
 
     if lookback is None:
-        return _hammer(index)
+        return _hammer(index_)
 
     return any(_hammer(i) for i in range(len(candles) - lookback, len(candles)))
 
@@ -106,9 +100,7 @@ def inverted_hammer(
     lookback: Optional[int] = None,
     index: Optional[int] = None,
 ) -> bool | int:
-    index = validate_index(index, len(candles), -1)
-    if index is None:
-        return False
+    index_ = absindex(index, len(candles))
 
     def _invhammer(indx: int):
         if indx < 10:
@@ -127,6 +119,6 @@ def inverted_hammer(
         return False
 
     if lookback is None:
-        return _invhammer(index)
+        return _invhammer(index_)
 
     return any(_invhammer(i) for i in range(len(candles) - lookback, len(candles)))

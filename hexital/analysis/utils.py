@@ -1,6 +1,37 @@
 from typing import List, Optional
 
 from hexital.core.candle import Candle
+from hexital.utils.candles import get_readings_period
+
+
+def highest(
+    candles: List[Candle], indicator: str, length: int, index: Optional[int] = None
+) -> float | None:
+    """Highest reading for a given number of bars back. Includes latest
+    Returns:
+        Highest reading in the series.
+    """
+    if index is None:
+        index = len(candles) - 1
+
+    readings = get_readings_period(candles, indicator, length, index, True)
+    return max(readings, default=None)
+
+
+def lowest(
+    candles: List[Candle], indicator: str, length: int, index: Optional[int] = None
+) -> float | None:
+    """Lowest reading for a given number of bars back. Includes latest
+    Returns:
+        Lowest reading in the series.
+    """
+    if not candles:
+        return None
+    if index is None:
+        index = len(candles) - 1
+
+    readings = get_readings_period(candles, indicator, length, index, True)
+    return min(readings, default=None)
 
 
 def realbody_avg(candles: List[Candle], length: int, index: Optional[int] = None) -> float:

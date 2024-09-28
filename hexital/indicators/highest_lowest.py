@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from hexital.analysis.movement import highest, lowest
+from hexital.analysis.utils import highest, lowest
 from hexital.core.indicator import Indicator
 
 

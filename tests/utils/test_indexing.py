@@ -57,7 +57,7 @@ def test_absindex_basic_two():
 
 
 def test_absindex_basic_invalid():
-    assert absindex(10, 10) is None
+    assert absindex(10, 10) == 9
 
 
 def test_absindex_basic_negative():
@@ -69,4 +69,4 @@ def test_absindex_basic_negative_two():
 
 
 def test_absindex_basic_negative_invalid():
-    assert absindex(-20, 10) is None
+    assert absindex(-20, 10) == 9

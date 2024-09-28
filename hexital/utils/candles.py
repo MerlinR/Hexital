@@ -55,16 +55,13 @@ def _nested_indicator(candle: Candle, name: str, nested_name: str) -> float | No
 
 def reading_count(candles: List[Candle], name: str, index: Optional[int] = None) -> int:
     """Returns how many instance of the given indicator exist"""
-    if index is None:
-        index = len(candles) - 1
-    elif not valid_index(index, len(candles)):
-        index = len(candles) - 1
+    index_ = absindex(index, len(candles))
 
-    for count, idx in enumerate(range(index, -1, -1)):
+    for count, idx in enumerate(range(index_, -1, -1)):
         if reading_by_candle(candles[idx], name) is None:
             return count
 
-    return index + 1
+    return index_ + 1
 
 
 def reading_period(
@@ -72,18 +69,17 @@ def reading_period(
 ) -> bool:
     """Will return True if the given indicator goes back as far as amount,
     It's true if exactly or more than. Includes index"""
-    period_ = period - 1
-
-    if index is None:
-        index = len(candles) - 1
-    elif not valid_index(index, len(candles)):
+    if not candles:
         return False
 
-    if index - period_ < 0:
+    period_ = period - 1
+    index_ = absindex(index, len(candles))
+
+    if index_ - period_ < 0:
         return False
 
     for point in [period_, period_ / 2, 0]:
-        if reading_by_index(candles, name, index - int(point)) is None:
+        if reading_by_index(candles, name, index_ - int(point)) is None:
             return False
     return True
 
@@ -94,7 +90,7 @@ def candles_sum(
     length: int,
     index: int = -1,
     include_latest: bool = True,
-) -> float | None:
+) -> float:
     """Sum of `indicator` for `length` bars back. If not enough Candles, sum's what's available"""
     return sum(get_readings_period(candles, indicator, length, index, include_latest))
 
@@ -105,7 +101,7 @@ def candles_average(
     length: int,
     index: int = -1,
     include_latest: bool = True,
-) -> float | None:
+) -> float:
     """Averages period of `indicator` for `length` bars back.
     If not enough Candles, sum's what's available"""
     values = get_readings_period(candles, indicator, length, index, include_latest)
@@ -115,10 +111,9 @@ def candles_average(
 def get_readings_period(
     candles: List[Candle], indicator: str, length: int, index: int, include_latest: bool = False
 ) -> List[float | int]:
-    """Goes through from index-length to index and returns a list of values, removes dict's and None values
+    """Goes through from index-length to index and returns a list of values, removes dict's and None values, validates index, if out of range set to max (-1)
     Returns from newest at the back (same order)"""
     index_ = absindex(index, len(candles))
-    index_ = len(candles) - 1 if index_ is None else index_
 
     to_index = index_ + 1 if include_latest else index_
 
@@ -141,7 +136,6 @@ def get_candles_period(
     """Goes through from index-length to index and returns a list of values
     Returns from newest at the back (same order)"""
     index_ = absindex(index, len(candles))
-    index_ = len(candles) - 1 if index_ is None else index_
 
     to_index = index_ + 1 if include_latest else index_
 
@@ -163,19 +157,19 @@ def get_readings_timeframe(
     removes dict's and None values
     Returns from newest at the back (same order)"""
     index_ = absindex(index, len(candles))
-    index_ = len(candles) - 1 if index_ is None else index_
 
     to_index = index_ if include_latest else index_ - 1
 
     if rounded_timeframe:
-        index_timestamp = round_down_timestamp(candles[index_].timestamp, timeframe) + timeframe
+        timestamp = round_down_timestamp(candles[index_].timestamp, timeframe)
+        timestamp += timeframe
     else:
-        index_timestamp = candles[index_].timestamp
+        timestamp = candles[index_].timestamp
 
     candles_ = []
 
     for candle in candles[to_index::-1]:
-        if (index_timestamp - candle.timestamp) > timeframe:
+        if (timestamp - candle.timestamp) > timeframe:
             break
         reading = reading_by_candle(candle, indicator)
         if isinstance(reading, (float, int)):
@@ -194,19 +188,19 @@ def get_candles_timeframe(
     """Goes through from index and returns candles that are less or equal to timeframe to index candle
     Returns from newest at the back (same order)"""
     index_ = absindex(index, len(candles))
-    index_ = len(candles) - 1 if index_ is None else index_
 
     to_index = index_ if include_latest else index_ - 1
 
     if rounded_timeframe:
-        index_timestamp = round_down_timestamp(candles[index_].timestamp, timeframe) + timeframe
+        timestamp = round_down_timestamp(candles[index_].timestamp, timeframe)
+        timestamp += timeframe
     else:
-        index_timestamp = candles[index_].timestamp
+        timestamp = candles[index_].timestamp
 
     candles_ = []
 
     for candle in candles[to_index::-1]:
-        if (index_timestamp - candle.timestamp) > timeframe:
+        if (timestamp - candle.timestamp) > timeframe:
             break
         candles_.insert(0, candle)
 

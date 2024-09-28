@@ -283,7 +283,7 @@ class TestHighest:
         assert movement.highest(indicator_candles, "low") == 120
 
     def test_highest_missing(self):
-        assert movement.highest([], "close") is False
+        assert movement.highest([], "close") is None
 
     def test_highest_partial(self, indicator_candles_partial):
         assert movement.highest(indicator_candles_partial, "EMA_10") == 140
@@ -303,7 +303,7 @@ class TestLowest:
         assert movement.lowest(indicator_candles, "high") == 110
 
     def test_lowest_missing(self):
-        assert movement.lowest([], "low") is False
+        assert movement.lowest([], "low") is None
 
     def test_lowest_partial(self, indicator_candles_partial):
         assert movement.lowest(indicator_candles_partial, "EMA_10") == 100
