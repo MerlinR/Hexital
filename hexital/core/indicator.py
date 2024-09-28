@@ -162,8 +162,8 @@ class Indicator(ABC):
         self._candles.append(candles)
         self.calculate()
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
-        pass
+    @abstractmethod
+    def _calculate_reading(self, index: int) -> float | dict | None: ...
 
     def _calculate_sub_indicators(
         self,
@@ -389,6 +389,8 @@ class Managed(Indicator):
 
     def _generate_name(self) -> str:
         return self.indicator_name
+
+    def _calculate_reading(self, index: int) -> float | dict | None: ...
 
     def set_reading(self, reading: float | dict, index: Optional[int] = None):
         if index is None:
