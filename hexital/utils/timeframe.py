@@ -31,7 +31,10 @@ def timeframe_validation(timeframe: Optional[str | TimeFrame | timedelta | int] 
     if isinstance(timeframe, str):
         timeframe_ = timeframe.upper()
         if isinstance(timeframe_[0], str) and timeframe_[0] in VALID_TIMEFRAME_PREFIXES:
-            return True
+            if len(timeframe_) == 1:
+                return True
+            elif timeframe_[1].isdigit():
+                return True
     elif isinstance(timeframe, (int, timedelta, TimeFrame)):
         return True
 
