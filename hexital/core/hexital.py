@@ -92,12 +92,14 @@ class Hexital:
 
     def candles(self, name: Optional[str | TimeFrame | timedelta | int] = None) -> List[Candle]:
         """Get a set of candles by using either a Timeframe or Indicator name"""
-        name_ = DEFAULT_CANDLES if name == DEFAULT_CANDLES else None
+        if not name or name == DEFAULT_CANDLES:
+            return self._candles[DEFAULT_CANDLES].candles
 
-        if name and not name_:
-            if timeframe_validation(name):
-                name_ = convert_timeframe_to_timedelta(name)
-            name_ = timedelta_to_str(name_) if name_ else name
+        name_ = None
+
+        if timeframe_validation(name):
+            name_ = convert_timeframe_to_timedelta(name)
+        name_ = timedelta_to_str(name_) if name_ else name
 
         if isinstance(name_, str) and self._candles.get(name_, False):
             return self._candles[name_].candles
@@ -106,7 +108,7 @@ class Hexital:
                 if manager.find_indicator(name_):
                     return manager.candles
 
-        return self._candles[DEFAULT_CANDLES].candles
+        return []
 
     def get_candles(self) -> Dict[str, List[Candle]]:
         return {name: manager.candles for name, manager in self._candles.items()}
