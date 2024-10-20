@@ -92,14 +92,10 @@ class Hexital:
 
     def candles(self, name: Optional[str | TimeFrame | timedelta | int] = None) -> List[Candle]:
         """Get a set of candles by using either a Timeframe or Indicator name"""
-        if not name or name == DEFAULT_CANDLES:
-            return self._candles[DEFAULT_CANDLES].candles
+        name_ = name if name else DEFAULT_CANDLES
+        timeframe_name = self._parse_timeframe(name)
 
-        name_ = None
-
-        if timeframe_validation(name):
-            name_ = convert_timeframe_to_timedelta(name)
-        name_ = timedelta_to_str(name_) if name_ else name
+        name_ = timeframe_name if timeframe_name else name_
 
         if isinstance(name_, str) and self._candles.get(name_, False):
             return self._candles[name_].candles
@@ -167,16 +163,10 @@ class Hexital:
         candles: Candle | List[Candle] | dict | List[dict] | list | List[list],
         timeframe: Optional[str | TimeFrame | timedelta | int] = None,
     ):
-        name = None
+        timeframe_name = self._parse_timeframe(timeframe)
 
-        if timeframe and timeframe == DEFAULT_CANDLES:
-            name = DEFAULT_CANDLES
-        elif timeframe:
-            name = convert_timeframe_to_timedelta(timeframe)
-            name = timedelta_to_str(name) if name else None
-
-        if name and self._candles.get(name):
-            self._candles[name].append(deepcopy(candles))
+        if timeframe_name and self._candles.get(timeframe_name):
+            self._candles[timeframe_name].append(deepcopy(candles))
         else:
             for candle_manager in self._candles.values():
                 candle_manager.append(candles)
@@ -207,6 +197,22 @@ class Hexital:
         for indicator_name, indicator in self._indicators.items():
             if name is None or (name and name in indicator_name):
                 indicator.purge()
+
+    def _parse_timeframe(
+        self, timeframe: Optional[str | TimeFrame | timedelta | int]
+    ) -> str | None:
+        if not timeframe:
+            return None
+
+        if timeframe == DEFAULT_CANDLES:
+            return DEFAULT_CANDLES
+
+        if not timeframe_validation(timeframe):
+            return None
+
+        name = convert_timeframe_to_timedelta(timeframe)
+
+        return None if not name else timedelta_to_str(name)
 
     def _validate_indicators(self, indicators: List[dict | Indicator]) -> Dict[str, Indicator]:
         if not indicators:

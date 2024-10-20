@@ -239,6 +239,24 @@ def test_hextial_get_candles(candles):
     assert strat.candles()[-1].indicators.get("EMA_10")
 
 
+class TestParseTimeframe:
+    def test_hextial_parse_timeframe(self):
+        strat = Hexital("Test Stratergy", [], [])
+        assert strat._parse_timeframe(None) is None
+
+    def test_hextial_parse_timeframe_two(self):
+        strat = Hexital("Test Stratergy", [], [])
+        assert strat._parse_timeframe("default") == "default"
+
+    def test_hextial_parse_timeframe_three(self):
+        strat = Hexital("Test Stratergy", [], [])
+        assert strat._parse_timeframe(10) == "S10"
+
+    def test_hextial_parse_timeframe_four(self):
+        strat = Hexital("Test Stratergy", [], [])
+        assert strat._parse_timeframe(timedelta(minutes=15)) == "T15"
+
+
 @pytest.mark.usefixtures("minimal_candles")
 def test_hextial_timerange(minimal_candles):
     strat = Hexital("Test Stratergy", [], candle_life=timedelta(minutes=1))
