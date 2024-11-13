@@ -12,7 +12,7 @@ from hexital.exceptions import (
     InvalidIndicator,
 )
 from hexital.indicators.amorph import Amorph
-from hexital.utils.candles import reading_by_index
+from hexital.utils.candles import reading_by_candle, reading_by_index
 from hexital.utils.candlesticks import validate_candlesticktype
 from hexital.utils.timeframe import (
     TimeFrame,
@@ -281,3 +281,17 @@ class Hexital:
             raise InvalidAnalysis(
                 f"Dict Indicator missing 'indicator' or 'analysis' name, not: {raw_indicator}"
             )
+
+    def find_candles(self, indicator: str, indicator_two: Optional[str] = None) -> List[Candle]:
+        if indicator and not indicator_two:
+            return self.candles(indicator)
+
+        if indicator_two and indicator in ["open", "high", "low", "close", "volume"]:
+            indicator, indicator_two = indicator_two, indicator
+
+        candles = self.candles(indicator)
+
+        if candles and indicator_two and reading_by_candle(candles[-1], indicator_two) is not None:
+            return candles
+
+        return []

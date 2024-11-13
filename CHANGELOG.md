@@ -28,6 +28,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
   - Removed unreliable deepdiff rounding
   - Removed soft Correlation Coefficient
   - Custom accuracy none rounding driven custom diff check
+- Updated Movement methods to accept `Indicator | Hexital | List[Candle]` and searches the given
+  object to find the specific'd indicator(s)
 - Added 'candles_average' method to Indicator
 - Added 'exists' to do same as prev_exists for correct handling dict's
 - Updated Candle to now accept either 'timestamp' or 'time' for time's in 'from_dict(s)'

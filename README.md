@@ -197,6 +197,11 @@ my_ema.calculate_index("EMA_3")
 print("Latest high reading:", my_ema.reading("high"))  # 4837
 print("High reading at index -2:", my_ema.reading("high", index=-2))  # 6584
 
+# Use Movement tools
+print("EMA rising:", movement.rising(my_ema, "high"))  # False
+..
+print("EMA rising:", movement.falling(my_ema.candles, "high"))  # True
+
 ```
 
 ## Upcoming Features

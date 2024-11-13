@@ -11,6 +11,7 @@ from hexital.exceptions import (
     InvalidIndicator,
 )
 from hexital.indicators import EMA, RMA, SMA
+from hexital.utils.candles import reading_by_candle
 
 
 def fake_pattern(candles: List[Candle], index=-1):
@@ -385,3 +386,123 @@ class TestCandlestickType:
     def test_hextial_candlestick_type_error(self, candles):
         with pytest.raises(InvalidCandlestickType):
             Hexital("Test Stratergy", candles, [EMA()], candlestick="FUCK")
+
+
+class TestFindCandles:
+    @pytest.mark.usefixtures("candles")
+    def test_find_simple(self, candles):
+        strat = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA")])
+        strat.calculate()
+
+        assert strat.find_candles("EMA")
+
+    @pytest.mark.usefixtures("candles")
+    def test_find_missing(self, candles):
+        strat = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA")])
+        strat.calculate()
+
+        assert strat.find_candles("MMA") == []
+
+    @pytest.mark.usefixtures("candles")
+    def test_find_multi_simple(self, candles):
+        strat = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")])
+        strat.calculate()
+
+        found_candles = strat.find_candles("EMA", "SMA")
+        assert (
+            reading_by_candle(found_candles[-1], "EMA") is not None
+            and reading_by_candle(found_candles[-1], "SMA") is not None
+        )
+
+    @pytest.mark.usefixtures("candles")
+    def test_find_multi_defaults_simple(self, candles):
+        strat = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")])
+        strat.calculate()
+
+        found_candles = strat.find_candles("EMA", "high")
+
+        assert (
+            reading_by_candle(found_candles[-1], "EMA") is not None
+            and reading_by_candle(found_candles[-1], "high") is not None
+            and found_candles[-1].timeframe is None
+        )
+
+    @pytest.mark.usefixtures("candles")
+    def test_find_rev_multi_defaults_simple(self, candles):
+        strat = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")])
+        strat.calculate()
+
+        found_candles = strat.find_candles("high", "EMA")
+
+        assert (
+            reading_by_candle(found_candles[-1], "EMA") is not None
+            and reading_by_candle(found_candles[-1], "high") is not None
+            and found_candles[-1].timeframe is None
+        )
+
+    @pytest.mark.usefixtures("candles")
+    def test_find_multi_timeframes(self, candles):
+        strat = Hexital(
+            "Test Stratergy",
+            candles[:100],
+            [EMA(name="EMA", timeframe="T5"), SMA(name="SMA", timeframe="T5")],
+        )
+        strat.calculate()
+
+        found_candles = strat.find_candles("EMA", "SMA")
+        assert (
+            reading_by_candle(found_candles[-1], "EMA") is not None
+            and reading_by_candle(found_candles[-1], "SMA") is not None
+        )
+
+    @pytest.mark.usefixtures("candles")
+    def test_find_multi_defaults_timeframes(self, candles):
+        strat = Hexital(
+            "Test Stratergy",
+            candles[:100],
+            timeframe="T5",
+            indicators=[EMA(name="EMA"), SMA(name="SMA")],
+        )
+        strat.calculate()
+
+        found_candles = strat.find_candles("EMA", "high")
+
+        assert (
+            reading_by_candle(found_candles[-1], "EMA") is not None
+            and reading_by_candle(found_candles[-1], "high") is not None
+            and found_candles[-2].timeframe == timedelta(minutes=5)
+        )
+
+    @pytest.mark.usefixtures("candles")
+    def test_find_multi_mixed_timeframes(self, candles):
+        strat = Hexital(
+            "Test Stratergy",
+            candles[:100],
+            [EMA(name="EMA"), SMA(name="SMA", timeframe="T5")],
+        )
+        strat.calculate()
+
+        found_candles = strat.find_candles("SMA", "high")
+
+        assert (
+            reading_by_candle(found_candles[-1], "SMA") is not None
+            and reading_by_candle(found_candles[-1], "high") == strat.candles("SMA")[-1].high
+            and found_candles[-2].timeframe == timedelta(minutes=5)
+        )
+
+    @pytest.mark.usefixtures("candles")
+    def test_find_multi_rev_mixed_timeframes(self, candles):
+        strat = Hexital(
+            "Test Stratergy",
+            candles[:100],
+            [EMA(name="EMA"), SMA(name="SMA", timeframe="T5")],
+        )
+        strat.calculate()
+
+        found_candles = strat.find_candles("high", "SMA")
+
+        assert (
+            reading_by_candle(found_candles[-1], "SMA") is not None
+            and reading_by_candle(found_candles[-1], "high") == strat.candles("SMA")[-1].high
+            and found_candles[-2].timeframe == timedelta(minutes=5)
+        )
