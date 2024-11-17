@@ -142,14 +142,7 @@ class TestCandleTimeframeAppending:
         manager = CandleManager(timeframe=timedelta(minutes=5))
         manager.append(
             [
-                Candle(
-                    17213,
-                    2395,
-                    7813,
-                    3615,
-                    19661,
-                    timestamp=datetime(2023, 10, 3, 9, 5),
-                ),
+                Candle(17213, 2395, 7813, 3615, 19661, timestamp=datetime(2023, 10, 3, 9, 5)),
                 Candle(14842, 14842, 14831, 14835, 540, timestamp=datetime(2023, 10, 3, 9, 10)),
             ]
         )
@@ -162,17 +155,8 @@ class TestCandleTimeframeAppending:
                 19661,
                 timestamp=datetime(2023, 10, 3, 9, 5),
                 timeframe=timedelta(minutes=5),
-                completed=True,
             ),
-            Candle(
-                14842,
-                14842,
-                14831,
-                14835,
-                540,
-                timestamp=datetime(2023, 10, 3, 9, 10),
-                completed=False,
-            ),
+            Candle(14842, 14842, 14831, 14835, 540, timestamp=datetime(2023, 10, 3, 9, 10)),
         ]
 
     def test_candle_timeframe_append(self):
@@ -204,24 +188,8 @@ class TestCandleTimeframeAppending:
             ),
         )
         assert manager.candles == [
-            Candle(
-                17213,
-                2395,
-                7813,
-                3615,
-                19661,
-                timestamp=datetime(2023, 10, 3, 9, 5),
-                completed=True,
-            ),
-            Candle(
-                14842,
-                14842,
-                14831,
-                14835,
-                540,
-                timestamp=datetime(2023, 10, 3, 9, 10),
-                completed=False,
-            ),
+            Candle(17213, 2395, 7813, 3615, 19661, timestamp=datetime(2023, 10, 3, 9, 5)),
+            Candle(14842, 14842, 14831, 14835, 540, timestamp=datetime(2023, 10, 3, 9, 10)),
         ]
 
     def test_candle_timeframe_append_lower(self):
@@ -249,7 +217,6 @@ class TestCandleTimeframeAppending:
                 19661,
                 timestamp=datetime(2023, 10, 3, 9, 5),
                 timeframe=timedelta(minutes=5),
-                completed=True,
             ),
             Candle(
                 14842,
@@ -258,7 +225,6 @@ class TestCandleTimeframeAppending:
                 14835,
                 540,
                 timestamp=datetime(2023, 10, 3, 9, 10),
-                completed=False,
             ),
         ]
 
@@ -291,24 +257,8 @@ class TestCandleTimeframeAppending:
         )
         manager.collapse_candles()
         assert manager.candles == [
-            Candle(
-                17213,
-                2395,
-                7813,
-                3615,
-                19661,
-                timestamp=datetime(2023, 10, 3, 9, 5),
-                completed=True,
-            ),
-            Candle(
-                14842,
-                16000,
-                14831,
-                16000,
-                1080,
-                timestamp=datetime(2023, 10, 3, 9, 10),
-                completed=False,
-            ),
+            Candle(17213, 2395, 7813, 3615, 19661, timestamp=datetime(2023, 10, 3, 9, 5)),
+            Candle(14842, 16000, 14831, 16000, 1080, timestamp=datetime(2023, 10, 3, 9, 10)),
         ]
 
     def test_candle_timeframe_append_higher(self):
@@ -401,33 +351,9 @@ class TestCandleSort:
         )
 
         assert manager.candles == [
-            Candle(
-                1301,
-                3007,
-                11626,
-                19048,
-                28909,
-                timestamp=datetime(2023, 10, 3, 9, 0),
-                completed=True,
-            ),
-            Candle(
-                1301,
-                3007,
-                7813,
-                3615,
-                48570,
-                timestamp=datetime(2023, 10, 3, 9, 5),
-                completed=True,
-            ),
-            Candle(
-                14842,
-                14842,
-                14831,
-                14835,
-                540,
-                timestamp=datetime(2023, 10, 3, 9, 10),
-                completed=False,
-            ),
+            Candle(1301, 3007, 11626, 19048, 28909, timestamp=datetime(2023, 10, 3, 9, 0)),
+            Candle(1301, 3007, 7813, 3615, 48570, timestamp=datetime(2023, 10, 3, 9, 5)),
+            Candle(14842, 14842, 14831, 14835, 540, timestamp=datetime(2023, 10, 3, 9, 10)),
         ]
 
     def test_sort_candles_append_timeframed_on_untimeframed(self):
@@ -458,6 +384,7 @@ class TestMergingCandlesTimeFrame:
     @pytest.mark.usefixtures("candles", "candles_T5")
     def test_collapse_candles_first(self, candles: List[Candle], candles_T5: List[Candle]):
         manager = CandleManager(candles, timeframe=timedelta(minutes=5))
+
         assert manager.candles[0] == candles_T5[0]
 
     @pytest.mark.usefixtures("candles", "candles_T5")
@@ -491,7 +418,6 @@ class TestMergingCandlesTimeFrame:
 
         expected = data_input
         expected[-1].timestamp = datetime(2023, 10, 3, 9, 15)
-        expected[-1].completed = False
 
         manager = CandleManager([data_input[0]], timeframe=timedelta(minutes=5))
 
@@ -550,9 +476,7 @@ class TestMergingCandlesTimeFrame:
     @pytest.mark.usefixtures("candles", "candles_T5")
     def test_collapse_candles_t5_mixed_neat(self, candles: List[Candle], candles_T5: List[Candle]):
         manager = CandleManager(candles[:10], timeframe=timedelta(minutes=5))
-        mixed_init = copy.deepcopy(candles_T5[:2])
-        mixed_init[-1].completed = False
-        assert manager.candles == mixed_init
+        assert manager.candles == candles_T5[:2]
 
         manager.append(candles[10:])
         assert manager.candles == candles_T5
@@ -579,8 +503,6 @@ class TestMergingCandlesTimeFrame:
     ):
         cut_candles = candles[:5] + candles[10:15]
         manager = CandleManager(cut_candles, timeframe=timedelta(minutes=5))
-        candles_T5[2].completed = False
-
         assert manager.candles == [candles_T5[0], candles_T5[2]]
 
     @pytest.mark.usefixtures("candles", "candles_T5")
@@ -616,7 +538,6 @@ class TestMergingCandlesTimeFrame:
                 close=33406.8,
                 volume=40,
                 timestamp=datetime(2023, 10, 3, 1, 50),
-                completed=True,
             ),
             Candle(
                 open=33399.3,
@@ -625,7 +546,6 @@ class TestMergingCandlesTimeFrame:
                 close=33397.3,
                 volume=14,
                 timestamp=datetime(2023, 10, 3, 3, 00),
-                completed=False,
             ),
         ]
 
@@ -648,7 +568,6 @@ class TestMergingCandlesTimeFrame:
                 close=33406.8,
                 volume=40,
                 timestamp=datetime(2023, 10, 3, 1, 50),
-                completed=True,
             ),
             Candle(
                 open=33399.3,
@@ -657,7 +576,6 @@ class TestMergingCandlesTimeFrame:
                 close=33397.3,
                 volume=14,
                 timestamp=datetime(2023, 10, 3, 3, 00),
-                completed=False,
             ),
         ]
         manager = CandleManager([], timeframe=timedelta(minutes=5))
@@ -679,7 +597,6 @@ def test_collapse_candles_t5_missing_section_fill(candles_T5: List[Candle]):
         candles_T5[0].close,
         0,
         timestamp=candles_T5[0].timestamp + timedelta(minutes=5),
-        completed=True,
     )
 
     manager = CandleManager(cut_candles, timeframe=timedelta(minutes=5), timeframe_fill=True)
@@ -704,7 +621,6 @@ def test_collapse_candles_t5_missing_section_fill_all(candles_T5: List[Candle]):
                 candles_T5[0].close,
                 0,
                 timestamp=candles_T5[0].timestamp + (timedelta(minutes=5) * (i + 1)),
-                completed=True,
             )
         )
 

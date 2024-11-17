@@ -186,46 +186,45 @@ class CandleManager:
 
             next_end_time = end_time + self.timeframe
 
+            if candle.timeframe and candle.timeframe == self.timeframe:
+                candles_.append(candle)
+                start_time = end_time
+                end_time = next_end_time
+                continue
+
             candle.timestamp = clean_timestamp(candle.timestamp)
-            candle.timeframe = self.timeframe
-            candle.completed = False
 
             if start_time < candle.timestamp <= end_time and prev_candle.timestamp == end_time:
                 prev_candle.merge(candle)
-                prev_candle.completed = False
             elif (
                 start_time - self.timeframe < candle.timestamp <= start_time
                 and prev_candle.timestamp == start_time
             ):
                 prev_candle.merge(candle)
-                prev_candle.completed = False
             elif start_time < candle.timestamp <= end_time:
                 candle.set_collapsed_timestamp(end_time)
                 candles_.append(candle)
-                prev_candle.completed = True
             elif end_time < candle.timestamp <= next_end_time:
                 candle.set_collapsed_timestamp(next_end_time)
                 candles_.append(candle)
                 start_time = end_time
                 end_time = next_end_time
-                prev_candle.completed = True
             elif start_time < candle.timestamp and on_timeframe(candle.timestamp, self.timeframe):
                 start_time = round_down_timestamp(candle.timestamp, self.timeframe)
                 end_time = start_time + self.timeframe
                 candle.set_collapsed_timestamp(start_time)
                 candles_.append(candle)
-                prev_candle.completed = True
             elif next_end_time < candle.timestamp:
                 start_time = round_down_timestamp(candle.timestamp, self.timeframe)
                 end_time = start_time + self.timeframe
                 candle.set_collapsed_timestamp(end_time)
                 candles_.append(candle)
-                prev_candle.completed = True
             else:
                 # Shit's fucked yo
                 raise InvalidCandleOrder(
                     f"Failed to collapse_candles due to invalid candle order prev: [{prev_candle}] - current: [{candle}]",
                 )
+            prev_candle.timeframe = self.timeframe
 
         if self.timeframe_fill:
             candles_ = self._fill_timeframe_candles(candles_, self.timeframe)
@@ -249,7 +248,6 @@ class CandleManager:
                     low=prev_candle.close,
                     volume=0,
                     timestamp=prev_candle.timestamp + timeframe,
-                    completed=True,
                 )
                 candles.insert(index, fill_candle)
 
