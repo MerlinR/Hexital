@@ -37,15 +37,16 @@ class Candle:
         close: float,
         volume: int,
         timestamp: Optional[datetime | str] = None,
+        timeframe: Optional[str | TimeFrame | timedelta | int] = None,
         indicators: Optional[Dict[str, float | Dict[str, float | None] | None]] = None,
         sub_indicators: Optional[Dict[str, float | Dict[str, float | None] | None]] = None,
-        timeframe: Optional[str | TimeFrame | timedelta | int] = None,
     ):
         self.open = open
         self.high = high
         self.low = low
         self.close = close
         self.volume = volume
+        self.timeframe = convert_timeframe_to_timedelta(timeframe) if timeframe else None
 
         if isinstance(timestamp, datetime):
             self.timestamp = timestamp
@@ -192,6 +193,12 @@ class Candle:
         """Merge candle into existing candle, will use the merged into
         Candle for any already calc indicators.
         All indicators will be wiped due to new values, and any conversion removed"""
+
+        if self.timeframe:
+            if (candle.timestamp + self.timeframe > self.timestamp + self.timeframe) or (
+                candle.timestamp < self.timestamp - self.timeframe
+            ):
+                return
 
         self.recover_clean_values()
 

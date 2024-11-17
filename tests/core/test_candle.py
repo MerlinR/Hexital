@@ -387,3 +387,27 @@ class TestCandleMerge:
         assert main_candle.timestamp == datetime(2023, 10, 3, 9, 5)
         assert main_candle._start_timestamp == datetime(2023, 10, 3, 9, 0, 30)
         assert main_candle._end_timestamp == datetime(2023, 10, 3, 9, 1)
+
+    def test_candle_merge_out_of_timeframe_over(self, merge_candles):
+        main_candle = merge_candles[0]
+        second_candle = merge_candles[1]
+        main_candle.timeframe = timedelta(minutes=1)
+        second_candle.timestamp = datetime(2023, 10, 3, 9, 5)
+        main_candle.merge(second_candle)
+
+        assert (
+            main_candle.timestamp == datetime(2023, 10, 3, 9, 0, 30)
+            and main_candle.close == 12536.019
+        )
+
+    def test_candle_merge_out_of_timeframe_under(self, merge_candles):
+        main_candle = merge_candles[0]
+        second_candle = merge_candles[1]
+        main_candle.timeframe = timedelta(minutes=1)
+        second_candle.timestamp = datetime(2023, 10, 3, 8, 55)
+        main_candle.merge(second_candle)
+
+        assert (
+            main_candle.timestamp == datetime(2023, 10, 3, 9, 0, 30)
+            and main_candle.close == 12536.019
+        )

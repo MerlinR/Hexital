@@ -255,10 +255,26 @@ class TestCandleTimeframeAppending:
                 timeframe=timedelta(minutes=1),
             ),
         )
-        manager.collapse_candles()
+
         assert manager.candles == [
-            Candle(17213, 2395, 7813, 3615, 19661, timestamp=datetime(2023, 10, 3, 9, 5)),
-            Candle(14842, 16000, 14831, 16000, 1080, timestamp=datetime(2023, 10, 3, 9, 10)),
+            Candle(
+                17213,
+                2395,
+                7813,
+                3615,
+                19661,
+                timestamp=datetime(2023, 10, 3, 9, 5),
+                timeframe=timedelta(minutes=5),
+            ),
+            Candle(
+                14842,
+                16000,
+                14831,
+                16000,
+                1080,
+                timestamp=datetime(2023, 10, 3, 9, 10),
+                timeframe=timedelta(minutes=5),
+            ),
         ]
 
     def test_candle_timeframe_append_higher(self):
