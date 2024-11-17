@@ -185,14 +185,8 @@ class CandleManager:
             prev_candle = candles_[-1]
 
             next_end_time = end_time + self.timeframe
-
-            if candle.timeframe and candle.timeframe == self.timeframe:
-                candles_.append(candle)
-                start_time = end_time
-                end_time = next_end_time
-                continue
-
             candle.timestamp = clean_timestamp(candle.timestamp)
+            candle.timeframe = self.timeframe
 
             if start_time < candle.timestamp <= end_time and prev_candle.timestamp == end_time:
                 prev_candle.merge(candle)
@@ -224,7 +218,6 @@ class CandleManager:
                 raise InvalidCandleOrder(
                     f"Failed to collapse_candles due to invalid candle order prev: [{prev_candle}] - current: [{candle}]",
                 )
-            prev_candle.timeframe = self.timeframe
 
         if self.timeframe_fill:
             candles_ = self._fill_timeframe_candles(candles_, self.timeframe)

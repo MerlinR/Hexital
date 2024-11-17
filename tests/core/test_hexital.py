@@ -470,7 +470,7 @@ class TestFindCandles:
         assert (
             reading_by_candle(found_candles[-1], "EMA") is not None
             and reading_by_candle(found_candles[-1], "high") is not None
-            and found_candles[-2].timeframe == timedelta(minutes=5)
+            and found_candles[-1].timeframe == timedelta(minutes=5)
         )
 
     @pytest.mark.usefixtures("candles")
@@ -487,7 +487,7 @@ class TestFindCandles:
         assert (
             reading_by_candle(found_candles[-1], "SMA") is not None
             and reading_by_candle(found_candles[-1], "high") == strat.candles("SMA")[-1].high
-            and found_candles[-2].timeframe == timedelta(minutes=5)
+            and found_candles[-1].timeframe == timedelta(minutes=5)
         )
 
     @pytest.mark.usefixtures("candles")
@@ -504,5 +504,5 @@ class TestFindCandles:
         assert (
             reading_by_candle(found_candles[-1], "SMA") is not None
             and reading_by_candle(found_candles[-1], "high") == strat.candles("SMA")[-1].high
-            and found_candles[-2].timeframe == timedelta(minutes=5)
+            and found_candles[-1].timeframe == timedelta(minutes=5)
         )
