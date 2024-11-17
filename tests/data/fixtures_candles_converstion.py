@@ -182,6 +182,7 @@ def fixture_minimal_candles_5_minute_expected():
             close=8518,
             volume=162322,
             timestamp=datetime(2023, 6, 1, 9, 5, 0),
+            completed=True,
         ),
         Candle(
             open=13938,
@@ -190,6 +191,7 @@ def fixture_minimal_candles_5_minute_expected():
             close=6331,
             volume=88826,
             timestamp=datetime(2023, 6, 1, 9, 10, 0),
+            completed=True,
         ),
         Candle(
             open=13664,
@@ -198,6 +200,7 @@ def fixture_minimal_candles_5_minute_expected():
             close=19737,
             volume=171116,
             timestamp=datetime(2023, 6, 1, 9, 15, 0),
+            completed=True,
         ),
         Candle(
             open=19635,
@@ -206,6 +209,7 @@ def fixture_minimal_candles_5_minute_expected():
             close=13749,
             volume=94194,
             timestamp=datetime(2023, 6, 1, 9, 20, 0),
+            completed=False,
         ),
     ]
     return candles
@@ -221,6 +225,7 @@ def fixture_minimal_candles_10_minute_expected():
             close=6331,
             volume=251148,
             timestamp=datetime(2023, 6, 1, 9, 10, 0),
+            completed=True,
         ),
         #
         Candle(
@@ -230,6 +235,7 @@ def fixture_minimal_candles_10_minute_expected():
             close=13749,
             volume=265310,
             timestamp=datetime(2023, 6, 1, 9, 20, 0),
+            completed=False,
         ),
     ]
     return candles

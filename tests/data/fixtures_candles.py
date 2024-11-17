@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytest
 from hexital import Candle
@@ -23,12 +23,22 @@ def fixture_candle_data():
 
 @pytest.fixture(name="candles_T5")
 def fixture_candle_data_T5():
-    return Candle.from_dicts(load_json_candles("test_candles_5T", PATH_EXTRA))
+    candles = Candle.from_dicts(load_json_candles("test_candles_5T", PATH_EXTRA))
+    for candle in candles:
+        candle.completed = True
+        candle.timeframe = timedelta(minutes=5)
+    candles[-1].completed = False
+    return candles
 
 
 @pytest.fixture(name="candles_T10")
 def fixture_candle_data_T10():
-    return Candle.from_dicts(load_json_candles("test_candles_10T", PATH_EXTRA))
+    candles = Candle.from_dicts(load_json_candles("test_candles_10T", PATH_EXTRA))
+    for candle in candles:
+        candle.completed = True
+        candle.timeframe = timedelta(minutes=10)
+    candles[-1].completed = False
+    return candles
 
 
 @pytest.fixture(name="candles_heikinashi")
@@ -256,6 +266,7 @@ def fixture_minimal_candles_5_minute():
             indicators={},
             sub_indicators={},
             timestamp=datetime(2023, 6, 1, 9, 5, 0),
+            completed=True,
         ),
         Candle(
             open=13838,
@@ -266,6 +277,7 @@ def fixture_minimal_candles_5_minute():
             indicators={},
             sub_indicators={},
             timestamp=datetime(2023, 6, 1, 9, 10, 0),
+            completed=True,
         ),
         Candle(
             open=13564,
@@ -276,6 +288,7 @@ def fixture_minimal_candles_5_minute():
             indicators={},
             sub_indicators={},
             timestamp=datetime(2023, 6, 1, 9, 15, 0),
+            completed=True,
         ),
         Candle(
             open=19535,
@@ -286,6 +299,7 @@ def fixture_minimal_candles_5_minute():
             indicators={},
             sub_indicators={},
             timestamp=datetime(2023, 6, 1, 9, 20, 0),
+            completed=False,
         ),
     ]
     return candles
@@ -303,6 +317,7 @@ def fixture_minimal_candles_10_minute():
             indicators={},
             sub_indicators={},
             timestamp=datetime(2023, 6, 1, 9, 10, 0),
+            completed=True,
         ),
         #
         Candle(
@@ -314,6 +329,7 @@ def fixture_minimal_candles_10_minute():
             indicators={},
             sub_indicators={},
             timestamp=datetime(2023, 6, 1, 9, 20, 0),
+            completed=False,
         ),
     ]
     return candles

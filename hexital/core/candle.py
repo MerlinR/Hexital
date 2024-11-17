@@ -23,11 +23,12 @@ class Candle:
     timestamp: datetime
     indicators: Dict[str, float | Dict[str, float | None] | None]
     sub_indicators: Dict[str, float | Dict[str, float | None] | None]
+    completed: Optional[bool] = None
+    timeframe: Optional[timedelta]
     _clean_values: Dict[str, float | int]
     _tag: Optional[str] = None
     _start_timestamp: Optional[datetime] = None
     _end_timestamp: Optional[datetime] = None
-    timeframe: Optional[timedelta]
 
     def __init__(
         self,
@@ -40,12 +41,15 @@ class Candle:
         indicators: Optional[Dict[str, float | Dict[str, float | None] | None]] = None,
         sub_indicators: Optional[Dict[str, float | Dict[str, float | None] | None]] = None,
         timeframe: Optional[str | TimeFrame | timedelta | int] = None,
+        completed: Optional[bool] = None,
     ):
         self.open = open
         self.high = high
         self.low = low
         self.close = close
         self.volume = volume
+        self.completed = completed if completed is not None else self.completed
+        self.timeframe = convert_timeframe_to_timedelta(timeframe) if timeframe else None
 
         if isinstance(timestamp, datetime):
             self.timestamp = timestamp
@@ -57,10 +61,9 @@ class Candle:
             else:
                 self.timestamp = datetime.utcnow()
 
-        self._clean_values = {}
         self.indicators = indicators if indicators else {}
         self.sub_indicators = sub_indicators if sub_indicators else {}
-        self.timeframe = convert_timeframe_to_timedelta(timeframe) if timeframe else None
+        self._clean_values = {}
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, Candle):
