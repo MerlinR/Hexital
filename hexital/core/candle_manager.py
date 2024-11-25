@@ -173,6 +173,7 @@ class CandleManager:
 
         candles_ = [self.candles.pop(0)]
         init_candle = candles_[0]
+        init_candle.timeframe = self.timeframe
 
         start_time = round_down_timestamp(init_candle.timestamp, self.timeframe)
         end_time = start_time + self.timeframe
