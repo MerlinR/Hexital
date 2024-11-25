@@ -354,8 +354,7 @@ class TestCandleMerge:
         second_candle = merge_candles[1]
 
         main_candle.merge(second_candle)
-
-        assert main_candle == Candle(
+        expected = Candle(
             open=12331.69,
             high=12542.540,
             low=11202.410,
@@ -363,7 +362,8 @@ class TestCandleMerge:
             volume=1100,
             timestamp=datetime(2023, 10, 3, 9, 0, 30),
         )
-        assert main_candle._start_timestamp is None
+        expected.aggregation_factor = 2
+        assert main_candle == expected and main_candle._start_timestamp is None
 
     def test_candle_merge_basic_collapse(self, merge_candles):
         main_candle = merge_candles[0]

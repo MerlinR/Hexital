@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pytest
 from hexital import Candle
@@ -23,12 +23,28 @@ def fixture_candle_data():
 
 @pytest.fixture(name="candles_T5")
 def fixture_candle_data_T5():
-    return Candle.from_dicts(load_json_candles("test_candles_5T", PATH_EXTRA))
+    candles = Candle.from_dicts(load_json_candles("test_candles_5T", PATH_EXTRA))
+    for candle in candles:
+        candle.timeframe = timedelta(minutes=5)
+        candle.aggregation_factor = 5
+
+    candles[-1].aggregation_factor = 2
+    candles[9].aggregation_factor = 4
+    candles[22].aggregation_factor = 4
+    return candles
 
 
 @pytest.fixture(name="candles_T10")
 def fixture_candle_data_T10():
-    return Candle.from_dicts(load_json_candles("test_candles_10T", PATH_EXTRA))
+    candles = Candle.from_dicts(load_json_candles("test_candles_10T", PATH_EXTRA))
+    for candle in candles:
+        candle.timeframe = timedelta(minutes=10)
+        candle.aggregation_factor = 10
+
+    candles[-1].aggregation_factor = 2
+    candles[4].aggregation_factor = 9
+    candles[11].aggregation_factor = 9
+    return candles
 
 
 @pytest.fixture(name="candles_heikinashi")
@@ -288,6 +304,10 @@ def fixture_minimal_candles_5_minute():
             timestamp=datetime(2023, 6, 1, 9, 20, 0),
         ),
     ]
+    candles[0].aggregation_factor = 6
+    candles[1].aggregation_factor = 5
+    candles[2].aggregation_factor = 5
+    candles[3].aggregation_factor = 4
     return candles
 
 
@@ -304,7 +324,6 @@ def fixture_minimal_candles_10_minute():
             sub_indicators={},
             timestamp=datetime(2023, 6, 1, 9, 10, 0),
         ),
-        #
         Candle(
             open=13564,
             high=12390,
@@ -316,4 +335,6 @@ def fixture_minimal_candles_10_minute():
             timestamp=datetime(2023, 6, 1, 9, 20, 0),
         ),
     ]
+    candles[0].aggregation_factor = 11
+    candles[1].aggregation_factor = 9
     return candles

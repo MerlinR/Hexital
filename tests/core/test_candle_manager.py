@@ -256,7 +256,7 @@ class TestCandleTimeframeAppending:
             ),
         )
 
-        assert manager.candles == [
+        expected = [
             Candle(
                 17213,
                 2395,
@@ -276,6 +276,8 @@ class TestCandleTimeframeAppending:
                 timeframe=timedelta(minutes=5),
             ),
         ]
+        expected[0].aggregation_factor, expected[1].aggregation_factor = 2, 2
+        assert manager.candles == expected
 
     def test_candle_timeframe_append_higher(self):
         manager = CandleManager(
@@ -365,12 +367,13 @@ class TestCandleSort:
         manager.append(
             Candle(1301, 3007, 11626, 19048, 28909, timestamp=datetime(2023, 10, 3, 9, 2))
         )
-
-        assert manager.candles == [
+        expected = [
             Candle(1301, 3007, 11626, 19048, 28909, timestamp=datetime(2023, 10, 3, 9, 0)),
             Candle(1301, 3007, 7813, 3615, 48570, timestamp=datetime(2023, 10, 3, 9, 5)),
             Candle(14842, 14842, 14831, 14835, 540, timestamp=datetime(2023, 10, 3, 9, 10)),
         ]
+        expected[1].aggregation_factor = 2
+        assert manager.candles == expected
 
     def test_sort_candles_append_timeframed_on_untimeframed(self):
         manager = CandleManager([])
@@ -564,7 +567,7 @@ class TestMergingCandlesTimeFrame:
                 timestamp=datetime(2023, 10, 3, 3, 00),
             ),
         ]
-
+        expected[0].aggregation_factor, expected[1].aggregation_factor = 2, 2
         manager = CandleManager(data_input, timeframe=timedelta(minutes=5))
         assert manager.candles == expected
 
@@ -594,6 +597,7 @@ class TestMergingCandlesTimeFrame:
                 timestamp=datetime(2023, 10, 3, 3, 00),
             ),
         ]
+        expected[0].aggregation_factor, expected[1].aggregation_factor = 2, 2
         manager = CandleManager([], timeframe=timedelta(minutes=5))
 
         for candle in data_input:

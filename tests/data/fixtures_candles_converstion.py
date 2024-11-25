@@ -208,6 +208,10 @@ def fixture_minimal_candles_5_minute_expected():
             timestamp=datetime(2023, 6, 1, 9, 20, 0),
         ),
     ]
+    candles[0].aggregation_factor = 6
+    candles[1].aggregation_factor = 5
+    candles[2].aggregation_factor = 5
+    candles[3].aggregation_factor = 4
     return candles
 
 
@@ -222,7 +226,6 @@ def fixture_minimal_candles_10_minute_expected():
             volume=251148,
             timestamp=datetime(2023, 6, 1, 9, 10, 0),
         ),
-        #
         Candle(
             open=13664,
             high=12490,
@@ -232,4 +235,6 @@ def fixture_minimal_candles_10_minute_expected():
             timestamp=datetime(2023, 6, 1, 9, 20, 0),
         ),
     ]
+    candles[0].aggregation_factor = 11
+    candles[1].aggregation_factor = 9
     return candles

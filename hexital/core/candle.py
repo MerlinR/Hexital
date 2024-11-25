@@ -23,11 +23,12 @@ class Candle:
     timestamp: datetime
     indicators: Dict[str, float | Dict[str, float | None] | None]
     sub_indicators: Dict[str, float | Dict[str, float | None] | None]
+    timeframe: Optional[timedelta]
+    aggregation_factor: int = 1
     _clean_values: Dict[str, float | int]
     _tag: Optional[str] = None
     _start_timestamp: Optional[datetime] = None
     _end_timestamp: Optional[datetime] = None
-    timeframe: Optional[timedelta]
 
     def __init__(
         self,
@@ -61,7 +62,6 @@ class Candle:
         self._clean_values = {}
         self.indicators = indicators if indicators else {}
         self.sub_indicators = sub_indicators if sub_indicators else {}
-        self.timeframe = convert_timeframe_to_timedelta(timeframe) if timeframe else None
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, Candle):
@@ -233,5 +233,6 @@ class Candle:
         self.high = max(self.high, candle.high)
         self.low = min(self.low, candle.low)
         self.volume += candle.volume
+        self.aggregation_factor += 1
 
         self.reset_candle()
