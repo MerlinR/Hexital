@@ -133,6 +133,11 @@ def round_down_timestamp(timestamp: datetime, timeframe: timedelta) -> datetime:
         return timestamp.replace(day=0, hour=0, minute=0, second=0)
 
 
+def within_timeframe(timestamp: datetime, within: datetime, timeframe: timedelta) -> bool:
+    """Checks if timestamp is within other timestamp and timeframe period"""
+    return within - timeframe < timestamp <= within
+
+
 def on_timeframe(timestamp: datetime, timeframe: timedelta) -> bool:
     """Checks if timestamp is on a timeframe value"""
     return timestamp.timestamp() % timeframe.total_seconds() == 0
