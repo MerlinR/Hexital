@@ -401,7 +401,7 @@ class TestFindCandles:
         strat = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA")])
         strat.calculate()
 
-        assert strat.find_candles("MMA") == []
+        assert strat.find_candles("MMA") == [[], []]
 
     @pytest.mark.usefixtures("candles")
     def test_find_multi_simple(self, candles):
@@ -409,9 +409,11 @@ class TestFindCandles:
         strat.calculate()
 
         found_candles = strat.find_candles("EMA", "SMA")
+
+        assert found_candles[0] == found_candles[1]
         assert (
-            reading_by_candle(found_candles[-1], "EMA") is not None
-            and reading_by_candle(found_candles[-1], "SMA") is not None
+            reading_by_candle(found_candles[0][-1], "EMA") is not None
+            and reading_by_candle(found_candles[0][-1], "SMA") is not None
         )
 
     @pytest.mark.usefixtures("candles")
@@ -421,10 +423,11 @@ class TestFindCandles:
 
         found_candles = strat.find_candles("EMA", "high")
 
+        assert found_candles[0] == found_candles[1]
         assert (
-            reading_by_candle(found_candles[-1], "EMA") is not None
-            and reading_by_candle(found_candles[-1], "high") is not None
-            and found_candles[-1].timeframe is None
+            reading_by_candle(found_candles[0][-1], "EMA") is not None
+            and reading_by_candle(found_candles[0][-1], "high") is not None
+            and found_candles[0][-1].timeframe is None
         )
 
     @pytest.mark.usefixtures("candles")
@@ -434,10 +437,11 @@ class TestFindCandles:
 
         found_candles = strat.find_candles("high", "EMA")
 
+        assert found_candles[0] == found_candles[1]
         assert (
-            reading_by_candle(found_candles[-1], "EMA") is not None
-            and reading_by_candle(found_candles[-1], "high") is not None
-            and found_candles[-1].timeframe is None
+            reading_by_candle(found_candles[0][-1], "EMA") is not None
+            and reading_by_candle(found_candles[0][-1], "high") is not None
+            and found_candles[0][-1].timeframe is None
         )
 
     @pytest.mark.usefixtures("candles")
@@ -450,9 +454,11 @@ class TestFindCandles:
         strat.calculate()
 
         found_candles = strat.find_candles("EMA", "SMA")
+
+        assert found_candles[0] == found_candles[1]
         assert (
-            reading_by_candle(found_candles[-1], "EMA") is not None
-            and reading_by_candle(found_candles[-1], "SMA") is not None
+            reading_by_candle(found_candles[0][-1], "EMA") is not None
+            and reading_by_candle(found_candles[0][-1], "SMA") is not None
         )
 
     @pytest.mark.usefixtures("candles")
@@ -467,10 +473,11 @@ class TestFindCandles:
 
         found_candles = strat.find_candles("EMA", "high")
 
+        assert found_candles[0] == found_candles[1]
         assert (
-            reading_by_candle(found_candles[-1], "EMA") is not None
-            and reading_by_candle(found_candles[-1], "high") is not None
-            and found_candles[-1].timeframe == timedelta(minutes=5)
+            reading_by_candle(found_candles[0][-1], "EMA") is not None
+            and reading_by_candle(found_candles[0][-1], "high") is not None
+            and found_candles[0][-1].timeframe == timedelta(minutes=5)
         )
 
     @pytest.mark.usefixtures("candles")
@@ -484,10 +491,11 @@ class TestFindCandles:
 
         found_candles = strat.find_candles("SMA", "high")
 
+        assert found_candles[0] == found_candles[1]
         assert (
-            reading_by_candle(found_candles[-1], "SMA") is not None
-            and reading_by_candle(found_candles[-1], "high") == strat.candles("SMA")[-1].high
-            and found_candles[-1].timeframe == timedelta(minutes=5)
+            reading_by_candle(found_candles[0][-1], "SMA") is not None
+            and reading_by_candle(found_candles[0][-1], "high") == strat.candles("SMA")[-1].high
+            and found_candles[0][-1].timeframe == timedelta(minutes=5)
         )
 
     @pytest.mark.usefixtures("candles")
@@ -501,8 +509,33 @@ class TestFindCandles:
 
         found_candles = strat.find_candles("high", "SMA")
 
+        assert found_candles[0] == found_candles[1]
         assert (
-            reading_by_candle(found_candles[-1], "SMA") is not None
-            and reading_by_candle(found_candles[-1], "high") == strat.candles("SMA")[-1].high
-            and found_candles[-1].timeframe == timedelta(minutes=5)
+            reading_by_candle(found_candles[0][-1], "SMA") is not None
+            and reading_by_candle(found_candles[0][-1], "high") == strat.candles("SMA")[-1].high
+            and found_candles[0][-1].timeframe == timedelta(minutes=5)
+        )
+
+    @pytest.mark.usefixtures("candles")
+    def test_find_candles_multi_timeframes(self, candles):
+        strat = Hexital(
+            "Test Stratergy",
+            candles,
+            [EMA(name="EMA_T5", timeframe="T5"), EMA(name="EMA")],
+        )
+        strat.calculate()
+
+        found_candles = strat.find_candles("EMA", "EMA_T5")
+
+        assert len(found_candles) == 2
+        assert (
+            reading_by_candle(found_candles[0][-1], "EMA") is not None
+            and reading_by_candle(found_candles[0][-1], "high") == strat.candles("EMA")[-1].high
+            and found_candles[0][-1].timeframe is None
+        )
+
+        assert (
+            reading_by_candle(found_candles[1][-1], "EMA_T5") is not None
+            and reading_by_candle(found_candles[1][-1], "high") == strat.candles("EMA_T5")[-1].high
+            and found_candles[1][-1].timeframe == timedelta(minutes=5)
         )

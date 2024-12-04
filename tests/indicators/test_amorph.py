@@ -58,7 +58,7 @@ def test_movement_amorph_args(candles):
 
 @pytest.mark.usefixtures("candles")
 def test_movement_amorph_kawgs(candles):
-    test = Amorph(analysis=movement.above, candles=candles, indicator="open", indicator_two="low")
+    test = Amorph(analysis=movement.above, candles=candles, indicator="open", indicator_cmp="low")
     test.calculate()
     assert test.reading("above") is not None
 

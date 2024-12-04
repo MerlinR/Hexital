@@ -282,16 +282,26 @@ class Hexital:
                 f"Dict Indicator missing 'indicator' or 'analysis' name, not: {raw_indicator}"
             )
 
-    def find_candles(self, indicator: str, indicator_two: Optional[str] = None) -> List[Candle]:
-        if indicator and not indicator_two:
-            return self.candles(indicator)
+    def find_candles(
+        self, indicator: str, indicator_cmp: Optional[str] = None
+    ) -> List[List[Candle]]:
+        reverted = False
 
-        if indicator_two and indicator in ["open", "high", "low", "close", "volume"]:
-            indicator, indicator_two = indicator_two, indicator
+        if indicator and not indicator_cmp:
+            return [self.candles(indicator), []]
+
+        if indicator_cmp and indicator in ["open", "high", "low", "close", "volume"]:
+            indicator, indicator_cmp = indicator_cmp, indicator
+            reverted = True
 
         candles = self.candles(indicator)
 
-        if candles and indicator_two and reading_by_candle(candles[-1], indicator_two) is not None:
-            return candles
+        if candles and indicator_cmp and reading_by_candle(candles[-1], indicator_cmp) is not None:
+            return [candles, candles]
+        elif candles and indicator_cmp and reading_by_candle(candles[-1], indicator_cmp) is None:
+            if reverted:
+                return [self.candles(indicator_cmp), candles]
+            else:
+                return [candles, self.candles(indicator_cmp)]
 
-        return []
+        return [[]]
