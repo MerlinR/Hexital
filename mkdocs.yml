@@ -1,0 +1,78 @@
+site_name: Hexital Docs
+site_url: https://MerlinR.github.io/Hexital
+repo_name: merlinr/hexital
+repo_url: https://github.com/MerlinR/Hexital
+edit_uri: blob/master/docs/
+site_author: nardew
+site_description: talipp - incremental technical analysis library
+copyright: Copyright &copy; 2024 Merlinr
+theme:
+  name: material
+  font:
+    text: Merriweather Sans
+    code: Red Hat Mono
+  icon:
+    logo: material/hexagon-outline
+
+  palette: 
+    # Palette toggle for light mode
+    - scheme: default
+      toggle:
+        icon: material/brightness-7 
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+      primary: green
+      accent: white
+
+markdown_extensions:
+  - abbr
+  - attr_list
+  - def_list
+  - tables
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.details
+  
+
+plugins:
+- search
+- link-marker
+- git-revision-date-localized
+- mkdocstrings:
+      handlers:
+        python:
+          import:
+            - https://docs.python.org/3/objects.inv
+          paths: [ src ]
+          options:
+            docstring_options:
+              ignore_init_summary: true
+            docstring_section_style: table
+            show_if_no_docstring: false
+            filters: [ "!^_" ]
+            heading_level: 2
+            inherited_members: false
+            merge_init_into_class: true
+            separate_signature: true
+            show_root_heading: true
+            show_root_full_path: false
+            show_signature_annotations: true
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            signature_crossrefs: true
+            summary: true
