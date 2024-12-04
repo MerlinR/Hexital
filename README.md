@@ -24,6 +24,9 @@ While libraries like [Pandas-TA](https://github.com/twopirllc/pandas-ta) excel a
 
 With Hexital, users can enjoy swift and efficient computation of indicators, making it ideal for applications requiring real-time analysis or iterative data processing.
 
+[!NOTE]
+Full Documentation [available](https://merlinr.github.io/Hexital/)
+
 ## Features
 
 ### Indicators
@@ -135,7 +138,6 @@ In case you want to install the latest development version from the repo.
 ```bash
 pip install git+https://github.com/merlinr/hexital.git@development
 ```
-
 ## Usage
 
 ### Single Indicator
