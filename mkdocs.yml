@@ -3,6 +3,7 @@ site_url: https://MerlinR.github.io/Hexital
 repo_name: merlinr/hexital
 repo_url: https://github.com/MerlinR/Hexital
 site_author: Merlinr
+edit_uri: blob/master/docs/
 site_description: Hexital - Incremental Technical Analysis Library
 copyright: Copyright &copy; 2024 Merlinr
 theme:
