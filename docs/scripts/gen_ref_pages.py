@@ -12,6 +12,8 @@ mod_symbol = '<code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>'
 
 
 def clean_docstring(docs: List[str]) -> str:
+    if not docs:
+        return ""
     summary = " ".join(docs[1:]).strip('"""').strip("'''")
     title = docs[0].strip('"""').strip("'''")
     return f"{title}<br><br>{summary}"
