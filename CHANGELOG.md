@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+---
+
 ## 2.0.0
 
 *Release Date: -*
@@ -66,6 +68,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
         - Corrected when start calculation
     - Fixed KC
 
+---
+
 ## 1.1.2
 
 *Release Date: 2024-05-03*
@@ -74,6 +78,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Causing sub indicators to almost always re-calc entire set rather than latest (incrementally)
 - Optimised Analysis and Movement functions for less calls and less loops
 - Removed Deepcopies on Candles unless being added to Extra timeframes to speed up appending
+
+---
 
 ## 1.1.1
 
@@ -87,6 +93,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added Indicators
     - Added HighestLowest (HL)
     - Added Standard Deviation Threshold (STDEVTHRES)
+
+---
 
 ## 1.1.0
 
@@ -112,13 +120,17 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Inverted Hammer
     - Dojistar
 
+---
+
 ## 1.0.1
 
 *Release Date: 2024-04-08*
 
 - Fixed #12 Inaccurate verify_indicators method in Hexital
 
-## 1.0.0 
+---
+
+## 1.0.0
 
 *Release Date: 2024-02-11*
 
@@ -148,6 +160,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Removed read property
 - Renamed utils/candlesticks to utils/candles
 
+---
+
 ## 0.4.0
 
 *Release Date: 2024-01-22*
@@ -169,6 +183,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Fixed bug with nested Indicator returning None for valid 0 Value
 - Fixed purge not correctly purge sub and managed indicators
 
+---
+
 ## 0.3.1
 
 *Release Date: 2023-10-09*
@@ -181,6 +197,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Fixed bug where no timeframe indicator wasnt creating new copy of candles
 - Fixed bug where collapsed timeframe candles will use first calculated indicator value
     - Meaning 1 minute candle that only had first 10 seconds, will never re-calculate for rest of the minute
+
+---
 
 ## 0.3.0
 
@@ -196,6 +214,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added support to generate Indicators on multiple timeframes at once
     - Allowing one set of candles to be used to generate higher timeframe indicators
     - E.G 1m candles can be used to generate 10m indicators simultaneously with 1m indicators
+
+---
 
 ## 0.2.0
 
@@ -224,11 +244,15 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - VMA
     - WMA
 
+---
+
 ## 0.1.1
 
 *Release Date: 2023-08-28*
 
 - Nada
+
+---
 
 ## 0.1.0
 

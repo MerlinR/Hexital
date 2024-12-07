@@ -1,0 +1,3 @@
+# Guide: Candlestick repainting
+
+TODO
