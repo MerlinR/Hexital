@@ -50,3 +50,8 @@ test-all:
 profile:
 	poetry run python3 tests/extra/profiling/calc_supertrend.py
 	poetry run snakeviz prof/
+
+
+docs:
+	@echo "Generating Docs"
+	poetry install --with docs

@@ -19,10 +19,10 @@ class MACD(Indicator):
     Output type: `Dict["MACD": float, "signal": float, "histogram": float]`
 
     Args:
-        source: Which input field to calculate the Indicator
-        fast_period: How many Periods to use for fast EMA
-        slow_period: How many Periods to use for slow EMA
-        signal_period: How many Periods to use for MACD signal
+        source (str): Which input field to calculate the Indicator. Defaults to "close"
+        fast_period (int): How many Periods to use for fast EMA. Defaults to 12
+        slow_period (int): How many Periods to use for slow EMA. Defaults to 26
+        signal_period (int): How many Periods to use for MACD signal. Defaults to 9
     """
 
     _name: str = field(init=False, default="MACD")

@@ -7,9 +7,9 @@ from hexital.utils.candles import get_readings_period
 def highest(
     candles: List[Candle], indicator: str, length: int, index: Optional[int] = None
 ) -> float | None:
-    """Highest reading for a given number of bars back. Includes latest
-    Returns:
-        Highest reading in the series.
+    """
+    Computes the highest value of the specified `indicator` over a given range of candles.
+    The range includes the latest candle by default and considers up to the specified number of candles.
     """
     if index is None:
         index = len(candles) - 1
@@ -21,10 +21,11 @@ def highest(
 def lowest(
     candles: List[Candle], indicator: str, length: int, index: Optional[int] = None
 ) -> float | None:
-    """Lowest reading for a given number of bars back. Includes latest
-    Returns:
-        Lowest reading in the series.
     """
+    Computes the lowest value of the specified `indicator` over a given range of candles.
+    The range includes the latest candle by default and considers up to the specified number of candles.
+    """
+
     if not candles:
         return None
     if index is None:
@@ -35,7 +36,11 @@ def lowest(
 
 
 def realbody_avg(candles: List[Candle], length: int, index: Optional[int] = None) -> float:
-    """Includes Current Candle"""
+    """
+    Computes the average real body of a specified number of candles, including the current candle.
+    The real body is calculated as the absolute difference between a candle's open and close prices.
+    """
+
     if index is None:
         index = len(candles) - 1
     index += 1
@@ -45,7 +50,12 @@ def realbody_avg(candles: List[Candle], length: int, index: Optional[int] = None
 
 
 def high_low_avg(candles: List[Candle], length: int, index: Optional[int] = None) -> float:
-    """Includes Current Candle"""
+    """
+    Computes the average of the high-low range over a specified number of candles,
+    including the current candle. The high-low range is the difference between a candle's
+    high and low prices.
+    """
+
     if index is None:
         index = len(candles) - 1
     index += 1
@@ -55,7 +65,10 @@ def high_low_avg(candles: List[Candle], length: int, index: Optional[int] = None
 
 
 def shadow_upper_avg(candles: List[Candle], length: int, index: Optional[int] = None) -> float:
-    """Includes Current Candle"""
+    """
+    Computes the average upper shadow over a specified number of candles, including the current candle.
+    The upper shadow is the difference between a candle's high price and either its open or close price.
+    """
     if index is None:
         index = len(candles) - 1
     index += 1
@@ -65,7 +78,10 @@ def shadow_upper_avg(candles: List[Candle], length: int, index: Optional[int] = 
 
 
 def shadow_lower_avg(candles: List[Candle], length: int, index: Optional[int] = None) -> float:
-    """Includes Current Candle"""
+    """
+    Computes the average lower shadow over a specified number of candles, including the current candle.
+    The lower shadow is the difference between a candle's high price and either its open or close price.
+    """
     if index is None:
         index = len(candles) - 1
     index += 1
@@ -75,10 +91,24 @@ def shadow_lower_avg(candles: List[Candle], length: int, index: Optional[int] = 
 
 
 def realbody_gapup(candle: Candle, candle_two: Candle) -> bool:
+    """
+    Computes if a candle has a real body gap-up compared to a previous candle.
+    A gap-up occurs when the minimum value of the current candle's real body
+    (i.e., the lower of its open or close) is greater than the maximum value
+    of the previous candle's real body (i.e., the higher of its open or close).
+    """
+
     return min(candle.open, candle.close) > max(candle_two.open, candle_two.close)
 
 
 def realbody_gapdown(candle: Candle, candle_two: Candle) -> bool:
+    """
+    Computes if a candle has a real body gap-down compared to a previous candle.
+    A gap-down occurs when the maximum value of the current candle's real body
+    (i.e., the higher of its open or close) is less than the minimum value
+    of the previous candle's real body (i.e., the lower of its open or close).
+    """
+
     return max(candle.open, candle.close) < min(candle_two.open, candle_two.close)
 
 

@@ -12,14 +12,14 @@ class AROON(Indicator):
     It can also reveal the beginning of a new trend, its strength and can help anticipate
     changes from trading ranges to trends.
 
-    Source:
+    Sources:
         https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/aroon-indicator
 
 
     Output type: `Dict["AROONU": float, "AROOND": float, "AROONOSC": float]`
 
-     Args:
-        period: How many Periods to use
+    Args:
+        period (int): How many Periods to use. Defaults to 14
     """
 
     _name: str = field(init=False, default="AROON")

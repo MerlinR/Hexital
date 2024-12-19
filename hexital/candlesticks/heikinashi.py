@@ -5,6 +5,17 @@ from hexital.core.candlestick_type import CandlestickType
 
 
 class HeikinAshi(CandlestickType):
+    """Heikin-Ashi
+
+    Heikin Ashi is a charting technique that can be used to predict future price movements.
+    It is similar to traditional candlestick charts. However, unlike a regular candlestick
+    chart, the Heikin Ashi chart tries to filter out some of the market noise by smoothing
+    out strong price swings to better identify trend movements in the market.
+
+    Sources:
+        https://www.investopedia.com/trading/heikin-ashi-better-candlestick/
+    """
+
     name: str = "Heikin-Ashi"
     acronym: str = "HA"
 

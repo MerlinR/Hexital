@@ -17,7 +17,7 @@ class ATR(Indicator):
     Output type: `float`
 
     Args:
-        period: How many Periods to use
+        period (int): How many Periods to use. Defaults to 14
     """
 
     _name: str = field(init=False, default="ATR")

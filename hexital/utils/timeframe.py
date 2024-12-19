@@ -8,6 +8,8 @@ VALID_TIMEFRAME_PREFIXES = ["S", "T", "H", "D"]
 
 
 class TimeFrame(Enum):
+    """Pre-defined TimeFrame values"""
+
     SECOND = "S1"
     SECOND5 = "S5"
     SECOND10 = "S10"

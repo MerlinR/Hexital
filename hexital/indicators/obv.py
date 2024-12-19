@@ -15,10 +15,6 @@ class OBV(Indicator):
        https://en.wikipedia.org/wiki/On-balance_volume
 
     Output type: `float`
-
-    Args:
-        period: How many Periods to use
-        source: Which input field to calculate the Indicator
     """
 
     _name: str = field(init=False, default="OBV")

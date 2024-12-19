@@ -11,15 +11,15 @@ class STDEVT(Indicator):
     Standard Deviation while calculating threshold returning boolean signal
     if change to input is higher than threshold
 
-    sources:
+    Sources:
         ChatGPT
 
     Output type: `float`
 
     Args:
-        period: How many Periods to use
-        source: Which input field to calculate the Indicator
-        multiplier: A positive float to multiply the Deviation
+        period (int): How many Periods to use. Defaults to 10
+        source (str): Which input field to calculate the Indicator. Defaults to "close"
+        multiplier (float): A positive float to multiply the Deviation. Defaults to 2.0
     """
 
     _name: str = field(init=False, default="STDEVT")

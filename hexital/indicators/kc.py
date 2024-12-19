@@ -18,9 +18,9 @@ class KC(Indicator):
     Output type: `Dict["lower": float, "band": float, "upper": float]`
 
     Args:
-        period: How many Periods to use
-        source: Which input field to calculate the Indicator
-        multiplier: A positive float to multiply the bands
+        period (int): How many Periods to use. Defaults to 20
+        source (str): Which input field to calculate the Indicator. Defaults to "close"
+        multiplier (float): A positive float to multiply the bands. Defaults to 2.0
     """
 
     _name: str = field(init=False, default="KC")

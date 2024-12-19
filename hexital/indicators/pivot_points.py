@@ -13,7 +13,7 @@ class PivotPoints(Indicator):
     above the pivot point it is 1usually evaluated as a bullish sentiment, whereas trading below
     the pivot point is seen as bearish.
 
-    sources:
+    Sources:
         https://en.wikipedia.org/wiki/Pivot_point_(technical_analysis)
 
     Output type: `Dict["S1": float, "R1": float, "S2": float, "R2": float]`

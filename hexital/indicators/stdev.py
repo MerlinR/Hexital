@@ -12,14 +12,14 @@ class STDEV(Indicator):
     As long as the standard deviation is changing slowly enough, we should be able to see
     the change in the standard deviation over time if we use the right size window.
 
-    sources:
+    Sources:
         https://jonisalonen.com/2014/efficient-and-accurate-rolling-standard-deviation/
 
     Output type: `float`
 
     Args:
-        period: How many Periods to use
-        source: Which input field to calculate the Indicator
+        period (int): How many Periods to use. Defaults to 30
+        source (str): Which input field to calculate the Indicator. Defaults to "close"
     """
 
     _name: str = field(init=False, default="STDEV")

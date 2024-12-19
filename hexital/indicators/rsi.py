@@ -16,8 +16,8 @@ class RSI(Indicator):
     Output type: `float`
 
     Args:
-        period: How many Periods to use
-        source: Which input field to calculate the Indicator
+        period (int): How many Periods to use. Defaults to 14
+        source (str): Which input field to calculate the Indicator. Defaults to "close"
     """
 
     _name: str = field(init=False, default="RSI")

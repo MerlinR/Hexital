@@ -17,9 +17,9 @@ class JMA(Indicator):
         https://c.mql5.com/forextsd/forum/164/jurik_1.pdf
 
     Args:
-        period: How many Periods to use
-        source: Which input field to calculate the Indicator
-        phase: How heavy/light the average is [-100, 100]
+        period (int): How many Periods to use. Defaults to 7
+        source (str): Which input field to calculate the Indicator. Defaults to "close"
+        phase (float): How heavy/light the average is [-100, 100]. Defaults to 0.0
 
     """
 
