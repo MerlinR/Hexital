@@ -37,4 +37,9 @@ jobs:
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root --with docs
-      - run: poetry run mkdocs gh-deploy --force
+      - run: |
+          VERSION=$(cat pyproject.toml | grep version |  cut -d'"' -f 2)
+          poetry run mike deploy --push --update-aliases "$VERSION" latest
+
+
+      
