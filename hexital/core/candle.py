@@ -169,7 +169,7 @@ class Candle:
         Returning a list of `Candle` objects initialized with the provided dictionary data.
 
         Args:
-            candle (List[Dict[str, Any]]): A dictionary containing the candle data.
+            candles (List[Dict[str, Any]]): A dictionary containing the candle data.
 
         Returns:
             List[Candle]: A list of `Candle` object's.
@@ -227,7 +227,7 @@ class Candle:
         If the last element is a `str`, `int`, `TimeFrame`, or `timedelta`, it is treated as the `timeframe`.
 
         Args:
-            candle (List[list]): A list of list's containing the candle data.
+            candles (List[list]): A list of list's containing the candle data.
 
         Returns:
             List[Candle]: A list of `Candle` object's.

@@ -159,7 +159,7 @@ my_ema = EMA(name="EMA_Short", candles=candles, period=3, candle_life=timedelta(
 
 
 ### Appending new Candle
-Hexital is designed to be constantly receiving and updating it's Candle list and TA readings, therefore they can easily [append][hexital.core.indicator.Indicator] new candles in a variety of formats; As explained in the [Candle](guides/quick-start.md#candle) section.
+Hexital is designed to be constantly receiving and updating it's Candle list and TA readings, therefore they can easily [append][hexital.core.indicator.Indicator] new candles in a variety of formats; As explained in the [Candle](/Hexital/guides/quick-start#candle) section.
 ```python linenums="23"
 
 # Append new Candle
