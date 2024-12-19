@@ -2,7 +2,7 @@ name: gen_docs
 on:
   push:
     branches:
-      - docs
+      - master
 permissions:
   contents: write
 jobs:
