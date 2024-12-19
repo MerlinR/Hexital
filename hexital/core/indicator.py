@@ -114,7 +114,15 @@ class Indicator(ABC):
 
     @property
     def has_reading(self) -> bool:
-        """Simple boolean to state if values are being generated yet in the candles"""
+        """
+        Check if the indicator has generated values in the candles.
+
+        This property determines whether the indicator readings have been generated
+        for the associated candle data.
+
+        Returns:
+            bool: `True` if the indicator readings exist in the candles; otherwise, `False`.
+        """
         if len(self.candles) == 0:
             return False
         return self.exists(self.name)
@@ -127,7 +135,22 @@ class Indicator(ABC):
 
     @property
     def settings(self) -> dict:
-        """Returns a dict format of how this indicator can be generated"""
+        """
+        Retrieve the settings required to regenerate this indicator in a dictionary format.
+
+        This property compiles the configuration details of the indicator, excluding attributes
+        that are irrelevant for generation (e.g., candles and sub-indicators). It ensures the
+        output dictionary is clean and contains only the necessary settings for recreating the
+        indicator.
+
+        Special handling is included for attributes like `candlestick` and `timeframe`, ensuring
+        their values are properly formatted.
+
+        Returns:
+            dict: A dictionary containing the indicator's settings, ready for regeneration.
+                - `indicator` (str): The name of the indicator.
+                - Additional keys correspond to other configuration attributes of the indicator.
+        """
         output = {"indicator": self._name if self._name else type(self).__name__}
 
         for name, value in self.__dict__.items():
@@ -146,8 +169,23 @@ class Indicator(ABC):
         return output
 
     def as_list(self, name: Optional[str] = None) -> List[float | dict | None]:
-        """Gathers the indicator for all candles as a list
-        E.G `EMA_12` OR `MACD_12_26_9.MACD`"""
+        """
+        Retrieve the indicator values for all candles as a list.
+
+        This method collects the readings of a specified indicator for all candles
+        and returns them as a list. If no name is provided, the generated name of
+        the indicator is used.
+
+        Args:
+            name (Optional[str]): The name of the indicator to retrieve.
+                                  Defaults to `self.name` if not provided.
+
+        Returns:
+            List[float | dict | None]: A list containing the indicator values for
+                                       each candle. The values may be floats,
+                                       dictionaries (for complex indicators),
+                                       or `None` if no reading is available.
+        """
         return [reading_by_candle(candle, name if name else self.name) for candle in self.candles]
 
     def _set_reading(self, reading: float | dict | None, index: Optional[int] = None):

@@ -17,9 +17,9 @@ class TSI(Indicator):
     Output type: `float`
 
     Args:
-        period: How many Periods to use
-        smooth_period: How much to smooth with EMA defaults: (period / 2) + (period % 2 > 0)
-        source: Which input field to calculate the Indicator
+        period (int): How many Periods to use. Defaults to 25
+        smooth_period (int): How much to smooth with EMA defaults: (period / 2) + (period % 2 > 0). Defaults to halve of period
+        source (str): Which input field to calculate the Indicator. Defaults to "close"
 
     """
 

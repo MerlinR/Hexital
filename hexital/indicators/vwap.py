@@ -25,7 +25,7 @@ class VWAP(Indicator):
     Output type: `float`
 
     Args:
-        anchor: How to anchor VWAP, Depends on the index values, uses [TimeFrame][hexital.utils.timeframe.Timeframe]
+        anchor (Optional[str | TimeFrame | timedelta | int]): How to anchor VWAP, Depends on the index values, uses TimeFrame
     """
 
     _name: str = field(init=False, default="VWAP")

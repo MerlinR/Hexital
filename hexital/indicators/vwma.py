@@ -17,7 +17,7 @@ class VWMA(Indicator):
     Output type: `float`
 
     Args:
-        period: How many Periods to use
+        period (int): How many Periods to use. Defaults to 10
     """
 
     _name: str = field(init=False, default="VWMA")

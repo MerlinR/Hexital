@@ -14,8 +14,8 @@ class Counter(Indicator):
     Output type: `float`
 
     Args:
-        source: Which input field to calculate the Indicator
-        count_value: Which value to be counting, E.G `bool`, `1`, etc
+        source (str): Which input field to calculate the Indicator.
+        count_value (bool | int): Which value to be counting, E.G `bool`, `1`, etc
     """
 
     _name: str = field(init=False, default="COUNT")

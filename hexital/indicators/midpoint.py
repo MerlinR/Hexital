@@ -13,14 +13,14 @@ class MOP(Indicator):
     This indicator aims to provide a smoother representation of price action,
     avoiding the choppiness of extreme highs and lows.
 
-    sources:
+    Sources:
         https://trendspider.com/learning-center/understanding-and-applying-the-midpoint-over-period-indicator-in-trading/
 
     Output type: `float`
 
     Args:
-        period: How many Periods to use
-        source: Which input field to calculate the Indicator
+        period (int): How many Periods to use. Defaults to 2
+        source (str()): Which input field to calculate the Indicator. Defaults to "close"
     """
 
     _name: str = field(init=False, default="MOP")

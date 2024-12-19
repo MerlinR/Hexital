@@ -16,9 +16,9 @@ class Supertrend(Indicator):
     Output type: `Dict["trend": float, "direction": int, "short": float]`
 
     Args:
-        period: How many Periods to use
-        source: Which input field to calculate the Indicator
-        multiplier: A positive float to multiply the ATR
+        period (int): How many Periods to use. Defaults to 7
+        source (str): Which input field to calculate the Indicator. Defaults to "close"
+        multiplier (float): A positive float to multiply the ATR. Defaults to 3.0
     """
 
     _name: str = field(init=False, default="Supertrend")

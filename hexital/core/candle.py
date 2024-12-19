@@ -122,9 +122,28 @@ class Candle:
 
     @classmethod
     def from_dict(cls, candle: Dict[str, Any]) -> Candle:
-        """Expected dict with keys ['open', 'high', 'low', 'close', 'volume']
-        with optional 'timestamp' or 'time' and 'timeframe' keys."""
-        time = [v for k, v in candle.items() if k in ["timestamp", "Timestamp", "time", "Time"]]
+        """
+        Create a `Candle` object from a dictionary representation.
+
+        The dictionary is expected to have the following keys:
+        - Required: 'open', 'high', 'low', 'close', 'volume'
+        - Optional: 'timestamp', 'time', 'date'
+        - Optional: 'timeframe'
+
+        The method extracts the values for these keys. If the optional keys for time ('timestamp',
+        'time', etc.) are present, the first match is used as the timestamp.
+
+        Args:
+            candle (Dict[str, Any]): A dictionary containing the candle data.
+
+        Returns:
+            Candle: A `Candle` object initialized with the provided dictionary data.
+        """
+        time = [
+            v
+            for k, v in candle.items()
+            if k in ["timestamp", "Timestamp", "time", "Time", "date", "Date"]
+        ]
         return cls(
             candle.get("open", candle.get("Open", 0.0)),
             candle.get("high", candle.get("High", 0.0)),
@@ -137,14 +156,45 @@ class Candle:
 
     @staticmethod
     def from_dicts(candles: List[Dict[str, float]]) -> List[Candle]:
-        """Expected list of dict's with keys ['timestamp', 'open', 'high', 'low', 'close', 'volume']
-        with optional 'timeframe' keys."""
+        """
+        Create's a list of `Candle` object's from a list of dictionary representation.
+
+        Each dictionary is expected to have the following keys:
+        - Required: 'open', 'high', 'low', 'close', 'volume'
+        - Optional: 'timestamp', 'time', 'date'
+        - Optional: 'timeframe'
+
+        The method extracts the values for these keys. If the optional keys for time ('timestamp',
+        'time', etc.) are present, the first match is used as the timestamp.
+        Returning a list of `Candle` objects initialized with the provided dictionary data.
+
+        Args:
+            candle (List[Dict[str, Any]]): A dictionary containing the candle data.
+
+        Returns:
+            List[Candle]: A list of `Candle` object's.
+        """
         return [Candle.from_dict(candle) for candle in candles]
 
     @classmethod
     def from_list(cls, candle: list) -> Candle:
-        """Expected list [timestamp, open, high, low, close, volume]
-        with optional datetime at the beginning and optional timeframe at the end."""
+        """
+        Create a `Candle` object from a list representation.
+
+        The list is expected to contain the following elements:
+        - Required: `[open, high, low, close, volume]` in that order.
+        - Optional: A `timestamp` at the beginning of the list.
+        - Optional: A `timeframe` at the end of the list.
+
+        If the first element is a `str` or `datetime`, it is treated as the `timestamp`.
+        If the last element is a `str`, `int`, `TimeFrame`, or `timedelta`, it is treated as the `timeframe`.
+
+        Args:
+            candle (list): A list containing the candle data.
+
+        Returns:
+            Candle: A `Candle` object initialized with the data from the list.
+        """
         timestamp = None
         timeframe = None
 
@@ -164,8 +214,24 @@ class Candle:
         )
 
     @staticmethod
-    def from_lists(candles: List[List[float]]) -> List[Candle]:
-        """Expected list of the following list [timestamp, open, high, low, close, volume]"""
+    def from_lists(candles: List[list]) -> List[Candle]:
+        """
+        Create a list of `Candle` object's from a list of list representation.
+
+        Each list is expected to contain the following elements:
+        - Required: `[open, high, low, close, volume]` in that order.
+        - Optional: A `timestamp` at the beginning of the list.
+        - Optional: A `timeframe` at the end of the list.
+
+        If the first element is a `str` or `datetime`, it is treated as the `timestamp`.
+        If the last element is a `str`, `int`, `TimeFrame`, or `timedelta`, it is treated as the `timeframe`.
+
+        Args:
+            candle (List[list]): A list of list's containing the candle data.
+
+        Returns:
+            List[Candle]: A list of `Candle` object's.
+        """
         return [Candle.from_list(candle) for candle in candles]
 
     def set_collapsed_timestamp(self, timestamp: datetime):
@@ -190,9 +256,28 @@ class Candle:
         self._tag = None
 
     def merge(self, candle: Candle):
-        """Merge candle into existing candle, will use the merged into
-        Candle for any already calc indicators.
-        All indicators will be wiped due to new values, and any conversion removed"""
+        """
+        Merge another `Candle` object into the current candle.
+
+        This method updates the current candle by integrating data from the provided `candle`.
+        It ensures that the merged values respect the timeframe boundaries and adjusts
+        attributes such as open, high, low, close, volume, and timestamps accordingly.
+
+        **Note:**
+        - Any calculated indicators will be wiped, as merging modifies the core candle values.
+        - Any conversion or derived values associated with the candle will also be removed.
+
+        Args:
+            candle (Candle): The `Candle` object to merge into the current candle.
+
+        Behaviour:
+            - Adjusts the `open` if the merged candle's timestamp is earlier than the start timestamp.
+            - Updates the `close` if the merged candle's timestamp is more recent.
+            - Updates `high` and `low` based on the maximum and minimum values of the two candles.
+            - Increases the `volume` by the volume of the merged candle.
+            - Increments the `aggregation_factor` to account for the merged data.
+            - Resets calculated indicators and cleans any derived values.
+        """
 
         if self.timeframe:
             if (candle.timestamp + self.timeframe > self.timestamp + self.timeframe) or (

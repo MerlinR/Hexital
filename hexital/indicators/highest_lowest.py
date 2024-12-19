@@ -13,7 +13,7 @@ class HL(Indicator):
     Output type: `Dict["low": float, "high": float]`
 
     Args:
-        period: How many Periods to use
+        period (int): How many Periods to use. Defaults to 100
     """
 
     _name: str = field(init=False, default="HL")

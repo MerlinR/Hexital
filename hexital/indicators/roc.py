@@ -14,14 +14,14 @@ class ROC(Indicator):
     the difference between the current price and the price of a set number of periods ago
     by the previous price and multiplying by 100.
 
-    sources:
+    Sources:
         https://en.wikipedia.org/wiki/Momentum_(technical_analysis)
 
     Output type: `float`
 
     Args:
-        period: How many Periods to use
-        source: Which input field to calculate the Indicator
+        period (int): How many Periods to use. Defaults to 10
+        source (str): Which input field to calculate the Indicator. Defaults to "close"
     """
 
     _name: str = field(init=False, default="ROC")

@@ -19,7 +19,7 @@ class Donchian(Indicator):
     Output type: `Dict["DCL": float, "DCM": float, "DCU": float]`
 
     Args:
-        period: How many Periods to use
+        period (int): How many Periods to use. Defaults to 20
     """
 
     _name: str = field(init=False, default="DONCHIAN")

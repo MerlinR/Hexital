@@ -87,7 +87,22 @@ def above(
     length: int = 0,
     index: int = -1,
 ) -> bool:
-    """Check if indicator is a higher value than indicator_cmp"""
+    """Above Analysis
+
+    Checks whether the `indicator` reading is higher than the `indicator_cmp` reading.
+    By default, it evaluates the latest candle but can also check `n` candles back.
+    If any candle within the specified range is above, it returns `True`.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The primary indicator to evaluate.
+        indicator_cmp (str): The secondary indicator to compare against.
+        length (int, optional):  The number of candles to include in the range. Defaults to 0 (only the current index).
+        index (int, optional): The index to start the evaluation. Defaults to -1 (latest candle).
+
+    Returns:
+        bool: `True` if `indicator` is above `indicator_cmp` within the specified range; otherwise `False`.
+    """
     candles_ = _retrieve_candles(candles, indicator, indicator_cmp)
 
     if not candles_:
@@ -120,16 +135,16 @@ def above(
 
 
 def _above(
-    candles_one: List[Candle],
-    indicator_one: str,
+    candles: List[Candle],
+    indicator: str,
     candles_two: List[Candle],
     indicator_cmp: str,
 ) -> bool:
-    if len(candles_one) != len(candles_two):
+    if len(candles) != len(candles_two):
         return False
 
-    for i in range(len(candles_one)):
-        reading_one = reading_by_index(candles_one, indicator_one, i)
+    for i in range(len(candles)):
+        reading_one = reading_by_index(candles, indicator, i)
         reading_two = reading_by_index(candles_two, indicator_cmp, i)
 
         if isinstance(reading_one, (float, int)) and isinstance(reading_two, (float, int)):
@@ -146,7 +161,22 @@ def below(
     length: int = 0,
     index: int = -1,
 ) -> bool:
-    """Check if indicator is a lower value than indicator_cmp"""
+    """Below Analysis
+
+    Checks whether the `indicator` reading is lower than the `indicator_cmp` reading.
+    By default, it evaluates the latest candle but can also check `n` candles back.
+    If any candle within the specified range is below, it returns `True`.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The primary indicator to evaluate.
+        indicator_cmp (str): The secondary indicator to compare against.
+        length (int, optional): The number of candles to include in the range. Defaults to 0 (only the current index).
+        index (int, optional): The index to start the evaluation. Defaults to -1 (latest candle).
+
+    Returns:
+        bool: `True` if `indicator` is below `indicator_cmp` within the specified range; otherwise `False`.
+    """
     candles_ = _retrieve_candles(candles, indicator, indicator_cmp)
 
     if not candles_:
@@ -179,16 +209,16 @@ def below(
 
 
 def _below(
-    candles_one: List[Candle],
-    indicator_one: str,
+    candles: List[Candle],
+    indicator: str,
     candles_two: List[Candle],
     indicator_cmp: str,
 ) -> bool:
-    if len(candles_one) != len(candles_two):
+    if len(candles) != len(candles_two):
         return False
 
-    for i in range(len(candles_one)):
-        reading_one = reading_by_index(candles_one, indicator_one, i)
+    for i in range(len(candles)):
+        reading_one = reading_by_index(candles, indicator, i)
         reading_two = reading_by_index(candles_two, indicator_cmp, i)
 
         if isinstance(reading_one, (float, int)) and isinstance(reading_two, (float, int)):
@@ -201,9 +231,22 @@ def _below(
 def value_range(
     candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 4, index: int = -1
 ) -> float | None:
-    """Returns the difference between the min and max values in a indicator series.
-    Length `includes` latest, if length is too long for amount of candles,
-    will check all of them"""
+    """Value Range Analysis
+
+    Calculates the difference between the minimum and maximum values for the given `indicator`
+    within a specified range of candles. Includes the latest candle by default. If the specified
+    length exceeds the available candles, it will evaluate all candles.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The name of the indicator to evaluate.
+        length (int, optional): The number of candles to include in the range. Defaults to 4.
+        index (int, optional): The index to start the evaluation. Defaults to -1 (latest candle).
+
+    Returns:
+        float | None: The difference between the minimum and maximum indicator values in the range,
+        or `None` if there are insufficient readings.
+    """
     candle_set = _retrieve_candles(candles, indicator)[0]
     if not candle_set:
         return None
@@ -219,9 +262,21 @@ def value_range(
 def rising(
     candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 1, index: int = -1
 ) -> bool:
-    """True if current `indicator` is greater than all previous `indicator`
-    for `length` bars back, False otherwise.
-    Length `excludes` latest"""
+    """Rising Analysis
+
+    Determines whether the `indicator` consistently rises across a specified range of candles.
+    By default, it checks if the current indicator value is greater than the previous one.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The name of the indicator to evaluate.
+        length (int, optional): The number of candles to include in the range. Defaults to 1.
+            (compares the latest with the previous).
+        index (int, optional): The index to start the evaluation. Defaults to -1 (latest candle).
+
+    Returns:
+        bool: `True` if the `indicator` is greater than each previous readings in the range; otherwise `False`.
+    """
     candle_set = _retrieve_candles(candles, indicator)[0]
 
     idx = absindex(index, len(candle_set))
@@ -246,9 +301,21 @@ def rising(
 def falling(
     candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 1, index: int = -1
 ) -> bool:
-    """True if current `indicator` reading is less than all previous `indicator`
-    reading for `length` bars back, False otherwise.
-    Length `excludes` latest"""
+    """Falling Analysis
+
+    Determines whether the `indicator` consistently falling across a specified range of candles.
+    By default, it checks if the current indicator value is lower than the previous one.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The name of the indicator to evaluate.
+        length (int, optional): The number of candles to include in the range. Defaults to 1.
+            (compares the latest with the previous).
+        index (int, optional): The index to start the evaluation. Defaults to -1 (latest candle).
+
+    Returns:
+        bool: `True` if the `indicator` is lower than each previous readings in the range; otherwise `False`.
+    """
     candle_set = _retrieve_candles(candles, indicator)[0]
     idx = absindex(index, len(candle_set))
 
@@ -272,11 +339,21 @@ def falling(
 def mean_rising(
     candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 4, index: int = -1
 ) -> bool:
-    """True if current `indicator` reading is greater than the avg of the previous
-    `length` `indicator` reading bars back, False otherwise. Length `excludes` latest
+    """Mean Rising Analysis
 
-    Calc:
-        NewestCandle[indicator] > mean(Candles[newest] to Candles[length])"""
+    Evaluates whether the `indicator` is, on average, rising across a specified range of candles.
+    By default, it checks if the current indicator value is higher than the average of the previous four readings.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The name of the indicator to evaluate.
+        length (int, optional): The number of candles to include in the range. Defaults to 4.
+        index (int, optional): The index to start the evaluation. Defaults to -1 (latest candle).
+
+    Returns:
+        bool: `True` if the `indicator` is higher than the average of the specified `n` readings; otherwise `False`.
+    """
+
     candle_set = _retrieve_candles(candles, indicator)[0]
     idx = absindex(index, len(candle_set))
 
@@ -297,11 +374,20 @@ def mean_rising(
 def mean_falling(
     candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 4, index: int = -1
 ) -> bool:
-    """True if current `indicator` is less than the avg of the previous
-    `length` `indicator` bars back, False otherwise. Length `excludes` latest
+    """Mean Falling Analysis
 
-    Calc:
-        NewestCandle[indicator] > mean(Candles[newest] to Candles[length])"""
+    Evaluates whether the `indicator` is, on average, falling across a specified range of candles.
+    By default, it checks if the current indicator value is lower than the average of the previous four readings.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The name of the indicator to evaluate.
+        length (int, optional): The number of candles to include in the range. Defaults to 4.
+        index (int, optional): The index to start the evaluation. Defaults to -1 (latest candle).
+
+    Returns:
+        bool: `True` if the `indicator` is lower than the average of the specified `n` readings; otherwise `False`.
+    """
     candle_set = _retrieve_candles(candles, indicator)[0]
     idx = absindex(index, len(candle_set))
 
@@ -322,9 +408,20 @@ def mean_falling(
 def highest(
     candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 4, index: int = -1
 ) -> float | None:
-    """Highest reading for a given number of bars back. Includes latest
+    """Highest Reading Analysis
+
+    Determines the highest value of the specified `indicator` over a given number of candles.
+    By default, includes the latest candle and evaluates up to the previous four candles.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The name of the indicator to evaluate.
+        length (int, optional): The number of candles to include in the range. Defaults to 4.
+        index (int, optional): The index to start the evaluation. Defaults to -1 (latest candle).
+
     Returns:
-        Highest reading in the series.
+        float | None: The highest reading for the specified `indicator` within the range,
+        or `None` if no valid readings are found.
     """
     return utils.highest(_retrieve_candles(candles, indicator)[0], indicator, length, index)
 
@@ -332,9 +429,20 @@ def highest(
 def lowest(
     candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 4, index: int = -1
 ) -> float | None:
-    """Lowest reading for a given number of bars back. Includes latest
+    """Lowest Reading Analysis
+
+    Determines the lowest value of the specified `indicator` over a given number of candles.
+    By default, includes the latest candle and evaluates up to the previous four candles.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The name of the indicator to evaluate.
+        length (int, optional): The number of candles to include in the range. Defaults to 4.
+        index (int, optional): The index to start the evaluation. Defaults to -1 (latest candle).
+
     Returns:
-        Lowest reading in the series.
+        float | None: The lowest reading for the specified `indicator` within the range,
+        or `None` if no valid readings are found.
     """
     return utils.lowest(_retrieve_candles(candles, indicator)[0], indicator, length, index)
 
@@ -342,9 +450,20 @@ def lowest(
 def highestbar(
     candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 4, index: int = -1
 ) -> int | None:
-    """Highest reading offset for a given number of bars back.
+    """Highest Bar Offset Analysis
+
+    Determines the offset (distance) to the candle with the highest reading of the specified `indicator`
+    within a given range. By default, includes the latest candle and evaluates up to the previous four candles.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The name of the indicator to evaluate.
+        length (int, optional): The number of candles to include in the range. Defaults to 4.
+        index (int, optional): The index to start the evaluation. Defaults to -1 (latest candle).
+
     Returns:
-        Offset to the lowest bar
+        int | None: The offset to the candle with the highest reading, relative to the starting index,
+        or `None` if no valid readings are found.
     """
     candle_set = _retrieve_candles(candles, indicator)[0]
 
@@ -374,9 +493,20 @@ def highestbar(
 def lowestbar(
     candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 4, index: int = -1
 ) -> int | None:
-    """Lowest reading offset for a given number of bars back.
+    """Lowest Bar Offset Analysis
+
+    Determines the offset (distance) to the candle with the lowest reading of the specified `indicator`
+    within a given range. By default, includes the latest candle and evaluates up to the previous four candles.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The name of the indicator to evaluate.
+        length (int, optional): The number of candles to include in the range. Defaults to 4.
+        index (int, optional): The index to start the evaluation. Defaults to -1 (latest candle).
+
     Returns:
-        Offset to the lowest bar
+        int | None: The offset to the candle with the lowest reading, relative to the starting index,
+        or `None` if no valid readings are found.
     """
     candle_set = _retrieve_candles(candles, indicator)[0]
     if not candle_set:
@@ -404,14 +534,28 @@ def lowestbar(
 
 def cross(
     candles: Indicator | Hexital | List[Candle],
-    indicator_one: str,
+    indicator: str,
     indicator_cmp: str,
     length: int = 1,
     index: int = -1,
 ) -> bool:
-    """The `indicator_one` reading is defined as having crossed `indicator_cmp` reading.
-    Either direction"""
-    candles_ = _retrieve_candles(candles, indicator_one, indicator_cmp)
+    """Cross Analysis
+
+    Determines whether the `indicator` reading has crossed the `indicator_cmp` reading
+    within a specified range of candles. The cross can occur in either direction.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The primary indicator to evaluate.
+        indicator_cmp (str): The secondary indicator to compare against.
+        length (int, optional): The number of candles to include in the range. Defaults to 1.
+            (compares the latest with the previous).
+        index (int, optional): The index to start the evaluation. Defaults to -1 (latest candle).
+
+    Returns:
+        bool: `True` if `indicator` has crossed `indicator_cmp` within the specified range; otherwise `False`.
+    """
+    candles_ = _retrieve_candles(candles, indicator, indicator_cmp)
 
     if not candles_:
         return False
@@ -421,32 +565,32 @@ def cross(
         idx = absindex(index, len(candle_set)) + 1
         length = idx - (length + 1)
 
-        return _cross(candle_set[length:idx], indicator_one, candle_set[length:idx], indicator_cmp)
+        return _cross(candle_set[length:idx], indicator, candle_set[length:idx], indicator_cmp)
     elif len(candles_) == 2:
         candle_set = _timeframe_pair_candles(candles_)
         idx = absindex(index, len(candle_set[0])) + 1
         length = idx - (length + 1)
 
         return _cross(
-            candle_set[0][length:idx], indicator_one, candle_set[1][length:idx], indicator_cmp
+            candle_set[0][length:idx], indicator, candle_set[1][length:idx], indicator_cmp
         )
 
     return False
 
 
 def _cross(
-    candles_one: List[Candle],
-    indicator_one: str,
+    candles: List[Candle],
+    indicator: str,
     candles_two: List[Candle],
     indicator_cmp: str,
 ) -> bool:
-    if len(candles_one) != len(candles_two):
+    if len(candles) != len(candles_two):
         return False
 
-    for i in range(len(candles_one) - 1, -1, -1):
-        reading_one = reading_by_index(candles_one, indicator_one, i)
+    for i in range(len(candles) - 1, -1, -1):
+        reading_one = reading_by_index(candles, indicator, i)
         reading_two = reading_by_index(candles_two, indicator_cmp, i)
-        prev_one = reading_by_index(candles_one, indicator_one, i - 1)
+        prev_one = reading_by_index(candles, indicator, i - 1)
         prev_two = reading_by_index(candles_two, indicator_cmp, i - 1)
 
         if None in [reading_one, reading_two, prev_one, prev_two]:
@@ -461,15 +605,30 @@ def _cross(
 
 def crossover(
     candles: Indicator | Hexital | List[Candle],
-    indicator_one: str,
+    indicator: str,
     indicator_cmp: str,
     length: int = 1,
     index: int = -1,
 ) -> bool:
-    """The `indicator_one` reading is defined as having crossed over `indicator_cmp` reading,
-    If  `indicator_cmp` is higher then `indicator_one` and in the last `length` it was under.
-    Length is how far back to check, if length is greater then amount of candles, check all"""
-    candles_ = _retrieve_candles(candles, indicator_one, indicator_cmp)
+    """Crossover Analysis
+
+    Determines whether the `indicator` reading has crossed over the `indicator_cmp` reading
+    within a specified range of candles. A crossover occurs when `indicator` transitions from below
+    to above `indicator_cmp` within the given range.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The primary indicator to evaluate.
+        indicator_cmp (str): The secondary indicator to compare against.
+        length (int, optional): The number of candles to include in the range. Defaults to 1.
+            If `length` exceeds the total number of candles, all available candles are checked.
+        index (int, optional): The index to start the evaluation. Defaults to -1 (latest candle).
+
+    Returns:
+        bool: `True` if `indicator` has crossed over `indicator_cmp` within the specified range;
+        otherwise `False`.
+    """
+    candles_ = _retrieve_candles(candles, indicator, indicator_cmp)
 
     if not candles_:
         return False
@@ -479,34 +638,32 @@ def crossover(
         idx = absindex(index, len(candle_set)) + 1
         length = idx - (length + 1)
 
-        return _crossover(
-            candle_set[length:idx], indicator_one, candle_set[length:idx], indicator_cmp
-        )
+        return _crossover(candle_set[length:idx], indicator, candle_set[length:idx], indicator_cmp)
     elif len(candles_) == 2:
         candle_set = _timeframe_pair_candles(candles_)
         idx = absindex(index, len(candle_set[0])) + 1
         length = idx - (length + 1)
 
         return _crossover(
-            candle_set[0][length:idx], indicator_one, candle_set[1][length:idx], indicator_cmp
+            candle_set[0][length:idx], indicator, candle_set[1][length:idx], indicator_cmp
         )
 
     return False
 
 
 def _crossover(
-    candles_one: List[Candle],
-    indicator_one: str,
+    candles: List[Candle],
+    indicator: str,
     candles_two: List[Candle],
     indicator_cmp: str,
 ) -> bool:
-    if len(candles_one) != len(candles_two):
+    if len(candles) != len(candles_two):
         return False
 
-    for i in range(len(candles_one) - 1, -1, -1):
-        reading_one = reading_by_index(candles_one, indicator_one, i)
+    for i in range(len(candles) - 1, -1, -1):
+        reading_one = reading_by_index(candles, indicator, i)
         reading_two = reading_by_index(candles_two, indicator_cmp, i)
-        prev_one = reading_by_index(candles_one, indicator_one, i - 1)
+        prev_one = reading_by_index(candles, indicator, i - 1)
         prev_two = reading_by_index(candles_two, indicator_cmp, i - 1)
 
         if None in [reading_one, reading_two, prev_one, prev_two]:
@@ -519,15 +676,30 @@ def _crossover(
 
 def crossunder(
     candles: Indicator | Hexital | List[Candle],
-    indicator_one: str,
+    indicator: str,
     indicator_cmp: str,
     length: int = 1,
     index: int = -1,
 ) -> bool:
-    """The `indicator_one` reading is defined as having crossed under `indicator_cmp` reading,
-    If `indicator_cmp` is lower then `indicator_one` and in the last `length` it was over.
-    Length is how far back to check, if length is greater then amount of candles, check all"""
-    candles_ = _retrieve_candles(candles, indicator_one, indicator_cmp)
+    """Crossunder Analysis
+
+    Determines whether the `indicator` reading has crossed under the `indicator_cmp` reading
+    within a specified range of candles. A crossunder occurs when `indicator` transitions from above
+    to below `indicator_cmp` within the given range.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The primary indicator to evaluate.
+        indicator_cmp (str): The secondary indicator to compare against.
+        length (int, optional): The number of candles to include in the range. Defaults to 1.
+            If `length` exceeds the total number of candles, all available candles are checked.
+        index (int, optional): The index to start the evaluation. Defaults to -1 (latest candle).
+
+    Returns:
+        bool: `True` if `indicator` has crossed under `indicator_cmp` within the specified range;
+        otherwise `False`.
+    """
+    candles_ = _retrieve_candles(candles, indicator, indicator_cmp)
 
     if not candles_:
         return False
@@ -538,7 +710,7 @@ def crossunder(
         length = idx - (length + 1)
 
         return _crossunder(
-            candle_set[length:idx], indicator_one, candle_set[length:idx], indicator_cmp
+            candle_set[length:idx], indicator, candle_set[length:idx], indicator_cmp
         )
     elif len(candles_) == 2:
         candle_set = _timeframe_pair_candles(candles_)
@@ -546,25 +718,25 @@ def crossunder(
         length = idx - (length + 1)
 
         return _crossunder(
-            candle_set[0][length:idx], indicator_one, candle_set[1][length:idx], indicator_cmp
+            candle_set[0][length:idx], indicator, candle_set[1][length:idx], indicator_cmp
         )
 
     return False
 
 
 def _crossunder(
-    candles_one: List[Candle],
-    indicator_one: str,
+    candles: List[Candle],
+    indicator: str,
     candles_two: List[Candle],
     indicator_cmp: str,
 ) -> bool:
-    if len(candles_one) != len(candles_two):
+    if len(candles) != len(candles_two):
         return False
 
-    for i in range(len(candles_one) - 1, -1, -1):
-        reading_one = reading_by_index(candles_one, indicator_one, i)
+    for i in range(len(candles) - 1, -1, -1):
+        reading_one = reading_by_index(candles, indicator, i)
         reading_two = reading_by_index(candles_two, indicator_cmp, i)
-        prev_one = reading_by_index(candles_one, indicator_one, i - 1)
+        prev_one = reading_by_index(candles, indicator, i - 1)
         prev_two = reading_by_index(candles_two, indicator_cmp, i - 1)
 
         if None in [reading_one, reading_two, prev_one, prev_two]:
@@ -578,9 +750,21 @@ def _crossunder(
 def flipped(
     candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 1, index: int = -1
 ) -> bool:
-    """The `indicator` reading is defined as having flipped if reading if it's different to it's
-    previous reading and in the last `length` it was over.
-    Length is how far back to check, if length is greater then amount of candles, check all"""
+    """Flipped Reading Analysis
+
+    Determines whether the `indicator` has "flipped" its value, meaning the current reading is different
+    from its previous reading, and within the last `length` candles, the indicator was above its previous reading.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The indicator to evaluate.
+        length (int, optional): The number of candles to check for a flip. Defaults to 1.
+            If `length` exceeds the total number of candles, all available candles are checked.
+        index (int, optional): The index to start the evaluation. Defaults to -1 (latest candle).
+
+    Returns:
+        bool: `True` if the indicator has flipped (current value differs from previous); otherwise `False`.
+    """
     candle_set = _retrieve_candles(candles, indicator)[0]
     if not candle_set:
         return False

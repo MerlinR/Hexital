@@ -27,10 +27,10 @@ class STOCH(Indicator):
     Output type: `Dict["stoch": float, "k": float, "d": float]`
 
     Args:
-        period: How many Periods to use
-        slow_period: How many Periods to use on smoothing d
-        smoothing_k: How many Periods to use on smoothing K
-        source: Which input field to calculate the Indicator
+        period (int): How many Periods to use. Defaults to 14
+        slow_period (int): How many Periods to use on smoothing d. Defaults to 3
+        smoothing_k (int): How many Periods to use on smoothing K. Defaults to 3
+        source (str): Which input field to calculate the Indicator. Defaults to "close"
     """
 
     _name: str = field(init=False, default="STOCH")

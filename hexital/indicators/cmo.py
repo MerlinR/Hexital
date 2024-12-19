@@ -12,14 +12,14 @@ class CMO(Indicator):
     and then dividing the result by the sum of all price movement over a given time period.
     The result is multiplied by 100 to give the -100 to +100 range.
 
-    Source:
+    Sources:
         https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/cmo
 
     Output type: `float`
 
     Args:
-        period: How many Periods to use
-        source: Which input field to calculate the Indicator
+        period (int): How many Periods to use. Defaults to 14
+        source (str): Which input field to calculate the Indicator. Defaults to "close"
     """
 
     _name: str = field(init=False, default="CMO")

@@ -13,14 +13,14 @@ class BBANDS(Indicator):
     the prices and volatility over time of a financial instrument or commodity,
     using a formulaic method.
 
-    Source:
+    Sources:
         https://www.britannica.com/money/bollinger-bands-indicator
 
     Output type: `Dict["BBL": float, "BBM": float, "BBU": float]`
 
     Args:
-        period: How many Periods to use
-        source: Which input field to calculate the Indicator
+        period (int): How many Periods to use. Defaults to 5
+        source (str): Which input field to calculate the Indicator. Defaults to "close"
     """
 
     _name: str = field(init=False, default="BBANDS")

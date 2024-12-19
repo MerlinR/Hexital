@@ -18,9 +18,9 @@ class ADX(Indicator):
     Output type: `Dict["ADX": float, "DM_Plus": float, "DM_Neg": float]`
 
     Args:
-        period: How many Periods to use
-        period_signal:  Average Directional Index period, defaults same as period
-        multiplier: ADX smoothing multiplier
+        period (int): How many Periods to use. Defaults to 14
+        period_signal (Optional[int]):  Average Directional Index period. Defaults same as period
+        multiplier (Optional[float]): ADX smoothing multiplier. Defaults to 100.0
     """
 
     _name: str = field(init=False, default="ADX")
