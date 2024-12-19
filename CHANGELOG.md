@@ -8,7 +8,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ## 2.0.0
 
-*Release Date: - 2024-12-19*
+*Release Date: 2024-12-19*
 
 - Non-backward compatible changes:
     - Re-named several Hexital arguments
