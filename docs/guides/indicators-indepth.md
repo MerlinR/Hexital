@@ -1,3 +1,5 @@
 # Guide: Indicators
 
 TODO
+
+## Chaining

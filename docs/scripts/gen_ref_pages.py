@@ -1,4 +1,4 @@
-"""Generate the code reference pages and navigation."""
+"""Generate the code reference pages and navigation. This code is trash, Please dont read this."""
 
 import sys
 from pathlib import Path
@@ -11,15 +11,30 @@ nav = mkdocs_gen_files.Nav()
 mod_symbol = '<code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>'
 
 
-def clean_docstring(docs: List[str]) -> str:
+def clean_docstring(docs: List[str]) -> Tuple[str, str]:
     if not docs:
-        return ""
+        return "", ""
+
     summary = " ".join(docs[1:]).strip('"""').strip("'''")
     title = docs[0].strip('"""').strip("'''")
-    return f"{title}<br><br>{summary}"
+
+    return title, f"**{title}**<br><br>{summary}"
 
 
-def read_class(file_path) -> Tuple[str, str, list]:
+def write_table(path, intro, headers, rows):
+    with mkdocs_gen_files.open(path, "w") as fd:
+        fd.write(intro + "\n\n")
+        fd.write("|" + "|".join(headers) + "|\n")
+        fd.write("|" + "".join([":------|" for _ in range(len(headers))]) + "\n")
+
+        for row in rows:
+            for field in row:
+                fd.write(f"| {field} ")
+            fd.write("|")
+            fd.write("\n")
+
+
+def read_class(file_path) -> Tuple[str, str, str, list]:
     with open(file_path, "r") as file:
         lines = file.readlines()
 
@@ -48,14 +63,17 @@ def read_class(file_path) -> Tuple[str, str, list]:
             elif docstring_lines:
                 docstring_lines.append(line.strip())
 
+    title, docstring = clean_docstring(docstring_lines)
+
     return (
         name,
-        clean_docstring(docstring_lines),
+        title.strip(),
+        docstring,
         sources,
     )
 
 
-def read_methods(file_path) -> List[Tuple[str, str, str]]:
+def read_methods(file_path) -> List[Tuple[str, str, str, str]]:
     with open(file_path, "r") as file:
         lines = file.readlines()
 
@@ -80,7 +98,8 @@ def read_methods(file_path) -> List[Tuple[str, str, str]]:
             elif "Source:" in line:
                 source = line.strip().split(" ")[-1]
             elif (inside_desc and not line.strip()) or "Args:" in line:
-                methods.append((name, clean_docstring(docstring_lines), source))
+                title, docstring = clean_docstring(docstring_lines)
+                methods.append((name, title, docstring, source))
                 inside_method = False
                 inside_desc = False
                 docstring_lines = []
@@ -93,85 +112,103 @@ def read_methods(file_path) -> List[Tuple[str, str, str]]:
 def generate_indicator_catalog(root):
     catalog_path = "indicator-catalogue.md"
 
-    with mkdocs_gen_files.open(catalog_path, "w") as fd:
-        fd.write("Indicator usage guide found at ")
-        fd.write(
-            "[Quick Start](guides/quick-start.md) Or  [In depth.](guides/indicators-indepth.md)\n\n"
-        )
-        fd.write("| Indicator | Description | Sources |\n")
-        fd.write("| :---------- | :------ | :------ |\n")
+    intro = "Indicator usage guide found at [Quick Start](guides/quick-start.md) Or  [In depth.](guides/indicators-indepth.md)"
+    table_headers = ["Indicator", "API", "Description", "Sources"]
+    rows = []
 
     for path in sorted(Path(root, "hexital/indicators/").rglob("*.py")):
         module_path = path.relative_to(root)
-        doc_path = path.relative_to(root).with_suffix(".md")
-        full_doc_path = Path("reference", doc_path)
+        full_doc_path = Path("reference", path.relative_to(root).with_suffix(".md"))
         parts = tuple(module_path.with_suffix("").parts)
 
         if parts[-1] in ["__main__", "amorph", "__init__"]:
             continue
 
-        name, docstring, sources = read_class(module_path)
+        name, title, docstring, sources = read_class(module_path)
 
-        with mkdocs_gen_files.open(catalog_path, "a") as fd:
-            fd.write(f"|**[{name}]({full_doc_path})**|")
-            fd.write(f"{docstring}|")
-            for source in sources:
-                fd.write(f"[{urlparse(source).netloc}]({source})<br>")
-            fd.write("|\n")
+        rows.append(
+            [
+                f"**{title}**",
+                f"*[{name}]({full_doc_path})*",
+                f"{docstring}",
+                "<br>".join([f"[{urlparse(source).netloc}]({source})" for source in sources]),
+            ]
+        )
+
+    write_table(catalog_path, intro, table_headers, rows)
 
 
 def generate_pattern_catalog(root):
     catalog_path = "candle-pattern-catalogue.md"
 
-    with mkdocs_gen_files.open(catalog_path, "w") as fd:
-        fd.write("Candle Pattern's usage guide found at ")
-        fd.write("[Analysis guide.](guides/analysis-indepth.md)\n\n")
-        fd.write("| Pattern | Description | Source |\n")
-        fd.write("| :---------- | :------ | :------ |\n")
+    intro = "Candle Pattern's usage guide found at [Analysis guide.](guides/analysis-indepth.md)"
+    table_headers = ["Pattern", "API", "Description", "Source"]
+    rows = []
 
     path = Path(root, "hexital/analysis/patterns.py")
-    module_path = path.relative_to(root)
-    doc_path = path.relative_to(root).with_suffix(".md")
-    full_doc_path = Path("reference", doc_path)
+    full_doc_path = Path("reference", path.relative_to(root).with_suffix(".md"))
 
-    patterns = read_methods(module_path)
+    for pattern in read_methods(path.relative_to(root)):
+        rows.append(
+            [
+                f"**{pattern[1].split("Pattern")[0].strip()}**",
+                f"*[{pattern[0]}]({full_doc_path}#hexital.analysis.patterns.{pattern[0]})*",
+                f"{pattern[2]}",
+                f"[{urlparse(pattern[3]).netloc}]({pattern[3]})<br>",
+            ]
+        )
 
-    with mkdocs_gen_files.open(catalog_path, "a") as fd:
-        for pattern in patterns:
-            fd.write(
-                f"|**[{pattern[0]}]({full_doc_path}#hexital.analysis.patterns.{pattern[0]})**|"
-            )
-            fd.write(f"{pattern[1]}|")
-            fd.write(f"[{urlparse(pattern[2]).netloc}]({pattern[2]})<br>")
-            fd.write("|\n")
+    write_table(catalog_path, intro, table_headers, rows)
+
+
+def generate_analysis_catalog(root):
+    catalog_path = "analysis-catalogue.md"
+    intro = "Candle analysis usage guide found at [Analysis guide.](guides/analysis-indepth.md)"
+    table_headers = ["Pattern", "API", "Description"]
+    rows = []
+
+    path = Path(root, "hexital/analysis/movement.py")
+    full_doc_path = Path("reference", path.relative_to(root).with_suffix(".md"))
+
+    for pattern in read_methods(path.relative_to(root)):
+        rows.append(
+            [
+                f"**{pattern[1].split("Analysis")[0].strip()}**",
+                f"*[{pattern[0]}]({full_doc_path}#hexital.analysis.movement.{pattern[0]})*",
+                f"{pattern[2]}",
+            ]
+        )
+
+    write_table(catalog_path, intro, table_headers, rows)
 
 
 def generate_candlestick_catalog(root):
     catalog_path = "candlesticks-catalogue.md"
 
-    with mkdocs_gen_files.open(catalog_path, "w") as fd:
-        fd.write("Candlestick's usage guide found at ")
-        fd.write("[Candlesticks guide.](guides/candlesticks.md)\n\n")
-        fd.write("| Candlestick Type | Description | Sources |\n")
-        fd.write("| :---------- | :------ | :------ |\n")
+    intro = "Candlestick's usage guide found at [Candlesticks guide.](guides/candlesticks.md)"
+    table_headers = ["Candlestick Type", "API", "Description", "Sources"]
+    rows = []
 
     for path in sorted(Path(root, "hexital/candlesticks/").rglob("*.py")):
         module_path = path.relative_to(root)
-        doc_path = path.relative_to(root).with_suffix(".md")
-        full_doc_path = Path("reference", doc_path)
+        full_doc_path = Path("reference", path.relative_to(root).with_suffix(".md"))
         parts = tuple(module_path.with_suffix("").parts)
 
         if parts[-1] in ["__main__", "__init__"]:
             continue
 
-        name, docstring, sources = read_class(module_path)
+        name, title, docstring, sources = read_class(module_path)
 
-        with mkdocs_gen_files.open(catalog_path, "a") as fd:
-            fd.write(f"|**[{name}]({full_doc_path})**|")
-            fd.write(f"{docstring}|")
-            for source in sources:
-                fd.write(f"[{urlparse(source).netloc}]({source})<br>")
-            fd.write("|\n")
+        rows.append(
+            [
+                f"**{title}**",
+                f"*[{name}]({full_doc_path})*",
+                f"{docstring}",
+                "<br>".join([f"[{urlparse(source).netloc}]({source})" for source in sources]),
+            ]
+        )
+
+    write_table(catalog_path, intro, table_headers, rows)
 
 
 def generate_api_reference(root):
@@ -208,6 +245,7 @@ def main():
     generate_indicator_catalog(root)
     generate_pattern_catalog(root)
     generate_candlestick_catalog(root)
+    generate_analysis_catalog(root)
 
 
 sys.exit(main())

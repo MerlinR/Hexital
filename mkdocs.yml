@@ -25,7 +25,6 @@ theme:
       accent: white
   features:
     - navigation.tabs
-    - navigation.tabs.sticky
     - navigation.footer
 markdown_extensions:
   - abbr
@@ -97,6 +96,7 @@ nav:
   - Guides:
     - Quick Start: guides/quick-start.md
     - Indicators: guides/indicators-indepth.md
+    - Candles: guides/candles.md
     - Hexital Strategy: guides/hexital-indepth.md
     - Indicator Analysis: guides/analysis-indepth.md
     - Candlesticks: guides/candlesticks.md
@@ -106,7 +106,8 @@ nav:
   - Catalogues:
     - Indicator's: indicator-catalogue.md
     - Candle Pattern's: candle-pattern-catalogue.md
-    - Candlestick's: candlesticks-catalogue.md
+    - Candlestick's - Beta: candlesticks-catalogue.md
+    - Analysis Functions: analysis-catalogue.md
   - API Reference:
     - Reference: reference/index.md
     - API: reference/

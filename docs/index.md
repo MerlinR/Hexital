@@ -24,7 +24,7 @@ The key features are:
 
 * **Fast**: High performance, faster then many other technical analysis libraries. *
 * **Easy**: Designed for simplicity, with support for a variety of input data types.
-* **Versatile**: Offers built-in tools for handling common candlestick operations, streamlining analysis workflows.
+* **Versatile**: Offers built-in tools for indicators, Candle patterns, Candlestick types and analysis tools.
 * **Intuitive**: Consistent usage across indicators and tools, making it straightforward to use.
 * **Lightweight**: Operates independently of third-party libraries for maximum simplicity.
 
@@ -60,7 +60,7 @@ $ pip install git+https://github.com/merlinr/hexital.git@development
 
 ## Getting Started - Examples
 
-Below are simple use of generating EMA indicator and Hexital object from a set of Candles, more guides available [Here](guides/quick-start)
+Below are simple use of generating EMA indicator and Hexital object from a set of Candles, more guides available [Here](guides/quick-start.md)
 
 ### EMA Indicator
 
