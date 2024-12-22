@@ -6,6 +6,15 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ---
 
+## 2.0.1
+
+*Release Date: -*
+
+- Fixes
+    - Corrected merged candles not combining aggregation factor
+
+---
+
 ## 2.0.0
 
 *Release Date: 2024-12-19*

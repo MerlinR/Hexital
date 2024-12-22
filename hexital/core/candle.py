@@ -318,6 +318,6 @@ class Candle:
         self.high = max(self.high, candle.high)
         self.low = min(self.low, candle.low)
         self.volume += candle.volume
-        self.aggregation_factor += 1
+        self.aggregation_factor += candle.aggregation_factor
 
         self.reset_candle()
