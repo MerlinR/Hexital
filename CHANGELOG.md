@@ -12,6 +12,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 - Fixes
     - Corrected merged candles not combining aggregation factor
+    - Fix error when appending a list with one Candle
 
 ---
 

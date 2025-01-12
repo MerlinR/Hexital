@@ -30,6 +30,13 @@ class TestCandleAppending:
 
         assert manager.candles == minimal_candles
 
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_append_candle_list_single(self, minimal_candles):
+        manager = CandleManager()
+        manager.append([minimal_candles[0]])
+
+        assert manager.candles == [minimal_candles[0]]
+
     def test_append_dict(self):
         manager = CandleManager()
         manager.append(
@@ -120,7 +127,7 @@ class TestCandleAppending:
 
     def test_append_invalid(self):
         manager = CandleManager()
-        with pytest.raises(IndexError):
+        with pytest.raises(TypeError):
             manager.append(["Fuck", 2, 3])
 
 

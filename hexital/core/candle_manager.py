@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
-from datetime import timedelta
+from datetime import datetime, timedelta
 from functools import cmp_to_key
 from typing import List, Optional, Set
 
@@ -94,13 +94,14 @@ class CandleManager:
         elif isinstance(candles, list):
             if not candles:
                 return
-            elif isinstance(candles[1], Candle):
+            candle_ = candles[0]
+            if isinstance(candle_, Candle):
                 candles_.extend(candles)
-            elif isinstance(candles[1], dict):
+            elif isinstance(candle_, dict):
                 candles_.extend(Candle.from_dicts(candles))
-            elif isinstance(candles[1], (float, int)):
+            elif isinstance(candle_, (float, int, datetime)):
                 candles_.append(Candle.from_list(candles))
-            elif isinstance(candles[1], list):
+            elif isinstance(candle_, list):
                 candles_.extend(Candle.from_lists(candles))
             else:
                 raise TypeError
