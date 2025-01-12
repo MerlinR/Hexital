@@ -6,6 +6,12 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ---
 
+## 2.0.2
+
+*Release Date: -**
+
+- Added as_list and as_dict method's to Candle
+
 ## 2.0.1
 
 *Release Date: 2025-01-12**
