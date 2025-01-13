@@ -15,7 +15,16 @@ class TestCandleAppending:
         manager = CandleManager()
         manager.append(new_candle)
 
-        assert manager.candles == [new_candle]
+        assert manager.candles == [
+            Candle(
+                open=2424,
+                high=10767,
+                low=13115,
+                close=13649,
+                volume=15750,
+                timestamp=datetime(2023, 6, 1, 9, 19),
+            )
+        ]
 
     def test_append_list_nada(self):
         manager = CandleManager()
@@ -28,14 +37,23 @@ class TestCandleAppending:
         manager = CandleManager()
         manager.append(minimal_candles)
 
-        assert manager.candles == minimal_candles
+        assert manager.candles == [cdl.clean_copy() for cdl in minimal_candles]
 
     @pytest.mark.usefixtures("minimal_candles")
     def test_append_candle_list_single(self, minimal_candles):
         manager = CandleManager()
         manager.append([minimal_candles[0]])
 
-        assert manager.candles == [minimal_candles[0]]
+        assert manager.candles == [
+            Candle(
+                open=17213,
+                high=2395,
+                low=7813,
+                close=3615,
+                volume=19661,
+                timestamp=datetime(2023, 6, 1, 9, 0, 10),
+            )
+        ]
 
     def test_append_dict(self):
         manager = CandleManager()

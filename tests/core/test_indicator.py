@@ -178,12 +178,8 @@ def test_candle_timerange(minimal_candles):
             close=6255,
             volume=31307,
             indicators={
-                "ATR": 1900,
                 "Fake_10": 100.0,
-                "MinTR": 1902,
-                "NATR": {"nested": 1901},
             },
-            sub_indicators={"SATR": 1910, "SSATR": {"nested": 1911}},
             timestamp=datetime(2023, 6, 1, 9, 18),
         ),
         Candle(
@@ -193,12 +189,8 @@ def test_candle_timerange(minimal_candles):
             close=13649,
             volume=15750,
             indicators={
-                "ATR": 2000,
                 "Fake_10": 100.0,
-                "MinTR": 2002,
-                "NATR": {"nested": 2001},
             },
-            sub_indicators={"SATR": 2010, "SSATR": {"nested": 2011}},
             timestamp=datetime(2023, 6, 1, 9, 19),
         ),
     ]

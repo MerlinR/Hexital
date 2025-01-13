@@ -1,4 +1,4 @@
-from copy import copy, deepcopy
+from copy import copy
 from datetime import timedelta
 from importlib import import_module
 from typing import Dict, List, Optional, Set
@@ -166,7 +166,7 @@ class Hexital:
         timeframe_name = self._parse_timeframe(timeframe)
 
         if timeframe_name and self._candles.get(timeframe_name):
-            self._candles[timeframe_name].append(deepcopy(candles))
+            self._candles[timeframe_name].append(candles)
         else:
             for candle_manager in self._candles.values():
                 candle_manager.append(candles)
@@ -240,12 +240,13 @@ class Hexital:
                 indicator.candle_manager = self._candles[indicator.timeframe]
             else:
                 manager = CandleManager(
-                    deepcopy(self._candles[DEFAULT_CANDLES]).candles,
+                    [],
                     candle_life=self.candle_life,
                     timeframe=indicator._timeframe if indicator._timeframe else self._timeframe,
                     timeframe_fill=self.timeframe_fill,
                     candlestick=self.candlestick,
                 )
+                manager.append(self._candles[DEFAULT_CANDLES].candles)
                 self._candles[manager.name] = manager
                 indicator.candle_manager = self._candles[manager.name]
 
@@ -261,7 +262,9 @@ class Hexital:
             if indicator_class:
                 return indicator_class(**indicator)
             else:
-                raise InvalidIndicator(f"Indicator {indicator_name} does not exist. [{indicator}]")
+                raise InvalidIndicator(
+                    f"Indicator {indicator_name} does not exist. [{raw_indicator}]"
+                )
 
         elif indicator.get("analysis") and isinstance(indicator.get("analysis"), str):
             analysis_name = indicator.pop("analysis")
@@ -269,7 +272,7 @@ class Hexital:
 
             if not analysis_class:
                 raise InvalidAnalysis(
-                    f"analysis {analysis_name} does not exist in patterns or movements. [{indicator}]"
+                    f"analysis {analysis_name} does not exist in patterns or movements. [{raw_indicator}]"
                 )
 
             return Amorph(analysis=analysis_class, **indicator)

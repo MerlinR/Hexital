@@ -11,6 +11,12 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 *Release Date: -**
 
 - Added as_list and as_dict method's to Candle
+- Added clean_copy to Candle to copy core values to new Candle object
+    - Will remove indicators/sub_indicators
+    - Default used when appending new Candle
+
+- Optimisation
+    - Removed use of 'deepcopy' for 'clean_copy'
 
 ## 2.0.1
 

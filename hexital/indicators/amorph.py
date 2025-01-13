@@ -1,5 +1,5 @@
 import inspect
-from copy import deepcopy
+from copy import copy
 from typing import Callable, Optional
 
 from hexital.core.indicator import Indicator
@@ -45,7 +45,7 @@ class Amorph(Indicator):
             if name == "timeframe_fill" and self.timeframe is None:
                 continue
             if not name.startswith("_") and value:
-                output[name] = deepcopy(value)
+                output[name] = copy(value)
 
         return output
 

@@ -269,6 +269,9 @@ class Candle:
         """
         return [Candle.from_list(candle) for candle in candles]
 
+    def clean_copy(self) -> Candle:
+        return Candle.from_list(self.as_list())
+
     def set_collapsed_timestamp(self, timestamp: datetime):
         if not self._start_timestamp:
             self._start_timestamp = self.timestamp

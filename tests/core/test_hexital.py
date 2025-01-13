@@ -271,8 +271,6 @@ def test_hextial_timerange(minimal_candles):
             low=1903,
             close=6255,
             volume=31307,
-            indicators={"ATR": 1900, "MinTR": 1902, "NATR": {"nested": 1901}},
-            sub_indicators={"SATR": 1910, "SSATR": {"nested": 1911}},
             timestamp=datetime(2023, 6, 1, 9, 18),
         ),
         Candle(
@@ -281,8 +279,6 @@ def test_hextial_timerange(minimal_candles):
             low=13115,
             close=13649,
             volume=15750,
-            indicators={"ATR": 2000, "MinTR": 2002, "NATR": {"nested": 2001}},
-            sub_indicators={"SATR": 2010, "SSATR": {"nested": 2011}},
             timestamp=datetime(2023, 6, 1, 9, 19),
         ),
     ]

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from copy import deepcopy
+from copy import copy
 from dataclasses import dataclass, field
 from datetime import timedelta
 from typing import Dict, List, Optional, TypeVar
@@ -164,7 +164,7 @@ class Indicator(ABC):
             elif name == "timeframe" and self._candles.timeframe is not None:
                 output[name] = timedelta_to_str(self._candles.timeframe)
             elif not name.startswith("_") and value is not None:
-                output[name] = deepcopy(value)
+                output[name] = copy(value)
 
         return output
 

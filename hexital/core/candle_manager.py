@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from copy import deepcopy
 from datetime import datetime, timedelta
 from functools import cmp_to_key
 from typing import List, Optional, Set
@@ -45,7 +44,7 @@ class CandleManager:
         self.timeframe_fill = timeframe_fill
         self.candlestick = candlestick
 
-        self._tasks(True)
+        self._tasks()
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, CandleManager):
@@ -70,10 +69,7 @@ class CandleManager:
     def name(self, name: str):
         self._name = name
 
-    def _tasks(self, to_sort: Optional[bool] = False):
-        if to_sort:
-            self.sort_candles()
-
+    def _tasks(self):
         self.collapse_candles()
         self.convert_candles()
         self.trim_candles()
@@ -115,11 +111,14 @@ class CandleManager:
             if last_timestamp and candle.timestamp < last_timestamp:
                 to_sort = True
             if not candle.timeframe or not self.timeframe:
-                self.candles.append(deepcopy(candle))
+                self.candles.append(candle.clean_copy())
             elif candle.timeframe <= self.timeframe:
-                self.candles.append(deepcopy(candle))
+                self.candles.append(candle.clean_copy())
 
-        self._tasks(to_sort)
+        if to_sort:
+            self.sort_candles()
+
+        self._tasks()
 
     def sort_candles(self, candles: Optional[List[Candle]] = None):
         """Sorts Candles in order of timestamp, accounts for collapsing"""
