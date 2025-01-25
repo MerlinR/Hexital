@@ -14,7 +14,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added clean_copy to Candle to copy core values to new Candle object
     - Will remove indicators/sub_indicators
     - Default used when appending new Candle
-
+- Added 'Readings' to Hexital
 - Optimisation
     - Removed use of 'deepcopy' for 'clean_copy'
 

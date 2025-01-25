@@ -133,6 +133,11 @@ class Hexital:
     def prev_reading(self, name: str) -> float | dict | None:
         return self.reading(name, index=-2)
 
+    def readings(self) -> Dict[str, List[float | dict | None]]:
+        """Returns a Dictionary of all the Indicators and there results in a list format."""
+
+        return {name: indicator.as_list() for name, indicator in self._indicators.items()}
+
     def reading_as_list(self, name: str) -> List[float | dict | None]:
         """Find given indicator and returns the readings as a list
         Full Name of the indicator E.G `EMA_12` OR `MACD_12_26_9.MACD`"""

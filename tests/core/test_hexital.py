@@ -210,6 +210,15 @@ def test_hextial_indicator_selection(candles):
 
 
 @pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
+def test_hextial_readings(candles, expected_ema, expected_sma):
+    strat = Hexital("Test Stratergy", candles, [EMA(), SMA()])
+    strat.calculate()
+    results = strat.readings()
+    assert pytest.approx(results["SMA_10"]) == expected_sma
+    assert pytest.approx(results["EMA_10"]) == expected_ema
+
+
+@pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
 def test_hextial_purge(candles, expected_ema, expected_sma):
     strat = Hexital("Test Stratergy", candles, [EMA(), {"indicator": "SMA"}])
     strat.calculate()
