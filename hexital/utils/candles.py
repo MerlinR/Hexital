@@ -28,27 +28,23 @@ def reading_by_candle(candle: Candle, name: str) -> float | dict | None:
     if attr is not None:
         return attr
 
-    for key in candle.indicators:
-        if key == name:
-            return candle.indicators[key]
+    if name in candle.indicators:
+        return candle.indicators[name]
 
-    for key in candle.sub_indicators:
-        if key == name:
-            return candle.sub_indicators[key]
+    if name in candle.sub_indicators:
+        return candle.sub_indicators[name]
 
     return None
 
 
 def _nested_indicator(candle: Candle, name: str, nested_name: str) -> float | None:
-    for key in candle.indicators:
-        if key == name:
-            reading = candle.indicators[key]
-            return reading.get(nested_name) if isinstance(reading, dict) else reading
+    if name in candle.indicators:
+        reading = candle.indicators[name]
+        return reading.get(nested_name) if isinstance(reading, dict) else reading
 
-    for key in candle.sub_indicators:
-        if key == name:
-            reading = candle.sub_indicators[key]
-            return reading.get(nested_name) if isinstance(reading, dict) else reading
+    if name in candle.sub_indicators:
+        reading = candle.sub_indicators[name]
+        return reading.get(nested_name) if isinstance(reading, dict) else reading
 
     return None
 
