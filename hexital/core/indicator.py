@@ -123,7 +123,7 @@ class Indicator(ABC):
         Returns:
             bool: `True` if the indicator readings exist in the candles; otherwise, `False`.
         """
-        if len(self.candles) == 0:
+        if not self.candles:
             return False
         return self.exists(self.name)
 
@@ -205,55 +205,47 @@ class Indicator(ABC):
 
     def _calculate_sub_indicators(
         self,
-        prior_calc: bool = True,
-        start_index: Optional[int] = None,
+        prior_calc: bool,
+        index: int,
         end_index: Optional[int] = None,
     ):
         for indicator in self.sub_indicators.values():
             if indicator.prior_calc == prior_calc:
-                if start_index and end_index:
-                    indicator.calculate_index(start_index, end_index)
-                else:
-                    indicator.calculate()
+                indicator.calculate_index(index, end_index if end_index else index + 1)
 
-    def calculate(self):
-        """Calculate the TA values, will calculate for all the Candles,
-        where this indicator is missing"""
+    def check_initialised(self):
         if not self._initialised:
             self._initialise()
             self._initialised = True
 
-        self._calculate_sub_indicators(prior_calc=True)
+    def calculate(self):
+        """Calculate the TA values, will calculate for all the Candles,
+        where this indicator is missing"""
+        self.check_initialised()
 
         for index in range(self._find_calc_index(), len(self.candles)):
             self._set_active_index(index)
-
-            if self.candles[index].indicators.get(self.name) is not None:
-                continue
-
+            self._calculate_sub_indicators(True, index)
             reading = round_values(self._calculate_reading(index=index), round_by=self.rounding)
             self._set_reading(reading, index)
-
-        self._calculate_sub_indicators(prior_calc=False)
+            self._calculate_sub_indicators(False, index)
 
     def calculate_index(self, start_index: int, end_index: Optional[int] = None):
         """Calculate the TA values, will calculate a index range the Candles, will re-calculate"""
-        end_index = end_index if end_index else start_index + 1
+        self.check_initialised()
 
-        self._calculate_sub_indicators(True, start_index, end_index)
-
-        for index in range(start_index, end_index):
+        for index in range(start_index, end_index if end_index else start_index + 1):
             self._set_active_index(index)
+            self._calculate_sub_indicators(True, index)
             reading = round_values(self._calculate_reading(index=index), round_by=self.rounding)
             self._set_reading(reading, index)
-
-        self._calculate_sub_indicators(False, start_index, end_index)
+            self._calculate_sub_indicators(False, index)
 
     def _find_calc_index(self) -> int:
         """Optimisation method, to find where to start calculating the indicator from
         Searches from newest to oldest to find the first candle without the indicator
         """
-        if len(self.candles) == 0 or (
+        if not self.candles or (
             self.name not in self.candles[0].indicators
             and self.name not in self.candles[0].sub_indicators
         ):
@@ -436,9 +428,9 @@ class Managed(Indicator):
         else:
             self.set_active_index(index)
 
-        self._calculate_sub_indicators(True, index, index + 1)
+        self._calculate_sub_indicators(True, index)
         self._set_reading(reading, self._active_index)
-        self._calculate_sub_indicators(False, index, index + 1)
+        self._calculate_sub_indicators(False, index)
 
     def set_active_index(self, index: int):
         self._active_index = index
