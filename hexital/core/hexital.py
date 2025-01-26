@@ -1,3 +1,4 @@
+import asyncio
 from copy import copy
 from datetime import timedelta
 from importlib import import_module
@@ -21,6 +22,7 @@ from hexital.utils.timeframe import (
     timeframe_validation,
 )
 
+from .candle_loader import CandleLoader, CandleLoaderRequest
 
 class Hexital:
     name: str
@@ -158,11 +160,7 @@ class Hexital:
         self.purge(name)
         self._indicators.pop(name, None)
 
-    def append(
-        self,
-        candles: Candle | List[Candle] | dict | List[dict] | list | List[list],
-        timeframe: Optional[str | TimeFrame | timedelta | int] = None,
-    ):
+    def _just_append(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list], timeframe: Optional[str | TimeFrame | timedelta | int] = None):
         timeframe_name = self._parse_timeframe(timeframe)
 
         if timeframe_name and self._candles.get(timeframe_name):
@@ -171,6 +169,12 @@ class Hexital:
             for candle_manager in self._candles.values():
                 candle_manager.append(candles)
 
+    def append(
+        self,
+        candles: Candle | List[Candle] | dict | List[dict] | list | List[list],
+        timeframe: Optional[str | TimeFrame | timedelta | int] = None,
+    ):
+        self._just_append(candles, timeframe)
         self.calculate()
 
     def calculate(self, name: Optional[str] = None):
@@ -308,3 +312,34 @@ class Hexital:
                 return [candles, self.candles(indicator_cmp)]
 
         return [[]]
+
+    def load_past_sync(self, loader: CandleLoader, check_result: bool = True):
+        asyncio.run(self.load_past(loader, check_result))
+
+    def _no_candles_yet(self) -> bool:
+        for manager in self._candles.values():
+            if manager.candles:
+                return False
+        return True
+
+    async def load_past(self, loader: CandleLoader, check_result: bool = True):
+        assert self._no_candles_yet()
+
+        reqs: list[CandleLoaderRequest] = []
+        for indicator in self._indicators.values():
+            if req := indicator.required_past_candles():
+                assert req._skip_last == 0
+                reqs.append(req)
+
+        reqs = CandleLoaderRequest.merge_requests(reqs)
+
+        results = await asyncio.gather(*[loader.load_past(req) for req in reqs])
+
+        if check_result:
+            for req, r in zip(reqs, results):
+                assert r[0].timeframe
+                assert len(r) * r[0].timeframe == req.requested_duration()
+                assert req.n_candles - req._skip_last == len(r)
+
+        for req, r in reversed(list(zip(reqs, results))):
+            self._just_append(r, req.timeframe)

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 from abc import ABC, abstractmethod
 from copy import copy
 from dataclasses import dataclass, field
@@ -20,6 +21,8 @@ from hexital.utils.candles import (
 from hexital.utils.candlesticks import validate_candlesticktype
 from hexital.utils.indexing import round_values
 from hexital.utils.timeframe import TimeFrame, convert_timeframe_to_timedelta, timedelta_to_str
+
+from .candle_loader import CandleLoader, CandleLoaderRequest
 
 T = TypeVar("T")
 
@@ -411,6 +414,21 @@ class Indicator(ABC):
         """Re-calculate this indicator value for all Candles"""
         self.purge()
         self.calculate()
+
+    def required_past_candles(self) -> CandleLoaderRequest | None:
+        " Lets the Indicator hint how many past candles should get loaded initially "
+        return None
+
+    def load_past_sync(self, loader: CandleLoader):
+        asyncio.run(self.load_past(loader))
+
+    async def load_past(self, loader: CandleLoader, assume_req: bool = True):
+        " If Indicator is used without Hexital Group, this can be used to manually load the past candles "
+        assert not self.candles
+        if req := self.required_past_candles():
+            self.candles = await loader.load_past(req)
+        elif assume_req:
+            raise ValueError("called load_past but required_past_candles returned None")
 
 
 @dataclass(kw_only=True)
