@@ -49,6 +49,7 @@ test-all:
 
 profile:
 	poetry run python3 tests/extra/profiling/calc_supertrend.py
+	poetry run python3 tests/extra/profiling/calc_ema_multi.py
 	poetry run snakeviz prof/
 
 
