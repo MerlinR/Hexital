@@ -66,7 +66,7 @@ class Candle:
     def __eq__(self, other) -> bool:
         if not isinstance(other, Candle):
             return False
-        for key in self.__dict__.keys():
+        for key in set().union(self.__dict__.keys(), other.__dict__.keys()):
             if key in ["_start_timestamp", "_end_timestamp", "timeframe"]:
                 local = getattr(self, key)
                 remote = getattr(other, key)
@@ -270,7 +270,9 @@ class Candle:
         return [Candle.from_list(candle) for candle in candles]
 
     def clean_copy(self) -> Candle:
-        return Candle.from_list(self.as_list())
+        candle = Candle.from_list(self.as_list())
+        candle.aggregation_factor = self.aggregation_factor
+        return candle
 
     def set_collapsed_timestamp(self, timestamp: datetime):
         if not self._start_timestamp:
