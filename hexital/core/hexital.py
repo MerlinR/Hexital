@@ -22,7 +22,7 @@ from hexital.utils.timeframe import (
     timeframe_validation,
 )
 
-from .candle_loader import CandleLoader, CandleLoaderRequest
+from .candle_loader import CandleLoader, CandleLoaderRequest, LoaderConfig
 
 class Hexital:
     name: str
@@ -322,24 +322,19 @@ class Hexital:
                 return False
         return True
 
-    async def load_past(self, loader: CandleLoader, check_result: bool = True):
+    async def load_past(self, loader: CandleLoader, check_result: bool = True, cfg: LoaderConfig|None=None):
         assert self._no_candles_yet()
-
+        cfg = cfg or LoaderConfig.default
         reqs: list[CandleLoaderRequest] = []
+
         for indicator in self._indicators.values():
-            if req := indicator.required_past_candles():
+            for req in indicator.warmup_period(cfg):
                 assert req._skip_last == 0
                 reqs.append(req)
 
         reqs = CandleLoaderRequest.merge_requests(reqs)
+        results = await loader.load_requests(reqs)
 
-        results = await asyncio.gather(*[loader.load_past(req) for req in reqs])
-
-        if check_result:
-            for req, r in zip(reqs, results):
-                assert r[0].timeframe
-                assert len(r) * r[0].timeframe == req.requested_duration()
-                assert req.n_candles - req._skip_last == len(r)
-
-        for req, r in reversed(list(zip(reqs, results))):
-            self._just_append(r, req.timeframe)
+        for x in results:
+            for c in x.candles:  # ony-by-one so e.g. EMA as has time to warm-up
+                self.append(c, x.timeframe)

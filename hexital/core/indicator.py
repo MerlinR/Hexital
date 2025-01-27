@@ -22,7 +22,7 @@ from hexital.utils.candlesticks import validate_candlesticktype
 from hexital.utils.indexing import round_values
 from hexital.utils.timeframe import TimeFrame, convert_timeframe_to_timedelta, timedelta_to_str
 
-from .candle_loader import CandleLoader, CandleLoaderRequest
+from .candle_loader import CandleLoader, CandleLoaderRequest, LoaderConfig
 
 T = TypeVar("T")
 
@@ -415,20 +415,41 @@ class Indicator(ABC):
         self.purge()
         self.calculate()
 
-    def required_past_candles(self) -> CandleLoaderRequest | None:
-        " Lets the Indicator hint how many past candles should get loaded initially "
-        return None
+    def _warmup_period_for_sub_indicators(self, cfg: LoaderConfig) -> List[CandleLoaderRequest]:
+        r: List[CandleLoaderRequest] = []
+        for indicator in self.sub_indicators.values():
+            r.extend(indicator.warmup_period(cfg))
+        return r
+
+    def warmup_period(self, cfg: LoaderConfig) -> List[CandleLoaderRequest]:
+        " Lets the Indicator hint (by overwriting this method) how many past candles should get loaded initially "
+        r = self._warmup_period_for_sub_indicators(cfg)
+        if x := getattr(self, 'period', None):
+            r.append(CandleLoaderRequest(n_candles=x, timeframe=self._timeframe_f))
+        return r
 
     def load_past_sync(self, loader: CandleLoader):
         asyncio.run(self.load_past(loader))
 
-    async def load_past(self, loader: CandleLoader, assume_req: bool = True):
+    async def load_past(self, loader: CandleLoader, assume_req: bool = True, cfg: LoaderConfig|None=None):
         " If Indicator is used without Hexital Group, this can be used to manually load the past candles "
         assert not self.candles
-        if req := self.required_past_candles():
-            self.candles = await loader.load_past(req)
+        cfg = cfg or LoaderConfig.default
+        if reqs := self.warmup_period(cfg):
+            reqs = CandleLoaderRequest.merge_requests(reqs)
+            if len(reqs) > 1:
+                raise ValueError("Indicator.load_past does currently not support multiple timeframes, use Hexital.load_past instead")
+
+            self.candles = await loader.load_past(reqs[0])
         elif assume_req:
-            raise ValueError("called load_past but required_past_candles returned None")
+            raise ValueError("called load_past but warmup_period returned None")
+
+    @property
+    def _timeframe_f(self) -> timedelta:
+        " Helper in situations where we want to assume timeframe is set "
+        r = self._timeframe
+        assert r is not None
+        return r
 
 
 @dataclass(kw_only=True)
