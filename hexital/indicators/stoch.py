@@ -43,8 +43,8 @@ class STOCH(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
-        self.managed_indicators["data"].add_sub_indicator(
+        self.data = self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
+        self.sub_k = self.data.add_sub_indicator(
             SMA(
                 source=f"{self.name}_data.stoch",
                 period=self.smoothing_k,
@@ -52,7 +52,7 @@ class STOCH(Indicator):
             ),
             False,
         )
-        self.add_managed_indicator(
+        self.sub_d = self.add_managed_indicator(
             "STOCH_d",
             SMA(
                 source=f"{self.name}_data.k",
@@ -64,7 +64,6 @@ class STOCH(Indicator):
     def _calculate_reading(self, index: int) -> float | dict | None:
         stoch = None
         k = None
-        d = None
 
         if self.reading_period(self.period, self.source):
             lowest = movement.lowest(self.candles, "low", self.period, index)
@@ -72,11 +71,11 @@ class STOCH(Indicator):
 
             stoch = ((self.reading(self.source) - lowest) / (highest - lowest)) * 100
 
-            self.managed_indicators["data"].set_reading({"stoch": stoch})
-            k = self.reading(f"{self.name}_k")
+            self.data.set_reading({"stoch": stoch})
+            k = self.sub_k.reading()
 
-            self.managed_indicators["data"].set_reading({"stoch": stoch, "k": k})
-            self.managed_indicators["STOCH_d"].calculate_index(index)
-            d = self.reading(f"{self.name}_d")
+            self.data.set_reading({"stoch": stoch, "k": k})
 
-        return {"stoch": stoch, "k": k, "d": d}
+            self.sub_d.calculate_index(index)
+
+        return {"stoch": stoch, "k": k, "d": self.sub_d.reading()}

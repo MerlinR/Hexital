@@ -29,25 +29,25 @@ class MFI(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_sub_indicator(HLCA())
-        self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
+        self.sub_hlca = self.add_sub_indicator(HLCA())
+        self.data = self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        hlca = self.reading("HLCA")
-        prev_hlca = self.prev_reading("HLCA")
+        hlca = self.sub_hlca.reading()
+        prev_hlca = self.sub_hlca.prev_reading()
 
         money_flow = hlca * self.candles[index].volume
 
         if prev_hlca and hlca > prev_hlca:
-            self.managed_indicators["data"].set_reading({"positive": money_flow, "negative": 0})
+            self.data.set_reading({"positive": money_flow, "negative": 0})
         elif prev_hlca and hlca < prev_hlca:
-            self.managed_indicators["data"].set_reading({"positive": 0, "negative": money_flow})
+            self.data.set_reading({"positive": 0, "negative": money_flow})
         elif prev_hlca and hlca == prev_hlca:
-            self.managed_indicators["data"].set_reading({"positive": 0, "negative": 0})
+            self.data.set_reading({"positive": 0, "negative": 0})
 
-        if self.prev_exists() or self.reading_period(self.period + 1, "HLCA", index):
-            pos_money = self.candles_sum(self.period, f"{self.name}_data.positive")
-            neg_money = self.candles_sum(self.period, f"{self.name}_data.negative")
+        if self.prev_exists() or self.sub_hlca.reading_period(self.period + 1, index=index):
+            pos_money = self.candles_sum(self.period, f"{self.data.name}.positive")
+            neg_money = self.candles_sum(self.period, f"{self.data.name}.negative")
 
             if pos_money and neg_money:
                 return 100 * (pos_money / (pos_money + neg_money))

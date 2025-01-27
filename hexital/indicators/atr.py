@@ -27,13 +27,13 @@ class ATR(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_sub_indicator(TR())
+        self.sub_tr = self.add_sub_indicator(TR())
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         if self.prev_exists():
-            return (self.prev_reading() * (self.period - 1) + self.reading("TR")) / self.period
+            return (self.prev_reading() * (self.period - 1) + self.sub_tr.reading()) / self.period
 
-        if self.reading_period(self.period, "TR"):
-            return self.candles_average(self.period, "TR")
+        if self.sub_tr.reading_period(self.period):
+            return self.sub_tr.candles_average(self.period)
 
         return None

@@ -37,37 +37,36 @@ class ADX(Indicator):
             self.period_signal = self.period
 
     def _initialise(self):
-        self.add_sub_indicator(
+        self.sub_atr = self.add_sub_indicator(
             ATR(
                 period=self.period,
-                name=f"{self.name}_atr",
             )
         )
-        data_indicator = Managed(name=f"{self.name}_data")
-        self.add_managed_indicator("data", data_indicator)
 
-        data_indicator.add_sub_indicator(
+        self.data = self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
+
+        self.sub_pos = self.data.add_sub_indicator(
             RMA(
                 name=f"{self.name}_positive",
                 period=self.period,
-                source=f"{self.name}_data.positive",
+                source=f"{self.data.name}.positive",
             ),
             False,
         )
-        data_indicator.add_sub_indicator(
+        self.sub_neg = self.data.add_sub_indicator(
             RMA(
                 name=f"{self.name}_negative",
                 period=self.period,
-                source=f"{self.name}_data.negative",
+                source=f"{self.data.name}.negative",
             ),
             False,
         )
-        self.add_managed_indicator(
+        self.dx = self.add_managed_indicator(
             "dx",
             RMA(
                 name=f"{self.name}_dx",
                 period=self.period_signal,
-                source=f"{self.name}_data.dx",
+                source=f"{self.data.name}.dx",
             ),
         )
 
@@ -85,25 +84,23 @@ class ADX(Indicator):
         dm_plus = ((up > down) & (up > 0)) * up
         dm_neg = ((down > up) & (down > 0)) * down
 
-        self.managed_indicators["data"].set_reading({"positive": dm_plus, "negative": dm_neg})
+        self.data.set_reading({"positive": dm_plus, "negative": dm_neg})
 
-        atr_ = self.reading(f"{self.name}_atr")
+        atr_ = self.sub_atr.reading()
 
-        if self.exists(f"{self.name}_positive") and atr_ is not None:
+        if self.sub_pos.exists() and atr_ is not None:
             mod = self.multiplier / atr_
 
-            adx_positive = mod * self.reading(f"{self.name}_positive")
-            adx_negative = mod * self.reading(f"{self.name}_negative")
+            adx_positive = mod * self.sub_pos.reading()
+            adx_negative = mod * self.sub_neg.reading()
 
             dx = self.multiplier * abs(adx_positive - adx_negative) / (adx_positive + adx_negative)
 
-            self.managed_indicators["data"].set_reading(
-                {"positive": dm_plus, "negative": dm_neg, "dx": dx}
-            )
-            self.managed_indicators["dx"].calculate_index(index)
+            self.data.set_reading({"positive": dm_plus, "negative": dm_neg, "dx": dx})
+            self.dx.calculate_index(index)
 
         return {
-            "ADX": self.reading(f"{self.name}_dx"),
+            "ADX": self.dx.reading(),
             "DM_Plus": adx_positive,
             "DM_Neg": adx_negative,
         }

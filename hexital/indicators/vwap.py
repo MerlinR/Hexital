@@ -41,7 +41,7 @@ class VWAP(Indicator):
         self.anchor = convert_timeframe_to_timedelta(self.anchor)
 
     def _initialise(self):
-        self.add_managed_indicator("VWAP_data", Managed(name=f"{self.name}_data"))
+        self.data = self.add_managed_indicator("VWAP_data", Managed(name=f"{self.name}_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         candle = self.candles[index]
@@ -60,8 +60,6 @@ class VWAP(Indicator):
         pv = pv + (candle.volume * typical_price)
         vol = vol + candle.volume
 
-        self.managed_indicators["VWAP_data"].set_reading(
-            {"pv": pv, "vol": vol, "active_anchor": current_anchor}
-        )
+        self.data.set_reading({"pv": pv, "vol": vol, "active_anchor": current_anchor})
 
         return pv / vol

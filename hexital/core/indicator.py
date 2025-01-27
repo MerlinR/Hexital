@@ -266,20 +266,24 @@ class Indicator(ABC):
             if isinstance(indicator, Managed):
                 indicator.set_active_index(index)
 
-    def add_sub_indicator(self, indicator: Indicator, prior_calc: bool = True):
+    def add_sub_indicator(self, indicator: Indicator, prior_calc: bool = True) -> Indicator:
         """Adds sub indicator, this will auto calculate with indicator"""
         indicator._sub_indicator = True
         indicator._sub_calc_prior = prior_calc
         indicator.candle_manager = self._candles
         indicator.rounding = None
         self.sub_indicators[indicator.name] = indicator
+        return self.sub_indicators[indicator.name]
 
-    def add_managed_indicator(self, name: str, indicator: Managed | Indicator):
+    def add_managed_indicator(
+        self, name: str, indicator: Managed | Indicator
+    ) -> Managed | Indicator:
         """Adds managed sub indicator, this will not auto calculate with indicator"""
         indicator._sub_indicator = True
         indicator.candle_manager = self._candles
         indicator.rounding = None
         self.managed_indicators[name] = indicator
+        return self.managed_indicators[name]
 
     def exists(self, name: Optional[str] = None) -> bool:
         value = self.reading(self.name if not name else name)

@@ -36,9 +36,9 @@ class TSI(Indicator):
             self.smooth_period = int(int(self.period / 2) + (self.period % 2 > 0))
 
     def _initialise(self):
-        self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
+        self.data = self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
 
-        self.managed_indicators["data"].add_sub_indicator(
+        self.data.add_sub_indicator(
             EMA(
                 source=f"{self.name}_data.price",
                 period=self.period,
@@ -47,7 +47,7 @@ class TSI(Indicator):
             False,
         )
 
-        self.managed_indicators["data"].sub_indicators[f"{self.name}_first"].add_sub_indicator(
+        self.sub_second = self.data.sub_indicators[f"{self.name}_first"].add_sub_indicator(
             EMA(
                 source=f"{self.name}_first",
                 period=self.smooth_period,
@@ -56,7 +56,7 @@ class TSI(Indicator):
             False,
         )
 
-        self.managed_indicators["data"].add_sub_indicator(
+        self.data.add_sub_indicator(
             EMA(
                 source=f"{self.name}_data.abs_price",
                 period=self.period,
@@ -64,7 +64,7 @@ class TSI(Indicator):
             ),
             False,
         )
-        self.managed_indicators["data"].sub_indicators[f"{self.name}_abs_first"].add_sub_indicator(
+        self.abs_second = self.data.sub_indicators[f"{self.name}_abs_first"].add_sub_indicator(
             EMA(
                 source=f"{self.name}_abs_first",
                 period=self.smooth_period,
@@ -80,15 +80,15 @@ class TSI(Indicator):
 
         source = self.reading(self.source)
 
-        self.managed_indicators["data"].set_reading(
+        self.data.set_reading(
             {
                 "price": source - prev_reading,
                 "abs_price": abs(source - prev_reading),
             }
         )
 
-        abs_second = self.reading(f"{self.name}_abs_second")
+        abs_second = self.abs_second.reading()
         if abs_second is not None:
-            return 100 * (self.reading(f"{self.name}_second") / abs_second)
+            return 100 * (self.sub_second.reading() / abs_second)
 
         return None

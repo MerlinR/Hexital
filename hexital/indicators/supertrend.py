@@ -30,9 +30,11 @@ class Supertrend(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_sub_indicator(indicators.ATR(period=self.period, name=f"{self.name}_atr"))
-        self.add_sub_indicator(indicators.HLA(name=f"{self.name}_HL"))
-        self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
+        self.sub_atr = self.add_sub_indicator(
+            indicators.ATR(period=self.period, name=f"{self.name}_atr")
+        )
+        self.sub_hl = self.add_sub_indicator(indicators.HLA(name=f"{self.name}_HL"))
+        self.data = self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         direction = 1
@@ -40,13 +42,13 @@ class Supertrend(Indicator):
         long = None
         short = None
 
-        atr_ = self.reading(f"{self.name}_atr")
+        atr_ = self.sub_atr.reading()
 
         if atr_ is not None:
             mid_atr = self.multiplier * atr_
 
-            upper = self.reading(f"{self.name}_HL") + mid_atr
-            lower = self.reading(f"{self.name}_HL") - mid_atr
+            upper = self.sub_hl.reading() + mid_atr
+            lower = self.sub_hl.reading() - mid_atr
 
             prev_upper = self.prev_reading(f"{self.name}_data.upper")
             prev_lower = self.prev_reading(f"{self.name}_data.lower")
@@ -63,7 +65,7 @@ class Supertrend(Indicator):
                     if direction == -1 and upper > prev_upper:
                         upper = prev_upper
 
-            self.managed_indicators["data"].set_reading({"upper": upper, "lower": lower})
+            self.data.set_reading({"upper": upper, "lower": lower})
 
             trend = lower if direction == 1 else upper
             long = lower if direction == 1 else None

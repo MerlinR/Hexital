@@ -31,7 +31,7 @@ class STDEVT(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_sub_indicator(
+        self.sub_stdev = self.add_sub_indicator(
             STDEV(
                 source=self.source,
                 period=self.period,
@@ -45,5 +45,5 @@ class STDEVT(Indicator):
 
         return (
             abs(self.reading(self.source) - self.prev_reading(self.source))
-            > self.reading(f"{self.name}_stdev") * self.multiplier
+            > self.sub_stdev.reading() * self.multiplier
         )
