@@ -3,6 +3,9 @@ from dataclasses import dataclass, field
 from hexital.core.indicator import Indicator, Managed
 from hexital.indicators import EMA
 
+from ..core.candle_loader import CandleLoaderRequest, LoaderConfig
+from math import ceil
+
 
 @dataclass(kw_only=True)
 class MACD(Indicator):
@@ -84,3 +87,12 @@ class MACD(Indicator):
                 return {"MACD": macd, "signal": signal, "histogram": histogram}
 
         return {"MACD": None, "signal": None, "histogram": None}
+
+    def warmup_period(self, cfg: LoaderConfig) -> list[CandleLoaderRequest]:
+        assert self.slow_period > self.fast_period
+
+        slow_warmup = ceil(self.slow_period * cfg.ma_warmup_factor)
+        signal_warmup = ceil(self.signal_period * cfg.ma_warmup_factor)  # The signal line also needs warmup
+        total_required = slow_warmup + signal_warmup
+
+        return [CandleLoaderRequest(n_candles=total_required, timeframe=self._timeframe_f)]

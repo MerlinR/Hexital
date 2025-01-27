@@ -2,6 +2,8 @@ from dataclasses import dataclass, field
 
 from hexital.core.indicator import Indicator
 
+from math import ceil
+from ..core.candle_loader import CandleLoaderRequest, LoaderConfig
 
 @dataclass(kw_only=True)
 class RMA(Indicator):
@@ -56,3 +58,6 @@ class RMA(Indicator):
             return values / divide_by
 
         return None
+
+    def warmup_period(self, cfg: LoaderConfig) -> list[CandleLoaderRequest]:
+        return [CandleLoaderRequest(n_candles=ceil(self.period * cfg.ma_warmup_factor), timeframe=self._timeframe_f)]
