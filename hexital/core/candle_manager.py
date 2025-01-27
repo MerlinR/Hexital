@@ -87,9 +87,7 @@ class CandleManager:
             candles_.append(candles)
         elif isinstance(candles, dict):
             candles_.append(Candle.from_dict(candles))
-        elif isinstance(candles, list):
-            if not candles:
-                return
+        elif isinstance(candles, list) and candles:
             candle_ = candles[0]
             if isinstance(candle_, Candle):
                 candles_.extend(candles)
@@ -105,14 +103,12 @@ class CandleManager:
         self.sort_candles(candles_)
 
         to_sort = False
-        last_timestamp = self.candles[-1].timestamp if len(self.candles) > 0 else None
+        last_timestamp = self.candles[-1].timestamp if self.candles else None
 
         for candle in candles_:
             if last_timestamp and candle.timestamp < last_timestamp:
                 to_sort = True
-            if not candle.timeframe or not self.timeframe:
-                self.candles.append(candle.clean_copy())
-            elif candle.timeframe <= self.timeframe:
+            if not candle.timeframe or not self.timeframe or candle.timeframe <= self.timeframe:
                 self.candles.append(candle.clean_copy())
 
         if to_sort:
