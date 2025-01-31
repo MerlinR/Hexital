@@ -32,6 +32,8 @@ class Hexital:
     candle_life: Optional[timedelta] = None
     candlestick: Optional[CandlestickType] = None
 
+    default_tf: str = DEFAULT_CANDLES
+
     def __init__(
         self,
         name: str,
@@ -53,8 +55,11 @@ class Hexital:
         if candlestick:
             self.candlestick = validate_candlesticktype(candlestick)
 
+        if self._timeframe is not None:
+            self.default_tf = self.timeframe
+
         self._candles = {
-            DEFAULT_CANDLES: CandleManager(
+            self.default_tf: CandleManager(
                 candles if isinstance(candles, list) else [],
                 candle_life=self.candle_life,
                 timeframe=self._timeframe,
@@ -62,7 +67,7 @@ class Hexital:
                 candlestick=self.candlestick,
             )
         }
-        self._candles[DEFAULT_CANDLES].name = DEFAULT_CANDLES
+        self._candles[self.default_tf].name = self.default_tf
 
         self._indicators = self._validate_indicators(indicators) if indicators else {}
 
@@ -92,7 +97,7 @@ class Hexital:
 
     def candles(self, name: Optional[str | TimeFrame | timedelta | int] = None) -> List[Candle]:
         """Get a set of candles by using either a Timeframe or Indicator name"""
-        name_ = name if name else DEFAULT_CANDLES
+        name_ = name if name else self.default_tf
         timeframe_name = self._parse_timeframe(name)
 
         name_ = timeframe_name if timeframe_name else name_
@@ -118,7 +123,7 @@ class Hexital:
         """Attempts to retrieve a reading with a given Indicator name.
         `name` can use '.' to find nested reading, E.G `MACD_12_26_9.MACD`
         """
-        reading = reading_by_index(self._candles[DEFAULT_CANDLES].candles, name, index=index)
+        reading = reading_by_index(self._candles[self.default_tf].candles, name, index=index)
 
         if reading is not None:
             return reading
@@ -240,7 +245,7 @@ class Hexital:
 
         for indicator in valid_indicators.values():
             if not indicator.timeframe:
-                indicator.candle_manager = self._candles[DEFAULT_CANDLES]
+                indicator.candle_manager = self._candles[self.default_tf]
             elif indicator.timeframe and indicator.timeframe in self._candles:
                 indicator.candle_manager = self._candles[indicator.timeframe]
             else:
@@ -251,7 +256,7 @@ class Hexital:
                     timeframe_fill=self.timeframe_fill,
                     candlestick=self.candlestick,
                 )
-                manager.append(self._candles[DEFAULT_CANDLES].candles)
+                manager.append(self._candles[self.default_tf].candles)
                 self._candles[manager.name] = manager
                 indicator.candle_manager = self._candles[manager.name]
 
