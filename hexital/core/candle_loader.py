@@ -75,8 +75,6 @@ class CandleLoaderRequestResult:
 
 @dataclass
 class CandleLoader:
-    h: Optional['Hexital'] = None
-
     async def load_past(self, request: CandleLoaderRequest) -> list[Candle]:
         """
         This is intended to be implemented by the loader implementation.
