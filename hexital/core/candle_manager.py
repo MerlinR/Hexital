@@ -239,6 +239,7 @@ class CandleManager:
                     volume=0,
                     timestamp=prev_candle.timestamp + timeframe,
                 )
+                fill_candle.aggregation_factor = 0
                 candles.insert(index, fill_candle)
 
             index += 1

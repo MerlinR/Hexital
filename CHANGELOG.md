@@ -17,6 +17,9 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added 'Readings' to Hexital
 - Optimisation
     - Removed use of 'deepcopy' for 'clean_copy'
+- Fixes
+    - Corrected filler candles in timeframe to have 0 aggregation factor.
+
 
 ## 2.0.1
 

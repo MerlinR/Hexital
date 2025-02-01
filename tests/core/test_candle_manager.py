@@ -661,6 +661,7 @@ def test_collapse_candles_t5_missing_section_fill(candles_T5: List[Candle]):
         0,
         timestamp=candles_T5[0].timestamp + timedelta(minutes=5),
     )
+    filler.aggregation_factor = 0
 
     manager = CandleManager(cut_candles, timeframe=timedelta(minutes=5), timeframe_fill=True)
     assert manager.candles == [
@@ -686,6 +687,7 @@ def test_collapse_candles_t5_missing_section_fill_all(candles_T5: List[Candle]):
                 timestamp=candles_T5[0].timestamp + (timedelta(minutes=5) * (i + 1)),
             )
         )
+        filler_candles[-1].aggregation_factor = 0
 
     manager = CandleManager(cut_candles, timeframe=timedelta(minutes=5), timeframe_fill=True)
 
@@ -703,7 +705,7 @@ def test_collapse_candles_t5_missing_section_fill_all_extra(
     blank_candle.high = blank_candle.close
     blank_candle.low = blank_candle.close
     blank_candle.volume = 0
-    blank_candle.aggregation_factor = 1
+    blank_candle.aggregation_factor = 0
 
     filler_candles = []
     for i in range(99):
