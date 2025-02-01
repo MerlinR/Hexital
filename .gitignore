@@ -10,3 +10,4 @@ build_libs
 tags
 .pytest_cache
 dist/
+prof/*
