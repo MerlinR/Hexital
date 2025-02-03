@@ -8,6 +8,7 @@ from hexital.utils.timeframe import (
     TimeFrame,
     convert_timeframe_to_timedelta,
     round_down_timestamp,
+    timedelta_to_str,
     timeframe_validation,
 )
 
@@ -32,7 +33,7 @@ class VWAP(Indicator):
     anchor: Optional[str | TimeFrame | timedelta | int] = "D"
 
     def _generate_name(self) -> str:
-        return f"{self._name}_{self.anchor}"
+        return f"{self._name}_{timedelta_to_str(self.anchor)}"
 
     def _validate_fields(self):
         if not timeframe_validation(self.anchor):

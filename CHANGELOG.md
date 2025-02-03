@@ -19,6 +19,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Removed use of 'deepcopy' for 'clean_copy'
 - Fixes
     - Corrected filler candles in timeframe to have 0 aggregation factor.
+    - Corrected VWAP Naming
 
 
 ## 2.0.1
