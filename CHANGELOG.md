@@ -6,6 +6,24 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ---
 
+## 2.0.2
+
+*Release Date: 2025-02-04*
+
+- Added as_list and as_dict method's to Candle
+- Added clean_copy to Candle to copy core values to new Candle object
+    - Will remove indicators/sub_indicators
+    - Default used when appending new Candle
+- Added 'Readings' to Hexital
+- Optimisation
+    - Removed use of 'deepcopy' for 'clean_copy'
+- Fixes
+    - Corrected filler candles in timeframe to have 0 aggregation factor
+    - Corrected VWAP Naming
+    - Prevent DEFAULT timeframe being same as another set timeframe
+        - DEFAULT is renamed to the correct timeframe is set in Hexital
+
+
 ## 2.0.1
 
 *Release Date: 2025-01-12**

@@ -48,7 +48,7 @@ test-all:
 	poetry run coverage report -m
 
 profile:
-	poetry run python3 tests/extra/profiling/calc_supertrend.py
+	poetry run python3 tests/extra/profiling/profile_tests.py
 	poetry run snakeviz prof/
 
 

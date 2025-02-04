@@ -32,14 +32,9 @@ class KC(Indicator):
         return f"{self._name}_{self.period}_{self.multiplier}"
 
     def _initialise(self):
-        self.add_sub_indicator(
-            ATR(
-                period=self.period,
-                name=f"{self.name}_ATR",
-            )
-        )
+        self.sub_atr = self.add_sub_indicator(ATR(period=self.period))
 
-        self.add_sub_indicator(
+        self.sub_ema = self.add_sub_indicator(
             EMA(
                 source=self.source,
                 period=self.period,
@@ -48,16 +43,17 @@ class KC(Indicator):
         )
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        atr_ = self.reading(f"{self.name}_ATR")
+        atr_ = self.sub_atr.reading()
+        ema_ = self.sub_ema.reading()
 
         if atr_ is None:
-            return {"lower": None, "band": self.reading(f"{self.name}_EMA"), "upper": None}
+            return {"lower": None, "band": ema_, "upper": None}
 
-        lower = self.reading(f"{self.name}_EMA") - (self.multiplier * atr_)
-        upper = self.reading(f"{self.name}_EMA") + (self.multiplier * atr_)
+        lower = ema_ - (self.multiplier * atr_)
+        upper = ema_ + (self.multiplier * atr_)
 
         return {
             "lower": lower,
-            "band": self.reading(f"{self.name}_EMA"),
+            "band": ema_,
             "upper": upper,
         }

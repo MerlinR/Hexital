@@ -127,7 +127,8 @@ def round_down_timestamp(timestamp: datetime, timeframe: timedelta) -> datetime:
     timestamp = clean_timestamp(timestamp)
     if timeframe < timedelta(days=1):
         return datetime.fromtimestamp(
-            timestamp.timestamp() // timeframe.total_seconds() * timeframe.total_seconds()
+            timestamp.timestamp() // timeframe.total_seconds() * timeframe.total_seconds(),
+            tz=timestamp.tzinfo,
         )
     elif timeframe < timedelta(days=7):
         return timestamp.replace(hour=0, minute=0, second=0)

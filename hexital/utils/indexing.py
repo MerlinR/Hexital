@@ -23,7 +23,7 @@ def valid_index(index: int | None, length: int) -> bool:
 def round_values(
     value: float | Dict[str, float | None] | None, round_by: int | None = 4
 ) -> float | Dict[str, float | None] | None:
-    if not round_by:
+    if round_by is None:
         return value
 
     if isinstance(value, float):

@@ -44,23 +44,23 @@ class MACD(Indicator):
             self.fast_period, self.slow_period = self.slow_period, self.fast_period
 
     def _initialise(self):
-        self.add_managed_indicator("MACD", Managed(name=f"{self.name}_macd"))
+        self.data = self.add_managed_indicator("DATA", Managed(name=f"{self.name}_macd"))
 
-        self.add_sub_indicator(
+        self.sub_emaf = self.add_sub_indicator(
             EMA(
                 source=self.source,
                 period=self.fast_period,
                 name=f"{self.name}_EMA_fast",
             )
         )
-        self.add_sub_indicator(
+        self.sub_emas = self.add_sub_indicator(
             EMA(
                 source=self.source,
                 period=self.slow_period,
                 name=f"{self.name}_EMA_slow",
             )
         )
-        self.add_managed_indicator(
+        self.sub_signal = self.add_managed_indicator(
             "signal",
             EMA(
                 source=f"{self.name}_macd",
@@ -70,14 +70,15 @@ class MACD(Indicator):
         )
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        ema_slow = self.reading(f"{self.name}_EMA_slow")
+        ema_slow = self.sub_emas.reading()
 
         if ema_slow is not None:
-            macd = self.reading(f"{self.name}_EMA_fast") - ema_slow
+            macd = self.sub_emaf.reading() - ema_slow
 
-            self.managed_indicators["MACD"].set_reading(macd)
-            self.managed_indicators["signal"].calculate_index(index)
-            signal = self.managed_indicators["signal"].reading()
+            self.data.set_reading(macd)
+            self.sub_signal.calculate_index(index)
+
+            signal = self.sub_signal.reading()
 
             if signal is not None:
                 histogram = macd - signal

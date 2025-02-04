@@ -1,4 +1,3 @@
-import copy
 from datetime import datetime, timedelta
 from typing import List
 
@@ -15,7 +14,16 @@ class TestCandleAppending:
         manager = CandleManager()
         manager.append(new_candle)
 
-        assert manager.candles == [new_candle]
+        assert manager.candles == [
+            Candle(
+                open=2424,
+                high=10767,
+                low=13115,
+                close=13649,
+                volume=15750,
+                timestamp=datetime(2023, 6, 1, 9, 19),
+            )
+        ]
 
     def test_append_list_nada(self):
         manager = CandleManager()
@@ -28,14 +36,23 @@ class TestCandleAppending:
         manager = CandleManager()
         manager.append(minimal_candles)
 
-        assert manager.candles == minimal_candles
+        assert manager.candles == [cdl.clean_copy() for cdl in minimal_candles]
 
     @pytest.mark.usefixtures("minimal_candles")
     def test_append_candle_list_single(self, minimal_candles):
         manager = CandleManager()
         manager.append([minimal_candles[0]])
 
-        assert manager.candles == [minimal_candles[0]]
+        assert manager.candles == [
+            Candle(
+                open=17213,
+                high=2395,
+                low=7813,
+                close=3615,
+                volume=19661,
+                timestamp=datetime(2023, 6, 1, 9, 0, 10),
+            )
+        ]
 
     def test_append_dict(self):
         manager = CandleManager()
@@ -129,6 +146,25 @@ class TestCandleAppending:
         manager = CandleManager()
         with pytest.raises(TypeError):
             manager.append(["Fuck", 2, 3])
+
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_append_with_aggregation(self, minimal_candles):
+        manager = CandleManager()
+        new_candle = minimal_candles.pop()
+        new_candle.aggregation_factor = 5
+        manager.append(new_candle)
+
+        expected = Candle(
+            open=2424,
+            high=10767,
+            low=13115,
+            close=13649,
+            volume=15750,
+            timestamp=datetime(2023, 6, 1, 9, 19),
+        )
+        expected.aggregation_factor = 5
+
+        assert manager.candles == [expected]
 
 
 class TestCandleTimeframeAppending:
@@ -283,7 +319,7 @@ class TestCandleTimeframeAppending:
                 timeframe=timedelta(minutes=5),
             ),
         ]
-        expected[0].aggregation_factor, expected[1].aggregation_factor = 2, 2
+        expected[0].aggregation_factor, expected[1].aggregation_factor = 1, 2
         assert manager.candles == expected
 
     def test_candle_timeframe_append_higher(self):
@@ -625,6 +661,7 @@ def test_collapse_candles_t5_missing_section_fill(candles_T5: List[Candle]):
         0,
         timestamp=candles_T5[0].timestamp + timedelta(minutes=5),
     )
+    filler.aggregation_factor = 0
 
     manager = CandleManager(cut_candles, timeframe=timedelta(minutes=5), timeframe_fill=True)
     assert manager.candles == [
@@ -650,6 +687,7 @@ def test_collapse_candles_t5_missing_section_fill_all(candles_T5: List[Candle]):
                 timestamp=candles_T5[0].timestamp + (timedelta(minutes=5) * (i + 1)),
             )
         )
+        filler_candles[-1].aggregation_factor = 0
 
     manager = CandleManager(cut_candles, timeframe=timedelta(minutes=5), timeframe_fill=True)
 
@@ -662,16 +700,17 @@ def test_collapse_candles_t5_missing_section_fill_all_extra(
 ):
     cut_candles = candles[:5] + candles[-2:]
 
-    blank_candle = copy.deepcopy(candles_T5[0])
+    blank_candle = candles_T5[0].clean_copy()
     blank_candle.open = blank_candle.close
     blank_candle.high = blank_candle.close
     blank_candle.low = blank_candle.close
     blank_candle.volume = 0
+    blank_candle.aggregation_factor = 0
 
     filler_candles = []
     for i in range(99):
         blank_candle.timestamp += timedelta(minutes=5)
-        filler_candles.append(copy.deepcopy(blank_candle))
+        filler_candles.append(blank_candle.clean_copy())
 
     manager = CandleManager(cut_candles, timeframe=timedelta(minutes=5), timeframe_fill=True)
 

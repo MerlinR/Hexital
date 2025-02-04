@@ -31,14 +31,14 @@ class HMA(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_sub_indicator(
+        self.sub_wma = self.add_sub_indicator(
             WMA(
                 source=self.source,
                 period=self.period,
                 name=f"{self.name}_WMA",
             )
         )
-        self.add_sub_indicator(
+        self.sub_wmah = self.add_sub_indicator(
             WMA(
                 source=self.source,
                 period=int(self.period / 2),
@@ -46,8 +46,8 @@ class HMA(Indicator):
             )
         )
 
-        self.add_managed_indicator("raw_HMA", Managed(name=f"{self.name}_HMAr"))
-        self.managed_indicators["raw_HMA"].add_sub_indicator(
+        self.sub_hma = self.add_managed_indicator("raw_HMA", Managed(name=f"{self.name}_HMAr"))
+        self.sub_hma_smoothed = self.sub_hma.add_sub_indicator(
             WMA(
                 source=f"{self.name}_HMAr",
                 period=int(math.sqrt(self.period)),
@@ -58,10 +58,10 @@ class HMA(Indicator):
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         raw_hma = None
-        wma = self.reading(f"{self.name}_WMA")
+        wma = self.sub_wma.reading()
 
         if wma is not None:
-            raw_hma = (2 * self.reading(f"{self.name}_WMAh")) - wma
+            raw_hma = (2 * self.sub_wmah.reading()) - wma
 
-        self.managed_indicators["raw_HMA"].set_reading(raw_hma)
-        return self.reading(f"{self.name}_HMAs")
+        self.sub_hma.set_reading(raw_hma)
+        return self.sub_hma_smoothed.reading()

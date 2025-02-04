@@ -30,7 +30,7 @@ class CMO(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
+        self.data = self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         gains = None
@@ -43,11 +43,12 @@ class CMO(Indicator):
             change_loss = change if change > 0 else 0.0
 
             gains = (
-                (self.prev_reading(f"{self.name}_data.gain") * (self.period - 1)) + change_gain
+                (self.prev_reading(f"{self.data.name}.gain") * (self.period - 1)) + change_gain
             ) / self.period
 
             losses = (
-                (self.prev_reading(f"{self.name}_data.loss") * (self.period - 1)) + change_loss
+                (self.data.prev_reading(f"{self.data.name}.loss") * (self.period - 1))
+                + change_loss
             ) / self.period
 
         elif self.reading_period(self.period + 1, self.source):
@@ -59,7 +60,7 @@ class CMO(Indicator):
             gains = sum(chng for chng in changes if chng > 0) / self.period
             losses = sum(abs(chng) for chng in changes if chng < 0) / self.period
 
-        self.managed_indicators["data"].set_reading({"gain": gains, "loss": losses})
+        self.data.set_reading({"gain": gains, "loss": losses})
 
         if gains is not None and losses is not None:
             return ((gains - losses) / (gains + losses)) * 100

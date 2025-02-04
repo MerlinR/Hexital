@@ -411,3 +411,89 @@ class TestCandleMerge:
             main_candle.timestamp == datetime(2023, 10, 3, 9, 0, 30)
             and main_candle.close == 12536.019
         )
+
+
+class TestCandleTo:
+    def test_candle_to_list(self):
+        candle = Candle(
+            12331.69043,
+            12542.540039,
+            12202.410156,
+            12536.019531,
+            4918240000,
+            datetime(2023, 10, 3, 9),
+        )
+        expected = [
+            datetime(2023, 10, 3, 9),
+            12331.69043,
+            12542.540039,
+            12202.410156,
+            12536.019531,
+            4918240000,
+        ]
+
+        assert candle.as_list() == expected
+
+    def test_candle_to_list_timeframe(self):
+        candle = Candle(
+            12331.69043,
+            12542.540039,
+            12202.410156,
+            12536.019531,
+            4918240000,
+            datetime(2023, 10, 3, 9),
+            timeframe="H1",
+        )
+        expected = [
+            datetime(2023, 10, 3, 9),
+            12331.69043,
+            12542.540039,
+            12202.410156,
+            12536.019531,
+            4918240000,
+            timedelta(hours=1),
+        ]
+
+        assert candle.as_list() == expected
+
+    def test_candle_to_dict(self):
+        candle = Candle(
+            12331.69043,
+            12542.540039,
+            12202.410156,
+            12536.019531,
+            4918240000,
+            datetime(2023, 10, 3, 9),
+        )
+
+        expected = {
+            "open": 12331.69043,
+            "high": 12542.540039,
+            "low": 12202.410156,
+            "close": 12536.019531,
+            "volume": 4918240000,
+            "timestamp": datetime(2023, 10, 3, 9),
+        }
+        assert candle.as_dict() == expected
+
+    def test_candle_to_dict_timeframe(self):
+        candle = Candle(
+            12331.69043,
+            12542.540039,
+            12202.410156,
+            12536.019531,
+            4918240000,
+            datetime(2023, 10, 3, 9),
+            timeframe="H1",
+        )
+
+        expected = {
+            "open": 12331.69043,
+            "high": 12542.540039,
+            "low": 12202.410156,
+            "close": 12536.019531,
+            "volume": 4918240000,
+            "timestamp": datetime(2023, 10, 3, 9),
+            "timeframe": timedelta(hours=1),
+        }
+        assert candle.as_dict() == expected

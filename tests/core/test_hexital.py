@@ -210,6 +210,15 @@ def test_hextial_indicator_selection(candles):
 
 
 @pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
+def test_hextial_readings(candles, expected_ema, expected_sma):
+    strat = Hexital("Test Stratergy", candles, [EMA(), SMA()])
+    strat.calculate()
+    results = strat.readings()
+    assert pytest.approx(results["SMA_10"]) == expected_sma
+    assert pytest.approx(results["EMA_10"]) == expected_ema
+
+
+@pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
 def test_hextial_purge(candles, expected_ema, expected_sma):
     strat = Hexital("Test Stratergy", candles, [EMA(), {"indicator": "SMA"}])
     strat.calculate()
@@ -271,8 +280,6 @@ def test_hextial_timerange(minimal_candles):
             low=1903,
             close=6255,
             volume=31307,
-            indicators={"ATR": 1900, "MinTR": 1902, "NATR": {"nested": 1901}},
-            sub_indicators={"SATR": 1910, "SSATR": {"nested": 1911}},
             timestamp=datetime(2023, 6, 1, 9, 18),
         ),
         Candle(
@@ -281,8 +288,6 @@ def test_hextial_timerange(minimal_candles):
             low=13115,
             close=13649,
             volume=15750,
-            indicators={"ATR": 2000, "MinTR": 2002, "NATR": {"nested": 2001}},
-            sub_indicators={"SATR": 2010, "SSATR": {"nested": 2011}},
             timestamp=datetime(2023, 6, 1, 9, 19),
         ),
     ]
@@ -539,3 +544,25 @@ class TestFindCandles:
             and reading_by_candle(found_candles[1][-1], "high") == strat.candles("EMA_T5")[-1].high
             and found_candles[1][-1].timeframe == timedelta(minutes=5)
         )
+
+
+class TestMultiTimeframesNames:
+    def test_timeframe_default(self, candles):
+        strat = Hexital("Test Strategy", candles)
+        assert list(strat._candles.keys()) == ["default"]
+
+    def test_timeframe_multi(self, candles):
+        strat = Hexital("Test Strategy", candles, [EMA(timeframe="T1")])
+        assert list(strat._candles.keys()) == ["default", "T1"]
+
+    def test_duplicate_indicators(self, candles):
+        strat = Hexital("Test Strategy", candles, [EMA(timeframe="T1"), SMA(timeframe="T1")])
+        assert list(strat._candles.keys()) == ["default", "T1"]
+
+    def test_clash_hexital(self, candles):
+        strat = Hexital("Test Strategy", candles, [EMA(timeframe="T1")], timeframe="T1")
+        assert list(strat._candles.keys()) == ["T1"]
+
+    def test_multi_hexital(self, candles):
+        strat = Hexital("Test Strategy", candles, [EMA(timeframe="T5")], timeframe="T1")
+        assert list(strat._candles.keys()) == ["T1", "T5"]

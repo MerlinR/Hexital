@@ -66,7 +66,7 @@ class Candle:
     def __eq__(self, other) -> bool:
         if not isinstance(other, Candle):
             return False
-        for key in self.__dict__.keys():
+        for key in set().union(self.__dict__.keys(), other.__dict__.keys()):
             if key in ["_start_timestamp", "_end_timestamp", "timeframe"]:
                 local = getattr(self, key)
                 remote = getattr(other, key)
@@ -119,6 +119,41 @@ class Candle:
     @property
     def high_low(self) -> float:
         return abs(self.high - self.low)
+
+    def as_list(self) -> list:
+        """
+        Generates a list of values from the OHLCV values.
+        `[timestamp, open, high, low, close, volume]` in that order.
+        With an optional `timedelta` value at the end being the `timeframe`
+
+        Returns:
+            list: A list of the `Candle` values
+        """
+        return [self.timestamp, self.open, self.high, self.low, self.close, self.volume] + (
+            [self.timeframe] if self.timeframe else []
+        )
+
+    def as_dict(self) -> dict:
+        """
+        Generates a dict of values from the OHLCV values, with  the following keys:
+        `[timestamp, open, high, low, close, volume]`
+
+        Returns:
+            dict: A list of the `Candle` values
+        """
+        cdl = {
+            "open": self.open,
+            "high": self.high,
+            "low": self.low,
+            "close": self.close,
+            "volume": self.volume,
+            "timestamp": self.timestamp,
+        }
+
+        if self.timeframe:
+            cdl["timeframe"] = self.timeframe
+
+        return cdl
 
     @classmethod
     def from_dict(cls, candle: Dict[str, Any]) -> Candle:
@@ -233,6 +268,11 @@ class Candle:
             List[Candle]: A list of `Candle` object's.
         """
         return [Candle.from_list(candle) for candle in candles]
+
+    def clean_copy(self) -> Candle:
+        candle = Candle.from_list(self.as_list())
+        candle.aggregation_factor = self.aggregation_factor
+        return candle
 
     def set_collapsed_timestamp(self, timestamp: datetime):
         if not self._start_timestamp:

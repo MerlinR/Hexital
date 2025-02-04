@@ -32,8 +32,8 @@ class BBANDS(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_sub_indicator(STDEV(source=self.source, period=self.period))
-        self.add_sub_indicator(SMA(source=self.source, period=self.period))
+        self.sub_stdev = self.add_sub_indicator(STDEV(source=self.source, period=self.period))
+        self.sub_sma = self.add_sub_indicator(SMA(source=self.source, period=self.period))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         bbands = {
@@ -41,11 +41,9 @@ class BBANDS(Indicator):
             "BBM": None,
             "BBU": None,
         }
-        if self.prev_exists() or (
-            self.exists(f"SMA_{self.period}") and self.exists(f"STDEV_{self.period}")
-        ):
-            sma = self.reading(f"SMA_{self.period}")
-            stdev = self.reading(f"STDEV_{self.period}")
+        if self.prev_exists() or (self.sub_sma.exists() and self.sub_stdev.exists()):
+            sma = self.sub_sma.reading()
+            stdev = self.sub_stdev.reading()
 
             bbands["BBM"] = sma
             bbands["BBL"] = sma - (stdev * self._std)

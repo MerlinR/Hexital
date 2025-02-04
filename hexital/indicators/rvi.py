@@ -32,15 +32,16 @@ class RVI(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_sub_indicator(
+        self.data = self.add_managed_indicator("data", Managed(name=f"{self._name}_data"))
+
+        self.sub_stdev = self.add_sub_indicator(
             STDEV(
                 source=self.source,
                 period=self.period,
                 name=f"{self._name}_stdev",
             ),
         )
-        self.add_managed_indicator("data", Managed(name=f"{self._name}_data"))
-        self.add_managed_indicator(
+        self.sub_pos = self.add_managed_indicator(
             "pos_ema",
             EMA(
                 period=self.period,
@@ -48,7 +49,7 @@ class RVI(Indicator):
                 name=f"{self._name}_pos_ema",
             ),
         )
-        self.add_managed_indicator(
+        self.sub_neg = self.add_managed_indicator(
             "neg_ema",
             EMA(
                 period=self.period,
@@ -58,7 +59,7 @@ class RVI(Indicator):
         )
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        stdev_reading = self.reading(f"{self._name}_stdev")
+        stdev_reading = self.sub_stdev.reading()
 
         if stdev_reading is not None:
             prev_reading = self.prev_reading(self.source)
@@ -73,12 +74,13 @@ class RVI(Indicator):
 
             pos_stdev = pos * stdev_reading
             neg_stdev = neg * stdev_reading
-            self.managed_indicators["data"].set_reading({"pos": pos_stdev, "neg": neg_stdev})
-            self.managed_indicators["pos_ema"].calculate_index(index)
-            self.managed_indicators["neg_ema"].calculate_index(index)
 
-        positive_smoothed = self.reading(f"{self._name}_pos_ema")
-        negative_smoothed = self.reading(f"{self._name}_neg_ema")
+            self.data.set_reading({"pos": pos_stdev, "neg": neg_stdev})
+            self.sub_pos.calculate_index(index)
+            self.sub_neg.calculate_index(index)
+
+        positive_smoothed = self.sub_pos.reading()
+        negative_smoothed = self.sub_neg.reading()
 
         if self.prev_exists() or positive_smoothed is not None:
             return (self._scalar * positive_smoothed) / (positive_smoothed + negative_smoothed)
