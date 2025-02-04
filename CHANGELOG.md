@@ -8,7 +8,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ## 2.0.2
 
-*Release Date: -**
+*Release Date: 2025-02-04*
 
 - Added as_list and as_dict method's to Candle
 - Added clean_copy to Candle to copy core values to new Candle object
