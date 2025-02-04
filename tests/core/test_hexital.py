@@ -544,3 +544,25 @@ class TestFindCandles:
             and reading_by_candle(found_candles[1][-1], "high") == strat.candles("EMA_T5")[-1].high
             and found_candles[1][-1].timeframe == timedelta(minutes=5)
         )
+
+
+class TestMultiTimeframesNames:
+    def test_timeframe_default(self, candles):
+        strat = Hexital("Test Strategy", candles)
+        assert list(strat._candles.keys()) == ["default"]
+
+    def test_timeframe_multi(self, candles):
+        strat = Hexital("Test Strategy", candles, [EMA(timeframe="T1")])
+        assert list(strat._candles.keys()) == ["default", "T1"]
+
+    def test_duplicate_indicators(self, candles):
+        strat = Hexital("Test Strategy", candles, [EMA(timeframe="T1"), SMA(timeframe="T1")])
+        assert list(strat._candles.keys()) == ["default", "T1"]
+
+    def test_clash_hexital(self, candles):
+        strat = Hexital("Test Strategy", candles, [EMA(timeframe="T1")], timeframe="T1")
+        assert list(strat._candles.keys()) == ["T1"]
+
+    def test_multi_hexital(self, candles):
+        strat = Hexital("Test Strategy", candles, [EMA(timeframe="T5")], timeframe="T1")
+        assert list(strat._candles.keys()) == ["T1", "T5"]

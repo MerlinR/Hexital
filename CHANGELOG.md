@@ -18,8 +18,10 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Optimisation
     - Removed use of 'deepcopy' for 'clean_copy'
 - Fixes
-    - Corrected filler candles in timeframe to have 0 aggregation factor.
+    - Corrected filler candles in timeframe to have 0 aggregation factor
     - Corrected VWAP Naming
+    - Prevent DEFAULT timeframe being same as another set timeframe
+        - DEFAULT is renamed to the correct timeframe is set in Hexital
 
 
 ## 2.0.1
