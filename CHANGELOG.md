@@ -6,6 +6,13 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ---
 
+## 2.0.3
+
+*Release Date: *
+
+- Fixed
+    - Fixed Minor bug in _find_calc_index
+
 ## 2.0.2
 
 *Release Date: 2025-02-04*

@@ -251,7 +251,7 @@ class Indicator(ABC):
         ):
             return 0
 
-        for index in range(len(self.candles) - 1, 0, -1):
+        for index in range(len(self.candles) - 1, -1, -1):
             if (
                 self.name in self.candles[index].indicators
                 or self.name in self.candles[index].sub_indicators
