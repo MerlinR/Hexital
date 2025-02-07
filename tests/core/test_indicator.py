@@ -106,52 +106,58 @@ def test_reading_period(minimal_candles: List[Candle]):
     assert test.reading_period(10) is True
 
 
-@pytest.mark.usefixtures("minimal_candles")
-def test_settings(minimal_candles: List[Candle]):
-    test = FakeIndicator(candles=minimal_candles)
-    assert test.settings == {
-        "indicator": "Fake",
-        "name": "Fake_10",
-        "rounding": 4,
-        "source": "close",
-        "period": 10,
-    }
+class TestSettings:
+    def test_settings(self):
+        test = FakeIndicator(candles=[])
+        assert test.settings == {
+            "name": "Fake_10",
+            "rounding": 4,
+            "source": "close",
+            "period": 10,
+        }
 
+    def test_settings_timeframe(self):
+        test = FakeIndicator(candles=[], timeframe="T5")
+        assert test.settings == {
+            "name": "Fake_10_T5",
+            "rounding": 4,
+            "source": "close",
+            "period": 10,
+            "timeframe": "T5",
+            "timeframe_fill": False,
+        }
 
-@pytest.mark.usefixtures("minimal_candles")
-def test_settings_timeframe(minimal_candles: List[Candle]):
-    test = FakeIndicator(candles=minimal_candles, timeframe="T5")
-    assert test.settings == {
-        "indicator": "Fake",
-        "name": "Fake_10_T5",
-        "rounding": 4,
-        "source": "close",
-        "period": 10,
-        "timeframe": "T5",
-        "timeframe_fill": False,
-    }
+    def test_settings_candlestick_types(self):
+        test = FakeIndicator(candles=[], candlestick="HA")
+        assert test.settings == {
+            "name": "Fake_10",
+            "rounding": 4,
+            "source": "close",
+            "period": 10,
+            "candlestick": "HA",
+        }
 
+    def test_settings_back(self):
+        as_dict = {
+            "name": "Fake_10",
+            "rounding": 4,
+            "source": "close",
+            "period": 10,
+            "timeframe": "T5",
+            "timeframe_fill": False,
+            "candlestick": "HA",
+        }
+        test = FakeIndicator(**as_dict)
 
-@pytest.mark.usefixtures("minimal_candles")
-def test_settings_candlestick_types(minimal_candles: List[Candle]):
-    test = FakeIndicator(candles=minimal_candles, candlestick="HA")
-    assert test.settings == {
-        "indicator": "Fake",
-        "name": "Fake_10",
-        "rounding": 4,
-        "source": "close",
-        "period": 10,
-        "candlestick": "HA",
-    }
+        assert test.settings == as_dict
 
-
-def test_settings_analysis():
-    test = Amorph(analysis=doji)
-    assert test.settings == {
-        "analysis": "doji",
-        "name": "doji",
-        "rounding": 4,
-    }
+    def test_settings_analysis(self):
+        test = Amorph(analysis=doji)
+        assert test.settings == {
+            "analysis": "doji",
+            "name": "doji",
+            "rounding": 4,
+        }
 
 
 @pytest.mark.usefixtures("minimal_candles")

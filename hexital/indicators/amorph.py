@@ -22,11 +22,13 @@ class Amorph(Indicator):
         args: All of the Arguments as keyword arguments as a dict of keyword arguments for called analysis
     """
 
+    analysis_name: str
     _analysis_method: Callable
     _analysis_kwargs: dict
 
     def __init__(self, analysis: Callable, args: Optional[dict] = None, **kwargs):
         self._analysis_method = analysis
+        self.analysis_name = analysis.__name__
         self._analysis_kwargs, kwargs = self._separate_indicator_attributes(kwargs)
 
         if isinstance(args, dict):
@@ -37,10 +39,10 @@ class Amorph(Indicator):
     @property
     def settings(self) -> dict:
         """Returns a dict format of how this indicator can be generated"""
-        output = {"analysis": self._analysis_method.__name__}
+        output = {"analysis": self.analysis_name}
 
         for name, value in self.__dict__.items():
-            if name == "candles":
+            if name in ["analysis_name", "candles"]:
                 continue
             if name == "timeframe_fill" and self.timeframe is None:
                 continue
@@ -60,7 +62,7 @@ class Amorph(Indicator):
         return analysis_args, kwargs
 
     def _generate_name(self) -> str:
-        name = self._analysis_method.__name__
+        name = self.analysis_name
         period = self._analysis_kwargs.get("period")
         return f"{name}_{period}" if period else name
 

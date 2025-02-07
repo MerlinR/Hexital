@@ -11,6 +11,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 *Release Date: *
 
 - Added option when converting Candle to include the readings
+- Updated 'Settings' to work correctly in Indicator, and added it to Hexital
 - Fixed
     - Fixed Minor bug in _find_calc_index
 
