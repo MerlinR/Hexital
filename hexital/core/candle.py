@@ -120,26 +120,42 @@ class Candle:
     def high_low(self) -> float:
         return abs(self.high - self.low)
 
-    def as_list(self) -> list:
+    def as_list(self, readings: bool = False) -> list:
         """
         Generates a list of values from the OHLCV values.
         `[timestamp, open, high, low, close, volume]` in that order.
         With an optional `timedelta` value at the end being the `timeframe`
 
-        Returns:
-            list: A list of the `Candle` values
-        """
-        return [self.timestamp, self.open, self.high, self.low, self.close, self.volume] + (
-            [self.timeframe] if self.timeframe else []
-        )
+        Args:
+            readings (bool): Include Candle readings
 
-    def as_dict(self) -> dict:
+        Returns:
+            list: A list of the `Candle` values;
+            [timestamp, open, high, low, close, volume, timeframe*]
+            [timestamp, open, high, low, close, volume, indicators, sub_indicators, timeframe*]
+        """
+        cdl = [self.timestamp, self.open, self.high, self.low, self.close, self.volume]
+
+        if readings:
+            cdl.append(self.indicators)
+            cdl.append(self.sub_indicators)
+
+        cdl += [self.timeframe] if self.timeframe else []
+
+        return cdl
+
+    def as_dict(self, readings: bool = False) -> dict:
         """
         Generates a dict of values from the OHLCV values, with  the following keys:
         `[timestamp, open, high, low, close, volume]`
 
+        Args:
+            readings (bool): Include Candle readings
+
         Returns:
             dict: A list of the `Candle` values
+            {open, high, low, close, volume, timestamp, timeframe*}
+            {open, high, low, close, volume, timestamp, indicators, sub_indicators, timeframe*}
         """
         cdl = {
             "open": self.open,
@@ -153,6 +169,10 @@ class Candle:
         if self.timeframe:
             cdl["timeframe"] = self.timeframe
 
+        if readings:
+            cdl["indicators"] = self.indicators
+            cdl["sub_indicators"] = self.sub_indicators
+
         return cdl
 
     @classmethod
@@ -162,8 +182,8 @@ class Candle:
 
         The dictionary is expected to have the following keys:
         - Required: 'open', 'high', 'low', 'close', 'volume'
-        - Optional: 'timestamp', 'time', 'date'
-        - Optional: 'timeframe'
+        - Optional: 'timestamp' | 'time' | 'date'
+        - Optional: 'timeframe', 'indicators', 'sub_indicators'
 
         The method extracts the values for these keys. If the optional keys for time ('timestamp',
         'time', etc.) are present, the first match is used as the timestamp.
@@ -185,19 +205,21 @@ class Candle:
             candle.get("low", candle.get("Low", 0.0)),
             candle.get("close", candle.get("Close", 0.0)),
             candle.get("volume", candle.get("Volume", 0)),
+            indicators=candle.get("indicators", {}),
+            sub_indicators=candle.get("sub_indicators", {}),
             timestamp=time[0] if time else None,
             timeframe=candle.get("timeframe", candle.get("Timeframe")),
         )
 
-    @staticmethod
-    def from_dicts(candles: List[Dict[str, float]]) -> List[Candle]:
+    @classmethod
+    def from_dicts(cls, candles: List[Dict[str, float]]) -> List[Candle]:
         """
         Create's a list of `Candle` object's from a list of dictionary representation.
 
         Each dictionary is expected to have the following keys:
         - Required: 'open', 'high', 'low', 'close', 'volume'
-        - Optional: 'timestamp', 'time', 'date'
-        - Optional: 'timeframe'
+        - Optional: 'timestamp' | 'time' | 'date'
+        - Optional: 'timeframe', 'indicators', 'sub_indicators'
 
         The method extracts the values for these keys. If the optional keys for time ('timestamp',
         'time', etc.) are present, the first match is used as the timestamp.
@@ -209,7 +231,7 @@ class Candle:
         Returns:
             List[Candle]: A list of `Candle` object's.
         """
-        return [Candle.from_dict(candle) for candle in candles]
+        return [cls.from_dict(candle) for candle in candles]
 
     @classmethod
     def from_list(cls, candle: list) -> Candle:
@@ -220,6 +242,7 @@ class Candle:
         - Required: `[open, high, low, close, volume]` in that order.
         - Optional: A `timestamp` at the beginning of the list.
         - Optional: A `timeframe` at the end of the list.
+        - Optional: Dict's `indicators`, `sub_indicators` after Volume.
 
         If the first element is a `str` or `datetime`, it is treated as the `timestamp`.
         If the last element is a `str`, `int`, `TimeFrame`, or `timedelta`, it is treated as the `timeframe`.
@@ -232,11 +255,16 @@ class Candle:
         """
         timestamp = None
         timeframe = None
+        indicators = {}
+        sub_indicators = {}
 
         if len(candle) > 5 and isinstance(candle[0], (str, datetime)):
             timestamp = candle.pop(0)
         if len(candle) > 5 and isinstance(candle[-1], (str, int, TimeFrame, timedelta)):
             timeframe = candle.pop(-1)
+        if len(candle) > 5 and isinstance(candle[-1], dict):
+            sub_indicators = candle.pop(-1)
+            indicators = candle.pop(-1)
 
         return cls(
             open=candle[0],
@@ -244,12 +272,14 @@ class Candle:
             low=candle[2],
             close=candle[3],
             volume=candle[4],
+            indicators=indicators,
+            sub_indicators=sub_indicators,
             timestamp=timestamp,
             timeframe=timeframe,
         )
 
-    @staticmethod
-    def from_lists(candles: List[list]) -> List[Candle]:
+    @classmethod
+    def from_lists(cls, candles: List[list]) -> List[Candle]:
         """
         Create a list of `Candle` object's from a list of list representation.
 
@@ -257,6 +287,7 @@ class Candle:
         - Required: `[open, high, low, close, volume]` in that order.
         - Optional: A `timestamp` at the beginning of the list.
         - Optional: A `timeframe` at the end of the list.
+        - Optional: Dict's `indicators`, `sub_indicators` after Volume.
 
         If the first element is a `str` or `datetime`, it is treated as the `timestamp`.
         If the last element is a `str`, `int`, `TimeFrame`, or `timedelta`, it is treated as the `timeframe`.
@@ -267,7 +298,15 @@ class Candle:
         Returns:
             List[Candle]: A list of `Candle` object's.
         """
-        return [Candle.from_list(candle) for candle in candles]
+        return [cls.from_list(candle) for candle in candles]
+
+    @classmethod
+    def load_csv(cls, headers: List[str]):
+        return
+
+    @classmethod
+    def load_json(cls):
+        return
 
     def clean_copy(self) -> Candle:
         candle = Candle.from_list(self.as_list())
