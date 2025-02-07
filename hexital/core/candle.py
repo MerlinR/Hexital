@@ -1,11 +1,6 @@
 from __future__ import annotations
 
-try:
-    from datetime import UTC
-except ImportError:
-    UTC = False
-
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
 from hexital.exceptions import CandleAlreadyTagged
@@ -54,10 +49,7 @@ class Candle:
         elif isinstance(timestamp, str):
             self.timestamp = datetime.fromisoformat(timestamp)
         else:
-            if UTC:
-                self.timestamp = datetime.now(UTC)
-            else:
-                self.timestamp = datetime.utcnow()
+            self.timestamp = datetime.now(timezone.utc)
 
         self._clean_values = {}
         self.indicators = indicators if indicators else {}
