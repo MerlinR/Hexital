@@ -8,7 +8,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ## 2.0.3
 
-*Release Date: *
+*Release Date: 2025-02-12*
 
 - Added option when converting Candle to include the readings
 - Updated 'Settings' to work correctly in Indicator, and added it to Hexital
