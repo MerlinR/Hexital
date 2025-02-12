@@ -84,6 +84,30 @@ def fixture_candle_dict():
     ]
 
 
+@pytest.fixture(name="candle_dict_indicators")
+def fixture_candle_dict_indicators():
+    return [
+        {
+            "open": 12331.69043,
+            "high": 12542.540039,
+            "low": 12202.410156,
+            "close": 12536.019531,
+            "volume": 4918240000,
+            "indicators": {"Fake": 100},
+            "timestamp": datetime(2023, 8, 30),
+        },
+        {
+            "open": 12511.459961,
+            "high": 12645.830078,
+            "low": 12460.990234,
+            "close": 12563.759766,
+            "volume": 4547280000,
+            "indicators": {"Fake": 101},
+            "timestamp": datetime(2023, 8, 30),
+        },
+    ]
+
+
 @pytest.fixture(name="candle_dict_datetime")
 def fixture_candle_dict_datetime():
     return {
@@ -171,6 +195,22 @@ def fixture_candle_list():
     ]
 
 
+@pytest.fixture(name="candle_list_readings")
+def fixture_candle_list_readings():
+    return [
+        [
+            "2023-10-03T09:00:00",
+            12331.69043,
+            12542.540039,
+            12202.410156,
+            12536.019531,
+            4918240000,
+            {"Fake": 100},
+            {"Sub_Fake": 50},
+        ],
+    ]
+
+
 @pytest.fixture(name="candle_list_timeframe")
 def fixture_candle_list_timeframe():
     return [
@@ -195,148 +235,298 @@ def fixture_candle_list_timeframe():
     ]
 
 
-def test_candle_from_dict(candle_dict):
-    assert Candle.from_dict(candle_dict[0]) == Candle(
-        open=12331.69043,
-        high=12542.540039,
-        low=12202.410156,
-        close=12536.019531,
-        volume=4918240000,
-        timestamp=datetime(2023, 8, 30),
-    )
-
-
-def test_candle_from_dict_datetime(candle_dict_datetime):
-    assert Candle.from_dict(candle_dict_datetime) == Candle(
-        open=12331.69043,
-        high=12542.540039,
-        low=12202.410156,
-        close=12536.019531,
-        volume=4918240000,
-        timestamp=datetime(2023, 8, 30),
-    )
-
-
-def test_candle_from_dict_timeframe(candle_dict_timeframe):
-    assert Candle.from_dict(candle_dict_timeframe) == Candle(
-        open=12331.69043,
-        high=12542.540039,
-        low=12202.410156,
-        close=12536.019531,
-        volume=4918240000,
-        timestamp=datetime(2023, 8, 30),
-        timeframe="T5",
-    )
-
-
-def test_candle_from_dicts(candle_dict):
-    assert Candle.from_dicts(candle_dict) == [
-        Candle(
+class TestDictConv:
+    def test_candle_from_dict(self, candle_dict):
+        assert Candle.from_dict(candle_dict[0]) == Candle(
             open=12331.69043,
             high=12542.540039,
             low=12202.410156,
             close=12536.019531,
             volume=4918240000,
             timestamp=datetime(2023, 8, 30),
-        ),
-        Candle(
-            open=12511.459961,
-            high=12645.830078,
-            low=12460.990234,
-            close=12563.759766,
-            volume=4547280000,
+        )
+
+    def test_candle_from_dict_readings(self, candle_dict_indicators):
+        assert Candle.from_dict(candle_dict_indicators[0]) == Candle(
+            open=12331.69043,
+            high=12542.540039,
+            low=12202.410156,
+            close=12536.019531,
+            volume=4918240000,
+            indicators={"Fake": 100},
             timestamp=datetime(2023, 8, 30),
-        ),
-    ]
+        )
+
+    def test_candle_from_dict_datetime(self, candle_dict_datetime):
+        assert Candle.from_dict(candle_dict_datetime) == Candle(
+            open=12331.69043,
+            high=12542.540039,
+            low=12202.410156,
+            close=12536.019531,
+            volume=4918240000,
+            timestamp=datetime(2023, 8, 30),
+        )
+
+    def test_candle_from_dict_timeframe(self, candle_dict_timeframe):
+        assert Candle.from_dict(candle_dict_timeframe) == Candle(
+            open=12331.69043,
+            high=12542.540039,
+            low=12202.410156,
+            close=12536.019531,
+            volume=4918240000,
+            timestamp=datetime(2023, 8, 30),
+            timeframe="T5",
+        )
+
+    def test_candle_from_dicts(self, candle_dict):
+        assert Candle.from_dicts(candle_dict) == [
+            Candle(
+                open=12331.69043,
+                high=12542.540039,
+                low=12202.410156,
+                close=12536.019531,
+                volume=4918240000,
+                timestamp=datetime(2023, 8, 30),
+            ),
+            Candle(
+                open=12511.459961,
+                high=12645.830078,
+                low=12460.990234,
+                close=12563.759766,
+                volume=4547280000,
+                timestamp=datetime(2023, 8, 30),
+            ),
+        ]
+
+    def test_candle_from_dicts_numpy(self, candle_dicts_numpy):
+        assert Candle.from_dicts(candle_dicts_numpy) == [
+            Candle(
+                open=14851.6,
+                high=14854.1,
+                low=14847.2,
+                close=14848.1,
+                volume=247,
+                timestamp=datetime(2023, 10, 3, 9, 1),
+            ),
+            Candle(
+                open=14848.2,
+                high=14848.2,
+                low=14843.6,
+                close=14844.7,
+                volume=332,
+                timestamp=datetime(2023, 10, 3, 9, 2),
+            ),
+            Candle(
+                open=14844.6,
+                high=14846.6,
+                low=14842.4,
+                close=14842.6,
+                volume=196,
+                timestamp=datetime(2023, 10, 3, 9, 3),
+            ),
+            Candle(
+                open=14842.5,
+                high=14842.9,
+                low=14831.7,
+                close=14835.6,
+                volume=540,
+                timestamp=datetime(2023, 10, 3, 9, 4),
+            ),
+            Candle(
+                open=14835.5,
+                high=14842.1,
+                low=14835.4,
+                close=14839.7,
+                volume=171,
+                timestamp=datetime(2023, 10, 3, 9, 5),
+            ),
+        ]
+
+    def test_candle_to_dict(self):
+        candle = Candle(
+            12331.69043,
+            12542.540039,
+            12202.410156,
+            12536.019531,
+            4918240000,
+            datetime(2023, 10, 3, 9),
+        )
+
+        expected = {
+            "open": 12331.69043,
+            "high": 12542.540039,
+            "low": 12202.410156,
+            "close": 12536.019531,
+            "volume": 4918240000,
+            "timestamp": datetime(2023, 10, 3, 9),
+        }
+        assert candle.as_dict() == expected
+
+    def test_candle_to_dict_readings(self):
+        candle = Candle(
+            12331.69043,
+            12542.540039,
+            12202.410156,
+            12536.019531,
+            4918240000,
+            indicators={"Fake": 100},
+            timestamp=datetime(2023, 10, 3, 9),
+        )
+
+        expected = {
+            "open": 12331.69043,
+            "high": 12542.540039,
+            "low": 12202.410156,
+            "close": 12536.019531,
+            "volume": 4918240000,
+            "indicators": {"Fake": 100},
+            "sub_indicators": {},
+            "timestamp": datetime(2023, 10, 3, 9),
+        }
+        assert candle.as_dict(readings=True) == expected
+
+    def test_candle_to_dict_timeframe(self):
+        candle = Candle(
+            12331.69043,
+            12542.540039,
+            12202.410156,
+            12536.019531,
+            4918240000,
+            datetime(2023, 10, 3, 9),
+            timeframe="H1",
+        )
+
+        expected = {
+            "open": 12331.69043,
+            "high": 12542.540039,
+            "low": 12202.410156,
+            "close": 12536.019531,
+            "volume": 4918240000,
+            "timestamp": datetime(2023, 10, 3, 9),
+            "timeframe": timedelta(hours=1),
+        }
+        assert candle.as_dict() == expected
 
 
-def test_candle_from_dicts_numpy(candle_dicts_numpy):
-    assert Candle.from_dicts(candle_dicts_numpy) == [
-        Candle(
-            open=14851.6,
-            high=14854.1,
-            low=14847.2,
-            close=14848.1,
-            volume=247,
-            timestamp=datetime(2023, 10, 3, 9, 1),
-        ),
-        Candle(
-            open=14848.2,
-            high=14848.2,
-            low=14843.6,
-            close=14844.7,
-            volume=332,
-            timestamp=datetime(2023, 10, 3, 9, 2),
-        ),
-        Candle(
-            open=14844.6,
-            high=14846.6,
-            low=14842.4,
-            close=14842.6,
-            volume=196,
-            timestamp=datetime(2023, 10, 3, 9, 3),
-        ),
-        Candle(
-            open=14842.5,
-            high=14842.9,
-            low=14831.7,
-            close=14835.6,
-            volume=540,
-            timestamp=datetime(2023, 10, 3, 9, 4),
-        ),
-        Candle(
-            open=14835.5,
-            high=14842.1,
-            low=14835.4,
-            close=14839.7,
-            volume=171,
-            timestamp=datetime(2023, 10, 3, 9, 5),
-        ),
-    ]
-
-
-def test_candle_from_list(candle_list):
-    assert Candle.from_list(candle_list[0]) == Candle(
-        open=12331.69043,
-        high=12542.540039,
-        low=12202.410156,
-        close=12536.019531,
-        volume=4918240000,
-        timestamp=datetime(2023, 10, 3, 9, 0),
-    )
-
-
-def test_candle_from_list_timeframe(candle_list_timeframe):
-    assert Candle.from_list(candle_list_timeframe[0]) == Candle(
-        open=12331.69043,
-        high=12542.540039,
-        low=12202.410156,
-        close=12536.019531,
-        volume=4918240000,
-        timestamp=datetime(2023, 10, 3, 9, 0),
-        timeframe=timedelta(minutes=5),
-    )
-
-
-def test_candle_from_lists(candle_list):
-    assert Candle.from_lists(candle_list) == [
-        Candle(
+class TestListConv:
+    def test_candle_from_list(self, candle_list):
+        assert Candle.from_list(candle_list[0]) == Candle(
             open=12331.69043,
             high=12542.540039,
             low=12202.410156,
             close=12536.019531,
             volume=4918240000,
             timestamp=datetime(2023, 10, 3, 9, 0),
-        ),
-        Candle(
-            open=12511.459961,
-            high=12645.830078,
-            low=12460.990234,
-            close=12563.759766,
-            volume=4547280000,
-            timestamp=datetime(2023, 10, 3, 9, 5),
-        ),
-    ]
+        )
+
+    def test_candle_from_list_readings(self, candle_list_readings):
+        assert Candle.from_list(candle_list_readings[0]) == Candle(
+            open=12331.69043,
+            high=12542.540039,
+            low=12202.410156,
+            close=12536.019531,
+            volume=4918240000,
+            indicators={"Fake": 100},
+            sub_indicators={"Sub_Fake": 50},
+            timestamp=datetime(2023, 10, 3, 9, 0),
+        )
+
+    def test_candle_from_list_timeframe(self, candle_list_timeframe):
+        assert Candle.from_list(candle_list_timeframe[0]) == Candle(
+            open=12331.69043,
+            high=12542.540039,
+            low=12202.410156,
+            close=12536.019531,
+            volume=4918240000,
+            timestamp=datetime(2023, 10, 3, 9, 0),
+            timeframe=timedelta(minutes=5),
+        )
+
+    def test_candle_from_lists(self, candle_list):
+        assert Candle.from_lists(candle_list) == [
+            Candle(
+                open=12331.69043,
+                high=12542.540039,
+                low=12202.410156,
+                close=12536.019531,
+                volume=4918240000,
+                timestamp=datetime(2023, 10, 3, 9, 0),
+            ),
+            Candle(
+                open=12511.459961,
+                high=12645.830078,
+                low=12460.990234,
+                close=12563.759766,
+                volume=4547280000,
+                timestamp=datetime(2023, 10, 3, 9, 5),
+            ),
+        ]
+
+    def test_candle_to_list(self):
+        candle = Candle(
+            12331.69043,
+            12542.540039,
+            12202.410156,
+            12536.019531,
+            4918240000,
+            datetime(2023, 10, 3, 9),
+        )
+        expected = [
+            datetime(2023, 10, 3, 9),
+            12331.69043,
+            12542.540039,
+            12202.410156,
+            12536.019531,
+            4918240000,
+        ]
+
+        assert candle.as_list() == expected
+
+    def test_candle_to_list_readings(self):
+        candle = Candle(
+            12331.69043,
+            12542.540039,
+            12202.410156,
+            12536.019531,
+            4918240000,
+            indicators={"Fake": 100},
+            sub_indicators={"Sub_Fake": 50},
+            timestamp=datetime(2023, 10, 3, 9),
+        )
+        expected = [
+            datetime(2023, 10, 3, 9),
+            12331.69043,
+            12542.540039,
+            12202.410156,
+            12536.019531,
+            4918240000,
+            {"Fake": 100},
+            {"Sub_Fake": 50},
+        ]
+
+        assert candle.as_list(readings=True) == expected
+
+    def test_candle_to_list_timeframe(self):
+        candle = Candle(
+            12331.69043,
+            12542.540039,
+            12202.410156,
+            12536.019531,
+            4918240000,
+            datetime(2023, 10, 3, 9),
+            timeframe="H1",
+        )
+        expected = [
+            datetime(2023, 10, 3, 9),
+            12331.69043,
+            12542.540039,
+            12202.410156,
+            12536.019531,
+            4918240000,
+            timedelta(hours=1),
+        ]
+
+        assert candle.as_list() == expected
 
 
 class TestCandleCollapsedTimestamp:
@@ -411,89 +601,3 @@ class TestCandleMerge:
             main_candle.timestamp == datetime(2023, 10, 3, 9, 0, 30)
             and main_candle.close == 12536.019
         )
-
-
-class TestCandleTo:
-    def test_candle_to_list(self):
-        candle = Candle(
-            12331.69043,
-            12542.540039,
-            12202.410156,
-            12536.019531,
-            4918240000,
-            datetime(2023, 10, 3, 9),
-        )
-        expected = [
-            datetime(2023, 10, 3, 9),
-            12331.69043,
-            12542.540039,
-            12202.410156,
-            12536.019531,
-            4918240000,
-        ]
-
-        assert candle.as_list() == expected
-
-    def test_candle_to_list_timeframe(self):
-        candle = Candle(
-            12331.69043,
-            12542.540039,
-            12202.410156,
-            12536.019531,
-            4918240000,
-            datetime(2023, 10, 3, 9),
-            timeframe="H1",
-        )
-        expected = [
-            datetime(2023, 10, 3, 9),
-            12331.69043,
-            12542.540039,
-            12202.410156,
-            12536.019531,
-            4918240000,
-            timedelta(hours=1),
-        ]
-
-        assert candle.as_list() == expected
-
-    def test_candle_to_dict(self):
-        candle = Candle(
-            12331.69043,
-            12542.540039,
-            12202.410156,
-            12536.019531,
-            4918240000,
-            datetime(2023, 10, 3, 9),
-        )
-
-        expected = {
-            "open": 12331.69043,
-            "high": 12542.540039,
-            "low": 12202.410156,
-            "close": 12536.019531,
-            "volume": 4918240000,
-            "timestamp": datetime(2023, 10, 3, 9),
-        }
-        assert candle.as_dict() == expected
-
-    def test_candle_to_dict_timeframe(self):
-        candle = Candle(
-            12331.69043,
-            12542.540039,
-            12202.410156,
-            12536.019531,
-            4918240000,
-            datetime(2023, 10, 3, 9),
-            timeframe="H1",
-        )
-
-        expected = {
-            "open": 12331.69043,
-            "high": 12542.540039,
-            "low": 12202.410156,
-            "close": 12536.019531,
-            "volume": 4918240000,
-            "timestamp": datetime(2023, 10, 3, 9),
-            "timeframe": timedelta(hours=1),
-        }
-        assert candle.as_dict() == expected

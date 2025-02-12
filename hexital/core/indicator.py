@@ -151,7 +151,7 @@ class Indicator(ABC):
                 - `indicator` (str): The name of the indicator.
                 - Additional keys correspond to other configuration attributes of the indicator.
         """
-        output = {"indicator": self._name if self._name else type(self).__name__}
+        output = {}
 
         for name, value in self.__dict__.items():
             if name in ["candles", "managed_indicators", "sub_indicators"]:
@@ -251,7 +251,7 @@ class Indicator(ABC):
         ):
             return 0
 
-        for index in range(len(self.candles) - 1, 0, -1):
+        for index in range(len(self.candles) - 1, -1, -1):
             if (
                 self.name in self.candles[index].indicators
                 or self.name in self.candles[index].sub_indicators

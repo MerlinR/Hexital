@@ -113,9 +113,47 @@ class Hexital:
         return {name: manager.candles for name, manager in self._candles.items()}
 
     @property
+    def settings(self) -> dict:
+        output = {}
+
+        for name, value in self.__dict__.items():
+            if name in ["candles", "timeframe_fill"]:
+                continue
+            if name == "candlestick" and value:
+                output[name] = value.acronym if value.acronym else value.name
+            elif not name.startswith("_") and value is not None:
+                output[name] = copy(value)
+
+        output["candles"] = []
+
+        if self._timeframe:
+            output["timeframe"] = self.timeframe
+            output["timeframe_fill"] = self.timeframe_fill
+
+        output["indicators"] = self.indicator_settings
+
+        for indicator in output["indicators"]:
+            for k, v in output.items():
+                if k in indicator and v == indicator[k]:
+                    indicator.pop(k)
+
+        return output
+
+    @property
     def indicator_settings(self) -> List[dict]:
         """Simply get's a list of all the Indicators within Hexital strategy"""
-        return [indicator.settings for indicator in self._indicators.values()]
+        settings = []
+
+        for indicator in self._indicators.values():
+            conf = {}
+            if isinstance(indicator, Indicator) and not isinstance(indicator, Amorph):
+                conf.update(
+                    {"indicator": indicator._name if indicator._name else type(indicator).__name__}
+                )
+            conf.update(indicator.settings)
+            settings.append(conf)
+
+        return settings
 
     def reading(self, name: str, index: int = -1) -> float | dict | None:
         """Attempts to retrieve a reading with a given Indicator name.

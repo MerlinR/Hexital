@@ -3,6 +3,7 @@ from typing import List
 
 import pytest
 from hexital import Candle, Hexital, TimeFrame
+from hexital.analysis.patterns import doji
 from hexital.candlesticks.heikinashi import HeikinAshi
 from hexital.core.indicator import Indicator
 from hexital.exceptions import (
@@ -10,7 +11,7 @@ from hexital.exceptions import (
     InvalidCandlestickType,
     InvalidIndicator,
 )
-from hexital.indicators import EMA, RMA, SMA
+from hexital.indicators import EMA, RMA, SMA, Amorph
 from hexital.utils.candles import reading_by_candle
 
 
@@ -566,3 +567,87 @@ class TestMultiTimeframesNames:
     def test_multi_hexital(self, candles):
         strat = Hexital("Test Strategy", candles, [EMA(timeframe="T5")], timeframe="T1")
         assert list(strat._candles.keys()) == ["T1", "T5"]
+
+
+class TestHexitalSettings:
+    def test_indicator_settings(self):
+        strat = Hexital("Test Strategy", [], [EMA(candles=[])])
+
+        assert strat.indicator_settings == [
+            {
+                "indicator": "EMA",
+                "name": "EMA_10",
+                "rounding": 4,
+                "source": "close",
+                "period": 10,
+                "smoothing": 2.0,
+            }
+        ]
+
+    def test_indicator_settings_with_amorph(self):
+        strat = Hexital("Test Strategy", [], [EMA(candles=[]), Amorph(analysis=doji)])
+
+        assert strat.indicator_settings == [
+            {
+                "indicator": "EMA",
+                "name": "EMA_10",
+                "rounding": 4,
+                "source": "close",
+                "period": 10,
+                "smoothing": 2.0,
+            },
+            {
+                "analysis": "doji",
+                "name": "doji",
+                "rounding": 4,
+            },
+        ]
+
+    def test_hexital_settings(self):
+        strat = Hexital(
+            "Test Strategy",
+            [],
+            [EMA(candles=[])],
+            timeframe="T5",
+            candle_life=timedelta(minutes=60),
+        )
+
+        assert strat.settings == {
+            "name": "Test Strategy",
+            "candles": [],
+            "candle_life": timedelta(seconds=3600),
+            "timeframe": "T5",
+            "timeframe_fill": False,
+            "indicators": [
+                {
+                    "indicator": "EMA",
+                    "name": "EMA_10",
+                    "rounding": 4,
+                    "source": "close",
+                    "period": 10,
+                    "smoothing": 2.0,
+                }
+            ],
+        }
+
+    def test_hexital_settings_back(self):
+        as_dict = {
+            "name": "Test Strategy",
+            "candle_life": timedelta(seconds=3600),
+            "timeframe": "T5",
+            "timeframe_fill": False,
+            "candles": [],
+            "indicators": [
+                {
+                    "indicator": "EMA",
+                    "name": "EMA_10",
+                    "rounding": 4,
+                    "source": "close",
+                    "period": 10,
+                    "smoothing": 2.0,
+                }
+            ],
+        }
+        strat = Hexital(**as_dict)
+
+        assert strat.settings == as_dict

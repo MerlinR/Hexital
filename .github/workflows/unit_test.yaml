@@ -5,15 +5,13 @@ on:
     branches: ["master", "development"]
   pull_request:
     branches: ["master", "development"]
-  workflow_dispatch:
-    branches: ["master", "development"]
 
 jobs:
   test:
     strategy:
       matrix:
         os: ["ubuntu-latest"]
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
 
     runs-on: "${{ matrix.os }}"
 
@@ -38,7 +36,7 @@ jobs:
           key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
+        run: poetry install --no-interaction --no-root --with dev
       - name: Test with pytest
         run: |
           poetry run coverage run --omit="tests/*" -m pytest

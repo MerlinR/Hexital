@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hexital"
-version = "2.0.2"
+version = "2.0.3"
 description = "Hex Incremental Technical Analysis Library"
 readme = "README.md"
 license = "MIT"
@@ -24,6 +24,8 @@ include = ["CHANGELOG.md"]
 [tool.poetry.dependencies]
 python = "^3.10"
 
+[tool.poetry.group.dev]
+optional = true
 
 [tool.poetry.group.dev.dependencies]
 coverage = "^7.4.4"
@@ -49,8 +51,11 @@ optional = true
 matplotlib = "^3.8.4"
 pandas = "^2.2.2"
 numpy = "^1.26.4"
-ta-lib = "^0.4.28"
+ta-lib = "*"
 pandas-ta = { git = "https://github.com/twopirllc/pandas-ta.git#develop" }
+
+[tool.poetry.group.docs]
+optional = true
 
 [tool.poetry.group.docs.dependencies]
 mkdocs-material = "^9.5.47"
@@ -61,6 +66,7 @@ mkdocs-gen-files = "^0.5.0"
 mkdocs-literate-nav = "^0.6.1"
 black = "^24.10.0"
 mkdocs-section-index = "^0.3.9"
+mike = "*"
 
 [build-system]
 requires = ["setuptools", "poetry-core>=1.0.0"]
