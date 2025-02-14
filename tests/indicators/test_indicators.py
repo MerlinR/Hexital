@@ -1,3 +1,5 @@
+from random import randrange
+
 import pytest
 from hexital import exceptions, indicators
 
@@ -51,6 +53,28 @@ class TestIndicators(IndicatorTestBase):
     def test_ema(self, candles, expected_ema):
         test = indicators.EMA(candles=candles)
         test.calculate()
+        assert self.verify(test.as_list(), expected_ema)
+
+    @pytest.mark.usefixtures("candles", "expected_ema")
+    def test_ema_append(self, candles, expected_ema):
+        test = indicators.EMA(candles=[])
+        for candle in candles:
+            test.append(candle)
+        assert self.verify(test.as_list(), expected_ema)
+
+    @pytest.mark.usefixtures("candles", "expected_ema")
+    def test_ema_prepend(self, candles, expected_ema):
+        test = indicators.EMA(candles=[])
+        for candle in reversed(candles):
+            test.prepend(candle)
+        assert self.verify(test.as_list(), expected_ema)
+
+    @pytest.mark.usefixtures("candles", "expected_ema")
+    def test_ema_insert(self, candles, expected_ema):
+        test = indicators.EMA(candles=[])
+        while candles:
+            test.insert(candles.pop(randrange(len(candles))))
+
         assert self.verify(test.as_list(), expected_ema)
 
     @pytest.mark.usefixtures("candles", "expected_ema_t5")
@@ -138,9 +162,9 @@ class TestIndicators(IndicatorTestBase):
         assert self.verify(test.as_list(), expected_obv_t10)
 
     @pytest.mark.usefixtures("candles", "expected_obv_t10")
-    def test_obv_t10_double_collapse(self, candles, expected_obv_t10):
+    def test_obv_t10_double_resample(self, candles, expected_obv_t10):
         test = indicators.OBV(candles=candles, timeframe="t10")
-        test._candles.collapse_candles()
+        test._candles.resample_candles()
         test.calculate()
 
         assert self.verify(test.as_list(), expected_obv_t10, verbose=True)
@@ -180,7 +204,7 @@ class TestIndicators(IndicatorTestBase):
         test = indicators.RSI(candles=[])
         for candle in candles:
             test.append(candle)
-            test.calculate()
+
         assert self.verify(test.as_list(), expected_rsi)
 
     @pytest.mark.usefixtures("candles", "expected_sma")
@@ -231,7 +255,6 @@ class TestIndicators(IndicatorTestBase):
         test = indicators.Supertrend(candles=[])
         for candle in candles:
             test.append(candle)
-            test.calculate()
         assert self.verify(test.as_list(), expected_supertrend)
 
     @pytest.mark.usefixtures("candles", "expected_tr")
@@ -257,7 +280,7 @@ class TestIndicators(IndicatorTestBase):
         test = indicators.VWAP(candles=[])
         for candle in candles:
             test.append(candle)
-            test.calculate()
+
         assert self.verify(test.as_list(), expected_vwap)
 
     @pytest.mark.usefixtures("candles", "expected_vwap_h1")

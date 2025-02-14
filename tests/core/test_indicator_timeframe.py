@@ -30,7 +30,7 @@ def remove_indicators(candles: List[Candle]) -> List[Candle]:
 
 
 @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t5")
-def test_collapse_candles_minutes_t5(
+def test_resample_candles_minutes_t5(
     minimal_candles: List[Candle], minimal_candles_t5: List[Candle]
 ):
     minimal_candles = remove_indicators(minimal_candles)
@@ -40,7 +40,7 @@ def test_collapse_candles_minutes_t5(
 
 
 @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t10")
-def test_collapse_candles_minutes_t10(
+def test_resample_candles_minutes_t10(
     minimal_candles: List[Candle], minimal_candles_t10: List[Candle]
 ):
     minimal_candles = remove_indicators(minimal_candles)
@@ -50,7 +50,7 @@ def test_collapse_candles_minutes_t10(
 
 
 @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t10")
-def test_collapse_candles_minutes_t10_enum(
+def test_resample_candles_minutes_t10_enum(
     minimal_candles: List[Candle], minimal_candles_t10: List[Candle]
 ):
     minimal_candles = remove_indicators(minimal_candles)
@@ -60,7 +60,7 @@ def test_collapse_candles_minutes_t10_enum(
 
 
 @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t10")
-def test_collapse_candles_minutes_t10_enum_name(
+def test_resample_candles_minutes_t10_enum_name(
     minimal_candles: List[Candle], minimal_candles_t10: List[Candle]
 ):
     minimal_candles = remove_indicators(minimal_candles)
@@ -70,7 +70,7 @@ def test_collapse_candles_minutes_t10_enum_name(
 
 
 @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t5")
-def test_collapse_candles_minutes_t5_partial(
+def test_resample_candles_minutes_t5_partial(
     minimal_candles: List[Candle], minimal_candles_t5: List[Candle]
 ):
     minimal_candles_t5[0].indicators = {"Fake_10_T5": 25631}

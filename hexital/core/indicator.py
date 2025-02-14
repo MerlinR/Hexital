@@ -18,7 +18,7 @@ from hexital.utils.candles import (
     reading_period,
 )
 from hexital.utils.candlesticks import validate_candlesticktype
-from hexital.utils.indexing import round_values
+from hexital.utils.indexing import absindex, round_values
 from hexital.utils.timeframe import TimeFrame, convert_timeframe_to_timedelta, timedelta_to_str
 
 T = TypeVar("T")
@@ -113,27 +113,6 @@ class Indicator(ABC):
         self.candlestick = manager.candlestick
 
     @property
-    def has_reading(self) -> bool:
-        """
-        Check if the indicator has generated values in the candles.
-
-        This property determines whether the indicator readings have been generated
-        for the associated candle data.
-
-        Returns:
-            bool: `True` if the indicator readings exist in the candles; otherwise, `False`.
-        """
-        if not self.candles:
-            return False
-        return self.exists(self.name)
-
-    @property
-    def prior_calc(self) -> bool:
-        if self._sub_indicator and self._sub_calc_prior:
-            return True
-        return False
-
-    @property
     def settings(self) -> dict:
         """
         Retrieve the settings required to regenerate this indicator in a dictionary format.
@@ -188,17 +167,39 @@ class Indicator(ABC):
         """
         return [reading_by_candle(candle, name if name else self.name) for candle in self.candles]
 
-    def _set_reading(self, reading: float | dict | None, index: Optional[int] = None):
-        index = index if index else self._active_index
+    def prepend(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
+        """Prepends a Candle or a chronological ordered list of Candle's to the front of the Indicator Candle's. This will only re-sample and re-calculate the new Candles, with minor overlap.
 
-        if self._sub_indicator:
-            self.candles[index].sub_indicators[self.name] = reading
-        else:
-            self.candles[index].indicators[self.name] = reading
+        Args:
+            candles: The Candle or List of Candle's to prepend.
+        """
+
+        self._candles.prepend(candles)
+        self.calculate()
 
     def append(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
+        """append a Candle or a chronological ordered list of Candle's to the end of the Indicator Candle's. This wil only re-sample and re-calculate the new Candles, with minor overlap.
+
+        Args:
+            candles: The Candle or List of Candle's to prepend.
+        """
         self._candles.append(candles)
         self.calculate()
+
+    def insert(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
+        """insert a Candle or a list of Candle's to the Indicator Candles. This accepts any order or placement. This will sort, re-sample and re-calculate all Candles.
+
+        Args:
+            candles: The Candle or List of Candle's to prepend.
+        """
+        self._candles.insert(candles)
+        self.calculate_index(0, -1)
+
+    @property
+    def prior_calc(self) -> bool:
+        if self._sub_indicator and self._sub_calc_prior:
+            return True
+        return False
 
     @abstractmethod
     def _calculate_reading(self, index: int) -> float | dict | None: ...
@@ -211,7 +212,7 @@ class Indicator(ABC):
     ):
         for indicator in self.sub_indicators.values():
             if indicator.prior_calc == prior_calc:
-                indicator.calculate_index(index, end_index if end_index else index + 1)
+                indicator.calculate_index(index, end_index)
 
     def check_initialised(self):
         if not self._initialised:
@@ -226,18 +227,54 @@ class Indicator(ABC):
         for index in range(self._find_calc_index(), len(self.candles)):
             self._set_active_index(index)
             self._calculate_sub_indicators(True, index)
+
             reading = round_values(self._calculate_reading(index=index), round_by=self.rounding)
+
+            if index < len(self.candles) - 1 and self._reading_dup(reading, self.candles[index]):
+                break
+
             self._set_reading(reading, index)
             self._calculate_sub_indicators(False, index)
+
+    def _reading_dup(
+        self, reading: float | Dict[str, float | None] | None, candle: Candle
+    ) -> bool:
+        """Optimisation method for 'calculate'.
+        if calculating and not on latest Candle, check if reading match's a pre-existing reading.
+        This prevent's it from continuing calculating if already has readings
+        It also means if Candles are prepended they will be calculated, and already calculated readings
+        will be re-calculated using new prepended candles data until the reading stabilises.
+        """
+        if reading is None:
+            return False
+        cur_reading = candle.indicators.get(self.name, candle.sub_indicators.get(self.name))
+
+        if cur_reading is None:
+            return False
+        elif isinstance(cur_reading, dict) and isinstance(reading, dict):
+            # TODO find a good way to detect if dict is same or not
+            return False
+        elif reading == cur_reading:
+            return True
+        return False
 
     def calculate_index(self, start_index: int, end_index: Optional[int] = None):
         """Calculate the TA values, will calculate a index range the Candles, will re-calculate"""
         self.check_initialised()
 
-        for index in range(start_index, end_index if end_index else start_index + 1):
+        start_index = absindex(start_index, len(self.candles))
+
+        if end_index is not None:
+            end_index = absindex(end_index, len(self.candles))
+        else:
+            end_index = start_index
+
+        for index in range(start_index, end_index + 1):
             self._set_active_index(index)
             self._calculate_sub_indicators(True, index)
-            reading = round_values(self._calculate_reading(index=index), round_by=self.rounding)
+
+            reading = round_values(self._calculate_reading(index=index), self.rounding)
+
             self._set_reading(reading, index)
             self._calculate_sub_indicators(False, index)
 
@@ -259,6 +296,14 @@ class Indicator(ABC):
                 return index + 1
 
         return 0
+
+    def _set_reading(self, reading: float | dict | None, index: Optional[int] = None):
+        index = index if index else self._active_index
+
+        if self._sub_indicator:
+            self.candles[index].sub_indicators[self.name] = reading
+        else:
+            self.candles[index].indicators[self.name] = reading
 
     def _set_active_index(self, index: int):
         self._active_index = index
@@ -284,6 +329,21 @@ class Indicator(ABC):
         indicator.rounding = None
         self.managed_indicators[name] = indicator
         return self.managed_indicators[name]
+
+    @property
+    def has_reading(self) -> bool:
+        """
+        Check if the indicator has generated values in the candles.
+
+        This property determines whether the indicator readings have been generated
+        for the associated candle data.
+
+        Returns:
+            bool: `True` if the indicator readings exist in the candles; otherwise, `False`.
+        """
+        if not self.candles:
+            return False
+        return self.exists(self.name)
 
     def exists(self, name: Optional[str] = None) -> bool:
         value = self.reading(self.name if not name else name)
@@ -433,7 +493,7 @@ class Managed(Indicator):
             self.set_active_index(index)
 
         self._calculate_sub_indicators(True, index)
-        self._set_reading(reading, self._active_index)
+        self._set_reading(reading, index)
         self._calculate_sub_indicators(False, index)
 
     def set_active_index(self, index: int):

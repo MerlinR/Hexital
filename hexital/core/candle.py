@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Sequence
 
 from hexital.exceptions import CandleAlreadyTagged
 from hexital.utils.timeframe import TimeFrame, convert_timeframe_to_timedelta
@@ -32,7 +32,7 @@ class Candle:
         low: float,
         close: float,
         volume: int,
-        timestamp: Optional[datetime | str] = None,
+        timestamp: Optional[datetime | str] = None,  # End of Candle
         timeframe: Optional[str | TimeFrame | timedelta | int] = None,
         indicators: Optional[Dict[str, float | Dict[str, float | None] | None]] = None,
         sub_indicators: Optional[Dict[str, float | Dict[str, float | None] | None]] = None,
@@ -204,7 +204,7 @@ class Candle:
         )
 
     @classmethod
-    def from_dicts(cls, candles: List[Dict[str, float]]) -> List[Candle]:
+    def from_dicts(cls, candles: Sequence[Dict[str, Any]]) -> List[Candle]:
         """
         Create's a list of `Candle` object's from a list of dictionary representation.
 
@@ -305,7 +305,7 @@ class Candle:
         candle.aggregation_factor = self.aggregation_factor
         return candle
 
-    def set_collapsed_timestamp(self, timestamp: datetime):
+    def set_resampled_timestamp(self, timestamp: datetime):
         if not self._start_timestamp:
             self._start_timestamp = self.timestamp
         self.timestamp = timestamp

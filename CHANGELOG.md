@@ -6,6 +6,14 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ---
 
+## 3.0.0
+
+*Release Date: -**
+
+- Reworked and optimised 'append' and added 'insert' and 'prepend'
+
+---
+
 ## 2.0.3
 
 *Release Date: 2025-02-12*
@@ -14,6 +22,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Updated 'Settings' to work correctly in Indicator, and added it to Hexital
 - Fixed
     - Fixed Minor bug in _find_calc_index
+
+---
 
 ## 2.0.2
 
@@ -32,6 +42,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Prevent DEFAULT timeframe being same as another set timeframe
         - DEFAULT is renamed to the correct timeframe is set in Hexital
 
+---
 
 ## 2.0.1
 

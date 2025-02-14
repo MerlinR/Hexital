@@ -204,11 +204,38 @@ class Hexital:
         self.purge(name)
         self._indicators.pop(name, None)
 
+    def prepend(
+        self,
+        candles: Candle | List[Candle] | dict | List[dict] | list | List[list],
+        timeframe: Optional[str | TimeFrame | timedelta | int] = None,
+    ):
+        """Prepends a Candle or a chronological ordered list of Candle's to the front of the Hexital Candle's. This will only re-sample and re-calculate the new Candles, with minor overlap.
+
+        Args:
+            candles: The Candle or List of Candle's to prepend.
+            timeframe: A specific timeframe to insert Candle's into
+        """
+        timeframe_name = self._parse_timeframe(timeframe)
+
+        if timeframe_name and self._candles.get(timeframe_name):
+            self._candles[timeframe_name].prepend(candles)
+        else:
+            for candle_manager in self._candles.values():
+                candle_manager.prepend(candles)
+
+        self.calculate()
+
     def append(
         self,
         candles: Candle | List[Candle] | dict | List[dict] | list | List[list],
         timeframe: Optional[str | TimeFrame | timedelta | int] = None,
     ):
+        """append a Candle or a chronological ordered list of Candle's to the end of the Hexital Candle's. This wil only re-sample and re-calculate the new Candles, with minor overlap.
+
+        Args:
+            candles: The Candle or List of Candle's to prepend.
+            timeframe: A specific timeframe to insert Candle's into
+        """
         timeframe_name = self._parse_timeframe(timeframe)
 
         if timeframe_name and self._candles.get(timeframe_name):
@@ -219,17 +246,40 @@ class Hexital:
 
         self.calculate()
 
+    def insert(
+        self,
+        candles: Candle | List[Candle] | dict | List[dict] | list | List[list],
+        timeframe: Optional[str | TimeFrame | timedelta | int] = None,
+    ):
+        """insert a Candle or a list of Candle's to the Hexital Candles. This accepts any order or placement. This will sort, re-sample and re-calculate all Candles.
+
+        Args:
+            candles: The Candle or List of Candle's to prepend.
+            timeframe: A specific timeframe to insert Candle's into
+        """
+        timeframe_name = self._parse_timeframe(timeframe)
+
+        if timeframe_name and self._candles.get(timeframe_name):
+            self._candles[timeframe_name].insert(candles)
+        else:
+            for candle_manager in self._candles.values():
+                candle_manager.insert(candles)
+
+        self.calculate_index(index=0, end_index=-1)
+
     def calculate(self, name: Optional[str] = None):
         """Calculates all the missing indicator readings."""
         for indicator_name, indicator in self._indicators.items():
             if name is None or indicator_name == name:
                 indicator.calculate()
 
-    def calculate_index(self, name: Optional[str] = None, index: int = -1):
+    def calculate_index(
+        self, name: Optional[str] = None, index: int = -1, end_index: Optional[int] = None
+    ):
         """Calculate specific index for all or specific indicator readings."""
         for indicator_name, indicator in self._indicators.items():
             if name is None or indicator_name == name:
-                indicator.calculate_index(index)
+                indicator.calculate_index(index, end_index)
 
     def recalculate(self, name: Optional[str] = None):
         """Purge's all indicator reading's and re-calculates them all,

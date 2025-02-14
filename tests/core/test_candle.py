@@ -529,10 +529,10 @@ class TestListConv:
         assert candle.as_list() == expected
 
 
-class TestCandleCollapsedTimestamp:
-    def test_candle_merge_collapse_timestamp(self, merge_candles):
+class TestCandleResampledTimestamp:
+    def test_candle_merge_resample_timestamp(self, merge_candles):
         main_candle = merge_candles[0]
-        main_candle.set_collapsed_timestamp(datetime(2023, 10, 3, 9, 5))
+        main_candle.set_resampled_timestamp(datetime(2023, 10, 3, 9, 5))
 
         assert main_candle.timestamp == datetime(2023, 10, 3, 9, 5)
         assert main_candle._start_timestamp == datetime(2023, 10, 3, 9, 0, 30)
@@ -555,9 +555,9 @@ class TestCandleMerge:
         expected.aggregation_factor = 2
         assert main_candle == expected and main_candle._start_timestamp is None
 
-    def test_candle_merge_basic_collapse(self, merge_candles):
+    def test_candle_merge_basic_resample(self, merge_candles):
         main_candle = merge_candles[0]
-        main_candle.set_collapsed_timestamp(datetime(2023, 10, 3, 9, 5))
+        main_candle.set_resampled_timestamp(datetime(2023, 10, 3, 9, 5))
 
         second_candle = merge_candles[1]
 
@@ -568,7 +568,7 @@ class TestCandleMerge:
 
     def test_candle_merge_wrongorder(self, merge_candles):
         main_candle = merge_candles[1]
-        main_candle.set_collapsed_timestamp(datetime(2023, 10, 3, 9, 5))
+        main_candle.set_resampled_timestamp(datetime(2023, 10, 3, 9, 5))
 
         second_candle = merge_candles[0]
 

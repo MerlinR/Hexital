@@ -1,7 +1,8 @@
 from datetime import timedelta
 
 import pytest
-from hexital.core.hexital import DEFAULT_CANDLES, Hexital
+from hexital.core.candle_manager import DEFAULT_CANDLES
+from hexital.core.hexital import Hexital
 from hexital.indicators import EMA, OBV, SMA
 
 
