@@ -2,290 +2,294 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/analysis-catalogue/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/candle-pattern-catalogue/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/candlesticks-catalogue/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/changelog/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/features/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/indicator-catalogue/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/about/alternatives/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/about/design/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/guides/analysis-indepth/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/guides/candles/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/guides/candlesticks/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/guides/custom-indicator/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/guides/hexital-indepth/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/guides/indicators-indepth/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/guides/quick-start/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/SUMMARY/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/exceptions/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/analysis/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/analysis/movement/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/analysis/patterns/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/analysis/utils/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/candlesticks/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/candlesticks/heikinashi/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/core/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/core/candle/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/core/candle_manager/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/core/candlestick_type/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/core/hexital/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/core/indicator/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
+    </url>
+    <url>
+         <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/core/indicator_collection/</loc>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/adx/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/amorph/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/aroon/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/atr/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/bbands/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/cmo/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/counter/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/donchian/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/ema/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/highest_lowest/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/hla/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/hlca/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/hma/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/jma/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/kc/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/macd/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/mfi/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/midpoint/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/obv/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/pivot_points/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/rma/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/roc/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/rsi/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/rvi/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/sma/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/stdev/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/stdevthres/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/stoch/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/supertrend/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/tr/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/tsi/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/vwap/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/vwma/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/wma/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/utils/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/utils/candles/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/utils/candlesticks/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/utils/indexing/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/utils/timeframe/</loc>
-         <lastmod>2025-02-14</lastmod>
+         <lastmod>2025-02-27</lastmod>
     </url>
 </urlset>
