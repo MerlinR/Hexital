@@ -1,7 +1,7 @@
 from copy import copy
 from datetime import timedelta
 from importlib import import_module
-from typing import Dict, List, Optional, Sequence, Set
+from typing import Dict, Generic, List, Optional, Sequence, Set, TypeVar
 
 from hexital.core.candle import Candle
 from hexital.core.candle_manager import DEFAULT_CANDLES, CandleManager
@@ -407,14 +407,17 @@ class Hexital:
         return [[]]
 
 
-class HexitalRef[IND: IndicatorCollection](Hexital):
-    collection: IND
+T = TypeVar("T", IndicatorCollection, IndicatorCollection)
+
+
+class HexitalRef(Generic[T], Hexital):
+    collection: T
 
     def __init__(
         self,
         name: str,
         candles: List[Candle],
-        indicators: IND,
+        indicators: T,
         description: Optional[str] = None,
         timeframe: Optional[str | TimeFrame | timedelta | int] = None,
         timeframe_fill: bool = False,
