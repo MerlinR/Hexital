@@ -1,16 +1,14 @@
 from copy import copy
 from datetime import timedelta
 from importlib import import_module
-from typing import Dict, List, Optional, Set
+from typing import Dict, List, Optional, Sequence, Set
 
 from hexital.core.candle import Candle
 from hexital.core.candle_manager import DEFAULT_CANDLES, CandleManager
 from hexital.core.candlestick_type import CandlestickType
 from hexital.core.indicator import Indicator
-from hexital.exceptions import (
-    InvalidAnalysis,
-    InvalidIndicator,
-)
+from hexital.core.indicator_collection import IndicatorCollection
+from hexital.exceptions import InvalidAnalysis, InvalidIndicator
 from hexital.indicators.amorph import Amorph
 from hexital.utils.candles import reading_by_candle, reading_by_index
 from hexital.utils.candlesticks import validate_candlesticktype
@@ -36,8 +34,8 @@ class Hexital:
     def __init__(
         self,
         name: str,
-        candles: List[Candle],
-        indicators: Optional[List[dict | Indicator]] = None,
+        candles: Sequence[Candle],
+        indicators: Optional[Sequence[dict | Indicator] | IndicatorCollection] = None,
         description: Optional[str] = None,
         timeframe: Optional[str | TimeFrame | timedelta | int] = None,
         timeframe_fill: bool = False,
@@ -66,8 +64,12 @@ class Hexital:
                 candlestick=self.candlestick,
             )
         }
-
-        self._indicators = self._validate_indicators(indicators) if indicators else {}
+        if not indicators:
+            self._indicators = {}
+        elif isinstance(indicators, IndicatorCollection):
+            self._indicators = self._validate_indicators(indicators.as_list())
+        else:
+            self._indicators = self._validate_indicators(indicators)
 
     @property
     def timeframe(self) -> str | None:
@@ -79,12 +81,11 @@ class Hexital:
 
     @property
     def indicators(self) -> Dict[str, Indicator]:
-        """Simply get's a list of all the Indicators within Hexital strategy"""
         return self._indicators
 
-    def indicator(self, name: str) -> Indicator:
+    def indicator(self, name: str) -> Indicator | None:
         """Searches hexital's indicator's and Returns the Indicator object itself."""
-        return self._indicators[name]
+        return self._indicators.get(name)
 
     def has_reading(self, name: str) -> bool:
         """Checks if the given Indicator has a valid reading in latest Candle"""
@@ -196,8 +197,8 @@ class Hexital:
         Does not automatically calculates readings."""
         indicators = indicator if isinstance(indicator, list) else [indicator]
 
-        for valid_indicator in self._validate_indicators(indicators).values():
-            self._indicators[valid_indicator.name] = valid_indicator
+        for name, valid_indicator in self._validate_indicators(indicators).items():
+            self._indicators[name] = valid_indicator
 
     def remove_indicator(self, name: str):
         """Removes an indicator from running within hexital"""
@@ -291,7 +292,7 @@ class Hexital:
         """Takes Indicator name and removes all readings for said indicator.
         Indicator name must be exact"""
         for indicator_name, indicator in self._indicators.items():
-            if name is None or (name and name in indicator_name):
+            if name is None or indicator_name == name:
                 indicator.purge()
 
     def _parse_timeframe(
@@ -310,7 +311,7 @@ class Hexital:
 
         return None if not name else timedelta_to_str(name)
 
-    def _validate_indicators(self, indicators: List[dict | Indicator]) -> Dict[str, Indicator]:
+    def _validate_indicators(self, indicators: Sequence[dict | Indicator]) -> Dict[str, Indicator]:
         if not indicators:
             return {}
 
@@ -404,3 +405,31 @@ class Hexital:
                 return [candles, self.candles(indicator_cmp)]
 
         return [[]]
+
+
+class HexitalRef[IND: IndicatorCollection](Hexital):
+    collection: IND
+
+    def __init__(
+        self,
+        name: str,
+        candles: List[Candle],
+        indicators: IND,
+        description: Optional[str] = None,
+        timeframe: Optional[str | TimeFrame | timedelta | int] = None,
+        timeframe_fill: bool = False,
+        candle_life: Optional[timedelta] = None,
+        candlestick: Optional[CandlestickType | str] = None,
+    ):
+        self.collection = indicators
+
+        super().__init__(
+            name,
+            candles,
+            indicators.as_list(),
+            description,
+            timeframe,
+            timeframe_fill,
+            candle_life,
+            candlestick,
+        )

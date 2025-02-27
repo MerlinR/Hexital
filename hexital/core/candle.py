@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 from datetime import datetime, timedelta, timezone
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Optional
 
 from hexital.exceptions import CandleAlreadyTagged
 from hexital.utils.timeframe import TimeFrame, convert_timeframe_to_timedelta

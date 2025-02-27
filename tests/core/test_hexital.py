@@ -1,3 +1,4 @@
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import List
 
@@ -5,7 +6,9 @@ import pytest
 from hexital import Candle, Hexital, TimeFrame
 from hexital.analysis.patterns import doji
 from hexital.candlesticks.heikinashi import HeikinAshi
+from hexital.core.hexital import HexitalRef
 from hexital.core.indicator import Indicator
+from hexital.core.indicator_collection import IndicatorCollection
 from hexital.exceptions import (
     InvalidAnalysis,
     InvalidCandlestickType,
@@ -13,6 +16,7 @@ from hexital.exceptions import (
 )
 from hexital.indicators import EMA, RMA, SMA, Amorph
 from hexital.utils.candles import reading_by_candle
+from tests.core.test_indicator import FakeIndicator
 
 
 def fake_pattern(candles: List[Candle], index=-1):
@@ -239,7 +243,7 @@ def test_hextial_remove_indicator(candles, expected_ema, expected_sma):
 
     strat.remove_indicator("SMA_10")
 
-    assert not strat.indicators.get("SMA_10")
+    assert not strat.indicator("SMA_10")
 
 
 @pytest.mark.usefixtures("candles")
@@ -651,3 +655,26 @@ class TestHexitalSettings:
         strat = Hexital(**as_dict)
 
         assert strat.settings == as_dict
+
+
+class TestIndicatorCollection:
+    def test_collection(self, minimal_candles):
+        @dataclass
+        class customCol(IndicatorCollection):
+            fake: Indicator = field(default_factory=FakeIndicator)
+
+        collection = customCol()
+        strat = Hexital("collection", minimal_candles, collection)
+
+        assert strat.indicator("Fake_10")
+        assert collection.fake.reading is not None
+
+    def test_collectionRef(self, minimal_candles):
+        @dataclass
+        class customCol(IndicatorCollection):
+            fake: Indicator = field(default_factory=FakeIndicator)
+
+        strat = HexitalRef("collection", minimal_candles, customCol())
+
+        assert strat.collection.fake
+        assert strat.collection.fake.reading is not None
