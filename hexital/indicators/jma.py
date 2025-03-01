@@ -39,7 +39,7 @@ class JMA(Indicator):
         return f"{self._name}_{self.period}_{self.phase}"
 
     def _initialise(self):
-        self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
+        self.data = self.add_managed_indicator(Managed())
 
     def _validate_fields(self):
         if self.phase > 100:
@@ -71,11 +71,11 @@ class JMA(Indicator):
         del1 = price - uband
         del2 = price - lband
         volty = max(abs(del1), abs(del2)) if abs(del1) != abs(del2) else 0
-        self.managed_indicators["data"].set_reading({"volty": volty})
+        self.data.set_reading({"volty": volty})
 
         # Relative Price Volatility
         vsums = self.candles_average(10, f"{self.name}_data.volty")
-        self.managed_indicators["data"].set_reading({"vsums": vsums, "volty": volty})
+        self.data.set_reading({"vsums": vsums, "volty": volty})
 
         avg_volty = self.candles_average(65, f"{self.name}_data.vsums")
         d_volty = 0 if avg_volty == 0 else volty / avg_volty
@@ -103,7 +103,7 @@ class JMA(Indicator):
         )
         jma = self.prev_reading(default=price) + det_two
 
-        self.managed_indicators["data"].set_reading(
+        self.data.set_reading(
             {
                 "uband": uband,
                 "lband": lband,

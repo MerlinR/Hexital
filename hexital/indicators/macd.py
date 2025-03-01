@@ -44,7 +44,7 @@ class MACD(Indicator):
             self.fast_period, self.slow_period = self.slow_period, self.fast_period
 
     def _initialise(self):
-        self.data = self.add_managed_indicator("DATA", Managed(name=f"{self.name}_macd"))
+        self.data = self.add_managed_indicator(Managed(name=f"{self.name}_macd"))
 
         self.sub_emaf = self.add_sub_indicator(
             EMA(
@@ -61,9 +61,8 @@ class MACD(Indicator):
             )
         )
         self.sub_signal = self.add_managed_indicator(
-            "signal",
             EMA(
-                source=f"{self.name}_macd",
+                source=self.data.name,
                 period=self.signal_period,
                 name=f"{self.name}_signal_line",
             ),

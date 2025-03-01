@@ -30,7 +30,7 @@ class STDEV(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
+        self.data = self.add_managed_indicator(Managed())
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         popped_reading = 0
@@ -54,7 +54,7 @@ class STDEV(Indicator):
             / (self.period)
         )
 
-        self.managed_indicators["data"].set_reading({"mean": mean_, "variance": variance})
+        self.data.set_reading({"mean": mean_, "variance": variance})
 
         if self.prev_exists() or self.reading_period(self.period, self.source, index):
             return sqrt(variance) if variance > 0 else 0

@@ -43,7 +43,7 @@ class ADX(Indicator):
             )
         )
 
-        self.data = self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
+        self.data = self.add_managed_indicator(Managed())
 
         self.sub_pos = self.data.add_sub_indicator(
             RMA(
@@ -62,7 +62,6 @@ class ADX(Indicator):
             False,
         )
         self.dx = self.add_managed_indicator(
-            "dx",
             RMA(
                 name=f"{self.name}_dx",
                 period=self.period_signal,

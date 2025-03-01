@@ -320,15 +320,15 @@ class Indicator(ABC):
         self.sub_indicators[indicator.name] = indicator
         return self.sub_indicators[indicator.name]
 
-    def add_managed_indicator(
-        self, name: str, indicator: Managed | Indicator
-    ) -> Managed | Indicator:
+    def add_managed_indicator(self, indicator: Managed | Indicator) -> Managed | Indicator:
         """Adds managed sub indicator, this will not auto calculate with indicator"""
+        if indicator.name == MANAGED_NAME:
+            indicator.name = f"{self.name}_data"
         indicator._sub_indicator = True
         indicator.candle_manager = self._candles
         indicator.rounding = None
-        self.managed_indicators[name] = indicator
-        return self.managed_indicators[name]
+        self.managed_indicators[indicator.name] = indicator
+        return self.managed_indicators[indicator.name]
 
     @property
     def has_reading(self) -> bool:
@@ -469,6 +469,9 @@ class Indicator(ABC):
         self.calculate()
 
 
+MANAGED_NAME = "MAN"
+
+
 @dataclass(kw_only=True)
 class Managed(Indicator):
     """Managed
@@ -477,12 +480,12 @@ class Managed(Indicator):
 
     """
 
-    indicator_name: str = "MAN"
-    _sub_indicator: bool = True
-    _active_index: int = 0
+    _name: str = field(init=False, default=MANAGED_NAME)
+    _sub_indicator: bool = field(default=True)
+    _active_index: int = field(default=0)
 
     def _generate_name(self) -> str:
-        return self.indicator_name
+        return self._name
 
     def _calculate_reading(self, index: int) -> float | dict | None: ...
 

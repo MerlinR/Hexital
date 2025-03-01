@@ -34,7 +34,7 @@ class Supertrend(Indicator):
             indicators.ATR(period=self.period, name=f"{self.name}_atr")
         )
         self.sub_hl = self.add_sub_indicator(indicators.HLA(name=f"{self.name}_HL"))
-        self.data = self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
+        self.data = self.add_managed_indicator(Managed())
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         direction = 1

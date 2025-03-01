@@ -42,7 +42,7 @@ class VWAP(Indicator):
         self.anchor = convert_timeframe_to_timedelta(self.anchor)
 
     def _initialise(self):
-        self.data = self.add_managed_indicator("VWAP_data", Managed(name=f"{self.name}_data"))
+        self.data = self.add_managed_indicator(Managed())
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         candle = self.candles[index]
