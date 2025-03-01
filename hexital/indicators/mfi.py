@@ -30,7 +30,7 @@ class MFI(Indicator):
 
     def _initialise(self):
         self.sub_hlca = self.add_sub_indicator(HLCA())
-        self.data = self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
+        self.data = self.add_managed_indicator(Managed())
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         hlca = self.sub_hlca.reading()

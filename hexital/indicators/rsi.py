@@ -28,7 +28,7 @@ class RSI(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.data = self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
+        self.data = self.add_managed_indicator(Managed())
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         gains = None

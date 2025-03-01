@@ -43,7 +43,7 @@ class STOCH(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.data = self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
+        self.data = self.add_managed_indicator(Managed())
         self.sub_k = self.data.add_sub_indicator(
             SMA(
                 source=f"{self.name}_data.stoch",
@@ -53,7 +53,6 @@ class STOCH(Indicator):
             False,
         )
         self.sub_d = self.add_managed_indicator(
-            "STOCH_d",
             SMA(
                 source=f"{self.name}_data.k",
                 period=self.slow_period,

@@ -46,7 +46,7 @@ class HMA(Indicator):
             )
         )
 
-        self.sub_hma = self.add_managed_indicator("raw_HMA", Managed(name=f"{self.name}_HMAr"))
+        self.sub_hma = self.add_managed_indicator(Managed(name=f"{self.name}_HMAr"))
         self.sub_hma_smoothed = self.sub_hma.add_sub_indicator(
             WMA(
                 source=f"{self.name}_HMAr",

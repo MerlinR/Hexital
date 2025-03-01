@@ -36,7 +36,7 @@ class TSI(Indicator):
             self.smooth_period = int(int(self.period / 2) + (self.period % 2 > 0))
 
     def _initialise(self):
-        self.data = self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
+        self.data = self.add_managed_indicator(Managed())
 
         self.data.add_sub_indicator(
             EMA(
