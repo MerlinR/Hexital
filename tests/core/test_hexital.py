@@ -188,23 +188,23 @@ def test_hextial_prev_reading(candles, expected_sma):
 @pytest.mark.usefixtures("candles")
 def test_hextial_has_reading(candles):
     strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
-    assert strat.has_reading("SMA_10") is False
+    assert strat.exists("SMA_10") is False
 
     strat.calculate()
-    assert strat.has_reading("SMA_10")
+    assert strat.exists("SMA_10")
 
 
 @pytest.mark.usefixtures("candles")
 def test_hextial_has_reading_exists_no_values(candles):
     strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
-    assert strat.has_reading("SMA_10") is False
+    assert strat.exists("SMA_10") is False
 
 
 @pytest.mark.usefixtures("candles")
 def test_hextial_has_reading_missing(candles):
     strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
     strat.calculate()
-    assert strat.has_reading("EMA") is False
+    assert strat.exists("EMA") is False
 
 
 @pytest.mark.usefixtures("candles")
@@ -228,10 +228,10 @@ def test_hextial_purge(candles, expected_ema, expected_sma):
     strat = Hexital("Test Stratergy", candles, [EMA(), {"indicator": "SMA"}])
     strat.calculate()
 
-    assert strat.has_reading("SMA_10") and strat.has_reading("EMA_10")
+    assert strat.exists("SMA_10") and strat.exists("EMA_10")
     strat.purge("SMA_10")
 
-    assert not strat.has_reading("SMA_10") and strat.has_reading("EMA_10")
+    assert not strat.exists("SMA_10") and strat.exists("EMA_10")
 
 
 @pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
@@ -239,7 +239,7 @@ def test_hextial_remove_indicator(candles, expected_ema, expected_sma):
     strat = Hexital("Test Stratergy", candles, [EMA(), {"indicator": "SMA"}])
     strat.calculate()
 
-    assert strat.has_reading("SMA_10")
+    assert strat.exists("SMA_10")
 
     strat.remove_indicator("SMA_10")
 
@@ -378,7 +378,7 @@ class TestChain:
             [EMA(), EMA(source="EMA_10", name="Chained")],
         )
         strat.calculate()
-        assert strat.has_reading("EMA_10") and strat.has_reading("Chained")
+        assert strat.exists("EMA_10") and strat.exists("Chained")
 
 
 class TestCandlestickType:

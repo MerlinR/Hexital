@@ -73,14 +73,6 @@ def test_read(minimal_candles: List[Candle]):
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_has_reading(minimal_candles: List[Candle]):
-    test = FakeIndicator(candles=minimal_candles)
-    assert test.has_reading is False
-    test.calculate()
-    assert test.has_reading is True
-
-
-@pytest.mark.usefixtures("minimal_candles")
 def test_set_reading(minimal_candles: List[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     test.calculate()
@@ -163,11 +155,11 @@ class TestSettings:
 @pytest.mark.usefixtures("minimal_candles")
 def test_purge(minimal_candles: List[Candle]):
     test = FakeIndicator(candles=minimal_candles)
-    assert test.has_reading is False
+    assert test.exists() is False
     test.calculate()
-    assert test.has_reading is True
+    assert test.exists() is True
     test.purge()
-    assert test.has_reading is False
+    assert test.exists() is False
 
 
 @pytest.mark.usefixtures("minimal_candles")

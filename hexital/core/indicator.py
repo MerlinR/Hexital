@@ -333,21 +333,6 @@ class Indicator(ABC):
         self.managed_indicators[indicator.name] = indicator
         return self.managed_indicators[indicator.name]
 
-    @property
-    def has_reading(self) -> bool:
-        """
-        Check if the indicator has generated values in the candles.
-
-        This property determines whether the indicator readings have been generated
-        for the associated candle data.
-
-        Returns:
-            bool: `True` if the indicator readings exist in the candles; otherwise, `False`.
-        """
-        if not self.candles:
-            return False
-        return self.exists(self.name)
-
     def exists(self, name: Optional[str] = None) -> bool:
         value = self.reading(self.name if not name else name)
         if isinstance(value, dict):

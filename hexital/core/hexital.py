@@ -88,7 +88,7 @@ class Hexital:
         """Searches hexital's indicator's and Returns the Indicator object itself."""
         return self._indicators.get(name)
 
-    def has_reading(self, name: str) -> bool:
+    def exists(self, name: str) -> bool:
         """Checks if the given Indicator has a valid reading in latest Candle"""
         value = self.reading(name)
         if isinstance(value, dict):
