@@ -3,8 +3,9 @@ from datetime import timedelta
 from importlib import import_module
 from typing import Dict, Generic, List, Optional, Sequence, Set, TypeVar
 
+from hexital.core import Reading
 from hexital.core.candle import Candle
-from hexital.core.candle_manager import DEFAULT_CANDLES, CandleManager
+from hexital.core.candle_manager import DEFAULT_CANDLES, CandleManager, Candles
 from hexital.core.candlestick_type import CandlestickType
 from hexital.core.indicator import Indicator
 from hexital.core.indicator_collection import IndicatorCollection
@@ -13,7 +14,7 @@ from hexital.indicators.amorph import Amorph
 from hexital.utils.candles import reading_by_candle, reading_by_index
 from hexital.utils.candlesticks import validate_candlesticktype
 from hexital.utils.timeframe import (
-    TimeFrame,
+    TimeFramesSource,
     convert_timeframe_to_timedelta,
     timedelta_to_str,
     timeframe_validation,
@@ -37,7 +38,7 @@ class Hexital:
         candles: Sequence[Candle],
         indicators: Optional[Sequence[dict | Indicator] | IndicatorCollection] = None,
         description: Optional[str] = None,
-        timeframe: Optional[str | TimeFrame | timedelta | int] = None,
+        timeframe: Optional[TimeFramesSource] = None,
         timeframe_fill: bool = False,
         candle_life: Optional[timedelta] = None,
         candlestick: Optional[CandlestickType | str] = None,
@@ -94,7 +95,7 @@ class Hexital:
             return any(v is not None for v in value.values())
         return value is not None
 
-    def candles(self, name: Optional[str | TimeFrame | timedelta | int] = None) -> List[Candle]:
+    def candles(self, name: Optional[TimeFramesSource] = None) -> List[Candle]:
         """Get a set of candles by using either a Timeframe or Indicator name"""
         name_ = name if name else self._timeframe_name
         timeframe_name = self._parse_timeframe(name)
@@ -156,7 +157,7 @@ class Hexital:
 
         return settings
 
-    def reading(self, name: str, index: int = -1) -> float | dict | None:
+    def reading(self, name: str, index: int = -1) -> Reading:
         """Attempts to retrieve a reading with a given Indicator name.
         `name` can use '.' to find nested reading, E.G `MACD_12_26_9.MACD`
         """
@@ -172,15 +173,15 @@ class Hexital:
 
         return None
 
-    def prev_reading(self, name: str) -> float | dict | None:
+    def prev_reading(self, name: str) -> Reading:
         return self.reading(name, index=-2)
 
-    def readings(self) -> Dict[str, List[float | dict | None]]:
+    def readings(self) -> Dict[str, List[Reading]]:
         """Returns a Dictionary of all the Indicators and there results in a list format."""
 
         return {name: indicator.as_list() for name, indicator in self._indicators.items()}
 
-    def reading_as_list(self, name: str) -> List[float | dict | None]:
+    def reading_as_list(self, name: str) -> List[Reading]:
         """Find given indicator and returns the readings as a list
         Full Name of the indicator E.G `EMA_12` OR `MACD_12_26_9.MACD`"""
         primary_name = name.split(".")[0]
@@ -207,8 +208,8 @@ class Hexital:
 
     def prepend(
         self,
-        candles: Candle | List[Candle] | dict | List[dict] | list | List[list],
-        timeframe: Optional[str | TimeFrame | timedelta | int] = None,
+        candles: Candles,
+        timeframe: Optional[TimeFramesSource] = None,
     ):
         """Prepends a Candle or a chronological ordered list of Candle's to the front of the Hexital Candle's. This will only re-sample and re-calculate the new Candles, with minor overlap.
 
@@ -228,8 +229,8 @@ class Hexital:
 
     def append(
         self,
-        candles: Candle | List[Candle] | dict | List[dict] | list | List[list],
-        timeframe: Optional[str | TimeFrame | timedelta | int] = None,
+        candles: Candles,
+        timeframe: Optional[TimeFramesSource] = None,
     ):
         """append a Candle or a chronological ordered list of Candle's to the end of the Hexital Candle's. This wil only re-sample and re-calculate the new Candles, with minor overlap.
 
@@ -249,8 +250,8 @@ class Hexital:
 
     def insert(
         self,
-        candles: Candle | List[Candle] | dict | List[dict] | list | List[list],
-        timeframe: Optional[str | TimeFrame | timedelta | int] = None,
+        candles: Candles,
+        timeframe: Optional[TimeFramesSource] = None,
     ):
         """insert a Candle or a list of Candle's to the Hexital Candles. This accepts any order or placement. This will sort, re-sample and re-calculate all Candles.
 
@@ -295,9 +296,7 @@ class Hexital:
             if name is None or indicator_name == name:
                 indicator.purge()
 
-    def _parse_timeframe(
-        self, timeframe: Optional[str | TimeFrame | timedelta | int]
-    ) -> str | None:
+    def _parse_timeframe(self, timeframe: Optional[TimeFramesSource]) -> str | None:
         if not timeframe:
             return None
 
@@ -419,7 +418,7 @@ class HexitalCol(Generic[T], Hexital):
         candles: List[Candle],
         indicators: T,
         description: Optional[str] = None,
-        timeframe: Optional[str | TimeFrame | timedelta | int] = None,
+        timeframe: Optional[TimeFramesSource] = None,
         timeframe_fill: bool = False,
         candle_life: Optional[timedelta] = None,
         candlestick: Optional[CandlestickType | str] = None,

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta
 from functools import cmp_to_key
-from typing import List, Optional, Set
+from typing import List, Optional, Set, TypeAlias
 
 from hexital.core.candle import Candle
 from hexital.core.candlestick_type import CandlestickType
@@ -14,6 +14,8 @@ from hexital.utils.timeframe import (
     round_down_timestamp,
     timedelta_to_str,
 )
+
+Candles: TypeAlias = Candle | List[Candle] | dict | List[dict] | list | List[list]
 
 DEFAULT_CANDLES = "default"
 
@@ -79,9 +81,7 @@ class CandleManager:
                 return True
         return False
 
-    def _parse_candles(
-        self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]
-    ) -> List[Candle]:
+    def _parse_candles(self, candles: Candles) -> List[Candle]:
         candles_ = []
 
         if isinstance(candles, Candle):
@@ -103,7 +103,7 @@ class CandleManager:
 
         return candles_
 
-    def prepend(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
+    def prepend(self, candles: Candles):
         candles_ = self._parse_candles(candles)
 
         for candle in reversed(candles_):
@@ -114,7 +114,7 @@ class CandleManager:
         self.resample_candles(0, len(candles_))
         self._candle_tasks()
 
-    def append(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
+    def append(self, candles: Candles):
         candles_ = self._parse_candles(candles)
         start_index = len(self.candles) - 1 if len(self.candles) > 0 else 0
 
@@ -127,7 +127,7 @@ class CandleManager:
         self.resample_candles(start_index)
         self._candle_tasks()
 
-    def insert(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
+    def insert(self, candles: Candles):
         candles_ = self._parse_candles(candles)
 
         self.sort_candles(candles_)

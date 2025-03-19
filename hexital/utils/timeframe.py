@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Optional
+from typing import Optional, TypeAlias
 
 from hexital.exceptions import InvalidTimeFrame
 
@@ -29,7 +31,10 @@ class TimeFrame(Enum):
     WEEK = "D7"
 
 
-def timeframe_validation(timeframe: Optional[str | TimeFrame | timedelta | int] = None) -> bool:
+TimeFramesSource: TypeAlias = str | TimeFrame | timedelta | int
+
+
+def timeframe_validation(timeframe: Optional[TimeFramesSource] = None) -> bool:
     if isinstance(timeframe, str):
         timeframe_ = timeframe.upper()
         if isinstance(timeframe_[0], str) and timeframe_[0] in VALID_TIMEFRAME_PREFIXES:
@@ -44,7 +49,7 @@ def timeframe_validation(timeframe: Optional[str | TimeFrame | timedelta | int] 
 
 
 def convert_timeframe_to_timedelta(
-    timeframe: Optional[str | TimeFrame | timedelta | int] = None,
+    timeframe: Optional[TimeFramesSource] = None,
 ) -> timedelta | None:
     if isinstance(timeframe, (str, TimeFrame)):
         return timeframe_to_timedelta(validate_timeframe(timeframe))

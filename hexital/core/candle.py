@@ -4,8 +4,13 @@ from collections.abc import Sequence
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
+from hexital.core import Reading
 from hexital.exceptions import CandleAlreadyTagged
-from hexital.utils.timeframe import TimeFrame, convert_timeframe_to_timedelta
+from hexital.utils.timeframe import (
+    TimeFrame,
+    TimeFramesSource,
+    convert_timeframe_to_timedelta,
+)
 
 IGNORE_CLEAN = ["indicators", "sub_indicators", "_clean_values", "_tag"]
 
@@ -17,8 +22,8 @@ class Candle:
     close: float
     volume: int
     timestamp: datetime
-    indicators: Dict[str, float | Dict[str, float | None] | None]
-    sub_indicators: Dict[str, float | Dict[str, float | None] | None]
+    indicators: Dict[str, Reading]
+    sub_indicators: Dict[str, Reading]
     timeframe: Optional[timedelta]
     aggregation_factor: int = 1
     _clean_values: Dict[str, float | int]
@@ -34,9 +39,9 @@ class Candle:
         close: float,
         volume: int,
         timestamp: Optional[datetime | str] = None,  # End of Candle
-        timeframe: Optional[str | TimeFrame | timedelta | int] = None,
-        indicators: Optional[Dict[str, float | Dict[str, float | None] | None]] = None,
-        sub_indicators: Optional[Dict[str, float | Dict[str, float | None] | None]] = None,
+        timeframe: Optional[TimeFramesSource] = None,
+        indicators: Optional[Dict[str, Reading]] = None,
+        sub_indicators: Optional[Dict[str, Reading]] = None,
     ):
         self.open = open
         self.high = high

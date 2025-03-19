@@ -6,8 +6,9 @@ from dataclasses import dataclass, field
 from datetime import timedelta
 from typing import Dict, List, Optional, TypeVar
 
+from hexital.core import Reading
 from hexital.core.candle import Candle
-from hexital.core.candle_manager import CandleManager
+from hexital.core.candle_manager import CandleManager, Candles
 from hexital.core.candlestick_type import CandlestickType
 from hexital.utils.candles import (
     candles_average,
@@ -19,7 +20,11 @@ from hexital.utils.candles import (
 )
 from hexital.utils.candlesticks import validate_candlesticktype
 from hexital.utils.indexing import absindex, round_values
-from hexital.utils.timeframe import TimeFrame, convert_timeframe_to_timedelta, timedelta_to_str
+from hexital.utils.timeframe import (
+    TimeFramesSource,
+    convert_timeframe_to_timedelta,
+    timedelta_to_str,
+)
 
 T = TypeVar("T")
 
@@ -28,7 +33,7 @@ T = TypeVar("T")
 class Indicator(ABC):
     candles: List[Candle] = field(default_factory=list)
     name: str = ""
-    timeframe: Optional[str | TimeFrame | timedelta | int] = None
+    timeframe: Optional[TimeFramesSource] = None
     timeframe_fill: bool = False
     candle_life: Optional[timedelta] = None
     candlestick: Optional[CandlestickType | str] = None
@@ -147,7 +152,7 @@ class Indicator(ABC):
 
         return output
 
-    def as_list(self, name: Optional[str] = None) -> List[float | dict | None]:
+    def as_list(self, name: Optional[str] = None) -> List[Reading]:
         """
         Retrieve the indicator values for all candles as a list.
 
@@ -167,7 +172,7 @@ class Indicator(ABC):
         """
         return [reading_by_candle(candle, name if name else self.name) for candle in self.candles]
 
-    def prepend(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
+    def prepend(self, candles: Candles):
         """Prepends a Candle or a chronological ordered list of Candle's to the front of the Indicator Candle's. This will only re-sample and re-calculate the new Candles, with minor overlap.
 
         Args:
@@ -177,7 +182,7 @@ class Indicator(ABC):
         self._candles.prepend(candles)
         self.calculate()
 
-    def append(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
+    def append(self, candles: Candles):
         """append a Candle or a chronological ordered list of Candle's to the end of the Indicator Candle's. This wil only re-sample and re-calculate the new Candles, with minor overlap.
 
         Args:
@@ -186,7 +191,7 @@ class Indicator(ABC):
         self._candles.append(candles)
         self.calculate()
 
-    def insert(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
+    def insert(self, candles: Candles):
         """insert a Candle or a list of Candle's to the Indicator Candles. This accepts any order or placement. This will sort, re-sample and re-calculate all Candles.
 
         Args:
@@ -202,7 +207,7 @@ class Indicator(ABC):
         return False
 
     @abstractmethod
-    def _calculate_reading(self, index: int) -> float | dict | None: ...
+    def _calculate_reading(self, index: int) -> Reading: ...
 
     def _calculate_sub_indicators(
         self,
@@ -236,9 +241,7 @@ class Indicator(ABC):
             self._set_reading(reading, index)
             self._calculate_sub_indicators(False, index)
 
-    def _reading_dup(
-        self, reading: float | Dict[str, float | None] | None, candle: Candle
-    ) -> bool:
+    def _reading_dup(self, reading: Reading, candle: Candle) -> bool:
         """Optimisation method for 'calculate'.
         if calculating and not on latest Candle, check if reading match's a pre-existing reading.
         This prevent's it from continuing calculating if already has readings
@@ -297,7 +300,7 @@ class Indicator(ABC):
 
         return 0
 
-    def _set_reading(self, reading: float | dict | None, index: Optional[int] = None):
+    def _set_reading(self, reading: Reading, index: Optional[int] = None):
         index = index if index else self._active_index
 
         if self._sub_indicator:
@@ -357,9 +360,7 @@ class Indicator(ABC):
             return any(v is not None for v in value.values())
         return value is not None
 
-    def prev_reading(
-        self, name: Optional[str] = None, default: Optional[T] = None
-    ) -> float | dict | None | T:
+    def prev_reading(self, name: Optional[str] = None, default: Optional[T] = None) -> Reading | T:
         if len(self.candles) == 0 or self._active_index == 0:
             return default
         value = self.reading(name=name if name else self.name, index=self._active_index - 1)
@@ -370,7 +371,7 @@ class Indicator(ABC):
         name: Optional[str] = None,
         index: Optional[int] = None,
         default: Optional[T] = None,
-    ) -> float | dict | None | T:
+    ) -> Reading | T:
         """Simple method to get an indicator reading from the index
         Name can use '.' to find nested reading, E.G 'MACD_12_26_9.MACD"""
         value = reading_by_candle(
@@ -384,7 +385,7 @@ class Indicator(ABC):
         candle: Candle,
         name: Optional[str] = None,
         default: Optional[T] = None,
-    ) -> float | dict | None | T:
+    ) -> Reading | T:
         """Simple method to get an indicator reading from a candle,
         regardless of it's location"""
         value = reading_by_candle(candle, name if name else self.name)
@@ -487,9 +488,9 @@ class Managed(Indicator):
     def _generate_name(self) -> str:
         return self._name
 
-    def _calculate_reading(self, index: int) -> float | dict | None: ...
+    def _calculate_reading(self, index: int) -> Reading: ...
 
-    def set_reading(self, reading: float | dict, index: Optional[int] = None):
+    def set_reading(self, reading: Reading, index: Optional[int] = None):
         if index is None:
             index = self._active_index
         else:
