@@ -406,7 +406,7 @@ class Hexital:
         return [[]]
 
 
-T = TypeVar("T", IndicatorCollection, IndicatorCollection)
+T = TypeVar("T", bound=IndicatorCollection)
 
 
 class HexitalCol(Generic[T], Hexital):
