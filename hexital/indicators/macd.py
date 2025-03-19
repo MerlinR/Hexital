@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, Source
 from hexital.indicators import EMA
 
 
@@ -26,7 +26,7 @@ class MACD(Indicator):
     """
 
     _name: str = field(init=False, default="MACD")
-    source: str = "close"
+    source: Source = "close"
     fast_period: int = 12
     slow_period: int = 26
     signal_period: int = 9
@@ -44,7 +44,7 @@ class MACD(Indicator):
             self.fast_period, self.slow_period = self.slow_period, self.fast_period
 
     def _initialise(self):
-        self.data = self.add_managed_indicator(Managed(name=f"{self.name}_macd"))
+        self.macd = self.add_managed_indicator(Managed(name=f"{self.name}_macd"))
 
         self.sub_emaf = self.add_sub_indicator(
             EMA(
@@ -62,7 +62,7 @@ class MACD(Indicator):
         )
         self.sub_signal = self.add_managed_indicator(
             EMA(
-                source=self.data.name,
+                source=self.macd,
                 period=self.signal_period,
                 name=f"{self.name}_signal_line",
             ),
@@ -74,7 +74,7 @@ class MACD(Indicator):
         if ema_slow is not None:
             macd = self.sub_emaf.reading() - ema_slow
 
-            self.data.set_reading(macd)
+            self.macd.set_reading(macd)
             self.sub_signal.calculate_index(index)
 
             signal = self.sub_signal.reading()

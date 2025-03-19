@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, NestedSource, Source
 from hexital.indicators.ema import EMA
 from hexital.indicators.stdev import STDEV
 
@@ -25,7 +25,7 @@ class RVI(Indicator):
 
     _name: str = field(init=False, default="RVI")
     period: int = 14
-    source: str = "close"
+    source: Source = "close"
     _scalar: float = field(init=False, default=100.0)
 
     def _generate_name(self) -> str:
@@ -44,14 +44,14 @@ class RVI(Indicator):
         self.sub_pos = self.add_managed_indicator(
             EMA(
                 period=self.period,
-                source=f"{self.data.name}.pos",
+                source=NestedSource(self.data, "pos"),
                 name=f"{self._name}_pos_ema",
             ),
         )
         self.sub_neg = self.add_managed_indicator(
             EMA(
                 period=self.period,
-                source=f"{self.data.name}.neg",
+                source=NestedSource(self.data, "neg"),
                 name=f"{self._name}_neg_ema",
             ),
         )

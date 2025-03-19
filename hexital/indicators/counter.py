@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator
+from hexital.core.indicator import Indicator, Source
 
 
 @dataclass(kw_only=True)
@@ -19,11 +19,11 @@ class Counter(Indicator):
     """
 
     _name: str = field(init=False, default="COUNT")
-    source: str
+    source: Source
     count_value: bool | int = True
 
     def _generate_name(self) -> str:
-        return f"{self._name}_{self.source.split('.')[0]}"
+        return f"{self._name}_{str(self.source).split('.')[0]}"
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         count = self.prev_reading(default=0)

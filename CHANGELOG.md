@@ -16,6 +16,16 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Reworked and optimised 'append' and added 'insert' and 'prepend'
 - Added IndicatorCollection as a way to better reference Indicator's
 
+PLAN
+- Referencing rework - no more magic strings
+- Readings in indicators?
+- Better managed data
+- Candlestick rework - Handle timestamp less candles
+
+- get collection in
+- get indicator source stuff in?
+- add timestamp to readings
+
 ---
 
 ## 2.0.3

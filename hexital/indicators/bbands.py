@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator
+from hexital.core.indicator import Indicator, Source
 from hexital.indicators.sma import SMA
 from hexital.indicators.stdev import STDEV
 
@@ -25,7 +25,7 @@ class BBANDS(Indicator):
 
     _name: str = field(init=False, default="BBANDS")
     period: int = 5
-    source: str = "close"
+    source: Source = "close"
     _std: float = field(init=False, default=2.0)
 
     def _generate_name(self) -> str:

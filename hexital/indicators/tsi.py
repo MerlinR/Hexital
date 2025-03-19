@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, NestedSource, Source
 from hexital.indicators.ema import EMA
 
 
@@ -26,7 +26,7 @@ class TSI(Indicator):
     _name: str = field(init=False, default="TSI")
     period: int = 25
     smooth_period: Optional[int] = None
-    source: str = "close"
+    source: Source = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}_{self.smooth_period}"
@@ -38,35 +38,35 @@ class TSI(Indicator):
     def _initialise(self):
         self.data = self.add_managed_indicator(Managed())
 
-        self.data.add_sub_indicator(
+        self.sub_first = self.data.add_sub_indicator(
             EMA(
-                source=f"{self.name}_data.price",
+                source=NestedSource(self.data, "price"),
                 period=self.period,
                 name=f"{self.name}_first",
             ),
             False,
         )
 
-        self.sub_second = self.data.sub_indicators[f"{self.name}_first"].add_sub_indicator(
+        self.sub_second = self.sub_first.add_sub_indicator(
             EMA(
-                source=f"{self.name}_first",
+                source=self.sub_first,
                 period=self.smooth_period,
                 name=f"{self.name}_second",
             ),
             False,
         )
 
-        self.data.add_sub_indicator(
+        self.abs_first = self.data.add_sub_indicator(
             EMA(
-                source=f"{self.name}_data.abs_price",
+                source=NestedSource(self.data, "abs_price"),
                 period=self.period,
                 name=f"{self.name}_abs_first",
             ),
             False,
         )
-        self.abs_second = self.data.sub_indicators[f"{self.name}_abs_first"].add_sub_indicator(
+        self.abs_second = self.abs_first.add_sub_indicator(
             EMA(
-                source=f"{self.name}_abs_first",
+                source=self.abs_first,
                 period=self.smooth_period,
                 name=f"{self.name}_abs_second",
             ),

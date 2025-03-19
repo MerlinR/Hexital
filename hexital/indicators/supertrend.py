@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
 from hexital import indicators
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, NestedSource, Source, is_none
 
 
 @dataclass(kw_only=True)
@@ -23,7 +23,7 @@ class Supertrend(Indicator):
 
     _name: str = field(init=False, default="Supertrend")
     period: int = 7
-    source: str = "close"
+    source: Source = "close"
     multiplier: float = 3.0
 
     def _generate_name(self) -> str:
@@ -44,22 +44,22 @@ class Supertrend(Indicator):
 
         atr_ = self.sub_atr.reading()
 
-        if atr_ is not None:
+        if not is_none(atr_):
             mid_atr = self.multiplier * atr_
 
             upper = self.sub_hl.reading() + mid_atr
             lower = self.sub_hl.reading() - mid_atr
 
-            prev_upper = self.prev_reading(f"{self.name}_data.upper")
-            prev_lower = self.prev_reading(f"{self.name}_data.lower")
+            prev_upper = self.prev_reading(NestedSource(self.data, "upper"))
+            prev_lower = self.prev_reading(NestedSource(self.data, "lower"))
 
-            if self.prev_exists(f"{self.name}_data.lower"):
+            if self.prev_exists(NestedSource(self.data, "lower")):
                 if self.candles[index].close > prev_upper:
                     direction = 1
                 elif self.candles[index].close < prev_lower:
                     direction = -1
                 else:
-                    direction = self.prev_reading(f"{self.name}.direction")
+                    direction = self.prev_reading(NestedSource(self, "direction"))
                     if direction == 1 and lower < prev_lower:
                         lower = prev_lower
                     if direction == -1 and upper > prev_upper:

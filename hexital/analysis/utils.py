@@ -1,37 +1,34 @@
 from typing import List, Optional
 
 from hexital.core.candle import Candle
+from hexital.core.types import Reading
 from hexital.utils.candles import get_readings_period
 
 
-def highest(
-    candles: List[Candle], indicator: str, length: int, index: Optional[int] = None
-) -> float | None:
+def highest(values: List[Reading], length: int, index: Optional[int] = None) -> float | None:
     """
     Computes the highest value of the specified `indicator` over a given range of candles.
     The range includes the latest candle by default and considers up to the specified number of candles.
     """
     if index is None:
-        index = len(candles) - 1
+        index = len(values) - 1
 
-    readings = get_readings_period(candles, indicator, length, index, True)
+    readings = get_readings_period(values, length, index, True)
     return max(readings, default=None)
 
 
-def lowest(
-    candles: List[Candle], indicator: str, length: int, index: Optional[int] = None
-) -> float | None:
+def lowest(values: List[Reading], length: int, index: Optional[int] = None) -> float | None:
     """
     Computes the lowest value of the specified `indicator` over a given range of candles.
     The range includes the latest candle by default and considers up to the specified number of candles.
     """
 
-    if not candles:
+    if not values:
         return None
     if index is None:
-        index = len(candles) - 1
+        index = len(values) - 1
 
-    readings = get_readings_period(candles, indicator, length, index, True)
+    readings = get_readings_period(values, length, index, True)
     return min(readings, default=None)
 
 

@@ -1,19 +1,18 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List
 
 import pytest
 from hexital import TimeFrame
 from hexital.core.candle import Candle
-from hexital.core.indicator import Indicator
+from hexital.core.indicator import Indicator, Source
 
 
 @dataclass(kw_only=True)
 class FakeIndicator(Indicator):
     candles: list = field(default_factory=list)
-    timeframe: Optional[str | TimeFrame] = None
     indicator_name: str = "Fake"
     period: int = 10
-    source: str = "close"
+    source: Source = "close"
 
     def _generate_name(self) -> str:
         return f"{self.indicator_name}_{self.period}"

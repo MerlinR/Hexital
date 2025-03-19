@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Optional
+from typing import Optional, TypeAlias
 
 from hexital.exceptions import InvalidTimeFrame
 
@@ -27,6 +29,9 @@ class TimeFrame(Enum):
     HOUR4 = "H4"
     DAY = "D1"
     WEEK = "D7"
+
+
+TimeFramesSource: TypeAlias = str | TimeFrame | timedelta | int
 
 
 def timeframe_validation(timeframe: Optional[str | TimeFrame | timedelta | int] = None) -> bool:

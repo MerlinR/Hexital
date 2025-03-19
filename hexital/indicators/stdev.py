@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from math import sqrt
 
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, NestedSource, Source
 
 
 @dataclass(kw_only=True)
@@ -24,7 +24,7 @@ class STDEV(Indicator):
 
     _name: str = field(init=False, default="STDEV")
     period: int = 30
-    source: str = "close"
+    source: Source = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
@@ -43,8 +43,8 @@ class STDEV(Indicator):
         if self.reading_period(self.period + 1, self.source, index):
             popped_reading = self.reading(self.source, index - self.period)
 
-        old_mean = self.prev_reading(f"{self.name}_data.mean", 0.0)
-        variance = self.prev_reading(f"{self.name}_data.variance", 0.0)
+        old_mean = self.prev_reading(NestedSource(self.data, "mean"), 0.0)
+        variance = self.prev_reading(NestedSource(self.data, "variance"), 0.0)
 
         mean_ = old_mean + (reading - popped_reading) / self.period
 

@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator
+from hexital.core.indicator import Indicator, Source
 from hexital.indicators.stdev import STDEV
 
 
@@ -24,7 +24,7 @@ class STDEVT(Indicator):
 
     _name: str = field(init=False, default="STDEVT")
     period: int = 10
-    source: str = "close"
+    source: Source = "close"
     multiplier: float = 2.0
 
     def _generate_name(self) -> str:

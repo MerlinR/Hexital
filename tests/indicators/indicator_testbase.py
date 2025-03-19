@@ -35,6 +35,7 @@ class IndicatorTestBase:
         return differences <= acceptable_diff
 
     def show_results(self, differences: int, results: list, acceptable_diff: int, verbose: bool):
+        print("Result\t\t::\t\tExpected")
         for row in results:
             if row[-1] is False:
                 print(f"{bcolors.FAIL}{row[0]}: {row[1]}\t!=\t{row[2]}{bcolors.CLEAR}")
@@ -59,10 +60,12 @@ class IndicatorTestBase:
         for i, (res, exp) in enumerate(zip(result, expected)):
             results.append([i, res, exp, True])
 
-            if res is None or exp is None:
-                if (res is None and exp == 0) or res == 0 and exp is None:
-                    continue
-                elif res != exp:
+            if res is None and exp is not None:
+                if res != exp:
+                    differences += 1
+                    results[-1][-1] = False
+            elif exp is None and res is not None:
+                if res != exp:
                     differences += 1
                     results[-1][-1] = False
             elif isinstance(res, bool):

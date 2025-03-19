@@ -6,6 +6,7 @@ from typing import List, Optional, Set
 
 from hexital.core.candle import Candle
 from hexital.core.candlestick_type import CandlestickType
+from hexital.core.types import Candles
 from hexital.exceptions import InvalidCandleOrder
 from hexital.utils.candles import reading_by_candle
 from hexital.utils.timeframe import (
@@ -69,6 +70,10 @@ class CandleManager:
     def name(self, name: str):
         self._name = name
 
+    @property
+    def length(self) -> int:
+        return len(self.candles)
+
     def _candle_tasks(self):
         self.convert_candles()
         self.trim_candles()
@@ -79,9 +84,7 @@ class CandleManager:
                 return True
         return False
 
-    def _parse_candles(
-        self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]
-    ) -> List[Candle]:
+    def _parse_candles(self, candles: Candles) -> List[Candle]:
         candles_ = []
 
         if isinstance(candles, Candle):
@@ -103,7 +106,7 @@ class CandleManager:
 
         return candles_
 
-    def prepend(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
+    def prepend(self, candles: Candles):
         candles_ = self._parse_candles(candles)
 
         for candle in reversed(candles_):
@@ -114,7 +117,7 @@ class CandleManager:
         self.resample_candles(0, len(candles_))
         self._candle_tasks()
 
-    def append(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
+    def append(self, candles: Candles):
         candles_ = self._parse_candles(candles)
         start_index = len(self.candles) - 1 if len(self.candles) > 0 else 0
 
@@ -127,7 +130,7 @@ class CandleManager:
         self.resample_candles(start_index)
         self._candle_tasks()
 
-    def insert(self, candles: Candle | List[Candle] | dict | List[dict] | list | List[list]):
+    def insert(self, candles: Candles):
         candles_ = self._parse_candles(candles)
 
         self.sort_candles(candles_)
@@ -187,7 +190,7 @@ class CandleManager:
     def trim_candles(self):
         if self.candle_life is None or not self.candles:
             return
-
+        return
         latest = self.candles[-1].timestamp
 
         while self.candles[0].timestamp and self.candles[0].timestamp < latest - self.candle_life:

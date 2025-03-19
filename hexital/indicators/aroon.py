@@ -34,6 +34,7 @@ class AROON(Indicator):
             "AROOND": None,
             "AROONOSC": None,
         }
+
         if self.prev_exists() or self.reading_period(self.period + 1, "high"):
             aroon["AROONU"] = (
                 (self.period - movement.highestbar(self.candles, "high", self.period + 1, index))

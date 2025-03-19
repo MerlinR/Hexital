@@ -6,7 +6,7 @@ import pytest
 from hexital import Candle
 from hexital.analysis.patterns import doji
 from hexital.candlesticks.heikinashi import HeikinAshi
-from hexital.core.indicator import Indicator
+from hexital.core.indicator import Indicator, Source
 from hexital.exceptions import InvalidCandlestickType
 from hexital.indicators.amorph import Amorph
 
@@ -19,7 +19,7 @@ class FakeIndicator(Indicator):
     rounding: int | None = 4
 
     period: int = 10
-    source: str = "close"
+    source: Source = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
@@ -75,9 +75,9 @@ def test_read(minimal_candles: List[Candle]):
 @pytest.mark.usefixtures("minimal_candles")
 def test_has_reading(minimal_candles: List[Candle]):
     test = FakeIndicator(candles=minimal_candles)
-    assert test.has_reading is False
+    assert test.exists() is False
     test.calculate()
-    assert test.has_reading is True
+    assert test.exists() is True
 
 
 @pytest.mark.usefixtures("minimal_candles")
@@ -163,11 +163,11 @@ class TestSettings:
 @pytest.mark.usefixtures("minimal_candles")
 def test_purge(minimal_candles: List[Candle]):
     test = FakeIndicator(candles=minimal_candles)
-    assert test.has_reading is False
+    assert test.exists() is False
     test.calculate()
-    assert test.has_reading is True
+    assert test.exists() is True
     test.purge()
-    assert test.has_reading is False
+    assert test.exists() is False
 
 
 @pytest.mark.usefixtures("minimal_candles")

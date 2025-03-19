@@ -1,7 +1,7 @@
 import math
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, Source
 
 
 @dataclass(kw_only=True)
@@ -25,7 +25,7 @@ class JMA(Indicator):
 
     _name: str = field(init=False, default="JMA")
     period: int = 7
-    source: str = "close"
+    source: Source = "close"
     phase: float = 0.0
 
     _phase_ratio: float = field(init=False, default=0)

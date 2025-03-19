@@ -1,6 +1,9 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, NestedSource, Source
+
+GAIN = "gain"
+LOSS = "loss"
 
 
 @dataclass(kw_only=True)
@@ -22,7 +25,7 @@ class RSI(Indicator):
 
     _name: str = field(init=False, default="RSI")
     period: int = 14
-    source: str = "close"
+    source: Source = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
@@ -41,11 +44,13 @@ class RSI(Indicator):
             change_loss = change if change > 0 else 0.0
 
             gains = (
-                (self.prev_reading(f"{self.name}_data.gain") * (self.period - 1)) + change_gain
+                (self.prev_reading(NestedSource(self.data, GAIN)) * (self.period - 1))
+                + change_gain
             ) / self.period
 
             losses = (
-                (self.prev_reading(f"{self.name}_data.loss") * (self.period - 1)) + change_loss
+                (self.prev_reading(NestedSource(self.data, LOSS)) * (self.period - 1))
+                + change_loss
             ) / self.period
         elif self.reading_period(self.period + 1, self.source):
             changes = [
@@ -56,7 +61,7 @@ class RSI(Indicator):
             gains = sum(chng for chng in changes if chng > 0) / self.period
             losses = sum(abs(chng) for chng in changes if chng < 0) / self.period
 
-        self.data.set_reading({"gain": gains, "loss": losses})
+        self.data.set_reading({GAIN: gains, LOSS: losses})
 
         if gains is not None and losses is not None:
             return 100.0 - (100.0 / (1.0 + (gains / losses)))

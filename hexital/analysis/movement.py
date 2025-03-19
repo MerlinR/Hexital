@@ -80,6 +80,12 @@ def negative(candles: Candle | List[Candle], index: int = -1) -> bool:
     return candles[index].negative
 
 
+# def above(
+#     indicator: Source,
+#     indicator_cmp: Source,
+#     length: int = 0,
+#     index: int = -1,
+# ) -> bool:
 def above(
     candles: Indicator | Hexital | List[Candle],
     indicator: str,
