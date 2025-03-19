@@ -68,7 +68,7 @@ class Hexital:
         if not indicators:
             self._indicators = {}
         elif isinstance(indicators, IndicatorCollection):
-            self._indicators = self._validate_indicators(indicators.as_list())
+            self._indicators = self._validate_indicators(indicators.collection_list())
         else:
             self._indicators = self._validate_indicators(indicators)
 
@@ -179,14 +179,14 @@ class Hexital:
     def readings(self) -> Dict[str, List[Reading]]:
         """Returns a Dictionary of all the Indicators and there results in a list format."""
 
-        return {name: indicator.as_list() for name, indicator in self._indicators.items()}
+        return {name: indicator.readings() for name, indicator in self._indicators.items()}
 
     def reading_as_list(self, name: str) -> List[Reading]:
         """Find given indicator and returns the readings as a list
         Full Name of the indicator E.G `EMA_12` OR `MACD_12_26_9.MACD`"""
         primary_name = name.split(".")[0]
         if self._indicators.get(primary_name):
-            return self._indicators[primary_name].as_list(name)
+            return self._indicators[primary_name].readings(name)
         return []
 
     def add_indicator(
@@ -428,7 +428,7 @@ class HexitalCol(Generic[T], Hexital):
         super().__init__(
             name,
             candles,
-            indicators.as_list(),
+            indicators.collection_list(),
             description,
             timeframe,
             timeframe_fill,

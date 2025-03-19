@@ -152,7 +152,7 @@ class Indicator(ABC):
 
         return output
 
-    def as_list(self, name: Optional[str] = None) -> List[Reading]:
+    def readings(self, name: Optional[str] = None) -> List[Reading]:
         """
         Retrieve the indicator values for all candles as a list.
 

@@ -6,5 +6,5 @@ from hexital.core.indicator import Indicator
 
 @dataclass
 class IndicatorCollection:
-    def as_list(self) -> Sequence[Indicator]:
+    def collection_list(self) -> Sequence[Indicator]:
         return [f for f in vars(self).values() if isinstance(f, Indicator)]

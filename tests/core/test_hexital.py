@@ -305,7 +305,7 @@ def test_append_hexital_calc(candles, expected_ema):
         strat.append(candle)
         strat.calculate()
 
-    assert pytest.approx(strat.indicator("EMA_10").as_list()) == expected_ema
+    assert pytest.approx(strat.indicator("EMA_10").readings()) == expected_ema
 
 
 @pytest.mark.usefixtures("candles", "expected_rsi")
@@ -315,7 +315,7 @@ def test_append_hexital_calc_sub_indicators(candles, expected_rsi):
     for candle in candles:
         strat.append(candle)
         strat.calculate()
-    assert pytest.approx(strat.indicator("RSI_14").as_list()) == expected_rsi
+    assert pytest.approx(strat.indicator("RSI_14").readings()) == expected_rsi
 
 
 class TestHexitalCandleManagerInheritance:

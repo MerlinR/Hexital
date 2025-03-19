@@ -34,7 +34,7 @@ class EMA(Indicator):
     def _validate_fields(self):
         self._alpha = float(self.smoothing / (self.period + 1.0))
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         prev_ema = self.prev_reading()
         if prev_ema is not None:
             return float(

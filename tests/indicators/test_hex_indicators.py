@@ -13,7 +13,7 @@ class TestHexPatterns(IndicatorTestBase):
             [indicators.Supertrend(), indicators.Counter(source="Supertrend_7.direction")],
         )
         strat.calculate()
-        assert self.verify(strat.indicator("COUNT_Supertrend_7").as_list(), expected_counter_bull)
+        assert self.verify(strat.indicator("COUNT_Supertrend_7").readings(), expected_counter_bull)
 
     @pytest.mark.usefixtures("candles", "expected_counter_bear")
     def test_counter_inverse(self, candles, expected_counter_bear):
@@ -27,22 +27,22 @@ class TestHexPatterns(IndicatorTestBase):
         )
         strat.calculate()
 
-        assert self.verify(strat.indicator("COUNT_Supertrend_7").as_list(), expected_counter_bear)
+        assert self.verify(strat.indicator("COUNT_Supertrend_7").readings(), expected_counter_bear)
 
     @pytest.mark.usefixtures("candles", "expected_highestlowest")
     def test_highest_lowest(self, candles, expected_highestlowest):
         test = indicators.HL(candles=candles)
         test.calculate()
-        assert self.verify(test.as_list(), expected_highestlowest)
+        assert self.verify(test.readings(), expected_highestlowest)
 
     @pytest.mark.usefixtures("candles", "expected_stdevt")
     def test_stdevthres(self, candles, expected_stdevt):
         test = indicators.STDEVT(candles=candles)
         test.calculate()
-        assert self.verify(test.as_list(), expected_stdevt)
+        assert self.verify(test.readings(), expected_stdevt)
 
     @pytest.mark.usefixtures("candles", "expected_pivotpoints")
     def test_pivot_points(self, candles, expected_pivotpoints):
         test = indicators.PivotPoints(candles=candles)
         test.calculate()
-        assert self.verify(test.as_list(), expected_pivotpoints)
+        assert self.verify(test.readings(), expected_pivotpoints)
