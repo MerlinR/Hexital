@@ -6,7 +6,7 @@ import pytest
 from hexital import Candle, Hexital, TimeFrame
 from hexital.analysis.patterns import doji
 from hexital.candlesticks.heikinashi import HeikinAshi
-from hexital.core.hexital import HexitalRef
+from hexital.core.hexital import HexitalCol
 from hexital.core.indicator import Indicator
 from hexital.core.indicator_collection import IndicatorCollection
 from hexital.exceptions import (
@@ -674,7 +674,7 @@ class TestIndicatorCollection:
         class customCol(IndicatorCollection):
             fake: Indicator = field(default_factory=FakeIndicator)
 
-        strat = HexitalRef("collection", minimal_candles, customCol())
+        strat = HexitalCol("collection", minimal_candles, customCol())
 
         assert strat.collection.fake
         assert strat.collection.fake.reading is not None

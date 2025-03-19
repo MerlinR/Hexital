@@ -410,7 +410,7 @@ class Hexital:
 T = TypeVar("T", IndicatorCollection, IndicatorCollection)
 
 
-class HexitalRef(Generic[T], Hexital):
+class HexitalCol(Generic[T], Hexital):
     collection: T
 
     def __init__(
