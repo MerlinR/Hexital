@@ -35,12 +35,11 @@ class STDEVT(Indicator):
             STDEV(
                 source=self.source,
                 period=self.period,
-                name=f"{self.name}_stdev",
             )
         )
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        if not self.exists(f"{self.name}_stdev"):
+        if not self.exists(self.sub_stdev):
             return False
 
         return (

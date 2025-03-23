@@ -45,8 +45,10 @@ class BBANDS(Indicator):
             sma = self.sub_sma.reading()
             stdev = self.sub_stdev.reading()
 
-            bbands["BBM"] = sma
-            bbands["BBL"] = sma - (stdev * self._std)
-            bbands["BBU"] = sma + (stdev * self._std)
+            bbands = {
+                "BBM": sma,
+                "BBL": sma - (stdev * self._std),
+                "BBU": sma + (stdev * self._std),
+            }
 
         return bbands

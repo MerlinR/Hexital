@@ -50,6 +50,7 @@ class Indicator(ABC):
     sub_indicators: Dict[str, Indicator] = field(init=False, default_factory=dict)
     managed_indicators: Dict[str, Managed | Indicator] = field(init=False, default_factory=dict)
     _mode: IndicatorMode = field(init=False, default=IndicatorMode.STAND)
+    _generated_name: bool = field(init=False, default=False)
     _calc_prior: bool = field(init=False, default=True)
 
     _name: str = field(init=False, default="")
@@ -86,6 +87,7 @@ class Indicator(ABC):
         if self.name:
             name = self.name
         else:
+            self._generated_name = True
             name = self._generate_name()
             if self._candles.timeframe:
                 name += f"_{self._candles.name}"
@@ -319,6 +321,10 @@ class Indicator(ABC):
         """Adds sub indicator, this will auto calculate with indicator"""
         indicator._mode = IndicatorMode.SUB
         indicator._calc_prior = prior_calc
+
+        if indicator._generated_name:
+            indicator.name = f"{self.name}-{indicator.name}"
+
         indicator.candle_manager = self._candles
         indicator.rounding = None
         self.sub_indicators[indicator.name] = indicator
@@ -326,9 +332,13 @@ class Indicator(ABC):
 
     def add_managed_indicator(self, indicator: N) -> N:
         """Adds managed sub indicator, this will not auto calculate with indicator"""
+        indicator._mode = IndicatorMode.MANAGED
+
         if indicator.name == MANAGED_NAME:
             indicator.name = f"{self.name}_data"
-        indicator._mode = IndicatorMode.MANAGED
+        elif indicator._generated_name:
+            indicator.name = f"{self.name}-{indicator.name}"
+
         indicator.candle_manager = self._candles
         indicator.rounding = None
         self.managed_indicators[indicator.name] = indicator

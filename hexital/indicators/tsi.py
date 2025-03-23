@@ -48,28 +48,16 @@ class TSI(Indicator):
         )
 
         self.sub_second = self.sub_first.add_sub_indicator(
-            EMA(
-                source=self.sub_first,
-                period=self.smooth_period,
-                name=f"{self.name}_second",
-            ),
+            EMA(source=self.sub_first, period=self.smooth_period),
             False,
         )
 
         self.abs_first = self.data.add_sub_indicator(
-            EMA(
-                source=NestedSource(self.data, "abs_price"),
-                period=self.period,
-                name=f"{self.name}_abs_first",
-            ),
+            EMA(source=NestedSource(self.data, "abs_price"), period=self.period),
             False,
         )
         self.abs_second = self.abs_first.add_sub_indicator(
-            EMA(
-                source=self.abs_first,
-                period=self.smooth_period,
-                name=f"{self.name}_abs_second",
-            ),
+            EMA(source=self.abs_first, period=self.smooth_period),
             False,
         )
 

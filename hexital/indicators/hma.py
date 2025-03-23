@@ -31,28 +31,14 @@ class HMA(Indicator):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.sub_wma = self.add_sub_indicator(
-            WMA(
-                source=self.source,
-                period=self.period,
-                name=f"{self.name}_WMA",
-            )
-        )
+        self.sub_wma = self.add_sub_indicator(WMA(source=self.source, period=self.period))
         self.sub_wmah = self.add_sub_indicator(
-            WMA(
-                source=self.source,
-                period=int(self.period / 2),
-                name=f"{self.name}_WMAh",
-            )
+            WMA(source=self.source, period=int(self.period / 2))
         )
 
-        self.sub_hma = self.add_managed_indicator(Managed(name=f"{self.name}_HMAr"))
+        self.sub_hma = self.add_managed_indicator(Managed())
         self.sub_hma_smoothed = self.sub_hma.add_sub_indicator(
-            WMA(
-                source=self.sub_hma,
-                period=int(math.sqrt(self.period)),
-                name=f"{self.name}_HMAs",
-            ),
+            WMA(source=self.sub_hma, period=int(math.sqrt(self.period))),
             False,
         )
 

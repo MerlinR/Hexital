@@ -33,14 +33,7 @@ class KC(Indicator):
 
     def _initialise(self):
         self.sub_atr = self.add_sub_indicator(ATR(period=self.period))
-
-        self.sub_ema = self.add_sub_indicator(
-            EMA(
-                source=self.source,
-                period=self.period,
-                name=f"{self.name}_EMA",
-            )
-        )
+        self.sub_ema = self.add_sub_indicator(EMA(source=self.source, period=self.period))
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         atr_ = self.sub_atr.reading()

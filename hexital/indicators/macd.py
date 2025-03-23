@@ -46,26 +46,10 @@ class MACD(Indicator):
     def _initialise(self):
         self.data = self.add_managed_indicator(Managed(name=f"{self.name}_macd"))
 
-        self.sub_emaf = self.add_sub_indicator(
-            EMA(
-                source=self.source,
-                period=self.fast_period,
-                name=f"{self.name}_EMA_fast",
-            )
-        )
-        self.sub_emas = self.add_sub_indicator(
-            EMA(
-                source=self.source,
-                period=self.slow_period,
-                name=f"{self.name}_EMA_slow",
-            )
-        )
+        self.sub_emaf = self.add_sub_indicator(EMA(source=self.source, period=self.fast_period))
+        self.sub_emas = self.add_sub_indicator(EMA(source=self.source, period=self.slow_period))
         self.sub_signal = self.add_managed_indicator(
-            EMA(
-                source=self.data,
-                period=self.signal_period,
-                name=f"{self.name}_signal_line",
-            ),
+            EMA(source=self.data, period=self.signal_period)
         )
 
     def _calculate_reading(self, index: int) -> float | dict | None:

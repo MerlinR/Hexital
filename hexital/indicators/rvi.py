@@ -34,13 +34,7 @@ class RVI(Indicator):
     def _initialise(self):
         self.data = self.add_managed_indicator(Managed())
 
-        self.sub_stdev = self.add_sub_indicator(
-            STDEV(
-                source=self.source,
-                period=self.period,
-                name=f"{self._name}_stdev",
-            ),
-        )
+        self.sub_stdev = self.add_sub_indicator(STDEV(source=self.source, period=self.period))
         self.sub_pos = self.add_managed_indicator(
             EMA(
                 period=self.period,

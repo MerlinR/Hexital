@@ -17,6 +17,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 - Reworked and optimised 'append' and added 'insert' and 'prepend'
 - Added IndicatorCollection as a way to better reference Indicator's
+- More options when setting indicator 'Source' - str | Indicator | NestedSource
+- Updated Sub/Managed Indicator's to generate name based of parents if none set
 
 ---
 
