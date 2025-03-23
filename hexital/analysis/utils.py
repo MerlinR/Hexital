@@ -142,7 +142,7 @@ def _high_low_percentage(
     return high_low_avg(candles, length, index) * percentage
 
 
-def candle_doji(candles: List[Candle], index: Optional[int] = None, length: int = 10) -> float:
+def candle_bodydoji(candles: List[Candle], index: Optional[int] = None, length: int = 10) -> float:
     """real body is like doji's body when it's shorter than 10% the average of the 10 previous candles' high-low range"""
     return _high_low_percentage(candles, index=index, length=length, percentage=0.1)
 
