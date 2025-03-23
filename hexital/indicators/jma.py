@@ -1,7 +1,7 @@
 import math
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, NestedSource, Source
 
 
 @dataclass(kw_only=True)
@@ -25,7 +25,7 @@ class JMA(Indicator):
 
     _name: str = field(init=False, default="JMA")
     period: int = 7
-    source: str = "close"
+    source: Source = "close"
     phase: float = 0.0
 
     _phase_ratio: float = field(init=False, default=0)
@@ -59,13 +59,13 @@ class JMA(Indicator):
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         price = self.reading(self.source)
-        uband = self.prev_reading(f"{self.name}_data.uband", price)
-        lband = self.prev_reading(f"{self.name}_data.lband", price)
-        vsums = self.prev_reading(f"{self.name}_data.vsums", 0)
-        ma_one = self.prev_reading(f"{self.name}_data.ma_one", price)
-        ma_two = self.prev_reading(f"{self.name}_data.ma_two", 0)
-        det_one = self.prev_reading(f"{self.name}_data.det_one", 0)
-        det_two = self.prev_reading(f"{self.name}_data.det_two", 0)
+        uband = self.prev_reading(NestedSource(self.data, "uband"), price)
+        lband = self.prev_reading(NestedSource(self.data, "lband"), price)
+        vsums = self.prev_reading(NestedSource(self.data, "vsums"), 0)
+        ma_one = self.prev_reading(NestedSource(self.data, "ma_one"), price)
+        ma_two = self.prev_reading(NestedSource(self.data, "ma_two"), 0)
+        det_one = self.prev_reading(NestedSource(self.data, "det_one"), 0)
+        det_two = self.prev_reading(NestedSource(self.data, "det_two"), 0)
 
         # Price Volatility
         del1 = price - uband
@@ -74,10 +74,10 @@ class JMA(Indicator):
         self.data.set_reading({"volty": volty})
 
         # Relative Price Volatility
-        vsums = self.candles_average(10, f"{self.name}_data.volty")
+        vsums = self.candles_average(10, NestedSource(self.data, "volty"))
         self.data.set_reading({"vsums": vsums, "volty": volty})
 
-        avg_volty = self.candles_average(65, f"{self.name}_data.vsums")
+        avg_volty = self.candles_average(65, NestedSource(self.data, "vsums"))
         d_volty = 0 if avg_volty == 0 else volty / avg_volty
         r_volt = max(1.0, min(pow(self._length_1, 1 / self._power_1), d_volty))
 

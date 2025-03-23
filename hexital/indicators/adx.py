@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, NestedSource
 from hexital.indicators.atr import ATR
 from hexital.indicators.rma import RMA
 
@@ -49,7 +49,7 @@ class ADX(Indicator):
             RMA(
                 name=f"{self.name}_positive",
                 period=self.period,
-                source=f"{self.data.name}.positive",
+                source=NestedSource(self.data, "positive"),
             ),
             False,
         )
@@ -57,7 +57,7 @@ class ADX(Indicator):
             RMA(
                 name=f"{self.name}_negative",
                 period=self.period,
-                source=f"{self.data.name}.negative",
+                source=NestedSource(self.data, "negative"),
             ),
             False,
         )
@@ -65,7 +65,7 @@ class ADX(Indicator):
             RMA(
                 name=f"{self.name}_dx",
                 period=self.period_signal,
-                source=f"{self.data.name}.dx",
+                source=NestedSource(self.data, "dx"),
             ),
         )
 

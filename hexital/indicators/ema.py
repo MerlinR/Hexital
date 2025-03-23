@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator
+from hexital.core.indicator import Indicator, Source
 
 
 @dataclass(kw_only=True)
@@ -24,7 +24,7 @@ class EMA(Indicator):
 
     _name: str = field(init=False, default="EMA")
     period: int = 10
-    source: str = "close"
+    source: Source = "close"
     smoothing: float = 2.0
     _alpha: float = field(init=False, default=0)
 

@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator
+from hexital.core.indicator import Indicator, Source
 
 
 @dataclass(kw_only=True)
@@ -24,7 +24,7 @@ class RMA(Indicator):
 
     _name: str = field(init=False, default="RMA")
     period: int = 10
-    source: str = "close"
+    source: Source = "close"
     _alpha: float = field(init=False, default=0)
 
     def _generate_name(self) -> str:

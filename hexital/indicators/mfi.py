@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, NestedSource, Source
 from hexital.indicators.hlca import HLCA
 
 
@@ -23,7 +23,7 @@ class MFI(Indicator):
 
     _name: str = field(init=False, default="MFI")
     period: int = 14
-    source: str = "close"
+    source: Source = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
@@ -46,8 +46,8 @@ class MFI(Indicator):
             self.data.set_reading({"positive": 0, "negative": 0})
 
         if self.prev_exists() or self.sub_hlca.reading_period(self.period + 1, index=index):
-            pos_money = self.candles_sum(self.period, f"{self.data.name}.positive")
-            neg_money = self.candles_sum(self.period, f"{self.data.name}.negative")
+            pos_money = self.candles_sum(self.period, NestedSource(self.data, "positive"))
+            neg_money = self.candles_sum(self.period, NestedSource(self.data, "negative"))
 
             if pos_money and neg_money:
                 return 100 * (pos_money / (pos_money + neg_money))

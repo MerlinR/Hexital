@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, NestedSource, Source
 
 
 @dataclass(kw_only=True)
@@ -24,7 +24,7 @@ class CMO(Indicator):
 
     _name: str = field(init=False, default="CMO")
     period: int = 14
-    source: str = "close"
+    source: Source = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
@@ -43,11 +43,12 @@ class CMO(Indicator):
             change_loss = change if change > 0 else 0.0
 
             gains = (
-                (self.prev_reading(f"{self.data.name}.gain") * (self.period - 1)) + change_gain
+                (self.prev_reading(NestedSource(self.data, "gain")) * (self.period - 1))
+                + change_gain
             ) / self.period
 
             losses = (
-                (self.data.prev_reading(f"{self.data.name}.loss") * (self.period - 1))
+                (self.data.prev_reading(NestedSource(self.data, "loss")) * (self.period - 1))
                 + change_loss
             ) / self.period
 

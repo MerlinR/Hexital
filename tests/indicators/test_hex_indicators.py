@@ -13,7 +13,9 @@ class TestHexPatterns(IndicatorTestBase):
             [indicators.Supertrend(), indicators.Counter(source="Supertrend_7.direction")],
         )
         strat.calculate()
-        assert self.verify(strat.indicator("COUNT_Supertrend_7").readings(), expected_counter_bull)
+        assert self.verify(
+            strat.indicator("COUNT_Supertrend_7-direction").readings(), expected_counter_bull
+        )
 
     @pytest.mark.usefixtures("candles", "expected_counter_bear")
     def test_counter_inverse(self, candles, expected_counter_bear):
@@ -27,7 +29,9 @@ class TestHexPatterns(IndicatorTestBase):
         )
         strat.calculate()
 
-        assert self.verify(strat.indicator("COUNT_Supertrend_7").readings(), expected_counter_bear)
+        assert self.verify(
+            strat.indicator("COUNT_Supertrend_7-direction").readings(), expected_counter_bear
+        )
 
     @pytest.mark.usefixtures("candles", "expected_highestlowest")
     def test_highest_lowest(self, candles, expected_highestlowest):

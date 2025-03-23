@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from copy import copy
 from dataclasses import dataclass, field
 from datetime import timedelta
-from typing import Dict, List, Optional, TypeVar
+from typing import Dict, List, Optional, Tuple, TypeAlias, TypeVar
 
 from hexital.core import Reading
 from hexital.core.candle import Candle
@@ -15,11 +15,12 @@ from hexital.utils.candles import (
     candles_sum,
     get_readings_period,
     reading_by_candle,
+    reading_by_index,
     reading_count,
     reading_period,
 )
 from hexital.utils.candlesticks import validate_candlesticktype
-from hexital.utils.indexing import absindex, round_values
+from hexital.utils.indexing import absindex, round_values, valid_index
 from hexital.utils.timeframe import (
     TimeFramesSource,
     convert_timeframe_to_timedelta,
@@ -71,14 +72,10 @@ class Indicator(ABC):
 
         self._internal_generate_name()
 
-    def __str__(self):
-        data = vars(self)
-        data.pop("candles")
-        return str(data)
+    def __repr__(self) -> str:
+        return self.name
 
     def _internal_generate_name(self):
-        name = ""
-
         if self.name:
             name = self.name
         else:
@@ -86,7 +83,7 @@ class Indicator(ABC):
             if self._candles.timeframe:
                 name += f"_{self._candles.name}"
 
-        self.name = self._sanitise_name(name)
+        self.name = name.replace(".", "-")
 
     def _initialise(self):
         return
@@ -96,9 +93,6 @@ class Indicator(ABC):
 
     @abstractmethod
     def _generate_name(self) -> str: ...
-
-    def _sanitise_name(self, name: str) -> str:
-        return name.replace(".", ",")
 
     @property
     def candle_manager(self) -> CandleManager:
@@ -154,7 +148,7 @@ class Indicator(ABC):
 
     def readings(self, name: Optional[str] = None) -> List[Reading]:
         """
-        Retrieve the indicator values for all candles as a list.
+        Retrieve the indicator readings for within the candles as a list.
 
         This method collects the readings of a specified indicator for all candles
         and returns them as a list. If no name is provided, the generated name of
@@ -323,7 +317,7 @@ class Indicator(ABC):
         self.sub_indicators[indicator.name] = indicator
         return self.sub_indicators[indicator.name]
 
-    def add_managed_indicator(self, indicator: Managed | Indicator) -> Managed | Indicator:
+    def add_managed_indicator(self, indicator: N) -> N:
         """Adds managed sub indicator, this will not auto calculate with indicator"""
         if indicator.name == MANAGED_NAME:
             indicator.name = f"{self.name}_data"
@@ -333,79 +327,90 @@ class Indicator(ABC):
         self.managed_indicators[indicator.name] = indicator
         return self.managed_indicators[indicator.name]
 
-    def exists(self, name: Optional[str] = None) -> bool:
-        value = self.reading(self.name if not name else name)
+    def _find_reading(self, source: Source | None = None, index: Optional[int] = None) -> Reading:
+        if index is None:
+            index = self._active_index
+        elif valid_index(index, len(self.candles)):
+            index = index
+        else:
+            return None
+
+        if not source or (isinstance(source, str) and source == self.name):
+            if not self.candles:
+                return None
+            return reading_by_index(self.candles, self.name, index)
+        elif isinstance(source, str):
+            return reading_by_index(self.candles, source, index)
+        else:
+            return reading_by_index(self.candles, source.name, index)
+
+    def _find_candles(self, source: Source | None = None) -> Tuple[List[Candle], str]:
+        if not source or (isinstance(source, str) and source == self.name):
+            return self.candles, self.name
+        elif isinstance(source, str):
+            return self.candles, source
+        else:
+            return source.candles, source.name
+
+    def exists(self, source: Optional[Source] = None) -> bool:
+        value = self._find_reading(source)
         if isinstance(value, dict):
             return any(v is not None for v in value.values())
         return value is not None
 
-    def prev_exists(self, name: Optional[str] = None) -> bool:
-        value = self.prev_reading(self.name if not name else name)
+    def prev_exists(self, source: Optional[Source] = None) -> bool:
+        if self._active_index == 0:
+            return False
+        value = self._find_reading(source, self._active_index - 1)
         if isinstance(value, dict):
             return any(v is not None for v in value.values())
         return value is not None
 
-    def prev_reading(self, name: Optional[str] = None, default: Optional[T] = None) -> Reading | T:
-        if len(self.candles) == 0 or self._active_index == 0:
+    def prev_reading(
+        self, source: Optional[Source] = None, default: Optional[T] = None
+    ) -> Reading | T:
+        if self._active_index == 0:
             return default
-        value = self.reading(name=name if name else self.name, index=self._active_index - 1)
+        value = self._find_reading(source, self._active_index - 1)
         return value if value is not None else default
 
     def reading(
         self,
-        name: Optional[str] = None,
+        source: Source | None = None,
         index: Optional[int] = None,
         default: Optional[T] = None,
     ) -> Reading | T:
-        """Simple method to get an indicator reading from the index
-        Name can use '.' to find nested reading, E.G 'MACD_12_26_9.MACD"""
-        value = reading_by_candle(
-            self.candles[index if index is not None else self._active_index],
-            name if name else self.name,
-        )
+        """Simple method to get an indicator reading from the index"""
+        value = self._find_reading(source, index)
         return value if value is not None else default
 
-    def read_candle(
-        self,
-        candle: Candle,
-        name: Optional[str] = None,
-        default: Optional[T] = None,
-    ) -> Reading | T:
-        """Simple method to get an indicator reading from a candle,
-        regardless of it's location"""
-        value = reading_by_candle(candle, name if name else self.name)
-        return value if value is not None else default
-
-    def reading_count(self, name: Optional[str] = None, index: Optional[int] = None) -> int:
+    def reading_count(self, source: Source | None = None, index: Optional[int] = None) -> int:
         """Returns how many instance of the given indicator exist"""
         return reading_count(
-            self.candles,
-            name=name if name else self.name,
-            index=index if index is not None else self._active_index,
+            *self._find_candles(source),
+            index if index is not None else self._active_index,
         )
 
     def reading_period(
-        self, period: int, name: Optional[str] = None, index: Optional[int] = None
+        self, period: int, source: Source | None = None, index: Optional[int] = None
     ) -> bool:
         """Will return True if the given indicator goes back as far as amount,
         It's true if exactly or more than. Period will be period -1"""
         return reading_period(
-            self.candles,
-            period=period,
-            name=name if name else self.name,
-            index=index if index is not None else self._active_index,
+            *self._find_candles(source),
+            period,
+            index if index is not None else self._active_index,
         )
 
     def candles_sum(
         self,
         length: int = 1,
-        name: Optional[str] = None,
+        source: Source | None = None,
         index: Optional[int] = None,
         include_latest: bool = True,
-    ) -> float | None:
+    ) -> float:
         return candles_sum(
-            self.candles,
-            name if name else self.name,
+            *self._find_candles(source),
             length,
             index if index is not None else self._active_index,
             include_latest,
@@ -414,13 +419,12 @@ class Indicator(ABC):
     def candles_average(
         self,
         length: int = 1,
-        name: Optional[str] = None,
+        source: Source | None = None,
         index: Optional[int] = None,
         include_latest: bool = True,
-    ) -> float | None:
+    ) -> float:
         return candles_average(
-            self.candles,
-            name if name else self.name,
+            *self._find_candles(source),
             length,
             index if index is not None else self._active_index,
             include_latest,
@@ -429,13 +433,12 @@ class Indicator(ABC):
     def get_readings_period(
         self,
         length: int = 1,
-        name: Optional[str] = None,
+        source: Source | None = None,
         index: Optional[int] = None,
         include_latest: bool = False,
     ) -> List[float | int]:
         return get_readings_period(
-            self.candles,
-            name if name else self.name,
+            *self._find_candles(source),
             length,
             index if index is not None else self._active_index,
             include_latest,
@@ -487,3 +490,39 @@ class Managed(Indicator):
 
     def set_active_index(self, index: int):
         self._active_index = index
+
+
+class NestedSource:
+    indicator: Indicator
+    nested_name: str
+
+    def __init__(self, indicator: Indicator, nested_name: str):
+        self.indicator = indicator
+        self.nested_name = nested_name
+
+    @property
+    def candles(self):
+        return self.indicator.candles
+
+    @property
+    def name(self):
+        return f"{self.indicator.name}.{self.nested_name}"
+
+    def reading(self, index: Optional[int] = None) -> Reading:
+        value = self.indicator.reading(index=index)
+        if isinstance(value, dict):
+            return value.get(self.nested_name)
+        return value
+
+    def readings(self) -> List[Reading]:
+        return [
+            v.get(self.nested_name) if isinstance(v, dict) else v
+            for v in self.indicator.readings()
+        ]
+
+    def __str__(self):
+        return f"{self.indicator.name}.{self.nested_name}"
+
+
+Source: TypeAlias = str | Indicator | NestedSource
+N = TypeVar("N", Indicator, Managed)

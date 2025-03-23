@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator
+from hexital.core.indicator import Indicator, Source
 from hexital.indicators import ATR, EMA
 
 
@@ -25,7 +25,7 @@ class KC(Indicator):
 
     _name: str = field(init=False, default="KC")
     period: int = 20
-    source: str = "close"
+    source: Source = "close"
     multiplier: float = 2.0
 
     def _generate_name(self) -> str:

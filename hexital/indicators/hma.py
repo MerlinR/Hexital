@@ -1,7 +1,7 @@
 import math
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, Source
 from hexital.indicators.wma import WMA
 
 
@@ -25,7 +25,7 @@ class HMA(Indicator):
 
     _name: str = field(init=False, default="HMA")
     period: int = 10
-    source: str = "close"
+    source: Source = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
@@ -49,7 +49,7 @@ class HMA(Indicator):
         self.sub_hma = self.add_managed_indicator(Managed(name=f"{self.name}_HMAr"))
         self.sub_hma_smoothed = self.sub_hma.add_sub_indicator(
             WMA(
-                source=f"{self.name}_HMAr",
+                source=self.sub_hma,
                 period=int(math.sqrt(self.period)),
                 name=f"{self.name}_HMAs",
             ),
@@ -64,4 +64,5 @@ class HMA(Indicator):
             raw_hma = (2 * self.sub_wmah.reading()) - wma
 
         self.sub_hma.set_reading(raw_hma)
+
         return self.sub_hma_smoothed.reading()
