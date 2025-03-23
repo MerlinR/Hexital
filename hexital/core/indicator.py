@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 from copy import copy
 from dataclasses import dataclass, field
 from datetime import timedelta
+from enum import Enum
 from typing import Dict, List, Optional, Tuple, TypeAlias, TypeVar
 
 from hexital.core import Reading
@@ -30,6 +31,12 @@ from hexital.utils.timeframe import (
 T = TypeVar("T")
 
 
+class IndicatorMode(Enum):
+    STAND = "STANDARD"
+    SUB = "SUB"
+    MANAGED = "MANAGED"
+
+
 @dataclass(kw_only=True)
 class Indicator(ABC):
     candles: List[Candle] = field(default_factory=list)
@@ -42,8 +49,8 @@ class Indicator(ABC):
 
     sub_indicators: Dict[str, Indicator] = field(init=False, default_factory=dict)
     managed_indicators: Dict[str, Managed | Indicator] = field(init=False, default_factory=dict)
-    _sub_indicator: bool = field(init=False, default=False)
-    _sub_calc_prior: bool = field(init=False, default=True)
+    _mode: IndicatorMode = field(init=False, default=IndicatorMode.STAND)
+    _calc_prior: bool = field(init=False, default=True)
 
     _name: str = field(init=False, default="")
     _timeframe: Optional[timedelta] = field(init=False)
@@ -196,7 +203,7 @@ class Indicator(ABC):
 
     @property
     def prior_calc(self) -> bool:
-        if self._sub_indicator and self._sub_calc_prior:
+        if self._mode != IndicatorMode.STAND and self._calc_prior:
             return True
         return False
 
@@ -297,7 +304,7 @@ class Indicator(ABC):
     def _set_reading(self, reading: Reading, index: Optional[int] = None):
         index = index if index else self._active_index
 
-        if self._sub_indicator:
+        if self._mode != IndicatorMode.STAND:
             self.candles[index].sub_indicators[self.name] = reading
         else:
             self.candles[index].indicators[self.name] = reading
@@ -310,8 +317,8 @@ class Indicator(ABC):
 
     def add_sub_indicator(self, indicator: Indicator, prior_calc: bool = True) -> Indicator:
         """Adds sub indicator, this will auto calculate with indicator"""
-        indicator._sub_indicator = True
-        indicator._sub_calc_prior = prior_calc
+        indicator._mode = IndicatorMode.SUB
+        indicator._calc_prior = prior_calc
         indicator.candle_manager = self._candles
         indicator.rounding = None
         self.sub_indicators[indicator.name] = indicator
@@ -321,7 +328,7 @@ class Indicator(ABC):
         """Adds managed sub indicator, this will not auto calculate with indicator"""
         if indicator.name == MANAGED_NAME:
             indicator.name = f"{self.name}_data"
-        indicator._sub_indicator = True
+        indicator._mode = IndicatorMode.MANAGED
         indicator.candle_manager = self._candles
         indicator.rounding = None
         self.managed_indicators[indicator.name] = indicator
@@ -470,7 +477,7 @@ class Managed(Indicator):
     """
 
     _name: str = field(init=False, default=MANAGED_NAME)
-    _sub_indicator: bool = field(default=True)
+    _mode: IndicatorMode = field(init=False, default=IndicatorMode.MANAGED)
     _active_index: int = field(default=0)
 
     def _generate_name(self) -> str:
