@@ -1,13 +1,13 @@
 from copy import copy
 from datetime import timedelta
 from importlib import import_module
-from typing import Dict, Generic, List, Optional, Sequence, Set, TypeVar
+from typing import Any, Dict, Generic, List, Optional, Sequence, Set, TypeVar
 
 from hexital.core import Reading
 from hexital.core.candle import Candle
 from hexital.core.candle_manager import DEFAULT_CANDLES, CandleManager, Candles
 from hexital.core.candlestick_type import CandlestickType
-from hexital.core.indicator import Indicator
+from hexital.core.indicator import Indicator, NestedSource, Source
 from hexital.core.indicator_collection import IndicatorCollection
 from hexital.exceptions import InvalidAnalysis, InvalidIndicator
 from hexital.indicators.amorph import Amorph
@@ -36,7 +36,7 @@ class Hexital:
         self,
         name: str,
         candles: Sequence[Candle],
-        indicators: Optional[Sequence[dict | Indicator] | IndicatorCollection] = None,
+        indicators: Optional[Sequence[Dict[str, Any] | Indicator] | IndicatorCollection] = None,
         description: Optional[str] = None,
         timeframe: Optional[TimeFramesSource] = None,
         timeframe_fill: bool = False,
@@ -157,40 +157,61 @@ class Hexital:
 
         return settings
 
-    def reading(self, name: str, index: int = -1) -> Reading:
-        """Attempts to retrieve a reading with a given Indicator name.
-        `name` can use '.' to find nested reading, E.G `MACD_12_26_9.MACD`
-        """
-        reading = reading_by_index(self._candles[self._timeframe_name].candles, name, index=index)
+    def _find_indicator(self, source: Source) -> Indicator | None:
+        if isinstance(source, Indicator):
+            return source
+        elif isinstance(source, NestedSource):
+            return source.indicator
+        elif indicator := self._indicators.get(source.split(".")[0]):
+            return indicator
 
-        if reading is not None:
+        return None
+
+    def _find_reading(self, source: Source, index: int = -1) -> Reading:
+        if isinstance(source, (Indicator, NestedSource)):
+            return source.reading(index=index)
+        elif reading := reading_by_index(
+            self._candles[self._timeframe_name].candles, source, index=index
+        ):
             return reading
 
         for candle_manager in self._candles.values():
-            reading = reading_by_index(candle_manager.candles, name, index=index)
+            reading = reading_by_index(candle_manager.candles, source, index=index)
             if reading is not None:
                 return reading
 
         return None
 
-    def prev_reading(self, name: str) -> Reading:
-        return self.reading(name, index=-2)
+    def _find_readings(self, source: Source, index: int = -1) -> List[Reading]:
+        if isinstance(source, (Indicator, NestedSource)):
+            return source.readings()
+
+        primary_name = source.split(".")[0]
+        if self._indicators.get(primary_name):
+            return self._indicators[primary_name].readings(source)
+
+        return []
+
+    def reading(self, source: Source, index: int = -1) -> Reading:
+        """Attempts to retrieve a reading with a given Indicator name.
+        `name` can use '.' to find nested reading, E.G `MACD_12_26_9.MACD`
+        """
+        return self._find_reading(source, index)
+
+    def prev_reading(self, source: Source) -> Reading:
+        return self._find_reading(source, -2)
 
     def readings(self) -> Dict[str, List[Reading]]:
         """Returns a Dictionary of all the Indicators and there results in a list format."""
-
         return {name: indicator.readings() for name, indicator in self._indicators.items()}
 
-    def reading_as_list(self, name: str) -> List[Reading]:
+    def reading_as_list(self, source: Source) -> List[Reading]:
         """Find given indicator and returns the readings as a list
         Full Name of the indicator E.G `EMA_12` OR `MACD_12_26_9.MACD`"""
-        primary_name = name.split(".")[0]
-        if self._indicators.get(primary_name):
-            return self._indicators[primary_name].readings(name)
-        return []
+        return self._find_readings(source)
 
     def add_indicator(
-        self, indicator: Indicator | List[Indicator | Dict[str, str]] | Dict[str, str]
+        self, indicator: Indicator | List[Indicator | Dict[str, Any]] | Dict[str, Any]
     ):
         """Add's a new indicator to `Hexital` strategy.
         This accept either `Indicator` datatypes or dict string versions to be packed.
@@ -201,10 +222,14 @@ class Hexital:
         for name, valid_indicator in self._validate_indicators(indicators).items():
             self._indicators[name] = valid_indicator
 
-    def remove_indicator(self, name: str):
+    def remove_indicator(self, source: Source):
         """Removes an indicator from running within hexital"""
-        self.purge(name)
-        self._indicators.pop(name, None)
+        indicator = self._find_indicator(source)
+        if not indicator:
+            return
+
+        indicator.purge()
+        self._indicators.pop(indicator.name)
 
     def prepend(
         self,
@@ -283,18 +308,25 @@ class Hexital:
             if name is None or indicator_name == name:
                 indicator.calculate_index(index, end_index)
 
-    def recalculate(self, name: Optional[str] = None):
+    def recalculate(self, source: Source | None = None):
         """Purge's all indicator reading's and re-calculates them all,
         ideal for changing an indicator parameters midway."""
-        self.purge(name)
-        self.calculate(name)
+        if not source:
+            for indicator in self._indicators.values():
+                indicator.purge()
+                indicator.calculate()
+        elif indicator := self._find_indicator(source):
+            indicator.purge()
+            indicator.calculate()
 
-    def purge(self, name: Optional[str] = None):
+    def purge(self, source: Source | None = None):
         """Takes Indicator name and removes all readings for said indicator.
         Indicator name must be exact"""
-        for indicator_name, indicator in self._indicators.items():
-            if name is None or indicator_name == name:
+        if not source:
+            for indicator in self._indicators.values():
                 indicator.purge()
+        elif indicator := self._find_indicator(source):
+            indicator.purge()
 
     def _parse_timeframe(self, timeframe: Optional[TimeFramesSource]) -> str | None:
         if not timeframe:
