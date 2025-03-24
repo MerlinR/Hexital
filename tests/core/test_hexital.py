@@ -404,21 +404,21 @@ class TestFindCandles:
         strat = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA")])
         strat.calculate()
 
-        assert strat.find_candles("EMA")
+        assert strat.find_candle_pairing("EMA")
 
     @pytest.mark.usefixtures("candles")
     def test_find_missing(self, candles):
         strat = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA")])
         strat.calculate()
 
-        assert strat.find_candles("MMA") == [[], []]
+        assert strat.find_candle_pairing("MMA") == ([], [])
 
     @pytest.mark.usefixtures("candles")
     def test_find_multi_simple(self, candles):
         strat = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")])
         strat.calculate()
 
-        found_candles = strat.find_candles("EMA", "SMA")
+        found_candles = strat.find_candle_pairing("EMA", "SMA")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -431,7 +431,7 @@ class TestFindCandles:
         strat = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")])
         strat.calculate()
 
-        found_candles = strat.find_candles("EMA", "high")
+        found_candles = strat.find_candle_pairing("EMA", "high")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -445,7 +445,7 @@ class TestFindCandles:
         strat = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")])
         strat.calculate()
 
-        found_candles = strat.find_candles("high", "EMA")
+        found_candles = strat.find_candle_pairing("high", "EMA")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -463,7 +463,7 @@ class TestFindCandles:
         )
         strat.calculate()
 
-        found_candles = strat.find_candles("EMA", "SMA")
+        found_candles = strat.find_candle_pairing("EMA", "SMA")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -481,7 +481,7 @@ class TestFindCandles:
         )
         strat.calculate()
 
-        found_candles = strat.find_candles("EMA", "high")
+        found_candles = strat.find_candle_pairing("EMA", "high")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -499,7 +499,7 @@ class TestFindCandles:
         )
         strat.calculate()
 
-        found_candles = strat.find_candles("SMA", "high")
+        found_candles = strat.find_candle_pairing("SMA", "high")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -517,7 +517,7 @@ class TestFindCandles:
         )
         strat.calculate()
 
-        found_candles = strat.find_candles("high", "SMA")
+        found_candles = strat.find_candle_pairing("high", "SMA")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -535,7 +535,7 @@ class TestFindCandles:
         )
         strat.calculate()
 
-        found_candles = strat.find_candles("EMA", "EMA_T5")
+        found_candles = strat.find_candle_pairing("EMA", "EMA_T5")
 
         assert len(found_candles) == 2
         assert (

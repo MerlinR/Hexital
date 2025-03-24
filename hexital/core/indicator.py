@@ -344,7 +344,7 @@ class Indicator(Generic[V], ABC):
         indicator.candle_manager = self._candles
         indicator.rounding = None
         self.managed_indicators[indicator.name] = indicator
-        return self.managed_indicators[indicator.name]
+        return indicator
 
     def _find_reading(
         self, source: Optional[Source] = None, index: Optional[int] = None
@@ -365,7 +365,7 @@ class Indicator(Generic[V], ABC):
         else:
             return reading_by_index(self.candles, source.name, index)
 
-    def _find_readings(self, source: Optional[Source] = None) -> List[Reading]:
+    def _find_readings(self, source: Optional[Source] = None) -> List[Reading | V]:
         if not source:
             return [reading_by_candle(candle, self.name) for candle in self.candles]
         elif isinstance(source, Indicator):

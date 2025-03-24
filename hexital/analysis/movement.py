@@ -1,7 +1,8 @@
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from hexital.analysis import utils
 from hexital.core.candle import Candle
+from hexital.core.candle_manager import DEFAULT_CANDLES
 from hexital.core.hexital import Hexital
 from hexital.core.indicator import Indicator
 from hexital.utils.candles import get_readings_period, reading_by_candle, reading_by_index
@@ -13,53 +14,52 @@ def _retrieve_candles(
     obj: Indicator | Hexital | List[Candle],
     indicator: Optional[str] = None,
     indicator_cmp: Optional[str] = None,
-) -> List[List[Candle]]:
+) -> List[Candle] | Tuple[List[Candle], List[Candle]]:
     if isinstance(obj, list):
-        return [obj]
+        return obj
     elif isinstance(obj, Indicator):
-        return [obj.candles]
+        return obj.candles
     elif isinstance(obj, Hexital) and not indicator and not indicator_cmp:
-        return [obj.candles("default")]
+        return obj.candles(DEFAULT_CANDLES)
     elif isinstance(obj, Hexital) and indicator:
-        return obj.find_candles(indicator, indicator_cmp)
+        return obj.find_candle_pairing(indicator, indicator_cmp)
 
     return []
 
 
 def _timeframe_pair_candles(
-    candles: List[List[Candle]],
-) -> List[List[Candle]]:
-    organised = [[], []]
-    set_one = candles[0]
-    set_two = candles[1]
+    candles: Tuple[List[Candle], List[Candle]],
+) -> Tuple[List[Candle], List[Candle]]:
+    output_one, output_two = [], []
+    set_one, set_two = candles
 
     if set_one[-1].timeframe == set_two[-1].timeframe:
         return candles
     else:
-        second_pointer = len(candles[1]) - 1
+        end_pointer = len(candles[1]) - 1
 
-        for first_pointer in range(len(set_one) - 1, -1, -1):
-            if second_pointer == 0:
+        for front_pointer in range(len(set_one) - 1, -1, -1):
+            if not end_pointer:
                 break
 
             while (
                 not within_timeframe(
-                    set_one[first_pointer].timestamp,
-                    set_two[second_pointer].timestamp,
-                    set_two[second_pointer].timeframe,
+                    set_one[front_pointer].timestamp,
+                    set_two[end_pointer].timestamp,
+                    set_two[end_pointer].timeframe,
                 )
                 and not within_timeframe(
-                    set_two[second_pointer].timestamp,
-                    set_one[first_pointer].timestamp,
-                    set_one[first_pointer].timeframe,
+                    set_two[end_pointer].timestamp,
+                    set_one[front_pointer].timestamp,
+                    set_one[front_pointer].timeframe,
                 )
-            ) and second_pointer >= 0:
-                second_pointer -= 1
+            ) and end_pointer >= 0:
+                end_pointer -= 1
 
-            organised[0].insert(0, set_one[first_pointer])
-            organised[1].insert(0, set_two[second_pointer])
+            output_one.insert(0, set_one[front_pointer])
+            output_two.insert(0, set_two[end_pointer])
 
-    return organised
+    return output_one, output_two
 
 
 def positive(candles: Candle | List[Candle], index: int = -1) -> bool:
@@ -105,21 +105,17 @@ def above(
     """
     candles_ = _retrieve_candles(candles, indicator, indicator_cmp)
 
-    if not candles_:
-        return False
-
-    if len(candles_) == 1 and candles_[0]:
-        candle_set = candles_[0]
-        idx = absindex(index, len(candle_set)) + 1
+    if isinstance(candles_, list):
+        idx = absindex(index, len(candles_)) + 1
         length = idx - (length + 1)
 
         return _above(
-            candle_set[length:idx],
+            candles_[length:idx],
             indicator,
-            candle_set[length:idx],
+            candles_[length:idx],
             indicator_cmp,
         )
-    elif len(candles_) == 2:
+    elif isinstance(candles_, tuple):
         candle_set = _timeframe_pair_candles(candles_)
         idx = absindex(index, len(candle_set[0])) + 1
         length = idx - (length + 1)
@@ -179,21 +175,17 @@ def below(
     """
     candles_ = _retrieve_candles(candles, indicator, indicator_cmp)
 
-    if not candles_:
-        return False
-
-    if len(candles_) == 1 and candles_[0]:
-        candle_set = candles_[0]
-        idx = absindex(index, len(candle_set)) + 1
+    if isinstance(candles_, list):
+        idx = absindex(index, len(candles_)) + 1
         length = idx - (length + 1)
 
         return _below(
-            candle_set[length:idx],
+            candles_[length:idx],
             indicator,
-            candle_set[length:idx],
+            candles_[length:idx],
             indicator_cmp,
         )
-    elif len(candles_) == 2:
+    elif isinstance(candles_, tuple):
         candle_set = _timeframe_pair_candles(candles_)
         idx = absindex(index, len(candle_set[0])) + 1
         length = idx - (length + 1)
@@ -247,8 +239,8 @@ def value_range(
         float | None: The difference between the minimum and maximum indicator values in the range,
         or `None` if there are insufficient readings.
     """
-    candle_set = _retrieve_candles(candles, indicator)[0]
-    if not candle_set:
+    candle_set = _retrieve_candles(candles, indicator)
+    if not isinstance(candle_set, list) or not candle_set:
         return None
 
     readings = get_readings_period(candle_set, indicator, length, index, True)
@@ -277,12 +269,11 @@ def rising(
     Returns:
         bool: `True` if the `indicator` is greater than each previous readings in the range; otherwise `False`.
     """
-    candle_set = _retrieve_candles(candles, indicator)[0]
+    candle_set = _retrieve_candles(candles, indicator)
+    if not isinstance(candle_set, list) or not candle_set or length < 1 or len(candle_set) < 2:
+        return False
 
     idx = absindex(index, len(candle_set))
-
-    if length < 1 or len(candle_set) < 2:
-        return False
 
     latest_reading = reading_by_candle(candle_set[idx], indicator)
     if latest_reading is None or isinstance(latest_reading, dict):
@@ -316,11 +307,11 @@ def falling(
     Returns:
         bool: `True` if the `indicator` is lower than each previous readings in the range; otherwise `False`.
     """
-    candle_set = _retrieve_candles(candles, indicator)[0]
-    idx = absindex(index, len(candle_set))
-
-    if length < 1 or len(candle_set) < 2:
+    candle_set = _retrieve_candles(candles, indicator)
+    if not isinstance(candle_set, list) or not candle_set or length < 1 or len(candle_set) < 2:
         return False
+
+    idx = absindex(index, len(candle_set))
 
     latest_reading = reading_by_candle(candle_set[idx], indicator)
     if latest_reading is None or isinstance(latest_reading, dict):
@@ -354,11 +345,11 @@ def mean_rising(
         bool: `True` if the `indicator` is higher than the average of the specified `n` readings; otherwise `False`.
     """
 
-    candle_set = _retrieve_candles(candles, indicator)[0]
-    idx = absindex(index, len(candle_set))
-
-    if length < 1 or len(candle_set) < 2:
+    candle_set = _retrieve_candles(candles, indicator)
+    if not isinstance(candle_set, list) or not candle_set or length < 1 or len(candle_set) < 2:
         return False
+
+    idx = absindex(index, len(candle_set))
 
     latest_reading = reading_by_candle(candle_set[idx], indicator)
     if latest_reading is None or isinstance(latest_reading, dict):
@@ -388,11 +379,11 @@ def mean_falling(
     Returns:
         bool: `True` if the `indicator` is lower than the average of the specified `n` readings; otherwise `False`.
     """
-    candle_set = _retrieve_candles(candles, indicator)[0]
-    idx = absindex(index, len(candle_set))
-
-    if length < 1 or len(candle_set) < 2:
+    candle_set = _retrieve_candles(candles, indicator)
+    if not isinstance(candle_set, list) or not candle_set or length < 1 or len(candle_set) < 2:
         return False
+
+    idx = absindex(index, len(candle_set))
 
     latest_reading = reading_by_candle(candle_set[idx], indicator)
     if latest_reading is None or isinstance(latest_reading, dict):
@@ -423,7 +414,10 @@ def highest(
         float | None: The highest reading for the specified `indicator` within the range,
         or `None` if no valid readings are found.
     """
-    return utils.highest(_retrieve_candles(candles, indicator)[0], indicator, length, index)
+    candles_ = _retrieve_candles(candles, indicator)
+    if not isinstance(candles_, list):
+        return None
+    return utils.highest(candles_, indicator, length, index)
 
 
 def lowest(
@@ -444,7 +438,10 @@ def lowest(
         float | None: The lowest reading for the specified `indicator` within the range,
         or `None` if no valid readings are found.
     """
-    return utils.lowest(_retrieve_candles(candles, indicator)[0], indicator, length, index)
+    candles_ = _retrieve_candles(candles, indicator)
+    if not isinstance(candles_, list):
+        return None
+    return utils.lowest(candles_, indicator, length, index)
 
 
 def highestbar(
@@ -465,9 +462,8 @@ def highestbar(
         int | None: The offset to the candle with the highest reading, relative to the starting index,
         or `None` if no valid readings are found.
     """
-    candle_set = _retrieve_candles(candles, indicator)[0]
-
-    if not candles:
+    candle_set = _retrieve_candles(candles, indicator)
+    if not isinstance(candle_set, list) or not candle_set:
         return None
 
     idx = absindex(index, len(candle_set))
@@ -508,8 +504,8 @@ def lowestbar(
         int | None: The offset to the candle with the lowest reading, relative to the starting index,
         or `None` if no valid readings are found.
     """
-    candle_set = _retrieve_candles(candles, indicator)[0]
-    if not candle_set:
+    candle_set = _retrieve_candles(candles, indicator)
+    if not isinstance(candle_set, list) or not candle_set:
         return None
 
     idx = absindex(index, len(candle_set))
@@ -557,20 +553,15 @@ def cross(
     """
     candles_ = _retrieve_candles(candles, indicator, indicator_cmp)
 
-    if not candles_:
-        return False
-
-    if len(candles_) == 1 and candles_[0]:
-        candle_set = candles_[0]
-        idx = absindex(index, len(candle_set)) + 1
+    if isinstance(candles_, list):
+        idx = absindex(index, len(candles_)) + 1
         length = idx - (length + 1)
+        return _cross(candles_[length:idx], indicator, candles_[length:idx], indicator_cmp)
 
-        return _cross(candle_set[length:idx], indicator, candle_set[length:idx], indicator_cmp)
-    elif len(candles_) == 2:
+    elif isinstance(candles_, tuple):
         candle_set = _timeframe_pair_candles(candles_)
         idx = absindex(index, len(candle_set[0])) + 1
         length = idx - (length + 1)
-
         return _cross(
             candle_set[0][length:idx], indicator, candle_set[1][length:idx], indicator_cmp
         )
@@ -630,16 +621,12 @@ def crossover(
     """
     candles_ = _retrieve_candles(candles, indicator, indicator_cmp)
 
-    if not candles_:
-        return False
-
-    if len(candles_) == 1 and candles_[0]:
-        candle_set = candles_[0]
-        idx = absindex(index, len(candle_set)) + 1
+    if isinstance(candles_, list):
+        idx = absindex(index, len(candles_)) + 1
         length = idx - (length + 1)
+        return _crossover(candles_[length:idx], indicator, candles_[length:idx], indicator_cmp)
 
-        return _crossover(candle_set[length:idx], indicator, candle_set[length:idx], indicator_cmp)
-    elif len(candles_) == 2:
+    elif isinstance(candles_, tuple):
         candle_set = _timeframe_pair_candles(candles_)
         idx = absindex(index, len(candle_set[0])) + 1
         length = idx - (length + 1)
@@ -701,18 +688,12 @@ def crossunder(
     """
     candles_ = _retrieve_candles(candles, indicator, indicator_cmp)
 
-    if not candles_:
-        return False
-
-    if len(candles_) == 1 and candles_[0]:
-        candle_set = candles_[0]
-        idx = absindex(index, len(candle_set)) + 1
+    if isinstance(candles_, list):
+        idx = absindex(index, len(candles_)) + 1
         length = idx - (length + 1)
+        return _crossunder(candles_[length:idx], indicator, candles_[length:idx], indicator_cmp)
 
-        return _crossunder(
-            candle_set[length:idx], indicator, candle_set[length:idx], indicator_cmp
-        )
-    elif len(candles_) == 2:
+    elif isinstance(candles_, tuple):
         candle_set = _timeframe_pair_candles(candles_)
         idx = absindex(index, len(candle_set[0])) + 1
         length = idx - (length + 1)
@@ -765,8 +746,8 @@ def flipped(
     Returns:
         bool: `True` if the indicator has flipped (current value differs from previous); otherwise `False`.
     """
-    candle_set = _retrieve_candles(candles, indicator)[0]
-    if not candle_set:
+    candle_set = _retrieve_candles(candles, indicator)
+    if not isinstance(candle_set, list) or not candle_set:
         return False
 
     idx = absindex(index, len(candle_set))

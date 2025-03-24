@@ -13,12 +13,14 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Non-backward compatible changes:
     - Hexital and Indicator 'append' will now only append to Candles and not sort placement.
     - Renamed Indicator 'as_list' to 'readings'
+    - Renamed 'find_candles' to 'find_candle_pairing'
     - Removed 'has_reading' as pointless with method 'exists'
 
 - Reworked and optimised 'append' and added 'insert' and 'prepend'
 - Added IndicatorCollection as a way to better reference Indicator's
 - More options when setting indicator 'Source' - str | Indicator | NestedSource
 - Updated Sub/Managed Indicator's to generate name based of parents if none set
+- Added Specific reading typing for Indicators
 
 ---
 

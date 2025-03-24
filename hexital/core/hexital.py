@@ -1,7 +1,7 @@
 from copy import copy
 from datetime import timedelta
 from importlib import import_module
-from typing import Any, Dict, Generic, List, Optional, Sequence, Set, TypeVar
+from typing import Any, Dict, Generic, List, Optional, Sequence, Set, Tuple, TypeVar
 
 from hexital.core import Reading
 from hexital.core.candle import Candle
@@ -413,13 +413,13 @@ class Hexital:
                 f"Dict Indicator missing 'indicator' or 'analysis' name, not: {raw_indicator}"
             )
 
-    def find_candles(
+    def find_candle_pairing(
         self, indicator: str, indicator_cmp: Optional[str] = None
-    ) -> List[List[Candle]]:
+    ) -> Tuple[List[Candle], List[Candle]]:
         reverted = False
 
         if indicator and not indicator_cmp:
-            return [self.candles(indicator), []]
+            return self.candles(indicator), []
 
         if indicator_cmp and indicator in ["open", "high", "low", "close", "volume"]:
             indicator, indicator_cmp = indicator_cmp, indicator
@@ -428,14 +428,14 @@ class Hexital:
         candles = self.candles(indicator)
 
         if candles and indicator_cmp and reading_by_candle(candles[-1], indicator_cmp) is not None:
-            return [candles, candles]
+            return candles, candles
         elif candles and indicator_cmp and reading_by_candle(candles[-1], indicator_cmp) is None:
             if reverted:
-                return [self.candles(indicator_cmp), candles]
+                return self.candles(indicator_cmp), candles
             else:
-                return [candles, self.candles(indicator_cmp)]
+                return candles, self.candles(indicator_cmp)
 
-        return [[]]
+        return [], []
 
 
 T = TypeVar("T", bound=IndicatorCollection)
