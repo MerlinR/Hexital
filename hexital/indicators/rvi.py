@@ -6,7 +6,7 @@ from hexital.indicators.stdev import STDEV
 
 
 @dataclass(kw_only=True)
-class RVI(Indicator):
+class RVI(Indicator[float | None]):
     """Relative Vigor Index - RVI
 
     The Relative Vigor Index, or RVI, is a popular member of the “Oscillator” family of technical indicators.
@@ -50,7 +50,7 @@ class RVI(Indicator):
             ),
         )
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         stdev_reading = self.sub_stdev.reading()
 
         if stdev_reading is not None:

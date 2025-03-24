@@ -4,7 +4,7 @@ from hexital.core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
-class PivotPoints(Indicator):
+class PivotPoints(Indicator[dict]):
     """Pivot Points - PP
 
     Pivot point is a price level that is used by traders as a possible indicator of market movement.
@@ -24,7 +24,7 @@ class PivotPoints(Indicator):
     def _generate_name(self) -> str:
         return f"{self._name}"
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> dict:
         pivot_points = {"S1": None, "R1": None, "S2": None, "R2": None}
 
         if self.prev_exists("close"):

@@ -7,7 +7,7 @@ from hexital.indicators.rma import RMA
 
 
 @dataclass(kw_only=True)
-class ADX(Indicator):
+class ADX(Indicator[dict]):
     """Average Directional Index - ADX
 
     ADX is a trend strength in a series of prices of a financial instrument.
@@ -69,7 +69,7 @@ class ADX(Indicator):
             ),
         )
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> dict:
         adx_positive = None
         adx_negative = None
 

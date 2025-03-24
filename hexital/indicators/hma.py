@@ -6,7 +6,7 @@ from hexital.indicators.wma import WMA
 
 
 @dataclass(kw_only=True)
-class HMA(Indicator):
+class HMA(Indicator[float | None]):
     """Hull Moving Average - HMA
 
     It is a combination of weighted moving averages designed
@@ -42,7 +42,7 @@ class HMA(Indicator):
             False,
         )
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         raw_hma = None
         wma = self.sub_wma.reading()
 

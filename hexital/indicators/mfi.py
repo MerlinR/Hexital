@@ -5,7 +5,7 @@ from hexital.indicators.hlca import HLCA
 
 
 @dataclass(kw_only=True)
-class MFI(Indicator):
+class MFI(Indicator[float | None]):
     """Money Flow Index - MFI
 
     The money flow index (MFI) is an oscillator that ranges from 0 to 100.
@@ -32,7 +32,7 @@ class MFI(Indicator):
         self.sub_hlca = self.add_sub_indicator(HLCA())
         self.data = self.add_managed_indicator(Managed())
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         hlca = self.sub_hlca.reading()
         prev_hlca = self.sub_hlca.prev_reading()
 

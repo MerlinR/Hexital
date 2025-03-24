@@ -4,7 +4,7 @@ from hexital.core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
-class VWMA(Indicator):
+class VWMA(Indicator[float | None]):
     """Volume Weighted Moving Average - VWMA
 
     VWMA is the ratio of the value of a security or financial asset traded to the total
@@ -26,7 +26,7 @@ class VWMA(Indicator):
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists() or self.reading_period(self.period, "close"):
             volume_close = sum(
                 self.reading("close", i) * self.reading("volume", i)

@@ -6,7 +6,7 @@ from hexital.indicators.stdev import STDEV
 
 
 @dataclass(kw_only=True)
-class BBANDS(Indicator):
+class BBANDS(Indicator[dict]):
     """Bollinger Bands - BBANDS
 
     Bollinger Bands are a type of statistical chart characterizing
@@ -35,7 +35,7 @@ class BBANDS(Indicator):
         self.sub_stdev = self.add_sub_indicator(STDEV(source=self.source, period=self.period))
         self.sub_sma = self.add_sub_indicator(SMA(source=self.source, period=self.period))
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> dict:
         bbands = {
             "BBL": None,
             "BBM": None,

@@ -6,7 +6,7 @@ from hexital.indicators.sma import SMA
 
 
 @dataclass(kw_only=True)
-class STOCH(Indicator):
+class STOCH(Indicator[dict]):
     """Stochastic - STOCH
 
     The Stochastic Oscillator (STOCH) was developed by George Lane in the 1950's.
@@ -60,7 +60,7 @@ class STOCH(Indicator):
             ),
         )
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> dict:
         stoch = None
         k = None
 

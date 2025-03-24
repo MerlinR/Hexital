@@ -6,7 +6,7 @@ from hexital.indicators.ema import EMA
 
 
 @dataclass(kw_only=True)
-class TSI(Indicator):
+class TSI(Indicator[float | None]):
     """True Strength Index - TSI
     TSI attempts to show both trend direction and overbought/oversold conditions,
     using moving averages of the underlying momentum of a financial instrument.
@@ -61,7 +61,7 @@ class TSI(Indicator):
             False,
         )
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         prev_reading = self.prev_reading(self.source)
         if prev_reading is None:
             return None

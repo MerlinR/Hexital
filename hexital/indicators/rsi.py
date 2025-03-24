@@ -4,7 +4,7 @@ from hexital.core.indicator import Indicator, Managed, NestedSource, Source
 
 
 @dataclass(kw_only=True)
-class RSI(Indicator):
+class RSI(Indicator[float | None]):
     """Relative Strength Index - RSI
 
     The Relative Strength Index is popular momentum oscillator used to measure the
@@ -30,7 +30,7 @@ class RSI(Indicator):
     def _initialise(self):
         self.data = self.add_managed_indicator(Managed())
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         gains = None
         losses = None
 

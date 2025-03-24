@@ -4,7 +4,7 @@ from hexital.core.indicator import Indicator, Managed, NestedSource, Source
 
 
 @dataclass(kw_only=True)
-class CMO(Indicator):
+class CMO(Indicator[float | None]):
     """Chande Momentum Oscillator - CMO
 
     The CMO indicator is created by calculating the difference between the
@@ -32,7 +32,7 @@ class CMO(Indicator):
     def _initialise(self):
         self.data = self.add_managed_indicator(Managed())
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         gains = None
         losses = None
 
@@ -65,3 +65,4 @@ class CMO(Indicator):
 
         if gains is not None and losses is not None:
             return ((gains - losses) / (gains + losses)) * 100
+        return None

@@ -5,7 +5,7 @@ from hexital.core.indicator import Indicator, Managed, NestedSource, Source
 
 
 @dataclass(kw_only=True)
-class STDEV(Indicator):
+class STDEV(Indicator[float | None]):
     """Rolling Standard Deviation - STDEV
 
     You use a rolling stdev when you expect the standard deviation to change over time.
@@ -32,7 +32,7 @@ class STDEV(Indicator):
     def _initialise(self):
         self.data = self.add_managed_indicator(Managed())
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         popped_reading = 0
 
         reading = self.reading(self.source)

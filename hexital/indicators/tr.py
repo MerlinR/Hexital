@@ -4,7 +4,7 @@ from hexital.core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
-class TR(Indicator):
+class TR(Indicator[float | None]):
     """True Range - TR
 
     An method to expand a classical range (high minus low) to include
@@ -21,7 +21,7 @@ class TR(Indicator):
     def _generate_name(self) -> str:
         return self._name
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists("close"):
             close = self.candles[index - 1].close
             high = self.candles[index].high

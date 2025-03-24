@@ -1,10 +1,11 @@
 from dataclasses import dataclass, field
+from typing import Any
 
 from hexital.core.indicator import Indicator, Source
 
 
 @dataclass(kw_only=True)
-class Counter(Indicator):
+class Counter(Indicator[int]):
     """Counter
 
     Simple Indictor which will count the current streak of a given value,
@@ -20,12 +21,12 @@ class Counter(Indicator):
 
     _name: str = field(init=False, default="COUNT")
     source: Source
-    count_value: bool | int = True
+    count_value: Any = True
 
     def _generate_name(self) -> str:
         return f"{self._name}_{str(self.source)}"
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> int:
         count = self.prev_reading(default=0)
         reading = self.reading(self.source, default=count)
 

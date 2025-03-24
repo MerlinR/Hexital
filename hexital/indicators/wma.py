@@ -4,7 +4,7 @@ from hexital.core.indicator import Indicator, Source
 
 
 @dataclass(kw_only=True)
-class WMA(Indicator):
+class WMA(Indicator[float | None]):
     """Weighted Moving Average - WMA
 
     A Weighted Moving Average puts more weight on recent data and less on past data.

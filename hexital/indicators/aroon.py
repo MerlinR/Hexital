@@ -5,7 +5,7 @@ from hexital.core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
-class AROON(Indicator):
+class AROON(Indicator[dict]):
     """Aroon - AROON
 
     The Aroon indicator, indicates if a price is trending or is in a trading range.
@@ -28,7 +28,7 @@ class AROON(Indicator):
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> dict:
         aroon = {
             "AROONU": None,
             "AROOND": None,

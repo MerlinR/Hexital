@@ -14,7 +14,7 @@ from hexital.utils.timeframe import (
 
 
 @dataclass(kw_only=True)
-class VWAP(Indicator):
+class VWAP(Indicator[float]):
     """Volume-Weighted Average Price - VWAP
 
     The volume-weighted average price is a technical analysis indicator
@@ -44,7 +44,7 @@ class VWAP(Indicator):
     def _initialise(self):
         self.data = self.add_managed_indicator(Managed())
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float:
         candle = self.candles[index]
 
         current_anchor = round_down_timestamp(self.reading("timestamp"), self.anchor).timestamp()

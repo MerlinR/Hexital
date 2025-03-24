@@ -5,7 +5,7 @@ from hexital.indicators import EMA
 
 
 @dataclass(kw_only=True)
-class MACD(Indicator):
+class MACD(Indicator[dict]):
     """Moving Average Convergence Divergence - MACD
 
     The MACD is a popular indicator to that is used to identify a security's trend.
@@ -52,7 +52,7 @@ class MACD(Indicator):
             EMA(source=self.data, period=self.signal_period)
         )
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> dict:
         ema_slow = self.sub_emas.reading()
 
         if ema_slow is not None:

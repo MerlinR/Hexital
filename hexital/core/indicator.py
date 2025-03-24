@@ -5,7 +5,7 @@ from copy import copy
 from dataclasses import dataclass, field
 from datetime import timedelta
 from enum import Enum
-from typing import Dict, List, Optional, Tuple, TypeAlias, TypeVar
+from typing import Dict, Generic, List, Optional, Tuple, TypeAlias, TypeVar
 
 from hexital.core import Reading
 from hexital.core.candle import Candle
@@ -29,6 +29,7 @@ from hexital.utils.timeframe import (
 )
 
 T = TypeVar("T")
+V = TypeVar("V")
 
 
 class IndicatorMode(Enum):
@@ -38,7 +39,7 @@ class IndicatorMode(Enum):
 
 
 @dataclass(kw_only=True)
-class Indicator(ABC):
+class Indicator(Generic[V], ABC):
     candles: List[Candle] = field(default_factory=list)
     name: str = ""
     timeframe: Optional[TimeFramesSource] = None
@@ -155,7 +156,7 @@ class Indicator(ABC):
 
         return output
 
-    def readings(self, name: Optional[Source] = None) -> List[Reading]:
+    def readings(self, name: Optional[Source] = None) -> List[Reading | V]:
         """
         Retrieve the indicator readings for within the candles as a list.
 
@@ -210,7 +211,7 @@ class Indicator(ABC):
         return False
 
     @abstractmethod
-    def _calculate_reading(self, index: int) -> Reading: ...
+    def _calculate_reading(self, index: int) -> V: ...
 
     def _calculate_sub_indicators(
         self,
@@ -244,7 +245,7 @@ class Indicator(ABC):
             self._set_reading(reading, index)
             self._calculate_sub_indicators(False, index)
 
-    def _reading_dup(self, reading: Reading, candle: Candle) -> bool:
+    def _reading_dup(self, reading: Reading | V, candle: Candle) -> bool:
         """Optimisation method for 'calculate'.
         if calculating and not on latest Candle, check if reading match's a pre-existing reading.
         This prevent's it from continuing calculating if already has readings
@@ -346,7 +347,7 @@ class Indicator(ABC):
 
     def _find_reading(
         self, source: Optional[Source] = None, index: Optional[int] = None
-    ) -> Reading:
+    ) -> Reading | V:
         if index is None:
             index = self._active_index
         elif valid_index(index, len(self.candles)):
@@ -397,7 +398,7 @@ class Indicator(ABC):
 
     def prev_reading(
         self, source: Optional[Source] = None, default: Optional[T] = None
-    ) -> Reading | T:
+    ) -> Reading | V | T:
         if self._active_index == 0:
             return default
         value = self._find_reading(source, self._active_index - 1)
@@ -408,7 +409,7 @@ class Indicator(ABC):
         source: Optional[Source] = None,
         index: Optional[int] = None,
         default: Optional[T] = None,
-    ) -> Reading | T:
+    ) -> Reading | V | T:
         """Simple method to get an indicator reading from the index"""
         value = self._find_reading(source, index)
         return value if value is not None else default

@@ -5,7 +5,7 @@ from hexital.indicators.stdev import STDEV
 
 
 @dataclass(kw_only=True)
-class STDEVT(Indicator):
+class STDEVT(Indicator[float | None]):
     """Standard Deviation Threshold - STDEVT
 
     Standard Deviation while calculating threshold returning boolean signal
@@ -38,9 +38,9 @@ class STDEVT(Indicator):
             )
         )
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         if not self.exists(self.sub_stdev):
-            return False
+            return None
 
         return (
             abs(self.reading(self.source) - self.prev_reading(self.source))

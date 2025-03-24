@@ -5,7 +5,7 @@ from hexital.core.indicator import Indicator, Managed, NestedSource, Source
 
 
 @dataclass(kw_only=True)
-class Supertrend(Indicator):
+class Supertrend(Indicator[dict]):
     """Supertrend
 
     It is used to identify market trends and potential entry and exit points in trading.
@@ -34,7 +34,7 @@ class Supertrend(Indicator):
         self.sub_hl = self.add_sub_indicator(indicators.HLA())
         self.data = self.add_managed_indicator(Managed())
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> dict:
         direction = 1
         trend = None
         long = None

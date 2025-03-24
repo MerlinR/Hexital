@@ -5,7 +5,7 @@ from hexital.core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
-class Donchian(Indicator):
+class Donchian(Indicator[dict]):
     """Donchian Channels - Donchian
 
     Donchian Channels are a technical indicator that seeks to identify
@@ -28,7 +28,7 @@ class Donchian(Indicator):
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> dict:
         donchian = {"DCL": None, "DCM": None, "DCU": None}
 
         if self.prev_exists() or self.reading_period(self.period, "high", index):

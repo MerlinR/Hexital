@@ -5,7 +5,7 @@ from hexital.core.indicator import Indicator, Managed, NestedSource, Source
 
 
 @dataclass(kw_only=True)
-class JMA(Indicator):
+class JMA(Indicator[float | None]):
     """Jurik Moving Average Average - JMA
 
     The JMA is an adaptive moving average that aims to reduce lag and improve responsiveness
@@ -57,7 +57,7 @@ class JMA(Indicator):
         self._power_1 = max(self._length_1 - 2.0, 0.5)
         self._bet = self._length_2 / (self._length_2 + 1)
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         price = self.reading(self.source)
         uband = self.prev_reading(NestedSource(self.data, "uband"), price)
         lband = self.prev_reading(NestedSource(self.data, "lband"), price)

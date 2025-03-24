@@ -4,7 +4,7 @@ from hexital.core.indicator import Indicator, Source
 
 
 @dataclass(kw_only=True)
-class EMA(Indicator):
+class EMA(Indicator[float | None]):
     """Exponential Moving Average - EMA
 
     The Exponential Moving Average is more responsive moving average compared to the
