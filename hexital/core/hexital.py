@@ -308,7 +308,7 @@ class Hexital:
             if name is None or indicator_name == name:
                 indicator.calculate_index(index, end_index)
 
-    def recalculate(self, source: Source | None = None):
+    def recalculate(self, source: Optional[Source] = None):
         """Purge's all indicator reading's and re-calculates them all,
         ideal for changing an indicator parameters midway."""
         if not source:
@@ -319,7 +319,7 @@ class Hexital:
             indicator.purge()
             indicator.calculate()
 
-    def purge(self, source: Source | None = None):
+    def purge(self, source: Optional[Source] = None):
         """Takes Indicator name and removes all readings for said indicator.
         Indicator name must be exact"""
         if not source:

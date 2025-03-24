@@ -155,7 +155,7 @@ class Indicator(ABC):
 
         return output
 
-    def readings(self, name: Optional[str] = None) -> List[Reading]:
+    def readings(self, name: Optional[Source] = None) -> List[Reading]:
         """
         Retrieve the indicator readings for within the candles as a list.
 
@@ -173,7 +173,7 @@ class Indicator(ABC):
                                        dictionaries (for complex indicators),
                                        or `None` if no reading is available.
         """
-        return [reading_by_candle(candle, name if name else self.name) for candle in self.candles]
+        return self._find_readings(name)
 
     def prepend(self, candles: Candles):
         """Prepends a Candle or a chronological ordered list of Candle's to the front of the Indicator Candle's. This will only re-sample and re-calculate the new Candles, with minor overlap.
@@ -344,7 +344,9 @@ class Indicator(ABC):
         self.managed_indicators[indicator.name] = indicator
         return self.managed_indicators[indicator.name]
 
-    def _find_reading(self, source: Source | None = None, index: Optional[int] = None) -> Reading:
+    def _find_reading(
+        self, source: Optional[Source] = None, index: Optional[int] = None
+    ) -> Reading:
         if index is None:
             index = self._active_index
         elif valid_index(index, len(self.candles)):
@@ -361,7 +363,17 @@ class Indicator(ABC):
         else:
             return reading_by_index(self.candles, source.name, index)
 
-    def _find_candles(self, source: Source | None = None) -> Tuple[List[Candle], str]:
+    def _find_readings(self, source: Optional[Source] = None) -> List[Reading]:
+        if not source:
+            return [reading_by_candle(candle, self.name) for candle in self.candles]
+        elif isinstance(source, Indicator):
+            return [reading_by_candle(candle, source.name) for candle in self.candles]
+        elif isinstance(source, NestedSource):
+            return source.readings()
+        elif isinstance(source, str):
+            return [reading_by_candle(candle, source) for candle in self.candles]
+
+    def _find_candles(self, source: Optional[Source] = None) -> Tuple[List[Candle], str]:
         if not source or (isinstance(source, str) and source == self.name):
             return self.candles, self.name
         elif isinstance(source, str):
@@ -393,7 +405,7 @@ class Indicator(ABC):
 
     def reading(
         self,
-        source: Source | None = None,
+        source: Optional[Source] = None,
         index: Optional[int] = None,
         default: Optional[T] = None,
     ) -> Reading | T:
@@ -401,7 +413,7 @@ class Indicator(ABC):
         value = self._find_reading(source, index)
         return value if value is not None else default
 
-    def reading_count(self, source: Source | None = None, index: Optional[int] = None) -> int:
+    def reading_count(self, source: Optional[Source] = None, index: Optional[int] = None) -> int:
         """Returns how many instance of the given indicator exist"""
         return reading_count(
             *self._find_candles(source),
@@ -409,7 +421,7 @@ class Indicator(ABC):
         )
 
     def reading_period(
-        self, period: int, source: Source | None = None, index: Optional[int] = None
+        self, period: int, source: Optional[Source] = None, index: Optional[int] = None
     ) -> bool:
         """Will return True if the given indicator goes back as far as amount,
         It's true if exactly or more than. Period will be period -1"""
@@ -422,7 +434,7 @@ class Indicator(ABC):
     def candles_sum(
         self,
         length: int = 1,
-        source: Source | None = None,
+        source: Optional[Source] = None,
         index: Optional[int] = None,
         include_latest: bool = True,
     ) -> float:
@@ -436,7 +448,7 @@ class Indicator(ABC):
     def candles_average(
         self,
         length: int = 1,
-        source: Source | None = None,
+        source: Optional[Source] = None,
         index: Optional[int] = None,
         include_latest: bool = True,
     ) -> float:
@@ -450,7 +462,7 @@ class Indicator(ABC):
     def get_readings_period(
         self,
         length: int = 1,
-        source: Source | None = None,
+        source: Optional[Source] = None,
         index: Optional[int] = None,
         include_latest: bool = False,
     ) -> List[float | int]:
