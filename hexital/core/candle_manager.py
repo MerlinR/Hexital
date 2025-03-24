@@ -9,10 +9,10 @@ from hexital.core.candlestick_type import CandlestickType
 from hexital.exceptions import InvalidCandleOrder
 from hexital.utils.candles import reading_by_candle
 from hexital.utils.timeframe import (
-    clean_timestamp,
     on_timeframe,
     round_down_timestamp,
     timedelta_to_str,
+    trim_timestamp,
 )
 
 Candles: TypeAlias = Candle | List[Candle] | dict | List[dict] | list | List[list]
@@ -226,7 +226,7 @@ class CandleManager:
             prev_candle = candles_[-1]
 
             next_end_time = end_time + self.timeframe
-            candle.timestamp = clean_timestamp(candle.timestamp)
+            candle.timestamp = trim_timestamp(candle.timestamp)
             candle.timeframe = self.timeframe
 
             if start_time < candle.timestamp <= end_time and prev_candle.timestamp == end_time:

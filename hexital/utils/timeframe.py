@@ -127,9 +127,9 @@ def round_down_timestamp(timestamp: datetime, timeframe: timedelta) -> datetime:
     E.G T5: 09:00:01 -> 9:00:00
     E.G T5: 09:01:20 -> 9:00:00
     E.G T5: 09:05:00 -> 9:05:00
-    Note: This method also calls clean_timestamp, removing microseconds
+    Note: This method also calls trim_timestamp, removing microseconds
     """
-    timestamp = clean_timestamp(timestamp)
+    timestamp = trim_timestamp(timestamp)
     if timeframe < timedelta(days=1):
         return datetime.fromtimestamp(
             timestamp.timestamp() // timeframe.total_seconds() * timeframe.total_seconds(),
@@ -153,6 +153,6 @@ def on_timeframe(timestamp: datetime, timeframe: timedelta) -> bool:
     return timestamp.timestamp() % timeframe.total_seconds() == 0
 
 
-def clean_timestamp(timestamp: datetime) -> datetime:
+def trim_timestamp(timestamp: datetime) -> datetime:
     """Removes Microseconds from the timestamp and returns it"""
     return timestamp.replace(microsecond=0)
