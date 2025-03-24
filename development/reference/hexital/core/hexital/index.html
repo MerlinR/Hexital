@@ -3848,7 +3848,7 @@ Does not automatically calculates readings.</p>
 
 
 </h4>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">purge</span><span class="p">(</span><span class="n">source</span><span class="p">:</span> <span class="n"><span title="hexital.core.indicator.Source">Source</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">purge</span><span class="p">(</span><span class="n">source</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3/library/typing.html#typing.Optional">Optional</a></span><span class="p">[</span><span class="n"><span title="hexital.core.indicator.Source">Source</span></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
 </span></code></pre></div>
 
     <div class="doc doc-contents ">
@@ -3865,7 +3865,7 @@ Indicator name must be exact</p>
 <span class="normal"><a href="#__codelineno-0-326">326</a></span>
 <span class="normal"><a href="#__codelineno-0-327">327</a></span>
 <span class="normal"><a href="#__codelineno-0-328">328</a></span>
-<span class="normal"><a href="#__codelineno-0-329">329</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-322"><a id="__codelineno-0-322" name="__codelineno-0-322"></a><span class="k">def</span><span class="w"> </span><span class="nf">purge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="n">Source</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="normal"><a href="#__codelineno-0-329">329</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-322"><a id="__codelineno-0-322" name="__codelineno-0-322"></a><span class="k">def</span><span class="w"> </span><span class="nf">purge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Source</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 </span><span id="__span-0-323"><a id="__codelineno-0-323" name="__codelineno-0-323"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Takes Indicator name and removes all readings for said indicator.</span>
 </span><span id="__span-0-324"><a id="__codelineno-0-324" name="__codelineno-0-324"></a><span class="sd">    Indicator name must be exact&quot;&quot;&quot;</span>
 </span><span id="__span-0-325"><a id="__codelineno-0-325" name="__codelineno-0-325"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">source</span><span class="p">:</span>
@@ -3979,7 +3979,7 @@ Full Name of the indicator E.G <code>EMA_12</code> OR <code>MACD_12_26_9.MACD</c
 
 
 </h4>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">recalculate</span><span class="p">(</span><span class="n">source</span><span class="p">:</span> <span class="n"><span title="hexital.core.indicator.Source">Source</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">recalculate</span><span class="p">(</span><span class="n">source</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Optional" href="https://docs.python.org/3/library/typing.html#typing.Optional">Optional</a></span><span class="p">[</span><span class="n"><span title="hexital.core.indicator.Source">Source</span></span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
 </span></code></pre></div>
 
     <div class="doc doc-contents ">
@@ -3998,7 +3998,7 @@ ideal for changing an indicator parameters midway.</p>
 <span class="normal"><a href="#__codelineno-0-317">317</a></span>
 <span class="normal"><a href="#__codelineno-0-318">318</a></span>
 <span class="normal"><a href="#__codelineno-0-319">319</a></span>
-<span class="normal"><a href="#__codelineno-0-320">320</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-311"><a id="__codelineno-0-311" name="__codelineno-0-311"></a><span class="k">def</span><span class="w"> </span><span class="nf">recalculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="n">Source</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="normal"><a href="#__codelineno-0-320">320</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-311"><a id="__codelineno-0-311" name="__codelineno-0-311"></a><span class="k">def</span><span class="w"> </span><span class="nf">recalculate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Source</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 </span><span id="__span-0-312"><a id="__codelineno-0-312" name="__codelineno-0-312"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Purge&#39;s all indicator reading&#39;s and re-calculates them all,</span>
 </span><span id="__span-0-313"><a id="__codelineno-0-313" name="__codelineno-0-313"></a><span class="sd">    ideal for changing an indicator parameters midway.&quot;&quot;&quot;</span>
 </span><span id="__span-0-314"><a id="__codelineno-0-314" name="__codelineno-0-314"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">source</span><span class="p">:</span>
