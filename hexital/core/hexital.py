@@ -23,14 +23,15 @@ from hexital.utils.timeframe import (
 
 class Hexital:
     name: str
-    _candles: Dict[str, CandleManager]
-    _indicators: Dict[str, Indicator]
     description: Optional[str] = None
-    _timeframe: Optional[timedelta] = None
-    _timeframe_name: str = DEFAULT_CANDLES
     timeframe_fill: bool = False
     candle_life: Optional[timedelta] = None
     candlestick: Optional[CandlestickType] = None
+
+    _candle_map: Dict[str, CandleManager]
+    _indicators: Dict[str, Indicator]
+    _timeframe: Optional[timedelta] = None
+    _timeframe_name: str = DEFAULT_CANDLES
 
     def __init__(
         self,
@@ -56,7 +57,7 @@ class Hexital:
         if self._timeframe:
             self._timeframe_name = timedelta_to_str(self._timeframe)
 
-        self._candles = {
+        self._candle_map = {
             self._timeframe_name: CandleManager(
                 candles if isinstance(candles, list) else [],
                 candle_life=self.candle_life,
@@ -78,7 +79,7 @@ class Hexital:
 
     @property
     def timeframes(self) -> Set[str]:
-        return {manager.name for manager in self._candles.values()}
+        return {manager.name for manager in self._candle_map.values()}
 
     @property
     def indicators(self) -> Dict[str, Indicator]:
@@ -102,17 +103,17 @@ class Hexital:
 
         name_ = timeframe_name if timeframe_name else name_
 
-        if isinstance(name_, str) and self._candles.get(name_, False):
-            return self._candles[name_].candles
+        if isinstance(name_, str) and self._candle_map.get(name_, False):
+            return self._candle_map[name_].candles
         elif isinstance(name_, str):
-            for manager in self._candles.values():
+            for manager in self._candle_map.values():
                 if manager.find_indicator(name_):
                     return manager.candles
 
         return []
 
     def get_candles(self) -> Dict[str, List[Candle]]:
-        return {name: manager.candles for name, manager in self._candles.items()}
+        return {name: manager.candles for name, manager in self._candle_map.items()}
 
     @property
     def settings(self) -> dict:
@@ -171,18 +172,18 @@ class Hexital:
         if isinstance(source, (Indicator, NestedSource)):
             return source.reading(index=index)
         elif reading := reading_by_index(
-            self._candles[self._timeframe_name].candles, source, index=index
+            self._candle_map[self._timeframe_name].candles, source, index=index
         ):
             return reading
 
-        for candle_manager in self._candles.values():
+        for candle_manager in self._candle_map.values():
             reading = reading_by_index(candle_manager.candles, source, index=index)
             if reading is not None:
                 return reading
 
         return None
 
-    def _find_readings(self, source: Source, index: int = -1) -> List[Reading]:
+    def _find_readings(self, source: Source) -> List[Reading]:
         if isinstance(source, (Indicator, NestedSource)):
             return source.readings()
 
@@ -244,10 +245,10 @@ class Hexital:
         """
         timeframe_name = self._parse_timeframe(timeframe)
 
-        if timeframe_name and self._candles.get(timeframe_name):
-            self._candles[timeframe_name].prepend(candles)
+        if timeframe_name and self._candle_map.get(timeframe_name):
+            self._candle_map[timeframe_name].prepend(candles)
         else:
-            for candle_manager in self._candles.values():
+            for candle_manager in self._candle_map.values():
                 candle_manager.prepend(candles)
 
         self.calculate()
@@ -265,10 +266,10 @@ class Hexital:
         """
         timeframe_name = self._parse_timeframe(timeframe)
 
-        if timeframe_name and self._candles.get(timeframe_name):
-            self._candles[timeframe_name].append(candles)
+        if timeframe_name and self._candle_map.get(timeframe_name):
+            self._candle_map[timeframe_name].append(candles)
         else:
-            for candle_manager in self._candles.values():
+            for candle_manager in self._candle_map.values():
                 candle_manager.append(candles)
 
         self.calculate()
@@ -286,10 +287,10 @@ class Hexital:
         """
         timeframe_name = self._parse_timeframe(timeframe)
 
-        if timeframe_name and self._candles.get(timeframe_name):
-            self._candles[timeframe_name].insert(candles)
+        if timeframe_name and self._candle_map.get(timeframe_name):
+            self._candle_map[timeframe_name].insert(candles)
         else:
-            for candle_manager in self._candles.values():
+            for candle_manager in self._candle_map.values():
                 candle_manager.insert(candles)
 
         self.calculate_index(index=0, end_index=-1)
@@ -363,9 +364,9 @@ class Hexital:
 
         for indicator in valid_indicators.values():
             if not indicator.timeframe:
-                indicator.candle_manager = self._candles[self._timeframe_name]
-            elif indicator.timeframe and indicator.timeframe in self._candles:
-                indicator.candle_manager = self._candles[indicator.timeframe]
+                indicator.candle_manager = self._candle_map[self._timeframe_name]
+            elif indicator.timeframe and indicator.timeframe in self._candle_map:
+                indicator.candle_manager = self._candle_map[indicator.timeframe]
             else:
                 manager = CandleManager(
                     [],
@@ -374,9 +375,9 @@ class Hexital:
                     timeframe_fill=self.timeframe_fill,
                     candlestick=self.candlestick,
                 )
-                manager.append(self._candles[self._timeframe_name].candles)
-                self._candles[manager.name] = manager
-                indicator.candle_manager = self._candles[manager.name]
+                manager.append(self._candle_map[self._timeframe_name].candles)
+                self._candle_map[manager.name] = manager
+                indicator.candle_manager = self._candle_map[manager.name]
 
         return valid_indicators
 

@@ -54,11 +54,12 @@ class Indicator(Generic[V], ABC):
     _mode: IndicatorMode = field(init=False, default=IndicatorMode.STAND)
     _generated_name: bool = field(init=False, default=False)
     _calc_prior: bool = field(init=False, default=True)
+    _active_index: int = field(init=False, default=0)
 
     _name: str = field(init=False, default="")
     _timeframe: Optional[timedelta] = field(init=False)
-    _candles: CandleManager = field(init=False)
-    _active_index: int = field(init=False, default=0)
+    _candle_mngr: CandleManager = field(init=False)
+
     _initialised: bool = field(init=False, default=False)
 
     def __post_init__(self):
@@ -70,7 +71,7 @@ class Indicator(Generic[V], ABC):
         if self.candlestick is not None:
             self.candlestick = validate_candlesticktype(self.candlestick)
 
-        self._candles = CandleManager(
+        self._candle_mngr = CandleManager(
             self.candles,
             self.candle_life,
             self._timeframe,
@@ -78,7 +79,7 @@ class Indicator(Generic[V], ABC):
             self.candlestick,
         )
 
-        self.candles = self._candles.candles
+        self.candles = self._candle_mngr.candles
 
         self._internal_generate_name()
 
@@ -91,8 +92,8 @@ class Indicator(Generic[V], ABC):
         else:
             self._generated_name = True
             name = self._generate_name()
-            if self._candles.timeframe:
-                name += f"_{self._candles.name}"
+            if self._candle_mngr.timeframe:
+                name += f"_{self._candle_mngr.name}"
 
         self.name = name.replace(".", "-")
 
@@ -108,13 +109,13 @@ class Indicator(Generic[V], ABC):
     @property
     def candle_manager(self) -> CandleManager:
         """The Candle Manager which controls TimeFrame, Trimming and collapsing"""
-        return self._candles
+        return self._candle_mngr
 
     @candle_manager.setter
     def candle_manager(self, manager: CandleManager):
         """The Candle Manager which controls TimeFrame, Trimming and collapsing,
         this will overwrite the Manager as well as the candles"""
-        self._candles = manager
+        self._candle_mngr = manager
         self.candles = manager.candles
         self.timeframe = timedelta_to_str(manager.timeframe) if manager.timeframe else None
         self._timeframe = manager.timeframe
@@ -150,8 +151,8 @@ class Indicator(Generic[V], ABC):
 
             if name == "candlestick" and value:
                 output[name] = value.acronym if value.acronym else value.name
-            elif name == "timeframe" and self._candles.timeframe is not None:
-                output[name] = timedelta_to_str(self._candles.timeframe)
+            elif name == "timeframe" and self._candle_mngr.timeframe is not None:
+                output[name] = timedelta_to_str(self._candle_mngr.timeframe)
             elif not name.startswith("_") and value is not None:
                 output[name] = copy(value)
 
@@ -184,7 +185,7 @@ class Indicator(Generic[V], ABC):
             candles: The Candle or List of Candle's to prepend.
         """
 
-        self._candles.prepend(candles)
+        self._candle_mngr.prepend(candles)
         self.calculate()
 
     def append(self, candles: Candles):
@@ -193,7 +194,7 @@ class Indicator(Generic[V], ABC):
         Args:
             candles: The Candle or List of Candle's to prepend.
         """
-        self._candles.append(candles)
+        self._candle_mngr.append(candles)
         self.calculate()
 
     def insert(self, candles: Candles):
@@ -202,7 +203,7 @@ class Indicator(Generic[V], ABC):
         Args:
             candles: The Candle or List of Candle's to prepend.
         """
-        self._candles.insert(candles)
+        self._candle_mngr.insert(candles)
         self.calculate_index(0, -1)
 
     @property
@@ -327,7 +328,7 @@ class Indicator(Generic[V], ABC):
         if indicator._generated_name:
             indicator.name = f"{self.name}-{indicator.name}"
 
-        indicator.candle_manager = self._candles
+        indicator.candle_manager = self._candle_mngr
         indicator.rounding = None
         self.sub_indicators[indicator.name] = indicator
         return self.sub_indicators[indicator.name]
@@ -341,7 +342,7 @@ class Indicator(Generic[V], ABC):
         elif indicator._generated_name:
             indicator.name = f"{self.name}-{indicator.name}"
 
-        indicator.candle_manager = self._candles
+        indicator.candle_manager = self._candle_mngr
         indicator.rounding = None
         self.managed_indicators[indicator.name] = indicator
         return indicator
@@ -357,8 +358,6 @@ class Indicator(Generic[V], ABC):
             return None
 
         if not source or (isinstance(source, str) and source == self.name):
-            if not self.candles:
-                return None
             return reading_by_index(self.candles, self.name, index)
         elif isinstance(source, str):
             return reading_by_index(self.candles, source, index)
@@ -477,7 +476,7 @@ class Indicator(Generic[V], ABC):
 
     def purge(self):
         """Remove this indicator value from all Candles"""
-        self._candles.purge(
+        self._candle_mngr.purge(
             {self.name}
             | {indicator.name for indicator in self.sub_indicators.values()}
             | {indicator.name for indicator in self.managed_indicators.values()}

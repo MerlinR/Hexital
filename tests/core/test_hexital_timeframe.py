@@ -39,19 +39,19 @@ def test_hextial_multi_timeframes_shared_candles(
     strat.calculate()
 
     candles_name = None
-    for key in strat._candles.keys():
+    for key in strat._candle_map.keys():
         if key != DEFAULT_CANDLES:
             candles_name = key
 
     if not candles_name:
         assert False
 
-    assert len(strat._candles.keys()) == 2
+    assert len(strat._candle_map.keys()) == 2
     assert pytest.approx(strat.reading_as_list("EMA_10")) == expected_ema
     assert (
-        strat._candles[candles_name].candles[-1].indicators.get("SMA_10_T10")
+        strat._candle_map[candles_name].candles[-1].indicators.get("SMA_10_T10")
         == expected_sma_t10[-1]
-        and strat._candles[candles_name].candles[-1].indicators.get("OBV_T10")
+        and strat._candle_map[candles_name].candles[-1].indicators.get("OBV_T10")
         == expected_obv_t10[-1]
     )
 
@@ -66,7 +66,7 @@ def test_hextial_multi_timeframes_get_candles(candles):
     strat.calculate()
 
     candles_name = None
-    for key in strat._candles.keys():
+    for key in strat._candle_map.keys():
         if key != DEFAULT_CANDLES:
             candles_name = key
 

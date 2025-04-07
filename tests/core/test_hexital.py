@@ -554,23 +554,23 @@ class TestFindCandles:
 class TestMultiTimeframesNames:
     def test_timeframe_default(self, candles):
         strat = Hexital("Test Strategy", candles)
-        assert list(strat._candles.keys()) == ["default"]
+        assert list(strat._candle_map.keys()) == ["default"]
 
     def test_timeframe_multi(self, candles):
         strat = Hexital("Test Strategy", candles, [EMA(timeframe="T1")])
-        assert list(strat._candles.keys()) == ["default", "T1"]
+        assert list(strat._candle_map.keys()) == ["default", "T1"]
 
     def test_duplicate_indicators(self, candles):
         strat = Hexital("Test Strategy", candles, [EMA(timeframe="T1"), SMA(timeframe="T1")])
-        assert list(strat._candles.keys()) == ["default", "T1"]
+        assert list(strat._candle_map.keys()) == ["default", "T1"]
 
     def test_clash_hexital(self, candles):
         strat = Hexital("Test Strategy", candles, [EMA(timeframe="T1")], timeframe="T1")
-        assert list(strat._candles.keys()) == ["T1"]
+        assert list(strat._candle_map.keys()) == ["T1"]
 
     def test_multi_hexital(self, candles):
         strat = Hexital("Test Strategy", candles, [EMA(timeframe="T5")], timeframe="T1")
-        assert list(strat._candles.keys()) == ["T1", "T5"]
+        assert list(strat._candle_map.keys()) == ["T1", "T5"]
 
 
 class TestHexitalSettings:
