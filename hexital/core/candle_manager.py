@@ -62,6 +62,8 @@ class CandleManager:
     def name(self) -> str:
         if self._name:
             return self._name
+        elif self.candlestick and self.timeframe:
+            return f"{timedelta_to_str(self.timeframe)}_{self.candlestick.acronym}"
         elif self.timeframe:
             return timedelta_to_str(self.timeframe)
         else:
