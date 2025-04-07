@@ -315,7 +315,7 @@ class CandleManager:
     def purge(self, indicator: str | Set[str]):
         """Remove this indicator value from all Candles"""
         if isinstance(indicator, str):
-            indicator = indicator
+            indicator = {indicator}
 
         for candle in self.candles:
             for name in indicator:
