@@ -5,7 +5,7 @@ from functools import cmp_to_key
 from typing import List, Optional, Set, TypeAlias
 
 from hexital.core.candle import Candle
-from hexital.core.candlestick_type import CandlestickType
+from hexital.core.candlestick_type import CalcMode, CandlestickType
 from hexital.exceptions import InvalidCandleOrder
 from hexital.utils.candles import reading_by_candle
 from hexital.utils.timeframe import (
@@ -22,7 +22,7 @@ DEFAULT_CANDLES = "default"
 
 class CandleManager:
     _name: Optional[str] = None
-    candles: List[Candle]
+    _candles: List[Candle]
     candle_life: Optional[timedelta]
     timeframe: Optional[timedelta] = None
     timeframe_fill: bool = False
@@ -39,20 +39,20 @@ class CandleManager:
         self.candle_life = candle_life
         self.timeframe = timeframe
         self.timeframe_fill = timeframe_fill
-        self.candlestick = candlestick
+        self._candles = candles if candles else []
 
-        if candles:
-            self.candles = candles
-            self.resample_candles()
+        if candlestick:
+            self.candlestick = candlestick
+            self.candlestick.set_candle_refs(self._candles)
+
+        if self._candles:
             self._candle_tasks()
-        else:
-            self.candles = []
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, CandleManager):
             return False
 
-        for key in ["candle_life", "timeframe", "timeframe_fill"]:
+        for key in ["candle_life", "timeframe", "timeframe_fill", "candlestick"]:
             if getattr(self, key) != getattr(other, key):
                 return False
 
@@ -71,8 +71,27 @@ class CandleManager:
     def name(self, name: str):
         self._name = name
 
-    def _candle_tasks(self):
-        self.convert_candles()
+    @property
+    def candles(self) -> List[Candle]:
+        if self.candlestick:
+            return self.candlestick.derived_candles
+        return self._candles
+
+    @candles.setter
+    def candles(self, candles: List[Candle]):
+        """Set the Candles in Candlestick manager and reset transformed Candles"""
+        self._candles = candles
+        if self.candlestick:
+            self.candlestick.derived_candles.reset()
+
+    def _candle_tasks(
+        self,
+        mode: CalcMode = CalcMode.INSERT,
+        index: Optional[int] = None,
+        end_index: Optional[int] = None,
+    ):
+        self.resample_candles(index, end_index)
+        self.candlestick_conversion(mode, index)
         self.trim_candles()
 
     def find_indicator(self, name: str) -> bool:
@@ -109,23 +128,21 @@ class CandleManager:
         for candle in reversed(candles_):
             if self.timeframe and candle.timeframe and candle.timeframe > self.timeframe:
                 continue
-            self.candles.insert(0, candle.clean_copy())
+            self._candles.insert(0, candle.clean_copy())
 
-        self.resample_candles(0, len(candles_))
-        self._candle_tasks()
+        self._candle_tasks(CalcMode.PREPEND, 0, len(candles_))
 
     def append(self, candles: Candles):
         candles_ = self._parse_candles(candles)
-        start_index = len(self.candles) - 1 if len(self.candles) > 0 else 0
+        start_index = len(self._candles) - 1 if len(self._candles) > 0 else 0
 
         for candle in candles_:
             if self.timeframe and candle.timeframe and candle.timeframe > self.timeframe:
                 continue
 
-            self.candles.append(candle.clean_copy())
+            self._candles.append(candle.clean_copy())
 
-        self.resample_candles(start_index)
-        self._candle_tasks()
+        self._candle_tasks(CalcMode.APPEND, start_index)
 
     def insert(self, candles: Candles):
         candles_ = self._parse_candles(candles)
@@ -133,7 +150,7 @@ class CandleManager:
         self.sort_candles(candles_)
 
         to_sort = False
-        last_timestamp = self.candles[-1].timestamp if self.candles else None
+        last_timestamp = self._candles[-1].timestamp if self._candles else None
 
         for candle in candles_:
             if self.timeframe and candle.timeframe and candle.timeframe > self.timeframe:
@@ -141,20 +158,19 @@ class CandleManager:
             elif last_timestamp and candle.timestamp < last_timestamp:
                 to_sort = True
 
-            self.candles.append(candle.clean_copy())
+            self._candles.append(candle.clean_copy())
 
         if to_sort:
             self.sort_candles()
 
-        self.resample_candles()
-        self._candle_tasks()
+        self._candle_tasks(CalcMode.INSERT)
 
     def sort_candles(self, candles: Optional[List[Candle]] = None):
         """Sorts Candles in order of timestamp, accounts for collapsing"""
         if candles:
             candles.sort(key=cmp_to_key(self._sort_comparison))
         else:
-            self.candles.sort(key=cmp_to_key(self._sort_comparison))
+            self._candles.sort(key=cmp_to_key(self._sort_comparison))
 
     def _sort_comparison(self, candle_one: Candle, candle_two: Candle) -> int:
         """Sort's Candles in order but if timeframe exists, sorts with collapsing in mind.
@@ -185,28 +201,33 @@ class CandleManager:
         return int(time_one - time_two)
 
     def trim_candles(self):
-        if self.candle_life is None or not self.candles:
+        if self.candle_life is None or not self._candles:
             return
 
-        latest = self.candles[-1].timestamp
-
-        while self.candles[0].timestamp and self.candles[0].timestamp < latest - self.candle_life:
-            self.candles.pop(0)
+        while (
+            self._candles[0].timestamp
+            and self._candles[-1].timestamp
+            and self._candles[0].timestamp < self._candles[-1].timestamp - self.candle_life
+        ):
+            self._candles.pop(0)
 
     def resample_candles(
         self,
-        start_index: int = 0,
+        start_index: Optional[int] = None,
         end_index: Optional[int] = None,
     ):
         """resamples the given list of candles into specific timeframe candles.
         This can re-ran with same list to resample latest candles.
         This method is destructive, generating a new list for the resampled candles"""
-        if len(self.candles) <= start_index + 1 or not self.timeframe:
+        if start_index is None:
+            start_index = 0
+
+        if len(self._candles) <= start_index + 1 or not self.timeframe:
             return
 
-        end_index_ = end_index + 1 if end_index else len(self.candles)
+        end_index_ = end_index + 1 if end_index else len(self._candles)
 
-        candles_ = [self.candles.pop(start_index)]
+        candles_ = [self._candles.pop(start_index)]
 
         init_candle = candles_[0]
         init_candle.timeframe = self.timeframe
@@ -218,10 +239,10 @@ class CandleManager:
             init_candle.set_resampled_timestamp(end_time)
 
         for _ in range(abs(end_index_ - start_index)):
-            if len(self.candles) <= start_index:
+            if len(self._candles) <= start_index:
                 break
 
-            candle = self.candles.pop(start_index)
+            candle = self._candles.pop(start_index)
 
             prev_candle = candles_[-1]
 
@@ -265,7 +286,7 @@ class CandleManager:
                 candles_, self.timeframe, start_index, end_index
             )
 
-        self.candles[start_index:start_index] = candles_
+        self._candles[start_index:start_index] = candles_
 
     @staticmethod
     def _fill_timeframe_candles(
@@ -290,6 +311,10 @@ class CandleManager:
 
             prev_candle = candles[index - 1]
 
+            if prev_candle.timestamp is None:
+                # TODO Add logger warning?
+                break
+
             if candles[index].timestamp != prev_candle.timestamp + timeframe:
                 fill_candle = Candle(
                     open=prev_candle.close,
@@ -308,9 +333,9 @@ class CandleManager:
 
         return candles
 
-    def convert_candles(self):
-        if self.candles and self.candlestick:
-            self.candlestick.conversion(self.candles)
+    def candlestick_conversion(self, mode: CalcMode, index: Optional[int] = None):
+        if self.candlestick:
+            self.candlestick.transform(mode, index)
 
     def purge(self, indicator: str | Set[str]):
         """Remove this indicator value from all Candles"""

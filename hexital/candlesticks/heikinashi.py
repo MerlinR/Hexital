@@ -1,7 +1,9 @@
+from collections.abc import Sequence
 from typing import List
 
 from hexital.core.candle import Candle
 from hexital.core.candlestick_type import CandlestickType
+from hexital.utils.weakreflist import WeakList
 
 
 class HeikinAshi(CandlestickType):
@@ -18,16 +20,20 @@ class HeikinAshi(CandlestickType):
 
     name: str = "Heikin-Ashi"
     acronym: str = "HA"
+    candles: List[Candle]  # Fresh Candles
+    derived_candles: WeakList[Candle]  # Transformed Candles
 
-    def convert_candle(self, candle: Candle, candles: List[Candle], index: int):
-        new_close = (candle.open + candle.high + candle.low + candle.close) / 4
+    def transform_candle(self, candle: Candle) -> None | Candle | Sequence[Candle]:
+        candle_ = candle.clean_copy()
+        prev_candle = self.prev_derived()
+        candle_.close = (candle.open + candle.high + candle.low + candle.close) / 4
 
-        if index == 0:
-            candle.open = (candle.open + candle.close) / 2
+        if prev_candle := self.prev_derived():
+            candle_.open = (prev_candle.open + prev_candle.close) / 2
         else:
-            candle.open = (candles[index - 1].open + candles[index - 1].close) / 2
+            candle_.open = (candle.open + candle.close) / 2
 
-        candle.high = max(candle.open, candle.high, new_close)
-        candle.low = min(candle.open, candle.low, new_close)
+        candle_.high = max(candle_.open, candle_.high, candle_.close)
+        candle_.low = min(candle_.open, candle_.low, candle_.close)
 
-        candle.close = new_close
+        return candle_

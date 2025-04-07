@@ -4,6 +4,7 @@ from typing import List
 import pytest
 from hexital import Candle
 from hexital.core.candle_manager import CandleManager
+from hexital.core.candlestick_type import CalcMode
 from test_candlestick import FakeType
 
 
@@ -525,6 +526,7 @@ class TestCandleTimeframePrepend:
             ),
         ]
         expected[0].aggregation_factor, expected[1].aggregation_factor = 1, 2
+
         assert manager.candles == expected
 
     def test_candle_timeframe_prepend_resample_filler(self):
@@ -631,12 +633,13 @@ class TestCandleInsert:
 
 class TestCandleSort:
     def test_sort_candles(self):
-        manager = CandleManager()
-        manager.candles = [
-            Candle(17213, 2395, 7813, 3615, 19661, timestamp=datetime(2023, 10, 3, 9, 5)),
-            Candle(14842, 14842, 14831, 14835, 540, timestamp=datetime(2023, 10, 3, 9, 10)),
-            Candle(1301, 3007, 11626, 19048, 28909, timestamp=datetime(2023, 10, 3, 9, 0)),
-        ]
+        manager = CandleManager(
+            [
+                Candle(17213, 2395, 7813, 3615, 19661, timestamp=datetime(2023, 10, 3, 9, 5)),
+                Candle(14842, 14842, 14831, 14835, 540, timestamp=datetime(2023, 10, 3, 9, 10)),
+                Candle(1301, 3007, 11626, 19048, 28909, timestamp=datetime(2023, 10, 3, 9, 0)),
+            ]
+        )
 
         manager.sort_candles()
 
@@ -648,13 +651,13 @@ class TestCandleSort:
 
     def test_sort_candles_timeframed(self):
         manager = CandleManager(
+            [
+                Candle(1301, 3007, 11626, 19048, 28909, timestamp=datetime(2023, 10, 3, 9, 0)),
+                Candle(17213, 2395, 7813, 3615, 19661, timestamp=datetime(2023, 10, 3, 9, 5)),
+                Candle(14842, 14842, 14831, 14835, 540, timestamp=datetime(2023, 10, 3, 9, 10)),
+            ],
             timeframe=timedelta(minutes=5),
         )
-        manager.candles = [
-            Candle(1301, 3007, 11626, 19048, 28909, timestamp=datetime(2023, 10, 3, 9, 0)),
-            Candle(17213, 2395, 7813, 3615, 19661, timestamp=datetime(2023, 10, 3, 9, 5)),
-            Candle(14842, 14842, 14831, 14835, 540, timestamp=datetime(2023, 10, 3, 9, 10)),
-        ]
 
         manager.candles.append(
             Candle(1301, 3007, 11626, 19048, 28909, timestamp=datetime(2023, 10, 3, 9, 2))
@@ -1004,39 +1007,36 @@ def test_resample_candles_t5_missing_section_fill_all_extra(
 
 
 class TestCandleConversion:
-    @pytest.mark.usefixtures("candles", "minimal_conv_candles_t5_expected")
-    def test_conversion_manager_timeframe(
-        self, minimal_candles: List[Candle], minimal_conv_candles_t5_expected: List[Candle]
+    @pytest.mark.usefixtures("minimal_candles", "candles_candlesticks_T5_expected")
+    def test_candlestick_timeframe(
+        self, minimal_candles: List[Candle], candles_candlesticks_T5_expected: List[Candle]
     ):
         manager = CandleManager(
             minimal_candles, timeframe=timedelta(minutes=5), candlestick=FakeType()
         )
-        manager._candle_tasks()
 
-        assert manager.candles == minimal_conv_candles_t5_expected
+        assert manager.candles == candles_candlesticks_T5_expected
 
-    @pytest.mark.usefixtures("candles", "minimal_conv_candles_t5_expected")
-    def test_conversion_manager_timeframe_multi_convert(
-        self, minimal_candles: List[Candle], minimal_conv_candles_t5_expected: List[Candle]
+    @pytest.mark.usefixtures("minimal_candles", "candles_candlesticks_T5_expected")
+    def test_candlestick_timeframe_multi_convert(
+        self, minimal_candles: List[Candle], candles_candlesticks_T5_expected: List[Candle]
     ):
         manager = CandleManager(
             minimal_candles, timeframe=timedelta(minutes=5), candlestick=FakeType()
         )
-        manager.convert_candles()
-        manager.convert_candles()
-        manager.convert_candles()
+        manager.candlestick_conversion(CalcMode.INSERT)
+        manager.candlestick_conversion(CalcMode.INSERT)
 
-        assert manager.candles == minimal_conv_candles_t5_expected
+        assert manager.candles == candles_candlesticks_T5_expected
 
-    @pytest.mark.usefixtures("candles", "minimal_conv_candles_t5_expected")
-    def test_conversion_manager_timeframe_resample_messy(
-        self, minimal_candles: List[Candle], minimal_conv_candles_t5_expected: List[Candle]
+    @pytest.mark.usefixtures("minimal_candles", "candles_candlesticks_T5_expected")
+    def test_candlestick_timeframe_resample_messy(
+        self, minimal_candles: List[Candle], candles_candlesticks_T5_expected: List[Candle]
     ):
         manager = CandleManager(
             minimal_candles[:3], timeframe=timedelta(minutes=5), candlestick=FakeType()
         )
 
-        manager._candle_tasks()
         manager.append(minimal_candles[3:])
 
-        assert manager.candles == minimal_conv_candles_t5_expected
+        assert manager.candles == candles_candlesticks_T5_expected
