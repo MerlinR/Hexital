@@ -30,10 +30,13 @@ class WeakList(Generic[T], list):
         self._refs = []
         self._dirty = False
 
-    def __getitem__(self, idx) -> T:
+    def __getitem__(self, idx: slice | SupportsIndex) -> T | List[T]:
         if self._dirty:
             self.flush()
-        return self._refs[idx]()
+        if isinstance(idx, int):
+            return self._refs[idx]()
+        else:
+            return [v() for v in self._refs[idx]]
 
     def __iter__(self) -> Generator[T, None, None]:
         for ref in self._refs:
