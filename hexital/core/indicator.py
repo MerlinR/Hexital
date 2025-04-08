@@ -260,9 +260,7 @@ class Indicator(Generic[V], ABC):
 
         if cur_reading is None:
             return False
-        elif isinstance(cur_reading, dict) and isinstance(reading, dict):
-            # TODO find a good way to detect if dict is same or not
-            return False
+
         elif reading == cur_reading:
             return True
         return False
