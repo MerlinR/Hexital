@@ -24,7 +24,7 @@ class Candle:
     timeframe: Optional[timedelta]
     aggregation_factor: int
     tag: Optional[str] = None
-    refs: Dict[str, Any]
+    refs: Dict[str, Sequence | None]
     _start_timestamp: Optional[datetime] = None
     _end_timestamp: Optional[datetime] = None
 

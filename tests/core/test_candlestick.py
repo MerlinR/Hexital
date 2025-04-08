@@ -2,7 +2,8 @@ from typing import List
 
 import pytest
 from hexital.core.candle import Candle
-from hexital.core.candlestick_type import CalcMode, CandlestickType
+from hexital.core.candlestick_type import CandlestickType
+from hexital.utils.common import CalcMode
 
 
 class FakeType(CandlestickType):

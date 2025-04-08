@@ -5,9 +5,10 @@ from functools import cmp_to_key
 from typing import List, Optional, Set, TypeAlias
 
 from hexital.core.candle import Candle
-from hexital.core.candlestick_type import CalcMode, CandlestickType
+from hexital.core.candlestick_type import CandlestickType
 from hexital.exceptions import InvalidCandleOrder
 from hexital.utils.candles import reading_by_candle
+from hexital.utils.common import CalcMode
 from hexital.utils.timeframe import (
     on_timeframe,
     round_down_timestamp,
@@ -92,9 +93,8 @@ class CandleManager:
         self,
         mode: CalcMode = CalcMode.INSERT,
         index: Optional[int] = None,
-        end_index: Optional[int] = None,
     ):
-        self.resample_candles(index, end_index)
+        self.resample_candles(mode, index)
         self.candlestick_conversion(mode, index)
         self.trim_candles()
 
@@ -134,11 +134,11 @@ class CandleManager:
                 continue
             self._candles.insert(0, candle.clean_copy())
 
-        self._candle_tasks(CalcMode.PREPEND, 0, len(candles_))
+        self._candle_tasks(CalcMode.PREPEND)
 
     def append(self, candles: Candles):
         candles_ = self._parse_candles(candles)
-        start_index = len(self._candles) - 1 if len(self._candles) > 0 else 0
+        index = len(self._candles) - 1 if len(self._candles) > 0 else 0
 
         for candle in candles_:
             if self.timeframe and candle.timeframe and candle.timeframe > self.timeframe:
@@ -146,7 +146,7 @@ class CandleManager:
 
             self._candles.append(candle.clean_copy())
 
-        self._candle_tasks(CalcMode.APPEND, start_index)
+        self._candle_tasks(CalcMode.APPEND, index)
 
     def insert(self, candles: Candles):
         candles_ = self._parse_candles(candles)
@@ -217,24 +217,30 @@ class CandleManager:
 
     def resample_candles(
         self,
-        start_index: Optional[int] = None,
-        end_index: Optional[int] = None,
+        mode: CalcMode,
+        index: Optional[int] = None,
     ):
         """resamples the given list of candles into specific timeframe candles.
         This can re-ran with same list to resample latest candles.
         This method is destructive, generating a new list for the resampled candles"""
-        if start_index is None:
+        if mode == CalcMode.INSERT:
             start_index = 0
+        elif index is not None:
+            start_index = index
+        else:
+            start_index = self._find_resample_index()
 
         if len(self._candles) <= start_index + 1 or not self.timeframe:
             return
 
-        end_index_ = end_index + 1 if end_index else len(self._candles)
+        end_index = len(self._candles)
 
         candles_ = [self._candles.pop(start_index)]
 
         init_candle = candles_[0]
         init_candle.timeframe = self.timeframe
+        if not init_candle.timestamp:
+            return
 
         start_time = round_down_timestamp(init_candle.timestamp, self.timeframe)
         end_time = start_time + self.timeframe
@@ -242,13 +248,23 @@ class CandleManager:
         if not on_timeframe(init_candle.timestamp, self.timeframe):
             init_candle.set_resampled_timestamp(end_time)
 
-        for _ in range(abs(end_index_ - start_index)):
+        for _ in range(abs(end_index - start_index)):
             if len(self._candles) <= start_index:
                 break
 
             candle = self._candles.pop(start_index)
-
             prev_candle = candles_[-1]
+
+            if not candle.timestamp:
+                return
+
+            if (
+                mode != CalcMode.INSERT
+                and candle.timeframe == self.timeframe
+                and prev_candle.timeframe == self.timeframe
+            ):
+                candles_.append(candle)
+                break
 
             next_end_time = end_time + self.timeframe
             candle.timestamp = trim_timestamp(candle.timestamp)
@@ -291,6 +307,22 @@ class CandleManager:
             )
 
         self._candles[start_index:start_index] = candles_
+
+    def _find_resample_index(self) -> int:
+        """Optimisation method, to find where to start calculating the indicator from
+        Searches from newest to oldest to find the first candle without the indicator
+        """
+        if (
+            not self.candles
+            or not self.candles[0].timeframe
+            or self.candles[0].timeframe != self.timeframe
+        ):
+            return 0
+
+        for index in range(len(self.candles) - 1, -1, -1):
+            if self.candles[index].timeframe == self.timeframe:
+                return index + 1
+        return 0
 
     @staticmethod
     def _fill_timeframe_candles(

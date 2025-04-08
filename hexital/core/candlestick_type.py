@@ -1,16 +1,11 @@
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
-from enum import Enum, auto
 from typing import List, Optional
 
 from hexital.core.candle import Candle
+from hexital.utils.common import CalcMode
+from hexital.utils.indexing import valid_index
 from hexital.utils.weakreflist import WeakList
-
-
-class CalcMode(Enum):
-    INSERT = auto()
-    APPEND = auto()
-    PREPEND = auto()
 
 
 class CandlestickType(ABC):
@@ -44,12 +39,14 @@ class CandlestickType(ABC):
         APPEND: Will transform all Candles at the end that have no derived Candles
         PREPEND: Will transform all Candles from the start until hitting already Transformed candles
         """
-        if mode != CalcMode.APPEND:
+        if mode == CalcMode.INSERT:
             start_index = 0
+        elif index is not None:
+            start_index = index
         else:
-            start_index = index if index is not None else self._find_transform_index()
+            start_index = self._find_transform_index()
 
-        self._derived_idx = 0 if mode != CalcMode.APPEND else len(self.derived_candles)
+        self._derived_idx = len(self.derived_candles) if mode == CalcMode.APPEND else 0
 
         if mode == CalcMode.INSERT:
             self.derived_candles.reset()
@@ -57,33 +54,40 @@ class CandlestickType(ABC):
         for index in range(start_index, len(self.candles)):
             candle = self.candles[index]
 
-            if mode == CalcMode.PREPEND and self.acronym in candle.refs:
-                break
-
-            trans_cdl = self.transform_candle(candle)
+            candles = self.transform_candle(candle)
 
             # None Candles never added to derived
-            if not trans_cdl:
+            if not candles:
                 candle.refs[self.acronym] = None
                 continue
 
-            for cdl in trans_cdl if isinstance(trans_cdl, Sequence) else [trans_cdl]:
-                cdl.tag = self.acronym
+            if candles := self._insert_derived_candles(candles):
+                candle.refs[self.acronym] = candles
+            else:
+                break
 
-                if mode != CalcMode.PREPEND:
-                    self.derived_candles.append(cdl)
-                else:
-                    self.derived_candles.insert(self._derived_idx, cdl)
+    def _insert_derived_candles(self, candles: Candle | Sequence[Candle]) -> Sequence:
+        candle_ = candles if isinstance(candles, Sequence) else [candles]
 
-                self._derived_idx += 1
+        for cdl in candle_:
+            cdl.tag = self.acronym
 
-            candle.refs[self.acronym] = trans_cdl
+            if (
+                valid_index(self._derived_idx, len(self.derived_candles))
+                and cdl == self.derived_candles[self._derived_idx]
+            ):
+                return []
+
+            self.derived_candles.insert(self._derived_idx, cdl)
+            self._derived_idx += 1
+
+        return candle_
 
     def _find_transform_index(self) -> int:
         """Optimisation method, to find where to start calculating the indicator from
         Searches from newest to oldest to find the first candle without the indicator
         """
-        if not self.candles:
+        if not self.candles or not self.candles[0].refs.get(self.acronym):
             return 0
 
         for index in range(len(self.candles) - 1, -1, -1):

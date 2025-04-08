@@ -4,7 +4,7 @@ from typing import List
 import pytest
 from hexital import Candle
 from hexital.core.candle_manager import CandleManager
-from hexital.core.candlestick_type import CalcMode
+from hexital.utils.common import CalcMode
 from test_candlestick import FakeType
 
 
@@ -818,10 +818,10 @@ class TestMergingCandlesTimeFrame:
         manager = CandleManager(candles, timeframe=timedelta(minutes=5))
         assert manager.candles == candles_T5
 
-        manager.resample_candles()
+        manager.resample_candles(CalcMode.INSERT)
         assert manager.candles == candles_T5
 
-        manager.resample_candles()
+        manager.resample_candles(CalcMode.INSERT)
         assert manager.candles == candles_T5
 
     @pytest.mark.usefixtures("candles", "candles_T5")
