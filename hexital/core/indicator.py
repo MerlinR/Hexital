@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from copy import copy
 from dataclasses import dataclass, field
 from datetime import timedelta
-from enum import Enum
+from enum import Enum, auto
 from typing import Dict, Generic, List, Optional, Tuple, TypeAlias, TypeVar
 
 from hexital.core import Reading
@@ -34,9 +34,9 @@ V = TypeVar("V")
 
 
 class IndicatorMode(Enum):
-    STAND = "STANDARD"
-    SUB = "SUB"
-    MANAGED = "MANAGED"
+    SOLO = auto()
+    SUB = auto()
+    MANAGED = auto()
 
 
 @dataclass(kw_only=True)
@@ -51,7 +51,7 @@ class Indicator(Generic[V], ABC):
 
     sub_indicators: Dict[str, Indicator] = field(init=False, default_factory=dict)
     managed_indicators: Dict[str, Managed | Indicator] = field(init=False, default_factory=dict)
-    _mode: IndicatorMode = field(init=False, default=IndicatorMode.STAND)
+    _mode: IndicatorMode = field(init=False, default=IndicatorMode.SOLO)
     _generated_name: bool = field(init=False, default=False)
     _calc_prior: bool = field(init=False, default=True)
     _active_index: int = field(init=False, default=0)
@@ -208,7 +208,7 @@ class Indicator(Generic[V], ABC):
 
     @property
     def prior_calc(self) -> bool:
-        if self._mode != IndicatorMode.STAND and self._calc_prior:
+        if self._mode != IndicatorMode.SOLO and self._calc_prior:
             return True
         return False
 
@@ -307,7 +307,7 @@ class Indicator(Generic[V], ABC):
     def _set_reading(self, reading: Reading, index: Optional[int] = None):
         index = index if index else self._active_index
 
-        if self._mode != IndicatorMode.STAND:
+        if self._mode != IndicatorMode.SOLO:
             self.candles[index].sub_indicators[self.name] = reading
         else:
             self.candles[index].indicators[self.name] = reading
