@@ -4,10 +4,10 @@ all: test
 
 setup:
 	@echo "Running setup"
-	poetry install
+	poetry install --with dev
 
 format:
-	poetry run ruff format hex_*
+	poetry run ruff format hex*
 
 update:
 	@echo "Running setup"
