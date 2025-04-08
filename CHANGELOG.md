@@ -8,7 +8,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ## 3.0.0
 
-*Release Date: -**
+*Release Date: 2025-04-08*
 
 - Non-backward compatible changes:
     - Hexital and Indicator 'append' will now only append to Candles and not sort placement.
