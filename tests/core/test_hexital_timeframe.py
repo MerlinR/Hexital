@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 import pytest
+from hexital.candlesticks.heikinashi import HeikinAshi
 from hexital.core.candle_manager import DEFAULT_CANDLES
 from hexital.core.hexital import Hexital
 from hexital.indicators import EMA, OBV, SMA
@@ -96,3 +97,14 @@ def test_hextial_multi_timeframes_lifespan(candles, expected_ema, expected_sma_t
 
     assert pytest.approx(strat.reading_as_list("EMA_10")) == expected_ema[-61:]
     assert pytest.approx(strat.reading_as_list("SMA_10_T5"), 1.5e-02) == expected_sma_t5[-13:]
+
+
+@pytest.mark.usefixtures("candles")
+def test_hextial_multi_timeframes_candlesticks(candles):
+    strat = Hexital("Test Strategy", candles, [EMA(timeframe="t5", candlestick=HeikinAshi())])
+    strat.calculate()
+
+    assert (
+        isinstance(strat.indicators["EMA_10_T5_HA"].candlestick, HeikinAshi)
+        and strat.indicators["EMA_10_T5_HA"].candles[-1].tag == "HA"
+    )

@@ -66,6 +66,8 @@ class CandleManager:
             return f"{timedelta_to_str(self.timeframe)}_{self.candlestick.acronym}"
         elif self.timeframe:
             return timedelta_to_str(self.timeframe)
+        elif self.candlestick:
+            return self.candlestick.acronym
         else:
             return DEFAULT_CANDLES
 

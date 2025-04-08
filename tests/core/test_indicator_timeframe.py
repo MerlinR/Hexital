@@ -5,6 +5,7 @@ import pytest
 from hexital import TimeFrame
 from hexital.core.candle import Candle
 from hexital.core.indicator import Indicator
+from test_candlestick import FakeType
 
 
 @dataclass(kw_only=True)
@@ -84,3 +85,25 @@ def test_resample_candles_minutes_t5_partial(
     test.append(minimal_candles[3:])
 
     assert test.candles == minimal_candles_t5
+
+
+class TestIndicatorCandlestickType:
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_indicator_candlestick_type(self, minimal_candles):
+        test_indicator = FakeIndicator(candles=minimal_candles, candlestick=FakeType())
+
+        assert (
+            isinstance(test_indicator.candlestick, FakeType)
+            and test_indicator.candles[-1].tag == "Fake_Type"
+        )
+
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_indicator_candlestick_type_inuse(self, minimal_candles):
+        test_indicator = FakeIndicator(
+            candles=minimal_candles, candlestick=FakeType(), timeframe="T5"
+        )
+
+        assert (
+            isinstance(test_indicator.candlestick, FakeType)
+            and test_indicator.candles[-1].tag == "Fake_Type"
+        )
