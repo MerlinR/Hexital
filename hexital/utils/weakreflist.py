@@ -33,7 +33,7 @@ class WeakList(Generic[T], list):
     def __getitem__(self, idx: slice | SupportsIndex) -> T | List[T]:
         if self._dirty:
             self.flush()
-        if isinstance(idx, int):
+        if isinstance(idx, SupportsIndex):
             return self._refs[idx]()
         else:
             return [v() for v in self._refs[idx]]

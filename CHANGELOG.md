@@ -6,6 +6,14 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ---
 
+## 3.0.1
+
+*Release Date: -*
+
+- CandlestickType now re-calculates after prepending to ensure prev transformed are still correct
+
+---
+
 ## 3.0.0
 
 *Release Date: 2025-04-08*

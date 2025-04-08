@@ -4,6 +4,7 @@ from enum import Enum, auto
 from typing import List, Optional
 
 from hexital.core.candle import Candle
+from hexital.utils.indexing import valid_index
 from hexital.utils.weakreflist import WeakList
 
 
@@ -57,9 +58,6 @@ class CandlestickType(ABC):
         for index in range(start_index, len(self.candles)):
             candle = self.candles[index]
 
-            if mode == CalcMode.PREPEND and self.acronym in candle.refs:
-                break
-
             trans_cdl = self.transform_candle(candle)
 
             # None Candles never added to derived
@@ -67,17 +65,30 @@ class CandlestickType(ABC):
                 candle.refs[self.acronym] = None
                 continue
 
-            for cdl in trans_cdl if isinstance(trans_cdl, Sequence) else [trans_cdl]:
-                cdl.tag = self.acronym
+            if candles := self._insert_derived_candles(mode, trans_cdl):
+                candle.refs[self.acronym] = candles
+            else:
+                break
 
-                if mode != CalcMode.PREPEND:
-                    self.derived_candles.append(cdl)
-                else:
-                    self.derived_candles.insert(self._derived_idx, cdl)
+    def _insert_derived_candles(
+        self, mode: CalcMode, candles: Candle | Sequence[Candle]
+    ) -> Sequence:
+        candle_ = candles if isinstance(candles, Sequence) else [candles]
 
-                self._derived_idx += 1
+        for cdl in candle_:
+            cdl.tag = self.acronym
 
-            candle.refs[self.acronym] = trans_cdl
+            if mode == CalcMode.PREPEND:
+                if (
+                    valid_index(self._derived_idx, len(self.derived_candles))
+                    and cdl == self.derived_candles[self._derived_idx]
+                ):
+                    return []
+                self.derived_candles.insert(self._derived_idx, cdl)
+            else:
+                self.derived_candles.append(cdl)
+            self._derived_idx += 1
+        return candle_
 
     def _find_transform_index(self) -> int:
         """Optimisation method, to find where to start calculating the indicator from
