@@ -1,4 +1,11 @@
+from enum import Enum, auto
 from typing import Any, Dict
+
+
+class CalcMode(Enum):
+    INSERT = auto()
+    APPEND = auto()
+    PREPEND = auto()
 
 
 def round_values(

@@ -11,7 +11,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 *Release Date: -*
 
 - CandlestickType now re-calculates after prepending to ensure prev transformed are still correct
-- Optimise Indicator _reading_dup (I think im dumb)
+- Optimise Indicator '_reading_dup' (I think im dumb)
+- Updated 'resample_candles' to make use of CalcMode
 
 ---
 
