@@ -1,11 +1,11 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, Source
 from hexital.indicators import EMA
 
 
 @dataclass(kw_only=True)
-class MACD(Indicator):
+class MACD(Indicator[dict]):
     """Moving Average Convergence Divergence - MACD
 
     The MACD is a popular indicator to that is used to identify a security's trend.
@@ -26,7 +26,7 @@ class MACD(Indicator):
     """
 
     _name: str = field(init=False, default="MACD")
-    source: str = "close"
+    source: Source = "close"
     fast_period: int = 12
     slow_period: int = 26
     signal_period: int = 9
@@ -44,32 +44,15 @@ class MACD(Indicator):
             self.fast_period, self.slow_period = self.slow_period, self.fast_period
 
     def _initialise(self):
-        self.data = self.add_managed_indicator("DATA", Managed(name=f"{self.name}_macd"))
+        self.data = self.add_managed_indicator(Managed(name=f"{self.name}_macd"))
 
-        self.sub_emaf = self.add_sub_indicator(
-            EMA(
-                source=self.source,
-                period=self.fast_period,
-                name=f"{self.name}_EMA_fast",
-            )
-        )
-        self.sub_emas = self.add_sub_indicator(
-            EMA(
-                source=self.source,
-                period=self.slow_period,
-                name=f"{self.name}_EMA_slow",
-            )
-        )
+        self.sub_emaf = self.add_sub_indicator(EMA(source=self.source, period=self.fast_period))
+        self.sub_emas = self.add_sub_indicator(EMA(source=self.source, period=self.slow_period))
         self.sub_signal = self.add_managed_indicator(
-            "signal",
-            EMA(
-                source=f"{self.name}_macd",
-                period=self.signal_period,
-                name=f"{self.name}_signal_line",
-            ),
+            EMA(source=self.data, period=self.signal_period)
         )
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> dict:
         ema_slow = self.sub_emas.reading()
 
         if ema_slow is not None:

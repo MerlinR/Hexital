@@ -4,7 +4,7 @@ from hexital.core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
-class HLA(Indicator):
+class HLA(Indicator[float]):
     """High Low Average - HLA
 
     Output type: `float`
@@ -15,5 +15,5 @@ class HLA(Indicator):
     def _generate_name(self) -> str:
         return f"{self._name}"
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float:
         return (self.candles[index].high + self.candles[index].low) / 2

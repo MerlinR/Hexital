@@ -1,13 +1,13 @@
 from dataclasses import dataclass, field
 from typing import Optional
 
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, NestedSource
 from hexital.indicators.atr import ATR
 from hexital.indicators.rma import RMA
 
 
 @dataclass(kw_only=True)
-class ADX(Indicator):
+class ADX(Indicator[dict]):
     """Average Directional Index - ADX
 
     ADX is a trend strength in a series of prices of a financial instrument.
@@ -43,13 +43,13 @@ class ADX(Indicator):
             )
         )
 
-        self.data = self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
+        self.data = self.add_managed_indicator(Managed())
 
         self.sub_pos = self.data.add_sub_indicator(
             RMA(
                 name=f"{self.name}_positive",
                 period=self.period,
-                source=f"{self.data.name}.positive",
+                source=NestedSource(self.data, "positive"),
             ),
             False,
         )
@@ -57,20 +57,19 @@ class ADX(Indicator):
             RMA(
                 name=f"{self.name}_negative",
                 period=self.period,
-                source=f"{self.data.name}.negative",
+                source=NestedSource(self.data, "negative"),
             ),
             False,
         )
         self.dx = self.add_managed_indicator(
-            "dx",
             RMA(
                 name=f"{self.name}_dx",
                 period=self.period_signal,
-                source=f"{self.data.name}.dx",
+                source=NestedSource(self.data, "dx"),
             ),
         )
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> dict:
         adx_positive = None
         adx_negative = None
 

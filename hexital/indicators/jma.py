@@ -1,11 +1,11 @@
 import math
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, NestedSource, Source
 
 
 @dataclass(kw_only=True)
-class JMA(Indicator):
+class JMA(Indicator[float | None]):
     """Jurik Moving Average Average - JMA
 
     The JMA is an adaptive moving average that aims to reduce lag and improve responsiveness
@@ -25,7 +25,7 @@ class JMA(Indicator):
 
     _name: str = field(init=False, default="JMA")
     period: int = 7
-    source: str = "close"
+    source: Source = "close"
     phase: float = 0.0
 
     _phase_ratio: float = field(init=False, default=0)
@@ -39,7 +39,7 @@ class JMA(Indicator):
         return f"{self._name}_{self.period}_{self.phase}"
 
     def _initialise(self):
-        self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
+        self.data = self.add_managed_indicator(Managed())
 
     def _validate_fields(self):
         if self.phase > 100:
@@ -57,27 +57,27 @@ class JMA(Indicator):
         self._power_1 = max(self._length_1 - 2.0, 0.5)
         self._bet = self._length_2 / (self._length_2 + 1)
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         price = self.reading(self.source)
-        uband = self.prev_reading(f"{self.name}_data.uband", price)
-        lband = self.prev_reading(f"{self.name}_data.lband", price)
-        vsums = self.prev_reading(f"{self.name}_data.vsums", 0)
-        ma_one = self.prev_reading(f"{self.name}_data.ma_one", price)
-        ma_two = self.prev_reading(f"{self.name}_data.ma_two", 0)
-        det_one = self.prev_reading(f"{self.name}_data.det_one", 0)
-        det_two = self.prev_reading(f"{self.name}_data.det_two", 0)
+        uband = self.prev_reading(NestedSource(self.data, "uband"), price)
+        lband = self.prev_reading(NestedSource(self.data, "lband"), price)
+        vsums = self.prev_reading(NestedSource(self.data, "vsums"), 0)
+        ma_one = self.prev_reading(NestedSource(self.data, "ma_one"), price)
+        ma_two = self.prev_reading(NestedSource(self.data, "ma_two"), 0)
+        det_one = self.prev_reading(NestedSource(self.data, "det_one"), 0)
+        det_two = self.prev_reading(NestedSource(self.data, "det_two"), 0)
 
         # Price Volatility
         del1 = price - uband
         del2 = price - lband
         volty = max(abs(del1), abs(del2)) if abs(del1) != abs(del2) else 0
-        self.managed_indicators["data"].set_reading({"volty": volty})
+        self.data.set_reading({"volty": volty})
 
         # Relative Price Volatility
-        vsums = self.candles_average(10, f"{self.name}_data.volty")
-        self.managed_indicators["data"].set_reading({"vsums": vsums, "volty": volty})
+        vsums = self.candles_average(10, NestedSource(self.data, "volty"))
+        self.data.set_reading({"vsums": vsums, "volty": volty})
 
-        avg_volty = self.candles_average(65, f"{self.name}_data.vsums")
+        avg_volty = self.candles_average(65, NestedSource(self.data, "vsums"))
         d_volty = 0 if avg_volty == 0 else volty / avg_volty
         r_volt = max(1.0, min(pow(self._length_1, 1 / self._power_1), d_volty))
 
@@ -103,7 +103,7 @@ class JMA(Indicator):
         )
         jma = self.prev_reading(default=price) + det_two
 
-        self.managed_indicators["data"].set_reading(
+        self.data.set_reading(
             {
                 "uband": uband,
                 "lband": lband,

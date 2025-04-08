@@ -1,14 +1,10 @@
-from datetime import timedelta
 from typing import List
 
 import pytest
 from hexital.core.candle import Candle
 from hexital.utils.candles import (
     candles_sum,
-    get_candles_period,
-    get_candles_timeframe,
     get_readings_period,
-    get_readings_timeframe,
     reading_by_index,
     reading_count,
     reading_period,
@@ -102,32 +98,32 @@ def test_reading_count_index_two(minimal_candles: List[Candle]):
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_reading_period(minimal_candles: List[Candle]):
-    assert reading_period(minimal_candles, 5, "MinTR") is True
+    assert reading_period(minimal_candles, "MinTR", 5) is True
 
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_reading_period_over(minimal_candles: List[Candle]):
-    assert reading_period(minimal_candles, 15, "MinTR") is False
+    assert reading_period(minimal_candles, "MinTR", 15) is False
 
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_reading_period_over_indexed(minimal_candles: List[Candle]):
-    assert reading_period(minimal_candles, 5, "MinTR", 10) is False
+    assert reading_period(minimal_candles, "MinTR", 5, 10) is False
 
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_reading_period_over_none(minimal_candles: List[Candle]):
-    assert reading_period(minimal_candles, 6, "NoneATR", 5) is True
+    assert reading_period(minimal_candles, "NoneATR", 6, 5) is True
 
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_reading_period_over_none_nested(minimal_candles: List[Candle]):
-    assert reading_period(minimal_candles, 6, "NoneATR.nested", 5) is False
+    assert reading_period(minimal_candles, "NoneATR.nested", 6, 5) is False
 
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_reading_period_over_none_nested_two(minimal_candles: List[Candle]):
-    assert reading_period(minimal_candles, 5, "NoneATR.nested", 5) is True
+    assert reading_period(minimal_candles, "NoneATR.nested", 5, 5) is True
 
 
 @pytest.mark.usefixtures("minimal_candles")
@@ -179,69 +175,3 @@ class TestReadingsPeriod:
             4309,
             10767,
         ]
-
-
-class TestCandlePeriod:
-    @pytest.mark.usefixtures("minimal_candles")
-    def test_basic(self, minimal_candles: List[Candle]):
-        assert get_candles_period(minimal_candles, 5, -1) == minimal_candles[-6:-1]
-
-    def test_basic_with_latest(self, minimal_candles: List[Candle]):
-        assert get_candles_period(minimal_candles, 5, -1, True) == minimal_candles[-5:]
-
-
-class TestReadingsTimeframe:
-    @pytest.mark.usefixtures("minimal_candles")
-    def test_basic(self, minimal_candles: List[Candle]):
-        assert get_readings_timeframe(minimal_candles, "high", timedelta(minutes=4), -1) == [
-            1398,
-            3624,
-            11555,
-            4309,
-        ]
-
-    def test_basic_with_latest(self, minimal_candles: List[Candle]):
-        assert get_readings_timeframe(minimal_candles, "high", timedelta(minutes=4), -1, True) == [
-            1398,
-            3624,
-            11555,
-            4309,
-            10767,
-        ]
-
-    def test_solo(self, minimal_candles: List[Candle]):
-        assert get_readings_timeframe(
-            [minimal_candles[-1]], "high", timedelta(minutes=4), -1, True
-        ) == [minimal_candles[-1].high]
-
-
-class TestCandleTimeframe:
-    @pytest.mark.usefixtures("minimal_candles")
-    def test_basic(self, minimal_candles: List[Candle]):
-        assert (
-            get_candles_timeframe(minimal_candles, timedelta(minutes=4), -1)
-            == minimal_candles[-5:-1]
-        )
-
-    def test_basic_with_latest(self, minimal_candles: List[Candle]):
-        assert (
-            get_candles_timeframe(minimal_candles, timedelta(minutes=4), -1, True)
-            == minimal_candles[-5:]
-        )
-
-    def test_solo(self, minimal_candles: List[Candle]):
-        assert get_candles_timeframe([minimal_candles[0]], timedelta(minutes=4), -1, True) == [
-            minimal_candles[0]
-        ]
-
-    def test_rounded(self, minimal_candles: List[Candle]):
-        assert (
-            get_candles_timeframe(minimal_candles, timedelta(minutes=5), -1, True, True)
-            == minimal_candles[-5:]
-        )
-
-    def test_rounded_two(self, minimal_candles: List[Candle]):
-        assert (
-            get_candles_timeframe(minimal_candles, timedelta(minutes=5), -3, True, True)
-            == minimal_candles[-5:-2]
-        )

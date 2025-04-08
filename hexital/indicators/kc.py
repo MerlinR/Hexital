@@ -1,11 +1,11 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator
+from hexital.core.indicator import Indicator, Source
 from hexital.indicators import ATR, EMA
 
 
 @dataclass(kw_only=True)
-class KC(Indicator):
+class KC(Indicator[dict]):
     """Keltner Channel - KC
 
     Keltner channel is a technical analysis indicator showing a central moving
@@ -25,7 +25,7 @@ class KC(Indicator):
 
     _name: str = field(init=False, default="KC")
     period: int = 20
-    source: str = "close"
+    source: Source = "close"
     multiplier: float = 2.0
 
     def _generate_name(self) -> str:
@@ -33,16 +33,9 @@ class KC(Indicator):
 
     def _initialise(self):
         self.sub_atr = self.add_sub_indicator(ATR(period=self.period))
+        self.sub_ema = self.add_sub_indicator(EMA(source=self.source, period=self.period))
 
-        self.sub_ema = self.add_sub_indicator(
-            EMA(
-                source=self.source,
-                period=self.period,
-                name=f"{self.name}_EMA",
-            )
-        )
-
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> dict:
         atr_ = self.sub_atr.reading()
         ema_ = self.sub_ema.reading()
 

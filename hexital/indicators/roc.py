@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator
+from hexital.core.indicator import Indicator, Source
 
 
 @dataclass(kw_only=True)
-class ROC(Indicator):
+class ROC(Indicator[float | None]):
     """Rate Of Change - ROC
 
     The Price Rate of Change (ROC) indicator in trading refers to the percentage change
@@ -26,12 +26,12 @@ class ROC(Indicator):
 
     _name: str = field(init=False, default="ROC")
     period: int = 10
-    source: str = "close"
+    source: Source = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}"
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists() or self.reading_period(self.period + 1, self.source):
             period_n_back = self.reading(self.source, index - self.period)
 

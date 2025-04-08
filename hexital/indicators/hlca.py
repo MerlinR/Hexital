@@ -4,7 +4,7 @@ from hexital.core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
-class HLCA(Indicator):
+class HLCA(Indicator[float]):
     """High Low Close Average - HLCA
 
     Output type: `float`
@@ -15,5 +15,5 @@ class HLCA(Indicator):
     def _generate_name(self) -> str:
         return f"{self._name}"
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float:
         return (self.candles[index].high + self.candles[index].low + self.candles[index].close) / 3

@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator
+from hexital.core.indicator import Indicator, Source
 
 
 @dataclass(kw_only=True)
-class RMA(Indicator):
+class RMA(Indicator[float | None]):
     """wildeR's Moving Average - RMA
 
     Wilder's Moving Average places more emphasis on recent price movements than other moving averages.
@@ -24,7 +24,7 @@ class RMA(Indicator):
 
     _name: str = field(init=False, default="RMA")
     period: int = 10
-    source: str = "close"
+    source: Source = "close"
     _alpha: float = field(init=False, default=0)
 
     def _generate_name(self) -> str:
@@ -33,7 +33,7 @@ class RMA(Indicator):
     def _validate_fields(self):
         self._alpha = float(1.0 / self.period)
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists():
             return float(
                 (self._alpha * self.reading(self.source))

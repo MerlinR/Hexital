@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from datetime import timedelta
 from typing import Optional
 
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, NestedSource
 from hexital.exceptions import InvalidConfiguration
 from hexital.utils.timeframe import (
     TimeFrame,
@@ -14,7 +14,7 @@ from hexital.utils.timeframe import (
 
 
 @dataclass(kw_only=True)
-class VWAP(Indicator):
+class VWAP(Indicator[float]):
     """Volume-Weighted Average Price - VWAP
 
     The volume-weighted average price is a technical analysis indicator
@@ -42,21 +42,21 @@ class VWAP(Indicator):
         self.anchor = convert_timeframe_to_timedelta(self.anchor)
 
     def _initialise(self):
-        self.data = self.add_managed_indicator("VWAP_data", Managed(name=f"{self.name}_data"))
+        self.data = self.add_managed_indicator(Managed())
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float:
         candle = self.candles[index]
 
         current_anchor = round_down_timestamp(self.reading("timestamp"), self.anchor).timestamp()
-        prev_anchor = self.prev_reading(f"{self.name}_data.active_anchor")
+        prev_anchor = self.prev_reading(NestedSource(self.data, "active_anchor"))
         typical_price = (candle.high + candle.low + candle.close) / 3.0
 
         if prev_anchor != current_anchor:
             pv = 0
             vol = 0
         else:
-            pv = self.prev_reading(f"{self.name}_data.pv", 0.0)
-            vol = self.prev_reading(f"{self.name}_data.vol", 0.0)
+            pv = self.prev_reading(NestedSource(self.data, "pv"), 0.0)
+            vol = self.prev_reading(NestedSource(self.data, "vol"), 0.0)
 
         pv = pv + (candle.volume * typical_price)
         vol = vol + candle.volume

@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, NestedSource, Source
 
 
 @dataclass(kw_only=True)
-class CMO(Indicator):
+class CMO(Indicator[float | None]):
     """Chande Momentum Oscillator - CMO
 
     The CMO indicator is created by calculating the difference between the
@@ -24,15 +24,15 @@ class CMO(Indicator):
 
     _name: str = field(init=False, default="CMO")
     period: int = 14
-    source: str = "close"
+    source: Source = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.data = self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
+        self.data = self.add_managed_indicator(Managed())
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         gains = None
         losses = None
 
@@ -43,11 +43,12 @@ class CMO(Indicator):
             change_loss = change if change > 0 else 0.0
 
             gains = (
-                (self.prev_reading(f"{self.data.name}.gain") * (self.period - 1)) + change_gain
+                (self.prev_reading(NestedSource(self.data, "gain")) * (self.period - 1))
+                + change_gain
             ) / self.period
 
             losses = (
-                (self.data.prev_reading(f"{self.data.name}.loss") * (self.period - 1))
+                (self.data.prev_reading(NestedSource(self.data, "loss")) * (self.period - 1))
                 + change_loss
             ) / self.period
 
@@ -64,3 +65,4 @@ class CMO(Indicator):
 
         if gains is not None and losses is not None:
             return ((gains - losses) / (gains + losses)) * 100
+        return None

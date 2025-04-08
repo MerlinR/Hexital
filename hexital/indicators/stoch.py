@@ -1,12 +1,12 @@
 from dataclasses import dataclass, field
 
 from hexital.analysis import movement
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, NestedSource, Source
 from hexital.indicators.sma import SMA
 
 
 @dataclass(kw_only=True)
-class STOCH(Indicator):
+class STOCH(Indicator[dict]):
     """Stochastic - STOCH
 
     The Stochastic Oscillator (STOCH) was developed by George Lane in the 1950's.
@@ -37,31 +37,30 @@ class STOCH(Indicator):
     period: int = 14
     slow_period: int = 3
     smoothing_k: int = 3
-    source: str = "close"
+    source: Source = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.data = self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
+        self.data = self.add_managed_indicator(Managed())
         self.sub_k = self.data.add_sub_indicator(
             SMA(
-                source=f"{self.name}_data.stoch",
+                source=NestedSource(self.data, "stoch"),
                 period=self.smoothing_k,
                 name=f"{self.name}_k",
             ),
             False,
         )
         self.sub_d = self.add_managed_indicator(
-            "STOCH_d",
             SMA(
-                source=f"{self.name}_data.k",
+                source=NestedSource(self.data, "k"),
                 period=self.slow_period,
                 name=f"{self.name}_d",
             ),
         )
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> dict:
         stoch = None
         k = None
 

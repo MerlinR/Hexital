@@ -1,12 +1,15 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
+from collections.abc import Sequence
+from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
-from hexital.exceptions import CandleAlreadyTagged
-from hexital.utils.timeframe import TimeFrame, convert_timeframe_to_timedelta
-
-IGNORE_CLEAN = ["indicators", "sub_indicators", "_clean_values", "_tag"]
+from hexital.core import Reading
+from hexital.utils.timeframe import (
+    TimeFrame,
+    TimeFramesSource,
+    convert_timeframe_to_timedelta,
+)
 
 
 class Candle:
@@ -15,13 +18,13 @@ class Candle:
     low: float
     close: float
     volume: int
-    timestamp: datetime
-    indicators: Dict[str, float | Dict[str, float | None] | None]
-    sub_indicators: Dict[str, float | Dict[str, float | None] | None]
+    timestamp: Optional[datetime]
+    indicators: Dict[str, Reading]
+    sub_indicators: Dict[str, Reading]
     timeframe: Optional[timedelta]
-    aggregation_factor: int = 1
-    _clean_values: Dict[str, float | int]
-    _tag: Optional[str] = None
+    aggregation_factor: int
+    tag: Optional[str] = None
+    refs: Dict[str, Any]
     _start_timestamp: Optional[datetime] = None
     _end_timestamp: Optional[datetime] = None
 
@@ -32,10 +35,10 @@ class Candle:
         low: float,
         close: float,
         volume: int,
-        timestamp: Optional[datetime | str] = None,
-        timeframe: Optional[str | TimeFrame | timedelta | int] = None,
-        indicators: Optional[Dict[str, float | Dict[str, float | None] | None]] = None,
-        sub_indicators: Optional[Dict[str, float | Dict[str, float | None] | None]] = None,
+        timestamp: Optional[datetime | str] = None,  # End of Candle
+        timeframe: Optional[TimeFramesSource] = None,
+        indicators: Optional[Dict[str, Reading]] = None,
+        sub_indicators: Optional[Dict[str, Reading]] = None,
     ):
         self.open = open
         self.high = high
@@ -44,14 +47,17 @@ class Candle:
         self.volume = volume
         self.timeframe = convert_timeframe_to_timedelta(timeframe) if timeframe else None
 
+        self.tag = None
+        self.aggregation_factor = 1
+
         if isinstance(timestamp, datetime):
             self.timestamp = timestamp
         elif isinstance(timestamp, str):
             self.timestamp = datetime.fromisoformat(timestamp)
         else:
-            self.timestamp = datetime.now(timezone.utc)
+            self.timestamp = None
 
-        self._clean_values = {}
+        self.refs = {}
         self.indicators = indicators if indicators else {}
         self.sub_indicators = sub_indicators if sub_indicators else {}
 
@@ -72,17 +78,6 @@ class Candle:
 
     def __repr__(self) -> str:
         return str({name: value for name, value in vars(self).items() if not name.startswith("_")})
-
-    @property
-    def tag(self) -> str | None:
-        return self._tag
-
-    @tag.setter
-    def tag(self, tag: str):
-        if not self._tag:
-            self._tag = tag
-            return
-        raise CandleAlreadyTagged(f"Candle already tagged as {self._tag} - [{self}]")
 
     @property
     def positive(self) -> bool:
@@ -204,7 +199,7 @@ class Candle:
         )
 
     @classmethod
-    def from_dicts(cls, candles: List[Dict[str, float]]) -> List[Candle]:
+    def from_dicts(cls, candles: Sequence[Dict[str, Any]]) -> List[Candle]:
         """
         Create's a list of `Candle` object's from a list of dictionary representation.
 
@@ -250,7 +245,7 @@ class Candle:
         indicators = {}
         sub_indicators = {}
 
-        if len(candle) > 5 and isinstance(candle[0], (str, datetime)):
+        if len(candle) > 5 and (isinstance(candle[0], (str, datetime)) or candle[0] is None):
             timestamp = candle.pop(0)
         if len(candle) > 5 and isinstance(candle[-1], (str, int, TimeFrame, timedelta)):
             timeframe = candle.pop(-1)
@@ -292,39 +287,21 @@ class Candle:
         """
         return [cls.from_list(candle) for candle in candles]
 
-    @classmethod
-    def load_csv(cls, headers: List[str]):
-        return
-
-    @classmethod
-    def load_json(cls):
-        return
-
     def clean_copy(self) -> Candle:
         candle = Candle.from_list(self.as_list())
         candle.aggregation_factor = self.aggregation_factor
         return candle
 
-    def set_collapsed_timestamp(self, timestamp: datetime):
+    def set_resampled_timestamp(self, timestamp: datetime):
         if not self._start_timestamp:
             self._start_timestamp = self.timestamp
         self.timestamp = timestamp
 
-    def save_clean_values(self):
-        self._clean_values = {
-            name: value for name, value in vars(self).items() if name not in IGNORE_CLEAN
-        }
-
-    def recover_clean_values(self):
-        if self._clean_values:
-            for name, value in self._clean_values.items():
-                self.__setattr__(name, value)
-        self._clean_values = {}
-
     def reset_candle(self):
         self.indicators = {}
         self.sub_indicators = {}
-        self._tag = None
+        self.refs = {}
+        self.tag = None
 
     def merge(self, candle: Candle):
         """
@@ -349,14 +326,17 @@ class Candle:
             - Increments the `aggregation_factor` to account for the merged data.
             - Resets calculated indicators and cleans any derived values.
         """
+        if self.timestamp is None or candle.timestamp is None:
+            self.high = max(self.high, candle.high)
+            self.low = min(self.low, candle.low)
+            self.close = candle.close
+            return
 
         if self.timeframe:
             if (candle.timestamp + self.timeframe > self.timestamp + self.timeframe) or (
                 candle.timestamp < self.timestamp - self.timeframe
             ):
                 return
-
-        self.recover_clean_values()
 
         if self._start_timestamp and candle.timestamp < self._start_timestamp:
             self.open = candle.open

@@ -1,7 +1,9 @@
 from datetime import timedelta
 
 import pytest
-from hexital.core.hexital import DEFAULT_CANDLES, Hexital
+from hexital.candlesticks.heikinashi import HeikinAshi
+from hexital.core.candle_manager import DEFAULT_CANDLES
+from hexital.core.hexital import Hexital
 from hexital.indicators import EMA, OBV, SMA
 
 
@@ -38,19 +40,19 @@ def test_hextial_multi_timeframes_shared_candles(
     strat.calculate()
 
     candles_name = None
-    for key in strat._candles.keys():
+    for key in strat._candle_map.keys():
         if key != DEFAULT_CANDLES:
             candles_name = key
 
     if not candles_name:
         assert False
 
-    assert len(strat._candles.keys()) == 2
+    assert len(strat._candle_map.keys()) == 2
     assert pytest.approx(strat.reading_as_list("EMA_10")) == expected_ema
     assert (
-        strat._candles[candles_name].candles[-1].indicators.get("SMA_10_T10")
+        strat._candle_map[candles_name].candles[-1].indicators.get("SMA_10_T10")
         == expected_sma_t10[-1]
-        and strat._candles[candles_name].candles[-1].indicators.get("OBV_T10")
+        and strat._candle_map[candles_name].candles[-1].indicators.get("OBV_T10")
         == expected_obv_t10[-1]
     )
 
@@ -65,7 +67,7 @@ def test_hextial_multi_timeframes_get_candles(candles):
     strat.calculate()
 
     candles_name = None
-    for key in strat._candles.keys():
+    for key in strat._candle_map.keys():
         if key != DEFAULT_CANDLES:
             candles_name = key
 
@@ -95,3 +97,14 @@ def test_hextial_multi_timeframes_lifespan(candles, expected_ema, expected_sma_t
 
     assert pytest.approx(strat.reading_as_list("EMA_10")) == expected_ema[-61:]
     assert pytest.approx(strat.reading_as_list("SMA_10_T5"), 1.5e-02) == expected_sma_t5[-13:]
+
+
+@pytest.mark.usefixtures("candles")
+def test_hextial_multi_timeframes_candlesticks(candles):
+    strat = Hexital("Test Strategy", candles, [EMA(timeframe="t5", candlestick=HeikinAshi())])
+    strat.calculate()
+
+    assert (
+        isinstance(strat.indicators["EMA_10_T5_HA"].candlestick, HeikinAshi)
+        and strat.indicators["EMA_10_T5_HA"].candles[-1].tag == "HA"
+    )

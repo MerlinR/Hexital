@@ -25,11 +25,25 @@ def default(candles):
         strat.append(candle)
 
 
-def timeframe(candles):
+def default_prepend(candles):
+    strat = Hexital("test", [], [indicators.EMA(), indicators.EMA()])
+
+    for i, candle in enumerate(candles):
+        strat.prepend(candle)
+
+
+def timeframe_1t(candles):
     strat = Hexital("test", [], [indicators.EMA(), indicators.EMA(timeframe="T1")])
 
     for i, candle in enumerate(candles):
         strat.append(candle)
+
+
+def timeframe_prepend_1t(candles):
+    strat = Hexital("test", [], [indicators.EMA(), indicators.EMA(timeframe="T1")])
+
+    for candle in reversed(candles):
+        strat.prepend(candle)
 
 
 def timeframe_5t(candles):
@@ -37,6 +51,20 @@ def timeframe_5t(candles):
 
     for i, candle in enumerate(candles):
         strat.append(candle)
+
+
+def timeframe_append(candles):
+    strat = Hexital("test", [], [indicators.Supertrend(), indicators.Supertrend(timeframe="T5")])
+
+    for candle in candles:
+        strat.append(candle)
+
+
+def timeframe_prepend(candles):
+    strat = Hexital("test", [], [indicators.Supertrend(), indicators.Supertrend(timeframe="T5")])
+
+    for candle in reversed(candles):
+        strat.prepend(candle)
 
 
 if __name__ == "__main__":
@@ -50,8 +78,20 @@ if __name__ == "__main__":
     with common.Profiler("Timeframes_default"):
         default(candles)
 
+    with common.Profiler("Timeframes_default_prepend"):
+        default_prepend(candles)
+
     with common.Profiler("Timeframes_T1"):
-        timeframe(candles)
+        timeframe_1t(candles)
+
+    with common.Profiler("Timeframes_T1_prepend"):
+        timeframe_prepend_1t(candles)
 
     with common.Profiler("Timeframes_T5"):
-        timeframe(candles)
+        timeframe_5t(candles)
+
+    with common.Profiler("Timeframes_supertrend_append"):
+        timeframe_append(candles)
+
+    with common.Profiler("Timeframes_supertrend_prepend"):
+        timeframe_prepend(candles)

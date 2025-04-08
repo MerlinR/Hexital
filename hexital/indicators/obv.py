@@ -4,7 +4,7 @@ from hexital.core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
-class OBV(Indicator):
+class OBV(Indicator[float]):
     """On-Balance Volume - OBC
 
     On-balance volume (OBV) is a technical analysis indicator intended
@@ -22,13 +22,13 @@ class OBV(Indicator):
     def _generate_name(self) -> str:
         return self._name
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float:
         if self.prev_exists():
-            if self.reading("close") == self.prev_reading("close"):
+            if self.candles[index].close == self.candles[index - 1].close:
                 return self.prev_reading()
-            elif self.reading("close") > self.prev_reading("close"):
-                return self.prev_reading() + self.reading("volume")
+            elif self.candles[index].close > self.candles[index - 1].close:
+                return self.prev_reading() + self.candles[index].volume
 
-            return self.prev_reading() - self.reading("volume")
+            return self.prev_reading() - self.candles[index].volume
 
-        return self.reading("volume")
+        return self.candles[index].volume

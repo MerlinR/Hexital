@@ -5,7 +5,7 @@ from hexital.core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
-class HL(Indicator):
+class HL(Indicator[dict]):
     """Highest Lowest - HL
 
     Simple utility indicator to record and display the highest and lowest values N periods back.
@@ -22,7 +22,7 @@ class HL(Indicator):
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> dict:
         return {
             "low": lowest(self.candles, "low", self.period, index),
             "high": highest(self.candles, "high", self.period, index),

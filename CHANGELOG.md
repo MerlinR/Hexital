@@ -6,6 +6,27 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ---
 
+## 3.0.0
+
+*Release Date: 2025-04-08*
+
+- Non-backward compatible changes:
+    - Hexital and Indicator 'append' will now only append to Candles and not sort placement.
+    - Renamed Indicator 'as_list' to 'readings'
+    - Renamed 'find_candles' to 'find_candle_pairing'
+    - Removed 'has_reading' as pointless with method 'exists'
+    - Candle with no 'timestamp' will no longer use current UTC time
+
+- Candle's no longer require a Timestamp
+- Reworked and optimised 'append' and added 'insert' and 'prepend'
+- Added IndicatorCollection as a way to better reference Indicator's
+- More options when setting indicator 'Source' - str | Indicator | NestedSource
+- Updated Sub/Managed Indicator's to generate name based of parents if none set
+- Added Specific reading typing for Indicators
+- Reworked CandlestickType to be faster and can generate larger set of Candlesticks
+
+---
+
 ## 2.0.3
 
 *Release Date: 2025-02-12*
@@ -14,6 +35,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Updated 'Settings' to work correctly in Indicator, and added it to Hexital
 - Fixed
     - Fixed Minor bug in _find_calc_index
+
+---
 
 ## 2.0.2
 
@@ -32,6 +55,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Prevent DEFAULT timeframe being same as another set timeframe
         - DEFAULT is renamed to the correct timeframe is set in Hexital
 
+---
 
 ## 2.0.1
 

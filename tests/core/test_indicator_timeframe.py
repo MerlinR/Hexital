@@ -5,6 +5,7 @@ import pytest
 from hexital import TimeFrame
 from hexital.core.candle import Candle
 from hexital.core.indicator import Indicator
+from test_candlestick import FakeType
 
 
 @dataclass(kw_only=True)
@@ -30,7 +31,7 @@ def remove_indicators(candles: List[Candle]) -> List[Candle]:
 
 
 @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t5")
-def test_collapse_candles_minutes_t5(
+def test_resample_candles_minutes_t5(
     minimal_candles: List[Candle], minimal_candles_t5: List[Candle]
 ):
     minimal_candles = remove_indicators(minimal_candles)
@@ -40,7 +41,7 @@ def test_collapse_candles_minutes_t5(
 
 
 @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t10")
-def test_collapse_candles_minutes_t10(
+def test_resample_candles_minutes_t10(
     minimal_candles: List[Candle], minimal_candles_t10: List[Candle]
 ):
     minimal_candles = remove_indicators(minimal_candles)
@@ -50,7 +51,7 @@ def test_collapse_candles_minutes_t10(
 
 
 @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t10")
-def test_collapse_candles_minutes_t10_enum(
+def test_resample_candles_minutes_t10_enum(
     minimal_candles: List[Candle], minimal_candles_t10: List[Candle]
 ):
     minimal_candles = remove_indicators(minimal_candles)
@@ -60,7 +61,7 @@ def test_collapse_candles_minutes_t10_enum(
 
 
 @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t10")
-def test_collapse_candles_minutes_t10_enum_name(
+def test_resample_candles_minutes_t10_enum_name(
     minimal_candles: List[Candle], minimal_candles_t10: List[Candle]
 ):
     minimal_candles = remove_indicators(minimal_candles)
@@ -70,7 +71,7 @@ def test_collapse_candles_minutes_t10_enum_name(
 
 
 @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t5")
-def test_collapse_candles_minutes_t5_partial(
+def test_resample_candles_minutes_t5_partial(
     minimal_candles: List[Candle], minimal_candles_t5: List[Candle]
 ):
     minimal_candles_t5[0].indicators = {"Fake_10_T5": 25631}
@@ -84,3 +85,25 @@ def test_collapse_candles_minutes_t5_partial(
     test.append(minimal_candles[3:])
 
     assert test.candles == minimal_candles_t5
+
+
+class TestIndicatorCandlestickType:
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_indicator_candlestick_type(self, minimal_candles):
+        test_indicator = FakeIndicator(candles=minimal_candles, candlestick=FakeType())
+
+        assert (
+            isinstance(test_indicator.candlestick, FakeType)
+            and test_indicator.candles[-1].tag == "Fake_Type"
+        )
+
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_indicator_candlestick_type_inuse(self, minimal_candles):
+        test_indicator = FakeIndicator(
+            candles=minimal_candles, candlestick=FakeType(), timeframe="T5"
+        )
+
+        assert (
+            isinstance(test_indicator.candlestick, FakeType)
+            and test_indicator.candles[-1].tag == "Fake_Type"
+        )

@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator
+from hexital.core.indicator import Indicator, Source
 
 
 @dataclass(kw_only=True)
-class WMA(Indicator):
+class WMA(Indicator[float | None]):
     """Weighted Moving Average - WMA
 
     A Weighted Moving Average puts more weight on recent data and less on past data.
@@ -24,12 +24,12 @@ class WMA(Indicator):
 
     _name: str = field(init=False, default="WMA")
     period: int = 10
-    source: str = "close"
+    source: Source = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists() or self.reading_period(self.period, self.source):
             values = sum(
                 self.reading(self.source, i) * (self.period - py)

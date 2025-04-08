@@ -35,7 +35,7 @@ def doji(
 def _doji(candles: List[Candle], index: int):
     if index < 10:
         return False
-    return candles[index].realbody < utils.candle_doji(candles, index)
+    return candles[index].realbody < utils.candle_bodydoji(candles, index)
 
 
 def dojistar(
@@ -74,7 +74,7 @@ def _dojistar(candles: List[Candle], index: int):
 
     if (
         prev_candle.realbody > utils.candle_bodylong(candles, index - 1)
-        and candle.realbody <= utils.candle_doji(candles, index)
+        and candle.realbody <= utils.candle_bodydoji(candles, index)
         and (
             (prev_candle.positive and utils.realbody_gapup(candle, prev_candle))
             or (prev_candle.negative and utils.realbody_gapdown(candle, prev_candle))

@@ -1,5 +1,6 @@
 import json
 from datetime import datetime, timedelta
+from typing import List
 
 import pytest
 from hexital import Candle
@@ -8,7 +9,7 @@ PATH = "tests/data/"
 PATH_EXTRA = "tests/data/source_of_truth/candles/"
 
 
-def load_json_candles(name: str, path: str) -> list:
+def load_json_candles(name: str, path: str) -> List[dict]:
     csv_file = open(f"{path}{name}.json")
     raw_candles = json.load(csv_file)
     for candle in raw_candles:
@@ -49,7 +50,10 @@ def fixture_candle_data_T10():
 
 @pytest.fixture(name="candles_heikinashi")
 def fixture_candle_data_heikinashi():
-    return Candle.from_dicts(load_json_candles("test_candles_heikin_ashi", PATH_EXTRA))
+    candles = Candle.from_dicts(load_json_candles("test_candles_heikin_ashi", PATH_EXTRA))
+    for candle in candles:
+        candle.tag = "HA"
+    return candles
 
 
 @pytest.fixture(name="minimal_candles")

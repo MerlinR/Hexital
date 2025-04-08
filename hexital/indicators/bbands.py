@@ -1,12 +1,12 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator
+from hexital.core.indicator import Indicator, Source
 from hexital.indicators.sma import SMA
 from hexital.indicators.stdev import STDEV
 
 
 @dataclass(kw_only=True)
-class BBANDS(Indicator):
+class BBANDS(Indicator[dict]):
     """Bollinger Bands - BBANDS
 
     Bollinger Bands are a type of statistical chart characterizing
@@ -25,7 +25,7 @@ class BBANDS(Indicator):
 
     _name: str = field(init=False, default="BBANDS")
     period: int = 5
-    source: str = "close"
+    source: Source = "close"
     _std: float = field(init=False, default=2.0)
 
     def _generate_name(self) -> str:
@@ -35,7 +35,7 @@ class BBANDS(Indicator):
         self.sub_stdev = self.add_sub_indicator(STDEV(source=self.source, period=self.period))
         self.sub_sma = self.add_sub_indicator(SMA(source=self.source, period=self.period))
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> dict:
         bbands = {
             "BBL": None,
             "BBM": None,
@@ -45,8 +45,10 @@ class BBANDS(Indicator):
             sma = self.sub_sma.reading()
             stdev = self.sub_stdev.reading()
 
-            bbands["BBM"] = sma
-            bbands["BBL"] = sma - (stdev * self._std)
-            bbands["BBU"] = sma + (stdev * self._std)
+            bbands = {
+                "BBM": sma,
+                "BBL": sma - (stdev * self._std),
+                "BBU": sma + (stdev * self._std),
+            }
 
         return bbands

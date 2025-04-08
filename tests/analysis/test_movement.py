@@ -564,45 +564,24 @@ class TestFlipped:
 class TestRetrieveCandles:
     def test_retrieve_candles_list(self, gen_ema):
         candles = movement._retrieve_candles(gen_ema)
-        assert (
-            isinstance(candles, list)
-            and len(candles) == 1
-            and len(candles[0]) > 1
-            and isinstance(candles[0][0], Candle)
-        )
+        assert isinstance(candles, list) and isinstance(candles[0], Candle)
 
     def test_retrieve_candles_indicator(self, gen_indicator_candles):
         candles = movement._retrieve_candles(gen_indicator_candles)
-        assert (
-            isinstance(candles, list)
-            and len(candles) == 1
-            and len(candles[0]) > 1
-            and isinstance(candles[0][0], Candle)
-        )
+        assert isinstance(candles, list) and isinstance(candles[0], Candle)
 
     def test_retrieve_candles_hexital_default(self, hexital_candles):
         candles = movement._retrieve_candles(hexital_candles)
-        assert (
-            isinstance(candles, list)
-            and len(candles) == 1
-            and len(candles[0]) > 1
-            and isinstance(candles[0][0], Candle)
-        )
+        assert isinstance(candles, list) and isinstance(candles[0], Candle)
 
     def test_retrieve_candles_hexital_single(self, multi_candles):
         candles = movement._retrieve_candles(multi_candles, "EMA")
-        assert (
-            isinstance(candles, list)
-            and isinstance(candles[0], list) is True
-            and len(candles[0]) > 0
-            and len(candles[1]) == 0
-        )
+        assert isinstance(candles, tuple) and len(candles[0]) > 0 and len(candles[1]) == 0
 
     def test_retrieve_candles_hexital_multi(self, multi_candles):
         candles = movement._retrieve_candles(multi_candles, "EMA", "SUPERTREND")
         assert (
-            isinstance(candles, list)
-            and isinstance(candles[0], list) is True
+            isinstance(candles, tuple)
             and len(candles[0]) > 0
             and len(candles[1]) > 0
             and candles[0] == candles[1]
@@ -611,8 +590,7 @@ class TestRetrieveCandles:
     def test_retrieve_candles_hexital_multi_timeframe(self, multi_timeframe_candles):
         candles = movement._retrieve_candles(multi_timeframe_candles, "EMA", "EMA_T5")
         assert (
-            isinstance(candles, list)
-            and isinstance(candles[0], list) is True
+            isinstance(candles, tuple)
             and len(candles[0]) > 0
             and len(candles[1]) > 0
             and "EMA" in candles[0][-1].indicators
@@ -805,8 +783,10 @@ class TestTimeframePairCandles:
 
     def test_timeframe_pair_candles_length_diff(self, multi_timeframe_candles):
         found_candles = movement._retrieve_candles(multi_timeframe_candles, "EMA", "EMA_T5")
-        found_candles[0] = found_candles[0][100:]
-        candles = movement._timeframe_pair_candles(found_candles)
+        assert isinstance(found_candles, tuple)
+
+        data_set = found_candles[0][100:], found_candles[1]
+        candles = movement._timeframe_pair_candles(data_set)
         expected = [
             [
                 Candle(

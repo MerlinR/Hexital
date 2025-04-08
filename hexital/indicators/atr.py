@@ -5,7 +5,7 @@ from hexital.indicators.tr import TR
 
 
 @dataclass(kw_only=True)
-class ATR(Indicator):
+class ATR(Indicator[float | None]):
     """Average True Range - ATR
 
     Average True Range is used to measure volatility, especially volatility caused by
@@ -29,7 +29,7 @@ class ATR(Indicator):
     def _initialise(self):
         self.sub_tr = self.add_sub_indicator(TR())
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists():
             return (self.prev_reading() * (self.period - 1) + self.sub_tr.reading()) / self.period
 

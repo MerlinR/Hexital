@@ -1,3 +1,4 @@
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from typing import List
 
@@ -5,7 +6,9 @@ import pytest
 from hexital import Candle, Hexital, TimeFrame
 from hexital.analysis.patterns import doji
 from hexital.candlesticks.heikinashi import HeikinAshi
+from hexital.core.hexital import HexitalCol
 from hexital.core.indicator import Indicator
+from hexital.core.indicator_collection import IndicatorCollection
 from hexital.exceptions import (
     InvalidAnalysis,
     InvalidCandlestickType,
@@ -13,6 +16,7 @@ from hexital.exceptions import (
 )
 from hexital.indicators import EMA, RMA, SMA, Amorph
 from hexital.utils.candles import reading_by_candle
+from tests.core.test_indicator import FakeIndicator
 
 
 def fake_pattern(candles: List[Candle], index=-1):
@@ -184,23 +188,23 @@ def test_hextial_prev_reading(candles, expected_sma):
 @pytest.mark.usefixtures("candles")
 def test_hextial_has_reading(candles):
     strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
-    assert strat.has_reading("SMA_10") is False
+    assert strat.exists("SMA_10") is False
 
     strat.calculate()
-    assert strat.has_reading("SMA_10")
+    assert strat.exists("SMA_10")
 
 
 @pytest.mark.usefixtures("candles")
 def test_hextial_has_reading_exists_no_values(candles):
     strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
-    assert strat.has_reading("SMA_10") is False
+    assert strat.exists("SMA_10") is False
 
 
 @pytest.mark.usefixtures("candles")
 def test_hextial_has_reading_missing(candles):
     strat = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
     strat.calculate()
-    assert strat.has_reading("EMA") is False
+    assert strat.exists("EMA") is False
 
 
 @pytest.mark.usefixtures("candles")
@@ -224,10 +228,10 @@ def test_hextial_purge(candles, expected_ema, expected_sma):
     strat = Hexital("Test Stratergy", candles, [EMA(), {"indicator": "SMA"}])
     strat.calculate()
 
-    assert strat.has_reading("SMA_10") and strat.has_reading("EMA_10")
+    assert strat.exists("SMA_10") and strat.exists("EMA_10")
     strat.purge("SMA_10")
 
-    assert not strat.has_reading("SMA_10") and strat.has_reading("EMA_10")
+    assert not strat.exists("SMA_10") and strat.exists("EMA_10")
 
 
 @pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
@@ -235,11 +239,11 @@ def test_hextial_remove_indicator(candles, expected_ema, expected_sma):
     strat = Hexital("Test Stratergy", candles, [EMA(), {"indicator": "SMA"}])
     strat.calculate()
 
-    assert strat.has_reading("SMA_10")
+    assert strat.exists("SMA_10")
 
     strat.remove_indicator("SMA_10")
 
-    assert not strat.indicators.get("SMA_10")
+    assert not strat.indicator("SMA_10")
 
 
 @pytest.mark.usefixtures("candles")
@@ -301,7 +305,7 @@ def test_append_hexital_calc(candles, expected_ema):
         strat.append(candle)
         strat.calculate()
 
-    assert pytest.approx(strat.indicator("EMA_10").as_list()) == expected_ema
+    assert pytest.approx(strat.indicator("EMA_10").readings()) == expected_ema
 
 
 @pytest.mark.usefixtures("candles", "expected_rsi")
@@ -311,7 +315,7 @@ def test_append_hexital_calc_sub_indicators(candles, expected_rsi):
     for candle in candles:
         strat.append(candle)
         strat.calculate()
-    assert pytest.approx(strat.indicator("RSI_14").as_list()) == expected_rsi
+    assert pytest.approx(strat.indicator("RSI_14").readings()) == expected_rsi
 
 
 class TestHexitalCandleManagerInheritance:
@@ -374,7 +378,7 @@ class TestChain:
             [EMA(), EMA(source="EMA_10", name="Chained")],
         )
         strat.calculate()
-        assert strat.has_reading("EMA_10") and strat.has_reading("Chained")
+        assert strat.exists("EMA_10") and strat.exists("Chained")
 
 
 class TestCandlestickType:
@@ -400,21 +404,21 @@ class TestFindCandles:
         strat = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA")])
         strat.calculate()
 
-        assert strat.find_candles("EMA")
+        assert strat.find_candle_pairing("EMA")
 
     @pytest.mark.usefixtures("candles")
     def test_find_missing(self, candles):
         strat = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA")])
         strat.calculate()
 
-        assert strat.find_candles("MMA") == [[], []]
+        assert strat.find_candle_pairing("MMA") == ([], [])
 
     @pytest.mark.usefixtures("candles")
     def test_find_multi_simple(self, candles):
         strat = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")])
         strat.calculate()
 
-        found_candles = strat.find_candles("EMA", "SMA")
+        found_candles = strat.find_candle_pairing("EMA", "SMA")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -427,7 +431,7 @@ class TestFindCandles:
         strat = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")])
         strat.calculate()
 
-        found_candles = strat.find_candles("EMA", "high")
+        found_candles = strat.find_candle_pairing("EMA", "high")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -441,7 +445,7 @@ class TestFindCandles:
         strat = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")])
         strat.calculate()
 
-        found_candles = strat.find_candles("high", "EMA")
+        found_candles = strat.find_candle_pairing("high", "EMA")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -459,7 +463,7 @@ class TestFindCandles:
         )
         strat.calculate()
 
-        found_candles = strat.find_candles("EMA", "SMA")
+        found_candles = strat.find_candle_pairing("EMA", "SMA")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -477,7 +481,7 @@ class TestFindCandles:
         )
         strat.calculate()
 
-        found_candles = strat.find_candles("EMA", "high")
+        found_candles = strat.find_candle_pairing("EMA", "high")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -495,7 +499,7 @@ class TestFindCandles:
         )
         strat.calculate()
 
-        found_candles = strat.find_candles("SMA", "high")
+        found_candles = strat.find_candle_pairing("SMA", "high")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -513,7 +517,7 @@ class TestFindCandles:
         )
         strat.calculate()
 
-        found_candles = strat.find_candles("high", "SMA")
+        found_candles = strat.find_candle_pairing("high", "SMA")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -531,7 +535,7 @@ class TestFindCandles:
         )
         strat.calculate()
 
-        found_candles = strat.find_candles("EMA", "EMA_T5")
+        found_candles = strat.find_candle_pairing("EMA", "EMA_T5")
 
         assert len(found_candles) == 2
         assert (
@@ -550,23 +554,23 @@ class TestFindCandles:
 class TestMultiTimeframesNames:
     def test_timeframe_default(self, candles):
         strat = Hexital("Test Strategy", candles)
-        assert list(strat._candles.keys()) == ["default"]
+        assert list(strat._candle_map.keys()) == ["default"]
 
     def test_timeframe_multi(self, candles):
         strat = Hexital("Test Strategy", candles, [EMA(timeframe="T1")])
-        assert list(strat._candles.keys()) == ["default", "T1"]
+        assert list(strat._candle_map.keys()) == ["default", "T1"]
 
     def test_duplicate_indicators(self, candles):
         strat = Hexital("Test Strategy", candles, [EMA(timeframe="T1"), SMA(timeframe="T1")])
-        assert list(strat._candles.keys()) == ["default", "T1"]
+        assert list(strat._candle_map.keys()) == ["default", "T1"]
 
     def test_clash_hexital(self, candles):
         strat = Hexital("Test Strategy", candles, [EMA(timeframe="T1")], timeframe="T1")
-        assert list(strat._candles.keys()) == ["T1"]
+        assert list(strat._candle_map.keys()) == ["T1"]
 
     def test_multi_hexital(self, candles):
         strat = Hexital("Test Strategy", candles, [EMA(timeframe="T5")], timeframe="T1")
-        assert list(strat._candles.keys()) == ["T1", "T5"]
+        assert list(strat._candle_map.keys()) == ["T1", "T5"]
 
 
 class TestHexitalSettings:
@@ -651,3 +655,26 @@ class TestHexitalSettings:
         strat = Hexital(**as_dict)
 
         assert strat.settings == as_dict
+
+
+class TestIndicatorCollection:
+    def test_collection(self, minimal_candles):
+        @dataclass
+        class customCol(IndicatorCollection):
+            fake: Indicator = field(default_factory=FakeIndicator)
+
+        collection = customCol()
+        strat = Hexital("collection", minimal_candles, collection)
+
+        assert strat.indicator("Fake_10")
+        assert collection.fake.reading is not None
+
+    def test_collectionRef(self, minimal_candles):
+        @dataclass
+        class customCol(IndicatorCollection):
+            fake: Indicator = field(default_factory=FakeIndicator)
+
+        strat = HexitalCol("collection", minimal_candles, customCol())
+
+        assert strat.collection.fake
+        assert strat.collection.fake.reading is not None

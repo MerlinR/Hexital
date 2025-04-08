@@ -4,7 +4,7 @@ import pytest
 from hexital import Candle
 
 
-@pytest.fixture(name="minimal_conv_candles_exp")
+@pytest.fixture(name="candles_candlesticks")
 def fixture_minimal_candles():
     candles = [
         Candle(
@@ -169,10 +169,183 @@ def fixture_minimal_candles():
         ),
     ]
 
+    for candle in candles:
+        candle.tag = "Fake_Type"
     return candles
 
 
-@pytest.fixture(name="minimal_conv_candles_t5_expected")
+@pytest.fixture(name="minimal_candles_jumpy")
+def fixture_minimal_jumpy_candles():
+    candles = [
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=500,
+            timestamp=datetime(2023, 6, 1, 9, 0, 10),
+        ),
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=600,
+            timestamp=datetime(2023, 6, 1, 9, 1, 0),
+        ),
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=700,
+            timestamp=datetime(2023, 6, 1, 9, 2, 0),
+        ),
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=700,
+            timestamp=datetime(2023, 6, 1, 9, 3, 0),
+        ),
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=800,
+            timestamp=datetime(2023, 6, 1, 9, 4, 0),
+        ),
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=900,
+            timestamp=datetime(2023, 6, 1, 9, 5, 0),
+        ),
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=1000,
+            timestamp=datetime(2023, 6, 1, 9, 6, 0),
+        ),
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=1000,
+            timestamp=datetime(2023, 6, 1, 9, 7, 0),
+        ),
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=1300,
+            timestamp=datetime(2023, 6, 1, 9, 8, 0),
+        ),
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=1400,
+            timestamp=datetime(2023, 6, 1, 9, 9, 0),
+        ),
+    ]
+
+    return candles
+
+
+@pytest.fixture(name="minimal_candles_jumpy_exp")
+def fixture_minimal_jumpy_candles_exp():
+    candles = [
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=500,
+        ),
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=600,
+        ),
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=700,
+        ),
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=800,
+        ),
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=900,
+        ),
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=1000,
+        ),
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=1100,
+        ),
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=1200,
+        ),
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=1300,
+        ),
+        Candle(
+            open=500,
+            high=500,
+            low=500,
+            close=500,
+            volume=1400,
+        ),
+    ]
+
+    for candle in candles:
+        if not candle:
+            continue
+        candle.tag = "Fake_Jumpy_Type"
+
+    return candles
+
+
+@pytest.fixture(name="candles_candlesticks_T5_expected")
 def fixture_minimal_candles_5_minute_expected():
     candles = [
         Candle(
@@ -212,10 +385,13 @@ def fixture_minimal_candles_5_minute_expected():
     candles[1].aggregation_factor = 5
     candles[2].aggregation_factor = 5
     candles[3].aggregation_factor = 4
+
+    for candle in candles:
+        candle.tag = "Fake_Type"
     return candles
 
 
-@pytest.fixture(name="minimal_conv_candles_t10_expected")
+@pytest.fixture(name="candles_candlesticks_T10_expected")
 def fixture_minimal_candles_10_minute_expected():
     candles = [
         Candle(
@@ -237,4 +413,7 @@ def fixture_minimal_candles_10_minute_expected():
     ]
     candles[0].aggregation_factor = 11
     candles[1].aggregation_factor = 9
+
+    for candle in candles:
+        candle.tag = "Fake_Type"
     return candles

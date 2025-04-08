@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator
+from hexital.core.indicator import Indicator, Source
 
 
 @dataclass(kw_only=True)
-class EMA(Indicator):
+class EMA(Indicator[float | None]):
     """Exponential Moving Average - EMA
 
     The Exponential Moving Average is more responsive moving average compared to the
@@ -24,7 +24,7 @@ class EMA(Indicator):
 
     _name: str = field(init=False, default="EMA")
     period: int = 10
-    source: str = "close"
+    source: Source = "close"
     smoothing: float = 2.0
     _alpha: float = field(init=False, default=0)
 
@@ -34,7 +34,7 @@ class EMA(Indicator):
     def _validate_fields(self):
         self._alpha = float(self.smoothing / (self.period + 1.0))
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         prev_ema = self.prev_reading()
         if prev_ema is not None:
             return float(

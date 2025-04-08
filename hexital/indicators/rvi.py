@@ -1,12 +1,12 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, NestedSource, Source
 from hexital.indicators.ema import EMA
 from hexital.indicators.stdev import STDEV
 
 
 @dataclass(kw_only=True)
-class RVI(Indicator):
+class RVI(Indicator[float | None]):
     """Relative Vigor Index - RVI
 
     The Relative Vigor Index, or RVI, is a popular member of the “Oscillator” family of technical indicators.
@@ -25,40 +25,32 @@ class RVI(Indicator):
 
     _name: str = field(init=False, default="RVI")
     period: int = 14
-    source: str = "close"
+    source: Source = "close"
     _scalar: float = field(init=False, default=100.0)
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.data = self.add_managed_indicator("data", Managed(name=f"{self._name}_data"))
+        self.data = self.add_managed_indicator(Managed())
 
-        self.sub_stdev = self.add_sub_indicator(
-            STDEV(
-                source=self.source,
-                period=self.period,
-                name=f"{self._name}_stdev",
-            ),
-        )
+        self.sub_stdev = self.add_sub_indicator(STDEV(source=self.source, period=self.period))
         self.sub_pos = self.add_managed_indicator(
-            "pos_ema",
             EMA(
                 period=self.period,
-                source=f"{self._name}_data.pos",
+                source=NestedSource(self.data, "pos"),
                 name=f"{self._name}_pos_ema",
             ),
         )
         self.sub_neg = self.add_managed_indicator(
-            "neg_ema",
             EMA(
                 period=self.period,
-                source=f"{self._name}_data.neg",
+                source=NestedSource(self.data, "neg"),
                 name=f"{self._name}_neg_ema",
             ),
         )
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> float | None:
         stdev_reading = self.sub_stdev.reading()
 
         if stdev_reading is not None:

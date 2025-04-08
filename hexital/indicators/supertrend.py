@@ -1,11 +1,11 @@
 from dataclasses import dataclass, field
 
 from hexital import indicators
-from hexital.core.indicator import Indicator, Managed
+from hexital.core.indicator import Indicator, Managed, NestedSource, Source
 
 
 @dataclass(kw_only=True)
-class Supertrend(Indicator):
+class Supertrend(Indicator[dict]):
     """Supertrend
 
     It is used to identify market trends and potential entry and exit points in trading.
@@ -23,20 +23,18 @@ class Supertrend(Indicator):
 
     _name: str = field(init=False, default="Supertrend")
     period: int = 7
-    source: str = "close"
+    source: Source = "close"
     multiplier: float = 3.0
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.sub_atr = self.add_sub_indicator(
-            indicators.ATR(period=self.period, name=f"{self.name}_atr")
-        )
-        self.sub_hl = self.add_sub_indicator(indicators.HLA(name=f"{self.name}_HL"))
-        self.data = self.add_managed_indicator("data", Managed(name=f"{self.name}_data"))
+        self.sub_atr = self.add_sub_indicator(indicators.ATR(period=self.period))
+        self.sub_hl = self.add_sub_indicator(indicators.HLA())
+        self.data = self.add_managed_indicator(Managed())
 
-    def _calculate_reading(self, index: int) -> float | dict | None:
+    def _calculate_reading(self, index: int) -> dict:
         direction = 1
         trend = None
         long = None
@@ -50,16 +48,16 @@ class Supertrend(Indicator):
             upper = self.sub_hl.reading() + mid_atr
             lower = self.sub_hl.reading() - mid_atr
 
-            prev_upper = self.prev_reading(f"{self.name}_data.upper")
-            prev_lower = self.prev_reading(f"{self.name}_data.lower")
+            prev_upper = self.prev_reading(NestedSource(self.data, "upper"))
+            prev_lower = self.prev_reading(NestedSource(self.data, "lower"))
 
-            if self.prev_exists(f"{self.name}_data.lower"):
+            if self.prev_exists(NestedSource(self.data, "lower")):
                 if self.candles[index].close > prev_upper:
                     direction = 1
                 elif self.candles[index].close < prev_lower:
                     direction = -1
                 else:
-                    direction = self.prev_reading(f"{self.name}.direction")
+                    direction = self.prev_reading(NestedSource(self, "direction"))
                     if direction == 1 and lower < prev_lower:
                         lower = prev_lower
                     if direction == -1 and upper > prev_upper:
