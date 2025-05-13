@@ -138,7 +138,7 @@ def round_down_timestamp(timestamp: datetime, timeframe: timedelta) -> datetime:
     elif timeframe < timedelta(days=7):
         return timestamp.replace(hour=0, minute=0, second=0)
     else:
-        return timestamp.replace(day=0, hour=0, minute=0, second=0)
+        return (timestamp - timedelta(days=timestamp.isoweekday()-1)).replace(hour=0, minute=0, second=0)
 
 
 def within_timeframe(timestamp: datetime, within: datetime, timeframe: timedelta | None) -> bool:
