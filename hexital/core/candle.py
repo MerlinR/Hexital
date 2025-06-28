@@ -181,11 +181,15 @@ class Candle:
         Returns:
             Candle: A `Candle` object initialized with the provided dictionary data.
         """
-        time = [
+        timestamp = [
             v
             for k, v in candle.items()
             if k in ["timestamp", "Timestamp", "time", "Time", "date", "Date"]
         ]
+
+        if timestamp and not isinstance(timestamp[0], (datetime, str)):
+            raise TypeError("Timestamp must be native python Datetime object")
+
         return cls(
             candle.get("open", candle.get("Open", 0.0)),
             candle.get("high", candle.get("High", 0.0)),
@@ -194,7 +198,7 @@ class Candle:
             candle.get("volume", candle.get("Volume", 0)),
             indicators=candle.get("indicators", {}),
             sub_indicators=candle.get("sub_indicators", {}),
-            timestamp=time[0] if time else None,
+            timestamp=timestamp[0] if timestamp else None,
             timeframe=candle.get("timeframe", candle.get("Timeframe")),
         )
 
