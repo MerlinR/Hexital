@@ -282,7 +282,7 @@ def generate_patterns():
 
 
 def generate_heikin_candles():
-    print("Generating Candles")
+    print("Generating heikin Candles")
     df = pd.DataFrame.from_dict(load_json_candles())
 
     dfha = ta.ha(df["open"], df["high"], df["low"], df["close"])
@@ -302,6 +302,17 @@ def generate_heikin_candles():
     )
 
     save_json_result(df.to_dict("records"), "test_candles_heikin_ashi", PATH_CANDLES)
+    return df
+
+
+def generate_heikin_candles_ema():
+    print("Generating heikin EMA Candles")
+    df = generate_heikin_candles()
+    MyStrategy = ta.Strategy(name="Truth Source", ta=[{"kind": "ema"}])
+
+    df.ta.strategy(MyStrategy)
+    df = df.astype(object).replace(np.nan, None)
+    save_json_result([round_values(value) for value in df["EMA_10"].tolist()], "HEIKINASHI_EMA")
 
 
 def generate_timeframe_candles(frame: str):
@@ -317,7 +328,7 @@ def generate_timeframe_candles(frame: str):
         row["timestamp"] = row["timestamp"].to_pydatetime().isoformat(timespec="seconds")
         output.append(row)
 
-    save_json_result(output, f"test_candles_{frame.replace('min','T')}", PATH_CANDLES)
+    save_json_result(output, f"test_candles_{frame.replace('min', 'T')}", PATH_CANDLES)
 
 
 if __name__ == "__main__":
@@ -328,3 +339,4 @@ if __name__ == "__main__":
     generate_timeframe_candles("5min")
     generate_timeframe_candles("10min")
     generate_heikin_candles()
+    generate_heikin_candles_ema()

@@ -277,3 +277,12 @@ def fixture_expected_counter_bull():
 def fixture_expected_pivotpoints():
     csv_files = open(f"{SOURCE_OF_TRUTH_HEX_PATH}/PIVOTPOINTS.json")
     return json.load(csv_files)
+
+
+# Candlesticks
+
+
+@pytest.fixture(name="expected_heikinashi_ema")
+def fixture_candle_data_heikinashi_ema():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/HEIKINASHI_EMA.json")
+    return json.load(csv_files)
