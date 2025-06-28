@@ -1,11 +1,11 @@
 from collections.abc import Sequence
-from typing import List
+from dataclasses import dataclass
 
 from hexital.core.candle import Candle
 from hexital.core.candlestick_type import CandlestickType
-from hexital.utils.weakreflist import WeakList
 
 
+@dataclass(kw_only=True)
 class HeikinAshi(CandlestickType):
     """Heikin-Ashi
 
@@ -20,8 +20,8 @@ class HeikinAshi(CandlestickType):
 
     name: str = "Heikin-Ashi"
     acronym: str = "HA"
-    candles: List[Candle]  # Fresh Candles
-    derived_candles: WeakList[Candle]  # Transformed Candles
+    # candles: List[Candle]  # Fresh Candles
+    # derived_candles: WeakList[Candle]  # Transformed Candles
 
     def transform_candle(self, candle: Candle) -> None | Candle | Sequence[Candle]:
         candle_ = candle.clean_copy()

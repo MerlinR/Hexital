@@ -53,7 +53,8 @@ class FakeJumpyType(CandlestickType):
 
 @pytest.mark.usefixtures("candles")
 def test_naming(candles: List[Candle]):
-    faketype = FakeType(candles)
+    faketype = FakeType()
+    faketype.set_candle_refs(candles)
     faketype.transform(CalcMode.APPEND)
 
     for candle in faketype.derived_candles:
@@ -62,7 +63,8 @@ def test_naming(candles: List[Candle]):
 
 @pytest.mark.usefixtures("minimal_candles", "candles_candlesticks")
 def test_conversion(minimal_candles: List[Candle], candles_candlesticks: List[Candle]):
-    faketype = FakeType(minimal_candles)
+    faketype = FakeType()
+    faketype.set_candle_refs(minimal_candles)
     faketype.transform(CalcMode.APPEND)
 
     assert faketype.derived_candles == candles_candlesticks
@@ -70,7 +72,8 @@ def test_conversion(minimal_candles: List[Candle], candles_candlesticks: List[Ca
 
 @pytest.mark.usefixtures("minimal_candles", "candles_candlesticks")
 def test_conv_redone(minimal_candles: List[Candle], candles_candlesticks: List[Candle]):
-    faketype = FakeType(minimal_candles)
+    faketype = FakeType()
+    faketype.set_candle_refs(minimal_candles)
     faketype.transform(CalcMode.APPEND)
     faketype.transform(CalcMode.APPEND)
 
@@ -79,7 +82,8 @@ def test_conv_redone(minimal_candles: List[Candle], candles_candlesticks: List[C
 
 @pytest.mark.usefixtures("minimal_candles", "candles_candlesticks")
 def test_conv_append(minimal_candles: List[Candle], candles_candlesticks: List[Candle]):
-    faketype = FakeType(minimal_candles[:-1])
+    faketype = FakeType()
+    faketype.set_candle_refs(minimal_candles[:-1])
     faketype.transform(CalcMode.APPEND)
 
     faketype.candles.append(minimal_candles[-1])
@@ -101,7 +105,8 @@ def test_conv_append_bulk(minimal_candles: List[Candle], candles_candlesticks: L
 
 @pytest.mark.usefixtures("minimal_candles", "candles_candlesticks")
 def test_conv_preappend(minimal_candles: List[Candle], candles_candlesticks: List[Candle]):
-    faketype = FakeType(minimal_candles[1:])
+    faketype = FakeType()
+    faketype.set_candle_refs(minimal_candles[1:])
 
     faketype.transform(CalcMode.PREPEND)
     faketype.candles.insert(0, minimal_candles[0])
@@ -123,7 +128,8 @@ def test_conv_preappend_bulk(minimal_candles: List[Candle], candles_candlesticks
 
 @pytest.mark.usefixtures("minimal_candles", "candles_candlesticks")
 def test_conv_insert(minimal_candles: List[Candle], candles_candlesticks: List[Candle]):
-    faketype = FakeType(minimal_candles[:9] + minimal_candles[10:])
+    faketype = FakeType()
+    faketype.set_candle_refs(minimal_candles[:9] + minimal_candles[10:])
     faketype.transform(CalcMode.APPEND)
 
     faketype.candles.insert(9, minimal_candles[9])
@@ -147,7 +153,8 @@ def test_conv_insert_bulk(minimal_candles: List[Candle], candles_candlesticks: L
 def test_conv_sticks_none_values(
     minimal_candles_jumpy: List[Candle], minimal_candles_jumpy_exp: List[Candle]
 ):
-    faketype = FakeJumpyType(minimal_candles_jumpy[:5])
+    faketype = FakeJumpyType()
+    faketype.set_candle_refs(minimal_candles_jumpy[:5])
 
     faketype.transform(CalcMode.APPEND)
     assert faketype.derived_candles == minimal_candles_jumpy_exp[:4]
@@ -157,7 +164,8 @@ def test_conv_sticks_none_values(
 def test_conv_sticks_jump_values(
     minimal_candles_jumpy: List[Candle], minimal_candles_jumpy_exp: List[Candle]
 ):
-    faketype = FakeJumpyType(minimal_candles_jumpy[-5:])
+    faketype = FakeJumpyType()
+    faketype.set_candle_refs(minimal_candles_jumpy[-5:])
 
     faketype.transform(CalcMode.APPEND)
     assert faketype.derived_candles == minimal_candles_jumpy_exp[-6:]
@@ -167,7 +175,8 @@ def test_conv_sticks_jump_values(
 def test_conv_sticks_mix_values(
     minimal_candles_jumpy: List[Candle], minimal_candles_jumpy_exp: List[Candle]
 ):
-    faketype = FakeJumpyType(minimal_candles_jumpy)
+    faketype = FakeJumpyType()
+    faketype.set_candle_refs(minimal_candles_jumpy)
     faketype.transform(CalcMode.APPEND)
 
     assert faketype.derived_candles == minimal_candles_jumpy_exp

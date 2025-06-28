@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
+from dataclasses import dataclass, field
 from typing import List, Optional
 
 from hexital.core.candle import Candle
@@ -8,22 +9,28 @@ from hexital.utils.indexing import valid_index
 from hexital.utils.weakreflist import WeakList
 
 
+@dataclass(kw_only=True)
 class CandlestickType(ABC):
-    name: str = "NA"
-    acronym: str = "NA"
+    name: str = field(init=False, default="NA")
+    acronym: str = field(init=False, default="NA")
 
-    candles: List[Candle]  # Fresh Candles
-    derived_candles: WeakList[Candle]  # Transformed Candles # List[ReferenceType[Candle]
+    candles: List[Candle] = field(init=False, default_factory=list)  # Fresh Candles
+    derived_candles: WeakList[Candle] = field(
+        init=False, default_factory=WeakList
+    )  # Transformed Candles # List[ReferenceType[Candle]
 
     _derived_idx: int = 0
 
-    def __init__(self, candles: Optional[List[Candle]] = None):
-        self.candles = candles if candles else []
-        self.derived_candles = WeakList()
+    def __post_init__(self):
+        self._validate_fields()
+
+    def _validate_fields(self):
+        return
 
     def set_candle_refs(self, candles: List[Candle]):
         """Replace CandlestickType Candles to own by reference"""
         self.candles = candles
+        self.derived_candles = WeakList()
 
     @property
     def index(self) -> int:
