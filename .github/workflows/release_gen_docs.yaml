@@ -42,6 +42,7 @@ jobs:
       - name: Install dependencies
         run: poetry install --no-interaction --no-root --with docs
       - run: |
-          poetry run mike deploy --push --update-aliases ${{ github.event.release.tag_name }} latest
+          poetry run mike delete latest
+          poetry run mike deploy --push --update-aliases $(cat pyproject.toml | grep version | cut -d '"' -f2) latest
           poetry run mike set-default --push latest
 
