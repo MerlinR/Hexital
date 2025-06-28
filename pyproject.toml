@@ -42,7 +42,8 @@ optional = true
 pandas = "^2.2.2"
 numpy = "^1.26.4"
 ta-lib = "*"
-pandas-ta = { git = "https://github.com/twopirllc/pandas-ta.git#develop" }
+pandas-ta = { git = "https://github.com/MerlinR/Pandas-ta-fork.git#master" }
+
 
 [tool.poetry.group.speed_tests]
 optional = true
@@ -52,7 +53,7 @@ matplotlib = "^3.8.4"
 pandas = "^2.2.2"
 numpy = "^1.26.4"
 ta-lib = "*"
-pandas-ta = { git = "https://github.com/twopirllc/pandas-ta.git#develop" }
+pandas-ta = { git = "https://github.com/MerlinR/Pandas-ta-fork.git#master" }
 
 [tool.poetry.group.docs]
 optional = true
