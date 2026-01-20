@@ -3,7 +3,7 @@ name = "hexital"
 version = "3.0.1"
 description = "Hex Incremental Technical Analysis Library"
 authors = [{ name = "Merlin Roe", email = "merlin.roe@hotmail.co.uk" }]
-requires-python = "~=3.13.0"
+requires-python = ">=3.10"
 readme = "README.md"
 license = "MIT"
 keywords = ["trading", "quant", "indicators"]
