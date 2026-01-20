@@ -1,5 +1,5 @@
 import json
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 import numpy as np
 import pandas as pd
@@ -16,7 +16,7 @@ def load_json_candles() -> List[dict]:
     return json.load(csv_file)
 
 
-def save_json_result(data: list, filename: str, path: Optional[str] = None):
+def save_json_result(data: list, filename: str, path: str | None = None):
     path = path if path is not None else PATH_INDICATOR
     with open(f"tests/data/{path}/{filename}.json", "w") as json_file:
         json.dump(data, json_file, indent=4, default=str)
@@ -112,7 +112,9 @@ def generate_indicators():
 
     save_json_result([round_values(value) for value in df["RMA_10"].tolist()], "RMA")
     save_json_result([round_values(value) for value in df["RMA_20"].tolist()], "RMA_20")
-    save_json_result([round_values(value) for value in df["TRUERANGE_1"].tolist()], "TR")
+    save_json_result(
+        [round_values(value) for value in df["TRUERANGE_1"].tolist()], "TR"
+    )
     save_json_result([round_values(value) for value in df["EMA_10"].tolist()], "EMA")
     save_json_result([round_values(value) for value in df["SMA_10"].tolist()], "SMA")
     save_json_result([round_values(value) for value in df["SMA_3"].tolist()], "SMA_3")
@@ -121,20 +123,32 @@ def generate_indicators():
     save_json_result([round_values(value) for value in df["WMA_10"].tolist()], "WMA")
     save_json_result([round_values(value) for value in df["VWMA_10"].tolist()], "VWMA")
     save_json_result([round_values(value) for value in df["VWAP_D"].tolist()], "VWAP")
-    save_json_result([round_values(value) for value in df["VWAP_1H"].tolist()], "VWAP_H1")
+    save_json_result(
+        [round_values(value) for value in df["VWAP_1H"].tolist()], "VWAP_H1"
+    )
     save_json_result([round_values(value) for value in df["OBV"].tolist()], "OBV")
     save_json_result([round_values(value) for value in df["HL2"].tolist()], "HL2")
     save_json_result([round_values(value) for value in df["HLC3"].tolist()], "HLC")
     save_json_result([round_values(value) for value in df["ROC_10"].tolist()], "ROC")
-    save_json_result([round_values(value) for value in df["ATRr_20"].tolist()], "ATR_20")
+    save_json_result(
+        [round_values(value) for value in df["ATRr_20"].tolist()], "ATR_20"
+    )
     save_json_result([round_values(value) for value in df["HMA_10"].tolist()], "HMA")
-    save_json_result([round_values(value) for value in df["STDEV_30"].tolist()], "STDEV")
-    save_json_result([round_values(value) for value in df["TSI_13_25_13"].tolist()], "TSI")
+    save_json_result(
+        [round_values(value) for value in df["STDEV_30"].tolist()], "STDEV"
+    )
+    save_json_result(
+        [round_values(value) for value in df["TSI_13_25_13"].tolist()], "TSI"
+    )
     save_json_result([round_values(value) for value in df["CMO_14"].tolist()], "CMO")
     save_json_result([round_values(value) for value in df["MFI_14"].tolist()], "MFI")
-    save_json_result([round_values(value) for value in df["MIDPOINT_2"].tolist()], "MIDPOINT")
+    save_json_result(
+        [round_values(value) for value in df["MIDPOINT_2"].tolist()], "MIDPOINT"
+    )
     save_json_result([round_values(value) for value in df["JMA_7_0"].tolist()], "JMA")
-    save_json_result([round_values(value) for value in df["JMA_10_80.0"].tolist()], "JMA_extra")
+    save_json_result(
+        [round_values(value) for value in df["JMA_10_80.0"].tolist()], "JMA_extra"
+    )
     save_json_result([round_values(value) for value in df["RVI_14"].tolist()], "RVI")
 
     kc_data = []
@@ -186,7 +200,9 @@ def generate_indicators():
         [round_values(value) for value in df["DMP_14"].tolist()],
         [round_values(value) for value in df["DMN_14"].tolist()],
     ):
-        adx_data.append({"ADX": adx_row[0], "DM_Plus": adx_row[1], "DM_Neg": adx_row[2]})
+        adx_data.append(
+            {"ADX": adx_row[0], "DM_Plus": adx_row[1], "DM_Neg": adx_row[2]}
+        )
     save_json_result(adx_data, "ADX")
 
     bbands_data = []
@@ -246,9 +262,15 @@ def generate_indicators_timeframe(frame: str):
 
     print_new(df)
     frame = frame.replace("min", "T")
-    save_json_result([round_values(value) for value in df["EMA_10"].tolist()], f"EMA_{frame}")
-    save_json_result([round_values(value) for value in df["SMA_10"].tolist()], f"SMA_{frame}")
-    save_json_result([round_values(value) for value in df["OBV"].tolist()], f"OBV_{frame}")
+    save_json_result(
+        [round_values(value) for value in df["EMA_10"].tolist()], f"EMA_{frame}"
+    )
+    save_json_result(
+        [round_values(value) for value in df["SMA_10"].tolist()], f"SMA_{frame}"
+    )
+    save_json_result(
+        [round_values(value) for value in df["OBV"].tolist()], f"OBV_{frame}"
+    )
 
 
 def generate_patterns():
@@ -273,7 +295,9 @@ def generate_patterns():
     save_json_result(
         [bool(value) for value in df["CDL_DOJISTAR"].tolist()], "DOJISTAR", PATH_PATTERN
     )
-    save_json_result([bool(value) for value in df["CDL_HAMMER"].tolist()], "HAMMER", PATH_PATTERN)
+    save_json_result(
+        [bool(value) for value in df["CDL_HAMMER"].tolist()], "HAMMER", PATH_PATTERN
+    )
     save_json_result(
         [bool(value) for value in df["CDL_INVERTEDHAMMER"].tolist()],
         "INVERTEDHAMMER",
@@ -312,7 +336,9 @@ def generate_heikin_candles_ema():
 
     df.ta.strategy(MyStrategy)
     df = df.astype(object).replace(np.nan, None)
-    save_json_result([round_values(value) for value in df["EMA_10"].tolist()], "HEIKINASHI_EMA")
+    save_json_result(
+        [round_values(value) for value in df["EMA_10"].tolist()], "HEIKINASHI_EMA"
+    )
 
 
 def generate_timeframe_candles(frame: str):
@@ -325,7 +351,9 @@ def generate_timeframe_candles(frame: str):
 
     output = []
     for row in df.to_dict("records"):
-        row["timestamp"] = row["timestamp"].to_pydatetime().isoformat(timespec="seconds")
+        row["timestamp"] = (
+            row["timestamp"].to_pydatetime().isoformat(timespec="seconds")
+        )
         output.append(row)
 
     save_json_result(output, f"test_candles_{frame.replace('min', 'T')}", PATH_CANDLES)

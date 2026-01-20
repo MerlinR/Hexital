@@ -5,7 +5,7 @@ from copy import copy
 from dataclasses import dataclass, field
 from datetime import timedelta
 from enum import Enum, auto
-from typing import Dict, Generic, List, Optional, Tuple, TypeAlias, TypeVar
+from typing import Dict, Generic, List, Tuple, TypeAlias, TypeVar
 
 from hexital.core import Reading
 from hexital.core.candle import Candle
@@ -43,21 +43,23 @@ class IndicatorMode(Enum):
 class Indicator(Generic[V], ABC):
     candles: List[Candle] = field(default_factory=list)
     name: str = ""
-    timeframe: Optional[TimeFramesSource] = None
+    timeframe: TimeFramesSource | None = None
     timeframe_fill: bool = False
-    candle_life: Optional[timedelta] = None
-    candlestick: Optional[CandlestickType | str] = None
-    rounding: Optional[int] = 4
+    candle_life: timedelta | None = None
+    candlestick: CandlestickType | str | None = None
+    rounding: int | None = 4
 
     sub_indicators: Dict[str, Indicator] = field(init=False, default_factory=dict)
-    managed_indicators: Dict[str, Managed | Indicator] = field(init=False, default_factory=dict)
+    managed_indicators: Dict[str, Managed | Indicator] = field(
+        init=False, default_factory=dict
+    )
     _mode: IndicatorMode = field(init=False, default=IndicatorMode.SOLO)
     _generated_name: bool = field(init=False, default=False)
     _calc_prior: bool = field(init=False, default=True)
     _active_index: int = field(init=False, default=0)
 
     _name: str = field(init=False, default="")
-    _timeframe: Optional[timedelta] = field(init=False)
+    _timeframe: timedelta | None = field(init=False)
     _candle_mngr: CandleManager = field(init=False)
 
     _initialised: bool = field(init=False, default=False)
@@ -117,7 +119,9 @@ class Indicator(Generic[V], ABC):
         this will overwrite the Manager as well as the candles"""
         self._candle_mngr = manager
         self.candles = manager.candles
-        self.timeframe = timedelta_to_str(manager.timeframe) if manager.timeframe else None
+        self.timeframe = (
+            timedelta_to_str(manager.timeframe) if manager.timeframe else None
+        )
         self._timeframe = manager.timeframe
         self.timeframe_fill = manager.timeframe_fill
         self.candle_life = manager.candle_life
@@ -158,7 +162,7 @@ class Indicator(Generic[V], ABC):
 
         return output
 
-    def readings(self, name: Optional[Source] = None) -> List[Reading | V]:
+    def readings(self, name: Source | None = None) -> List[Reading | V]:
         """
         Retrieve the indicator readings for within the candles as a list.
 
@@ -167,7 +171,7 @@ class Indicator(Generic[V], ABC):
         the indicator is used.
 
         Args:
-            name (Optional[str]): The name of the indicator to retrieve.
+            name (str | None): The name of the indicator to retrieve.
                                   Defaults to `self.name` if not provided.
 
         Returns:
@@ -219,7 +223,7 @@ class Indicator(Generic[V], ABC):
         self,
         prior_calc: bool,
         index: int,
-        end_index: Optional[int] = None,
+        end_index: int | None = None,
     ):
         for indicator in self.sub_indicators.values():
             if indicator.prior_calc == prior_calc:
@@ -239,9 +243,13 @@ class Indicator(Generic[V], ABC):
             self._set_active_index(index)
             self._calculate_sub_indicators(True, index)
 
-            reading = round_values(self._calculate_reading(index=index), round_by=self.rounding)
+            reading = round_values(
+                self._calculate_reading(index=index), round_by=self.rounding
+            )
 
-            if index < len(self.candles) - 1 and self._reading_dup(reading, self.candles[index]):
+            if index < len(self.candles) - 1 and self._reading_dup(
+                reading, self.candles[index]
+            ):
                 break
 
             self._set_reading(reading, index)
@@ -256,7 +264,9 @@ class Indicator(Generic[V], ABC):
         """
         if reading is None:
             return False
-        cur_reading = candle.indicators.get(self.name, candle.sub_indicators.get(self.name))
+        cur_reading = candle.indicators.get(
+            self.name, candle.sub_indicators.get(self.name)
+        )
 
         if cur_reading is None:
             return False
@@ -265,7 +275,7 @@ class Indicator(Generic[V], ABC):
             return True
         return False
 
-    def calculate_index(self, start_index: int, end_index: Optional[int] = None):
+    def calculate_index(self, start_index: int, end_index: int | None = None):
         """Calculate the TA values, will calculate a index range the Candles, will re-calculate"""
         self.check_initialised()
 
@@ -304,7 +314,7 @@ class Indicator(Generic[V], ABC):
 
         return 0
 
-    def _set_reading(self, reading: Reading, index: Optional[int] = None):
+    def _set_reading(self, reading: Reading, index: int | None = None):
         index = index if index else self._active_index
 
         if self._mode != IndicatorMode.SOLO:
@@ -318,7 +328,9 @@ class Indicator(Generic[V], ABC):
             if isinstance(indicator, Managed):
                 indicator.set_active_index(index)
 
-    def add_sub_indicator(self, indicator: Indicator, prior_calc: bool = True) -> Indicator:
+    def add_sub_indicator(
+        self, indicator: Indicator, prior_calc: bool = True
+    ) -> Indicator:
         """Adds sub indicator, this will auto calculate with indicator"""
         indicator._mode = IndicatorMode.SUB
         indicator._calc_prior = prior_calc
@@ -346,7 +358,7 @@ class Indicator(Generic[V], ABC):
         return indicator
 
     def _find_reading(
-        self, source: Optional[Source] = None, index: Optional[int] = None
+        self, source: Source | None = None, index: int | None = None
     ) -> Reading | V:
         if index is None:
             index = self._active_index
@@ -362,7 +374,7 @@ class Indicator(Generic[V], ABC):
         else:
             return reading_by_index(self.candles, source.name, index)
 
-    def _find_readings(self, source: Optional[Source] = None) -> List[Reading | V]:
+    def _find_readings(self, source: Source | None = None) -> List[Reading | V]:
         if not source:
             return [reading_by_candle(candle, self.name) for candle in self.candles]
         elif isinstance(source, Indicator):
@@ -372,7 +384,7 @@ class Indicator(Generic[V], ABC):
         elif isinstance(source, str):
             return [reading_by_candle(candle, source) for candle in self.candles]
 
-    def _find_candles(self, source: Optional[Source] = None) -> Tuple[List[Candle], str]:
+    def _find_candles(self, source: Source | None = None) -> Tuple[List[Candle], str]:
         if not source or (isinstance(source, str) and source == self.name):
             return self.candles, self.name
         elif isinstance(source, str):
@@ -380,13 +392,13 @@ class Indicator(Generic[V], ABC):
         else:
             return source.candles, source.name
 
-    def exists(self, source: Optional[Source] = None) -> bool:
+    def exists(self, source: Source | None = None) -> bool:
         value = self._find_reading(source)
         if isinstance(value, dict):
             return any(v is not None for v in value.values())
         return value is not None
 
-    def prev_exists(self, source: Optional[Source] = None) -> bool:
+    def prev_exists(self, source: Source | None = None) -> bool:
         if self._active_index == 0:
             return False
         value = self._find_reading(source, self._active_index - 1)
@@ -395,7 +407,7 @@ class Indicator(Generic[V], ABC):
         return value is not None
 
     def prev_reading(
-        self, source: Optional[Source] = None, default: Optional[T] = None
+        self, source: Source | None = None, default: T | None = None
     ) -> Reading | V | T:
         if self._active_index == 0:
             return default
@@ -404,15 +416,17 @@ class Indicator(Generic[V], ABC):
 
     def reading(
         self,
-        source: Optional[Source] = None,
-        index: Optional[int] = None,
-        default: Optional[T] = None,
+        source: Source | None = None,
+        index: int | None = None,
+        default: T | None = None,
     ) -> Reading | V | T:
         """Simple method to get an indicator reading from the index"""
         value = self._find_reading(source, index)
         return value if value is not None else default
 
-    def reading_count(self, source: Optional[Source] = None, index: Optional[int] = None) -> int:
+    def reading_count(
+        self, source: Source | None = None, index: int | None = None
+    ) -> int:
         """Returns how many instance of the given indicator exist"""
         return reading_count(
             *self._find_candles(source),
@@ -420,7 +434,7 @@ class Indicator(Generic[V], ABC):
         )
 
     def reading_period(
-        self, period: int, source: Optional[Source] = None, index: Optional[int] = None
+        self, period: int, source: Source | None = None, index: int | None = None
     ) -> bool:
         """Will return True if the given indicator goes back as far as amount,
         It's true if exactly or more than. Period will be period -1"""
@@ -433,8 +447,8 @@ class Indicator(Generic[V], ABC):
     def candles_sum(
         self,
         length: int = 1,
-        source: Optional[Source] = None,
-        index: Optional[int] = None,
+        source: Source | None = None,
+        index: int | None = None,
         include_latest: bool = True,
     ) -> float:
         return candles_sum(
@@ -447,8 +461,8 @@ class Indicator(Generic[V], ABC):
     def candles_average(
         self,
         length: int = 1,
-        source: Optional[Source] = None,
-        index: Optional[int] = None,
+        source: Source | None = None,
+        index: int | None = None,
         include_latest: bool = True,
     ) -> float:
         return candles_average(
@@ -461,8 +475,8 @@ class Indicator(Generic[V], ABC):
     def get_readings_period(
         self,
         length: int = 1,
-        source: Optional[Source] = None,
-        index: Optional[int] = None,
+        source: Source | None = None,
+        index: int | None = None,
         include_latest: bool = False,
     ) -> List[float | int]:
         return get_readings_period(
@@ -506,7 +520,7 @@ class Managed(Indicator):
 
     def _calculate_reading(self, index: int) -> Reading: ...
 
-    def set_reading(self, reading: Reading, index: Optional[int] = None):
+    def set_reading(self, reading: Reading, index: int | None = None):
         if index is None:
             index = self._active_index
         else:
@@ -536,7 +550,7 @@ class NestedSource:
     def name(self):
         return f"{self.indicator.name}.{self.nested_name}"
 
-    def reading(self, index: Optional[int] = None) -> Reading:
+    def reading(self, index: int | None = None) -> Reading:
         value = self.indicator.reading(index=index)
         if isinstance(value, dict):
             return value.get(self.nested_name)

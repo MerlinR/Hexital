@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import Optional
 
 from hexital.core.indicator import Indicator, Managed, NestedSource, Source
 from hexital.indicators.ema import EMA
@@ -25,7 +24,7 @@ class TSI(Indicator[float | None]):
 
     _name: str = field(init=False, default="TSI")
     period: int = 25
-    smooth_period: Optional[int] = None
+    smooth_period: int | None = None
     source: Source = "close"
 
     def _generate_name(self) -> str:

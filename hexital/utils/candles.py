@@ -1,10 +1,12 @@
-from typing import List, Optional
+from typing import List
 
 from hexital.core.candle import Candle
 from hexital.utils.indexing import absindex, valid_index
 
 
-def reading_by_index(candles: List[Candle], name: str, index: int = -1) -> float | dict | None:
+def reading_by_index(
+    candles: List[Candle], name: str, index: int = -1
+) -> float | dict | None:
     """Simple method to get a reading from the given indicator from it's index"""
     if not valid_index(index, len(candles)):
         return None
@@ -47,7 +49,7 @@ def _nested_indicator(candle: Candle, name: str, nested_name: str) -> float | No
     return None
 
 
-def reading_count(candles: List[Candle], name: str, index: Optional[int] = None) -> int:
+def reading_count(candles: List[Candle], name: str, index: int | None = None) -> int:
     """Returns how many instance of the given indicator exist"""
     index_ = absindex(index, len(candles))
 
@@ -59,7 +61,7 @@ def reading_count(candles: List[Candle], name: str, index: Optional[int] = None)
 
 
 def reading_period(
-    candles: List[Candle], name: str, period: int, index: Optional[int] = None
+    candles: List[Candle], name: str, period: int, index: int | None = None
 ) -> bool:
     """Will return True if the given indicator goes back as far as amount,
     It's true if exactly or more than. Includes index"""
@@ -103,7 +105,11 @@ def candles_average(
 
 
 def get_readings_period(
-    candles: List[Candle], name: str, length: int, index: int, include_latest: bool = False
+    candles: List[Candle],
+    name: str,
+    length: int,
+    index: int,
+    include_latest: bool = False,
 ) -> List[float | int]:
     """Goes through from index-length to index and returns a list of values, removes dict's and None values, validates index, if out of range set to max (-1)
     Returns from newest at the back (same order)"""

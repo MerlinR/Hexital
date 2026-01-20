@@ -1,6 +1,6 @@
 import inspect
 from copy import copy
-from typing import Callable, Optional
+from typing import Callable
 
 from hexital.core.indicator import Indicator
 
@@ -26,7 +26,7 @@ class Amorph(Indicator):
     _analysis_method: Callable
     _analysis_kwargs: dict
 
-    def __init__(self, analysis: Callable, args: Optional[dict] = None, **kwargs):
+    def __init__(self, analysis: Callable, args: dict | None = None, **kwargs):
         self._analysis_method = analysis
         self.analysis_name = analysis.__name__
         self._analysis_kwargs, kwargs = self._separate_indicator_attributes(kwargs)
@@ -67,4 +67,6 @@ class Amorph(Indicator):
         return f"{name}_{period}" if period else name
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        return self._analysis_method(candles=self.candles, index=index, **self._analysis_kwargs)
+        return self._analysis_method(
+            candles=self.candles, index=index, **self._analysis_kwargs
+        )

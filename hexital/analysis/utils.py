@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List
 
 from hexital.core.candle import Candle
 from hexital.utils.candles import get_readings_period
@@ -6,7 +6,7 @@ from hexital.utils.indexing import absindex
 
 
 def highest(
-    candles: List[Candle], name: str, length: int, index: Optional[int] = None
+    candles: List[Candle], name: str, length: int, index: int | None = None
 ) -> float | None:
     """
     Computes the highest value of the specified `name` over a given range of candles.
@@ -15,12 +15,14 @@ def highest(
     if not candles:
         return None
 
-    readings = get_readings_period(candles, name, length, absindex(index, len(candles)), True)
+    readings = get_readings_period(
+        candles, name, length, absindex(index, len(candles)), True
+    )
     return max(readings, default=None)
 
 
 def lowest(
-    candles: List[Candle], name: str, length: int, index: Optional[int] = None
+    candles: List[Candle], name: str, length: int, index: int | None = None
 ) -> float | None:
     """
     Computes the lowest value of the specified `indicator` over a given range of candles.
@@ -29,11 +31,13 @@ def lowest(
     if not candles:
         return None
 
-    readings = get_readings_period(candles, name, length, absindex(index, len(candles)), True)
+    readings = get_readings_period(
+        candles, name, length, absindex(index, len(candles)), True
+    )
     return min(readings, default=None)
 
 
-def realbody_avg(candles: List[Candle], length: int, index: Optional[int] = None) -> float:
+def realbody_avg(candles: List[Candle], length: int, index: int | None = None) -> float:
     """
     Computes the average real body of a specified number of candles, including the current candle.
     The real body is calculated as the absolute difference between a candle's open and close prices.
@@ -44,7 +48,7 @@ def realbody_avg(candles: List[Candle], length: int, index: Optional[int] = None
     return sum(candles[i].realbody for i in range(start_index, index)) / length
 
 
-def high_low_avg(candles: List[Candle], length: int, index: Optional[int] = None) -> float:
+def high_low_avg(candles: List[Candle], length: int, index: int | None = None) -> float:
     """
     Computes the average of the high-low range over a specified number of candles,
     including the current candle. The high-low range is the difference between a candle's
@@ -56,7 +60,9 @@ def high_low_avg(candles: List[Candle], length: int, index: Optional[int] = None
     return sum(candles[i].high_low for i in range(start_index, index)) / length
 
 
-def shadow_upper_avg(candles: List[Candle], length: int, index: Optional[int] = None) -> float:
+def shadow_upper_avg(
+    candles: List[Candle], length: int, index: int | None = None
+) -> float:
     """
     Computes the average upper shadow over a specified number of candles, including the current candle.
     The upper shadow is the difference between a candle's high price and either its open or close price.
@@ -67,7 +73,9 @@ def shadow_upper_avg(candles: List[Candle], length: int, index: Optional[int] = 
     return sum(candles[i].shadow_upper for i in range(start_index, index)) / length
 
 
-def shadow_lower_avg(candles: List[Candle], length: int, index: Optional[int] = None) -> float:
+def shadow_lower_avg(
+    candles: List[Candle], length: int, index: int | None = None
+) -> float:
     """
     Computes the average lower shadow over a specified number of candles, including the current candle.
     The lower shadow is the difference between a candle's high price and either its open or close price.
@@ -111,18 +119,26 @@ def candle_gapdown(candle: Candle, candle_two: Candle) -> bool:
 
 
 def _realbody_percentage(
-    candles: List[Candle], index: Optional[int] = None, percentage: float = 1.0, length: int = 10
+    candles: List[Candle],
+    index: int | None = None,
+    percentage: float = 1.0,
+    length: int = 10,
 ) -> float:
     return realbody_avg(candles, length, absindex(index, len(candles))) * percentage
 
 
 def _high_low_percentage(
-    candles: List[Candle], index: Optional[int] = None, percentage: float = 1.0, length: int = 10
+    candles: List[Candle],
+    index: int | None = None,
+    percentage: float = 1.0,
+    length: int = 10,
 ) -> float:
     return high_low_avg(candles, length, absindex(index, len(candles))) * percentage
 
 
-def candle_bodydoji(candles: List[Candle], index: Optional[int] = None, length: int = 10) -> float:
+def candle_bodydoji(
+    candles: List[Candle], index: int | None = None, length: int = 10
+) -> float:
     """A real body is like doji's body when it's shorter than 10% the average of the 10 previous candles' high-low range
 
     Returns:
@@ -131,7 +147,9 @@ def candle_bodydoji(candles: List[Candle], index: Optional[int] = None, length: 
     return _high_low_percentage(candles, index=index, length=length, percentage=0.1)
 
 
-def candle_bodylong(candles: List[Candle], index: Optional[int] = None, length: int = 10) -> float:
+def candle_bodylong(
+    candles: List[Candle], index: int | None = None, length: int = 10
+) -> float:
     """A real body is long when it's longer than the average of the 10 previous candles' real body
 
     Returns:
@@ -140,7 +158,7 @@ def candle_bodylong(candles: List[Candle], index: Optional[int] = None, length: 
 
 
 def candle_bodyverylong(
-    candles: List[Candle], index: Optional[int] = None, length: int = 10
+    candles: List[Candle], index: int | None = None, length: int = 10
 ) -> float:
     """A real body is very long when it's longer than 3 times the average of the 10 previous candles' real body
 
@@ -150,7 +168,7 @@ def candle_bodyverylong(
 
 
 def candle_bodyshort(
-    candles: List[Candle], index: Optional[int] = None, length: int = 10
+    candles: List[Candle], index: int | None = None, length: int = 10
 ) -> float:
     """real body is short when it's shorter than the average of the 10 previous candles' real bodies
 
@@ -160,7 +178,7 @@ def candle_bodyshort(
 
 
 def candle_shadow_short(
-    candles: List[Candle], index: Optional[int] = None, length: int = 10
+    candles: List[Candle], index: int | None = None, length: int = 10
 ) -> float:
     """shadow is short when it's shorter than half the average of the 10 previous candles' sum of shadows
 
@@ -170,7 +188,7 @@ def candle_shadow_short(
 
 
 def candle_shadow_veryshort(
-    candles: List[Candle], index: Optional[int] = None, length: int = 10
+    candles: List[Candle], index: int | None = None, length: int = 10
 ) -> float:
     """shadow is very short when it's shorter than 10% the average of the 10 previous candles' high-low range
 
@@ -179,7 +197,7 @@ def candle_shadow_veryshort(
     return _high_low_percentage(candles, index=index, length=length, percentage=0.1)
 
 
-def candle_shadow_long(candles: List[Candle], index: Optional[int] = None) -> float:
+def candle_shadow_long(candles: List[Candle], index: int | None = None) -> float:
     """shadow is long when it's longer than the real body
 
     Returns:
@@ -187,7 +205,7 @@ def candle_shadow_long(candles: List[Candle], index: Optional[int] = None) -> fl
     return candles[index if index is not None else -1].realbody
 
 
-def candle_shadow_verylong(candles: List[Candle], index: Optional[int] = None) -> float:
+def candle_shadow_verylong(candles: List[Candle], index: int | None = None) -> float:
     """shadow is very long when it's longer than 2 times the real body
 
     Returns:
@@ -195,7 +213,9 @@ def candle_shadow_verylong(candles: List[Candle], index: Optional[int] = None) -
     return candles[index if index is not None else -1].realbody * 2
 
 
-def candle_equal(candles: List[Candle], index: Optional[int] = None, length: int = 5) -> float:
+def candle_equal(
+    candles: List[Candle], index: int | None = None, length: int = 5
+) -> float:
     """when measuring distance between parts of candles or width of gaps
     equal means "<= 5% of the average of the 5 previous candles' high-low range
 
@@ -204,7 +224,9 @@ def candle_equal(candles: List[Candle], index: Optional[int] = None, length: int
     return _high_low_percentage(candles, index=index, length=length, percentage=0.05)
 
 
-def candle_near(candles: List[Candle], index: Optional[int] = None, length: int = 5) -> float:
+def candle_near(
+    candles: List[Candle], index: int | None = None, length: int = 5
+) -> float:
     """when measuring distance between parts of candles or width of gaps
     near means "<= 20% of the average of the 5 previous candles' high-low range"
 
@@ -213,7 +235,9 @@ def candle_near(candles: List[Candle], index: Optional[int] = None, length: int 
     return _high_low_percentage(candles, index=index, length=length, percentage=0.2)
 
 
-def candle_far(candles: List[Candle], index: Optional[int] = None, length: int = 5) -> float:
+def candle_far(
+    candles: List[Candle], index: int | None = None, length: int = 5
+) -> float:
     """when measuring distance between parts of candles or width of gaps
     far means ">= 60% of the average of the 5 previous candles' high-low range
 

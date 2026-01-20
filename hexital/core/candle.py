@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 
 from hexital.core import Reading
 from hexital.utils.timeframe import (
@@ -18,15 +18,15 @@ class Candle:
     low: float
     close: float
     volume: int
-    timestamp: Optional[datetime]
+    timestamp: datetime | None
     indicators: Dict[str, Reading]
     sub_indicators: Dict[str, Reading]
-    timeframe: Optional[timedelta]
+    timeframe: timedelta | None
     aggregation_factor: int
-    tag: Optional[str] = None
+    tag: str | None = None
     refs: Dict[str, Sequence | None]
-    _start_timestamp: Optional[datetime] = None
-    _end_timestamp: Optional[datetime] = None
+    _start_timestamp: datetime | None = None
+    _end_timestamp: datetime | None = None
 
     def __init__(
         self,
@@ -35,20 +35,23 @@ class Candle:
         low: float,
         close: float,
         volume: int,
-        timestamp: Optional[datetime | str] = None,  # End of Candle
-        timeframe: Optional[TimeFramesSource] = None,
-        indicators: Optional[Dict[str, Reading]] = None,
-        sub_indicators: Optional[Dict[str, Reading]] = None,
+        timestamp: datetime | str | None = None,  # End of Candle
+        timeframe: TimeFramesSource | None = None,
+        indicators: Dict[str, Reading] | None = None,
+        sub_indicators: Dict[str, Reading] | None = None,
+        aggregation_factor: int | None = None,
     ):
         self.open = open
         self.high = high
         self.low = low
         self.close = close
         self.volume = volume
-        self.timeframe = convert_timeframe_to_timedelta(timeframe) if timeframe else None
+        self.timeframe = (
+            convert_timeframe_to_timedelta(timeframe) if timeframe else None
+        )
 
         self.tag = None
-        self.aggregation_factor = 1
+        self.aggregation_factor = aggregation_factor if aggregation_factor else 1
 
         if isinstance(timestamp, datetime):
             self.timestamp = timestamp
@@ -77,7 +80,13 @@ class Candle:
         return True
 
     def __repr__(self) -> str:
-        return str({name: value for name, value in vars(self).items() if not name.startswith("_")})
+        return str(
+            {
+                name: value
+                for name, value in vars(self).items()
+                if not name.startswith("_")
+            }
+        )
 
     @property
     def positive(self) -> bool:
@@ -249,7 +258,9 @@ class Candle:
         indicators = {}
         sub_indicators = {}
 
-        if len(candle) > 5 and (isinstance(candle[0], (str, datetime)) or candle[0] is None):
+        if len(candle) > 5 and (
+            isinstance(candle[0], (str, datetime)) or candle[0] is None
+        ):
             timestamp = candle.pop(0)
         if len(candle) > 5 and isinstance(candle[-1], (str, int, TimeFrame, timedelta)):
             timeframe = candle.pop(-1)
@@ -337,9 +348,9 @@ class Candle:
             return
 
         if self.timeframe:
-            if (candle.timestamp + self.timeframe > self.timestamp + self.timeframe) or (
-                candle.timestamp < self.timestamp - self.timeframe
-            ):
+            if (
+                candle.timestamp + self.timeframe > self.timestamp + self.timeframe
+            ) or (candle.timestamp < self.timestamp - self.timeframe):
                 return
 
         if self._start_timestamp and candle.timestamp < self._start_timestamp:

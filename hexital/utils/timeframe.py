@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta
 from enum import Enum
-from typing import Optional, TypeAlias
+from typing import TypeAlias
 
 from hexital.exceptions import InvalidTimeFrame
 
@@ -34,7 +34,7 @@ class TimeFrame(Enum):
 TimeFramesSource: TypeAlias = str | TimeFrame | timedelta | int
 
 
-def timeframe_validation(timeframe: Optional[TimeFramesSource] = None) -> bool:
+def timeframe_validation(timeframe: TimeFramesSource | None = None) -> bool:
     if isinstance(timeframe, str):
         timeframe_ = timeframe.upper()
         if isinstance(timeframe_[0], str) and timeframe_[0] in VALID_TIMEFRAME_PREFIXES:
@@ -49,7 +49,7 @@ def timeframe_validation(timeframe: Optional[TimeFramesSource] = None) -> bool:
 
 
 def convert_timeframe_to_timedelta(
-    timeframe: Optional[TimeFramesSource] = None,
+    timeframe: TimeFramesSource | None = None,
 ) -> timedelta | None:
     if isinstance(timeframe, (str, TimeFrame)):
         return timeframe_to_timedelta(validate_timeframe(timeframe))
@@ -64,7 +64,9 @@ def convert_timeframe_to_timedelta(
 def timeframe_to_timedelta(timeframe: str | TimeFrame) -> timedelta:
     # https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases
 
-    timeframe_ = timeframe.value if isinstance(timeframe, TimeFrame) else timeframe.upper()
+    timeframe_ = (
+        timeframe.value if isinstance(timeframe, TimeFrame) else timeframe.upper()
+    )
 
     if not timeframe_validation(timeframe_):
         raise InvalidTimeFrame(
@@ -100,7 +102,8 @@ def timedelta_to_str(timeframe: timedelta) -> str:
         return f"T{int(timeframe.seconds / 60)}"
     elif (
         timeframe < timedelta(hours=24)
-        or (timeframe >= timedelta(days=1) and timeframe.total_seconds() / 60 / 60) % 24 != 0
+        or (timeframe >= timedelta(days=1) and timeframe.total_seconds() / 60 / 60) % 24
+        != 0
     ):
         return f"H{int(timeframe.total_seconds() / 60 / 60)}"
     elif timeframe >= timedelta(days=1):
@@ -112,7 +115,10 @@ def timedelta_to_str(timeframe: timedelta) -> str:
 def validate_timeframe(timeframe: str | TimeFrame) -> str:
     if isinstance(timeframe, str):
         timeframe = timeframe.upper()
-        if not isinstance(timeframe[0], str) or timeframe[0] not in VALID_TIMEFRAME_PREFIXES:
+        if (
+            not isinstance(timeframe[0], str)
+            or timeframe[0] not in VALID_TIMEFRAME_PREFIXES
+        ):
             raise InvalidTimeFrame(
                 f"Invalid value: {timeframe}, valid are: {VALID_TIMEFRAME_PREFIXES}, E.G 'T10' 10 minutes"
             )
@@ -132,16 +138,22 @@ def round_down_timestamp(timestamp: datetime, timeframe: timedelta) -> datetime:
     timestamp = trim_timestamp(timestamp)
     if timeframe < timedelta(days=1):
         return datetime.fromtimestamp(
-            timestamp.timestamp() // timeframe.total_seconds() * timeframe.total_seconds(),
+            timestamp.timestamp()
+            // timeframe.total_seconds()
+            * timeframe.total_seconds(),
             tz=timestamp.tzinfo,
         )
     elif timeframe < timedelta(days=7):
         return timestamp.replace(hour=0, minute=0, second=0)
     else:
-        return (timestamp - timedelta(days=timestamp.isoweekday()-1)).replace(hour=0, minute=0, second=0)
+        return (timestamp - timedelta(days=timestamp.isoweekday() - 1)).replace(
+            hour=0, minute=0, second=0
+        )
 
 
-def within_timeframe(timestamp: datetime, within: datetime, timeframe: timedelta | None) -> bool:
+def within_timeframe(
+    timestamp: datetime, within: datetime, timeframe: timedelta | None
+) -> bool:
     """Checks if timestamp is within other timestamp and timeframe period"""
     if not timeframe:
         return False

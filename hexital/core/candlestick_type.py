@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List
 
 from hexital.core.candle import Candle
 from hexital.utils.common import CalcMode
@@ -40,7 +40,7 @@ class CandlestickType(ABC):
     @abstractmethod
     def transform_candle(self, candle: Candle) -> None | Candle | Sequence[Candle]: ...
 
-    def transform(self, mode: CalcMode = CalcMode.INSERT, index: Optional[int] = None):
+    def transform(self, mode: CalcMode = CalcMode.INSERT, index: int | None = None):
         """Transforms the Candle's into their candlestick type, using the given CalcMode.
         INSERT: Fresh transformation, will re-transform all Candles. Slow
         APPEND: Will transform all Candles at the end that have no derived Candles
@@ -102,7 +102,7 @@ class CandlestickType(ABC):
                 return index + 1
         return 0
 
-    def prev_derived(self, index: Optional[int] = None) -> Candle | None:
+    def prev_derived(self, index: int | None = None) -> Candle | None:
         """Returns the previous derived Candle"""
         if not self.derived_candles:
             return None

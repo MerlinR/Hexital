@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import weakref
 from collections.abc import Sequence
-from typing import Generator, Generic, List, Optional, SupportsIndex, TypeVar
+from typing import Generator, Generic, List, SupportsIndex, TypeVar
 
 T = TypeVar("T")
 
@@ -11,7 +11,7 @@ class WeakList(Generic[T], list):
     _refs: List[weakref.ReferenceType[T]]
     _dirty: bool
 
-    def __init__(self, seq: Optional[Sequence] = None):
+    def __init__(self, seq: Sequence | None = None):
         list.__init__(self)
         self._refs = []
         self._dirty = False

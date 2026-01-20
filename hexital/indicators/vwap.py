@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 from datetime import timedelta
-from typing import Optional
 
 from hexital.core.indicator import Indicator, Managed, NestedSource
 from hexital.exceptions import InvalidConfiguration
@@ -30,7 +29,7 @@ class VWAP(Indicator[float]):
     """
 
     _name: str = field(init=False, default="VWAP")
-    anchor: Optional[str | TimeFrame | timedelta | int] = "D"
+    anchor: str | TimeFrame | timedelta | int | None = "D"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{timedelta_to_str(self.anchor)}"
@@ -47,7 +46,9 @@ class VWAP(Indicator[float]):
     def _calculate_reading(self, index: int) -> float:
         candle = self.candles[index]
 
-        current_anchor = round_down_timestamp(self.reading("timestamp"), self.anchor).timestamp()
+        current_anchor = round_down_timestamp(
+            self.reading("timestamp"), self.anchor
+        ).timestamp()
         prev_anchor = self.prev_reading(NestedSource(self.data, "active_anchor"))
         typical_price = (candle.high + candle.low + candle.close) / 3.0
 

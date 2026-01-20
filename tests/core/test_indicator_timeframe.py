@@ -1,17 +1,18 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List
 
 import pytest
+from test_candlestick import FakeType
+
 from hexital import TimeFrame
 from hexital.core.candle import Candle
 from hexital.core.indicator import Indicator
-from test_candlestick import FakeType
 
 
 @dataclass(kw_only=True)
 class FakeIndicator(Indicator):
-    candles: list = field(default_factory=list)
-    timeframe: Optional[str | TimeFrame] = None
+    candles: List[Candle] = field(default_factory=list)
+    timeframe: str | TimeFrame | None = None
     indicator_name: str = "Fake"
     period: int = 10
     source: str = "close"

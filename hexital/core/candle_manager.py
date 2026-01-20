@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta
 from functools import cmp_to_key
-from typing import List, Optional, Set, TypeAlias
+from typing import List, Set, TypeAlias
 
 from hexital.core.candle import Candle
 from hexital.core.candlestick_type import CandlestickType
@@ -22,20 +22,20 @@ DEFAULT_CANDLES = "default"
 
 
 class CandleManager:
-    _name: Optional[str] = None
+    _name: str | None = None
     _candles: List[Candle]
-    candle_life: Optional[timedelta]
-    timeframe: Optional[timedelta] = None
+    candle_life: timedelta | None
+    timeframe: timedelta | None = None
     timeframe_fill: bool = False
-    candlestick: Optional[CandlestickType] = None
+    candlestick: CandlestickType | None = None
 
     def __init__(
         self,
-        candles: Optional[List[Candle]] = None,
-        candle_life: Optional[timedelta] = None,
-        timeframe: Optional[timedelta] = None,
+        candles: List[Candle] | None = None,
+        candle_life: timedelta | None = None,
+        timeframe: timedelta | None = None,
         timeframe_fill: bool = False,
-        candlestick: Optional[CandlestickType] = None,
+        candlestick: CandlestickType | None = None,
     ):
         self.candle_life = candle_life
         self.timeframe = timeframe
@@ -92,7 +92,7 @@ class CandleManager:
     def _candle_tasks(
         self,
         mode: CalcMode = CalcMode.INSERT,
-        index: Optional[int] = None,
+        index: int | None = None,
     ):
         self.resample_candles(mode, index)
         self.candlestick_conversion(mode, index)
@@ -130,7 +130,11 @@ class CandleManager:
         candles_ = self._parse_candles(candles)
 
         for candle in reversed(candles_):
-            if self.timeframe and candle.timeframe and candle.timeframe > self.timeframe:
+            if (
+                self.timeframe
+                and candle.timeframe
+                and candle.timeframe > self.timeframe
+            ):
                 continue
             self._candles.insert(0, candle.clean_copy())
 
@@ -141,7 +145,11 @@ class CandleManager:
         index = len(self._candles) - 1 if len(self._candles) > 0 else 0
 
         for candle in candles_:
-            if self.timeframe and candle.timeframe and candle.timeframe > self.timeframe:
+            if (
+                self.timeframe
+                and candle.timeframe
+                and candle.timeframe > self.timeframe
+            ):
                 continue
 
             self._candles.append(candle.clean_copy())
@@ -157,7 +165,11 @@ class CandleManager:
         last_timestamp = self._candles[-1].timestamp if self._candles else None
 
         for candle in candles_:
-            if self.timeframe and candle.timeframe and candle.timeframe > self.timeframe:
+            if (
+                self.timeframe
+                and candle.timeframe
+                and candle.timeframe > self.timeframe
+            ):
                 continue
             elif last_timestamp and candle.timestamp < last_timestamp:
                 to_sort = True
@@ -169,7 +181,7 @@ class CandleManager:
 
         self._candle_tasks(CalcMode.INSERT)
 
-    def sort_candles(self, candles: Optional[List[Candle]] = None):
+    def sort_candles(self, candles: List[Candle | None] = None):
         """Sorts Candles in order of timestamp, accounts for collapsing"""
         if candles:
             candles.sort(key=cmp_to_key(self._sort_comparison))
@@ -211,14 +223,15 @@ class CandleManager:
         while (
             self._candles[0].timestamp
             and self._candles[-1].timestamp
-            and self._candles[0].timestamp < self._candles[-1].timestamp - self.candle_life
+            and self._candles[0].timestamp
+            < self._candles[-1].timestamp - self.candle_life
         ):
             self._candles.pop(0)
 
     def resample_candles(
         self,
         mode: CalcMode,
-        index: Optional[int] = None,
+        index: int | None = None,
     ):
         """resamples the given list of candles into specific timeframe candles.
         This can re-ran with same list to resample latest candles.
@@ -270,7 +283,10 @@ class CandleManager:
             candle.timestamp = trim_timestamp(candle.timestamp)
             candle.timeframe = self.timeframe
 
-            if start_time < candle.timestamp <= end_time and prev_candle.timestamp == end_time:
+            if (
+                start_time < candle.timestamp <= end_time
+                and prev_candle.timestamp == end_time
+            ):
                 prev_candle.merge(candle)
             elif (
                 start_time - self.timeframe < candle.timestamp <= start_time
@@ -285,7 +301,9 @@ class CandleManager:
                 candles_.append(candle)
                 start_time = end_time
                 end_time = next_end_time
-            elif start_time < candle.timestamp and on_timeframe(candle.timestamp, self.timeframe):
+            elif start_time < candle.timestamp and on_timeframe(
+                candle.timestamp, self.timeframe
+            ):
                 start_time = round_down_timestamp(candle.timestamp, self.timeframe)
                 end_time = start_time + self.timeframe
                 candle.set_resampled_timestamp(start_time)
@@ -329,7 +347,7 @@ class CandleManager:
         candles: List[Candle],
         timeframe: timedelta,
         start_index: int = 0,
-        end_index: Optional[int] = None,
+        end_index: int | None = None,
     ) -> List[Candle]:
         """Generates filler Candle's to the list of Candles.
         Filler Candles are Candles that fill gaps of timeframed Candles,
@@ -369,7 +387,7 @@ class CandleManager:
 
         return candles
 
-    def candlestick_conversion(self, mode: CalcMode, index: Optional[int] = None):
+    def candlestick_conversion(self, mode: CalcMode, index: int | None = None):
         if self.candlestick:
             self.candlestick.transform(mode, index)
 

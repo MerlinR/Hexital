@@ -1,8 +1,9 @@
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import List, Optional
+from typing import List
 
 import pytest
+
 from hexital import Candle
 from hexital.analysis.patterns import doji
 from hexital.candlesticks.heikinashi import HeikinAshi
@@ -15,7 +16,7 @@ from hexital.indicators.amorph import Amorph
 class FakeIndicator(Indicator):
     candles: List[Candle] = field(default_factory=list)
     _name: str = field(init=False, default="Fake")
-    name_suffix: Optional[str] = None
+    name_suffix: str | None = None
     rounding: int | None = 4
 
     period: int = 10

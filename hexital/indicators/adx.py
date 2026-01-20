@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import Optional
 
 from hexital.core.indicator import Indicator, Managed, NestedSource
 from hexital.indicators.atr import ATR
@@ -20,13 +19,13 @@ class ADX(Indicator[dict]):
     Args:
         period (int): How many Periods to use. Defaults to 14
         period_signal (Optional[int]):  Average Directional Index period. Defaults same as period
-        multiplier (Optional[float]): ADX smoothing multiplier. Defaults to 100.0
+        multiplier (float | None): ADX smoothing multiplier. Defaults to 100.0
     """
 
     _name: str = field(init=False, default="ADX")
 
     period: int = 14
-    period_signal: Optional[int] = None
+    period_signal: int | None = None
     multiplier: float = 100.0
 
     def _generate_name(self) -> str:
@@ -93,7 +92,11 @@ class ADX(Indicator[dict]):
             adx_positive = mod * self.sub_pos.reading()
             adx_negative = mod * self.sub_neg.reading()
 
-            dx = self.multiplier * abs(adx_positive - adx_negative) / (adx_positive + adx_negative)
+            dx = (
+                self.multiplier
+                * abs(adx_positive - adx_negative)
+                / (adx_positive + adx_negative)
+            )
 
             self.data.set_reading({"positive": dm_plus, "negative": dm_neg, "dx": dx})
             self.dx.calculate_index(index)

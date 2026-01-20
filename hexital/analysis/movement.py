@@ -1,19 +1,23 @@
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 from hexital.analysis import utils
 from hexital.core.candle import Candle
 from hexital.core.candle_manager import DEFAULT_CANDLES
 from hexital.core.hexital import Hexital
 from hexital.core.indicator import Indicator
-from hexital.utils.candles import get_readings_period, reading_by_candle, reading_by_index
+from hexital.utils.candles import (
+    get_readings_period,
+    reading_by_candle,
+    reading_by_index,
+)
 from hexital.utils.indexing import absindex, valid_index
 from hexital.utils.timeframe import within_timeframe
 
 
 def _retrieve_candles(
     obj: Indicator | Hexital | List[Candle],
-    indicator: Optional[str] = None,
-    indicator_cmp: Optional[str] = None,
+    indicator: str | None = None,
+    indicator_cmp: str | None = None,
 ) -> List[Candle] | Tuple[List[Candle], List[Candle]]:
     if isinstance(obj, list):
         return obj
@@ -143,7 +147,9 @@ def _above(
         reading_one = reading_by_index(candles, indicator, i)
         reading_two = reading_by_index(candles_two, indicator_cmp, i)
 
-        if isinstance(reading_one, (float, int)) and isinstance(reading_two, (float, int)):
+        if isinstance(reading_one, (float, int)) and isinstance(
+            reading_two, (float, int)
+        ):
             if reading_one > reading_two:
                 return True
 
@@ -213,7 +219,9 @@ def _below(
         reading_one = reading_by_index(candles, indicator, i)
         reading_two = reading_by_index(candles_two, indicator_cmp, i)
 
-        if isinstance(reading_one, (float, int)) and isinstance(reading_two, (float, int)):
+        if isinstance(reading_one, (float, int)) and isinstance(
+            reading_two, (float, int)
+        ):
             if reading_one < reading_two:
                 return True
 
@@ -221,7 +229,10 @@ def _below(
 
 
 def value_range(
-    candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 4, index: int = -1
+    candles: Indicator | Hexital | List[Candle],
+    indicator: str,
+    length: int = 4,
+    index: int = -1,
 ) -> float | None:
     """Value Range Analysis
 
@@ -252,7 +263,10 @@ def value_range(
 
 
 def rising(
-    candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 1, index: int = -1
+    candles: Indicator | Hexital | List[Candle],
+    indicator: str,
+    length: int = 1,
+    index: int = -1,
 ) -> bool:
     """Rising Analysis
 
@@ -270,7 +284,12 @@ def rising(
         bool: `True` if the `indicator` is greater than each previous readings in the range; otherwise `False`.
     """
     candle_set = _retrieve_candles(candles, indicator)
-    if not isinstance(candle_set, list) or not candle_set or length < 1 or len(candle_set) < 2:
+    if (
+        not isinstance(candle_set, list)
+        or not candle_set
+        or length < 1
+        or len(candle_set) < 2
+    ):
         return False
 
     idx = absindex(index, len(candle_set))
@@ -290,7 +309,10 @@ def rising(
 
 
 def falling(
-    candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 1, index: int = -1
+    candles: Indicator | Hexital | List[Candle],
+    indicator: str,
+    length: int = 1,
+    index: int = -1,
 ) -> bool:
     """Falling Analysis
 
@@ -308,7 +330,12 @@ def falling(
         bool: `True` if the `indicator` is lower than each previous readings in the range; otherwise `False`.
     """
     candle_set = _retrieve_candles(candles, indicator)
-    if not isinstance(candle_set, list) or not candle_set or length < 1 or len(candle_set) < 2:
+    if (
+        not isinstance(candle_set, list)
+        or not candle_set
+        or length < 1
+        or len(candle_set) < 2
+    ):
         return False
 
     idx = absindex(index, len(candle_set))
@@ -328,7 +355,10 @@ def falling(
 
 
 def mean_rising(
-    candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 4, index: int = -1
+    candles: Indicator | Hexital | List[Candle],
+    indicator: str,
+    length: int = 4,
+    index: int = -1,
 ) -> bool:
     """Mean Rising Analysis
 
@@ -346,7 +376,12 @@ def mean_rising(
     """
 
     candle_set = _retrieve_candles(candles, indicator)
-    if not isinstance(candle_set, list) or not candle_set or length < 1 or len(candle_set) < 2:
+    if (
+        not isinstance(candle_set, list)
+        or not candle_set
+        or length < 1
+        or len(candle_set) < 2
+    ):
         return False
 
     idx = absindex(index, len(candle_set))
@@ -363,7 +398,10 @@ def mean_rising(
 
 
 def mean_falling(
-    candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 4, index: int = -1
+    candles: Indicator | Hexital | List[Candle],
+    indicator: str,
+    length: int = 4,
+    index: int = -1,
 ) -> bool:
     """Mean Falling Analysis
 
@@ -380,7 +418,12 @@ def mean_falling(
         bool: `True` if the `indicator` is lower than the average of the specified `n` readings; otherwise `False`.
     """
     candle_set = _retrieve_candles(candles, indicator)
-    if not isinstance(candle_set, list) or not candle_set or length < 1 or len(candle_set) < 2:
+    if (
+        not isinstance(candle_set, list)
+        or not candle_set
+        or length < 1
+        or len(candle_set) < 2
+    ):
         return False
 
     idx = absindex(index, len(candle_set))
@@ -397,7 +440,10 @@ def mean_falling(
 
 
 def highest(
-    candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 4, index: int = -1
+    candles: Indicator | Hexital | List[Candle],
+    indicator: str,
+    length: int = 4,
+    index: int = -1,
 ) -> float | None:
     """Highest Reading Analysis
 
@@ -421,7 +467,10 @@ def highest(
 
 
 def lowest(
-    candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 4, index: int = -1
+    candles: Indicator | Hexital | List[Candle],
+    indicator: str,
+    length: int = 4,
+    index: int = -1,
 ) -> float | None:
     """Lowest Reading Analysis
 
@@ -445,7 +494,10 @@ def lowest(
 
 
 def highestbar(
-    candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 4, index: int = -1
+    candles: Indicator | Hexital | List[Candle],
+    indicator: str,
+    length: int = 4,
+    index: int = -1,
 ) -> int | None:
     """Highest Bar Offset Analysis
 
@@ -487,7 +539,10 @@ def highestbar(
 
 
 def lowestbar(
-    candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 4, index: int = -1
+    candles: Indicator | Hexital | List[Candle],
+    indicator: str,
+    length: int = 4,
+    index: int = -1,
 ) -> int | None:
     """Lowest Bar Offset Analysis
 
@@ -556,14 +611,19 @@ def cross(
     if isinstance(candles_, list):
         idx = absindex(index, len(candles_)) + 1
         length = idx - (length + 1)
-        return _cross(candles_[length:idx], indicator, candles_[length:idx], indicator_cmp)
+        return _cross(
+            candles_[length:idx], indicator, candles_[length:idx], indicator_cmp
+        )
 
     elif isinstance(candles_, tuple):
         candle_set = _timeframe_pair_candles(candles_)
         idx = absindex(index, len(candle_set[0])) + 1
         length = idx - (length + 1)
         return _cross(
-            candle_set[0][length:idx], indicator, candle_set[1][length:idx], indicator_cmp
+            candle_set[0][length:idx],
+            indicator,
+            candle_set[1][length:idx],
+            indicator_cmp,
         )
 
     return False
@@ -624,7 +684,9 @@ def crossover(
     if isinstance(candles_, list):
         idx = absindex(index, len(candles_)) + 1
         length = idx - (length + 1)
-        return _crossover(candles_[length:idx], indicator, candles_[length:idx], indicator_cmp)
+        return _crossover(
+            candles_[length:idx], indicator, candles_[length:idx], indicator_cmp
+        )
 
     elif isinstance(candles_, tuple):
         candle_set = _timeframe_pair_candles(candles_)
@@ -632,7 +694,10 @@ def crossover(
         length = idx - (length + 1)
 
         return _crossover(
-            candle_set[0][length:idx], indicator, candle_set[1][length:idx], indicator_cmp
+            candle_set[0][length:idx],
+            indicator,
+            candle_set[1][length:idx],
+            indicator_cmp,
         )
 
     return False
@@ -691,7 +756,9 @@ def crossunder(
     if isinstance(candles_, list):
         idx = absindex(index, len(candles_)) + 1
         length = idx - (length + 1)
-        return _crossunder(candles_[length:idx], indicator, candles_[length:idx], indicator_cmp)
+        return _crossunder(
+            candles_[length:idx], indicator, candles_[length:idx], indicator_cmp
+        )
 
     elif isinstance(candles_, tuple):
         candle_set = _timeframe_pair_candles(candles_)
@@ -699,7 +766,10 @@ def crossunder(
         length = idx - (length + 1)
 
         return _crossunder(
-            candle_set[0][length:idx], indicator, candle_set[1][length:idx], indicator_cmp
+            candle_set[0][length:idx],
+            indicator,
+            candle_set[1][length:idx],
+            indicator_cmp,
         )
 
     return False
@@ -729,7 +799,10 @@ def _crossunder(
 
 
 def flipped(
-    candles: Indicator | Hexital | List[Candle], indicator: str, length: int = 1, index: int = -1
+    candles: Indicator | Hexital | List[Candle],
+    indicator: str,
+    length: int = 1,
+    index: int = -1,
 ) -> bool:
     """Flipped Reading Analysis
 
