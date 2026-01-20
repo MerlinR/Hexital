@@ -27,7 +27,7 @@ jobs:
         with:
           enable-cache: true
       - name: Install dependencies
-        run: uv sync
+        run: uv sync --group dev
       - name: Test with pytest
         run: |
           uv run coverage run --omit="tests/*" -m pytest
