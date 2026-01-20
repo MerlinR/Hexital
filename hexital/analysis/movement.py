@@ -1,5 +1,3 @@
-from typing import List, Tuple
-
 from hexital.analysis import utils
 from hexital.core.candle import Candle
 from hexital.core.candle_manager import DEFAULT_CANDLES
@@ -15,58 +13,57 @@ from hexital.utils.timeframe import within_timeframe
 
 
 def _retrieve_candles(
-    obj: Indicator | Hexital | List[Candle],
+    obj: Indicator | Hexital | list[Candle],
     indicator: str | None = None,
     indicator_cmp: str | None = None,
-) -> List[Candle] | Tuple[List[Candle], List[Candle]]:
+) -> list[Candle] | tuple[list[Candle], list[Candle]]:
     if isinstance(obj, list):
         return obj
-    elif isinstance(obj, Indicator):
+    if isinstance(obj, Indicator):
         return obj.candles
-    elif isinstance(obj, Hexital) and not indicator and not indicator_cmp:
+    if isinstance(obj, Hexital) and not indicator and not indicator_cmp:
         return obj.candles(DEFAULT_CANDLES)
-    elif isinstance(obj, Hexital) and indicator:
+    if isinstance(obj, Hexital) and indicator:
         return obj.find_candle_pairing(indicator, indicator_cmp)
 
     return []
 
 
 def _timeframe_pair_candles(
-    candles: Tuple[List[Candle], List[Candle]],
-) -> Tuple[List[Candle], List[Candle]]:
+    candles: tuple[list[Candle], list[Candle]],
+) -> tuple[list[Candle], list[Candle]]:
     output_one, output_two = [], []
     set_one, set_two = candles
 
     if set_one[-1].timeframe == set_two[-1].timeframe:
         return candles
-    else:
-        end_pointer = len(candles[1]) - 1
+    end_pointer = len(candles[1]) - 1
 
-        for front_pointer in range(len(set_one) - 1, -1, -1):
-            if not end_pointer:
-                break
+    for front_pointer in range(len(set_one) - 1, -1, -1):
+        if not end_pointer:
+            break
 
-            while (
-                not within_timeframe(
-                    set_one[front_pointer].timestamp,
-                    set_two[end_pointer].timestamp,
-                    set_two[end_pointer].timeframe,
-                )
-                and not within_timeframe(
-                    set_two[end_pointer].timestamp,
-                    set_one[front_pointer].timestamp,
-                    set_one[front_pointer].timeframe,
-                )
-            ) and end_pointer >= 0:
-                end_pointer -= 1
+        while (
+            not within_timeframe(
+                set_one[front_pointer].timestamp,
+                set_two[end_pointer].timestamp,
+                set_two[end_pointer].timeframe,
+            )
+            and not within_timeframe(
+                set_two[end_pointer].timestamp,
+                set_one[front_pointer].timestamp,
+                set_one[front_pointer].timeframe,
+            )
+        ) and end_pointer >= 0:
+            end_pointer -= 1
 
-            output_one.insert(0, set_one[front_pointer])
-            output_two.insert(0, set_two[end_pointer])
+        output_one.insert(0, set_one[front_pointer])
+        output_two.insert(0, set_two[end_pointer])
 
     return output_one, output_two
 
 
-def positive(candles: Candle | List[Candle], index: int = -1) -> bool:
+def positive(candles: Candle | list[Candle], index: int = -1) -> bool:
     if isinstance(candles, Candle):
         return candles.positive
 
@@ -75,7 +72,7 @@ def positive(candles: Candle | List[Candle], index: int = -1) -> bool:
     return candles[index].positive
 
 
-def negative(candles: Candle | List[Candle], index: int = -1) -> bool:
+def negative(candles: Candle | list[Candle], index: int = -1) -> bool:
     if isinstance(candles, Candle):
         return candles.negative
 
@@ -85,7 +82,7 @@ def negative(candles: Candle | List[Candle], index: int = -1) -> bool:
 
 
 def above(
-    candles: Indicator | Hexital | List[Candle],
+    candles: Indicator | Hexital | list[Candle],
     indicator: str,
     indicator_cmp: str,
     length: int = 0,
@@ -119,7 +116,7 @@ def above(
             candles_[length:idx],
             indicator_cmp,
         )
-    elif isinstance(candles_, tuple):
+    if isinstance(candles_, tuple):
         candle_set = _timeframe_pair_candles(candles_)
         idx = absindex(index, len(candle_set[0])) + 1
         length = idx - (length + 1)
@@ -135,9 +132,9 @@ def above(
 
 
 def _above(
-    candles: List[Candle],
+    candles: list[Candle],
     indicator: str,
-    candles_two: List[Candle],
+    candles_two: list[Candle],
     indicator_cmp: str,
 ) -> bool:
     if len(candles) != len(candles_two):
@@ -157,7 +154,7 @@ def _above(
 
 
 def below(
-    candles: Indicator | Hexital | List[Candle],
+    candles: Indicator | Hexital | list[Candle],
     indicator: str,
     indicator_cmp: str,
     length: int = 0,
@@ -191,7 +188,7 @@ def below(
             candles_[length:idx],
             indicator_cmp,
         )
-    elif isinstance(candles_, tuple):
+    if isinstance(candles_, tuple):
         candle_set = _timeframe_pair_candles(candles_)
         idx = absindex(index, len(candle_set[0])) + 1
         length = idx - (length + 1)
@@ -207,9 +204,9 @@ def below(
 
 
 def _below(
-    candles: List[Candle],
+    candles: list[Candle],
     indicator: str,
-    candles_two: List[Candle],
+    candles_two: list[Candle],
     indicator_cmp: str,
 ) -> bool:
     if len(candles) != len(candles_two):
@@ -229,7 +226,7 @@ def _below(
 
 
 def value_range(
-    candles: Indicator | Hexital | List[Candle],
+    candles: Indicator | Hexital | list[Candle],
     indicator: str,
     length: int = 4,
     index: int = -1,
@@ -263,7 +260,7 @@ def value_range(
 
 
 def rising(
-    candles: Indicator | Hexital | List[Candle],
+    candles: Indicator | Hexital | list[Candle],
     indicator: str,
     length: int = 1,
     index: int = -1,
@@ -309,7 +306,7 @@ def rising(
 
 
 def falling(
-    candles: Indicator | Hexital | List[Candle],
+    candles: Indicator | Hexital | list[Candle],
     indicator: str,
     length: int = 1,
     index: int = -1,
@@ -355,7 +352,7 @@ def falling(
 
 
 def mean_rising(
-    candles: Indicator | Hexital | List[Candle],
+    candles: Indicator | Hexital | list[Candle],
     indicator: str,
     length: int = 4,
     index: int = -1,
@@ -398,7 +395,7 @@ def mean_rising(
 
 
 def mean_falling(
-    candles: Indicator | Hexital | List[Candle],
+    candles: Indicator | Hexital | list[Candle],
     indicator: str,
     length: int = 4,
     index: int = -1,
@@ -440,7 +437,7 @@ def mean_falling(
 
 
 def highest(
-    candles: Indicator | Hexital | List[Candle],
+    candles: Indicator | Hexital | list[Candle],
     indicator: str,
     length: int = 4,
     index: int = -1,
@@ -467,7 +464,7 @@ def highest(
 
 
 def lowest(
-    candles: Indicator | Hexital | List[Candle],
+    candles: Indicator | Hexital | list[Candle],
     indicator: str,
     length: int = 4,
     index: int = -1,
@@ -494,7 +491,7 @@ def lowest(
 
 
 def highestbar(
-    candles: Indicator | Hexital | List[Candle],
+    candles: Indicator | Hexital | list[Candle],
     indicator: str,
     length: int = 4,
     index: int = -1,
@@ -523,23 +520,20 @@ def highestbar(
     high = None
     distance = 0
 
-    for idx, index in enumerate(range(idx, idx - length, -1)):
-        current = reading_by_index(candle_set, indicator, index)
+    for offset, candle_idx in enumerate(range(idx, idx - length, -1)):
+        current = reading_by_index(candle_set, indicator, candle_idx)
         if not isinstance(current, (float, int)):
             continue
 
-        if high is None:
+        if high is None or high < current:
             high = current
-
-        if high < current:
-            high = current
-            distance = idx
+            distance = offset
 
     return distance
 
 
 def lowestbar(
-    candles: Indicator | Hexital | List[Candle],
+    candles: Indicator | Hexital | list[Candle],
     indicator: str,
     length: int = 4,
     index: int = -1,
@@ -568,23 +562,20 @@ def lowestbar(
     low = None
     distance = 0
 
-    for idx, index in enumerate(range(idx, idx - length, -1)):
-        current = reading_by_index(candle_set, indicator, index)
+    for offset, candle_idx in enumerate(range(idx, idx - length, -1)):
+        current = reading_by_index(candle_set, indicator, candle_idx)
         if not isinstance(current, (float, int)):
             continue
 
-        if low is None:
+        if low is None or low > current:
             low = current
-
-        if low > current:
-            low = current
-            distance = idx
+            distance = offset
 
     return distance
 
 
 def cross(
-    candles: Indicator | Hexital | List[Candle],
+    candles: Indicator | Hexital | list[Candle],
     indicator: str,
     indicator_cmp: str,
     length: int = 1,
@@ -615,7 +606,7 @@ def cross(
             candles_[length:idx], indicator, candles_[length:idx], indicator_cmp
         )
 
-    elif isinstance(candles_, tuple):
+    if isinstance(candles_, tuple):
         candle_set = _timeframe_pair_candles(candles_)
         idx = absindex(index, len(candle_set[0])) + 1
         length = idx - (length + 1)
@@ -630,9 +621,9 @@ def cross(
 
 
 def _cross(
-    candles: List[Candle],
+    candles: list[Candle],
     indicator: str,
-    candles_two: List[Candle],
+    candles_two: list[Candle],
     indicator_cmp: str,
 ) -> bool:
     if len(candles) != len(candles_two):
@@ -646,7 +637,7 @@ def _cross(
 
         if None in [reading_one, reading_two, prev_one, prev_two]:
             continue
-        elif (reading_one < reading_two and prev_one >= prev_two) or (
+        if (reading_one < reading_two and prev_one >= prev_two) or (
             reading_one > reading_two and prev_one <= prev_two
         ):
             return True
@@ -655,7 +646,7 @@ def _cross(
 
 
 def crossover(
-    candles: Indicator | Hexital | List[Candle],
+    candles: Indicator | Hexital | list[Candle],
     indicator: str,
     indicator_cmp: str,
     length: int = 1,
@@ -688,7 +679,7 @@ def crossover(
             candles_[length:idx], indicator, candles_[length:idx], indicator_cmp
         )
 
-    elif isinstance(candles_, tuple):
+    if isinstance(candles_, tuple):
         candle_set = _timeframe_pair_candles(candles_)
         idx = absindex(index, len(candle_set[0])) + 1
         length = idx - (length + 1)
@@ -704,9 +695,9 @@ def crossover(
 
 
 def _crossover(
-    candles: List[Candle],
+    candles: list[Candle],
     indicator: str,
-    candles_two: List[Candle],
+    candles_two: list[Candle],
     indicator_cmp: str,
 ) -> bool:
     if len(candles) != len(candles_two):
@@ -720,14 +711,14 @@ def _crossover(
 
         if None in [reading_one, reading_two, prev_one, prev_two]:
             continue
-        elif reading_one > reading_two and prev_one <= prev_two:
+        if reading_one > reading_two and prev_one <= prev_two:
             return True
 
     return False
 
 
 def crossunder(
-    candles: Indicator | Hexital | List[Candle],
+    candles: Indicator | Hexital | list[Candle],
     indicator: str,
     indicator_cmp: str,
     length: int = 1,
@@ -760,7 +751,7 @@ def crossunder(
             candles_[length:idx], indicator, candles_[length:idx], indicator_cmp
         )
 
-    elif isinstance(candles_, tuple):
+    if isinstance(candles_, tuple):
         candle_set = _timeframe_pair_candles(candles_)
         idx = absindex(index, len(candle_set[0])) + 1
         length = idx - (length + 1)
@@ -776,9 +767,9 @@ def crossunder(
 
 
 def _crossunder(
-    candles: List[Candle],
+    candles: list[Candle],
     indicator: str,
-    candles_two: List[Candle],
+    candles_two: list[Candle],
     indicator_cmp: str,
 ) -> bool:
     if len(candles) != len(candles_two):
@@ -792,14 +783,14 @@ def _crossunder(
 
         if None in [reading_one, reading_two, prev_one, prev_two]:
             continue
-        elif reading_one < reading_two and prev_one >= prev_two:
+        if reading_one < reading_two and prev_one >= prev_two:
             return True
 
     return False
 
 
 def flipped(
-    candles: Indicator | Hexital | List[Candle],
+    candles: Indicator | Hexital | list[Candle],
     indicator: str,
     length: int = 1,
     index: int = -1,

@@ -35,15 +35,13 @@ TimeFramesSource: TypeAlias = str | TimeFrame | timedelta | int
 
 
 def timeframe_validation(timeframe: TimeFramesSource | None = None) -> bool:
+    if isinstance(timeframe, (int, timedelta, TimeFrame)):
+        return True
+
     if isinstance(timeframe, str):
         timeframe_ = timeframe.upper()
-        if isinstance(timeframe_[0], str) and timeframe_[0] in VALID_TIMEFRAME_PREFIXES:
-            if len(timeframe_) == 1:
-                return True
-            elif timeframe_[1].isdigit():
-                return True
-    elif isinstance(timeframe, (int, timedelta, TimeFrame)):
-        return True
+        if timeframe_[0] in VALID_TIMEFRAME_PREFIXES:
+            return len(timeframe_) == 1 or timeframe_[1:].isdigit()
 
     return False
 
@@ -53,9 +51,9 @@ def convert_timeframe_to_timedelta(
 ) -> timedelta | None:
     if isinstance(timeframe, (str, TimeFrame)):
         return timeframe_to_timedelta(validate_timeframe(timeframe))
-    elif isinstance(timeframe, int):
+    if isinstance(timeframe, int):
         return timedelta(seconds=timeframe)
-    elif isinstance(timeframe, timedelta):
+    if isinstance(timeframe, timedelta):
         return timeframe
 
     return None
@@ -89,41 +87,33 @@ def timeframe_to_timedelta(timeframe: str | TimeFrame) -> timedelta:
 
 
 def timedelta_to_str(timeframe: timedelta) -> str:
-    # https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases
     if not timeframe:
         return ""
 
-    if timeframe < timedelta(seconds=60):
-        return f"S{timeframe.seconds}"
-    elif (
-        timeframe < timedelta(minutes=60)
-        or (timeframe < timedelta(hours=24) and timeframe.seconds / 60) % 60 != 0
-    ):
-        return f"T{int(timeframe.seconds / 60)}"
-    elif (
-        timeframe < timedelta(hours=24)
-        or (timeframe >= timedelta(days=1) and timeframe.total_seconds() / 60 / 60) % 24
-        != 0
-    ):
-        return f"H{int(timeframe.total_seconds() / 60 / 60)}"
-    elif timeframe >= timedelta(days=1):
-        return f"D{int(timeframe.days)}"
+    total_seconds = timeframe.total_seconds()
 
-    return ""
+    # Days
+    if total_seconds >= 86400 and total_seconds % 86400 == 0:
+        return f"D{int(timeframe.days)}"
+    # Hours
+    if total_seconds >= 3600 and total_seconds % 3600 == 0:
+        return f"H{int(total_seconds / 3600)}"
+    # Minutes
+    if total_seconds >= 60 and total_seconds % 60 == 0:
+        return f"T{int(total_seconds / 60)}"
+    # Seconds
+    return f"S{int(total_seconds)}"
 
 
 def validate_timeframe(timeframe: str | TimeFrame) -> str:
-    if isinstance(timeframe, str):
-        timeframe = timeframe.upper()
-        if (
-            not isinstance(timeframe[0], str)
-            or timeframe[0] not in VALID_TIMEFRAME_PREFIXES
-        ):
-            raise InvalidTimeFrame(
-                f"Invalid value: {timeframe}, valid are: {VALID_TIMEFRAME_PREFIXES}, E.G 'T10' 10 minutes"
-            )
-    elif isinstance(timeframe, TimeFrame):
-        timeframe = timeframe.value
+    if isinstance(timeframe, TimeFrame):
+        return timeframe.value
+
+    timeframe = timeframe.upper()
+    if timeframe[0] not in VALID_TIMEFRAME_PREFIXES:
+        raise InvalidTimeFrame(
+            f"Invalid value: {timeframe}, valid are: {VALID_TIMEFRAME_PREFIXES}, E.G 'T10' 10 minutes"
+        )
 
     return timeframe
 
@@ -135,20 +125,20 @@ def round_down_timestamp(timestamp: datetime, timeframe: timedelta) -> datetime:
     E.G T5: 09:05:00 -> 9:05:00
     Note: This method also calls trim_timestamp, removing microseconds
     """
-    timestamp = trim_timestamp(timestamp)
+    timestamp = timestamp.replace(microsecond=0)
+
     if timeframe < timedelta(days=1):
-        return datetime.fromtimestamp(
-            timestamp.timestamp()
-            // timeframe.total_seconds()
-            * timeframe.total_seconds(),
-            tz=timestamp.tzinfo,
-        )
-    elif timeframe < timedelta(days=7):
-        return timestamp.replace(hour=0, minute=0, second=0)
-    else:
-        return (timestamp - timedelta(days=timestamp.isoweekday() - 1)).replace(
+        seconds = timeframe.total_seconds()
+        rounded_ts = (timestamp.timestamp() // seconds) * seconds
+        return datetime.fromtimestamp(rounded_ts, tz=timestamp.tzinfo)
+
+    if timeframe >= timedelta(days=7):
+        days_since_monday = timestamp.isoweekday() - 1
+        return (timestamp - timedelta(days=days_since_monday)).replace(
             hour=0, minute=0, second=0
         )
+
+    return timestamp.replace(hour=0, minute=0, second=0)
 
 
 def within_timeframe(
@@ -163,8 +153,3 @@ def within_timeframe(
 def on_timeframe(timestamp: datetime, timeframe: timedelta) -> bool:
     """Checks if timestamp is on a timeframe value"""
     return timestamp.timestamp() % timeframe.total_seconds() == 0
-
-
-def trim_timestamp(timestamp: datetime) -> datetime:
-    """Removes Microseconds from the timestamp and returns it"""
-    return timestamp.replace(microsecond=0)

@@ -1,5 +1,4 @@
 import json
-from typing import Dict, List
 
 import numpy as np
 import pandas as pd
@@ -11,7 +10,7 @@ PATH_CANDLES = "source_of_truth/candles"
 PATH_DATA = "."
 
 
-def load_json_candles() -> List[dict]:
+def load_json_candles() -> list[dict]:
     csv_file = open("tests/data/test_candles.json")
     return json.load(csv_file)
 
@@ -22,7 +21,7 @@ def save_json_result(data: list, filename: str, path: str | None = None):
         json.dump(data, json_file, indent=4, default=str)
 
 
-def round_values(values: float | Dict[str, float]) -> float | Dict[str, float]:
+def round_values(values: float | dict[str, float]) -> float | dict[str, float]:
     if isinstance(values, dict):
         for key, val in values.items():
             if val is not None:
@@ -112,9 +111,7 @@ def generate_indicators():
 
     save_json_result([round_values(value) for value in df["RMA_10"].tolist()], "RMA")
     save_json_result([round_values(value) for value in df["RMA_20"].tolist()], "RMA_20")
-    save_json_result(
-        [round_values(value) for value in df["TRUERANGE_1"].tolist()], "TR"
-    )
+    save_json_result([round_values(value) for value in df["TRUERANGE_1"].tolist()], "TR")
     save_json_result([round_values(value) for value in df["EMA_10"].tolist()], "EMA")
     save_json_result([round_values(value) for value in df["SMA_10"].tolist()], "SMA")
     save_json_result([round_values(value) for value in df["SMA_3"].tolist()], "SMA_3")
@@ -123,20 +120,14 @@ def generate_indicators():
     save_json_result([round_values(value) for value in df["WMA_10"].tolist()], "WMA")
     save_json_result([round_values(value) for value in df["VWMA_10"].tolist()], "VWMA")
     save_json_result([round_values(value) for value in df["VWAP_D"].tolist()], "VWAP")
-    save_json_result(
-        [round_values(value) for value in df["VWAP_1H"].tolist()], "VWAP_H1"
-    )
+    save_json_result([round_values(value) for value in df["VWAP_1H"].tolist()], "VWAP_H1")
     save_json_result([round_values(value) for value in df["OBV"].tolist()], "OBV")
     save_json_result([round_values(value) for value in df["HL2"].tolist()], "HL2")
     save_json_result([round_values(value) for value in df["HLC3"].tolist()], "HLC")
     save_json_result([round_values(value) for value in df["ROC_10"].tolist()], "ROC")
-    save_json_result(
-        [round_values(value) for value in df["ATRr_20"].tolist()], "ATR_20"
-    )
+    save_json_result([round_values(value) for value in df["ATRr_20"].tolist()], "ATR_20")
     save_json_result([round_values(value) for value in df["HMA_10"].tolist()], "HMA")
-    save_json_result(
-        [round_values(value) for value in df["STDEV_30"].tolist()], "STDEV"
-    )
+    save_json_result([round_values(value) for value in df["STDEV_30"].tolist()], "STDEV")
     save_json_result(
         [round_values(value) for value in df["TSI_13_25_13"].tolist()], "TSI"
     )
@@ -200,9 +191,7 @@ def generate_indicators():
         [round_values(value) for value in df["DMP_14"].tolist()],
         [round_values(value) for value in df["DMN_14"].tolist()],
     ):
-        adx_data.append(
-            {"ADX": adx_row[0], "DM_Plus": adx_row[1], "DM_Neg": adx_row[2]}
-        )
+        adx_data.append({"ADX": adx_row[0], "DM_Plus": adx_row[1], "DM_Neg": adx_row[2]})
     save_json_result(adx_data, "ADX")
 
     bbands_data = []
@@ -351,9 +340,7 @@ def generate_timeframe_candles(frame: str):
 
     output = []
     for row in df.to_dict("records"):
-        row["timestamp"] = (
-            row["timestamp"].to_pydatetime().isoformat(timespec="seconds")
-        )
+        row["timestamp"] = row["timestamp"].to_pydatetime().isoformat(timespec="seconds")
         output.append(row)
 
     save_json_result(output, f"test_candles_{frame.replace('min', 'T')}", PATH_CANDLES)

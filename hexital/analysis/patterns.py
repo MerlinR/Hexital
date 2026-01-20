@@ -1,14 +1,12 @@
-from typing import List, Optional
-
 from hexital.analysis import utils
 from hexital.core.candle import Candle
 from hexital.utils.indexing import absindex
 
 
 def doji(
-    candles: List[Candle],
-    lookback: Optional[int] = None,
-    index: Optional[int] = None,
+    candles: list[Candle],
+    lookback: int | None = None,
+    index: int | None = None,
 ) -> bool:
     """Doji Pattern
     A candle body is Doji when it's shorter than 10% of the average of the
@@ -32,16 +30,16 @@ def doji(
     return any(_doji(candles, i) for i in range(len(candles) - lookback, len(candles)))
 
 
-def _doji(candles: List[Candle], index: int):
+def _doji(candles: list[Candle], index: int):
     if index < 10:
         return False
     return candles[index].realbody < utils.candle_bodydoji(candles, index)
 
 
 def dojistar(
-    candles: List[Candle],
-    lookback: Optional[int] = None,
-    index: Optional[int] = None,
+    candles: list[Candle],
+    lookback: int | None = None,
+    index: int | None = None,
 ) -> bool:
     """Dojistar Pattern
     A Dojistar is either bearish or bullish, and is detected when we have a larger then average
@@ -63,31 +61,31 @@ def dojistar(
     if lookback is None:
         return _dojistar(candles, index_)
 
-    return any(_dojistar(candles, i) for i in range(len(candles) - lookback, len(candles)))
+    return any(
+        _dojistar(candles, i) for i in range(len(candles) - lookback, len(candles))
+    )
 
 
-def _dojistar(candles: List[Candle], index: int):
+def _dojistar(candles: list[Candle], index: int):
     if index < 10:
         return False
     candle = candles[index]
     prev_candle = candles[index - 1]
 
-    if (
+    return (
         prev_candle.realbody > utils.candle_bodylong(candles, index - 1)
         and candle.realbody <= utils.candle_bodydoji(candles, index)
         and (
             (prev_candle.positive and utils.realbody_gapup(candle, prev_candle))
             or (prev_candle.negative and utils.realbody_gapdown(candle, prev_candle))
         )
-    ):
-        return True
-    return False
+    )
 
 
 def hammer(
-    candles: List[Candle],
-    lookback: Optional[int] = None,
-    index: Optional[int] = None,
+    candles: list[Candle],
+    lookback: int | None = None,
+    index: int | None = None,
 ) -> bool | int:
     """Hammer Pattern
     A Hammer is detected when the Candle's open and close values are considered shorter
@@ -110,27 +108,24 @@ def hammer(
     return any(_hammer(candles, i) for i in range(len(candles) - lookback, len(candles)))
 
 
-def _hammer(candles: List[Candle], index: int):
+def _hammer(candles: list[Candle], index: int):
     if index < 10:
         return False
     candle = candles[index]
 
-    if (
+    return (
         candle.realbody < utils.candle_bodyshort(candles, index)
         and candle.shadow_lower > utils.candle_shadow_long(candles, index)
         and candle.shadow_upper < utils.candle_shadow_veryshort(candles, index)
         and min(candle.close, candle.open)
         <= candles[index - 1].low + utils.candle_near(candles, index - 1)
-    ):
-        return True
-
-    return False
+    )
 
 
 def inverted_hammer(
-    candles: List[Candle],
-    lookback: Optional[int] = None,
-    index: Optional[int] = None,
+    candles: list[Candle],
+    lookback: int | None = None,
+    index: int | None = None,
 ) -> bool | int:
     """Inverted Hammer Pattern
     An Inverted Hammer is detected when the Candle's open and close values are considered shorter
@@ -150,21 +145,20 @@ def inverted_hammer(
     if lookback is None:
         return _inverted_hammer(candles, index_)
 
-    return any(_inverted_hammer(candles, i) for i in range(len(candles) - lookback, len(candles)))
+    return any(
+        _inverted_hammer(candles, i) for i in range(len(candles) - lookback, len(candles))
+    )
 
 
-def _inverted_hammer(candles: List[Candle], index: int):
+def _inverted_hammer(candles: list[Candle], index: int):
     if index < 10:
         return False
     candle = candles[index]
     prev_candle = candles[index - 1]
 
-    if (
+    return (
         candle.realbody < utils.candle_bodyshort(candles, index)
         and candle.shadow_upper > utils.candle_shadow_long(candles, index)
         and candle.shadow_lower < utils.candle_shadow_veryshort(candles, index)
         and utils.realbody_gapdown(candle, prev_candle)
-    ):
-        return True
-
-    return False
+    )

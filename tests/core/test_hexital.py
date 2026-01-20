@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import List
 
 import pytest
 from hexital import Candle, Hexital, TimeFrame
@@ -19,7 +18,7 @@ from hexital.utils.candles import reading_by_candle
 from tests.core.test_indicator import FakeIndicator
 
 
-def fake_pattern(candles: List[Candle], index=-1):
+def fake_pattern(candles: list[Candle], index=-1):
     return 1
 
 
@@ -321,7 +320,9 @@ def test_append_hexital_calc_sub_indicators(candles, expected_rsi):
 class TestHexitalCandleManagerInheritance:
     @pytest.mark.usefixtures("candles")
     def test_hexital_inheritance(self, candles):
-        strat = Hexital("Test Stratergy", candles, [EMA()], candle_life=timedelta(hours=1))
+        strat = Hexital(
+            "Test Stratergy", candles, [EMA()], candle_life=timedelta(hours=1)
+        )
 
         assert strat.candle_life == timedelta(hours=1)
         assert strat.indicator("EMA_10").candle_life == timedelta(hours=1)
@@ -415,7 +416,9 @@ class TestFindCandles:
 
     @pytest.mark.usefixtures("candles")
     def test_find_multi_simple(self, candles):
-        strat = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")])
+        strat = Hexital(
+            "Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")]
+        )
         strat.calculate()
 
         found_candles = strat.find_candle_pairing("EMA", "SMA")
@@ -428,7 +431,9 @@ class TestFindCandles:
 
     @pytest.mark.usefixtures("candles")
     def test_find_multi_defaults_simple(self, candles):
-        strat = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")])
+        strat = Hexital(
+            "Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")]
+        )
         strat.calculate()
 
         found_candles = strat.find_candle_pairing("EMA", "high")
@@ -442,7 +447,9 @@ class TestFindCandles:
 
     @pytest.mark.usefixtures("candles")
     def test_find_rev_multi_defaults_simple(self, candles):
-        strat = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")])
+        strat = Hexital(
+            "Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")]
+        )
         strat.calculate()
 
         found_candles = strat.find_candle_pairing("high", "EMA")
@@ -504,7 +511,8 @@ class TestFindCandles:
         assert found_candles[0] == found_candles[1]
         assert (
             reading_by_candle(found_candles[0][-1], "SMA") is not None
-            and reading_by_candle(found_candles[0][-1], "high") == strat.candles("SMA")[-1].high
+            and reading_by_candle(found_candles[0][-1], "high")
+            == strat.candles("SMA")[-1].high
             and found_candles[0][-1].timeframe == timedelta(minutes=5)
         )
 
@@ -522,7 +530,8 @@ class TestFindCandles:
         assert found_candles[0] == found_candles[1]
         assert (
             reading_by_candle(found_candles[0][-1], "SMA") is not None
-            and reading_by_candle(found_candles[0][-1], "high") == strat.candles("SMA")[-1].high
+            and reading_by_candle(found_candles[0][-1], "high")
+            == strat.candles("SMA")[-1].high
             and found_candles[0][-1].timeframe == timedelta(minutes=5)
         )
 
@@ -540,13 +549,15 @@ class TestFindCandles:
         assert len(found_candles) == 2
         assert (
             reading_by_candle(found_candles[0][-1], "EMA") is not None
-            and reading_by_candle(found_candles[0][-1], "high") == strat.candles("EMA")[-1].high
+            and reading_by_candle(found_candles[0][-1], "high")
+            == strat.candles("EMA")[-1].high
             and found_candles[0][-1].timeframe is None
         )
 
         assert (
             reading_by_candle(found_candles[1][-1], "EMA_T5") is not None
-            and reading_by_candle(found_candles[1][-1], "high") == strat.candles("EMA_T5")[-1].high
+            and reading_by_candle(found_candles[1][-1], "high")
+            == strat.candles("EMA_T5")[-1].high
             and found_candles[1][-1].timeframe == timedelta(minutes=5)
         )
 
@@ -561,7 +572,9 @@ class TestMultiTimeframesNames:
         assert list(strat._candle_map.keys()) == ["default", "T1"]
 
     def test_duplicate_indicators(self, candles):
-        strat = Hexital("Test Strategy", candles, [EMA(timeframe="T1"), SMA(timeframe="T1")])
+        strat = Hexital(
+            "Test Strategy", candles, [EMA(timeframe="T1"), SMA(timeframe="T1")]
+        )
         assert list(strat._candle_map.keys()) == ["default", "T1"]
 
     def test_clash_hexital(self, candles):

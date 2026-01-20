@@ -1,5 +1,3 @@
-from typing import List
-
 import pytest
 from hexital.core.candle import Candle
 from hexital.utils.candles import (
@@ -13,116 +11,116 @@ from hexital.utils.candles import (
 
 class TestReadByIndex:
     @pytest.mark.usefixtures("minimal_candles")
-    def test_basic(self, minimal_candles: List[Candle]):
+    def test_basic(self, minimal_candles: list[Candle]):
         assert reading_by_index(minimal_candles, "high") == 10767
 
     def test_basic_invalid(self):
         assert reading_by_index([], "high") is None
 
     @pytest.mark.usefixtures("minimal_candles")
-    def test_indexed(self, minimal_candles: List[Candle]):
+    def test_indexed(self, minimal_candles: list[Candle]):
         assert reading_by_index(minimal_candles, "high", index=5) == 5858
 
     @pytest.mark.usefixtures("minimal_candles")
-    def test_indexed_invalid(self, minimal_candles: List[Candle]):
+    def test_indexed_invalid(self, minimal_candles: list[Candle]):
         assert reading_by_index(minimal_candles, "high", index=6000) is None
 
     @pytest.mark.usefixtures("minimal_candles")
-    def test_indicator(self, minimal_candles: List[Candle]):
+    def test_indicator(self, minimal_candles: list[Candle]):
         assert reading_by_index(minimal_candles, "ATR") == 2000
 
     @pytest.mark.usefixtures("minimal_candles")
-    def test_nested_indicator(self, minimal_candles: List[Candle]):
+    def test_nested_indicator(self, minimal_candles: list[Candle]):
         assert reading_by_index(minimal_candles, "NATR") == {"nested": 2001}
 
     @pytest.mark.usefixtures("minimal_candles")
-    def test_inner_nested_indicator(self, minimal_candles: List[Candle]):
+    def test_inner_nested_indicator(self, minimal_candles: list[Candle]):
         assert reading_by_index(minimal_candles, "NATR.nested") == 2001
 
     @pytest.mark.usefixtures("minimal_candles")
-    def test_indicator_indexed(self, minimal_candles: List[Candle]):
+    def test_indicator_indexed(self, minimal_candles: list[Candle]):
         assert reading_by_index(minimal_candles, "ATR", index=5) == 600
 
     @pytest.mark.usefixtures("minimal_candles")
-    def test_nested_indicator_indexed(self, minimal_candles: List[Candle]):
+    def test_nested_indicator_indexed(self, minimal_candles: list[Candle]):
         assert reading_by_index(minimal_candles, "NATR", index=5) == {"nested": 601}
 
     @pytest.mark.usefixtures("minimal_candles")
-    def test_inner_nested_indicator_indexed(self, minimal_candles: List[Candle]):
+    def test_inner_nested_indicator_indexed(self, minimal_candles: list[Candle]):
         assert reading_by_index(minimal_candles, "NATR.nested", index=5) == 601
 
     @pytest.mark.usefixtures("minimal_candles")
-    def test_subindicator(self, minimal_candles: List[Candle]):
+    def test_subindicator(self, minimal_candles: list[Candle]):
         assert reading_by_index(minimal_candles, "SATR") == 2010
 
     @pytest.mark.usefixtures("minimal_candles")
-    def test_nested_subindicator(self, minimal_candles: List[Candle]):
+    def test_nested_subindicator(self, minimal_candles: list[Candle]):
         assert reading_by_index(minimal_candles, "SSATR") == {"nested": 2011}
 
     @pytest.mark.usefixtures("minimal_candles")
-    def test_inner_nested_subindicator(self, minimal_candles: List[Candle]):
+    def test_inner_nested_subindicator(self, minimal_candles: list[Candle]):
         assert reading_by_index(minimal_candles, "SSATR.nested") == 2011
 
     @pytest.mark.usefixtures("minimal_candles")
-    def test_subindicator_indexed(self, minimal_candles: List[Candle]):
+    def test_subindicator_indexed(self, minimal_candles: list[Candle]):
         assert reading_by_index(minimal_candles, "SATR", index=5) == 610
 
     @pytest.mark.usefixtures("minimal_candles")
-    def test_nested_subindicator_indexed(self, minimal_candles: List[Candle]):
+    def test_nested_subindicator_indexed(self, minimal_candles: list[Candle]):
         assert reading_by_index(minimal_candles, "SSATR", index=5) == {"nested": 611}
 
     @pytest.mark.usefixtures("minimal_candles")
-    def test_inner_nested_subindicator_indexed(self, minimal_candles: List[Candle]):
+    def test_inner_nested_subindicator_indexed(self, minimal_candles: list[Candle]):
         assert reading_by_index(minimal_candles, "SSATR.nested", index=5) == 611
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_reading_count(minimal_candles: List[Candle]):
+def test_reading_count(minimal_candles: list[Candle]):
     assert reading_count(minimal_candles, "open") == 20
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_reading_count_limited(minimal_candles: List[Candle]):
+def test_reading_count_limited(minimal_candles: list[Candle]):
     assert reading_count(minimal_candles, "MinTR") == 10
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_reading_count_index(minimal_candles: List[Candle]):
+def test_reading_count_index(minimal_candles: list[Candle]):
     assert reading_count(minimal_candles, "open", 1) == 2
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_reading_count_index_two(minimal_candles: List[Candle]):
+def test_reading_count_index_two(minimal_candles: list[Candle]):
     assert reading_count(minimal_candles, "MinTR", 5) == 0
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_reading_period(minimal_candles: List[Candle]):
+def test_reading_period(minimal_candles: list[Candle]):
     assert reading_period(minimal_candles, "MinTR", 5) is True
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_reading_period_over(minimal_candles: List[Candle]):
+def test_reading_period_over(minimal_candles: list[Candle]):
     assert reading_period(minimal_candles, "MinTR", 15) is False
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_reading_period_over_indexed(minimal_candles: List[Candle]):
+def test_reading_period_over_indexed(minimal_candles: list[Candle]):
     assert reading_period(minimal_candles, "MinTR", 5, 10) is False
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_reading_period_over_none(minimal_candles: List[Candle]):
+def test_reading_period_over_none(minimal_candles: list[Candle]):
     assert reading_period(minimal_candles, "NoneATR", 6, 5) is True
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_reading_period_over_none_nested(minimal_candles: List[Candle]):
+def test_reading_period_over_none_nested(minimal_candles: list[Candle]):
     assert reading_period(minimal_candles, "NoneATR.nested", 6, 5) is False
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_reading_period_over_none_nested_two(minimal_candles: List[Candle]):
+def test_reading_period_over_none_nested_two(minimal_candles: list[Candle]):
     assert reading_period(minimal_candles, "NoneATR.nested", 5, 5) is True
 
 
@@ -158,7 +156,7 @@ def test_candle_sum_reg_indicator_insane_index_and_length(minimal_candles):
 
 class TestReadingsPeriod:
     @pytest.mark.usefixtures("minimal_candles")
-    def test_basic(self, minimal_candles: List[Candle]):
+    def test_basic(self, minimal_candles: list[Candle]):
         assert get_readings_period(minimal_candles, "high", 5, -1) == [
             5167,
             1398,
@@ -167,7 +165,7 @@ class TestReadingsPeriod:
             4309,
         ]
 
-    def test_basic_with_latest(self, minimal_candles: List[Candle]):
+    def test_basic_with_latest(self, minimal_candles: list[Candle]):
         assert get_readings_period(minimal_candles, "high", 5, -1, True) == [
             1398,
             3624,

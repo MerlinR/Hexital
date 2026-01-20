@@ -1,17 +1,15 @@
 from dataclasses import dataclass, field
-from typing import List
 
 import pytest
-from test_candlestick import FakeType
-
 from hexital import TimeFrame
 from hexital.core.candle import Candle
 from hexital.core.indicator import Indicator
+from test_candlestick import FakeType
 
 
 @dataclass(kw_only=True)
 class FakeIndicator(Indicator):
-    candles: List[Candle] = field(default_factory=list)
+    candles: list[Candle] = field(default_factory=list)
     timeframe: str | TimeFrame | None = None
     indicator_name: str = "Fake"
     period: int = 10
@@ -24,7 +22,7 @@ class FakeIndicator(Indicator):
         return self.reading("open") + self.reading("close")
 
 
-def remove_indicators(candles: List[Candle]) -> List[Candle]:
+def remove_indicators(candles: list[Candle]) -> list[Candle]:
     for candle in candles:
         candle.sub_indicators = {}
         candle.indicators = {}
@@ -33,7 +31,7 @@ def remove_indicators(candles: List[Candle]) -> List[Candle]:
 
 @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t5")
 def test_resample_candles_minutes_t5(
-    minimal_candles: List[Candle], minimal_candles_t5: List[Candle]
+    minimal_candles: list[Candle], minimal_candles_t5: list[Candle]
 ):
     minimal_candles = remove_indicators(minimal_candles)
     test = FakeIndicator(candles=minimal_candles, timeframe="t5")
@@ -43,7 +41,7 @@ def test_resample_candles_minutes_t5(
 
 @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t10")
 def test_resample_candles_minutes_t10(
-    minimal_candles: List[Candle], minimal_candles_t10: List[Candle]
+    minimal_candles: list[Candle], minimal_candles_t10: list[Candle]
 ):
     minimal_candles = remove_indicators(minimal_candles)
     test = FakeIndicator(candles=minimal_candles, timeframe="t10")
@@ -53,7 +51,7 @@ def test_resample_candles_minutes_t10(
 
 @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t10")
 def test_resample_candles_minutes_t10_enum(
-    minimal_candles: List[Candle], minimal_candles_t10: List[Candle]
+    minimal_candles: list[Candle], minimal_candles_t10: list[Candle]
 ):
     minimal_candles = remove_indicators(minimal_candles)
     test = FakeIndicator(candles=minimal_candles, timeframe=TimeFrame.MINUTE10)
@@ -63,7 +61,7 @@ def test_resample_candles_minutes_t10_enum(
 
 @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t10")
 def test_resample_candles_minutes_t10_enum_name(
-    minimal_candles: List[Candle], minimal_candles_t10: List[Candle]
+    minimal_candles: list[Candle], minimal_candles_t10: list[Candle]
 ):
     minimal_candles = remove_indicators(minimal_candles)
     test = FakeIndicator(candles=minimal_candles, timeframe=TimeFrame.MINUTE10)
@@ -73,7 +71,7 @@ def test_resample_candles_minutes_t10_enum_name(
 
 @pytest.mark.usefixtures("minimal_candles", "minimal_candles_t5")
 def test_resample_candles_minutes_t5_partial(
-    minimal_candles: List[Candle], minimal_candles_t5: List[Candle]
+    minimal_candles: list[Candle], minimal_candles_t5: list[Candle]
 ):
     minimal_candles_t5[0].indicators = {"Fake_10_T5": 25631}
     minimal_candles_t5[1].indicators = {"Fake_10_T5": 20069}

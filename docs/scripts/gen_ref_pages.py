@@ -2,7 +2,6 @@
 
 import sys
 from pathlib import Path
-from typing import List, Tuple
 from urllib.parse import urlparse
 
 import mkdocs_gen_files
@@ -11,7 +10,7 @@ nav = mkdocs_gen_files.Nav()
 mod_symbol = '<code class="doc-symbol doc-symbol-nav doc-symbol-module"></code>'
 
 
-def clean_docstring(docs: List[str]) -> Tuple[str, str]:
+def clean_docstring(docs: list[str]) -> tuple[str, str]:
     if not docs:
         return "", ""
 
@@ -34,8 +33,8 @@ def write_table(path, intro, headers, rows):
             fd.write("\n")
 
 
-def read_class(file_path) -> Tuple[str, str, str, list]:
-    with open(file_path, "r") as file:
+def read_class(file_path) -> tuple[str, str, str, list]:
+    with open(file_path) as file:
         lines = file.readlines()
 
     inside_class = False
@@ -73,8 +72,8 @@ def read_class(file_path) -> Tuple[str, str, str, list]:
     )
 
 
-def read_methods(file_path) -> List[Tuple[str, str, str, str]]:
-    with open(file_path, "r") as file:
+def read_methods(file_path) -> list[tuple[str, str, str, str]]:
+    with open(file_path) as file:
         lines = file.readlines()
 
     inside_method = False
@@ -131,7 +130,9 @@ def generate_indicator_catalog(root):
                 f"**{title}**",
                 f"*[{name}]({full_doc_path})*",
                 f"{docstring}",
-                "<br>".join([f"[{urlparse(source).netloc}]({source})" for source in sources]),
+                "<br>".join(
+                    [f"[{urlparse(source).netloc}]({source})" for source in sources]
+                ),
             ]
         )
 
@@ -151,7 +152,7 @@ def generate_pattern_catalog(root):
     for pattern in read_methods(path.relative_to(root)):
         rows.append(
             [
-                f"**{pattern[1].split("Pattern")[0].strip()}**",
+                f"**{pattern[1].split('Pattern')[0].strip()}**",
                 f"*[{pattern[0]}]({full_doc_path}#hexital.analysis.patterns.{pattern[0]})*",
                 f"{pattern[2]}",
                 f"[{urlparse(pattern[3]).netloc}]({pattern[3]})<br>",
@@ -173,7 +174,7 @@ def generate_analysis_catalog(root):
     for pattern in read_methods(path.relative_to(root)):
         rows.append(
             [
-                f"**{pattern[1].split("Analysis")[0].strip()}**",
+                f"**{pattern[1].split('Analysis')[0].strip()}**",
                 f"*[{pattern[0]}]({full_doc_path}#hexital.analysis.movement.{pattern[0]})*",
                 f"{pattern[2]}",
             ]
@@ -185,7 +186,9 @@ def generate_analysis_catalog(root):
 def generate_candlestick_catalog(root):
     catalog_path = "candlesticks-catalogue.md"
 
-    intro = "Candlestick's usage guide found at [Candlesticks guide.](guides/candlesticks.md)"
+    intro = (
+        "Candlestick's usage guide found at [Candlesticks guide.](guides/candlesticks.md)"
+    )
     table_headers = ["Candlestick Type", "API", "Description", "Sources"]
     rows = []
 
@@ -204,7 +207,9 @@ def generate_candlestick_catalog(root):
                 f"**{title}**",
                 f"*[{name}]({full_doc_path})*",
                 f"{docstring}",
-                "<br>".join([f"[{urlparse(source).netloc}]({source})" for source in sources]),
+                "<br>".join(
+                    [f"[{urlparse(source).netloc}]({source})" for source in sources]
+                ),
             ]
         )
 

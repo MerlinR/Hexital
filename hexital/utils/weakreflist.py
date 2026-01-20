@@ -1,14 +1,14 @@
 from __future__ import annotations
 
 import weakref
-from collections.abc import Sequence
-from typing import Generator, Generic, List, SupportsIndex, TypeVar
+from collections.abc import Generator, Sequence
+from typing import Generic, SupportsIndex, TypeVar
 
 T = TypeVar("T")
 
 
 class WeakList(Generic[T], list):
-    _refs: List[weakref.ReferenceType[T]]
+    _refs: list[weakref.ReferenceType[T]]
     _dirty: bool
 
     def __init__(self, seq: Sequence | None = None):
@@ -30,15 +30,14 @@ class WeakList(Generic[T], list):
         self._refs = []
         self._dirty = False
 
-    def __getitem__(self, idx: slice | SupportsIndex) -> T | List[T]:
+    def __getitem__(self, idx: slice | SupportsIndex) -> T | list[T]:
         if self._dirty:
             self.flush()
         if isinstance(idx, SupportsIndex):
             return self._refs[idx]()
-        else:
-            return [v() for v in self._refs[idx]]
+        return [v() for v in self._refs[idx]]
 
-    def __iter__(self) -> Generator[T, None, None]:
+    def __iter__(self) -> Generator[T]:
         for ref in self._refs:
             obj = ref()
             if obj is not None:

@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from typing import List
 
 import pytest
 from hexital import Hexital
@@ -53,21 +52,21 @@ def fixture_mixed_candles_two():
 
 
 @pytest.fixture(name="gen_ema")
-def fixture_gen_ema(candles: List[Candle]):
+def fixture_gen_ema(candles: list[Candle]):
     ema = EMA(candles=candles)
     ema.calculate()
     return ema.candles
 
 
 @pytest.fixture(name="gen_indicator_candles")
-def fixture_gen_indicator_candles(candles: List[Candle]):
+def fixture_gen_indicator_candles(candles: list[Candle]):
     ema = EMA(name="EMA", candles=candles)
     ema.calculate()
     return ema
 
 
 @pytest.fixture(name="hexital_candles")
-def fixture_hexital_candles(candles: List[Candle]):
+def fixture_hexital_candles(candles: list[Candle]):
     strat = Hexital(
         "Multi-Timeframe",
         candles,
@@ -78,7 +77,7 @@ def fixture_hexital_candles(candles: List[Candle]):
 
 
 @pytest.fixture(name="multi_candles")
-def fixture_hexital_multi_candles(candles: List[Candle]):
+def fixture_hexital_multi_candles(candles: list[Candle]):
     strat = Hexital(
         "Multi-Timeframe",
         candles,
@@ -89,7 +88,7 @@ def fixture_hexital_multi_candles(candles: List[Candle]):
 
 
 @pytest.fixture(name="multi_timeframe_candles")
-def fixture_hexital_multi_timeframe_candles(candles: List[Candle]):
+def fixture_hexital_multi_timeframe_candles(candles: list[Candle]):
     strat = Hexital(
         "Multi-Timeframe",
         candles,
@@ -100,7 +99,7 @@ def fixture_hexital_multi_timeframe_candles(candles: List[Candle]):
 
 
 @pytest.fixture(name="multi_timeframe")
-def fixture_hexital_multi_timeframe(candles: List[Candle]):
+def fixture_hexital_multi_timeframe(candles: list[Candle]):
     strat = Hexital(
         "Multi-Timeframe",
         candles,
@@ -161,8 +160,12 @@ def fixture_indicator_candles_partial():
     return [
         Candle(open=130, high=150, low=120, close=120, volume=10, indicators={}),
         Candle(open=120, high=140, low=110, close=120, volume=10, indicators={}),
-        Candle(open=110, high=150, low=120, close=130, volume=10, indicators={"EMA_10": 100}),
-        Candle(open=150, high=120, low=90, close=115, volume=10, indicators={"EMA_10": 110}),
+        Candle(
+            open=110, high=150, low=120, close=130, volume=10, indicators={"EMA_10": 100}
+        ),
+        Candle(
+            open=150, high=120, low=90, close=115, volume=10, indicators={"EMA_10": 110}
+        ),
         Candle(
             open=115,
             high=140,
@@ -488,10 +491,14 @@ class TestCrossOver:
         assert movement.crossover([], "EMA_10", "close") is False
 
     def test_crossover_partial(self, indicator_candles_partial):
-        assert movement.crossover(indicator_candles_partial, "volume", "EMA_10", 5) is False
+        assert (
+            movement.crossover(indicator_candles_partial, "volume", "EMA_10", 5) is False
+        )
 
     def test_crossover_partial_missing(self, indicator_candles_partial):
-        assert movement.crossover(indicator_candles_partial, "volume", "SMA_10", 5) is False
+        assert (
+            movement.crossover(indicator_candles_partial, "volume", "SMA_10", 5) is False
+        )
 
     def test_crossover_length(self, indicator_candles):
         assert movement.crossover(indicator_candles, "EMA_10", "close", length=10) is True
@@ -500,7 +507,9 @@ class TestCrossOver:
         assert movement.crossover(gen_indicator_candles, "EMA", "close") is False
 
     def test_crossover_datatype_indicator_long(self, gen_indicator_candles):
-        assert movement.crossover(gen_indicator_candles, "EMA", "close", length=200) is True
+        assert (
+            movement.crossover(gen_indicator_candles, "EMA", "close", length=200) is True
+        )
 
     def test_crossover_datatype_hexital(self, hexital_candles):
         assert movement.crossover(hexital_candles, "EMA", "close") is False
@@ -523,19 +532,27 @@ class TestCrossUnder:
         assert movement.crossunder([], "close", "EMA_10") is False
 
     def test_crossunder_partial(self, indicator_candles_partial):
-        assert movement.crossunder(indicator_candles_partial, "volume", "EMA_10", 5) is False
+        assert (
+            movement.crossunder(indicator_candles_partial, "volume", "EMA_10", 5) is False
+        )
 
     def test_crossunder_partial_missing(self, indicator_candles_partial):
-        assert movement.crossunder(indicator_candles_partial, "volume", "SMA_10", 5) is False
+        assert (
+            movement.crossunder(indicator_candles_partial, "volume", "SMA_10", 5) is False
+        )
 
     def test_crossunder_length(self, indicator_candles):
-        assert movement.crossunder(indicator_candles, "close", "EMA_10", length=10) is True
+        assert (
+            movement.crossunder(indicator_candles, "close", "EMA_10", length=10) is True
+        )
 
     def test_crossunder_datatype_indicator(self, gen_indicator_candles):
         assert movement.crossunder(gen_indicator_candles, "EMA", "close") is False
 
     def test_crossunder_datatype_indicator_long(self, gen_indicator_candles):
-        assert movement.crossunder(gen_indicator_candles, "EMA", "close", length=200) is True
+        assert (
+            movement.crossunder(gen_indicator_candles, "EMA", "close", length=200) is True
+        )
 
     def test_crossunder_datatype_hexital(self, hexital_candles):
         assert movement.crossunder(hexital_candles, "EMA", "close") is False
@@ -782,7 +799,9 @@ class TestTimeframePairCandles:
         assert [candles[0][-2:], candles[1][-2:]] == expected
 
     def test_timeframe_pair_candles_length_diff(self, multi_timeframe_candles):
-        found_candles = movement._retrieve_candles(multi_timeframe_candles, "EMA", "EMA_T5")
+        found_candles = movement._retrieve_candles(
+            multi_timeframe_candles, "EMA", "EMA_T5"
+        )
         assert isinstance(found_candles, tuple)
 
         data_set = found_candles[0][100:], found_candles[1]
@@ -836,4 +855,7 @@ class TestTimeframePairCandles:
         ]
         expected[1][0].aggregation_factor = 5
         expected[1][1].aggregation_factor = 2
-        assert [[candles[0][0], candles[0][-1]], [candles[1][0], candles[1][-1]]] == expected
+        assert [
+            [candles[0][0], candles[0][-1]],
+            [candles[1][0], candles[1][-1]],
+        ] == expected

@@ -1,6 +1,5 @@
 import json
 from datetime import datetime, timedelta
-from typing import List
 
 import pytest
 from hexital import Candle
@@ -9,7 +8,7 @@ PATH = "tests/data/"
 PATH_EXTRA = "tests/data/source_of_truth/candles/"
 
 
-def load_json_candles(name: str, path: str) -> List[dict]:
+def load_json_candles(name: str, path: str) -> list[dict]:
     csv_file = open(f"{path}{name}.json")
     raw_candles = json.load(csv_file)
     for candle in raw_candles:

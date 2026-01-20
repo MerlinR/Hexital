@@ -1,5 +1,4 @@
 import math
-from typing import Dict, List, Tuple
 
 # math.isclose to 99.5%
 ACCURACY_PER = 99.5
@@ -34,7 +33,9 @@ class IndicatorTestBase:
 
         return differences <= acceptable_diff
 
-    def show_results(self, differences: int, results: list, acceptable_diff: int, verbose: bool):
+    def show_results(
+        self, differences: int, results: list, acceptable_diff: int, verbose: bool
+    ):
         for row in results:
             if row[-1] is False:
                 print(f"{bcolors.FAIL}{row[0]}: {row[1]}\t!=\t{row[2]}{bcolors.CLEAR}")
@@ -45,9 +46,9 @@ class IndicatorTestBase:
 
     def deepdiff(
         self,
-        result: List[dict | float | bool] | dict | float | bool,
-        expected: List[dict | float | bool] | dict | float | bool,
-    ) -> Tuple[int, list]:
+        result: list[dict | float | bool] | dict | float | bool,
+        expected: list[dict | float | bool] | dict | float | bool,
+    ) -> tuple[int, list]:
         differences = 0
         results = []
 
@@ -62,7 +63,7 @@ class IndicatorTestBase:
             if res is None or exp is None:
                 if (res is None and exp == 0) or res == 0 and exp is None:
                     continue
-                elif res != exp:
+                if res != exp:
                     differences += 1
                     results[-1][-1] = False
             elif isinstance(res, bool):
@@ -82,11 +83,11 @@ class IndicatorTestBase:
 
     @staticmethod
     def compare_dict(
-        value_a: Dict[str, int | float | bool | None],
-        value_b: Dict[str, int | float | bool | None],
+        value_a: dict[str, int | float | bool | None],
+        value_b: dict[str, int | float | bool | None],
     ) -> bool:
-        fields = [field for field in value_a.keys() if field in value_b.keys()]
-        fields = [field for field in value_b.keys() if field in fields]
+        fields = [field for field in value_a if field in value_b]
+        fields = [field for field in value_b if field in fields]
 
         for field in fields:
             res = value_a[field]
@@ -94,7 +95,7 @@ class IndicatorTestBase:
             if res is None or exp is None:
                 if (res is None and exp == 0) or res == 0 and exp is None:
                     continue
-                elif res != exp:
+                if res != exp:
                     return False
             elif isinstance(res, bool):
                 if res != exp:

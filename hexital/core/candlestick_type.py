@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from dataclasses import dataclass, field
-from typing import List
 
 from hexital.core.candle import Candle
 from hexital.utils.common import CalcMode
@@ -14,7 +13,7 @@ class CandlestickType(ABC):
     name: str = field(init=False, default="NA")
     acronym: str = field(init=False, default="NA")
 
-    candles: List[Candle] = field(init=False, default_factory=list)  # Fresh Candles
+    candles: list[Candle] = field(init=False, default_factory=list)  # Fresh Candles
     derived_candles: WeakList[Candle] = field(
         init=False, default_factory=WeakList
     )  # Transformed Candles # List[ReferenceType[Candle]
@@ -27,7 +26,7 @@ class CandlestickType(ABC):
     def _validate_fields(self):
         return
 
-    def set_candle_refs(self, candles: List[Candle]):
+    def set_candle_refs(self, candles: list[Candle]):
         """Replace CandlestickType Candles to own by reference"""
         self.candles = candles
         self.derived_candles = WeakList()

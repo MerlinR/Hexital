@@ -5,7 +5,7 @@ from copy import copy
 from dataclasses import dataclass, field
 from datetime import timedelta
 from enum import Enum, auto
-from typing import Dict, Generic, List, Tuple, TypeAlias, TypeVar
+from typing import Generic, TypeAlias, TypeVar
 
 from hexital.core import Reading
 from hexital.core.candle import Candle
@@ -41,7 +41,7 @@ class IndicatorMode(Enum):
 
 @dataclass(kw_only=True)
 class Indicator(Generic[V], ABC):
-    candles: List[Candle] = field(default_factory=list)
+    candles: list[Candle] = field(default_factory=list)
     name: str = ""
     timeframe: TimeFramesSource | None = None
     timeframe_fill: bool = False
@@ -49,8 +49,8 @@ class Indicator(Generic[V], ABC):
     candlestick: CandlestickType | str | None = None
     rounding: int | None = 4
 
-    sub_indicators: Dict[str, Indicator] = field(init=False, default_factory=dict)
-    managed_indicators: Dict[str, Managed | Indicator] = field(
+    sub_indicators: dict[str, Indicator] = field(init=False, default_factory=dict)
+    managed_indicators: dict[str, Managed | Indicator] = field(
         init=False, default_factory=dict
     )
     _mode: IndicatorMode = field(init=False, default=IndicatorMode.SOLO)
@@ -162,7 +162,7 @@ class Indicator(Generic[V], ABC):
 
         return output
 
-    def readings(self, name: Source | None = None) -> List[Reading | V]:
+    def readings(self, name: Source | None = None) -> list[Reading | V]:
         """
         Retrieve the indicator readings for within the candles as a list.
 
@@ -212,9 +212,7 @@ class Indicator(Generic[V], ABC):
 
     @property
     def prior_calc(self) -> bool:
-        if self._mode != IndicatorMode.SOLO and self._calc_prior:
-            return True
-        return False
+        return self._mode != IndicatorMode.SOLO and self._calc_prior
 
     @abstractmethod
     def _calculate_reading(self, index: int) -> V: ...
@@ -271,9 +269,7 @@ class Indicator(Generic[V], ABC):
         if cur_reading is None:
             return False
 
-        elif reading == cur_reading:
-            return True
-        return False
+        return reading == cur_reading
 
     def calculate_index(self, start_index: int, end_index: int | None = None):
         """Calculate the TA values, will calculate a index range the Candles, will re-calculate"""
@@ -369,28 +365,26 @@ class Indicator(Generic[V], ABC):
 
         if not source or (isinstance(source, str) and source == self.name):
             return reading_by_index(self.candles, self.name, index)
-        elif isinstance(source, str):
+        if isinstance(source, str):
             return reading_by_index(self.candles, source, index)
-        else:
-            return reading_by_index(self.candles, source.name, index)
+        return reading_by_index(self.candles, source.name, index)
 
-    def _find_readings(self, source: Source | None = None) -> List[Reading | V]:
+    def _find_readings(self, source: Source | None = None) -> list[Reading | V]:
         if not source:
             return [reading_by_candle(candle, self.name) for candle in self.candles]
-        elif isinstance(source, Indicator):
+        if isinstance(source, Indicator):
             return [reading_by_candle(candle, source.name) for candle in self.candles]
-        elif isinstance(source, NestedSource):
+        if isinstance(source, NestedSource):
             return source.readings()
-        elif isinstance(source, str):
-            return [reading_by_candle(candle, source) for candle in self.candles]
 
-    def _find_candles(self, source: Source | None = None) -> Tuple[List[Candle], str]:
+        return [reading_by_candle(candle, source) for candle in self.candles]
+
+    def _find_candles(self, source: Source | None = None) -> tuple[list[Candle], str]:
         if not source or (isinstance(source, str) and source == self.name):
             return self.candles, self.name
-        elif isinstance(source, str):
+        if isinstance(source, str):
             return self.candles, source
-        else:
-            return source.candles, source.name
+        return source.candles, source.name
 
     def exists(self, source: Source | None = None) -> bool:
         value = self._find_reading(source)
@@ -478,7 +472,7 @@ class Indicator(Generic[V], ABC):
         source: Source | None = None,
         index: int | None = None,
         include_latest: bool = False,
-    ) -> List[float | int]:
+    ) -> list[float | int]:
         return get_readings_period(
             *self._find_candles(source),
             length,
@@ -556,7 +550,7 @@ class NestedSource:
             return value.get(self.nested_name)
         return value
 
-    def readings(self) -> List[Reading]:
+    def readings(self) -> list[Reading]:
         return [
             v.get(self.nested_name) if isinstance(v, dict) else v
             for v in self.indicator.readings()

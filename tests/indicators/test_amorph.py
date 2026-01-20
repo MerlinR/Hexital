@@ -1,11 +1,9 @@
-from typing import List
-
 import pytest
 from hexital import Candle, movement, patterns
 from hexital.indicators import Amorph
 
 
-def fake_pattern(candles: List[Candle], index=-1):
+def fake_pattern(candles: list[Candle], index=-1):
     return 1
 
 
@@ -58,7 +56,9 @@ def test_movement_amorph_args(candles):
 
 @pytest.mark.usefixtures("candles")
 def test_movement_amorph_kawgs(candles):
-    test = Amorph(analysis=movement.above, candles=candles, indicator="open", indicator_cmp="low")
+    test = Amorph(
+        analysis=movement.above, candles=candles, indicator="open", indicator_cmp="low"
+    )
     test.calculate()
     assert test.reading("above") is not None
 

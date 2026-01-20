@@ -1,7 +1,8 @@
+from collections.abc import Sequence
 from copy import copy
 from datetime import timedelta
 from importlib import import_module
-from typing import Any, Dict, Generic, List, Optional, Sequence, Set, Tuple, TypeVar
+from typing import Any, Generic, TypeVar
 
 from hexital.core import Reading
 from hexital.core.candle import Candle
@@ -28,8 +29,8 @@ class Hexital:
     candle_life: timedelta | None = None
     candlestick: CandlestickType | None
 
-    _candle_map: Dict[str, CandleManager]
-    _indicators: Dict[str, Indicator]
+    _candle_map: dict[str, CandleManager]
+    _indicators: dict[str, Indicator]
     _timeframe: timedelta | None
     _default_name: str
 
@@ -37,9 +38,9 @@ class Hexital:
         self,
         name: str,
         candles: Sequence[Candle],
-        indicators: Optional[
-            Sequence[Dict[str, Any] | Indicator] | IndicatorCollection
-        ] = None,
+        indicators: Sequence[dict[str, Any] | Indicator]
+        | IndicatorCollection
+        | None = None,
         description: str | None = None,
         timeframe: TimeFramesSource | None = None,
         timeframe_fill: bool = False,
@@ -53,9 +54,7 @@ class Hexital:
         self.timeframe_fill = timeframe_fill
         self.candle_life = candle_life
 
-        self.candlestick = (
-            validate_candlesticktype(candlestick) if candlestick else None
-        )
+        self.candlestick = validate_candlesticktype(candlestick) if candlestick else None
 
         manager = CandleManager(
             candles if isinstance(candles, list) else [],
@@ -80,11 +79,11 @@ class Hexital:
         return timedelta_to_str(self._timeframe) if self._timeframe else None
 
     @property
-    def timeframes(self) -> Set[str]:
+    def timeframes(self) -> set[str]:
         return {manager.name for manager in self._candle_map.values()}
 
     @property
-    def indicators(self) -> Dict[str, Indicator]:
+    def indicators(self) -> dict[str, Indicator]:
         return self._indicators
 
     def indicator(self, name: str) -> Indicator | None:
@@ -98,7 +97,7 @@ class Hexital:
             return any(v is not None for v in value.values())
         return value is not None
 
-    def candles(self, name: TimeFramesSource | None = None) -> List[Candle]:
+    def candles(self, name: TimeFramesSource | None = None) -> list[Candle]:
         """Get a set of candles by using either a Timeframe or Indicator name"""
         name_ = name if name else self._default_name
         timeframe_name = self._parse_timeframe(name)
@@ -107,14 +106,14 @@ class Hexital:
 
         if isinstance(name_, str) and self._candle_map.get(name_, False):
             return self._candle_map[name_].candles
-        elif isinstance(name_, str):
+        if isinstance(name_, str):
             for manager in self._candle_map.values():
                 if manager.find_indicator(name_):
                     return manager.candles
 
         return []
 
-    def get_candles(self) -> Dict[str, List[Candle]]:
+    def get_candles(self) -> dict[str, list[Candle]]:
         return {name: manager.candles for name, manager in self._candle_map.items()}
 
     @property
@@ -145,7 +144,7 @@ class Hexital:
         return output
 
     @property
-    def indicator_settings(self) -> List[dict]:
+    def indicator_settings(self) -> list[dict]:
         """Simply get's a list of all the Indicators within Hexital strategy"""
         settings = []
 
@@ -167,9 +166,9 @@ class Hexital:
     def _find_indicator(self, source: Source) -> Indicator | None:
         if isinstance(source, Indicator):
             return source
-        elif isinstance(source, NestedSource):
+        if isinstance(source, NestedSource):
             return source.indicator
-        elif indicator := self._indicators.get(source.split(".")[0]):
+        if indicator := self._indicators.get(source.split(".")[0]):
             return indicator
 
         return None
@@ -177,7 +176,7 @@ class Hexital:
     def _find_reading(self, source: Source, index: int = -1) -> Reading:
         if isinstance(source, (Indicator, NestedSource)):
             return source.reading(index=index)
-        elif reading := reading_by_index(
+        if reading := reading_by_index(
             self._candle_map[self._default_name].candles, source, index=index
         ):
             return reading
@@ -189,7 +188,7 @@ class Hexital:
 
         return None
 
-    def _find_readings(self, source: Source) -> List[Reading]:
+    def _find_readings(self, source: Source) -> list[Reading]:
         if isinstance(source, (Indicator, NestedSource)):
             return source.readings()
 
@@ -208,19 +207,19 @@ class Hexital:
     def prev_reading(self, source: Source) -> Reading:
         return self._find_reading(source, -2)
 
-    def readings(self) -> Dict[str, List[Reading]]:
+    def readings(self) -> dict[str, list[Reading]]:
         """Returns a Dictionary of all the Indicators and there results in a list format."""
         return {
             name: indicator.readings() for name, indicator in self._indicators.items()
         }
 
-    def reading_as_list(self, source: Source) -> List[Reading]:
+    def reading_as_list(self, source: Source) -> list[Reading]:
         """Find given indicator and returns the readings as a list
         Full Name of the indicator E.G `EMA_12` OR `MACD_12_26_9.MACD`"""
         return self._find_readings(source)
 
     def add_indicator(
-        self, indicator: Indicator | List[Indicator | Dict[str, Any]] | Dict[str, Any]
+        self, indicator: Indicator | list[Indicator | dict[str, Any]] | dict[str, Any]
     ):
         """Add's a new indicator to `Hexital` strategy.
         This accept either `Indicator` datatypes or dict string versions to be packed.
@@ -353,11 +352,11 @@ class Hexital:
 
     def _validate_indicators(
         self, indicators: Sequence[dict | Indicator]
-    ) -> Dict[str, Indicator]:
+    ) -> dict[str, Indicator]:
         if not indicators:
             return {}
 
-        valid_indicators: Dict[str, Indicator] = {}
+        valid_indicators: dict[str, Indicator] = {}
 
         for indicator in indicators:
             if isinstance(indicator, Indicator):
@@ -374,9 +373,7 @@ class Hexital:
 
         for indicator in valid_indicators.values():
             if indicator.candle_manager.name in self._candle_map:
-                indicator.candle_manager = self._candle_map[
-                    indicator.candle_manager.name
-                ]
+                indicator.candle_manager = self._candle_map[indicator.candle_manager.name]
             elif indicator.candle_manager.name == DEFAULT_CANDLES:
                 indicator.candle_manager = self._candle_map[self._default_name]
             else:
@@ -409,12 +406,11 @@ class Hexital:
 
             if indicator_class:
                 return indicator_class(**indicator)
-            else:
-                raise InvalidIndicator(
-                    f"Indicator {indicator_name} does not exist. [{raw_indicator}]"
-                )
+            raise InvalidIndicator(
+                f"Indicator {indicator_name} does not exist. [{raw_indicator}]"
+            )
 
-        elif indicator.get("analysis") and isinstance(indicator.get("analysis"), str):
+        if indicator.get("analysis") and isinstance(indicator.get("analysis"), str):
             analysis_name = indicator.pop("analysis")
             analysis_class = getattr(
                 import_module("hexital.analysis"), analysis_name, None
@@ -427,17 +423,16 @@ class Hexital:
 
             return Amorph(analysis=analysis_class, **indicator)
 
-        elif indicator.get("analysis") and callable(indicator.get("analysis")):
+        if indicator.get("analysis") and callable(indicator.get("analysis")):
             method_name = indicator.pop("analysis")
             return Amorph(analysis=method_name, **indicator)
-        else:
-            raise InvalidAnalysis(
-                f"Dict Indicator missing 'indicator' or 'analysis' name, not: {raw_indicator}"
-            )
+        raise InvalidAnalysis(
+            f"Dict Indicator missing 'indicator' or 'analysis' name, not: {raw_indicator}"
+        )
 
     def find_candle_pairing(
         self, indicator: str, indicator_cmp: str | None = None
-    ) -> Tuple[List[Candle], List[Candle]]:
+    ) -> tuple[list[Candle], list[Candle]]:
         reverted = False
 
         if indicator and not indicator_cmp:
@@ -455,15 +450,14 @@ class Hexital:
             and reading_by_candle(candles[-1], indicator_cmp) is not None
         ):
             return candles, candles
-        elif (
+        if (
             candles
             and indicator_cmp
             and reading_by_candle(candles[-1], indicator_cmp) is None
         ):
             if reverted:
                 return self.candles(indicator_cmp), candles
-            else:
-                return candles, self.candles(indicator_cmp)
+            return candles, self.candles(indicator_cmp)
 
         return [], []
 
@@ -477,7 +471,7 @@ class HexitalCol(Generic[T], Hexital):
     def __init__(
         self,
         name: str,
-        candles: List[Candle],
+        candles: list[Candle],
         indicators: T,
         description: str | None = None,
         timeframe: TimeFramesSource | None = None,

@@ -1,5 +1,5 @@
 from enum import Enum, auto
-from typing import Any, Dict
+from typing import Any
 
 
 class CalcMode(Enum):
@@ -9,8 +9,8 @@ class CalcMode(Enum):
 
 
 def round_values(
-    value: float | Dict[str, float | None] | Any | None, round_by: int | None = 4
-) -> float | Dict[str, float | None] | None:
+    value: float | dict[str, float | None] | Any | None, round_by: int | None = 4
+) -> float | dict[str, float | None] | None:
     if round_by is None:
         return value
 

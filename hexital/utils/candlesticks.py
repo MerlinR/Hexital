@@ -12,5 +12,4 @@ def validate_candlesticktype(
     if not CANDLESTICK_MAP.get(candlestick):
         raise InvalidCandlestickType(f"Candlestick type {candlestick} is Invalid")
 
-    requested_candlesticks = CANDLESTICK_MAP[candlestick]
-    return requested_candlesticks()
+    return CANDLESTICK_MAP[candlestick]()

@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import List
 
 import pytest
-
 from hexital import Candle
 from hexital.analysis.patterns import doji
 from hexital.candlesticks.heikinashi import HeikinAshi
@@ -14,7 +12,7 @@ from hexital.indicators.amorph import Amorph
 
 @dataclass(kw_only=True)
 class FakeIndicator(Indicator):
-    candles: List[Candle] = field(default_factory=list)
+    candles: list[Candle] = field(default_factory=list)
     _name: str = field(init=False, default="Fake")
     name_suffix: str | None = None
     rounding: int | None = 4
@@ -30,14 +28,14 @@ class FakeIndicator(Indicator):
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_calculate(minimal_candles: List[Candle]):
+def test_calculate(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     test.calculate()
     assert minimal_candles[-1].indicators.get("Fake_10")
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_name_default(minimal_candles: List[Candle]):
+def test_name_default(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     test.calculate()
     assert test.reading("Fake_10")
@@ -45,28 +43,28 @@ def test_name_default(minimal_candles: List[Candle]):
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_name_override(minimal_candles: List[Candle]):
+def test_name_override(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles, name="FUCK")
     test.calculate()
     assert test.name == "FUCK"
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_name_timeframe(minimal_candles: List[Candle]):
+def test_name_timeframe(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles, timeframe="t5")
     test.calculate()
     assert test.name == "Fake_10_T5"
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_name_timeframe_override(minimal_candles: List[Candle]):
+def test_name_timeframe_override(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles, name="FUCK", timeframe="t5")
     test.calculate()
     assert test.name == "FUCK"
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_read(minimal_candles: List[Candle]):
+def test_read(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     assert test.reading() is None
     test.calculate()
@@ -74,7 +72,7 @@ def test_read(minimal_candles: List[Candle]):
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_set_reading(minimal_candles: List[Candle]):
+def test_set_reading(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     test.calculate()
     assert test.reading() == 100
@@ -83,7 +81,7 @@ def test_set_reading(minimal_candles: List[Candle]):
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_set_reading_indexed(minimal_candles: List[Candle]):
+def test_set_reading_indexed(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     test.calculate()
     assert test.prev_reading() == 100
@@ -92,7 +90,7 @@ def test_set_reading_indexed(minimal_candles: List[Candle]):
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_reading_period(minimal_candles: List[Candle]):
+def test_reading_period(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     assert test.reading_period(10) is False
     test.calculate()
@@ -154,7 +152,7 @@ class TestSettings:
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_purge(minimal_candles: List[Candle]):
+def test_purge(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     assert test.exists() is False
     test.calculate()
@@ -196,7 +194,7 @@ def test_candle_timerange(minimal_candles):
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_reading_as_list_exp(minimal_candles: List[Candle]):
+def test_reading_as_list_exp(minimal_candles: list[Candle]):
     test_indicator = FakeIndicator(candles=minimal_candles)
     assert test_indicator.readings("ATR") == [
         100,
@@ -223,7 +221,7 @@ def test_reading_as_list_exp(minimal_candles: List[Candle]):
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_reading_as_list_partial(minimal_candles: List[Candle]):
+def test_reading_as_list_partial(minimal_candles: list[Candle]):
     test_indicator = FakeIndicator(candles=minimal_candles)
     assert test_indicator.readings("MinTR") == [
         None,
@@ -250,7 +248,7 @@ def test_reading_as_list_partial(minimal_candles: List[Candle]):
 
 
 @pytest.mark.usefixtures("minimal_candles")
-def test_reading_as_list_no_indicator(minimal_candles: List[Candle]):
+def test_reading_as_list_no_indicator(minimal_candles: list[Candle]):
     test_indicator = FakeIndicator(candles=minimal_candles)
     assert test_indicator.readings("FUCK") == [None] * 20
 

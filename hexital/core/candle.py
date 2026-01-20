@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from datetime import datetime, timedelta
-from typing import Any, Dict, List
+from typing import Any
 
 from hexital.core import Reading
 from hexital.utils.timeframe import (
@@ -19,12 +19,12 @@ class Candle:
     close: float
     volume: int
     timestamp: datetime | None
-    indicators: Dict[str, Reading]
-    sub_indicators: Dict[str, Reading]
+    indicators: dict[str, Reading]
+    sub_indicators: dict[str, Reading]
     timeframe: timedelta | None
     aggregation_factor: int
     tag: str | None = None
-    refs: Dict[str, Sequence | None]
+    refs: dict[str, Sequence | None]
     _start_timestamp: datetime | None = None
     _end_timestamp: datetime | None = None
 
@@ -37,8 +37,8 @@ class Candle:
         volume: int,
         timestamp: datetime | str | None = None,  # End of Candle
         timeframe: TimeFramesSource | None = None,
-        indicators: Dict[str, Reading] | None = None,
-        sub_indicators: Dict[str, Reading] | None = None,
+        indicators: dict[str, Reading] | None = None,
+        sub_indicators: dict[str, Reading] | None = None,
         aggregation_factor: int | None = None,
     ):
         self.open = open
@@ -46,9 +46,7 @@ class Candle:
         self.low = low
         self.close = close
         self.volume = volume
-        self.timeframe = (
-            convert_timeframe_to_timedelta(timeframe) if timeframe else None
-        )
+        self.timeframe = convert_timeframe_to_timedelta(timeframe) if timeframe else None
 
         self.tag = None
         self.aggregation_factor = aggregation_factor if aggregation_factor else 1
@@ -172,7 +170,7 @@ class Candle:
         return cdl
 
     @classmethod
-    def from_dict(cls, candle: Dict[str, Any]) -> Candle:
+    def from_dict(cls, candle: dict[str, Any]) -> Candle:
         """
         Create a `Candle` object from a dictionary representation.
 
@@ -212,7 +210,7 @@ class Candle:
         )
 
     @classmethod
-    def from_dicts(cls, candles: Sequence[Dict[str, Any]]) -> List[Candle]:
+    def from_dicts(cls, candles: Sequence[dict[str, Any]]) -> list[Candle]:
         """
         Create's a list of `Candle` object's from a list of dictionary representation.
 
@@ -281,7 +279,7 @@ class Candle:
         )
 
     @classmethod
-    def from_lists(cls, candles: List[list]) -> List[Candle]:
+    def from_lists(cls, candles: list[list]) -> list[Candle]:
         """
         Create a list of `Candle` object's from a list of list representation.
 
@@ -347,11 +345,11 @@ class Candle:
             self.close = candle.close
             return
 
-        if self.timeframe:
-            if (
-                candle.timestamp + self.timeframe > self.timestamp + self.timeframe
-            ) or (candle.timestamp < self.timestamp - self.timeframe):
-                return
+        if self.timeframe and (
+            (candle.timestamp + self.timeframe > self.timestamp + self.timeframe)
+            or (candle.timestamp < self.timestamp - self.timeframe)
+        ):
+            return
 
         if self._start_timestamp and candle.timestamp < self._start_timestamp:
             self.open = candle.open
@@ -362,10 +360,7 @@ class Candle:
             self._start_timestamp
             and not self._end_timestamp
             and candle.timestamp > self._start_timestamp
-        ):
-            self.close = candle.close
-            self._end_timestamp = candle.timestamp
-        elif (
+        ) or (
             self._start_timestamp
             and self._end_timestamp
             and candle.timestamp > self._end_timestamp
