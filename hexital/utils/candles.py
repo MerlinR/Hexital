@@ -22,26 +22,23 @@ def reading_by_candle(candle: Candle, name: str) -> float | dict | None:
         return reading
 
     attr = getattr(candle, name, None)
-
     if attr is not None:
         return attr
 
-    if name in candle.indicators:
-        return candle.indicators[name]
+    if (reading := candle.indicators.get(name)) is not None:
+        return reading
 
-    if name in candle.sub_indicators:
-        return candle.sub_indicators[name]
+    if (reading := candle.sub_indicators.get(name)) is not None:
+        return reading
 
     return None
 
 
 def _nested_indicator(candle: Candle, name: str, nested_name: str) -> float | None:
-    if name in candle.indicators:
-        reading = candle.indicators[name]
+    if (reading := candle.indicators.get(name)) is not None:
         return reading.get(nested_name) if isinstance(reading, dict) else reading
 
-    if name in candle.sub_indicators:
-        reading = candle.sub_indicators[name]
+    if (reading := candle.sub_indicators.get(name)) is not None:
         return reading.get(nested_name) if isinstance(reading, dict) else reading
 
     return None
@@ -66,16 +63,13 @@ def reading_period(
     if not candles:
         return False
 
-    period_ = period - 1
     index_ = absindex(index, len(candles))
+    oldest_index = index_ - (period - 1)
 
-    if index_ - period_ < 0:
+    if oldest_index < 0:
         return False
 
-    for point in [period_, period_ / 2, 0]:
-        if reading_by_index(candles, name, index_ - int(point)) is None:
-            return False
-    return True
+    return reading_by_index(candles, name, oldest_index) is not None
 
 
 def candles_sum(

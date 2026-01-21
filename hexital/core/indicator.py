@@ -371,9 +371,11 @@ class Indicator(Generic[V], ABC):
 
     def _find_readings(self, source: Source | None = None) -> list[Reading | V]:
         if not source:
-            return [reading_by_candle(candle, self.name) for candle in self.candles]
+            name = self.name
+            return [reading_by_candle(candle, name) for candle in self.candles]
         if isinstance(source, Indicator):
-            return [reading_by_candle(candle, source.name) for candle in self.candles]
+            name = source.name
+            return [reading_by_candle(candle, name) for candle in self.candles]
         if isinstance(source, NestedSource):
             return source.readings()
 
@@ -483,9 +485,7 @@ class Indicator(Generic[V], ABC):
     def purge(self):
         """Remove this indicator value from all Candles"""
         self._candle_mngr.purge(
-            {self.name}
-            | {indicator.name for indicator in self.sub_indicators.values()}
-            | {indicator.name for indicator in self.managed_indicators.values()}
+            {self.name} | self.sub_indicators.keys() | self.managed_indicators.keys()
         )
 
     def recalculate(self):

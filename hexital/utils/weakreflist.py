@@ -48,8 +48,9 @@ class WeakList(Generic[T], list):
             return False
         if len(self._refs) != len(obj):
             return False
-        for idx in range(len(self._refs)):
-            if obj[idx] != self._refs[idx]():
+        for idx, ref in enumerate(self._refs):
+            item = ref()
+            if item is None or obj[idx] != item:
                 return False
         return True
 
@@ -63,7 +64,7 @@ class WeakList(Generic[T], list):
 
     def __setitem__(self, idx, obj):
         if isinstance(idx, slice):
-            self._refs[idx] = [weakref.ref(obj, self._mark_dirty) for x in obj]
+            self._refs[idx] = [weakref.ref(item, self._mark_dirty) for item in obj]
         else:
             self._refs[idx] = weakref.ref(obj, self._mark_dirty)
 

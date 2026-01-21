@@ -39,7 +39,9 @@ class CandleManager:
         self.candle_life = candle_life
         self.timeframe = timeframe
         self.timeframe_fill = timeframe_fill
-        self._candles = candles if candles else []
+        self._candles = []
+        if candles:
+            self._candles.extend(candles)
 
         if candlestick:
             self.candlestick = candlestick
@@ -76,14 +78,21 @@ class CandleManager:
 
     @property
     def candles(self) -> list[Candle]:
+        """Returns reference to the managed candles list.
+
+        WARNING: This is a live reference, not a copy. Modifications affect
+        all indicators sharing this manager. This is intentional to enable
+        indicator chaining (e.g., one indicator reading another's results).
+        """
         if self.candlestick:
             return self.candlestick.derived_candles
         return self._candles
 
     @candles.setter
     def candles(self, candles: list[Candle]):
-        """Set the Candles in Candlestick manager and reset transformed Candles"""
-        self._candles = candles
+        """Set the Candles by clearing and extending (preserves reference)"""
+        self._candles.clear()
+        self._candles.extend(candles)
         if self.candlestick:
             self.candlestick.derived_candles.reset()
 
@@ -245,7 +254,10 @@ class CandleManager:
 
         end_index = len(self._candles)
 
-        candles_ = [self._candles.pop(start_index)]
+        to_process = self._candles[start_index:end_index]
+        del self._candles[start_index:end_index]
+
+        candles_ = [to_process[0]]
 
         init_candle = candles_[0]
         init_candle.timeframe = self.timeframe
@@ -258,11 +270,7 @@ class CandleManager:
         if not on_timeframe(init_candle.timestamp, self.timeframe):
             init_candle.set_resampled_timestamp(end_time)
 
-        for _ in range(abs(end_index - start_index)):
-            if len(self._candles) <= start_index:
-                break
-
-            candle = self._candles.pop(start_index)
+        for candle in to_process[1:]:
             prev_candle = candles_[-1]
 
             if not candle.timestamp:
@@ -350,37 +358,43 @@ class CandleManager:
         if len(candles) < 2:
             return candles
 
-        index = start_index if start_index != 0 else 1
+        result = []
+        start_idx = start_index if start_index != 0 else 1
+        end_idx = end_index if end_index else len(candles)
 
-        end_index_ = end_index if end_index else len(candles)
+        # Add candles before start_idx
+        result.extend(candles[:start_idx])
 
-        while index < end_index_ + 1:
-            if len(candles) <= index:
-                break
-
-            prev_candle = candles[index - 1]
+        for i in range(start_idx, min(end_idx, len(candles))):
+            prev_candle = result[-1]
 
             if prev_candle.timestamp is None:
-                # TODO Add logger warning?
+                result.extend(candles[i:])
                 break
 
-            if candles[index].timestamp != prev_candle.timestamp + timeframe:
+            current_candle = candles[i]
+
+            # Fill gaps between prev_candle and current_candle
+            expected_timestamp = prev_candle.timestamp + timeframe
+            while expected_timestamp < current_candle.timestamp:
                 fill_candle = Candle(
                     open=prev_candle.close,
                     close=prev_candle.close,
                     high=prev_candle.close,
                     low=prev_candle.close,
                     volume=0,
-                    timestamp=prev_candle.timestamp + timeframe,
+                    timestamp=expected_timestamp,
                     timeframe=prev_candle.timeframe,
                 )
                 fill_candle.aggregation_factor = 0
-                candles.insert(index, fill_candle)
-                end_index_ += 1
+                result.append(fill_candle)
+                prev_candle = fill_candle
+                expected_timestamp = prev_candle.timestamp + timeframe
 
-            index += 1
+            # Add the current candle
+            result.append(current_candle)
 
-        return candles
+        return result
 
     def candlestick_conversion(self, mode: CalcMode, index: int | None = None):
         if self.candlestick:

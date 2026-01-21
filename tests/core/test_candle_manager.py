@@ -968,7 +968,7 @@ class TestMergingCandlesTimeFrame:
         data_input.append(candles_T5[1])
         data_input.append(candles_T5[2])
 
-        expected = data_input
+        expected = [candles_T5[0], candles_T5[1], candles_T5[2]]
         expected.append(candles[20])
         expected[-1].timestamp = datetime(2023, 10, 3, 9, 25)
 

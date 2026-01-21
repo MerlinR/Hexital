@@ -39,7 +39,7 @@ def test_data(fixture_candles_30, expected_ema):
 def test_data_append(fixture_candles_30, fixture_candles_31st, expected_ema):
     test = EMA(candles=fixture_candles_30, source="close")
     test.calculate()
-    fixture_candles_30.append(fixture_candles_31st)
+    test.append(fixture_candles_31st)
     test.calculate()
 
     assert pytest.approx(test.readings()) == expected_ema[0:31]

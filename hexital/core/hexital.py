@@ -304,16 +304,22 @@ class Hexital:
 
     def calculate(self, name: str | None = None):
         """Calculates all the missing indicator readings."""
-        for indicator_name, indicator in self._indicators.items():
-            if name is None or indicator_name == name:
+        if name is not None:
+            if indicator := self._indicators.get(name):
+                indicator.calculate()
+        else:
+            for indicator in self._indicators.values():
                 indicator.calculate()
 
     def calculate_index(
         self, name: str | None = None, index: int = -1, end_index: int | None = None
     ):
         """Calculate specific index for all or specific indicator readings."""
-        for indicator_name, indicator in self._indicators.items():
-            if name is None or indicator_name == name:
+        if name is not None:
+            if indicator := self._indicators.get(name):
+                indicator.calculate_index(index, end_index)
+        else:
+            for indicator in self._indicators.values():
                 indicator.calculate_index(index, end_index)
 
     def recalculate(self, source: Source | None = None):

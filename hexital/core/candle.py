@@ -49,7 +49,9 @@ class Candle:
         self.timeframe = convert_timeframe_to_timedelta(timeframe) if timeframe else None
 
         self.tag = None
-        self.aggregation_factor = aggregation_factor if aggregation_factor else 1
+        self.aggregation_factor = (
+            aggregation_factor if aggregation_factor is not None else 1
+        )
 
         if isinstance(timestamp, datetime):
             self.timestamp = timestamp
@@ -65,15 +67,19 @@ class Candle:
     def __eq__(self, other) -> bool:
         if not isinstance(other, Candle):
             return False
-        for key in set().union(self.__dict__.keys(), other.__dict__.keys()):
-            if key in ["_start_timestamp", "_end_timestamp", "timeframe"]:
-                local = getattr(self, key)
-                remote = getattr(other, key)
-                if remote is not None and local is not None and remote != local:
-                    return False
-            elif key.startswith("_"):
+
+        for key, value in self.__dict__.items():
+            if key.startswith("_") and key not in ["_start_timestamp", "_end_timestamp"]:
                 continue
-            elif getattr(self, key) != getattr(other, key):
+            if key in ["_start_timestamp", "_end_timestamp", "timeframe"]:
+                other_value = getattr(other, key, None)
+                if other_value is not None and value is not None and other_value != value:
+                    return False
+            elif getattr(other, key, None) != value:
+                return False
+
+        for key in other.__dict__:
+            if key not in self.__dict__ and not key.startswith("_"):
                 return False
         return True
 
@@ -301,9 +307,17 @@ class Candle:
         return [cls.from_list(candle) for candle in candles]
 
     def clean_copy(self) -> Candle:
-        candle = Candle.from_list(self.as_list())
-        candle.aggregation_factor = self.aggregation_factor
-        return candle
+        """Create a clean copy with OHLCV data but without indicators, refs, or tag."""
+        return Candle(
+            open=self.open,
+            high=self.high,
+            low=self.low,
+            close=self.close,
+            volume=self.volume,
+            timestamp=self.timestamp,
+            timeframe=self.timeframe,
+            aggregation_factor=self.aggregation_factor,
+        )
 
     def set_resampled_timestamp(self, timestamp: datetime):
         if not self._start_timestamp:
