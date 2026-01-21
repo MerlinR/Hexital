@@ -24,14 +24,14 @@ class TSI(Indicator[float | None]):
 
     _name: str = field(init=False, default="TSI")
     period: int = 25
-    smooth_period: int | None = None
+    smooth_period: int = 0
     source: Source = "close"
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}_{self.smooth_period}"
 
     def _validate_fields(self):
-        if not self.smooth_period:
+        if self.smooth_period == 0:
             self.smooth_period = int(int(self.period / 2) + (self.period % 2 > 0))
 
     def _initialise(self):

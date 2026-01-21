@@ -40,26 +40,38 @@ def _timeframe_pair_candles(
     end_pointer = len(candles[1]) - 1
 
     for front_pointer in range(len(set_one) - 1, -1, -1):
-        if not end_pointer:
+        if end_pointer < 0:
             break
 
-        while (
-            not within_timeframe(
-                set_one[front_pointer].timestamp,
-                set_two[end_pointer].timestamp,
+        ts_one = set_one[front_pointer].timestamp
+        if ts_one is None:
+            continue
+
+        while end_pointer >= 0:
+            ts_two = set_two[end_pointer].timestamp
+            if ts_two is None:
+                end_pointer -= 1
+                continue
+
+            if within_timeframe(
+                ts_one,
+                ts_two,
                 set_two[end_pointer].timeframe,
-            )
-            and not within_timeframe(
-                set_two[end_pointer].timestamp,
-                set_one[front_pointer].timestamp,
+            ) or within_timeframe(
+                ts_two,
+                ts_one,
                 set_one[front_pointer].timeframe,
-            )
-        ) and end_pointer >= 0:
+            ):
+                break
+
             end_pointer -= 1
 
-        output_one.insert(0, set_one[front_pointer])
-        output_two.insert(0, set_two[end_pointer])
+        if end_pointer >= 0:
+            output_one.append(set_one[front_pointer])
+            output_two.append(set_two[end_pointer])
 
+    output_one.reverse()
+    output_two.reverse()
     return output_one, output_two
 
 
@@ -144,11 +156,12 @@ def _above(
         reading_one = reading_by_index(candles, indicator, i)
         reading_two = reading_by_index(candles_two, indicator_cmp, i)
 
-        if isinstance(reading_one, (float, int)) and isinstance(
-            reading_two, (float, int)
+        if (
+            isinstance(reading_one, (float, int))
+            and isinstance(reading_two, (float, int))
+            and reading_one > reading_two
         ):
-            if reading_one > reading_two:
-                return True
+            return True
 
     return False
 
@@ -216,11 +229,12 @@ def _below(
         reading_one = reading_by_index(candles, indicator, i)
         reading_two = reading_by_index(candles_two, indicator_cmp, i)
 
-        if isinstance(reading_one, (float, int)) and isinstance(
-            reading_two, (float, int)
+        if (
+            isinstance(reading_one, (float, int))
+            and isinstance(reading_two, (float, int))
+            and reading_one < reading_two
         ):
-            if reading_one < reading_two:
-                return True
+            return True
 
     return False
 
@@ -299,10 +313,7 @@ def rising(
     if not readings:
         return False
 
-    for reading in readings:
-        if reading >= latest_reading:
-            return False
-    return True
+    return all(reading < latest_reading for reading in readings)
 
 
 def falling(
@@ -345,10 +356,7 @@ def falling(
     if not readings:
         return False
 
-    for reading in readings:
-        if reading <= latest_reading:
-            return False
-    return True
+    return all(reading > latest_reading for reading in readings)
 
 
 def mean_rising(
@@ -635,7 +643,10 @@ def _cross(
         prev_one = reading_by_index(candles, indicator, i - 1)
         prev_two = reading_by_index(candles_two, indicator_cmp, i - 1)
 
-        if None in [reading_one, reading_two, prev_one, prev_two]:
+        if not all(
+            isinstance(r, (float, int))
+            for r in [reading_one, reading_two, prev_one, prev_two]
+        ):
             continue
         if (reading_one < reading_two and prev_one >= prev_two) or (
             reading_one > reading_two and prev_one <= prev_two
@@ -709,7 +720,10 @@ def _crossover(
         prev_one = reading_by_index(candles, indicator, i - 1)
         prev_two = reading_by_index(candles_two, indicator_cmp, i - 1)
 
-        if None in [reading_one, reading_two, prev_one, prev_two]:
+        if not all(
+            isinstance(r, (float, int))
+            for r in [reading_one, reading_two, prev_one, prev_two]
+        ):
             continue
         if reading_one > reading_two and prev_one <= prev_two:
             return True
@@ -781,7 +795,10 @@ def _crossunder(
         prev_one = reading_by_index(candles, indicator, i - 1)
         prev_two = reading_by_index(candles_two, indicator_cmp, i - 1)
 
-        if None in [reading_one, reading_two, prev_one, prev_two]:
+        if not all(
+            isinstance(r, (float, int))
+            for r in [reading_one, reading_two, prev_one, prev_two]
+        ):
             continue
         if reading_one < reading_two and prev_one >= prev_two:
             return True

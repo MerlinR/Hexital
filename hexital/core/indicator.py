@@ -16,7 +16,6 @@ from hexital.utils.candles import (
     candles_sum,
     get_readings_period,
     reading_by_candle,
-    reading_by_index,
     reading_count,
     reading_period,
 )
@@ -180,7 +179,7 @@ class Indicator(Generic[V], ABC):
                                        dictionaries (for complex indicators),
                                        or `None` if no reading is available.
         """
-        return self._find_readings(name)
+        return self._find_readings(name)  # type: ignore
 
     def prepend(self, candles: Candles):
         """Prepends a Candle or a chronological ordered list of Candle's to the front of the Indicator Candle's. This will only re-sample and re-calculate the new Candles, with minor overlap.
@@ -310,13 +309,13 @@ class Indicator(Generic[V], ABC):
 
         return 0
 
-    def _set_reading(self, reading: Reading, index: int | None = None):
+    def _set_reading(self, reading: V, index: int | None = None):
         index = index if index else self._active_index
 
         if self._mode != IndicatorMode.SOLO:
-            self.candles[index].sub_indicators[self.name] = reading
+            self.candles[index].sub_indicators[self.name] = reading  # type: ignore
         else:
-            self.candles[index].indicators[self.name] = reading
+            self.candles[index].indicators[self.name] = reading  # type: ignore
 
     def _set_active_index(self, index: int):
         self._active_index = index
@@ -353,21 +352,19 @@ class Indicator(Generic[V], ABC):
         self.managed_indicators[indicator.name] = indicator
         return indicator
 
-    def _find_reading(
-        self, source: Source | None = None, index: int | None = None
-    ) -> Reading | V:
+    def _find_reading(self, source: Source | None = None, index: int | None = None) -> V:
         if index is None:
             index = self._active_index
         elif valid_index(index, len(self.candles)):
-            index = index
+            index = absindex(index, len(self.candles))
         else:
-            return None
+            return None  # type: ignore
 
         if not source or (isinstance(source, str) and source == self.name):
-            return reading_by_index(self.candles, self.name, index)
+            return reading_by_candle(self.candles[index], self.name)
         if isinstance(source, str):
-            return reading_by_index(self.candles, source, index)
-        return reading_by_index(self.candles, source.name, index)
+            return reading_by_candle(self.candles[index], source)
+        return reading_by_candle(self.candles[index], source.name)
 
     def _find_readings(self, source: Source | None = None) -> list[Reading | V]:
         if not source:
@@ -377,7 +374,7 @@ class Indicator(Generic[V], ABC):
             name = source.name
             return [reading_by_candle(candle, name) for candle in self.candles]
         if isinstance(source, NestedSource):
-            return source.readings()
+            return source.readings()  # type: ignore
 
         return [reading_by_candle(candle, source) for candle in self.candles]
 
@@ -404,21 +401,21 @@ class Indicator(Generic[V], ABC):
 
     def prev_reading(
         self, source: Source | None = None, default: T | None = None
-    ) -> Reading | V | T:
+    ) -> V | T:
         if self._active_index == 0:
-            return default
+            return default  # type: ignore
         value = self._find_reading(source, self._active_index - 1)
-        return value if value is not None else default
+        return value if value is not None else default  # type: ignore
 
     def reading(
         self,
         source: Source | None = None,
         index: int | None = None,
         default: T | None = None,
-    ) -> Reading | V | T:
+    ) -> V | T:
         """Simple method to get an indicator reading from the index"""
         value = self._find_reading(source, index)
-        return value if value is not None else default
+        return value if value is not None else default  # type: ignore
 
     def reading_count(
         self, source: Source | None = None, index: int | None = None
@@ -514,14 +511,14 @@ class Managed(Indicator):
 
     def _calculate_reading(self, index: int) -> Reading: ...
 
-    def set_reading(self, reading: Reading, index: int | None = None):
+    def set_reading(self, reading: Reading, index: int | None = None):  # type: ignore
         if index is None:
             index = self._active_index
         else:
             self.set_active_index(index)
 
         self._calculate_sub_indicators(True, index)
-        self._set_reading(reading, index)
+        self._set_reading(reading, index)  # type: ignore
         self._calculate_sub_indicators(False, index)
 
     def set_active_index(self, index: int):
@@ -544,10 +541,10 @@ class NestedSource:
     def name(self):
         return f"{self.indicator.name}.{self.nested_name}"
 
-    def reading(self, index: int | None = None) -> Reading:
+    def reading(self, index: int | None = None) -> Reading:  # type: ignore
         value = self.indicator.reading(index=index)
         if isinstance(value, dict):
-            return value.get(self.nested_name)
+            return value.get(self.nested_name)  # type: ignore
         return value
 
     def readings(self) -> list[Reading]:

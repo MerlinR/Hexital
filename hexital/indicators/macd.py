@@ -32,12 +32,7 @@ class MACD(Indicator[dict]):
     signal_period: int = 9
 
     def _generate_name(self) -> str:
-        return "{}_{}_{}_{}".format(
-            self._name,
-            self.fast_period,
-            self.slow_period,
-            self.signal_period,
-        )
+        return f"{self._name}_{self.fast_period}_{self.slow_period}_{self.signal_period}"
 
     def _validate_fields(self):
         if self.slow_period < self.fast_period:
@@ -46,8 +41,12 @@ class MACD(Indicator[dict]):
     def _initialise(self):
         self.data = self.add_managed_indicator(Managed(name=f"{self.name}_macd"))
 
-        self.sub_emaf = self.add_sub_indicator(EMA(source=self.source, period=self.fast_period))
-        self.sub_emas = self.add_sub_indicator(EMA(source=self.source, period=self.slow_period))
+        self.sub_emaf = self.add_sub_indicator(
+            EMA(source=self.source, period=self.fast_period)
+        )
+        self.sub_emas = self.add_sub_indicator(
+            EMA(source=self.source, period=self.slow_period)
+        )
         self.sub_signal = self.add_managed_indicator(
             EMA(source=self.data, period=self.signal_period)
         )

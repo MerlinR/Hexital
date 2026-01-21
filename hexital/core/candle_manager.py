@@ -163,7 +163,8 @@ class CandleManager:
         for candle in candles_:
             if self.timeframe and candle.timeframe and candle.timeframe > self.timeframe:
                 continue
-            if last_timestamp and candle.timestamp < last_timestamp:
+
+            if last_timestamp and candle.timestamp and candle.timestamp < last_timestamp:
                 to_sort = True
 
             self._candles.append(candle.clean_copy())
@@ -173,7 +174,7 @@ class CandleManager:
 
         self._candle_tasks(CalcMode.INSERT)
 
-    def sort_candles(self, candles: list[Candle | None] = None):
+    def sort_candles(self, candles: list[Candle] | None = None):
         """Sorts Candles in order of timestamp, accounts for collapsing"""
         if candles:
             candles.sort(key=cmp_to_key(self._sort_comparison))

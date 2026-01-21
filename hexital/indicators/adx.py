@@ -25,22 +25,18 @@ class ADX(Indicator[dict]):
     _name: str = field(init=False, default="ADX")
 
     period: int = 14
-    period_signal: int | None = None
+    period_signal: int = 0
     multiplier: float = 100.0
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}_{self.period_signal}"
 
     def _validate_fields(self):
-        if self.period_signal is None:
+        if self.period_signal == 0:
             self.period_signal = self.period
 
     def _initialise(self):
-        self.sub_atr = self.add_sub_indicator(
-            ATR(
-                period=self.period,
-            )
-        )
+        self.sub_atr = self.add_sub_indicator(ATR(period=self.period))
 
         self.data = self.add_managed_indicator(Managed())
 
@@ -84,7 +80,7 @@ class ADX(Indicator[dict]):
 
         self.data.set_reading({"positive": dm_plus, "negative": dm_neg})
 
-        atr_ = self.sub_atr.reading()
+        atr_: float = self.sub_atr.reading()
 
         if self.sub_pos.exists() and atr_ is not None:
             mod = self.multiplier / atr_

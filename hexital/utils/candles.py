@@ -18,7 +18,12 @@ def reading_by_candle(candle: Candle, name: str) -> float | dict | None:
 
     if "." in name:
         main_name, nested_name = name.split(".")
-        reading = _nested_indicator(candle, main_name, nested_name)
+        if (reading := candle.indicators.get(main_name)) is not None:
+            return reading.get(nested_name) if isinstance(reading, dict) else reading
+
+        if (reading := candle.sub_indicators.get(main_name)) is not None:
+            return reading.get(nested_name) if isinstance(reading, dict) else reading
+
         return reading
 
     attr = getattr(candle, name, None)
@@ -30,16 +35,6 @@ def reading_by_candle(candle: Candle, name: str) -> float | dict | None:
 
     if (reading := candle.sub_indicators.get(name)) is not None:
         return reading
-
-    return None
-
-
-def _nested_indicator(candle: Candle, name: str, nested_name: str) -> float | None:
-    if (reading := candle.indicators.get(name)) is not None:
-        return reading.get(nested_name) if isinstance(reading, dict) else reading
-
-    if (reading := candle.sub_indicators.get(name)) is not None:
-        return reading.get(nested_name) if isinstance(reading, dict) else reading
 
     return None
 
