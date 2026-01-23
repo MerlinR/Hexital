@@ -3116,10 +3116,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#3x" class="md-nav__link">
+  <a href="#4x" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.X
+        4.X
       
     </span>
   </a>
@@ -3348,10 +3348,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#3x" class="md-nav__link">
+  <a href="#4x" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3.X
+        4.X
       
     </span>
   </a>
@@ -3569,10 +3569,24 @@
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning&nbsp;⧉</a>.</p>
 <hr />
-<h2 id="3x">3.X</h2>
+<h2 id="4x">4.X</h2>
 <p><em>Release Date: X</em></p>
 <ul>
 <li>Major Typing update, some method clean up and optimisation</li>
+<li>TimeFrames are now required*<ul>
+<li>
+<ul>
+<li>Indicators with no timeframe with no timeframed Candles still function.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Altered how append "timeframe" argument is treated<ul>
+<li>Append/Prepend/Insert, the timeframe argument will set Candles to that timeframe <code>start.append(candle, "T1")</code></li>
+</ul>
+</li>
+<li>Indicators/default timeframe, will inherit a timeframe from Candle's or the appending methods</li>
+<li>Timeframe default has changed from str CONST "default" TimeFrame DEFAULT = "N"</li>
 </ul>
 <hr />
 <h2 id="301">3.0.1</h2>
