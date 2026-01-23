@@ -6,12 +6,13 @@ from typing import TypeAlias
 
 from hexital.exceptions import InvalidTimeFrame
 
-VALID_TIMEFRAME_PREFIXES = ["S", "T", "H", "D"]
+VALID_TIMEFRAME_PREFIXES = "N", "S", "T", "H", "D"
 
 
 class TimeFrame(Enum):
     """Pre-defined TimeFrame values"""
 
+    DEFAULT = "N"
     SECOND = "S1"
     SECOND5 = "S5"
     SECOND10 = "S10"
@@ -33,8 +34,11 @@ class TimeFrame(Enum):
 
 TimeFramesSource: TypeAlias = str | TimeFrame | timedelta | int
 
+NullTimeFrame = TimeFrame.DEFAULT
+NullTimeFrameTypes = ("N", TimeFrame.DEFAULT, "DEFAULT", NullTimeFrame)
 
-def timeframe_validation(timeframe: TimeFramesSource | None = None) -> bool:
+
+def validate_timeframe(timeframe: TimeFramesSource | None = None) -> bool:
     if isinstance(timeframe, (int, timedelta, TimeFrame)):
         return True
 
@@ -49,14 +53,41 @@ def timeframe_validation(timeframe: TimeFramesSource | None = None) -> bool:
 def convert_timeframe_to_timedelta(
     timeframe: TimeFramesSource | None = None,
 ) -> timedelta | None:
+    if timeframe in NullTimeFrameTypes:
+        return None
     if isinstance(timeframe, (str, TimeFrame)):
-        return timeframe_to_timedelta(validate_timeframe(timeframe))
+        return timeframe_to_timedelta(_timeframe_to_str(timeframe))
     if isinstance(timeframe, int):
         return timedelta(seconds=timeframe)
     if isinstance(timeframe, timedelta):
         return timeframe
 
     return None
+
+
+def _timeframe_to_str(timeframe: str | TimeFrame) -> str:
+    if isinstance(timeframe, TimeFrame):
+        return timeframe.value
+
+    timeframe = timeframe.upper()
+    if timeframe[0] not in VALID_TIMEFRAME_PREFIXES:
+        raise InvalidTimeFrame(
+            f"Invalid value: {timeframe}, valid are: {VALID_TIMEFRAME_PREFIXES}, E.G 'T10' 10 minutes"
+        )
+
+    return timeframe
+
+
+def convert_timeframe_to_str(timeframe: TimeFramesSource | None) -> str | None:
+    if (
+        not timeframe
+        or timeframe in NullTimeFrameTypes
+        or not validate_timeframe(timeframe)
+    ):
+        return None
+
+    name = convert_timeframe_to_timedelta(timeframe)
+    return None if not name else timedelta_to_str(name)
 
 
 def timeframe_to_timedelta(timeframe: str | TimeFrame) -> timedelta:
@@ -66,7 +97,7 @@ def timeframe_to_timedelta(timeframe: str | TimeFrame) -> timedelta:
         timeframe.value if isinstance(timeframe, TimeFrame) else timeframe.upper()
     )
 
-    if not timeframe_validation(timeframe_):
+    if not validate_timeframe(timeframe_):
         raise InvalidTimeFrame(
             f"Invalid value: {timeframe_}, valid are: {VALID_TIMEFRAME_PREFIXES}, E.G 'T10' 10 minutes"
         )
@@ -103,19 +134,6 @@ def timedelta_to_str(timeframe: timedelta) -> str:
         return f"T{int(total_seconds / 60)}"
     # Seconds
     return f"S{int(total_seconds)}"
-
-
-def validate_timeframe(timeframe: str | TimeFrame) -> str:
-    if isinstance(timeframe, TimeFrame):
-        return timeframe.value
-
-    timeframe = timeframe.upper()
-    if timeframe[0] not in VALID_TIMEFRAME_PREFIXES:
-        raise InvalidTimeFrame(
-            f"Invalid value: {timeframe}, valid are: {VALID_TIMEFRAME_PREFIXES}, E.G 'T10' 10 minutes"
-        )
-
-    return timeframe
 
 
 def round_down_timestamp(timestamp: datetime, timeframe: timedelta) -> datetime:

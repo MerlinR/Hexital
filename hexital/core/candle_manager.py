@@ -2,22 +2,18 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta
 from functools import cmp_to_key
-from typing import TypeAlias
 
 from hexital.core.candle import Candle
 from hexital.core.candlestick_type import CandlestickType
 from hexital.exceptions import InvalidCandleOrder
-from hexital.utils.candles import reading_by_candle
+from hexital.utils.candles import Candles, parse_candles, reading_by_candle
 from hexital.utils.common import CalcMode
 from hexital.utils.timeframe import (
+    NullTimeFrame,
     on_timeframe,
     round_down_timestamp,
     timedelta_to_str,
 )
-
-Candles: TypeAlias = Candle | list[Candle] | dict | list[dict] | list | list[list]
-
-DEFAULT_CANDLES = "default"
 
 
 class CandleManager:
@@ -42,6 +38,8 @@ class CandleManager:
         self._candles = []
         if candles:
             self._candles.extend(candles)
+        if not self.timeframe and candles and candles[0].timeframe:
+            self.timeframe = candles[0].timeframe
 
         if candlestick:
             self.candlestick = candlestick
@@ -70,7 +68,7 @@ class CandleManager:
             return timedelta_to_str(self.timeframe)
         if self.candlestick:
             return self.candlestick.acronym
-        return DEFAULT_CANDLES
+        return NullTimeFrame.name
 
     @name.setter
     def name(self, name: str):
@@ -108,6 +106,103 @@ class CandleManager:
     def find_indicator(self, name: str) -> bool:
         return any(reading_by_candle(candle, name) for candle in reversed(self.candles))
 
+    def prepend(self, candles: Candles, timeframe: timedelta | None = None):
+        candles_ = parse_candles(candles)
+        self.sort_candles(candles_)
+
+        if not self.timeframe and not self._candles:
+            if timeframe:
+                self.timeframe = timeframe
+            elif candles_ and candles_[0].timeframe:
+                self.timeframe = candles_[0].timeframe
+
+        for candle in reversed(candles_):
+            candle_copy = candle.clean_copy()
+
+            if timeframe:
+                candle_copy.timeframe = timeframe
+
+            if self.timeframe and not candle_copy.timeframe and not timeframe:
+                continue
+            if (
+                self.timeframe
+                and candle_copy.timeframe
+                and candle_copy.timeframe > self.timeframe
+            ):
+                continue
+
+            self._candles.insert(0, candle_copy)
+
+        self._candle_tasks(CalcMode.PREPEND)
+
+    def append(self, candles: Candles, timeframe: timedelta | None = None):
+        candles_ = parse_candles(candles)
+        index = len(self._candles) - 1 if len(self._candles) > 0 else 0
+
+        if not self.timeframe and not self._candles:
+            if timeframe:
+                self.timeframe = timeframe
+            elif candles_ and candles_[0].timeframe:
+                self.timeframe = candles_[0].timeframe
+
+        for candle in candles_:
+            candle_copy = candle.clean_copy()
+
+            if timeframe:
+                candle_copy.timeframe = timeframe
+
+            if self.timeframe and not candle_copy.timeframe and not timeframe:
+                continue
+            if (
+                self.timeframe
+                and candle_copy.timeframe
+                and candle_copy.timeframe > self.timeframe
+            ):
+                continue
+
+            self._candles.append(candle_copy)
+
+        self._candle_tasks(CalcMode.APPEND, index)
+
+    def insert(self, candles: Candles, timeframe: timedelta | None = None):
+        candles_ = parse_candles(candles)
+
+        self.sort_candles(candles_)
+
+        to_sort = False
+        last_timestamp = self._candles[-1].timestamp if self._candles else None
+
+        if not self.timeframe and not self._candles:
+            if timeframe:
+                self.timeframe = timeframe
+            elif candles_ and candles_[0].timeframe:
+                self.timeframe = candles_[0].timeframe
+
+        for candle in candles_:
+            candle_copy = candle.clean_copy()
+
+            if timeframe:
+                candle_copy.timeframe = timeframe
+
+            if self.timeframe and not candle_copy.timeframe and not timeframe:
+                continue
+            if (
+                self.timeframe
+                and candle_copy.timeframe
+                and candle_copy.timeframe > self.timeframe
+            ):
+                continue
+
+            if last_timestamp and candle.timestamp and candle.timestamp < last_timestamp:
+                to_sort = True
+
+            self._candles.append(candle_copy)
+
+        if to_sort:
+            self.sort_candles()
+
+        self._candle_tasks(CalcMode.INSERT)
+
     def _parse_candles(self, candles: Candles) -> list[Candle]:
         candles_ = []
 
@@ -129,50 +224,6 @@ class CandleManager:
                 raise TypeError
 
         return candles_
-
-    def prepend(self, candles: Candles):
-        candles_ = self._parse_candles(candles)
-
-        for candle in reversed(candles_):
-            if self.timeframe and candle.timeframe and candle.timeframe > self.timeframe:
-                continue
-            self._candles.insert(0, candle.clean_copy())
-
-        self._candle_tasks(CalcMode.PREPEND)
-
-    def append(self, candles: Candles):
-        candles_ = self._parse_candles(candles)
-        index = len(self._candles) - 1 if len(self._candles) > 0 else 0
-
-        for candle in candles_:
-            if self.timeframe and candle.timeframe and candle.timeframe > self.timeframe:
-                continue
-
-            self._candles.append(candle.clean_copy())
-
-        self._candle_tasks(CalcMode.APPEND, index)
-
-    def insert(self, candles: Candles):
-        candles_ = self._parse_candles(candles)
-
-        self.sort_candles(candles_)
-
-        to_sort = False
-        last_timestamp = self._candles[-1].timestamp if self._candles else None
-
-        for candle in candles_:
-            if self.timeframe and candle.timeframe and candle.timeframe > self.timeframe:
-                continue
-
-            if last_timestamp and candle.timestamp and candle.timestamp < last_timestamp:
-                to_sort = True
-
-            self._candles.append(candle.clean_copy())
-
-        if to_sort:
-            self.sort_candles()
-
-        self._candle_tasks(CalcMode.INSERT)
 
     def sort_candles(self, candles: list[Candle] | None = None):
         """Sorts Candles in order of timestamp, accounts for collapsing"""
@@ -256,6 +307,25 @@ class CandleManager:
         end_index = len(self._candles)
 
         to_process = self._candles[start_index:end_index]
+
+        # Optimization: Skip resampling for INSERT mode if all candles already properly formatted
+        # For APPEND/PREPEND, we still need to run resample for gap filling
+        # Also skip optimization if timeframe_fill is True as we need to check for gaps
+        if (
+            mode == CalcMode.INSERT
+            and not self.timeframe_fill
+            and to_process
+            and all(c.timeframe == self.timeframe for c in to_process)
+        ):
+            # Check they're in chronological order
+            timestamps_sorted = all(
+                to_process[i].timestamp <= to_process[i + 1].timestamp
+                for i in range(len(to_process) - 1)
+                if to_process[i].timestamp and to_process[i + 1].timestamp
+            )
+            if timestamps_sorted:
+                return
+
         del self._candles[start_index:end_index]
 
         candles_ = [to_process[0]]
@@ -271,7 +341,7 @@ class CandleManager:
         if not on_timeframe(init_candle.timestamp, self.timeframe):
             init_candle.set_resampled_timestamp(end_time)
 
-        for candle in to_process[1:]:
+        for i, candle in enumerate(to_process[1:], start=1):
             prev_candle = candles_[-1]
 
             if not candle.timestamp:
@@ -283,6 +353,7 @@ class CandleManager:
                 and prev_candle.timeframe == self.timeframe
             ):
                 candles_.append(candle)
+                candles_.extend(to_process[i + 1 :])
                 break
 
             next_end_time = end_time + self.timeframe

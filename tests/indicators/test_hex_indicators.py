@@ -7,19 +7,23 @@ from .indicator_testbase import IndicatorTestBase
 class TestHexPatterns(IndicatorTestBase):
     @pytest.mark.usefixtures("candles", "expected_counter_bull")
     def test_counter(self, candles, expected_counter_bull):
-        strat = Hexital(
+        strategy = Hexital(
             "Test counter",
             candles,
-            [indicators.Supertrend(), indicators.Counter(source="Supertrend_7.direction")],
+            [
+                indicators.Supertrend(),
+                indicators.Counter(source="Supertrend_7.direction"),
+            ],
         )
-        strat.calculate()
+        strategy.calculate()
         assert self.verify(
-            strat.indicator("COUNT_Supertrend_7-direction").readings(), expected_counter_bull
+            strategy.indicator("COUNT_Supertrend_7-direction").readings(),
+            expected_counter_bull,
         )
 
     @pytest.mark.usefixtures("candles", "expected_counter_bear")
     def test_counter_inverse(self, candles, expected_counter_bear):
-        strat = Hexital(
+        strategy = Hexital(
             "Test counter",
             candles,
             [
@@ -27,10 +31,11 @@ class TestHexPatterns(IndicatorTestBase):
                 indicators.Counter(source="Supertrend_7.direction", count_value=-1),
             ],
         )
-        strat.calculate()
+        strategy.calculate()
 
         assert self.verify(
-            strat.indicator("COUNT_Supertrend_7-direction").readings(), expected_counter_bear
+            strategy.indicator("COUNT_Supertrend_7-direction").readings(),
+            expected_counter_bear,
         )
 
     @pytest.mark.usefixtures("candles", "expected_highestlowest")

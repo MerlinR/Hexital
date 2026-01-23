@@ -223,6 +223,51 @@ class TestCandleTimeframeAppend:
         manager.append(
             [
                 Candle(
+                    17213,
+                    2395,
+                    7813,
+                    3615,
+                    19661,
+                    timestamp=datetime(2023, 10, 3, 9, 5),
+                    timeframe=timedelta(minutes=5),
+                ),
+                Candle(
+                    14842,
+                    14842,
+                    14831,
+                    14835,
+                    540,
+                    timestamp=datetime(2023, 10, 3, 9, 10),
+                    timeframe=timedelta(minutes=5),
+                ),
+            ]
+        )
+        assert manager.candles == [
+            Candle(
+                17213,
+                2395,
+                7813,
+                3615,
+                19661,
+                timestamp=datetime(2023, 10, 3, 9, 5),
+                timeframe=timedelta(minutes=5),
+            ),
+            Candle(
+                14842,
+                14842,
+                14831,
+                14835,
+                540,
+                timestamp=datetime(2023, 10, 3, 9, 10),
+                timeframe=timedelta(minutes=5),
+            ),
+        ]
+
+    def test_default_untimeframe(self):
+        manager = CandleManager(timeframe=timedelta())
+        manager.append(
+            [
+                Candle(
                     17213, 2395, 7813, 3615, 19661, timestamp=datetime(2023, 10, 3, 9, 5)
                 ),
                 Candle(
@@ -243,10 +288,14 @@ class TestCandleTimeframeAppend:
                 3615,
                 19661,
                 timestamp=datetime(2023, 10, 3, 9, 5),
-                timeframe=timedelta(minutes=5),
             ),
             Candle(
-                14842, 14842, 14831, 14835, 540, timestamp=datetime(2023, 10, 3, 9, 10)
+                14842,
+                14842,
+                14831,
+                14835,
+                540,
+                timestamp=datetime(2023, 10, 3, 9, 10),
             ),
         ]
 
@@ -421,7 +470,13 @@ class TestCandleTimeframeAppend:
         manager.append(
             [
                 Candle(
-                    17213, 2395, 7813, 3615, 19661, timestamp=datetime(2023, 10, 3, 9, 5)
+                    17213,
+                    2395,
+                    7813,
+                    3615,
+                    19661,
+                    timestamp=datetime(2023, 10, 3, 9, 5),
+                    timeframe=timedelta(minutes=5),
                 ),
             ]
         )
@@ -434,6 +489,7 @@ class TestCandleTimeframeAppend:
                     14835,
                     540,
                     timestamp=datetime(2023, 10, 3, 9, 15),
+                    timeframe=timedelta(minutes=5),
                 )
             ]
         )
@@ -542,6 +598,7 @@ class TestCandleTimeframePrepend:
                     14835,
                     540,
                     timestamp=datetime(2023, 10, 3, 9, 10),
+                    timeframe=timedelta(minutes=5),
                 )
             ],
             timeframe=timedelta(minutes=5),
@@ -549,7 +606,13 @@ class TestCandleTimeframePrepend:
         manager.prepend(
             [
                 Candle(
-                    17213, 2395, 7813, 3615, 19661, timestamp=datetime(2023, 10, 3, 9, 5)
+                    17213,
+                    2395,
+                    7813,
+                    3615,
+                    19661,
+                    timestamp=datetime(2023, 10, 3, 9, 5),
+                    timeframe=timedelta(minutes=5),
                 )
             ]
         )
@@ -564,7 +627,13 @@ class TestCandleTimeframePrepend:
                 timeframe=timedelta(minutes=5),
             ),
             Candle(
-                14842, 14842, 14831, 14835, 540, timestamp=datetime(2023, 10, 3, 9, 10)
+                14842,
+                14842,
+                14831,
+                14835,
+                540,
+                timestamp=datetime(2023, 10, 3, 9, 10),
+                timeframe=timedelta(minutes=5),
             ),
         ]
 
@@ -853,10 +922,22 @@ class TestCandleSort:
         manager = CandleManager(
             [
                 Candle(
-                    1301, 3007, 11626, 19048, 28909, timestamp=datetime(2023, 10, 3, 9, 0)
+                    1301,
+                    3007,
+                    11626,
+                    19048,
+                    28909,
+                    timestamp=datetime(2023, 10, 3, 9, 0),
+                    timeframe=timedelta(minutes=5),
                 ),
                 Candle(
-                    17213, 2395, 7813, 3615, 19661, timestamp=datetime(2023, 10, 3, 9, 5)
+                    17213,
+                    2395,
+                    7813,
+                    3615,
+                    19661,
+                    timestamp=datetime(2023, 10, 3, 9, 5),
+                    timeframe=timedelta(minutes=5),
                 ),
                 Candle(
                     14842,
@@ -865,24 +946,55 @@ class TestCandleSort:
                     14835,
                     540,
                     timestamp=datetime(2023, 10, 3, 9, 10),
+                    timeframe=timedelta(minutes=5),
                 ),
             ],
             timeframe=timedelta(minutes=5),
         )
 
         manager.insert(
-            Candle(1301, 3007, 11626, 19048, 28909, timestamp=datetime(2023, 10, 3, 9, 2))
+            Candle(
+                1301,
+                3007,
+                11626,
+                19048,
+                28909,
+                timestamp=datetime(2023, 10, 3, 9, 2),
+                timeframe=timedelta(minutes=5),
+            )
         )
+
         expected = [
             Candle(
-                1301, 3007, 11626, 19048, 28909, timestamp=datetime(2023, 10, 3, 9, 0)
+                1301,
+                3007,
+                11626,
+                19048,
+                28909,
+                timestamp=datetime(2023, 10, 3, 9, 0),
+                timeframe=timedelta(minutes=5),
             ),
-            Candle(1301, 3007, 7813, 3615, 48570, timestamp=datetime(2023, 10, 3, 9, 5)),
             Candle(
-                14842, 14842, 14831, 14835, 540, timestamp=datetime(2023, 10, 3, 9, 10)
+                1301,
+                3007,
+                7813,
+                3615,
+                48570,
+                timestamp=datetime(2023, 10, 3, 9, 5),
+                timeframe=timedelta(minutes=5),
+            ),
+            Candle(
+                14842,
+                14842,
+                14831,
+                14835,
+                540,
+                timestamp=datetime(2023, 10, 3, 9, 10),
+                timeframe=timedelta(minutes=5),
             ),
         ]
         expected[1].aggregation_factor = 2
+
         assert manager.candles == expected
 
     def test_sort_candles_append_timeframed_on_untimeframed(self):
@@ -951,6 +1063,7 @@ class TestMergingCandlesTimeFrame:
 
         expected = data_input
         expected[-1].timestamp = datetime(2023, 10, 3, 9, 15)
+        expected[-1].timeframe = timedelta(minutes=5)
 
         manager = CandleManager([data_input[0]], timeframe=timedelta(minutes=5))
 
@@ -971,6 +1084,7 @@ class TestMergingCandlesTimeFrame:
         expected = [candles_T5[0], candles_T5[1], candles_T5[2]]
         expected.append(candles[20])
         expected[-1].timestamp = datetime(2023, 10, 3, 9, 25)
+        expected[-1].timeframe = timedelta(minutes=5)
 
         manager = CandleManager(data_input, timeframe=timedelta(minutes=5))
         manager.append(candles[20])
@@ -1128,7 +1242,7 @@ class TestMergingCandlesTimeFrame:
                 33410.8,
                 33410.8,
                 24,
-                timestamp=datetime(2023, 10, 3, 1, 47),
+                timestamp=datetime(2023, 10, 3, 1, 46),
             ),
             Candle(
                 33411.3,
@@ -1177,6 +1291,7 @@ class TestMergingCandlesTimeFrame:
         manager = CandleManager([], timeframe=timedelta(minutes=5))
 
         for candle in data_input:
+            candle.timeframe = timedelta(minutes=1)
             manager.append(candle)
 
         assert manager.candles == expected
@@ -1193,12 +1308,14 @@ def test_resample_candles_t5_missing_section_fill(candles_T5: list[Candle]):
         candles_T5[0].close,
         0,
         timestamp=candles_T5[0].timestamp + timedelta(minutes=5),
+        timeframe=timedelta(minutes=5),
+        aggregation_factor=0,
     )
-    filler.aggregation_factor = 0
 
     manager = CandleManager(
         cut_candles, timeframe=timedelta(minutes=5), timeframe_fill=True
     )
+
     assert manager.candles == [
         candles_T5[0],
         filler,
@@ -1220,9 +1337,10 @@ def test_resample_candles_t5_missing_section_fill_all(candles_T5: list[Candle]):
                 candles_T5[0].close,
                 0,
                 timestamp=candles_T5[0].timestamp + (timedelta(minutes=5) * (i + 1)),
+                timeframe=timedelta(minutes=5),
+                aggregation_factor=0,
             )
         )
-        filler_candles[-1].aggregation_factor = 0
 
     manager = CandleManager(
         cut_candles, timeframe=timedelta(minutes=5), timeframe_fill=True
@@ -1243,6 +1361,7 @@ def test_resample_candles_t5_missing_section_fill_all_extra(
     blank_candle.low = blank_candle.close
     blank_candle.volume = 0
     blank_candle.aggregation_factor = 0
+    blank_candle.timeframe = timedelta(minutes=5)
 
     filler_candles = []
     for i in range(99):

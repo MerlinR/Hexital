@@ -8,7 +8,7 @@ from hexital.utils.timeframe import (
     convert_timeframe_to_timedelta,
     round_down_timestamp,
     timedelta_to_str,
-    timeframe_validation,
+    validate_timeframe,
 )
 
 
@@ -35,7 +35,7 @@ class VWAP(Indicator[float]):
         return f"{self._name}_{timedelta_to_str(self.anchor)}"
 
     def _validate_fields(self):
-        if not timeframe_validation(self.anchor):
+        if not validate_timeframe(self.anchor):
             raise InvalidConfiguration(f"Anchor is Invalid: {self.anchor}")
 
         self.anchor = convert_timeframe_to_timedelta(self.anchor)

@@ -51,26 +51,26 @@ def create_graph(data: dict, title: str):
     plt.savefig(f"{PATH}/{title}.png")
 
 
-def test_pandas_ta_bulk(candle_length: int, strat: list):
+def test_pandas_ta_bulk(candle_length: int, strategy: list):
     df = pd.DataFrame.from_dict(generate_random_candles(candle_length))
     df.set_index("timestamp", inplace=True)
 
     MyStrategy = ta.Strategy(
         name="Truth Source",
-        ta=strat,
+        ta=strategy,
     )
     start_time = time.time()
     df.ta.strategy(MyStrategy)
     return time.time() - start_time
 
 
-def test_pandas_ta_incremental(candle_length: int, strat: list):
+def test_pandas_ta_incremental(candle_length: int, strategy: list):
     df = pd.DataFrame.from_dict(generate_random_candles(candle_length))
     df.set_index("timestamp", inplace=True)
 
     MyStrategy = ta.Strategy(
         name="Truth Source",
-        ta=strat,
+        ta=strategy,
     )
     used_df = pd.DataFrame([df.iloc[0]])
 
@@ -81,17 +81,19 @@ def test_pandas_ta_incremental(candle_length: int, strat: list):
     return time.time() - start_time
 
 
-def test_hexital_bulk(candle_length: int, strat: list):
-    hexitl = Hexital("test", Candle.from_dicts(generate_random_candles(candle_length)), strat)
+def test_hexital_bulk(candle_length: int, strategy: list):
+    hexitl = Hexital(
+        "test", Candle.from_dicts(generate_random_candles(candle_length)), strategy
+    )
     start_time = time.time()
     hexitl.calculate()
     return time.time() - start_time
 
 
-def hexital_incremental(candle_length: int, strat: list):
+def hexital_incremental(candle_length: int, strategy: list):
     candles = Candle.from_dicts(generate_random_candles(candle_length))
 
-    hexitl = Hexital("Test Stratergy", [candles[0]], strat)
+    hexitl = Hexital("Test Stratergy", [candles[0]], strategy)
     start_time = time.time()
     for i in range(1, len(candles)):
         hexitl.calculate()

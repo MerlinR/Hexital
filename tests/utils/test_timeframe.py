@@ -4,6 +4,8 @@ import pytest
 from hexital import TimeFrame
 from hexital.exceptions import InvalidTimeFrame
 from hexital.utils.timeframe import (
+    NullTimeFrame,
+    convert_timeframe_to_str,
     round_down_timestamp,
     timedelta_to_str,
     timeframe_to_timedelta,
@@ -46,6 +48,20 @@ class TestRoundDownTimestamp:
         assert round_down_timestamp(
             datetime(2023, 6, 6, 12, 9, 43, 3857), timedelta(days=1)
         ) == datetime(2023, 6, 6, 0, 0, 0)
+
+
+class TestParseTimeframe:
+    def test_hextial_parse_timeframe(self):
+        assert convert_timeframe_to_str(None) is None
+
+    def test_hextial_parse_timeframe_two(self):
+        assert convert_timeframe_to_str(NullTimeFrame) is None
+
+    def test_hextial_parse_timeframe_three(self):
+        assert convert_timeframe_to_str(10) == "S10"
+
+    def test_hextial_parse_timeframe_four(self):
+        assert convert_timeframe_to_str(timedelta(minutes=15)) == "T15"
 
 
 class TestTimeframeToTimeDelta:
@@ -111,15 +127,21 @@ class TestTimedeltaToStr:
 class TestWithinTimeframe:
     def test_within_basic(self):
         assert within_timeframe(
-            datetime(2024, 6, 9, 9, 3, 0), datetime(2024, 6, 9, 9, 5, 0), timedelta(minutes=5)
+            datetime(2024, 6, 9, 9, 3, 0),
+            datetime(2024, 6, 9, 9, 5, 0),
+            timedelta(minutes=5),
         )
 
     def test_within_false(self):
         assert not within_timeframe(
-            datetime(2024, 6, 9, 9, 7, 0), datetime(2024, 6, 9, 9, 5, 0), timedelta(minutes=5)
+            datetime(2024, 6, 9, 9, 7, 0),
+            datetime(2024, 6, 9, 9, 5, 0),
+            timedelta(minutes=5),
         )
 
     def test_within_on(self):
         assert within_timeframe(
-            datetime(2024, 6, 9, 9, 5, 0), datetime(2024, 6, 9, 9, 5, 0), timedelta(minutes=5)
+            datetime(2024, 6, 9, 9, 5, 0),
+            datetime(2024, 6, 9, 9, 5, 0),
+            timedelta(minutes=5),
         )

@@ -6,11 +6,17 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ---
 
-## 3.X
+## 4.X
 
 *Release Date: X*
 
 - Major Typing update, some method clean up and optimisation
+- TimeFrames are now required*
+    - * Indicators with no timeframe with no timeframed Candles still function.
+- Altered how append "timeframe" argument is treated
+    - Append/Prepend/Insert, the timeframe argument will set Candles to that timeframe `start.append(candle, "T1")`
+- Indicators/default timeframe, will inherit a timeframe from Candle's or the appending methods
+- Timeframe default has changed from str CONST "default" TimeFrame DEFAULT = "N"
 
 ---
 

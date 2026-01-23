@@ -5,10 +5,10 @@ PATH = "tests/data/"
 
 
 def profile_ema(candles):
-    strat = Hexital("test", [], [indicators.EMA(), indicators.EMA(timeframe="T5")])
+    strategy = Hexital("test", [], [indicators.EMA(), indicators.EMA(timeframe="T5")])
 
     for i, candle in enumerate(candles):
-        strat.append(candle)
+        strategy.append(candle)
 
 
 def profile_supertrend(candles):
@@ -19,52 +19,56 @@ def profile_supertrend(candles):
 
 
 def default(candles):
-    strat = Hexital("test", [], [indicators.EMA(), indicators.EMA()])
+    strategy = Hexital("test", [], [indicators.EMA(), indicators.EMA()])
 
     for i, candle in enumerate(candles):
-        strat.append(candle)
+        strategy.append(candle)
 
 
 def default_prepend(candles):
-    strat = Hexital("test", [], [indicators.EMA(), indicators.EMA()])
+    strategy = Hexital("test", [], [indicators.EMA(), indicators.EMA()])
 
     for i, candle in enumerate(candles):
-        strat.prepend(candle)
+        strategy.prepend(candle)
 
 
 def timeframe_1t(candles):
-    strat = Hexital("test", [], [indicators.EMA(), indicators.EMA(timeframe="T1")])
+    strategy = Hexital("test", [], [indicators.EMA(), indicators.EMA(timeframe="T1")])
 
     for i, candle in enumerate(candles):
-        strat.append(candle)
+        strategy.append(candle)
 
 
 def timeframe_prepend_1t(candles):
-    strat = Hexital("test", [], [indicators.EMA(), indicators.EMA(timeframe="T1")])
+    strategy = Hexital("test", [], [indicators.EMA(), indicators.EMA(timeframe="T1")])
 
     for candle in reversed(candles):
-        strat.prepend(candle)
+        strategy.prepend(candle)
 
 
 def timeframe_5t(candles):
-    strat = Hexital("test", [], [indicators.EMA(), indicators.EMA(timeframe="T5")])
+    strategy = Hexital("test", [], [indicators.EMA(), indicators.EMA(timeframe="T5")])
 
     for i, candle in enumerate(candles):
-        strat.append(candle)
+        strategy.append(candle)
 
 
 def timeframe_append(candles):
-    strat = Hexital("test", [], [indicators.Supertrend(), indicators.Supertrend(timeframe="T5")])
+    strategy = Hexital(
+        "test", [], [indicators.Supertrend(), indicators.Supertrend(timeframe="T5")]
+    )
 
     for candle in candles:
-        strat.append(candle)
+        strategy.append(candle)
 
 
 def timeframe_prepend(candles):
-    strat = Hexital("test", [], [indicators.Supertrend(), indicators.Supertrend(timeframe="T5")])
+    strategy = Hexital(
+        "test", [], [indicators.Supertrend(), indicators.Supertrend(timeframe="T5")]
+    )
 
     for candle in reversed(candles):
-        strat.prepend(candle)
+        strategy.prepend(candle)
 
 
 if __name__ == "__main__":

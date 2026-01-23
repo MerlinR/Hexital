@@ -6,7 +6,7 @@ from typing import Any, Generic, TypeVar
 
 from hexital.core import Reading
 from hexital.core.candle import Candle
-from hexital.core.candle_manager import DEFAULT_CANDLES, CandleManager, Candles
+from hexital.core.candle_manager import CandleManager, Candles
 from hexital.core.candlestick_type import CandlestickType
 from hexital.core.indicator import Indicator, NestedSource, Source
 from hexital.core.indicator_collection import IndicatorCollection
@@ -15,10 +15,11 @@ from hexital.indicators.amorph import Amorph
 from hexital.utils.candles import reading_by_candle, reading_by_index
 from hexital.utils.candlesticks import validate_candlesticktype
 from hexital.utils.timeframe import (
+    NullTimeFrame,
     TimeFramesSource,
+    convert_timeframe_to_str,
     convert_timeframe_to_timedelta,
     timedelta_to_str,
-    timeframe_validation,
 )
 
 
@@ -29,10 +30,9 @@ class Hexital:
     candle_life: timedelta | None = None
     candlestick: CandlestickType | None
 
-    _candle_map: dict[str, CandleManager]
+    _candle_managers: list[CandleManager]
     _indicators: dict[str, Indicator]
     _timeframe: timedelta | None
-    _default_name: str
 
     def __init__(
         self,
@@ -63,9 +63,7 @@ class Hexital:
             timeframe_fill=self.timeframe_fill,
             candlestick=self.candlestick,
         )
-
-        self._default_name = manager.name
-        self._candle_map = {manager.name: manager}
+        self._candle_managers = [manager]
 
         if not indicators:
             self._indicators = {}
@@ -80,7 +78,7 @@ class Hexital:
 
     @property
     def timeframes(self) -> set[str]:
-        return {manager.name for manager in self._candle_map.values()}
+        return {manager.name for manager in self._candle_managers}
 
     @property
     def indicators(self) -> dict[str, Indicator]:
@@ -99,22 +97,24 @@ class Hexital:
 
     def candles(self, name: TimeFramesSource | None = None) -> list[Candle]:
         """Get a set of candles by using either a Timeframe or Indicator name"""
-        name_ = name if name else self._default_name
-        timeframe_name = self._parse_timeframe(name)
+        name_ = name if name else self._candle_managers[0].name
+        timeframe_name = convert_timeframe_to_str(name)
 
         name_ = timeframe_name if timeframe_name else name_
 
-        if isinstance(name_, str) and self._candle_map.get(name_, False):
-            return self._candle_map[name_].candles
         if isinstance(name_, str):
-            for manager in self._candle_map.values():
+            if manager := next(
+                (m for m in self._candle_managers if m.name == name_), None
+            ):
+                return manager.candles
+            for manager in self._candle_managers:
                 if manager.find_indicator(name_):
                     return manager.candles
 
         return []
 
     def get_candles(self) -> dict[str, list[Candle]]:
-        return {name: manager.candles for name, manager in self._candle_map.items()}
+        return {manager.name: manager.candles for manager in self._candle_managers}
 
     @property
     def settings(self) -> dict:
@@ -177,11 +177,11 @@ class Hexital:
         if isinstance(source, (Indicator, NestedSource)):
             return source.reading(index=index)
         if reading := reading_by_index(
-            self._candle_map[self._default_name].candles, source, index=index
+            self._candle_managers[0].candles, source, index=index
         ):
             return reading
 
-        for candle_manager in self._candle_map.values():
+        for candle_manager in self._candle_managers:
             reading = reading_by_index(candle_manager.candles, source, index=index)
             if reading is not None:
                 return reading
@@ -248,16 +248,16 @@ class Hexital:
 
         Args:
             candles: The Candle or List of Candle's to prepend.
-            timeframe: A specific timeframe to insert Candle's into
+            timeframe: Set the timeframe of the Candle's being prepended.
         """
-        timeframe_name = self._parse_timeframe(timeframe)
 
-        if timeframe_name and self._candle_map.get(timeframe_name):
-            self._candle_map[timeframe_name].prepend(candles)
-        else:
-            for candle_manager in self._candle_map.values():
-                candle_manager.prepend(candles)
+        timeframe_delta = convert_timeframe_to_timedelta(timeframe)
 
+        for candle_manager in self._candle_managers:
+            candle_manager.prepend(
+                candles,
+                timeframe=timeframe_delta,
+            )
         self.calculate()
 
     def append(
@@ -268,16 +268,17 @@ class Hexital:
         """append a Candle or a chronological ordered list of Candle's to the end of the Hexital Candle's. This wil only re-sample and re-calculate the new Candles, with minor overlap.
 
         Args:
-            candles: The Candle or List of Candle's to prepend.
-            timeframe: A specific timeframe to insert Candle's into
+            candles: The Candle or List of Candle's to appended.
+            timeframe: Set the timeframe of the Candle's being cappended.
         """
-        timeframe_name = self._parse_timeframe(timeframe)
 
-        if timeframe_name and self._candle_map.get(timeframe_name):
-            self._candle_map[timeframe_name].append(candles)
-        else:
-            for candle_manager in self._candle_map.values():
-                candle_manager.append(candles)
+        timeframe_delta = convert_timeframe_to_timedelta(timeframe)
+
+        for candle_manager in self._candle_managers:
+            candle_manager.append(
+                candles,
+                timeframe=timeframe_delta,
+            )
 
         self.calculate()
 
@@ -289,16 +290,16 @@ class Hexital:
         """insert a Candle or a list of Candle's to the Hexital Candles. This accepts any order or placement. This will sort, re-sample and re-calculate all Candles.
 
         Args:
-            candles: The Candle or List of Candle's to prepend.
-            timeframe: A specific timeframe to insert Candle's into
+            candles: The Candle or List of Candle's to inserted.
+            timeframe: Set the timeframe of the Candle's being inserted.
         """
-        timeframe_name = self._parse_timeframe(timeframe)
+        timeframe_delta = convert_timeframe_to_timedelta(timeframe)
 
-        if timeframe_name and self._candle_map.get(timeframe_name):
-            self._candle_map[timeframe_name].insert(candles)
-        else:
-            for candle_manager in self._candle_map.values():
-                candle_manager.insert(candles)
+        for candle_manager in self._candle_managers:
+            candle_manager.insert(
+                candles,
+                timeframe=timeframe_delta,
+            )
 
         self.calculate_index(index=0, end_index=-1)
 
@@ -342,20 +343,6 @@ class Hexital:
         elif indicator := self._find_indicator(source):
             indicator.purge()
 
-    def _parse_timeframe(self, timeframe: TimeFramesSource | None) -> str | None:
-        if not timeframe:
-            return None
-
-        if timeframe == self._default_name:
-            return self._default_name
-
-        if not timeframe_validation(timeframe):
-            return None
-
-        name = convert_timeframe_to_timedelta(timeframe)
-
-        return None if not name else timedelta_to_str(name)
-
     def _validate_indicators(
         self, indicators: Sequence[dict | Indicator]
     ) -> dict[str, Indicator]:
@@ -378,10 +365,17 @@ class Hexital:
             valid_indicators[new_indicator.name] = new_indicator
 
         for indicator in valid_indicators.values():
-            if indicator.candle_manager.name in self._candle_map:
-                indicator.candle_manager = self._candle_map[indicator.candle_manager.name]
-            elif indicator.candle_manager.name == DEFAULT_CANDLES:
-                indicator.candle_manager = self._candle_map[self._default_name]
+            if existing := next(
+                (
+                    m
+                    for m in self._candle_managers
+                    if m.name == indicator.candle_manager.name
+                ),
+                None,
+            ):
+                indicator.candle_manager = existing
+            elif indicator.candle_manager.name == NullTimeFrame.name:
+                indicator.candle_manager = self._candle_managers[0]
             else:
                 manager = CandleManager(
                     [],
@@ -395,8 +389,8 @@ class Hexital:
                     else self.candlestick,
                 )
 
-                manager.append(self._candle_map[self._default_name].candles)
-                self._candle_map[manager.name] = manager
+                manager.append(self._candle_managers[0].candles)
+                self._candle_managers.append(manager)
                 indicator.candle_manager = manager
 
         return valid_indicators

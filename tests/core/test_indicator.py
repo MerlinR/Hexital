@@ -8,6 +8,7 @@ from hexital.candlesticks.heikinashi import HeikinAshi
 from hexital.core.indicator import Indicator
 from hexital.exceptions import InvalidCandlestickType
 from hexital.indicators.amorph import Amorph
+from hexital.utils import timeframe
 
 
 @dataclass(kw_only=True)
@@ -31,15 +32,24 @@ class FakeIndicator(Indicator):
 def test_calculate(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     test.calculate()
-    assert minimal_candles[-1].indicators.get("Fake_10")
+    assert minimal_candles[-1].indicators.get("Fake_10_T1")
 
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_name_default(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     test.calculate()
-    assert test.reading("Fake_10")
-    assert test.name == "Fake_10"
+    assert test.reading("Fake_10_T1")
+    assert test.name == "Fake_10_T1"
+
+
+@pytest.mark.usefixtures("minimal_candles_untimeframed")
+def test_name_default_timeframe_inherit(minimal_candles_untimeframed: list[Candle]):
+    test = FakeIndicator(timeframe=timeframe.TimeFrame.MINUTE)
+    test.append(minimal_candles_untimeframed)
+    test.calculate()
+    assert test.reading("Fake_10_T1")
+    assert test.name == "Fake_10_T1"
 
 
 @pytest.mark.usefixtures("minimal_candles")

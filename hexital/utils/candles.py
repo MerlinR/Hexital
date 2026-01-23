@@ -1,5 +1,33 @@
+from datetime import datetime
+from typing import TypeAlias
+
 from hexital.core.candle import Candle
 from hexital.utils.indexing import absindex, valid_index
+
+Candles: TypeAlias = Candle | list[Candle] | dict | list[dict] | list | list[list]
+
+
+def parse_candles(candles: Candles) -> list[Candle]:
+    candles_ = []
+
+    if isinstance(candles, Candle):
+        candles_.append(candles)
+    elif isinstance(candles, dict):
+        candles_.append(Candle.from_dict(candles))
+    elif isinstance(candles, list) and candles:
+        candle_ = candles[0]
+        if isinstance(candle_, Candle):
+            candles_.extend(candles)
+        elif isinstance(candle_, dict):
+            candles_.extend(Candle.from_dicts(candles))
+        elif isinstance(candle_, (float, int, datetime)):
+            candles_.append(Candle.from_list(candles))
+        elif isinstance(candle_, list):
+            candles_.extend(Candle.from_lists(candles))
+        else:
+            raise TypeError
+
+    return candles_
 
 
 def reading_by_index(

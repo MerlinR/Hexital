@@ -1,6 +1,5 @@
 from hexital.analysis import utils
 from hexital.core.candle import Candle
-from hexital.core.candle_manager import DEFAULT_CANDLES
 from hexital.core.hexital import Hexital
 from hexital.core.indicator import Indicator
 from hexital.utils.candles import (
@@ -22,7 +21,7 @@ def _retrieve_candles(
     if isinstance(obj, Indicator):
         return obj.candles
     if isinstance(obj, Hexital) and not indicator and not indicator_cmp:
-        return obj.candles(DEFAULT_CANDLES)
+        return obj.candles()
     if isinstance(obj, Hexital) and indicator:
         return obj.find_candle_pairing(indicator, indicator_cmp)
 

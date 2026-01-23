@@ -9,12 +9,14 @@ from typing import Generic, TypeAlias, TypeVar
 
 from hexital.core import Reading
 from hexital.core.candle import Candle
-from hexital.core.candle_manager import CandleManager, Candles
+from hexital.core.candle_manager import CandleManager
 from hexital.core.candlestick_type import CandlestickType
 from hexital.utils.candles import (
+    Candles,
     candles_average,
     candles_sum,
     get_readings_period,
+    parse_candles,
     reading_by_candle,
     reading_count,
     reading_period,
@@ -126,6 +128,17 @@ class Indicator(Generic[V], ABC):
         self.candle_life = manager.candle_life
         self.candlestick = manager.candlestick
 
+    def _sync_from_manager(self):
+        """Sync indicator properties from candle manager (used after manager state changes)"""
+        self.timeframe = (
+            timedelta_to_str(self._candle_mngr.timeframe)
+            if self._candle_mngr.timeframe
+            else None
+        )
+        self._timeframe = self._candle_mngr.timeframe
+        for indicator in {**self.sub_indicators, **self.managed_indicators}.values():
+            indicator._sync_from_manager()
+
     @property
     def settings(self) -> dict:
         """
@@ -181,23 +194,33 @@ class Indicator(Generic[V], ABC):
         """
         return self._find_readings(name)  # type: ignore
 
+    def _check_timeframes(self, candles: Candles) -> list[Candle]:
+        """Ensures that the candles being added have the correct timeframe."""
+        candles_ = parse_candles(candles)
+
+        for candle in candles_:
+            if self._candle_mngr.timeframe and not candle.timeframe:
+                candle.timeframe = self._candle_mngr.timeframe
+        return candles_
+
     def prepend(self, candles: Candles):
         """Prepends a Candle or a chronological ordered list of Candle's to the front of the Indicator Candle's. This will only re-sample and re-calculate the new Candles, with minor overlap.
 
         Args:
             candles: The Candle or List of Candle's to prepend.
         """
-
-        self._candle_mngr.prepend(candles)
+        self._candle_mngr.prepend(self._check_timeframes(candles))
+        self._sync_from_manager()
         self.calculate()
 
     def append(self, candles: Candles):
-        """append a Candle or a chronological ordered list of Candle's to the end of the Indicator Candle's. This wil only re-sample and re-calculate the new Candles, with minor overlap.
+        """Appends a Candle or a chronological ordered list of Candle's to the end of the Indicator Candle's. This will only re-sample and re-calculate the new Candles, with minor overlap.
 
         Args:
-            candles: The Candle or List of Candle's to prepend.
+            candles: The Candle or List of Candle's to append.
         """
-        self._candle_mngr.append(candles)
+        self._candle_mngr.append(self._check_timeframes(candles))
+        self._sync_from_manager()
         self.calculate()
 
     def insert(self, candles: Candles):
@@ -206,7 +229,8 @@ class Indicator(Generic[V], ABC):
         Args:
             candles: The Candle or List of Candle's to prepend.
         """
-        self._candle_mngr.insert(candles)
+        self._candle_mngr.insert(self._check_timeframes(candles))
+        self._sync_from_manager()
         self.calculate_index(0, -1)
 
     @property
@@ -353,6 +377,9 @@ class Indicator(Generic[V], ABC):
         return indicator
 
     def _find_reading(self, source: Source | None = None, index: int | None = None) -> V:
+        if not self.candles:
+            return None  # type: ignore
+
         if index is None:
             index = self._active_index
         elif valid_index(index, len(self.candles)):
@@ -367,6 +394,9 @@ class Indicator(Generic[V], ABC):
         return reading_by_candle(self.candles[index], source.name)
 
     def _find_readings(self, source: Source | None = None) -> list[Reading | V]:
+        if not self.candles:
+            return []
+
         if not source:
             name = self.name
             return [reading_by_candle(candle, name) for candle in self.candles]

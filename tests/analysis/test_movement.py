@@ -67,46 +67,46 @@ def fixture_gen_indicator_candles(candles: list[Candle]):
 
 @pytest.fixture(name="hexital_candles")
 def fixture_hexital_candles(candles: list[Candle]):
-    strat = Hexital(
-        "Multi-Timeframe",
+    strategy = Hexital(
+        "EMA_SingleTimeframe",
         candles,
         [EMA(name="EMA")],
     )
-    strat.calculate()
-    return strat
+    strategy.calculate()
+    return strategy
 
 
 @pytest.fixture(name="multi_candles")
 def fixture_hexital_multi_candles(candles: list[Candle]):
-    strat = Hexital(
+    strategy = Hexital(
         "Multi-Timeframe",
         candles,
         [EMA(name="EMA"), Supertrend(name="SUPERTREND")],
     )
-    strat.calculate()
-    return strat
+    strategy.calculate()
+    return strategy
 
 
 @pytest.fixture(name="multi_timeframe_candles")
 def fixture_hexital_multi_timeframe_candles(candles: list[Candle]):
-    strat = Hexital(
+    strategy = Hexital(
         "Multi-Timeframe",
         candles,
         [EMA(name="EMA"), EMA(name="EMA_T5", timeframe="T5")],
     )
-    strat.calculate()
-    return strat
+    strategy.calculate()
+    return strategy
 
 
 @pytest.fixture(name="multi_timeframe")
 def fixture_hexital_multi_timeframe(candles: list[Candle]):
-    strat = Hexital(
+    strategy = Hexital(
         "Multi-Timeframe",
         candles,
         [EMA(name="EMA", period=3), EMA(name="EMA_T5", timeframe="T5", period=10)],
     )
-    strat.calculate()
-    return strat
+    strategy.calculate()
+    return strategy
 
 
 @pytest.fixture(name="indicator_candles")
