@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Any
 
-from hexital.core.indicator import Indicator, Source
+from ..core.indicator import Indicator, Source
 
 
 @dataclass(kw_only=True)

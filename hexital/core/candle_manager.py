@@ -3,17 +3,17 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 from functools import cmp_to_key
 
-from hexital.core.candle import Candle
-from hexital.core.candlestick_type import CandlestickType
-from hexital.exceptions import InvalidCandleOrder
-from hexital.utils.candles import Candles, parse_candles, reading_by_candle
-from hexital.utils.common import CalcMode
-from hexital.utils.timeframe import (
+from ..exceptions import InvalidCandleOrder
+from ..utils.candles import Candles, parse_candles, reading_by_candle
+from ..utils.common import CalcMode
+from ..utils.timeframe import (
     NullTimeFrame,
     on_timeframe,
     round_down_timestamp,
     timedelta_to_str,
 )
+from .candle import Candle
+from .candlestick_type import CandlestickType
 
 
 class CandleManager:

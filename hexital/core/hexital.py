@@ -1,26 +1,30 @@
+from __future__ import annotations
+
 from collections.abc import Sequence
 from copy import copy
 from datetime import timedelta
 from importlib import import_module
 from typing import Any, Generic, TypeVar
 
-from hexital.core import Reading
-from hexital.core.candle import Candle
-from hexital.core.candle_manager import CandleManager, Candles
-from hexital.core.candlestick_type import CandlestickType
-from hexital.core.indicator import Indicator, NestedSource, Source
-from hexital.core.indicator_collection import IndicatorCollection
-from hexital.exceptions import InvalidAnalysis, InvalidIndicator
-from hexital.indicators.amorph import Amorph
-from hexital.utils.candles import reading_by_candle, reading_by_index
-from hexital.utils.candlesticks import validate_candlesticktype
-from hexital.utils.timeframe import (
+from ..exceptions import InvalidAnalysis, InvalidIndicator
+from ..indicators.amorph import Amorph
+from ..utils.candles import Candles, reading_by_candle, reading_by_index
+from ..utils.candlesticks import validate_candlesticktype
+from ..utils.timeframe import (
     NullTimeFrame,
     TimeFramesSource,
     convert_timeframe_to_str,
     convert_timeframe_to_timedelta,
     timedelta_to_str,
 )
+from . import Reading
+from .candle import Candle
+from .candle_manager import CandleManager
+from .candlestick_type import CandlestickType
+from .indicator import Indicator, NestedSource, Source
+from .indicator_collection import IndicatorCollection
+
+T = TypeVar("T", bound=IndicatorCollection)
 
 
 class Hexital:
@@ -28,7 +32,7 @@ class Hexital:
     description: str | None = None
     timeframe_fill: bool = False
     candle_life: timedelta | None = None
-    candlestick: CandlestickType | None
+    candlestick: CandlestickType | None = None
 
     _candle_managers: list[CandleManager]
     _indicators: dict[str, Indicator]
@@ -460,9 +464,6 @@ class Hexital:
             return candles, self.candles(indicator_cmp)
 
         return [], []
-
-
-T = TypeVar("T", bound=IndicatorCollection)
 
 
 class HexitalCol(Generic[T], Hexital):

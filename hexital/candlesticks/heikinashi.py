@@ -1,8 +1,8 @@
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from hexital.core.candle import Candle
-from hexital.core.candlestick_type import CandlestickType
+from ..core.candlestick_type import CandlestickType
+from ..utils.candles import Candle
 
 
 @dataclass(kw_only=True)

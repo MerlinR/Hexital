@@ -1,6 +1,6 @@
-from hexital.core.candle import Candle
-from hexital.utils.candles import get_readings_period
-from hexital.utils.indexing import absindex
+from ..core.candle import Candle
+from ..utils.candles import get_readings_period
+from ..utils.indexing import absindex
 
 
 def highest(

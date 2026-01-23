@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
 
-from hexital import indicators
-from hexital.core.indicator import Indicator, Managed, NestedSource, Source
+from ..core.indicator import Indicator, Managed, NestedSource, Source
+from .atr import ATR
+from .hla import HLA
 
 
 @dataclass(kw_only=True)
@@ -30,8 +31,8 @@ class Supertrend(Indicator[dict]):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.sub_atr = self.add_sub_indicator(indicators.ATR(period=self.period))
-        self.sub_hl = self.add_sub_indicator(indicators.HLA())
+        self.sub_atr = self.add_sub_indicator(ATR(period=self.period))
+        self.sub_hl = self.add_sub_indicator(HLA())
         self.data = self.add_managed_indicator(Managed())
 
     def _calculate_reading(self, index: int) -> dict:

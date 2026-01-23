@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import TypeAlias
 
-from hexital.core.candle import Candle
-from hexital.utils.indexing import absindex, valid_index
+from ..core.candle import Candle
+from .indexing import absindex, valid_index
 
 Candles: TypeAlias = Candle | list[Candle] | dict | list[dict] | list | list[list]
 

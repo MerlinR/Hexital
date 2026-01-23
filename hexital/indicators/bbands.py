@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Source
-from hexital.indicators.sma import SMA
-from hexital.indicators.stdev import STDEV
+from ..core.indicator import Indicator, Source
+from .sma import SMA
+from .stdev import STDEV
 
 
 @dataclass(kw_only=True)
@@ -32,7 +32,9 @@ class BBANDS(Indicator[dict]):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.sub_stdev = self.add_sub_indicator(STDEV(source=self.source, period=self.period))
+        self.sub_stdev = self.add_sub_indicator(
+            STDEV(source=self.source, period=self.period)
+        )
         self.sub_sma = self.add_sub_indicator(SMA(source=self.source, period=self.period))
 
     def _calculate_reading(self, index: int) -> dict:

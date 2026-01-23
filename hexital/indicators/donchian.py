@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
-from hexital.analysis import movement
-from hexital.core.indicator import Indicator
+from ..analysis import movement
+from ..core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
@@ -32,7 +32,9 @@ class Donchian(Indicator[dict]):
         donchian = {"DCL": None, "DCM": None, "DCU": None}
 
         if self.prev_exists() or self.reading_period(self.period, "high", index):
-            donchian["DCU"] = movement.highest(self.candles, "high", self.period - 1, index)
+            donchian["DCU"] = movement.highest(
+                self.candles, "high", self.period - 1, index
+            )
             donchian["DCL"] = movement.lowest(self.candles, "low", self.period - 1, index)
             donchian["DCM"] = (donchian["DCU"] + donchian["DCL"]) / 2
 

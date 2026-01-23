@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Managed, NestedSource, Source
+from ..core.indicator import Indicator, Managed, NestedSource, Source
 
 
 @dataclass(kw_only=True)
@@ -48,7 +48,10 @@ class CMO(Indicator[float | None]):
             ) / self.period
 
             losses = (
-                (self.data.prev_reading(NestedSource(self.data, "loss")) * (self.period - 1))
+                (
+                    self.data.prev_reading(NestedSource(self.data, "loss"))
+                    * (self.period - 1)
+                )
                 + change_loss
             ) / self.period
 

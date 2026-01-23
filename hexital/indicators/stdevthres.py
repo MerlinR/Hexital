@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Source
-from hexital.indicators.stdev import STDEV
+from ..core.indicator import Indicator, Source
+from .stdev import STDEV
 
 
 @dataclass(kw_only=True)

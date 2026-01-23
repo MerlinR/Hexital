@@ -1,9 +1,9 @@
 from dataclasses import dataclass, field
 from datetime import timedelta
 
-from hexital.core.indicator import Indicator, Managed, NestedSource
-from hexital.exceptions import InvalidConfiguration
-from hexital.utils.timeframe import (
+from ..core.indicator import Indicator, Managed, NestedSource
+from ..exceptions import InvalidConfiguration
+from ..utils.timeframe import (
     TimeFrame,
     convert_timeframe_to_timedelta,
     round_down_timestamp,

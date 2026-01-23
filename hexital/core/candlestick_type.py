@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from dataclasses import dataclass, field
 
-from hexital.core.candle import Candle
-from hexital.utils.common import CalcMode
-from hexital.utils.indexing import valid_index
-from hexital.utils.weakreflist import WeakList
+from ..utils.common import CalcMode
+from ..utils.indexing import valid_index
+from ..utils.weakreflist import WeakList
+from .candle import Candle
 
 
 @dataclass(kw_only=True)

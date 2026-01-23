@@ -1,6 +1,6 @@
-from hexital.candlesticks import CANDLESTICK_MAP
-from hexital.core.candlestick_type import CandlestickType
-from hexital.exceptions import InvalidCandlestickType
+from ..candlesticks import CANDLESTICK_MAP
+from ..core.candlestick_type import CandlestickType
+from ..exceptions import InvalidCandlestickType
 
 
 def validate_candlesticktype(

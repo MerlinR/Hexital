@@ -4,12 +4,12 @@ from collections.abc import Sequence
 from datetime import datetime, timedelta
 from typing import Any
 
-from hexital.core import Reading
-from hexital.utils.timeframe import (
+from ..utils.timeframe import (
     TimeFrame,
     TimeFramesSource,
     convert_timeframe_to_timedelta,
 )
+from . import Reading
 
 
 class Candle:
@@ -257,6 +257,7 @@ class Candle:
         Returns:
             Candle: A `Candle` object initialized with the data from the list.
         """
+        candle = list(candle)
         timestamp = None
         timeframe = None
         indicators = {}
@@ -268,7 +269,11 @@ class Candle:
             timestamp = candle.pop(0)
         if len(candle) > 5 and isinstance(candle[-1], (str, int, TimeFrame, timedelta)):
             timeframe = candle.pop(-1)
-        if len(candle) > 5 and isinstance(candle[-1], dict):
+        if (
+            len(candle) > 5
+            and isinstance(candle[-1], dict)
+            and isinstance(candle[-2], dict)
+        ):
             sub_indicators = candle.pop(-1)
             indicators = candle.pop(-1)
 

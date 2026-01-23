@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 
-from hexital.analysis import movement
-from hexital.core.indicator import Indicator, Managed, NestedSource, Source
-from hexital.indicators.sma import SMA
+from ..analysis import movement
+from ..core.indicator import Indicator, Managed, NestedSource, Source
+from .sma import SMA
 
 
 @dataclass(kw_only=True)

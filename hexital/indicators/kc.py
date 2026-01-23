@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Source
-from hexital.indicators import ATR, EMA
+from ..core.indicator import Indicator, Source
+from .atr import ATR
+from .ema import EMA
 
 
 @dataclass(kw_only=True)

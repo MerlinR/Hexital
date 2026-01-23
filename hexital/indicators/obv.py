@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator
+from ..core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
@@ -26,7 +26,7 @@ class OBV(Indicator[float]):
         if self.prev_exists():
             if self.candles[index].close == self.candles[index - 1].close:
                 return self.prev_reading()
-            elif self.candles[index].close > self.candles[index - 1].close:
+            if self.candles[index].close > self.candles[index - 1].close:
                 return self.prev_reading() + self.candles[index].volume
 
             return self.prev_reading() - self.candles[index].volume

@@ -1,7 +1,7 @@
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from hexital.core.indicator import Indicator
+from .indicator import Indicator
 
 
 @dataclass

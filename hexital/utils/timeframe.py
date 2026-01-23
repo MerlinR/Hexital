@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import TypeAlias
 
-from hexital.exceptions import InvalidTimeFrame
+from ..exceptions import InvalidTimeFrame
 
 VALID_TIMEFRAME_PREFIXES = "N", "S", "T", "H", "D"
 

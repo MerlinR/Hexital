@@ -1,8 +1,8 @@
 import inspect
+from collections.abc import Callable
 from copy import copy
-from typing import Callable
 
-from hexital.core.indicator import Indicator
+from ..core.indicator import Indicator
 
 
 class Amorph(Indicator):

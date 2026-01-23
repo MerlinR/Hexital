@@ -1,6 +1,6 @@
-from hexital.analysis import utils
-from hexital.core.candle import Candle
-from hexital.utils.indexing import absindex
+from ..core.candle import Candle
+from ..utils.indexing import absindex
+from . import utils
 
 
 def doji(

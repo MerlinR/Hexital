@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
-from hexital.analysis.utils import highest, lowest
-from hexital.core.indicator import Indicator, Source
+from ..analysis.utils import highest, lowest
+from ..core.indicator import Indicator, Source
 
 
 @dataclass(kw_only=True)

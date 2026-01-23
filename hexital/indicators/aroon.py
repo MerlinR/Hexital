@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
-from hexital.analysis import movement
-from hexital.core.indicator import Indicator
+from ..analysis import movement
+from ..core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
@@ -36,11 +36,17 @@ class AROON(Indicator[dict]):
         }
         if self.prev_exists() or self.reading_period(self.period + 1, "high"):
             aroon["AROONU"] = (
-                (self.period - movement.highestbar(self.candles, "high", self.period + 1, index))
+                (
+                    self.period
+                    - movement.highestbar(self.candles, "high", self.period + 1, index)
+                )
                 / self.period
             ) * 100
             aroon["AROOND"] = (
-                (self.period - movement.lowestbar(self.candles, "low", self.period + 1, index))
+                (
+                    self.period
+                    - movement.lowestbar(self.candles, "low", self.period + 1, index)
+                )
                 / self.period
             ) * 100
 

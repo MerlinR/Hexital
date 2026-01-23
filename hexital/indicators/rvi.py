@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Managed, NestedSource, Source
-from hexital.indicators.ema import EMA
-from hexital.indicators.stdev import STDEV
+from ..core.indicator import Indicator, Managed, NestedSource, Source
+from .ema import EMA
+from .stdev import STDEV
 
 
 @dataclass(kw_only=True)
@@ -34,7 +34,9 @@ class RVI(Indicator[float | None]):
     def _initialise(self):
         self.data = self.add_managed_indicator(Managed())
 
-        self.sub_stdev = self.add_sub_indicator(STDEV(source=self.source, period=self.period))
+        self.sub_stdev = self.add_sub_indicator(
+            STDEV(source=self.source, period=self.period)
+        )
         self.sub_pos = self.add_managed_indicator(
             EMA(
                 period=self.period,
@@ -75,6 +77,8 @@ class RVI(Indicator[float | None]):
         negative_smoothed = self.sub_neg.reading()
 
         if self.prev_exists() or positive_smoothed is not None:
-            return (self._scalar * positive_smoothed) / (positive_smoothed + negative_smoothed)
+            return (self._scalar * positive_smoothed) / (
+                positive_smoothed + negative_smoothed
+            )
 
         return None

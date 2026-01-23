@@ -7,11 +7,7 @@ from datetime import timedelta
 from enum import Enum, auto
 from typing import Generic, TypeAlias, TypeVar
 
-from hexital.core import Reading
-from hexital.core.candle import Candle
-from hexital.core.candle_manager import CandleManager
-from hexital.core.candlestick_type import CandlestickType
-from hexital.utils.candles import (
+from ..utils.candles import (
     Candles,
     candles_average,
     candles_sum,
@@ -21,14 +17,18 @@ from hexital.utils.candles import (
     reading_count,
     reading_period,
 )
-from hexital.utils.candlesticks import validate_candlesticktype
-from hexital.utils.common import round_values
-from hexital.utils.indexing import absindex, valid_index
-from hexital.utils.timeframe import (
+from ..utils.candlesticks import validate_candlesticktype
+from ..utils.common import round_values
+from ..utils.indexing import absindex, valid_index
+from ..utils.timeframe import (
     TimeFramesSource,
     convert_timeframe_to_timedelta,
     timedelta_to_str,
 )
+from . import Reading
+from .candle import Candle
+from .candle_manager import CandleManager
+from .candlestick_type import CandlestickType
 
 T = TypeVar("T")
 V = TypeVar("V")

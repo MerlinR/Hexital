@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator
+from ..core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
@@ -16,4 +16,6 @@ class HLCA(Indicator[float]):
         return f"{self._name}"
 
     def _calculate_reading(self, index: int) -> float:
-        return (self.candles[index].high + self.candles[index].low + self.candles[index].close) / 3
+        return (
+            self.candles[index].high + self.candles[index].low + self.candles[index].close
+        ) / 3

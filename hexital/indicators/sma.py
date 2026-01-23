@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Source
+from ..core.indicator import Indicator, Source
 
 
 @dataclass(kw_only=True)
@@ -31,7 +31,10 @@ class SMA(Indicator[float | None]):
         if self.prev_exists():
             return (
                 self.prev_reading()
-                - (self.reading(self.source, index - self.period) - self.reading(self.source))
+                - (
+                    self.reading(self.source, index - self.period)
+                    - self.reading(self.source)
+                )
                 / self.period
             )
 

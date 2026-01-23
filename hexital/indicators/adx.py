@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Managed, NestedSource
-from hexital.indicators.atr import ATR
-from hexital.indicators.rma import RMA
+from ..core.indicator import Indicator, Managed, NestedSource
+from .atr import ATR
+from .rma import RMA
 
 
 @dataclass(kw_only=True)

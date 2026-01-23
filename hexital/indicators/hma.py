@@ -1,8 +1,8 @@
 import math
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Managed, Source
-from hexital.indicators.wma import WMA
+from ..core.indicator import Indicator, Managed, Source
+from .wma import WMA
 
 
 @dataclass(kw_only=True)

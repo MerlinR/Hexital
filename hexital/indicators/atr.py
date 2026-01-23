@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator
-from hexital.indicators.tr import TR
+from ..core.indicator import Indicator
+from .tr import TR
 
 
 @dataclass(kw_only=True)
@@ -31,7 +31,9 @@ class ATR(Indicator[float | None]):
 
     def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists():
-            return (self.prev_reading() * (self.period - 1) + self.sub_tr.reading()) / self.period
+            return (
+                self.prev_reading() * (self.period - 1) + self.sub_tr.reading()
+            ) / self.period
 
         if self.sub_tr.reading_period(self.period):
             return self.sub_tr.candles_average(self.period)

@@ -1,14 +1,14 @@
-from hexital.analysis import utils
-from hexital.core.candle import Candle
-from hexital.core.hexital import Hexital
-from hexital.core.indicator import Indicator
-from hexital.utils.candles import (
+from ..analysis import utils
+from ..core.hexital import Hexital
+from ..core.indicator import Indicator
+from ..utils.candles import (
+    Candle,
     get_readings_period,
     reading_by_candle,
     reading_by_index,
 )
-from hexital.utils.indexing import absindex, valid_index
-from hexital.utils.timeframe import within_timeframe
+from ..utils.indexing import absindex, valid_index
+from ..utils.timeframe import within_timeframe
 
 
 def _retrieve_candles(

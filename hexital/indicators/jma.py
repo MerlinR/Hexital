@@ -1,7 +1,7 @@
 import math
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Managed, NestedSource, Source
+from ..core.indicator import Indicator, Managed, NestedSource, Source
 
 
 @dataclass(kw_only=True)
@@ -98,9 +98,9 @@ class JMA(Indicator[float | None]):
         ma_two = ma_one + self._phase_ratio * det_one
 
         # Stage Three
-        det_two = ((ma_two - self.prev_reading(default=price)) * (1 - alpha) * (1 - alpha)) + (
-            alpha * alpha * det_two
-        )
+        det_two = (
+            (ma_two - self.prev_reading(default=price)) * (1 - alpha) * (1 - alpha)
+        ) + (alpha * alpha * det_two)
         jma = self.prev_reading(default=price) + det_two
 
         self.data.set_reading(

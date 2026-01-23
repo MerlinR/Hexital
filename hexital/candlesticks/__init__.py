@@ -1,5 +1,4 @@
-from hexital.core.candlestick_type import CandlestickType
-
+from ..core.candlestick_type import CandlestickType
 from .heikinashi import HeikinAshi
 
 
