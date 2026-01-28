@@ -106,8 +106,8 @@ class Indicator(Generic[V], ABC):
     def _validate_fields(self):
         return
 
-    @abstractmethod
-    def _generate_name(self) -> str: ...
+    def _generate_name(self) -> str:
+        return self._name
 
     @property
     def candle_manager(self) -> CandleManager:

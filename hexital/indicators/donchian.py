@@ -5,7 +5,7 @@ from ..core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
-class Donchian(Indicator[dict]):
+class Donchian(Indicator[dict[str, float | None]]):
     """Donchian Channels - Donchian
 
     Donchian Channels are a technical indicator that seeks to identify
@@ -28,14 +28,13 @@ class Donchian(Indicator[dict]):
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
-    def _calculate_reading(self, index: int) -> dict:
-        donchian = {"DCL": None, "DCM": None, "DCU": None}
+    def _calculate_reading(self, index: int) -> dict[str, float | None]:
+        donchian: dict[str, float | None] = {"DCL": None, "DCM": None, "DCU": None}
 
         if self.prev_exists() or self.reading_period(self.period, "high", index):
-            donchian["DCU"] = movement.highest(
-                self.candles, "high", self.period - 1, index
-            )
-            donchian["DCL"] = movement.lowest(self.candles, "low", self.period - 1, index)
-            donchian["DCM"] = (donchian["DCU"] + donchian["DCL"]) / 2
+            dcu = movement.highest(self.candles, "high", self.period - 1, index)
+            dcl = movement.lowest(self.candles, "low", self.period - 1, index)
+            dcm = (dcu + dcl) / 2
+            donchian = {"DCL": dcl, "DCM": dcm, "DCU": dcu}
 
         return donchian

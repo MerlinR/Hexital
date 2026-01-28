@@ -22,10 +22,12 @@ class TR(Indicator[float | None]):
         return self._name
 
     def _calculate_reading(self, index: int) -> float | None:
-        if self.prev_exists("close"):
+        candle = self.candles[index]
+
+        if index > 0:
             close = self.candles[index - 1].close
-            high = self.candles[index].high
-            low = self.candles[index].low
+            high = candle.high
+            low = candle.low
             return max(high - low, abs(high - close), abs(low - close))
 
         return None

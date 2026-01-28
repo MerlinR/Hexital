@@ -61,16 +61,19 @@ class JMA(Indicator[float | None]):
         price = self.reading(self.source)
         uband = self.prev_reading(NestedSource(self.data, "uband"), price)
         lband = self.prev_reading(NestedSource(self.data, "lband"), price)
-        vsums = self.prev_reading(NestedSource(self.data, "vsums"), 0)
+        vsums = self.prev_reading(NestedSource(self.data, "vsums"), 0.0)
         ma_one = self.prev_reading(NestedSource(self.data, "ma_one"), price)
-        ma_two = self.prev_reading(NestedSource(self.data, "ma_two"), 0)
-        det_one = self.prev_reading(NestedSource(self.data, "det_one"), 0)
-        det_two = self.prev_reading(NestedSource(self.data, "det_two"), 0)
+        ma_two = self.prev_reading(NestedSource(self.data, "ma_two"), 0.0)
+        det_one = self.prev_reading(NestedSource(self.data, "det_one"), 0.0)
+        det_two = self.prev_reading(NestedSource(self.data, "det_two"), 0.0)
+
+        if not uband or not lband or not price:
+            return None
 
         # Price Volatility
         del1 = price - uband
         del2 = price - lband
-        volty = max(abs(del1), abs(del2)) if abs(del1) != abs(del2) else 0
+        volty = max(abs(del1), abs(del2)) if abs(del1) != abs(del2) else 0.0
         self.data.set_reading({"volty": volty})
 
         # Relative Price Volatility

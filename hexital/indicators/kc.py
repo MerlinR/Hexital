@@ -6,7 +6,7 @@ from .ema import EMA
 
 
 @dataclass(kw_only=True)
-class KC(Indicator[dict]):
+class KC(Indicator[dict[str, float | None]]):
     """Keltner Channel - KC
 
     Keltner channel is a technical analysis indicator showing a central moving
@@ -36,7 +36,7 @@ class KC(Indicator[dict]):
         self.sub_atr = self.add_sub_indicator(ATR(period=self.period))
         self.sub_ema = self.add_sub_indicator(EMA(source=self.source, period=self.period))
 
-    def _calculate_reading(self, index: int) -> dict:
+    def _calculate_reading(self, index: int) -> dict[str, float | None]:
         atr_ = self.sub_atr.reading()
         ema_ = self.sub_ema.reading()
 
@@ -46,8 +46,4 @@ class KC(Indicator[dict]):
         lower = ema_ - (self.multiplier * atr_)
         upper = ema_ + (self.multiplier * atr_)
 
-        return {
-            "lower": lower,
-            "band": ema_,
-            "upper": upper,
-        }
+        return {"lower": lower, "band": ema_, "upper": upper}

@@ -4,7 +4,7 @@ from ..core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
-class PivotPoints(Indicator[dict]):
+class PivotPoints(Indicator[dict[str, float | None]]):
     """Pivot Points - PP
 
     Pivot point is a price level that is used by traders as a possible indicator of market movement.
@@ -24,10 +24,15 @@ class PivotPoints(Indicator[dict]):
     def _generate_name(self) -> str:
         return f"{self._name}"
 
-    def _calculate_reading(self, index: int) -> dict:
-        pivot_points = {"S1": None, "R1": None, "S2": None, "R2": None}
+    def _calculate_reading(self, index: int) -> dict[str, float | None]:
+        pivot_points: dict[str, float | None] = {
+            "S1": None,
+            "R1": None,
+            "S2": None,
+            "R2": None,
+        }
 
-        if self.prev_exists("close"):
+        if index > 0:
             high = self.candles[index - 1].high
             low = self.candles[index - 1].low
             close = self.candles[index - 1].close

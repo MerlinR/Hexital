@@ -5,7 +5,7 @@ from .ema import EMA
 
 
 @dataclass(kw_only=True)
-class MACD(Indicator[dict]):
+class MACD(Indicator[dict[str, float | None]]):
     """Moving Average Convergence Divergence - MACD
 
     The MACD is a popular indicator to that is used to identify a security's trend.
@@ -51,19 +51,21 @@ class MACD(Indicator[dict]):
             EMA(source=self.data, period=self.signal_period)
         )
 
-    def _calculate_reading(self, index: int) -> dict:
+    def _calculate_reading(self, index: int) -> dict[str, float | None]:
         ema_slow = self.sub_emas.reading()
 
-        if ema_slow is not None:
-            macd = self.sub_emaf.reading() - ema_slow
+        if ema_slow is None:
+            return {"MACD": None, "signal": None, "histogram": None}
 
-            self.data.set_reading(macd)
-            self.sub_signal.calculate_index(index)
+        macd = self.sub_emaf.reading() - ema_slow
 
-            signal = self.sub_signal.reading()
+        self.data.set_reading(macd)
+        self.sub_signal.calculate_index(index)
 
-            if signal is not None:
-                histogram = macd - signal
-                return {"MACD": macd, "signal": signal, "histogram": histogram}
+        signal = self.sub_signal.reading()
+
+        if signal is not None:
+            histogram = macd - signal
+            return {"MACD": macd, "signal": signal, "histogram": histogram}
 
         return {"MACD": None, "signal": None, "histogram": None}

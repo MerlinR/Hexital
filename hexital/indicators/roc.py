@@ -37,6 +37,8 @@ class ROC(Indicator[float | None]):
 
             if period_n_back == 0:
                 return -100
+            if not period_n_back:
+                return None
 
             return ((self.reading(self.source) - period_n_back) / period_n_back) * 100
         return None

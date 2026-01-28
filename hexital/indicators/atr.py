@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import cast
 
 from ..core.indicator import Indicator
 from .tr import TR
@@ -32,7 +33,8 @@ class ATR(Indicator[float | None]):
     def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists():
             return (
-                self.prev_reading() * (self.period - 1) + self.sub_tr.reading()
+                cast(float, self.prev_reading()) * (self.period - 1)
+                + self.sub_tr.reading()
             ) / self.period
 
         if self.sub_tr.reading_period(self.period):

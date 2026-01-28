@@ -36,10 +36,10 @@ class EMA(Indicator[float | None]):
 
     def _calculate_reading(self, index: int) -> float | None:
         prev_ema = self.prev_reading()
-        if prev_ema is not None:
-            return float(
-                self._alpha * self.reading(self.source) + (prev_ema * (1.0 - self._alpha))
-            )
+        reading = self.reading(self.source)
+
+        if prev_ema is not None and reading is not None:
+            return float(self._alpha * reading + (prev_ema * (1.0 - self._alpha)))
 
         if self.reading_period(self.period, self.source):
             return self.candles_average(self.period, self.source)

@@ -29,14 +29,12 @@ class SMA(Indicator[float | None]):
 
     def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists():
-            return (
-                self.prev_reading()
-                - (
-                    self.reading(self.source, index - self.period)
-                    - self.reading(self.source)
-                )
-                / self.period
-            )
+            prev = self.prev_reading()
+            old = self.reading(self.source, index - self.period)
+            new = self.reading(self.source)
+            if prev is not None and old is not None and new is not None:
+                return prev - (old - new) / self.period
+            return None
 
         if self.reading_period(self.period, self.source):
             return self.candles_average(self.period, self.source)

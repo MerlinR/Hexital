@@ -58,3 +58,4 @@ class STDEV(Indicator[float | None]):
 
         if self.prev_exists() or self.reading_period(self.period, self.source, index):
             return sqrt(variance) if variance > 0 else 0
+        return None

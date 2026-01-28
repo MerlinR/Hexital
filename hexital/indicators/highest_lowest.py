@@ -5,7 +5,7 @@ from ..core.indicator import Indicator
 
 
 @dataclass(kw_only=True)
-class HL(Indicator[dict]):
+class HL(Indicator[dict[str, float | None]]):
     """Highest Lowest - HL
 
     Simple utility indicator to record and display the highest and lowest values N periods back.
@@ -22,7 +22,7 @@ class HL(Indicator[dict]):
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
-    def _calculate_reading(self, index: int) -> dict:
+    def _calculate_reading(self, index: int) -> dict[str, float | None]:
         return {
             "low": lowest(self.candles, "low", self.period, index),
             "high": highest(self.candles, "high", self.period, index),

@@ -6,7 +6,7 @@ from .stdev import STDEV
 
 
 @dataclass(kw_only=True)
-class BBANDS(Indicator[dict]):
+class BBANDS(Indicator[dict[str, float | None]]):
     """Bollinger Bands - BBANDS
 
     Bollinger Bands are a type of statistical chart characterizing
@@ -37,12 +37,9 @@ class BBANDS(Indicator[dict]):
         )
         self.sub_sma = self.add_sub_indicator(SMA(source=self.source, period=self.period))
 
-    def _calculate_reading(self, index: int) -> dict:
-        bbands = {
-            "BBL": None,
-            "BBM": None,
-            "BBU": None,
-        }
+    def _calculate_reading(self, index: int) -> dict[str, float | None]:
+        bbands = {"BBL": None, "BBM": None, "BBU": None}
+
         if self.prev_exists() or (self.sub_sma.exists() and self.sub_stdev.exists()):
             sma = self.sub_sma.reading()
             stdev = self.sub_stdev.reading()

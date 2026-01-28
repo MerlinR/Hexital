@@ -63,6 +63,9 @@ class RVI(Indicator[float | None]):
 
             cur_reading = self.reading(self.source)
 
+            if cur_reading is None:
+                return None
+
             pos = 0 if cur_reading <= prev_reading else 1
             neg = 0 if cur_reading >= prev_reading else 1
 

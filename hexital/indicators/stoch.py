@@ -6,7 +6,7 @@ from .sma import SMA
 
 
 @dataclass(kw_only=True)
-class STOCH(Indicator[dict]):
+class STOCH(Indicator[dict[str, float | None]]):
     """Stochastic - STOCH
 
     The Stochastic Oscillator (STOCH) was developed by George Lane in the 1950's.
@@ -60,21 +60,23 @@ class STOCH(Indicator[dict]):
             ),
         )
 
-    def _calculate_reading(self, index: int) -> dict:
+    def _calculate_reading(self, index: int) -> dict[str, float | None]:
         stoch = None
         k = None
 
-        if self.reading_period(self.period, self.source):
-            lowest = movement.lowest(self.candles, "low", self.period, index)
-            highest = movement.highest(self.candles, "high", self.period, index)
+        if not self.reading_period(self.period, self.source):
+            return {"stoch": None, "k": None, "d": None}
 
-            stoch = ((self.reading(self.source) - lowest) / (highest - lowest)) * 100
+        lowest = movement.lowest(self.candles, "low", self.period, index)
+        highest = movement.highest(self.candles, "high", self.period, index)
 
-            self.data.set_reading({"stoch": stoch})
-            k = self.sub_k.reading()
+        stoch = ((self.reading(self.source) - lowest) / (highest - lowest)) * 100
 
-            self.data.set_reading({"stoch": stoch, "k": k})
+        self.data.set_reading({"stoch": stoch})
+        k = self.sub_k.reading()
 
-            self.sub_d.calculate_index(index)
+        self.data.set_reading({"stoch": stoch, "k": k})
+
+        self.sub_d.calculate_index(index)
 
         return {"stoch": stoch, "k": k, "d": self.sub_d.reading()}

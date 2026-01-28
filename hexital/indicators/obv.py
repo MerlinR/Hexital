@@ -19,16 +19,15 @@ class OBV(Indicator[float]):
 
     _name: str = field(init=False, default="OBV")
 
-    def _generate_name(self) -> str:
-        return self._name
-
     def _calculate_reading(self, index: int) -> float:
+        candle = self.candles[index]
+
         if self.prev_exists():
-            if self.candles[index].close == self.candles[index - 1].close:
+            if candle.close == self.candles[index - 1].close:
                 return self.prev_reading()
-            if self.candles[index].close > self.candles[index - 1].close:
-                return self.prev_reading() + self.candles[index].volume
+            if candle.close > self.candles[index - 1].close:
+                return self.prev_reading() + candle.volume
 
-            return self.prev_reading() - self.candles[index].volume
+            return self.prev_reading() - candle.volume
 
-        return self.candles[index].volume
+        return candle.volume

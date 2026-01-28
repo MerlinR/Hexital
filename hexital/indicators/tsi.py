@@ -67,6 +67,9 @@ class TSI(Indicator[float | None]):
 
         source = self.reading(self.source)
 
+        if source is None:
+            return None
+
         self.data.set_reading(
             {
                 "price": source - prev_reading,

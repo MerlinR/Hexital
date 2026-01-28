@@ -6,7 +6,7 @@ from .rma import RMA
 
 
 @dataclass(kw_only=True)
-class ADX(Indicator[dict]):
+class ADX(Indicator[dict[str, float | None]]):
     """Average Directional Index - ADX
 
     ADX is a trend strength in a series of prices of a financial instrument.
@@ -64,38 +64,42 @@ class ADX(Indicator[dict]):
             ),
         )
 
-    def _calculate_reading(self, index: int) -> dict:
+    def _calculate_reading(self, index: int) -> dict[str, float | None]:
         adx_positive = None
         adx_negative = None
+        candle = self.candles[index]
+        prev_candle = self.candles[index - 1] if index > 0 else None
 
-        if self.prev_exists("high"):
-            up = self.candles[index].high - self.candles[index - 1].high
-            down = self.candles[index - 1].low - self.candles[index].low
+        if prev_candle:
+            up = candle.high - prev_candle.high
+            down = prev_candle.low - candle.low
         else:
             up = 0
             down = 0
 
-        dm_plus = ((up > down) & (up > 0)) * up
-        dm_neg = ((down > up) & (down > 0)) * down
+        dm_plus = ((up > down) and (up > 0)) * up
+        dm_neg = ((down > up) and (down > 0)) * down
 
         self.data.set_reading({"positive": dm_plus, "negative": dm_neg})
 
         atr_: float = self.sub_atr.reading()
 
-        if self.sub_pos.exists() and atr_ is not None:
-            mod = self.multiplier / atr_
+        if atr_ is None or not self.sub_pos.exists():
+            return {"ADX": None, "DM_Plus": None, "DM_Neg": None}
 
-            adx_positive = mod * self.sub_pos.reading()
-            adx_negative = mod * self.sub_neg.reading()
+        mod = self.multiplier / atr_
 
-            dx = (
-                self.multiplier
-                * abs(adx_positive - adx_negative)
-                / (adx_positive + adx_negative)
-            )
+        adx_positive = mod * self.sub_pos.reading()
+        adx_negative = mod * self.sub_neg.reading()
 
-            self.data.set_reading({"positive": dm_plus, "negative": dm_neg, "dx": dx})
-            self.dx.calculate_index(index)
+        dx = (
+            self.multiplier
+            * abs(adx_positive - adx_negative)
+            / (adx_positive + adx_negative)
+        )
+
+        self.data.set_reading({"positive": dm_plus, "negative": dm_neg, "dx": dx})
+        self.dx.calculate_index(index)
 
         return {
             "ADX": self.dx.reading(),

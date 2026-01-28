@@ -18,6 +18,7 @@ class VWAP(Indicator[float]):
 
     The volume-weighted average price is a technical analysis indicator
     used on intraday charts that resets at the start of every new trading session.
+    Resets on the configured anchor timeframe (default: daily "D").
 
     Sources:
         https://www.investopedia.com/terms/v/vwap.asp
@@ -45,23 +46,23 @@ class VWAP(Indicator[float]):
 
     def _calculate_reading(self, index: int) -> float:
         candle = self.candles[index]
+        if not candle.timestamp:
+            return 0.0
 
-        current_anchor = round_down_timestamp(
-            self.reading("timestamp"), self.anchor
-        ).timestamp()
+        current_anchor = round_down_timestamp(candle.timestamp, self.anchor).timestamp()
+
         prev_anchor = self.prev_reading(NestedSource(self.data, "active_anchor"))
         typical_price = (candle.high + candle.low + candle.close) / 3.0
 
         if prev_anchor != current_anchor:
-            pv = 0
-            vol = 0
+            pv = 0.0
+            vol = 0.0
         else:
-            pv = self.prev_reading(NestedSource(self.data, "pv"), 0.0)
-            vol = self.prev_reading(NestedSource(self.data, "vol"), 0.0)
+            pv = float(self.prev_reading(NestedSource(self.data, "pv"), 0.0))
+            vol = float(self.prev_reading(NestedSource(self.data, "vol"), 0.0))
 
-        pv = pv + (candle.volume * typical_price)
-        vol = vol + candle.volume
+        pv += candle.volume * typical_price
+        vol += candle.volume
 
         self.data.set_reading({"pv": pv, "vol": vol, "active_anchor": current_anchor})
-
-        return pv / vol
+        return pv / vol if vol != 0 else 0.0

@@ -29,7 +29,7 @@ class VWMA(Indicator[float | None]):
     def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists() or self.reading_period(self.period, "close"):
             volume_close = sum(
-                self.reading("close", i) * self.reading("volume", i)
+                self.candles[i].close * self.candles[i].volume
                 for i in range(index - (self.period - 1), index + 1)
             )
             return volume_close / self.candles_sum(self.period, "volume")
