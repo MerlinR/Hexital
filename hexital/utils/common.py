@@ -1,5 +1,5 @@
 from enum import Enum, auto
-from typing import Any
+from typing import TypeVar, cast
 
 
 class CalcMode(Enum):
@@ -8,18 +8,22 @@ class CalcMode(Enum):
     PREPEND = auto()
 
 
-def round_values(
-    value: float | dict[str, float | None] | Any | None, round_by: int | None = 4
-) -> float | dict[str, float | None] | None:
+T = TypeVar("T")
+
+
+def round_values(value: T, round_by: int | None = 4) -> T:
     if round_by is None:
         return value
 
     if isinstance(value, float):
-        return round(value, round_by)
+        return cast(T, round(value, round_by))
 
     if isinstance(value, dict):
-        for key, val in value.items():
+        # narrow to the expected mapping for assignment
+        d = cast(dict[str, float | None], value)
+        for key, val in d.items():
             if isinstance(val, float):
-                value[key] = round(val, round_by)
+                d[key] = round(val, round_by)
+        return cast(T, d)
 
     return value

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 from functools import cmp_to_key
 
 from ..exceptions import InvalidCandleOrder
@@ -203,28 +203,6 @@ class CandleManager:
 
         self._candle_tasks(CalcMode.INSERT)
 
-    def _parse_candles(self, candles: Candles) -> list[Candle]:
-        candles_ = []
-
-        if isinstance(candles, Candle):
-            candles_.append(candles)
-        elif isinstance(candles, dict):
-            candles_.append(Candle.from_dict(candles))
-        elif isinstance(candles, list) and candles:
-            candle_ = candles[0]
-            if isinstance(candle_, Candle):
-                candles_.extend(candles)
-            elif isinstance(candle_, dict):
-                candles_.extend(Candle.from_dicts(candles))
-            elif isinstance(candle_, (float, int, datetime)):
-                candles_.append(Candle.from_list(candles))
-            elif isinstance(candle_, list):
-                candles_.extend(Candle.from_lists(candles))
-            else:
-                raise TypeError
-
-        return candles_
-
     def sort_candles(self, candles: list[Candle] | None = None):
         """Sorts Candles in order of timestamp, accounts for collapsing"""
         if candles:
@@ -317,12 +295,16 @@ class CandleManager:
             and to_process
             and all(c.timeframe == self.timeframe for c in to_process)
         ):
-            # Check they're in chronological order
-            timestamps_sorted = all(
-                to_process[i].timestamp <= to_process[i + 1].timestamp
-                for i in range(len(to_process) - 1)
-                if to_process[i].timestamp and to_process[i + 1].timestamp
-            )
+            timestamps_sorted = True
+            for i in range(len(to_process) - 1):
+                t1 = to_process[i].timestamp
+                t2 = to_process[i + 1].timestamp
+                if t1 is None or t2 is None:
+                    continue
+                if t1 > t2:
+                    timestamps_sorted = False
+                    break
+
             if timestamps_sorted:
                 return
 

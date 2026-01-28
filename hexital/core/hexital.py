@@ -381,6 +381,9 @@ class Hexital:
             elif indicator.candle_manager.name == NullTimeFrame.name:
                 indicator.candle_manager = self._candle_managers[0]
             else:
+                candlestick = (
+                    indicator.candlestick if indicator.candlestick else self.candlestick
+                )
                 manager = CandleManager(
                     [],
                     candle_life=self.candle_life,
@@ -388,9 +391,9 @@ class Hexital:
                     if indicator._timeframe
                     else self._timeframe,
                     timeframe_fill=self.timeframe_fill,
-                    candlestick=indicator.candlestick
-                    if indicator.candlestick
-                    else self.candlestick,
+                    candlestick=candlestick
+                    if isinstance(candlestick, CandlestickType)
+                    else None,
                 )
 
                 manager.append(self._candle_managers[0].candles)

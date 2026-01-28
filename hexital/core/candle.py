@@ -278,7 +278,7 @@ class Candle:
             indicators = candle.pop(-1)
 
         return cls(
-            open=candle[0],
+            open=candle[0],  # type: ignore
             high=candle[1],
             low=candle[2],
             close=candle[3],

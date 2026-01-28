@@ -13,10 +13,6 @@ def test_valid_index_invalid():
     assert valid_index(100, 1) is False
 
 
-def test_valid_index_invalid_none():
-    assert valid_index(None, 1) is False
-
-
 def test_valid_index_valid_negative():
     assert valid_index(-1, 1) is True
 

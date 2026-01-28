@@ -5,7 +5,5 @@ def absindex(index: int | None, length: int) -> int:
     return index if index >= 0 else length + index
 
 
-def valid_index(index: int | None, length: int) -> bool:
-    if index is None or not length > index >= -length:
-        return False
-    return True
+def valid_index(index: int, length: int) -> bool:
+    return length > index >= -length

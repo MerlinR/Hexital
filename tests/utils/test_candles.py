@@ -1,8 +1,11 @@
+from datetime import datetime
+
 import pytest
 from hexital.core.candle import Candle
 from hexital.utils.candles import (
     candles_sum,
     get_readings_period,
+    parse_candles,
     reading_by_index,
     reading_count,
     reading_period,
@@ -72,6 +75,146 @@ class TestReadByIndex:
     @pytest.mark.usefixtures("minimal_candles")
     def test_inner_nested_subindicator_indexed(self, minimal_candles: list[Candle]):
         assert reading_by_index(minimal_candles, "SSATR.nested", index=5) == 611
+
+
+class TestParseCandles:
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_append_candle(self, minimal_candles):
+        new_candle = minimal_candles[-1]
+
+        candles = parse_candles(new_candle)
+
+        assert candles == [
+            Candle(
+                open=2424,
+                high=10767,
+                low=13115,
+                close=13649,
+                volume=15750,
+                indicators={"ATR": 2000, "NATR": {"nested": 2001}, "MinTR": 2002},
+                sub_indicators={"SATR": 2010, "SSATR": {"nested": 2011}},
+                timestamp=datetime(2023, 6, 1, 9, 19, 0),
+            ),
+        ]
+
+    def test_append_list_nada(self):
+        candles = parse_candles([])
+        assert candles == []
+
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_append_candle_list(self, minimal_candles):
+        candles = parse_candles(minimal_candles)
+
+        assert candles == minimal_candles
+
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_append_candle_list_single(self, minimal_candles):
+        candles = parse_candles([minimal_candles[-1]])
+
+        assert candles == [
+            Candle(
+                open=2424,
+                high=10767,
+                low=13115,
+                close=13649,
+                volume=15750,
+                indicators={"ATR": 2000, "NATR": {"nested": 2001}, "MinTR": 2002},
+                sub_indicators={"SATR": 2010, "SSATR": {"nested": 2011}},
+                timestamp=datetime(2023, 6, 1, 9, 19, 0),
+            ),
+        ]
+
+    def test_append_dict(self):
+        candles = parse_candles(
+            {
+                "open": 17213,
+                "high": 2395,
+                "low": 7813,
+                "close": 3615,
+                "volume": 19661,
+                "timestamp": datetime(2023, 10, 3, 9, 0),
+            }
+        )
+
+        assert candles == [
+            Candle(
+                17213,
+                2395,
+                7813,
+                3615,
+                19661,
+                timestamp=datetime(2023, 10, 3, 9, 0),
+            )
+        ]
+
+    def test_append_dict_list(self):
+        candles = parse_candles(
+            [
+                {
+                    "open": 17213,
+                    "high": 2395,
+                    "low": 7813,
+                    "close": 3615,
+                    "volume": 19661,
+                    "timestamp": datetime(2023, 10, 3, 9, 0),
+                },
+                {
+                    "open": 1301,
+                    "high": 3007,
+                    "low": 11626,
+                    "close": 19048,
+                    "volume": 28909,
+                    "timestamp": datetime(2023, 10, 3, 9, 5),
+                },
+            ]
+        )
+
+        assert candles == [
+            Candle(
+                17213,
+                2395,
+                7813,
+                3615,
+                19661,
+                timestamp=datetime(2023, 10, 3, 9, 0),
+            ),
+            Candle(
+                1301,
+                3007,
+                11626,
+                19048,
+                28909,
+                timestamp=datetime(2023, 10, 3, 9, 5),
+            ),
+        ]
+
+    def test_append_list(self):
+        candles = parse_candles(
+            [datetime(2023, 10, 3, 9, 0), 17213, 2395, 7813, 3615, 19661]
+        )
+
+        assert candles == [
+            Candle(17213, 2395, 7813, 3615, 19661, timestamp=datetime(2023, 10, 3, 9, 0))
+        ]
+
+    def test_append_list_list(self):
+        candles = parse_candles(
+            [
+                [datetime(2023, 10, 3, 9, 0), 17213, 2395, 7813, 3615, 19661],
+                [datetime(2023, 10, 3, 9, 5), 1301, 3007, 11626, 19048, 28909],
+            ]
+        )
+
+        assert candles == [
+            Candle(17213, 2395, 7813, 3615, 19661, timestamp=datetime(2023, 10, 3, 9, 0)),
+            Candle(
+                1301, 3007, 11626, 19048, 28909, timestamp=datetime(2023, 10, 3, 9, 5)
+            ),
+        ]
+
+    def test_append_invalid(self):
+        with pytest.raises(TypeError):
+            parse_candles(["Fuck", 2, 3])
 
 
 @pytest.mark.usefixtures("minimal_candles")

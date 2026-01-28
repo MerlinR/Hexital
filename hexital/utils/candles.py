@@ -1,5 +1,6 @@
+from collections.abc import Sequence
 from datetime import datetime
-from typing import TypeAlias
+from typing import Any, TypeAlias, cast
 
 from ..core.candle import Candle
 from .indexing import absindex, valid_index
@@ -19,11 +20,11 @@ def parse_candles(candles: Candles) -> list[Candle]:
         if isinstance(candle_, Candle):
             candles_.extend(candles)
         elif isinstance(candle_, dict):
-            candles_.extend(Candle.from_dicts(candles))
+            candles_.extend(Candle.from_dicts(cast(Sequence[dict[str, Any]], candles)))
         elif isinstance(candle_, (float, int, datetime)):
             candles_.append(Candle.from_list(candles))
         elif isinstance(candle_, list):
-            candles_.extend(Candle.from_lists(candles))
+            candles_.extend(Candle.from_lists(cast(list[list[Any]], candles)))
         else:
             raise TypeError
 

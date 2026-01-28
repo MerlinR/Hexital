@@ -388,10 +388,10 @@ class Indicator(Generic[V], ABC):
             return None  # type: ignore
 
         if not source or (isinstance(source, str) and source == self.name):
-            return reading_by_candle(self.candles[index], self.name)
+            return reading_by_candle(self.candles[index], self.name)  # type: ignore
         if isinstance(source, str):
-            return reading_by_candle(self.candles[index], source)
-        return reading_by_candle(self.candles[index], source.name)
+            return reading_by_candle(self.candles[index], source)  # type: ignore
+        return reading_by_candle(self.candles[index], source.name)  # type: ignore
 
     def _find_readings(self, source: Source | None = None) -> list[Reading | V]:
         if not self.candles:
