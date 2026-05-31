@@ -1,4 +1,3 @@
-import inspect
 from collections.abc import Callable
 from copy import copy
 
@@ -53,7 +52,7 @@ class Amorph(Indicator):
 
     @staticmethod
     def _separate_indicator_attributes(kwargs: dict) -> tuple[dict, dict]:
-        indicator_attr = inspect.getmembers(Indicator)[1][1].keys()
+        indicator_attr = Indicator.__dataclass_fields__.keys()
         analysis_args = {}
         for argum in list(kwargs.keys()):
             if argum not in indicator_attr:

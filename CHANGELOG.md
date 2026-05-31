@@ -10,6 +10,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 *Release Date: X*
 
+- Support python 3.14
 - Major Typing update, some method clean up and optimisation
 - TimeFrames are now required*
     - * Indicators with no timeframe with no timeframed Candles still function.

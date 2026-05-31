@@ -657,13 +657,13 @@ docs = [
 ]
 speed-tests = [
     { name = "matplotlib" },
-    { name = "numpy" },
+    { name = "numpy", specifier = "==1.26.4" },
     { name = "pandas" },
     { name = "pandas-ta", git = "https://github.com/MerlinR/Pandas-ta-fork.git" },
     { name = "ta-lib" },
 ]
 truth = [
-    { name = "numpy" },
+    { name = "numpy", specifier = "==1.26.4" },
     { name = "pandas" },
     { name = "pandas-ta", git = "https://github.com/MerlinR/Pandas-ta-fork.git" },
     { name = "ta-lib" },
