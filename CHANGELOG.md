@@ -31,6 +31,11 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Added `Indicator.add_state()` to register state backed by a managed child
     - `State` provides `prev()`, `reading()`, `set()`, `update()`, and `source()` — replacing manual `Managed` + `NestedSource`
     - Exported `State` from `hexital`; built-in stateful indicators migrated to use it
+- Added qol methods on `Indicator`
+    - OHLCV properties: `open`, `high`, `low`, `close`, `volume`
+    - Shorthand methods: `prev()`, `at()`, `src()`, `prev_src()`, `at_src()`
+    - Built-in indicators migrated to use `src()` / `prev_src()` / `at_src()`
+- Removed `Managed` and `NestedSource` from public `hexital` exports (use `add_state()`; import from `hexital.core.indicator` if needed)
 ---
 
 ## 3.0.1

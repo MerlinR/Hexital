@@ -37,7 +37,7 @@ class CMO(Indicator[float | None]):
         losses = None
 
         if self.prev_exists():
-            change = self.prev_reading(self.source) - self.reading(self.source)
+            change = self.prev_src() - self.src()
 
             change_gain = -1 * change if change < 0 else 0.0
             change_loss = change if change > 0 else 0.0
@@ -52,7 +52,7 @@ class CMO(Indicator[float | None]):
 
         elif self.reading_period(self.period + 1, self.source):
             changes = [
-                self.reading(self.source, i) - self.reading(self.source, i - 1)
+                self.at_src(i) - self.at_src(i - 1)
                 for i in range(index - (self.period - 1), index + 1)
             ]
 

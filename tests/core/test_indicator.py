@@ -378,3 +378,31 @@ class TestAddState:
         assert state.prev("value") == 10.0
         assert state.reading("value") == 20.0
         assert state.source("value").name == f"{state.managed.name}.value"
+
+
+class TestAuthorShortcuts:
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_ohlcv_properties(self, minimal_candles: list[Candle]):
+        parent = FakeIndicator(candles=minimal_candles)
+        parent.calculate()
+
+        assert parent.close == minimal_candles[-1].close
+        assert parent.open == minimal_candles[-1].open
+        assert parent.at(-2, "high") == minimal_candles[-2].high
+
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_prev_alias(self, minimal_candles: list[Candle]):
+        parent = FakeIndicator(candles=minimal_candles)
+        parent.calculate()
+
+        assert parent.prev() == 100.0
+        assert parent.prev("close") == minimal_candles[-2].close
+
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_src_shortcuts(self, minimal_candles: list[Candle]):
+        parent = FakeIndicator(candles=minimal_candles, source="close")
+        parent.calculate()
+
+        assert parent.src() == parent.close
+        assert parent.prev_src() == minimal_candles[-2].close
+        assert parent.at_src(-2) == minimal_candles[-2].close

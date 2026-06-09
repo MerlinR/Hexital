@@ -98,7 +98,7 @@ class MyOscillator(Indicator[float | None]):
         losses = None
 
         if self.prev_exists():
-            change = self.prev_reading(self.source) - self.reading(self.source)
+            change = self.prev_src() - self.src()
             change_gain = -change if change < 0 else 0.0
             change_loss = change if change > 0 else 0.0
 
@@ -119,6 +119,8 @@ class MyOscillator(Indicator[float | None]):
 ```
 
 - `add_state()` holds hidden state via `set()` / `update()` / `prev()`
+- `src()` / `prev_src()` — shorthand for reading your configured `source` field
+- `close`, `open`, etc. — OHLCV properties; `prev("close")`, `at(-2, "high")` for indexed reads
 - `add_child_managed()` — child runs only when you invoke it (via `set_reading()` or `calculate_index()`)
 
 ---

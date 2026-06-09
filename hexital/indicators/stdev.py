@@ -35,13 +35,13 @@ class STDEV(Indicator[float | None]):
     def _calculate_reading(self, index: int) -> float | None:
         popped_reading = 0
 
-        reading = self.reading(self.source)
+        reading = self.src()
 
         if reading is None:
             return None
 
         if self.reading_period(self.period + 1, self.source, index):
-            popped_reading = self.reading(self.source, index - self.period)
+            popped_reading = self.at_src(index - self.period)
 
         old_mean = self._state.prev("mean", 0.0)
         variance = self._state.prev("variance", 0.0)

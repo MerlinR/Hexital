@@ -43,6 +43,6 @@ class STDEVT(Indicator[float | None]):
             return None
 
         return (
-            abs(self.reading(self.source) - self.prev_reading(self.source))
+            abs(self.src() - self.prev_src())
             > self.sub_stdev.reading() * self.multiplier
         )

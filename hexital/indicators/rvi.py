@@ -56,12 +56,12 @@ class RVI(Indicator[float | None]):
         stdev_reading = self.sub_stdev.reading()
 
         if stdev_reading is not None:
-            prev_reading = self.prev_reading(self.source)
+            prev_reading = self.prev_src()
 
             if prev_reading is None:
                 return None
 
-            cur_reading = self.reading(self.source)
+            cur_reading = self.src()
 
             if cur_reading is None:
                 return None

@@ -57,11 +57,11 @@ class TSI(Indicator[float | None]):
         )
 
     def _calculate_reading(self, index: int) -> float | None:
-        prev_reading = self.prev_reading(self.source)
+        prev_reading = self.prev_src()
         if prev_reading is None:
             return None
 
-        source = self.reading(self.source)
+        source = self.src()
 
         if source is None:
             return None

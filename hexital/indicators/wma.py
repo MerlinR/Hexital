@@ -33,7 +33,7 @@ class WMA(Indicator[float | None]):
     def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists() or self.reading_period(self.period, self.source):
             values = sum(
-                cast(float, self.reading(self.source, i)) * (self.period - py)
+                cast(float, self.at_src(i)) * (self.period - py)
                 for py, i in enumerate(range(index, index - self.period, -1))
             )
             weight = (self.period * (self.period + 1)) / 2

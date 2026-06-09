@@ -36,7 +36,7 @@ class EMA(Indicator[float | None]):
 
     def _calculate_reading(self, index: int) -> float | None:
         prev_ema = self.prev_reading()
-        reading = self.reading(self.source)
+        reading = self.src()
 
         if prev_ema is not None and reading is not None:
             return float(self._alpha * reading + (prev_ema * (1.0 - self._alpha)))

@@ -2,7 +2,7 @@ from . import analysis, exceptions, indicators
 from .analysis import movement, patterns
 from .core.candle import Candle
 from .core.hexital import Hexital, HexitalCol
-from .core.indicator import ChildWhen, Indicator, Managed, State
+from .core.indicator import ChildWhen, Indicator, State
 from .core.indicator_collection import IndicatorCollection
 from .indicators import (
     ADX,
@@ -67,7 +67,6 @@ __all__ = [
     "MACD",
     "MFI",
     "MOP",
-    "Managed",
     "OBV",
     "PivotPoints",
     "RMA",

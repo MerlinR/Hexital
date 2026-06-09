@@ -33,12 +33,12 @@ class ROC(Indicator[float | None]):
 
     def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists() or self.reading_period(self.period + 1, self.source):
-            period_n_back = self.reading(self.source, index - self.period)
+            period_n_back = self.at_src(index - self.period)
 
             if period_n_back == 0:
                 return -100
             if not period_n_back:
                 return None
 
-            return ((self.reading(self.source) - period_n_back) / period_n_back) * 100
+            return ((self.src() - period_n_back) / period_n_back) * 100
         return None

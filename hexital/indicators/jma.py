@@ -58,7 +58,7 @@ class JMA(Indicator[float | None]):
         self._bet = self._length_2 / (self._length_2 + 1)
 
     def _calculate_reading(self, index: int) -> float | None:
-        price = self.reading(self.source)
+        price = self.src()
         uband = self._state.prev("uband", price)
         lband = self._state.prev("lband", price)
         vsums = self._state.prev("vsums", 0.0)

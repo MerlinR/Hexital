@@ -36,7 +36,7 @@ class RMA(Indicator[float | None]):
     def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists():
             return float(
-                (self._alpha * self.reading(self.source))
+                (self._alpha * self.src())
                 + ((1.0 - self._alpha) * self.prev_reading())
             )
 
@@ -45,7 +45,7 @@ class RMA(Indicator[float | None]):
 
             # numpy ewm adjusted calc
             values = sum(
-                ((1 - self._alpha) ** py) * self.reading(self.source, i)
+                ((1 - self._alpha) ** py) * self.at_src(i)
                 for py, i in enumerate(range(index, period_to, -1))
             )
 

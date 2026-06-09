@@ -37,7 +37,7 @@ Below is a brief example of a custom indicator using [indicator chaining](featur
 ```python linenums="1"
 from dataclasses import dataclass, field
 
-from hexital import Indicator, Managed
+from hexital import Indicator, State
 from hexital import EMA
 
 
@@ -49,15 +49,13 @@ class HighLowAverageSmoothed(Indicator):
         return f"{self._name}"
 
     def _initialise(self):
-        self.hlas_raw = self.add_child_managed(Managed(name="HLAS_raw"))
+        self._raw = self.add_state(name="HLAS_raw")
         self.ema_smooth = self.add_child_managed(
-            EMA(name="HLSmoothed", source="HLAS_raw", period=6),
+            EMA(name="HLSmoothed", source=self._raw.managed, period=6),
         )
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        self.hlas_raw.set_reading(
-            (self.candles[index].high + self.candles[index].low) / 2
-        )
+        self._raw.set((self.candles[index].high + self.candles[index].low) / 2)
         self.ema_smooth.calculate_index(index)
         return self.reading("HLSmoothed")
 

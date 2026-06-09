@@ -28,6 +28,6 @@ class Counter(Indicator[int]):
 
     def _calculate_reading(self, index: int) -> int:
         count = self.prev_reading(default=0)
-        reading = self.reading(self.source, default=count)
+        reading = self.src(default=count)
 
         return count + 1 if self.count_value == reading else 0

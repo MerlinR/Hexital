@@ -139,6 +139,57 @@ class Indicator(Generic[V], ABC):
         self.candle_life = manager.candle_life
         self.candlestick = manager.candlestick
 
+    @property
+    def open(self) -> float:
+        return self.candles[self._active_index].open
+
+    @property
+    def high(self) -> float:
+        return self.candles[self._active_index].high
+
+    @property
+    def low(self) -> float:
+        return self.candles[self._active_index].low
+
+    @property
+    def close(self) -> float:
+        return self.candles[self._active_index].close
+
+    @property
+    def volume(self) -> int:
+        return self.candles[self._active_index].volume
+
+    def prev(
+        self, source: Source | None = None, default: T | None = None
+    ) -> V | T:
+        """Previous reading — shorthand for :meth:`prev_reading`."""
+        return self.prev_reading(source, default)
+
+    def at(
+        self,
+        index: int,
+        source: Source | None = None,
+        default: T | None = None,
+    ) -> V | T:
+        """Reading at a specific candle index — shorthand for :meth:`reading`."""
+        return self.reading(source, index=index, default=default)
+
+    def src(self, default: T | None = None) -> V | T:
+        """Current reading for this indicator's configured ``source``."""
+        return self.reading(getattr(self, "source", "close"), default=default)
+
+    def prev_src(self, default: T | None = None) -> V | T:
+        """Previous reading for this indicator's configured ``source``."""
+        return self.prev_reading(getattr(self, "source", "close"), default=default)
+
+    def at_src(
+        self, index: int, default: T | None = None
+    ) -> V | T:
+        """Reading at ``index`` for this indicator's configured ``source``."""
+        return self.reading(
+            getattr(self, "source", "close"), index=index, default=default
+        )
+
     def _sync_from_manager(self):
         """Sync indicator properties from candle manager (used after manager state changes)"""
         self.timeframe = (
