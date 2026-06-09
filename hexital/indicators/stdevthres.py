@@ -31,7 +31,7 @@ class STDEVT(Indicator[float | None]):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.sub_stdev = self.add_sub_indicator(
+        self.sub_stdev = self.add_child(
             STDEV(
                 source=self.source,
                 period=self.period,

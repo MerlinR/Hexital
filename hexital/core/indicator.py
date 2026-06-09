@@ -4,9 +4,10 @@ from abc import ABC, abstractmethod
 from copy import copy
 from dataclasses import dataclass, field
 from datetime import timedelta
-from enum import Enum, auto
+from enum import Enum
 from typing import Generic, TypeAlias, TypeVar
 
+from ..exceptions import InvalidIndicator
 from ..utils.candles import (
     Candles,
     candles_average,
@@ -34,10 +35,24 @@ T = TypeVar("T")
 V = TypeVar("V")
 
 
-class IndicatorMode(Enum):
-    SOLO = auto()
-    SUB = auto()
-    MANAGED = auto()
+class ChildWhen(str, Enum):
+    """When a child indicator is calculated relative to its parent."""
+
+    BEFORE = "before"
+    AFTER = "after"
+    MANUAL = "manual"
+
+
+def _normalize_when(when: ChildWhen | str) -> ChildWhen:
+    if isinstance(when, ChildWhen):
+        return when
+    try:
+        return ChildWhen(when)
+    except ValueError as exc:
+        raise InvalidIndicator(
+            f"Invalid child when {when!r}; expected one of "
+            f"{', '.join(member.value for member in ChildWhen)}"
+        ) from exc
 
 
 @dataclass(kw_only=True)
@@ -50,13 +65,9 @@ class Indicator(Generic[V], ABC):
     candlestick: CandlestickType | str | None = None
     rounding: int | None = 4
 
-    sub_indicators: dict[str, Indicator] = field(init=False, default_factory=dict)
-    managed_indicators: dict[str, Managed | Indicator] = field(
-        init=False, default_factory=dict
-    )
-    _mode: IndicatorMode = field(init=False, default=IndicatorMode.SOLO)
+    children: dict[str, Indicator] = field(init=False, default_factory=dict)
+    _when: ChildWhen | None = field(init=False, default=None)
     _generated_name: bool = field(init=False, default=False)
-    _calc_prior: bool = field(init=False, default=True)
     _active_index: int = field(init=False, default=0)
 
     _name: str = field(init=False, default="")
@@ -136,7 +147,7 @@ class Indicator(Generic[V], ABC):
             else None
         )
         self._timeframe = self._candle_mngr.timeframe
-        for indicator in {**self.sub_indicators, **self.managed_indicators}.values():
+        for indicator in self.children.values():
             indicator._sync_from_manager()
 
     @property
@@ -160,7 +171,7 @@ class Indicator(Generic[V], ABC):
         output = {}
 
         for name, value in self.__dict__.items():
-            if name in ["candles", "managed_indicators", "sub_indicators"]:
+            if name in ["candles", "children"]:
                 continue
             if name == "timeframe_fill" and self._timeframe is None:
                 continue
@@ -233,21 +244,17 @@ class Indicator(Generic[V], ABC):
         self._sync_from_manager()
         self.calculate_index(0, -1)
 
-    @property
-    def prior_calc(self) -> bool:
-        return self._mode != IndicatorMode.SOLO and self._calc_prior
-
     @abstractmethod
     def _calculate_reading(self, index: int) -> V: ...
 
-    def _calculate_sub_indicators(
+    def _calculate_children(
         self,
-        prior_calc: bool,
+        when: ChildWhen,
         index: int,
         end_index: int | None = None,
     ):
-        for indicator in self.sub_indicators.values():
-            if indicator.prior_calc == prior_calc:
+        for indicator in self.children.values():
+            if indicator._when == when:
                 indicator.calculate_index(index, end_index)
 
     def check_initialised(self):
@@ -262,7 +269,7 @@ class Indicator(Generic[V], ABC):
 
         for index in range(self._find_calc_index(), len(self.candles)):
             self._set_active_index(index)
-            self._calculate_sub_indicators(True, index)
+            self._calculate_children(ChildWhen.BEFORE, index)
 
             reading = round_values(
                 self._calculate_reading(index=index), round_by=self.rounding
@@ -274,7 +281,7 @@ class Indicator(Generic[V], ABC):
                 break
 
             self._set_reading(reading, index)
-            self._calculate_sub_indicators(False, index)
+            self._calculate_children(ChildWhen.AFTER, index)
 
     def _reading_dup(self, reading: Reading | V, candle: Candle) -> bool:
         """Optimisation method for 'calculate'.
@@ -307,12 +314,12 @@ class Indicator(Generic[V], ABC):
 
         for index in range(start_index, end_index + 1):
             self._set_active_index(index)
-            self._calculate_sub_indicators(True, index)
+            self._calculate_children(ChildWhen.BEFORE, index)
 
             reading = round_values(self._calculate_reading(index=index), self.rounding)
 
             self._set_reading(reading, index)
-            self._calculate_sub_indicators(False, index)
+            self._calculate_children(ChildWhen.AFTER, index)
 
     def _find_calc_index(self) -> int:
         """Optimisation method, to find where to start calculating the indicator from
@@ -336,56 +343,69 @@ class Indicator(Generic[V], ABC):
     def _set_reading(self, reading: V, index: int | None = None):
         index = index if index else self._active_index
 
-        if self._mode != IndicatorMode.SOLO:
+        if self._when is not None:
             self.candles[index].sub_indicators[self.name] = reading  # type: ignore
         else:
             self.candles[index].indicators[self.name] = reading  # type: ignore
 
     def _set_active_index(self, index: int):
         self._active_index = index
-        for indicator in self.managed_indicators.values():
-            if isinstance(indicator, Managed):
+        for indicator in self.children.values():
+            if indicator._when == ChildWhen.MANUAL and isinstance(indicator, Managed):
                 indicator.set_active_index(index)
 
-    def add_sub_indicator(
-        self, indicator: Indicator, prior_calc: bool = True
+    def add_child(
+        self,
+        indicator: Indicator,
+        *,
+        when: ChildWhen | str = ChildWhen.BEFORE,
     ) -> Indicator:
-        """Adds sub indicator, this will auto calculate with indicator"""
-        indicator._mode = IndicatorMode.SUB
-        indicator._calc_prior = prior_calc
+        """Register a child indicator that shares this indicator's candles.
 
-        if indicator._generated_name:
-            indicator.name = f"{self.name}-{indicator.name}"
+        Args:
+            indicator: The child indicator to attach.
+            when: When the child is calculated relative to the parent at each index.
+                :attr:`ChildWhen.BEFORE` runs before :meth:`_calculate_reading`.
+                :attr:`ChildWhen.AFTER` runs after the parent's reading is stored.
+                :attr:`ChildWhen.MANUAL` is only calculated when explicitly invoked
+                (e.g. via :meth:`Managed.set_reading` or :meth:`calculate_index`).
+        """
+        when = _normalize_when(when)
 
-        indicator.candle_manager = self._candle_mngr
-        indicator.rounding = None
-        self.sub_indicators[indicator.name] = indicator
-        return self.sub_indicators[indicator.name]
-
-    def add_managed_indicator(self, indicator: N) -> N:
-        """Adds managed sub indicator, this will not auto calculate with indicator"""
-        indicator._mode = IndicatorMode.MANAGED
-
-        if indicator.name == MANAGED_NAME:
-            indicator.name = f"{self.name}_data"
+        if when == ChildWhen.MANUAL:
+            if indicator.name == MANAGED_NAME:
+                indicator.name = f"{self.name}_data"
+            elif indicator._generated_name:
+                indicator.name = f"{self.name}-{indicator.name}"
         elif indicator._generated_name:
             indicator.name = f"{self.name}-{indicator.name}"
 
+        indicator._when = when
         indicator.candle_manager = self._candle_mngr
         indicator.rounding = None
-        self.managed_indicators[indicator.name] = indicator
+        self.children[indicator.name] = indicator
         return indicator
 
-    def _find_reading(self, source: Source | None = None, index: int | None = None) -> V:
+    def add_child_after(self, indicator: Indicator) -> Indicator:
+        """Register a child calculated after the parent's reading is stored."""
+        return self.add_child(indicator, when=ChildWhen.AFTER)
+
+    def add_child_managed(self, indicator: Indicator) -> Indicator:
+        """Register a child calculated only when explicitly invoked."""
+        return self.add_child(indicator, when=ChildWhen.MANUAL)
+
+    def _find_reading(
+        self, source: Source | None = None, index: int | None = None
+    ) -> V:
         if not self.candles:
-            return None  # type: ignore
+            return None
 
         if index is None:
             index = self._active_index
         elif valid_index(index, len(self.candles)):
             index = absindex(index, len(self.candles))
         else:
-            return None  # type: ignore
+            return None
 
         if not source or (isinstance(source, str) and source == self.name):
             return reading_by_candle(self.candles[index], self.name)  # type: ignore
@@ -511,9 +531,7 @@ class Indicator(Generic[V], ABC):
 
     def purge(self):
         """Remove this indicator value from all Candles"""
-        self._candle_mngr.purge(
-            {self.name} | self.sub_indicators.keys() | self.managed_indicators.keys()
-        )
+        self._candle_mngr.purge({self.name} | self.children.keys())
 
     def recalculate(self):
         """Re-calculate this indicator value for all Candles"""
@@ -533,7 +551,7 @@ class Managed(Indicator):
     """
 
     _name: str = field(init=False, default=MANAGED_NAME)
-    _mode: IndicatorMode = field(init=False, default=IndicatorMode.MANAGED)
+    _when: ChildWhen | None = field(init=False, default=ChildWhen.MANUAL)
     _active_index: int = field(default=0)
 
     def _generate_name(self) -> str:
@@ -547,9 +565,9 @@ class Managed(Indicator):
         else:
             self.set_active_index(index)
 
-        self._calculate_sub_indicators(True, index)
+        self._calculate_children(ChildWhen.BEFORE, index)
         self._set_reading(reading, index)  # type: ignore
-        self._calculate_sub_indicators(False, index)
+        self._calculate_children(ChildWhen.AFTER, index)
 
     def set_active_index(self, index: int):
         self._active_index = index
@@ -588,4 +606,3 @@ class NestedSource:
 
 
 Source: TypeAlias = str | Indicator | NestedSource
-N = TypeVar("N", Indicator, Managed)

@@ -36,27 +36,24 @@ class ADX(Indicator[dict[str, float | None]]):
             self.period_signal = self.period
 
     def _initialise(self):
-        self.sub_atr = self.add_sub_indicator(ATR(period=self.period))
+        self.sub_atr = self.add_child(ATR(period=self.period))
+        self.data = self.add_child_managed(Managed())
 
-        self.data = self.add_managed_indicator(Managed())
-
-        self.sub_pos = self.data.add_sub_indicator(
+        self.sub_pos = self.data.add_child_after(
             RMA(
                 name=f"{self.name}_positive",
                 period=self.period,
                 source=NestedSource(self.data, "positive"),
             ),
-            False,
         )
-        self.sub_neg = self.data.add_sub_indicator(
+        self.sub_neg = self.data.add_child_after(
             RMA(
                 name=f"{self.name}_negative",
                 period=self.period,
                 source=NestedSource(self.data, "negative"),
             ),
-            False,
         )
-        self.dx = self.add_managed_indicator(
+        self.dx = self.add_child_managed(
             RMA(
                 name=f"{self.name}_dx",
                 period=self.period_signal,

@@ -32,9 +32,9 @@ class Supertrend(Indicator[dict[str, float | int | None]]):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.sub_atr = self.add_sub_indicator(ATR(period=self.period))
-        self.sub_hl = self.add_sub_indicator(HLA())
-        self.data = self.add_managed_indicator(Managed())
+        self.sub_atr = self.add_child(ATR(period=self.period))
+        self.sub_hl = self.add_child(HLA())
+        self.data = self.add_child_managed(Managed())
 
     def _calculate_reading(self, index: int) -> dict[str, float | int | None]:
         direction: int = 1

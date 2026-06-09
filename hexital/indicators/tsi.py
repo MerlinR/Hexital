@@ -35,29 +35,25 @@ class TSI(Indicator[float | None]):
             self.smooth_period = int(int(self.period / 2) + (self.period % 2 > 0))
 
     def _initialise(self):
-        self.data = self.add_managed_indicator(Managed())
+        self.data = self.add_child_managed(Managed())
 
-        self.sub_first = self.data.add_sub_indicator(
+        self.sub_first = self.data.add_child_after(
             EMA(
                 source=NestedSource(self.data, "price"),
                 period=self.period,
                 name=f"{self.name}_first",
             ),
-            False,
         )
 
-        self.sub_second = self.sub_first.add_sub_indicator(
+        self.sub_second = self.sub_first.add_child_after(
             EMA(source=self.sub_first, period=self.smooth_period),
-            False,
         )
 
-        self.abs_first = self.data.add_sub_indicator(
+        self.abs_first = self.data.add_child_after(
             EMA(source=NestedSource(self.data, "abs_price"), period=self.period),
-            False,
         )
-        self.abs_second = self.abs_first.add_sub_indicator(
+        self.abs_second = self.abs_first.add_child_after(
             EMA(source=self.abs_first, period=self.smooth_period),
-            False,
         )
 
     def _calculate_reading(self, index: int) -> float | None:

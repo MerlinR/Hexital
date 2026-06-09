@@ -39,7 +39,7 @@ class JMA(Indicator[float | None]):
         return f"{self._name}_{self.period}_{self.phase}"
 
     def _initialise(self):
-        self.data = self.add_managed_indicator(Managed())
+        self.data = self.add_child_managed(Managed())
 
     def _validate_fields(self):
         if self.phase > 100:

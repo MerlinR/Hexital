@@ -5,7 +5,8 @@ import pytest
 from hexital import Candle
 from hexital.analysis.patterns import doji
 from hexital.candlesticks.heikinashi import HeikinAshi
-from hexital.core.indicator import Indicator
+from hexital.core.indicator import ChildWhen, Indicator, Managed
+from hexital.exceptions import InvalidIndicator
 from hexital.exceptions import InvalidCandlestickType
 from hexital.indicators.amorph import Amorph
 from hexital.utils import timeframe
@@ -275,3 +276,60 @@ class TestCandlestickType:
     def test_indicator_candlestick_type_error(self):
         with pytest.raises(InvalidCandlestickType):
             test_indicator = FakeIndicator(candles=[], candlestick="FUCK")
+
+
+@dataclass(kw_only=True)
+class _ChildIndicator(Indicator[float | None]):
+    _name: str = field(init=False, default="Child")
+    value: float = 0.0
+
+    def _generate_name(self) -> str:
+        return self._name
+
+    def _calculate_reading(self, index: int) -> float | None:
+        return self.value + index
+
+
+class TestAddChild:
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_add_child_before(self, minimal_candles: list[Candle]):
+        parent = FakeIndicator(candles=minimal_candles)
+        child = parent.add_child(_ChildIndicator(value=10.0))
+        parent.calculate()
+
+        assert child.name in parent.children
+        assert child._when == ChildWhen.BEFORE
+        assert child.reading() == 10.0 + (len(minimal_candles) - 1)
+
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_add_child_after(self, minimal_candles: list[Candle]):
+        parent = FakeIndicator(candles=minimal_candles)
+        child = parent.add_child_after(_ChildIndicator(value=5.0))
+        parent.calculate()
+
+        assert child._when == ChildWhen.AFTER
+        assert child.reading() == 5.0 + (len(minimal_candles) - 1)
+
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_add_child_managed(self, minimal_candles: list[Candle]):
+        parent = FakeIndicator(candles=minimal_candles)
+        state = parent.add_child_managed(Managed())
+        parent.calculate()
+
+        assert state.name == f"{parent.name}_data"
+        assert state._when == ChildWhen.MANUAL
+        assert parent.children[state.name] is state
+        state.set_reading({"x": 1})
+        assert state.reading() == {"x": 1}
+
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_add_child_accepts_string_when(self, minimal_candles: list[Candle]):
+        parent = FakeIndicator(candles=minimal_candles)
+        child = parent.add_child(_ChildIndicator(), when="after")
+        assert child._when == ChildWhen.AFTER
+
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_add_child_invalid_when(self, minimal_candles: list[Candle]):
+        parent = FakeIndicator(candles=minimal_candles)
+        with pytest.raises(InvalidIndicator, match="Invalid child when"):
+            parent.add_child(_ChildIndicator(), when="invalid")

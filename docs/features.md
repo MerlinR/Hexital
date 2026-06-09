@@ -47,14 +47,16 @@ class HighLowAverageSmoothed(Indicator):
         return f"{self._name}"
 
     def _initialise(self):
-        self.add_managed_indicator("EMA", EMA(name="HLSmoothed", source="HLAS_raw", period=6))
-        self.add_managed_indicator("HLAS_raw", Managed(name="HLAS_raw"))
+        self.hlas_raw = self.add_child_managed(Managed(name="HLAS_raw"))
+        self.ema_smooth = self.add_child_managed(
+            EMA(name="HLSmoothed", source="HLAS_raw", period=6),
+        )
 
     def _calculate_reading(self, index: int) -> float | dict | None:
-        self.managed_indicators["HLAS_raw"].set_reading(
+        self.hlas_raw.set_reading(
             (self.candles[index].high + self.candles[index].low) / 2
         )
-        self.managed_indicators["EMA"].calculate_index(index)
+        self.ema_smooth.calculate_index(index)
         return self.reading("HLSmoothed")
 
 ```

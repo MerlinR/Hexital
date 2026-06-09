@@ -29,8 +29,8 @@ class MFI(Indicator[float | None]):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.sub_hlca = self.add_sub_indicator(HLCA())
-        self.data = self.add_managed_indicator(Managed())
+        self.sub_hlca = self.add_child(HLCA())
+        self.data = self.add_child_managed(Managed())
 
     def _calculate_reading(self, index: int) -> float | None:
         hlca = self.sub_hlca.reading()

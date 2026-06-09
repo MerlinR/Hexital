@@ -18,7 +18,15 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Append/Prepend/Insert, the timeframe argument will set Candles to that timeframe `start.append(candle, "T1")`
 - Indicators/default timeframe, will inherit a timeframe from Candle's or the appending methods
 - Timeframe default has changed from str CONST "default" TimeFrame DEFAULT = "N"
-
+- Reworked child indicator API
+    - Added `add_child(indicator, ...)` as the single entry point for attaching child indicators
+    - Added `ChildWhen` with `BEFORE`, `AFTER`, and `MANUAL` members; exported from `hexital`
+    - Added convenience methods `add_after_child()` and `add_managed_child()`
+    - `add_child()` accepts `ChildWhen` or a string value; invalid values raise `InvalidIndicator`
+    - Non-backward compatible changes:
+        - Removed `add_sub_indicator()` and `add_managed_indicator()` — use `add_child()` instead
+        - Removed `sub_indicators` and `managed_indicators` dicts on `Indicator` — use `children` instead
+        - Removed `prior_calc` property and `IndicatorMode` enum
 ---
 
 ## 3.0.1
@@ -26,8 +34,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 *Release Date: 2025-04-08*
 
 - CandlestickType now re-calculates after prepending to ensure prev transformed are still correct
-- Optimise Indicator '_reading_dup' (I think im dumb)
-- Updated 'resample_candles' to make use of CalcMode
+- Optimise Indicator `_reading_dup()` (I think im dumb)
+- Updated `resample_candles()` to make use of CalcMode
 
 ---
 
@@ -36,14 +44,14 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 *Release Date: 2025-04-08*
 
 - Non-backward compatible changes:
-    - Hexital and Indicator 'append' will now only append to Candles and not sort placement.
-    - Renamed Indicator 'as_list' to 'readings'
-    - Renamed 'find_candles' to 'find_candle_pairing'
-    - Removed 'has_reading' as pointless with method 'exists'
-    - Candle with no 'timestamp' will no longer use current UTC time
+    - Hexital and Indicator `append()` will now only append to Candles and not sort placement.
+    - Renamed Indicator `as_list()` to `readings()`
+    - Renamed `find_candles()` to `find_candle_pairing()`
+    - Removed `has_reading()` as pointless with method `exists()`
+    - Candle with no `timestamp` will no longer use current UTC time
 
 - Candle's no longer require a Timestamp
-- Reworked and optimised 'append' and added 'insert' and 'prepend'
+- Reworked and optimised `append()` and added `insert()` and `prepend()`
 - Added IndicatorCollection as a way to better reference Indicator's
 - More options when setting indicator 'Source' - str | Indicator | NestedSource
 - Updated Sub/Managed Indicator's to generate name based of parents if none set
@@ -57,9 +65,9 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 *Release Date: 2025-02-12*
 
 - Added option when converting Candle to include the readings
-- Updated 'Settings' to work correctly in Indicator, and added it to Hexital
+- Updated `settings` to work correctly in Indicator, and added it to Hexital
 - Fixed
-    - Fixed Minor bug in _find_calc_index
+    - Fixed Minor bug in `_find_calc_index()`
 
 ---
 
@@ -67,13 +75,13 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 *Release Date: 2025-02-04*
 
-- Added as_list and as_dict method's to Candle
-- Added clean_copy to Candle to copy core values to new Candle object
+- Added `as_list()` and `as_dict()` methods to Candle
+- Added `clean_copy()` to Candle to copy core values to new Candle object
     - Will remove indicators/sub_indicators
     - Default used when appending new Candle
-- Added 'Readings' to Hexital
+- Added `readings()` to Hexital
 - Optimisation
-    - Removed use of 'deepcopy' for 'clean_copy'
+    - Removed use of `deepcopy()` for `clean_copy()`
 - Fixes
     - Corrected filler candles in timeframe to have 0 aggregation factor
     - Corrected VWAP Naming
@@ -120,13 +128,13 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Updated Movement methods to accept `Indicator | Hexital | List[Candle]` and searches the given
   object to find the specific'd indicator(s)
     - Movement methods can now accept Indicator's from different timeframes when used with Hexital object
-- Added 'candles_average' method to Indicator
-- Added 'exists' to do same as prev_exists for correct handling dict's
-- Updated Candle to now accept either 'timestamp' or 'time' for time's in 'from_dict(s)'
-- Updated 'reading_count' to accept an index to count from
-- Updated Hexital append with optional 'timeframe' to select specific Candle's to append too
-- Updated 'candles' in Hexital method to accept timeframe's or indicators
-- Updated 'prev_exists' to correctly handle Dict's
+- Added `candles_average()` method to Indicator
+- Added `exists()` to do same as `prev_exists()` for correct handling dict's
+- Updated Candle to now accept either `timestamp` or `time` for times in `from_dict()` / `from_dicts()`
+- Updated `reading_count()` to accept an index to count from
+- Updated Hexital `append()` with optional `timeframe` to select specific Candle's to append too
+- Updated `candles()` in Hexital to accept timeframe's or indicators
+- Updated `prev_exists()` to correctly handle Dict's
 - Updated Rounding to accept 'None' to indicate no rounding, default is still 4
 
 - Added Movements
@@ -187,9 +195,9 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 *Release Date: 2024-04-21*
 
 - Removed Movement/Patterns from Hexital/Indicator
-- Removed get_indicator from Hexital as indicator already exists
-- Renamed candles_all to get_candles
-- Updated prev_exists to accept optional Indicator to be more useful
+- Removed `get_indicator()` from Hexital as `indicator()` already exists
+- Renamed `candles_all()` to `get_candles()`
+- Updated `prev_exists()` to accept optional Indicator to be more useful
 - Altered Indicator name reading, to avoid issue's such as "TR" in "ATR"
 - Changed several methods to properties in Candle (positive, realbody, etc)
 - Updated Candle to be more flexible with values
@@ -212,7 +220,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 *Release Date: 2024-04-08*
 
-- Fixed #12 Inaccurate verify_indicators method in Hexital
+- Fixed `#12` Inaccurate `verify_indicators()` method in Hexital
 
 ---
 
@@ -234,15 +242,15 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added Pattern_map, Movement_map, Indicator_map and Candlestick_map for easier control and possible modular altering
 - Added Heikin-Ashi candlestick conversion
 - Added better config inheritance from Hexital to Indicators
-- Added calculate_index to hexital
+- Added `calculate_index()` to hexital
 - Added ability to call the movement and pattern methods from Hexital and Indicator for easier usage
-    - above, below, cross, crossover, doji, hammer, etc..
-- Added sanitise_name to convert '.' to ',' to support name nesting
+    - `above()`, `below()`, `cross()`, `crossover()`, `doji()`, `hammer()`, etc..
+- Added `sanitise_name()` to convert '.' to ',' to support name nesting
 - Added more Exceptions to improve error's
 - Added Candle ability to accept json str timestamp, therefore allowing direct conversion from Pandas -> Hexital
 - Fixed Hammer index pattern working correctly
 - Changed Sub/managed indicators to auto populate candles field
-- Changed 'as_list' property a method that can now take a nested indicator name
+- Changed `as_list()` property a method that can now take a nested indicator name
 - Removed read property
 - Renamed utils/candlesticks to utils/candles
 
@@ -267,7 +275,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Fixed Timeframe bug with candles reference in indicator that use sub indicators
 - Fixed possible error in VWAP with no volumes traded
 - Fixed bug with nested Indicator returning None for valid 0 Value
-- Fixed purge not correctly purge sub and managed indicators
+- Fixed `purge()` not correctly purge sub and managed indicators
 
 ---
 
@@ -276,7 +284,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 *Release Date: 2023-10-09*
 
 - Added candles_timerange to auto remove older than N candles
-- Added 'Settings' propety, to output Indicator in a dict format, that can be fed into back into Hexital
+- Added `settings` property, to output Indicator in a dict format, that can be fed into back into Hexital
 - Updated Hexital to better take Pattern's as a dict input
 - Updated Hexital dict input to accept custom method Patterns
 - Fixed bug in Movement on to few candles
@@ -292,9 +300,9 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 - Added Patterns:
     - Doji Candle
-- Added append method to Indicator just like Hexital
+- Added `append()` method to Indicator just like Hexital
 - Fixed bug where Hexital would alter indicator list
-- Fixed bug in \_find_calc_index with no candles
+- Fixed bug in `_find_calc_index()` with no candles
 - Added Pattern Indicator, skeleton to run Any Patterns as a Indicator
     - E.G On all Candles automatically
 - Added support to generate Indicators on multiple timeframes at once
@@ -310,12 +318,12 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Feature: Added timestamp (datetime) to Candle dataclass
 - Feature: Can convert Candle from list and dict
 - Feature: Can set timestamp(datetime) in lists/dict Candle conversion
-- Feature: Added \_validate_fields method to Indicators
+- Added `_validate_fields()` method to Indicators
 - Added custom exceptions
 - More thorough unit testing
 - Updated Indicators accuracy to Truth source
 - Added private index property to Indicator allowing simpler method calls
-    - self.reading_by_index(index, self.input_value) -> self.reading(self.input_value)
+    - `self.reading_by_index(index, self.input_value)` -> `self.reading(self.input_value)`
     - Multiple Method's renamed/argument re-ordered
 - Added Indicators:
     - ADX

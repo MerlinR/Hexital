@@ -31,15 +31,16 @@ class HMA(Indicator[float | None]):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.sub_wma = self.add_sub_indicator(WMA(source=self.source, period=self.period))
-        self.sub_wmah = self.add_sub_indicator(
+        self.sub_wma = self.add_child(
+            WMA(source=self.source, period=self.period)
+        )
+        self.sub_wmah = self.add_child(
             WMA(source=self.source, period=int(self.period / 2))
         )
 
-        self.sub_hma = self.add_managed_indicator(Managed())
-        self.sub_hma_smoothed = self.sub_hma.add_sub_indicator(
+        self.sub_hma = self.add_child_managed(Managed())
+        self.sub_hma_smoothed = self.sub_hma.add_child_after(
             WMA(source=self.sub_hma, period=int(math.sqrt(self.period))),
-            False,
         )
 
     def _calculate_reading(self, index: int) -> float | None:

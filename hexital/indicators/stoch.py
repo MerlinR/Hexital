@@ -43,16 +43,15 @@ class STOCH(Indicator[dict[str, float | None]]):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.data = self.add_managed_indicator(Managed())
-        self.sub_k = self.data.add_sub_indicator(
+        self.data = self.add_child_managed(Managed())
+        self.sub_k = self.data.add_child_after(
             SMA(
                 source=NestedSource(self.data, "stoch"),
                 period=self.smoothing_k,
                 name=f"{self.name}_k",
             ),
-            False,
         )
-        self.sub_d = self.add_managed_indicator(
+        self.sub_d = self.add_child_managed(
             SMA(
                 source=NestedSource(self.data, "k"),
                 period=self.slow_period,

@@ -32,19 +32,19 @@ class RVI(Indicator[float | None]):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.data = self.add_managed_indicator(Managed())
+        self.data = self.add_child_managed(Managed())
 
-        self.sub_stdev = self.add_sub_indicator(
+        self.sub_stdev = self.add_child(
             STDEV(source=self.source, period=self.period)
         )
-        self.sub_pos = self.add_managed_indicator(
+        self.sub_pos = self.add_child_managed(
             EMA(
                 period=self.period,
                 source=NestedSource(self.data, "pos"),
                 name=f"{self._name}_pos_ema",
             ),
         )
-        self.sub_neg = self.add_managed_indicator(
+        self.sub_neg = self.add_child_managed(
             EMA(
                 period=self.period,
                 source=NestedSource(self.data, "neg"),

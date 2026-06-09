@@ -33,8 +33,10 @@ class KC(Indicator[dict[str, float | None]]):
         return f"{self._name}_{self.period}_{self.multiplier}"
 
     def _initialise(self):
-        self.sub_atr = self.add_sub_indicator(ATR(period=self.period))
-        self.sub_ema = self.add_sub_indicator(EMA(source=self.source, period=self.period))
+        self.sub_atr = self.add_child(ATR(period=self.period))
+        self.sub_ema = self.add_child(
+            EMA(source=self.source, period=self.period)
+        )
 
     def _calculate_reading(self, index: int) -> dict[str, float | None]:
         atr_ = self.sub_atr.reading()
