@@ -98,14 +98,12 @@ nav:
   - Features: features.md
   - Guides:
     - Quick Start: guides/quick-start.md
-    - Indicators: guides/indicators-indepth.md
+    - Strategies (Hexital): guides/hexital-indepth.md
     - Candles: guides/candles.md
-    - Hexital Strategy: guides/hexital-indepth.md
-    - Indicator Analysis: guides/analysis-indepth.md
+    - Analysis: guides/analysis-indepth.md
+    - Custom Indicators: guides/custom-indicator.md
+    - Indicators (advanced): guides/indicators-indepth.md
     - Candlesticks: guides/candlesticks.md
-    # - Amorph Indicator: guides/amorph.md
-    - Creating Indicator: guides/custom-indicator.md
-  - Indicator's: indicator-catalogue.md
   - Catalogues:
     - Indicator's: indicator-catalogue.md
     - Candle Pattern's: candle-pattern-catalogue.md

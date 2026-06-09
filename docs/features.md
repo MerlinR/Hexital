@@ -24,19 +24,21 @@ This feature provides significant flexibility for creating custom indicators. Fo
 
 A practical example is the calculation of the [Stochastic Oscillator (STOCH)][hexital.indicators.stoch.STOCH]. The `k` value of STOCH is used as the input for an SMA to compute the `d` value. Internally, this is implemented as the STOCH indicator chaining the SMA indicator, using its own `k` value as the input source.
 
-### Custom Indicator's
+### Custom Indicators
 
-All indicators in Hexital are implemented as dataclass objects, following a consistent and straightforward pattern. Most methods are inherited from the base [Indicator][hexital.core.indicator.Indicator] class, making it easy for users to create custom indicators. These custom indicators can be used individually or integrated into [Hexital][hexital.core.hexital.Hexital] as part of a trading strategy.
+All indicators in Hexital are implemented as dataclass objects, following a consistent and straightforward pattern. Most methods are inherited from the base [Indicator][hexital.core.indicator.Indicator] class, making it easy to create your own.
 
-Below is an example of a custom indicator, which utilizes [Indicator chaining](features.md#indicator-chaining). This custom indicator, HighLowAverageSmoothed, calculates the average of the high and low values for each candle, then smooths the result using an EMA.
+See the [Custom Indicators guide](guides/custom-indicator.md) for three recipes (simple, stateful, composite) and when to use each.
+
+Below is a brief example of a custom indicator using [indicator chaining](features.md#indicator-chaining). It calculates the average of high and low per candle, then smooths with an EMA.
 
 **Defining the Custom Indicator:**
 
 ```python linenums="1"
 from dataclasses import dataclass, field
 
-from hexital.core.indicator import Indicator, Managed
-from hexital.indicators.ema import EMA
+from hexital import Indicator, Managed
+from hexital import EMA
 
 
 @dataclass(kw_only=True)
