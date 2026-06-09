@@ -162,7 +162,7 @@ class Indicator(Generic[V], ABC):
     def prev(
         self, source: Source | None = None, default: T | None = None
     ) -> V | T:
-        """Previous reading — shorthand for :meth:`prev_reading`."""
+        """Previous reading — shorthand for `prev_reading`."""
         return self.prev_reading(source, default)
 
     def at(
@@ -171,7 +171,7 @@ class Indicator(Generic[V], ABC):
         source: Source | None = None,
         default: T | None = None,
     ) -> V | T:
-        """Reading at a specific candle index — shorthand for :meth:`reading`."""
+        """Reading at a specific candle index — shorthand for `reading`."""
         return self.reading(source, index=index, default=default)
 
     def src(self, default: T | None = None) -> V | T:
@@ -406,10 +406,10 @@ class Indicator(Generic[V], ABC):
         Args:
             indicator: The child indicator to attach.
             when: When the child is calculated relative to the parent at each index.
-                :attr:`ChildWhen.BEFORE` runs before :meth:`_calculate_reading`.
+                :attr:`ChildWhen.BEFORE` runs before `_calculate_reading`.
                 :attr:`ChildWhen.AFTER` runs after the parent's reading is stored.
                 :attr:`ChildWhen.MANUAL` is only calculated when explicitly invoked
-                (e.g. via :meth:`Managed.set_reading` or :meth:`calculate_index`).
+                (e.g. via `Managed.set_reading` or `calculate_index`).
         """
         when = _normalize_when(when)
 
