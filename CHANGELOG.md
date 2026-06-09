@@ -21,12 +21,16 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Reworked child indicator API
     - Added `add_child(indicator, ...)` as the single entry point for attaching child indicators
     - Added `ChildWhen` with `BEFORE`, `AFTER`, and `MANUAL` members; exported from `hexital`
-    - Added convenience methods `add_after_child()` and `add_managed_child()`
+    - Added convenience methods `add_child_after()` and `add_child_managed()`
     - `add_child()` accepts `ChildWhen` or a string value; invalid values raise `InvalidIndicator`
     - Non-backward compatible changes:
         - Removed `add_sub_indicator()` and `add_managed_indicator()` — use `add_child()` instead
         - Removed `sub_indicators` and `managed_indicators` dicts on `Indicator` — use `children` instead
         - Removed `prior_calc` property and `IndicatorMode` enum
+- Added `State` helper for indicator state
+    - Added `Indicator.add_state()` to register state backed by a managed child
+    - `State` provides `prev()`, `reading()`, `set()`, `update()`, and `source()` — replacing manual `Managed` + `NestedSource`
+    - Exported `State` from `hexital`; built-in stateful indicators migrated to use it
 ---
 
 ## 3.0.1
