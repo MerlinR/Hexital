@@ -8,7 +8,9 @@ A unique aspect of Hexital is that results are stored directly within the candle
 
 Additionally, this approach supports caching candles. If the application is restarted, the cached candles, combined with the Hexital configuration, can seamlessly restore both the candles and their indicator values, enabling incremental calculations to resume immediately.
 
+### Timeframe labels vs transforms
 
+`candle.timeframe` is stored on each bar as metadata (what resolution the row represents). Resampling is configured separately via `indicator.timeframe=` or `hexital.timeframe=`. Managers route appended candles by label: a resampling manager accepts bars labelled at its transform size or finer. See [Candles](../guides/candles.md#timeframes) for usage.
 
 
 ## Future Plans

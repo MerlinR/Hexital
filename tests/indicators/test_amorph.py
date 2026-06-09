@@ -25,7 +25,7 @@ def test_amorph_multi_arguments(candles_untimeframed):
 def test_amorph_dict_arguments(candles):
     test = Amorph(analysis=patterns.doji, candles=candles, args={"lookback": 20})
     test.calculate()
-    assert test.name == "doji_T1"
+    assert test.name == "doji"
 
 
 @pytest.mark.usefixtures("candles")
@@ -70,4 +70,4 @@ def test_movement_amorph_kawgs(candles_untimeframed):
 def test_amorph_custom(candles):
     test = Amorph(analysis=fake_pattern, candles=candles)
     test.calculate()
-    assert test.reading("fake_pattern_T1") is not None
+    assert test.reading("fake_pattern") is not None

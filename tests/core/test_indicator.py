@@ -33,24 +33,34 @@ class FakeIndicator(Indicator):
 def test_calculate(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     test.calculate()
-    assert minimal_candles[-1].indicators.get("Fake_10_T1")
+    assert minimal_candles[-1].indicators.get("Fake_10")
 
 
 @pytest.mark.usefixtures("minimal_candles")
 def test_name_default(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     test.calculate()
+    assert test.reading("Fake_10")
+    assert test.name == "Fake_10"
+
+
+@pytest.mark.usefixtures("minimal_candles")
+def test_name_default_timeframe_inherit(minimal_candles: list[Candle]):
+    test = FakeIndicator(timeframe=timeframe.TimeFrame.MINUTE)
+    test.append(minimal_candles)
+    test.calculate()
     assert test.reading("Fake_10_T1")
     assert test.name == "Fake_10_T1"
 
 
 @pytest.mark.usefixtures("minimal_candles_untimeframed")
-def test_name_default_timeframe_inherit(minimal_candles_untimeframed: list[Candle]):
+def test_unlabeled_candles_skipped_by_resample_manager(
+    minimal_candles_untimeframed: list[Candle],
+):
     test = FakeIndicator(timeframe=timeframe.TimeFrame.MINUTE)
     test.append(minimal_candles_untimeframed)
     test.calculate()
-    assert test.reading("Fake_10_T1")
-    assert test.name == "Fake_10_T1"
+    assert len(test.candles) == 0
 
 
 @pytest.mark.usefixtures("minimal_candles")
@@ -378,6 +388,29 @@ class TestAddState:
         assert state.prev("value") == 10.0
         assert state.reading("value") == 20.0
         assert state.source("value").name == f"{state.managed.name}.value"
+
+
+class TestCandleTimeframeLabel:
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_labeled_candles_do_not_enable_resampling(self, minimal_candles: list[Candle]):
+        indicator = FakeIndicator(candles=minimal_candles)
+        indicator.calculate()
+
+        assert indicator.timeframe is None
+        assert indicator.name == "Fake_10"
+        assert len(indicator.candles) == len(minimal_candles)
+
+    @pytest.mark.usefixtures("minimal_candles_untimeframed")
+    def test_explicit_indicator_timeframe_resamples(
+        self, minimal_candles_untimeframed: list[Candle]
+    ):
+        indicator = FakeIndicator(
+            candles=minimal_candles_untimeframed, timeframe=timeframe.TimeFrame.MINUTE
+        )
+        indicator.calculate()
+
+        assert indicator.name == "Fake_10_T1"
+        assert len(indicator.candles) < len(minimal_candles_untimeframed)
 
 
 class TestAuthorShortcuts:

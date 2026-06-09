@@ -111,9 +111,7 @@ class TestAppend:
         strategy.add_indicator([EMA(), EMA(timeframe="T5")])
         strategy.append(candles[0])
         assert len(strategy.candles()) == 1 and len(strategy.candles("T5")) == 1
-        strategy.append(candles[-1], "T5")
-        assert len(strategy.candles()) == 1 and len(strategy.candles("T5")) == 2
-        strategy.append(candles[-1], TimeFrame.DEFAULT)
+        strategy.append(candles[-1])
         assert len(strategy.candles()) == 2 and len(strategy.candles("T5")) == 2
 
 
@@ -561,7 +559,7 @@ class TestMultiTimeframesNames:
         strategy = Hexital(
             "Test Strategy", candles, [EMA(timeframe="T1"), SMA(timeframe="T1")]
         )
-        assert [st.name for st in strategy._candle_managers] == ["T1"]
+        assert [st.name for st in strategy._candle_managers] == ["DEFAULT", "T1"]
 
     def test_clash_hexital(self, candles):
         strategy = Hexital(

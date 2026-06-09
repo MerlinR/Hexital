@@ -47,7 +47,7 @@ pip install git+https://github.com/merlinr/hexital.git@development
 | Compute one indicator on a live feed | `EMA(...).append()` | [Quick Start](guides/quick-start.md) |
 | Run several indicators on one candle stream | `Hexital(...)` | [Strategies](guides/hexital-indepth.md) |
 | Load candles from CSV, Pandas, timestamps | `Candle.from_dicts()` etc. | [Candles](guides/candles.md) |
-| Build 5m bars from 1m data | `timeframe=` | [Candles](guides/candles.md) · [Features](features.md) |
+| Build 5m bars from 1m data | `timeframe=` on indicator + label on candles | [Candles](guides/candles.md) · [Features](features.md) |
 | Check crossovers, rising/falling | `hexital.analysis` | [Analysis](guides/analysis-indepth.md) |
 | Heikin-Ashi or other candle transforms | `candlestick=` | [Candlesticks](guides/candlesticks.md) |
 | Write my own indicator | subclass `Indicator` | [Custom indicators](guides/custom-indicator.md) |

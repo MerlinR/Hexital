@@ -243,67 +243,35 @@ class Hexital:
         indicator.purge()
         self._indicators.pop(indicator.name)
 
-    def prepend(
-        self,
-        candles: Candles,
-        timeframe: TimeFramesSource | None = None,
-    ):
+    def prepend(self, candles: Candles):
         """Prepends a Candle or a chronological ordered list of Candle's to the front of the Hexital Candle's. This will only re-sample and re-calculate the new Candles, with minor overlap.
 
         Args:
             candles: The Candle or List of Candle's to prepend.
-            timeframe: Set the timeframe of the Candle's being prepended.
         """
-
-        timeframe_delta = convert_timeframe_to_timedelta(timeframe)
-
         for candle_manager in self._candle_managers:
-            candle_manager.prepend(
-                candles,
-                timeframe=timeframe_delta,
-            )
+            candle_manager.prepend(candles)
         self.calculate()
 
-    def append(
-        self,
-        candles: Candles,
-        timeframe: TimeFramesSource | None = None,
-    ):
+    def append(self, candles: Candles):
         """append a Candle or a chronological ordered list of Candle's to the end of the Hexital Candle's. This wil only re-sample and re-calculate the new Candles, with minor overlap.
 
         Args:
             candles: The Candle or List of Candle's to appended.
-            timeframe: Set the timeframe of the Candle's being cappended.
         """
-
-        timeframe_delta = convert_timeframe_to_timedelta(timeframe)
-
         for candle_manager in self._candle_managers:
-            candle_manager.append(
-                candles,
-                timeframe=timeframe_delta,
-            )
+            candle_manager.append(candles)
 
         self.calculate()
 
-    def insert(
-        self,
-        candles: Candles,
-        timeframe: TimeFramesSource | None = None,
-    ):
+    def insert(self, candles: Candles):
         """insert a Candle or a list of Candle's to the Hexital Candles. This accepts any order or placement. This will sort, re-sample and re-calculate all Candles.
 
         Args:
             candles: The Candle or List of Candle's to inserted.
-            timeframe: Set the timeframe of the Candle's being inserted.
         """
-        timeframe_delta = convert_timeframe_to_timedelta(timeframe)
-
         for candle_manager in self._candle_managers:
-            candle_manager.insert(
-                candles,
-                timeframe=timeframe_delta,
-            )
+            candle_manager.insert(candles)
 
         self.calculate_index(index=0, end_index=-1)
 

@@ -12,11 +12,11 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 - Support python 3.14
 - Major Typing update, some method clean up and optimisation
-- TimeFrames are now required*
-    - * Indicators with no timeframe with no timeframed Candles still function.
-- Altered how append "timeframe" argument is treated
-    - Append/Prepend/Insert, the timeframe argument will set Candles to that timeframe `start.append(candle, "T1")`
-- Indicators/default timeframe, will inherit a timeframe from Candle's or the appending methods
+- Separated candle timeframe metadata from resampling
+    - `candle.timeframe` is metadata only — it does not configure managers or indicator naming
+    - Resampling runs only when `indicator.timeframe=` or `hexital.timeframe=` is set
+    - Removed `timeframe=` from `append` / `prepend` / `insert`; label candles at source instead
+    - Managers accept candles whose label is equal to or finer than the manager transform
 - Timeframe default has changed from str CONST "default" TimeFrame DEFAULT = "N"
 - Reworked child indicator API
     - Added `add_child(indicator, ...)` as the single entry point for attaching child indicators

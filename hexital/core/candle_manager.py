@@ -38,8 +38,6 @@ class CandleManager:
         self._candles = []
         if candles:
             self._candles.extend(candles)
-        if not self.timeframe and candles and candles[0].timeframe:
-            self.timeframe = candles[0].timeframe
 
         if candlestick:
             self.candlestick = candlestick
@@ -106,65 +104,41 @@ class CandleManager:
     def find_indicator(self, name: str) -> bool:
         return any(reading_by_candle(candle, name) for candle in reversed(self.candles))
 
-    def prepend(self, candles: Candles, timeframe: timedelta | None = None):
+    def _accepts_candle(self, candle: Candle) -> bool:
+        """Route candles to managers by label: skip unlabeled or coarser-than-manager bars."""
+        if not self.timeframe:
+            return True
+        if not candle.timeframe:
+            return False
+        return candle.timeframe <= self.timeframe
+
+    def prepend(self, candles: Candles):
         candles_ = parse_candles(candles)
         self.sort_candles(candles_)
 
-        if not self.timeframe and not self._candles:
-            if timeframe:
-                self.timeframe = timeframe
-            elif candles_ and candles_[0].timeframe:
-                self.timeframe = candles_[0].timeframe
-
         for candle in reversed(candles_):
             candle_copy = candle.clean_copy()
-
-            if timeframe:
-                candle_copy.timeframe = timeframe
-
-            if self.timeframe and not candle_copy.timeframe and not timeframe:
-                continue
-            if (
-                self.timeframe
-                and candle_copy.timeframe
-                and candle_copy.timeframe > self.timeframe
-            ):
+            if not self._accepts_candle(candle_copy):
                 continue
 
             self._candles.insert(0, candle_copy)
 
         self._candle_tasks(CalcMode.PREPEND)
 
-    def append(self, candles: Candles, timeframe: timedelta | None = None):
+    def append(self, candles: Candles):
         candles_ = parse_candles(candles)
         index = len(self._candles) - 1 if len(self._candles) > 0 else 0
 
-        if not self.timeframe and not self._candles:
-            if timeframe:
-                self.timeframe = timeframe
-            elif candles_ and candles_[0].timeframe:
-                self.timeframe = candles_[0].timeframe
-
         for candle in candles_:
             candle_copy = candle.clean_copy()
-
-            if timeframe:
-                candle_copy.timeframe = timeframe
-
-            if self.timeframe and not candle_copy.timeframe and not timeframe:
-                continue
-            if (
-                self.timeframe
-                and candle_copy.timeframe
-                and candle_copy.timeframe > self.timeframe
-            ):
+            if not self._accepts_candle(candle_copy):
                 continue
 
             self._candles.append(candle_copy)
 
         self._candle_tasks(CalcMode.APPEND, index)
 
-    def insert(self, candles: Candles, timeframe: timedelta | None = None):
+    def insert(self, candles: Candles):
         candles_ = parse_candles(candles)
 
         self.sort_candles(candles_)
@@ -172,25 +146,9 @@ class CandleManager:
         to_sort = False
         last_timestamp = self._candles[-1].timestamp if self._candles else None
 
-        if not self.timeframe and not self._candles:
-            if timeframe:
-                self.timeframe = timeframe
-            elif candles_ and candles_[0].timeframe:
-                self.timeframe = candles_[0].timeframe
-
         for candle in candles_:
             candle_copy = candle.clean_copy()
-
-            if timeframe:
-                candle_copy.timeframe = timeframe
-
-            if self.timeframe and not candle_copy.timeframe and not timeframe:
-                continue
-            if (
-                self.timeframe
-                and candle_copy.timeframe
-                and candle_copy.timeframe > self.timeframe
-            ):
+            if not self._accepts_candle(candle_copy):
                 continue
 
             if last_timestamp and candle.timestamp and candle.timestamp < last_timestamp:

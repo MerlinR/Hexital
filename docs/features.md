@@ -94,29 +94,37 @@ print(strategy.reading("HLASmooth"))
 
 ## Timeframes
 
-A unique feature of Hexital is its ability to effortlessly compress candles into different timeframes. This means you can work using 1-second candles which will be generating 5-minute candles and their corresponding indicator readings, which update dynamically as new candles are added.
+A unique feature of Hexital is its ability to compress candles into larger timeframes incrementally — e.g. feed 1-minute bars and maintain a 5-minute EMA that updates on each append.
+
+**Two settings, two jobs:**
+
+- **`candle.timeframe`** — label on the data (what bar size this row represents). See [Candles](guides/candles.md#timeframes).
+- **`indicator.timeframe=`** (or on [Hexital][hexital.core.hexital.Hexital]) — the resample transform. This drives manager behaviour and indicator naming (e.g. `EMA_10_T5`).
 
 Example:
 
 ```python linenums="1"
+from datetime import timedelta
 from hexital import EMA, Candle
 
-# T5 being 5 minutes
-my_ema = EMA(candles=candles, timeframe="T5")
-my_ema.calculate()
+# T5 = 5-minute transform; input candles must be labelled at T1 or finer
+my_ema = EMA(candles=[], timeframe="T5")
 
-# 1-second Candle stream
 async with connect(data_stream) as websocket:
     async for message in websocket:
-        candle_1s = await websocket.recv()
-        my_ema.append(Candle.from_dict(candle_1s))
-
+        candle_1m = Candle.from_dict(await websocket.recv())
+        if candle_1m.timeframe is None:
+            candle_1m.timeframe = timedelta(minutes=1)
+        my_ema.append(candle_1m)
 ```
 
-The `timeframe` attribute exists in all [Indicators][hexital.core.indicator.Indicator] and [Hexital][hexital.core.hexital.Hexital], using either [TimeFrame][hexital.utils.timeframe.TimeFrame], `strings`, `int` or `timedelta`.
+The `timeframe` transform exists on all [Indicators][hexital.core.indicator.Indicator] and [Hexital][hexital.core.hexital.Hexital], using [TimeFrame][hexital.utils.timeframe.TimeFrame], strings, ints, or `timedelta`.
 
-!!! info "Compression"
-    It should go without saying, it cannot take 5 Minute candle's and downgrade them into second Candles.
+!!! info "Compression direction"
+    You cannot downsample 5-minute candles into 1-minute bars. Coarser labelled candles are skipped by finer resample managers.
+
+!!! info "No timeframe on append"
+    `append()`, `prepend()`, and `insert()` do not take a `timeframe=` argument. Label candles when you create them; set the transform on the indicator or strategy.
 
 ---
 
@@ -168,13 +176,13 @@ For example, if you are working using 1-second candles, you can generate:
 - A 5-minute Supertrend
 - A 1-hour EMA
 
-This is achieved by appending the 1-second candles into a [Hexital][hexital.core.hexital.Hexital] object, which handles the timeframe conversions automatically.
+This is achieved by appending labelled candles into a [Hexital][hexital.core.hexital.Hexital] object. Each manager filters by candle label and applies its own transform.
 
 **Example:**
 
 ```python linenums="1"
-from hexital import EMA, SMA, Supertrend, Candle, Hexital
 from datetime import timedelta
+from hexital import EMA, SMA, Supertrend, Candle, Hexital
 
 strategy = Hexital("Demo Strat", [], [
         EMA(name="EMA_short", period=14, timeframe="T1"),
@@ -184,11 +192,12 @@ strategy = Hexital("Demo Strat", [], [
     ]
 )
 
-# 1-second Candle stream
 async with connect(data_stream) as websocket:
     async for message in websocket:
-        candle_1s = await websocket.recv()
-        my_ema.append(Candle.from_dict(candle_1s))
+        candle = Candle.from_dict(await websocket.recv())
+        if candle.timeframe is None:
+            candle.timeframe = timedelta(minutes=1)
+        strategy.append(candle)
 ```
 
 ---

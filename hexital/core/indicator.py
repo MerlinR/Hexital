@@ -256,22 +256,13 @@ class Indicator(Generic[V], ABC):
         """
         return self._find_readings(name)  # type: ignore
 
-    def _check_timeframes(self, candles: Candles) -> list[Candle]:
-        """Ensures that the candles being added have the correct timeframe."""
-        candles_ = parse_candles(candles)
-
-        for candle in candles_:
-            if self._candle_mngr.timeframe and not candle.timeframe:
-                candle.timeframe = self._candle_mngr.timeframe
-        return candles_
-
     def prepend(self, candles: Candles):
         """Prepends a Candle or a chronological ordered list of Candle's to the front of the Indicator Candle's. This will only re-sample and re-calculate the new Candles, with minor overlap.
 
         Args:
             candles: The Candle or List of Candle's to prepend.
         """
-        self._candle_mngr.prepend(self._check_timeframes(candles))
+        self._candle_mngr.prepend(parse_candles(candles))
         self._sync_from_manager()
         self.calculate()
 
@@ -281,7 +272,7 @@ class Indicator(Generic[V], ABC):
         Args:
             candles: The Candle or List of Candle's to append.
         """
-        self._candle_mngr.append(self._check_timeframes(candles))
+        self._candle_mngr.append(parse_candles(candles))
         self._sync_from_manager()
         self.calculate()
 
@@ -291,7 +282,7 @@ class Indicator(Generic[V], ABC):
         Args:
             candles: The Candle or List of Candle's to prepend.
         """
-        self._candle_mngr.insert(self._check_timeframes(candles))
+        self._candle_mngr.insert(parse_candles(candles))
         self._sync_from_manager()
         self.calculate_index(0, -1)
 
@@ -643,7 +634,7 @@ class State:
 
     @property
     def managed(self) -> Managed:
-        """Underlying managed child, e.g. as an EMA ``source``."""
+        """Underlying managed child, e.g. as an EMA `source`."""
         return self._managed
 
     def source(self, key: str) -> NestedSource:

@@ -7,7 +7,7 @@ Hexital uses its own [Candle][hexital.core.candle.Candle] type. Indicators read 
 
 Required fields: `open`, `high`, `low`, `close`, `volume`.
 
-Optional: `timestamp`, `timeframe`.
+Optional: `timestamp`, `timeframe` (bar-size label — see [Timeframes](#timeframes) below).
 
 ---
 
@@ -112,12 +112,66 @@ Culled candles take their indicator readings with them. Useful for memory limits
 
 ## Timeframes
 
-Pass `timeframe=` on an indicator or [Hexital][hexital.core.hexital.Hexital] strategy to resample incoming candles (e.g. build 5-minute bars from 1-minute data). See [Features](../features.md) for multi-timeframe examples.
+Hexital separates **what your data is** from **what you transform it into**.
+
+| | Where | Purpose |
+|---|--------|---------|
+| **Label** | `candle.timeframe` | Metadata: the native bar size of this OHLCV row (e.g. 1-minute). Set when you create or load candles. |
+| **Transform** | `indicator.timeframe=` or `hexital.timeframe=` | Enables resampling in the manager (e.g. build 5-minute bars from 1-minute input). |
+
+`candle.timeframe` does **not** turn on resampling, change indicator names, or configure managers. Only an explicit transform does.
+
+### Resampling
+
+Pass `timeframe=` on an indicator or [Hexital][hexital.core.hexital.Hexital] strategy to compress incoming candles (e.g. build 5-minute bars from 1-minute data). See [Features](../features.md) for multi-timeframe examples.
 
 ```python
+from datetime import timedelta
 from hexital import EMA, TimeFrame
 
 ema = EMA(candles=[], timeframe=TimeFrame.MINUTE_5)
+```
+
+The indicator name picks up the transform suffix (e.g. `EMA_10_T5`). Indicators with no `timeframe=` keep an unqualified name regardless of candle labels.
+
+### Label your input candles
+
+Resampling managers only accept candles that carry a label **equal to or finer than** the manager transform. A 1-minute candle feeds a 5-minute EMA; a 5-minute candle does not feed a 1-minute passthrough manager's resample path.
+
+```python
+from datetime import timedelta
+from hexital import EMA, Candle, TimeFrame
+
+candles = Candle.from_dicts([
+    {
+        "open": 1.0, "high": 1.2, "low": 0.9, "close": 1.1, "volume": 1000,
+        "timeframe": timedelta(minutes=1),  # or TimeFrame.MINUTE / "T1"
+    },
+])
+
+ema = EMA(candles=[], timeframe=TimeFrame.MINUTE_5)
+ema.append(candles[0])
+```
+
+**Passthrough managers** (no `timeframe=` on the indicator or strategy) accept any candle, labelled or not. Use these for raw 1:1 feeds.
+
+**Unlabeled candles** are ignored by resampling managers — label at source (CSV column, exchange metadata, or when building `Candle` objects).
+
+### Multi-timeframe strategies
+
+[Hexital][hexital.core.hexital.Hexital] broadcasts each `append()` to every manager. Each manager applies its own filter and transform. You do not pass `timeframe=` to `append()` — routing is driven by candle labels and each manager's transform.
+
+```python
+from datetime import timedelta
+from hexital import EMA, Hexital, Candle
+
+strategy = Hexital("Demo", [], [EMA(), EMA(timeframe="T5")])
+
+candle = Candle.from_dict({
+    "open": 1.0, "high": 1.2, "low": 0.9, "close": 1.1, "volume": 1000,
+    "timeframe": timedelta(minutes=1),
+})
+strategy.append(candle)  # passthrough manager + T5 resample manager
 ```
 
 ---
