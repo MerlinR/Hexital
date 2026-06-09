@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import cast
 
-from ..core.indicator import Indicator, Managed, NestedSource, Source
+from ..core.indicator import Indicator, Source
 from .atr import ATR
 from .hla import HLA
 
@@ -34,7 +34,7 @@ class Supertrend(Indicator[dict[str, float | int | None]]):
     def _initialise(self):
         self.sub_atr = self.add_child(ATR(period=self.period))
         self.sub_hl = self.add_child(HLA())
-        self.data = self.add_child_managed(Managed())
+        self._state = self.add_state()
 
     def _calculate_reading(self, index: int) -> dict[str, float | int | None]:
         direction: int = 1
@@ -53,26 +53,24 @@ class Supertrend(Indicator[dict[str, float | int | None]]):
         upper = hl + mid_atr
         lower = hl - mid_atr
 
-        prev_upper = self.prev_reading(NestedSource(self.data, "upper"))
-        prev_lower = self.prev_reading(NestedSource(self.data, "lower"))
+        prev_upper = self._state.prev("upper")
+        prev_lower = self._state.prev("lower")
 
-        if self.prev_exists(NestedSource(self.data, "lower")):
+        if self._state.prev_exists("lower"):
             close = self.candles[index].close
             if close > prev_upper:
                 direction = 1
             elif close < prev_lower:
                 direction = -1
             else:
-                direction = cast(
-                    int, self.prev_reading(NestedSource(self.data, "direction"))
-                )
+                direction = cast(int, self._state.prev("direction"))
 
                 if direction == 1 and lower < prev_lower:
                     lower = prev_lower
                 if direction == -1 and upper > prev_upper:
                     upper = prev_upper
 
-        self.data.set_reading({"upper": upper, "lower": lower, "direction": direction})
+        self._state.set({"upper": upper, "lower": lower, "direction": direction})
 
         trend = lower if direction == 1 else upper
         long = lower if direction == 1 else None

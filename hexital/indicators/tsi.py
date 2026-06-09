@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from ..core.indicator import Indicator, Managed, NestedSource, Source
+from ..core.indicator import Indicator, Source
 from .ema import EMA
 
 
@@ -35,11 +35,11 @@ class TSI(Indicator[float | None]):
             self.smooth_period = int(int(self.period / 2) + (self.period % 2 > 0))
 
     def _initialise(self):
-        self.data = self.add_child_managed(Managed())
+        self._state = self.add_state()
 
-        self.sub_first = self.data.add_child_after(
+        self.sub_first = self._state.managed.add_child_after(
             EMA(
-                source=NestedSource(self.data, "price"),
+                source=self._state.source("price"),
                 period=self.period,
                 name=f"{self.name}_first",
             ),
@@ -49,8 +49,8 @@ class TSI(Indicator[float | None]):
             EMA(source=self.sub_first, period=self.smooth_period),
         )
 
-        self.abs_first = self.data.add_child_after(
-            EMA(source=NestedSource(self.data, "abs_price"), period=self.period),
+        self.abs_first = self._state.managed.add_child_after(
+            EMA(source=self._state.source("abs_price"), period=self.period),
         )
         self.abs_second = self.abs_first.add_child_after(
             EMA(source=self.abs_first, period=self.smooth_period),
@@ -66,11 +66,9 @@ class TSI(Indicator[float | None]):
         if source is None:
             return None
 
-        self.data.set_reading(
-            {
-                "price": source - prev_reading,
-                "abs_price": abs(source - prev_reading),
-            }
+        self._state.update(
+            price=source - prev_reading,
+            abs_price=abs(source - prev_reading),
         )
 
         abs_second = self.abs_second.reading()

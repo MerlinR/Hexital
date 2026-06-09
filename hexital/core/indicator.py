@@ -357,7 +357,6 @@ class Indicator(Generic[V], ABC):
     def add_child(
         self,
         indicator: Indicator,
-        *,
         when: ChildWhen | str = ChildWhen.BEFORE,
     ) -> Indicator:
         """Register a child indicator that shares this indicator's candles.
@@ -393,6 +392,11 @@ class Indicator(Generic[V], ABC):
     def add_child_managed(self, indicator: Indicator) -> Indicator:
         """Register a child calculated only when explicitly invoked."""
         return self.add_child(indicator, when=ChildWhen.MANUAL)
+
+    def add_state(self, name: str | None = None) -> State:
+        """Register hidden state storage for incremental calculations."""
+        managed = Managed(name=name) if name else Managed()
+        return State(self, self.add_child_managed(managed))
 
     def _find_reading(
         self, source: Source | None = None, index: int | None = None
@@ -571,6 +575,64 @@ class Managed(Indicator):
 
     def set_active_index(self, index: int):
         self._active_index = index
+
+
+class State:
+    """Internal state backed by a managed child indicator.
+
+    Use via `Indicator.add_state()` rather than constructing directly.
+    Dictionary keys map to fields stored on each candle's `sub_indicators`.
+    """
+
+    __slots__ = ("_managed", "_parent")
+
+    def __init__(self, parent: Indicator, managed: Managed):
+        self._parent = parent
+        self._managed = managed
+
+    @property
+    def managed(self) -> Managed:
+        """Underlying managed child, e.g. as an EMA ``source``."""
+        return self._managed
+
+    def source(self, key: str) -> NestedSource:
+        """Reference a state field as an indicator source."""
+        return NestedSource(self._managed, key)
+
+    def prev(self, key: str | None = None, default: T | None = None) -> Reading | T:
+        """Previous reading for the whole state or a single field."""
+        if key is None:
+            return self._parent.prev_reading(self._managed, default)  # type: ignore
+        return self._parent.prev_reading(self.source(key), default)  # type: ignore
+
+    def reading(self, key: str | None = None, default: T | None = None) -> Reading | T:
+        """Current reading for the whole state or a single field."""
+        if key is None:
+            value = self._managed.reading()
+            return value if value is not None else default  # type: ignore
+        return self._parent.reading(self.source(key), default=default)  # type: ignore
+
+    def prev_exists(self, key: str | None = None) -> bool:
+        if key is None:
+            return self._parent.prev_exists(self._managed)
+        return self._parent.prev_exists(self.source(key))
+
+    def exists(self, key: str | None = None) -> bool:
+        if key is None:
+            return self._managed.exists()
+        return self._parent.exists(self.source(key))
+
+    def set(self, reading: Reading) -> None:
+        """Replace the stored state for the current candle."""
+        self._managed.set_reading(reading)  # type: ignore
+
+    def update(self, **values: Reading) -> None:
+        """Merge fields into dict state, or replace when no prior dict exists."""
+        current = self._managed.reading()
+        if isinstance(current, dict):
+            self._managed.set_reading({**current, **values})  # type: ignore
+        else:
+            self._managed.set_reading(values)  # type: ignore
 
 
 class NestedSource:

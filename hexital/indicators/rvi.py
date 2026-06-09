@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from ..core.indicator import Indicator, Managed, NestedSource, Source
+from ..core.indicator import Indicator, Source
 from .ema import EMA
 from .stdev import STDEV
 
@@ -32,7 +32,7 @@ class RVI(Indicator[float | None]):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.data = self.add_child_managed(Managed())
+        self._state = self.add_state()
 
         self.sub_stdev = self.add_child(
             STDEV(source=self.source, period=self.period)
@@ -40,14 +40,14 @@ class RVI(Indicator[float | None]):
         self.sub_pos = self.add_child_managed(
             EMA(
                 period=self.period,
-                source=NestedSource(self.data, "pos"),
+                source=self._state.source("pos"),
                 name=f"{self._name}_pos_ema",
             ),
         )
         self.sub_neg = self.add_child_managed(
             EMA(
                 period=self.period,
-                source=NestedSource(self.data, "neg"),
+                source=self._state.source("neg"),
                 name=f"{self._name}_neg_ema",
             ),
         )
@@ -72,7 +72,7 @@ class RVI(Indicator[float | None]):
             pos_stdev = pos * stdev_reading
             neg_stdev = neg * stdev_reading
 
-            self.data.set_reading({"pos": pos_stdev, "neg": neg_stdev})
+            self._state.set({"pos": pos_stdev, "neg": neg_stdev})
             self.sub_pos.calculate_index(index)
             self.sub_neg.calculate_index(index)
 

@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from ..core.indicator import Indicator, Managed, Source
+from ..core.indicator import Indicator, Source
 from .ema import EMA
 
 
@@ -39,7 +39,7 @@ class MACD(Indicator[dict[str, float | None]]):
             self.fast_period, self.slow_period = self.slow_period, self.fast_period
 
     def _initialise(self):
-        self.data = self.add_child_managed(Managed(name=f"{self.name}_macd"))
+        self._macd = self.add_state(name=f"{self.name}_macd")
 
         self.sub_emaf = self.add_child(
             EMA(source=self.source, period=self.fast_period)
@@ -48,7 +48,7 @@ class MACD(Indicator[dict[str, float | None]]):
             EMA(source=self.source, period=self.slow_period)
         )
         self.sub_signal = self.add_child_managed(
-            EMA(source=self.data, period=self.signal_period),
+            EMA(source=self._macd.managed, period=self.signal_period),
         )
 
     def _calculate_reading(self, index: int) -> dict[str, float | None]:
@@ -59,7 +59,7 @@ class MACD(Indicator[dict[str, float | None]]):
 
         macd = self.sub_emaf.reading() - ema_slow
 
-        self.data.set_reading(macd)
+        self._macd.set(macd)
         self.sub_signal.calculate_index(index)
 
         signal = self.sub_signal.reading()

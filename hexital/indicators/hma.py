@@ -1,7 +1,7 @@
 import math
 from dataclasses import dataclass, field
 
-from ..core.indicator import Indicator, Managed, Source
+from ..core.indicator import Indicator, Source
 from .wma import WMA
 
 
@@ -38,9 +38,9 @@ class HMA(Indicator[float | None]):
             WMA(source=self.source, period=int(self.period / 2))
         )
 
-        self.sub_hma = self.add_child_managed(Managed())
-        self.sub_hma_smoothed = self.sub_hma.add_child_after(
-            WMA(source=self.sub_hma, period=int(math.sqrt(self.period))),
+        self._hma_state = self.add_state()
+        self.sub_hma_smoothed = self._hma_state.managed.add_child_after(
+            WMA(source=self._hma_state.managed, period=int(math.sqrt(self.period))),
         )
 
     def _calculate_reading(self, index: int) -> float | None:
@@ -50,6 +50,6 @@ class HMA(Indicator[float | None]):
         if wma is not None:
             raw_hma = (2 * self.sub_wmah.reading()) - wma
 
-        self.sub_hma.set_reading(raw_hma)
+        self._hma_state.set(raw_hma)
 
         return self.sub_hma_smoothed.reading()

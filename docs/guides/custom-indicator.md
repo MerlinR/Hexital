@@ -10,7 +10,7 @@ All built-in indicators are dataclasses that subclass [Indicator][hexital.core.i
 ## Which recipe do I need?
 
 ```
-Need hidden state between candles?        → Recipe B (Managed)
+Need hidden state between candles?        → Recipe B (`add_state()`)
 Need other indicators as inputs?          → Recipe C (child indicators)
 Just math on candle fields?               → Recipe A (single method)
 One-off pattern without a full class?     → Amorph
@@ -78,7 +78,7 @@ Based on [RSI][hexital.indicators.rsi.RSI]:
 ```python
 from dataclasses import dataclass, field
 
-from hexital import Indicator, Managed, NestedSource
+from hexital import Indicator, State
 
 
 @dataclass(kw_only=True)
@@ -91,7 +91,7 @@ class MyOscillator(Indicator[float | None]):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.data = self.add_child_managed(Managed())
+        self._state = self.add_state()
 
     def _calculate_reading(self, index: int) -> float | None:
         gains = None
@@ -103,16 +103,14 @@ class MyOscillator(Indicator[float | None]):
             change_loss = change if change > 0 else 0.0
 
             gains = (
-                (self.prev_reading(NestedSource(self.data, "gain")) * (self.period - 1))
-                + change_gain
+                (self._state.prev("gain") * (self.period - 1)) + change_gain
             ) / self.period
 
             losses = (
-                (self.prev_reading(NestedSource(self.data, "loss")) * (self.period - 1))
-                + change_loss
+                (self._state.prev("loss") * (self.period - 1)) + change_loss
             ) / self.period
 
-        self.data.set_reading({"gain": gains, "loss": losses})
+        self._state.update(gain=gains, loss=losses)
 
         if gains is not None and losses is not None:
             return 100.0 - (100.0 / (1.0 + (gains / losses)))
@@ -120,7 +118,7 @@ class MyOscillator(Indicator[float | None]):
         return None
 ```
 
-- `Managed()` holds hidden state via `set_reading()` / `NestedSource`
+- `add_state()` holds hidden state via `set()` / `update()` / `prev()`
 - `add_child_managed()` — child runs only when you invoke it (via `set_reading()` or `calculate_index()`)
 
 ---

@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from ..core.indicator import Indicator, Managed, NestedSource, Source
+from ..core.indicator import Indicator, Source
 from .hlca import HLCA
 
 
@@ -30,7 +30,7 @@ class MFI(Indicator[float | None]):
 
     def _initialise(self):
         self.sub_hlca = self.add_child(HLCA())
-        self.data = self.add_child_managed(Managed())
+        self._state = self.add_state()
 
     def _calculate_reading(self, index: int) -> float | None:
         hlca = self.sub_hlca.reading()
@@ -39,17 +39,17 @@ class MFI(Indicator[float | None]):
         money_flow = hlca * self.candles[index].volume
 
         if prev_hlca and hlca > prev_hlca:
-            self.data.set_reading({"positive": money_flow, "negative": 0})
+            self._state.set({"positive": money_flow, "negative": 0})
         elif prev_hlca and hlca < prev_hlca:
-            self.data.set_reading({"positive": 0, "negative": money_flow})
+            self._state.set({"positive": 0, "negative": money_flow})
         elif prev_hlca and hlca == prev_hlca:
-            self.data.set_reading({"positive": 0, "negative": 0})
+            self._state.set({"positive": 0, "negative": 0})
 
         if self.prev_exists() or self.sub_hlca.reading_period(
             self.period + 1, index=index
         ):
-            pos_money = self.candles_sum(self.period, NestedSource(self.data, "positive"))
-            neg_money = self.candles_sum(self.period, NestedSource(self.data, "negative"))
+            pos_money = self.candles_sum(self.period, self._state.source("positive"))
+            neg_money = self.candles_sum(self.period, self._state.source("negative"))
 
             if pos_money and neg_money:
                 return 100 * (pos_money / (pos_money + neg_money))

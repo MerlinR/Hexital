@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
 from ..analysis import movement
-from ..core.indicator import Indicator, Managed, NestedSource, Source
+from ..core.indicator import Indicator, Source
 from .sma import SMA
 
 
@@ -43,17 +43,17 @@ class STOCH(Indicator[dict[str, float | None]]):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.data = self.add_child_managed(Managed())
-        self.sub_k = self.data.add_child_after(
+        self._state = self.add_state()
+        self.sub_k = self._state.managed.add_child_after(
             SMA(
-                source=NestedSource(self.data, "stoch"),
+                source=self._state.source("stoch"),
                 period=self.smoothing_k,
                 name=f"{self.name}_k",
             ),
         )
         self.sub_d = self.add_child_managed(
             SMA(
-                source=NestedSource(self.data, "k"),
+                source=self._state.source("k"),
                 period=self.slow_period,
                 name=f"{self.name}_d",
             ),
@@ -71,10 +71,10 @@ class STOCH(Indicator[dict[str, float | None]]):
 
         stoch = ((self.reading(self.source) - lowest) / (highest - lowest)) * 100
 
-        self.data.set_reading({"stoch": stoch})
+        self._state.set({"stoch": stoch})
         k = self.sub_k.reading()
 
-        self.data.set_reading({"stoch": stoch, "k": k})
+        self._state.set({"stoch": stoch, "k": k})
 
         self.sub_d.calculate_index(index)
 

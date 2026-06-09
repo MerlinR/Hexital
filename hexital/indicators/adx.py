@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from ..core.indicator import Indicator, Managed, NestedSource
+from ..core.indicator import Indicator
 from .atr import ATR
 from .rma import RMA
 
@@ -37,27 +37,27 @@ class ADX(Indicator[dict[str, float | None]]):
 
     def _initialise(self):
         self.sub_atr = self.add_child(ATR(period=self.period))
-        self.data = self.add_child_managed(Managed())
+        self._state = self.add_state()
 
-        self.sub_pos = self.data.add_child_after(
+        self.sub_pos = self._state.managed.add_child_after(
             RMA(
                 name=f"{self.name}_positive",
                 period=self.period,
-                source=NestedSource(self.data, "positive"),
+                source=self._state.source("positive"),
             ),
         )
-        self.sub_neg = self.data.add_child_after(
+        self.sub_neg = self._state.managed.add_child_after(
             RMA(
                 name=f"{self.name}_negative",
                 period=self.period,
-                source=NestedSource(self.data, "negative"),
+                source=self._state.source("negative"),
             ),
         )
         self.dx = self.add_child_managed(
             RMA(
                 name=f"{self.name}_dx",
                 period=self.period_signal,
-                source=NestedSource(self.data, "dx"),
+                source=self._state.source("dx"),
             ),
         )
 
@@ -77,7 +77,7 @@ class ADX(Indicator[dict[str, float | None]]):
         dm_plus = ((up > down) and (up > 0)) * up
         dm_neg = ((down > up) and (down > 0)) * down
 
-        self.data.set_reading({"positive": dm_plus, "negative": dm_neg})
+        self._state.set({"positive": dm_plus, "negative": dm_neg})
 
         atr_: float = self.sub_atr.reading()
 
@@ -95,7 +95,7 @@ class ADX(Indicator[dict[str, float | None]]):
             / (adx_positive + adx_negative)
         )
 
-        self.data.set_reading({"positive": dm_plus, "negative": dm_neg, "dx": dx})
+        self._state.set({"positive": dm_plus, "negative": dm_neg, "dx": dx})
         self.dx.calculate_index(index)
 
         return {

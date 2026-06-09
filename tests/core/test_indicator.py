@@ -5,7 +5,7 @@ import pytest
 from hexital import Candle
 from hexital.analysis.patterns import doji
 from hexital.candlesticks.heikinashi import HeikinAshi
-from hexital.core.indicator import ChildWhen, Indicator, Managed
+from hexital.core.indicator import ChildWhen, Indicator, Managed, State
 from hexital.exceptions import InvalidIndicator
 from hexital.exceptions import InvalidCandlestickType
 from hexital.indicators.amorph import Amorph
@@ -333,3 +333,48 @@ class TestAddChild:
         parent = FakeIndicator(candles=minimal_candles)
         with pytest.raises(InvalidIndicator, match="Invalid child when"):
             parent.add_child(_ChildIndicator(), when="invalid")
+
+
+class TestAddState:
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_add_state_registers_managed_child(self, minimal_candles: list[Candle]):
+        parent = FakeIndicator(candles=minimal_candles)
+        state = parent.add_state()
+        parent.calculate()
+
+        assert state.managed.name == f"{parent.name}_data"
+        assert state.managed._when == ChildWhen.MANUAL
+        assert parent.children[state.managed.name] is state.managed
+
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_add_state_custom_name(self, minimal_candles: list[Candle]):
+        parent = FakeIndicator(candles=minimal_candles)
+        state = parent.add_state(name=f"{parent.name}_macd")
+        parent.calculate()
+
+        assert state.managed.name == f"{parent.name}_macd"
+
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_state_set_and_update(self, minimal_candles: list[Candle]):
+        parent = FakeIndicator(candles=minimal_candles)
+        state = parent.add_state()
+        parent.calculate()
+
+        state.set({"gain": 1.0, "loss": 2.0})
+        assert state.reading() == {"gain": 1.0, "loss": 2.0}
+
+        state.update(gain=3.0)
+        assert state.reading() == {"gain": 3.0, "loss": 2.0}
+
+    @pytest.mark.usefixtures("minimal_candles")
+    def test_state_prev_and_source(self, minimal_candles: list[Candle]):
+        parent = FakeIndicator(candles=minimal_candles)
+        state = parent.add_state()
+        parent.calculate()
+
+        state.managed.set_reading({"value": 10.0}, index=-2)
+        state.managed.set_reading({"value": 20.0}, index=-1)
+
+        assert state.prev("value") == 10.0
+        assert state.reading("value") == 20.0
+        assert state.source("value").name == f"{state.managed.name}.value"

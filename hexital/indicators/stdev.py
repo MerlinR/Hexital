@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from math import sqrt
 
-from ..core.indicator import Indicator, Managed, NestedSource, Source
+from ..core.indicator import Indicator, Source
 
 
 @dataclass(kw_only=True)
@@ -30,7 +30,7 @@ class STDEV(Indicator[float | None]):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.data = self.add_child_managed(Managed())
+        self._state = self.add_state()
 
     def _calculate_reading(self, index: int) -> float | None:
         popped_reading = 0
@@ -43,8 +43,8 @@ class STDEV(Indicator[float | None]):
         if self.reading_period(self.period + 1, self.source, index):
             popped_reading = self.reading(self.source, index - self.period)
 
-        old_mean = self.prev_reading(NestedSource(self.data, "mean"), 0.0)
-        variance = self.prev_reading(NestedSource(self.data, "variance"), 0.0)
+        old_mean = self._state.prev("mean", 0.0)
+        variance = self._state.prev("variance", 0.0)
 
         mean_ = old_mean + (reading - popped_reading) / self.period
 
@@ -54,7 +54,7 @@ class STDEV(Indicator[float | None]):
             / (self.period)
         )
 
-        self.data.set_reading({"mean": mean_, "variance": variance})
+        self._state.update(mean=mean_, variance=variance)
 
         if self.prev_exists() or self.reading_period(self.period, self.source, index):
             return sqrt(variance) if variance > 0 else 0

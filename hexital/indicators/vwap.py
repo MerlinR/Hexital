@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from datetime import timedelta
 
-from ..core.indicator import Indicator, Managed, NestedSource
+from ..core.indicator import Indicator
 from ..exceptions import InvalidConfiguration
 from ..utils.timeframe import (
     TimeFrame,
@@ -42,7 +42,7 @@ class VWAP(Indicator[float]):
         self.anchor = convert_timeframe_to_timedelta(self.anchor)
 
     def _initialise(self):
-        self.data = self.add_child_managed(Managed())
+        self._state = self.add_state()
 
     def _calculate_reading(self, index: int) -> float:
         candle = self.candles[index]
@@ -51,18 +51,18 @@ class VWAP(Indicator[float]):
 
         current_anchor = round_down_timestamp(candle.timestamp, self.anchor).timestamp()
 
-        prev_anchor = self.prev_reading(NestedSource(self.data, "active_anchor"))
+        prev_anchor = self._state.prev("active_anchor")
         typical_price = (candle.high + candle.low + candle.close) / 3.0
 
         if prev_anchor != current_anchor:
             pv = 0.0
             vol = 0.0
         else:
-            pv = float(self.prev_reading(NestedSource(self.data, "pv"), 0.0))
-            vol = float(self.prev_reading(NestedSource(self.data, "vol"), 0.0))
+            pv = float(self._state.prev("pv", 0.0))
+            vol = float(self._state.prev("vol", 0.0))
 
         pv += candle.volume * typical_price
         vol += candle.volume
 
-        self.data.set_reading({"pv": pv, "vol": vol, "active_anchor": current_anchor})
+        self._state.set({"pv": pv, "vol": vol, "active_anchor": current_anchor})
         return pv / vol if vol != 0 else 0.0

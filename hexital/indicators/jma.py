@@ -1,7 +1,7 @@
 import math
 from dataclasses import dataclass, field
 
-from ..core.indicator import Indicator, Managed, NestedSource, Source
+from ..core.indicator import Indicator, Source
 
 
 @dataclass(kw_only=True)
@@ -39,7 +39,7 @@ class JMA(Indicator[float | None]):
         return f"{self._name}_{self.period}_{self.phase}"
 
     def _initialise(self):
-        self.data = self.add_child_managed(Managed())
+        self._state = self.add_state()
 
     def _validate_fields(self):
         if self.phase > 100:
@@ -59,13 +59,13 @@ class JMA(Indicator[float | None]):
 
     def _calculate_reading(self, index: int) -> float | None:
         price = self.reading(self.source)
-        uband = self.prev_reading(NestedSource(self.data, "uband"), price)
-        lband = self.prev_reading(NestedSource(self.data, "lband"), price)
-        vsums = self.prev_reading(NestedSource(self.data, "vsums"), 0.0)
-        ma_one = self.prev_reading(NestedSource(self.data, "ma_one"), price)
-        ma_two = self.prev_reading(NestedSource(self.data, "ma_two"), 0.0)
-        det_one = self.prev_reading(NestedSource(self.data, "det_one"), 0.0)
-        det_two = self.prev_reading(NestedSource(self.data, "det_two"), 0.0)
+        uband = self._state.prev("uband", price)
+        lband = self._state.prev("lband", price)
+        vsums = self._state.prev("vsums", 0.0)
+        ma_one = self._state.prev("ma_one", price)
+        ma_two = self._state.prev("ma_two", 0.0)
+        det_one = self._state.prev("det_one", 0.0)
+        det_two = self._state.prev("det_two", 0.0)
 
         if not uband or not lband or not price:
             return None
@@ -74,13 +74,13 @@ class JMA(Indicator[float | None]):
         del1 = price - uband
         del2 = price - lband
         volty = max(abs(del1), abs(del2)) if abs(del1) != abs(del2) else 0.0
-        self.data.set_reading({"volty": volty})
+        self._state.update(volty=volty)
 
         # Relative Price Volatility
-        vsums = self.candles_average(10, NestedSource(self.data, "volty"))
-        self.data.set_reading({"vsums": vsums, "volty": volty})
+        vsums = self.candles_average(10, self._state.source("volty"))
+        self._state.update(vsums=vsums, volty=volty)
 
-        avg_volty = self.candles_average(65, NestedSource(self.data, "vsums"))
+        avg_volty = self.candles_average(65, self._state.source("vsums"))
         d_volty = 0 if avg_volty == 0 else volty / avg_volty
         r_volt = max(1.0, min(pow(self._length_1, 1 / self._power_1), d_volty))
 
@@ -106,7 +106,7 @@ class JMA(Indicator[float | None]):
         ) + (alpha * alpha * det_two)
         jma = self.prev_reading(default=price) + det_two
 
-        self.data.set_reading(
+        self._state.set(
             {
                 "uband": uband,
                 "lband": lband,
