@@ -26,3 +26,13 @@ class InvalidCandlestickType(Exception):
 class InvalidConfiguration(Exception):
     def __init__(self, message):
         super().__init__(message)
+
+
+__all__ = [
+    "InvalidAnalysis",
+    "InvalidCandleOrder",
+    "InvalidCandlestickType",
+    "InvalidConfiguration",
+    "InvalidIndicator",
+    "InvalidTimeFrame",
+]
