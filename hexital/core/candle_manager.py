@@ -118,14 +118,16 @@ class CandleManager:
     def _prepend_parsed(self, candles_: list[Candle]):
         self.sort_candles(candles_)
 
+        changed = False
         for candle in reversed(candles_):
-            candle_copy = candle.clean_copy()
-            if not self._accepts_candle(candle_copy):
+            if not self._accepts_candle(candle):
                 continue
 
-            self._candles.insert(0, candle_copy)
+            self._candles.insert(0, candle.clean_copy())
+            changed = True
 
-        self._candle_tasks(CalcMode.PREPEND)
+        if changed:
+            self._candle_tasks(CalcMode.PREPEND)
 
     def append(self, candles: Candles):
         self._append_parsed(parse_candles(candles))
@@ -133,14 +135,16 @@ class CandleManager:
     def _append_parsed(self, candles_: list[Candle]):
         index = len(self._candles) - 1 if len(self._candles) > 0 else 0
 
+        changed = False
         for candle in candles_:
-            candle_copy = candle.clean_copy()
-            if not self._accepts_candle(candle_copy):
+            if not self._accepts_candle(candle):
                 continue
 
-            self._candles.append(candle_copy)
+            self._candles.append(candle.clean_copy())
+            changed = True
 
-        self._candle_tasks(CalcMode.APPEND, index)
+        if changed:
+            self._candle_tasks(CalcMode.APPEND, index)
 
     def insert(self, candles: Candles):
         self._insert_parsed(parse_candles(candles))
@@ -150,16 +154,20 @@ class CandleManager:
 
         to_sort = False
         last_timestamp = self._candles[-1].timestamp if self._candles else None
+        changed = False
 
         for candle in candles_:
-            candle_copy = candle.clean_copy()
-            if not self._accepts_candle(candle_copy):
+            if not self._accepts_candle(candle):
                 continue
 
             if last_timestamp and candle.timestamp and candle.timestamp < last_timestamp:
                 to_sort = True
 
-            self._candles.append(candle_copy)
+            self._candles.append(candle.clean_copy())
+            changed = True
+
+        if not changed:
+            return
 
         if to_sort:
             self.sort_candles()
