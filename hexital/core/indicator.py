@@ -13,7 +13,6 @@ from ..utils.candles import (
     candles_average,
     candles_sum,
     get_readings_period,
-    parse_candles,
     reading_by_candle,
     reading_count,
     reading_period,
@@ -262,7 +261,7 @@ class Indicator(Generic[V], ABC):
         Args:
             candles: The Candle or List of Candle's to prepend.
         """
-        self._candle_mngr.prepend(parse_candles(candles))
+        self._candle_mngr.prepend(candles)
         self._sync_from_manager()
         self.calculate()
 
@@ -272,7 +271,7 @@ class Indicator(Generic[V], ABC):
         Args:
             candles: The Candle or List of Candle's to append.
         """
-        self._candle_mngr.append(parse_candles(candles))
+        self._candle_mngr.append(candles)
         self._sync_from_manager()
         self.calculate()
 
@@ -282,7 +281,7 @@ class Indicator(Generic[V], ABC):
         Args:
             candles: The Candle or List of Candle's to prepend.
         """
-        self._candle_mngr.insert(parse_candles(candles))
+        self._candle_mngr.insert(candles)
         self._sync_from_manager()
         self.calculate_index(0, -1)
 

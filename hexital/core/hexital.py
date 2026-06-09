@@ -8,7 +8,7 @@ from typing import Any, Generic, TypeVar
 
 from ..exceptions import InvalidAnalysis, InvalidIndicator
 from ..indicators.amorph import Amorph
-from ..utils.candles import Candles, reading_by_candle, reading_by_index
+from ..utils.candles import Candles, parse_candles, reading_by_candle, reading_by_index
 from ..utils.candlesticks import validate_candlesticktype
 from ..utils.timeframe import (
     NullTimeFrame,
@@ -249,8 +249,9 @@ class Hexital:
         Args:
             candles: The Candle or List of Candle's to prepend.
         """
+        candles_ = parse_candles(candles)
         for candle_manager in self._candle_managers:
-            candle_manager.prepend(candles)
+            candle_manager._prepend_parsed(candles_)
         self.calculate()
 
     def append(self, candles: Candles):
@@ -259,8 +260,9 @@ class Hexital:
         Args:
             candles: The Candle or List of Candle's to appended.
         """
+        candles_ = parse_candles(candles)
         for candle_manager in self._candle_managers:
-            candle_manager.append(candles)
+            candle_manager._append_parsed(candles_)
 
         self.calculate()
 
@@ -270,8 +272,9 @@ class Hexital:
         Args:
             candles: The Candle or List of Candle's to inserted.
         """
+        candles_ = parse_candles(candles)
         for candle_manager in self._candle_managers:
-            candle_manager.insert(candles)
+            candle_manager._insert_parsed(candles_)
 
         self.calculate_index(index=0, end_index=-1)
 

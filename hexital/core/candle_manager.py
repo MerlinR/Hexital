@@ -113,7 +113,9 @@ class CandleManager:
         return candle.timeframe <= self.timeframe
 
     def prepend(self, candles: Candles):
-        candles_ = parse_candles(candles)
+        self._prepend_parsed(parse_candles(candles))
+
+    def _prepend_parsed(self, candles_: list[Candle]):
         self.sort_candles(candles_)
 
         for candle in reversed(candles_):
@@ -126,7 +128,9 @@ class CandleManager:
         self._candle_tasks(CalcMode.PREPEND)
 
     def append(self, candles: Candles):
-        candles_ = parse_candles(candles)
+        self._append_parsed(parse_candles(candles))
+
+    def _append_parsed(self, candles_: list[Candle]):
         index = len(self._candles) - 1 if len(self._candles) > 0 else 0
 
         for candle in candles_:
@@ -139,8 +143,9 @@ class CandleManager:
         self._candle_tasks(CalcMode.APPEND, index)
 
     def insert(self, candles: Candles):
-        candles_ = parse_candles(candles)
+        self._insert_parsed(parse_candles(candles))
 
+    def _insert_parsed(self, candles_: list[Candle]):
         self.sort_candles(candles_)
 
         to_sort = False
