@@ -36,9 +36,6 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Shorthand methods: `prev()`, `at()`, `src()`, `prev_src()`, `at_src()`
 - Removed `Managed` and `NestedSource` from public `hexital` exports (use `add_state()`; import from `hexital.core.indicator` if needed)
 - Performance optimisations for appending
-- Stale forming-bar readings
-    - `Candle.merge()` marks readings stale instead of clearing indicator dicts
-    - Added `Candle.stale` property
 - Indicator improvements
     - `Indicator.candle_manager` setter syncs child indicators to the same manager
     - WMA uses O(1) incremental rolling after seed period
