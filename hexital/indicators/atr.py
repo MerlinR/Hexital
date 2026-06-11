@@ -37,7 +37,7 @@ class ATR(Indicator[float | None]):
                 + self.sub_tr.reading()
             ) / self.period
 
-        if self.sub_tr.reading_period(self.period):
-            return self.sub_tr.candles_average(self.period)
+        if self.sub_tr.reading_period(self.period, index=index):
+            return self.sub_tr.candles_average(self.period, index=index)
 
         return None

@@ -33,15 +33,17 @@ class STDEV(Indicator[float | None]):
         self._state = self.add_state()
 
     def _calculate_reading(self, index: int) -> float | None:
-        popped_reading = 0
-
         reading = self.src()
-
         if reading is None:
             return None
 
-        if self.reading_period(self.period + 1, self.source, index):
-            popped_reading = self.at_src(index - self.period)
+        popped_reading = 0.0
+        if self.prev_exists() or self.reading_period(
+            self.period + 1, self.source, index
+        ):
+            popped = self.at_src(index - self.period)
+            if popped is not None:
+                popped_reading = popped
 
         old_mean = self._state.prev("mean", 0.0)
         variance = self._state.prev("variance", 0.0)

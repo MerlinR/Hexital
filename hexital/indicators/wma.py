@@ -26,16 +26,41 @@ class WMA(Indicator[float | None]):
     _name: str = field(init=False, default="WMA")
     period: int = 10
     source: Source = "close"
+    _denom: float = field(init=False, default=0)
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
 
+    def _validate_fields(self):
+        self._denom = (self.period * (self.period + 1)) / 2
+
+    def _initialise(self):
+        self._state = self.add_state()
+
     def _calculate_reading(self, index: int) -> float | None:
-        if self.prev_exists() or self.reading_period(self.period, self.source):
-            values = sum(
-                cast(float, self.at_src(i)) * (self.period - py)
-                for py, i in enumerate(range(index, index - self.period, -1))
-            )
-            weight = (self.period * (self.period + 1)) / 2
-            return values / weight
+        reading = self.src()
+        if reading is None:
+            return None
+
+        if self.prev_exists():
+            prev = self.prev_reading()
+            oldest = self.at_src(index - self.period)
+            window_sum = self._state.prev("window_sum")
+            if prev is None or oldest is None or window_sum is None:
+                return None
+
+            new_num = (prev * self._denom) - window_sum + (self.period * reading)
+            self._state.update(window_sum=window_sum - oldest + reading)
+            return new_num / self._denom
+
+        if self.reading_period(self.period, self.source):
+            values = [
+                cast(float, self.at_src(i))
+                for i in range(index - self.period + 1, index + 1)
+            ]
+            window_sum = sum(values)
+            num = sum((py + 1) * val for py, val in enumerate(values))
+            self._state.update(window_sum=window_sum)
+            return num / self._denom
+
         return None
