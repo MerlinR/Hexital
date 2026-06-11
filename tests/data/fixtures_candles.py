@@ -12,7 +12,11 @@ def load_json_candles(name: str, path: str) -> list[dict]:
     csv_file = open(f"{path}{name}.json")
     raw_candles = json.load(csv_file)
     for candle in raw_candles:
-        candle["timestamp"] = datetime.strptime(candle["timestamp"], "%Y-%m-%dT%H:%M:%S")
+        if candle.get("timestamp"):
+            candle["timestamp"] = datetime.strptime(
+                candle["timestamp"], "%Y-%m-%dT%H:%M:%S"
+            )
+
     return raw_candles
 
 
@@ -61,6 +65,14 @@ def fixture_candle_data_heikinashi():
     for candle in candles:
         candle.tag = "HA"
         candle.timeframe = timedelta(minutes=1)
+    return candles
+
+
+@pytest.fixture(name="candles_renko")
+def fixture_candle_data_renko():
+    candles = Candle.from_dicts(load_json_candles("test_candles_renko", PATH_EXTRA))
+    for candle in candles:
+        candle.tag = "RENKO"
     return candles
 
 

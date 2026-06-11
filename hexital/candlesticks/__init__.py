@@ -1,5 +1,6 @@
 from ..core.candlestick_type import CandlestickType
 from .heikinashi import HeikinAshi
+from .renko import Renko
 
 
 def _build_candlestick_map() -> dict[str, type[CandlestickType]]:
@@ -13,4 +14,4 @@ def _build_candlestick_map() -> dict[str, type[CandlestickType]]:
 
 CANDLESTICK_MAP = _build_candlestick_map()
 
-__all__ = ["CANDLESTICK_MAP", "HeikinAshi"]
+__all__ = ["CANDLESTICK_MAP", "HeikinAshi", "Renko"]

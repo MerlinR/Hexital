@@ -23,7 +23,7 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
 ]
-dependencies = []
+
 
 [project.urls]
 Homepage = "https://github.com/MerlinR/Hexital"
@@ -39,7 +39,7 @@ dev = [
     "pytest-profiling",
     "snakeviz",
 ]
-truth = ["pandas", "numpy==1.26.4", "ta-lib", "pandas-ta"]
+truth = ["pandas", "numpy==1.26.4", "ta-lib", "pandas-ta", "renkodf>=2.0"]
 speed_tests = ["matplotlib", "pandas", "numpy==1.26.4", "ta-lib", "pandas-ta"]
 
 docs = [

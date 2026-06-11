@@ -3,6 +3,7 @@ import json
 import numpy as np
 import pandas as pd
 import pandas_ta as ta
+from renkodf import Renko
 
 PATH_INDICATOR = "source_of_truth/indicators"
 PATH_PATTERN = "source_of_truth/pattern"
@@ -301,7 +302,6 @@ def generate_heikin_candles():
     dfha = ta.ha(df["open"], df["high"], df["low"], df["close"])
     df = pd.merge(df, dfha, right_index=True, left_index=True)
     df = df.astype(object).replace(np.nan, None)
-    print_new(df)
 
     df.drop(columns=["open", "high", "low", "close"], axis=1, inplace=True)
     df.rename(
@@ -330,6 +330,24 @@ def generate_heikin_candles_ema():
     )
 
 
+def generate_renko_candles():
+    print("Generating Renko Candles")
+    odf = pd.DataFrame.from_dict(load_json_candles())
+    odf.rename(
+        columns={
+            "timestamp": "datetime",
+        },
+        inplace=True,
+    )
+
+    renko = Renko(odf, brick_size=5)
+
+    df = renko.renko_df("normal")  # 'wicks' = default
+    df = df.astype(object).replace(np.nan, None)
+
+    save_json_result(df.to_dict("records"), "test_candles_renko", PATH_CANDLES)
+
+
 def generate_timeframe_candles(frame: str):
     print(f"Generating candles with timeframe: {frame}")
     df = pd.DataFrame.from_dict(load_json_candles())
@@ -355,3 +373,4 @@ if __name__ == "__main__":
     generate_timeframe_candles("10min")
     generate_heikin_candles()
     generate_heikin_candles_ema()
+    generate_renko_candles()
