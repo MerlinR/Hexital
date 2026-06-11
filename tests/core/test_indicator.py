@@ -388,6 +388,7 @@ class TestAddState:
         assert state.prev("value") == 10.0
         assert state.reading("value") == 20.0
         assert state.source("value").name == f"{state.managed.name}.value"
+        assert state.source("value") is state.source("value")
 
 
 class TestCandleTimeframeLabel:

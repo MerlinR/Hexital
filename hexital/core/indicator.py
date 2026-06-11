@@ -613,11 +613,12 @@ class State:
     Dictionary keys map to fields stored on each candle's `sub_indicators`.
     """
 
-    __slots__ = ("_managed", "_parent")
+    __slots__ = ("_managed", "_parent", "_sources")
 
     def __init__(self, parent: Indicator, managed: Managed):
         self._parent = parent
         self._managed = managed
+        self._sources: dict[str, NestedSource] = {}
 
     @property
     def managed(self) -> Managed:
@@ -626,7 +627,9 @@ class State:
 
     def source(self, key: str) -> NestedSource:
         """Reference a state field as an indicator source."""
-        return NestedSource(self._managed, key)
+        if key not in self._sources:
+            self._sources[key] = NestedSource(self._managed, key)
+        return self._sources[key]
 
     def prev(self, key: str | None = None, default: T | None = None) -> Reading | T:
         """Previous reading for the whole state or a single field."""
