@@ -3562,11 +3562,6 @@
 </li>
 <li>Removed <code>Managed</code> and <code>NestedSource</code> from public <code>hexital</code> exports (use <code>add_state()</code>; import from <code>hexital.core.indicator</code> if needed)</li>
 <li>Performance optimisations for appending</li>
-<li>Stale forming-bar readings<ul>
-<li><code>Candle.merge()</code> marks readings stale instead of clearing indicator dicts</li>
-<li>Added <code>Candle.stale</code> property</li>
-</ul>
-</li>
 <li>Indicator improvements<ul>
 <li><code>Indicator.candle_manager</code> setter syncs child indicators to the same manager</li>
 <li>WMA uses O(1) incremental rolling after seed period</li>
