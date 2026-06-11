@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 from functools import cmp_to_key
+from typing import Literal
 
 from ..exceptions import InvalidCandleOrder
 from ..utils.candles import Candles, parse_candles, reading_by_candle
@@ -96,8 +97,9 @@ class CandleManager:
         self,
         mode: CalcMode = CalcMode.INSERT,
         index: int | None = None,
+        appended_count: int = 0,
     ):
-        self.resample_candles(mode, index)
+        self.resample_candles(mode, index, appended_count)
         self.candlestick_conversion(mode, index)
         self.trim_candles()
 
@@ -116,13 +118,9 @@ class CandleManager:
         self._prepend_parsed(parse_candles(candles))
 
     def _store_candle(self, candle: Candle, admitted: set[int] | None) -> Candle:
-        return candle.admit_for_storage(
-            admitted, force_copy=self.timeframe is not None
-        )
+        return candle.admit_for_storage(admitted, force_copy=self.timeframe is not None)
 
-    def _prepend_parsed(
-        self, candles_: list[Candle], admitted: set[int] | None = None
-    ):
+    def _prepend_parsed(self, candles_: list[Candle], admitted: set[int] | None = None):
         self.sort_candles(candles_)
 
         changed = False
@@ -139,28 +137,26 @@ class CandleManager:
     def append(self, candles: Candles):
         self._append_parsed(parse_candles(candles))
 
-    def _append_parsed(
-        self, candles_: list[Candle], admitted: set[int] | None = None
-    ):
+    def _append_parsed(self, candles_: list[Candle], admitted: set[int] | None = None):
         index = len(self._candles) - 1 if len(self._candles) > 0 else 0
 
         changed = False
+        appended_count = 0
         for candle in candles_:
             if not self._accepts_candle(candle):
                 continue
 
             self._candles.append(self._store_candle(candle, admitted))
             changed = True
+            appended_count += 1
 
         if changed:
-            self._candle_tasks(CalcMode.APPEND, index)
+            self._candle_tasks(CalcMode.APPEND, index, appended_count)
 
     def insert(self, candles: Candles):
         self._insert_parsed(parse_candles(candles))
 
-    def _insert_parsed(
-        self, candles_: list[Candle], admitted: set[int] | None = None
-    ):
+    def _insert_parsed(self, candles_: list[Candle], admitted: set[int] | None = None):
         self.sort_candles(candles_)
 
         to_sort = False
@@ -171,7 +167,11 @@ class CandleManager:
             if not self._accepts_candle(candle):
                 continue
 
-            if last_timestamp and candle.timestamp and candle.timestamp < last_timestamp:
+            if (
+                last_timestamp
+                and candle.timestamp
+                and candle.timestamp < last_timestamp
+            ):
                 to_sort = True
 
             self._candles.append(self._store_candle(candle, admitted))
@@ -260,10 +260,22 @@ class CandleManager:
         self,
         mode: CalcMode,
         index: int | None = None,
+        appended_count: int = 0,
     ):
-        """resamples the given list of candles into specific timeframe candles.
-        This can re-ran with same list to resample latest candles.
-        This method is destructive, generating a new list for the resampled candles"""
+        """Resample candles into the manager timeframe."""
+        tf = self.timeframe
+        if not tf:
+            return
+
+        if not self.timeframe_fill:
+            if mode == CalcMode.APPEND and appended_count >= 1:
+                if appended_count == 1 and self._try_resample_append_inplace():
+                    return
+                if appended_count > 1 and self._try_resample_multi_append(
+                    appended_count
+                ):
+                    return
+
         if mode == CalcMode.INSERT:
             start_index = 0
         elif index is not None:
@@ -271,51 +283,107 @@ class CandleManager:
         else:
             start_index = self._find_resample_index()
 
-        if len(self._candles) <= start_index + 1 or not self.timeframe:
+        end_index = len(self._candles)
+        if end_index <= start_index + 1:
             return
 
-        end_index = len(self._candles)
-
-        to_process = self._candles[start_index:end_index]
-
-        # Optimization: Skip resampling for INSERT mode if all candles already properly formatted
-        # For APPEND/PREPEND, we still need to run resample for gap filling
-        # Also skip optimization if timeframe_fill is True as we need to check for gaps
-        if (
-            mode == CalcMode.INSERT
-            and not self.timeframe_fill
-            and to_process
-            and all(c.timeframe == self.timeframe for c in to_process)
+        if not self.timeframe_fill and self._range_already_resampled(
+            start_index, end_index
         ):
-            timestamps_sorted = True
-            for i in range(len(to_process) - 1):
-                t1 = to_process[i].timestamp
-                t2 = to_process[i + 1].timestamp
-                if t1 is None or t2 is None:
-                    continue
-                if t1 > t2:
-                    timestamps_sorted = False
-                    break
+            return
 
-            if timestamps_sorted:
-                return
+        self._resample_rebuild_range(start_index, end_index, mode)
 
-        del self._candles[start_index:end_index]
+    def _candle_bounds(self, timestamp: datetime) -> tuple[datetime, datetime]:
+        start = round_down_timestamp(timestamp, self.timeframe)
+        return start, start + self.timeframe
+
+    def _slot_first_resampled(self, candle: Candle, incoming_ts: datetime) -> None:
+        tf = self.timeframe
+        candle.timeframe = tf
+
+        if not on_timeframe(incoming_ts, tf):
+            slot = round_down_timestamp(incoming_ts, tf)
+            candle.set_resampled_timestamp(slot + tf)
+        else:
+            candle.timestamp = incoming_ts
+
+    def _apply_resample_step(
+        self,
+        prev: Candle,
+        incoming: Candle,
+        incoming_ts: datetime,
+    ) -> Literal["merge", "slot"] | None:
+        """Merge or slot incoming against a resampled prev bar. None => full rebuild needed."""
+        tf = self.timeframe
+        start_time, end_time = self._candle_bounds(prev.timestamp)
+
+        if (start_time < incoming_ts <= end_time and prev.timestamp == end_time) or (
+            start_time - tf < incoming_ts <= start_time and prev.timestamp == start_time
+        ):
+            incoming.timeframe = tf
+            prev.merge(incoming)
+            return "merge"
+
+        if start_time < incoming_ts <= end_time:
+            incoming.timeframe = tf
+            incoming.set_resampled_timestamp(end_time)
+            return "slot"
+
+        next_end_time = end_time + tf
+        if end_time < incoming_ts <= next_end_time:
+            incoming.timeframe = tf
+            incoming.set_resampled_timestamp(next_end_time)
+            return "slot"
+
+        if start_time < incoming_ts and on_timeframe(incoming_ts, tf):
+            slot = round_down_timestamp(incoming_ts, tf)
+            incoming.timeframe = tf
+            incoming.set_resampled_timestamp(slot)
+            return "slot"
+
+        if next_end_time < incoming_ts:
+            slot = round_down_timestamp(incoming_ts, tf)
+            incoming.timeframe = tf
+            incoming.set_resampled_timestamp(slot + tf)
+            return "slot"
+
+        return None
+
+    def _range_already_resampled(self, start_index: int, end_index: int) -> bool:
+        tf = self.timeframe
+        candles = self._candles
+
+        for i in range(start_index, end_index):
+            if candles[i].timeframe != tf:
+                return False
+
+        for i in range(start_index, end_index - 1):
+            t1 = candles[i].timestamp
+            t2 = candles[i + 1].timestamp
+            if t1 is None or t2 is None:
+                continue
+            if t1 > t2:
+                return False
+
+        return True
+
+    def _resample_rebuild_range(self, start_index: int, end_index: int, mode: CalcMode):
+        tf = self.timeframe
+        to_process = self._candles[start_index:end_index]
+        del self._candles[start_index:]
 
         candles_ = [to_process[0]]
-
         init_candle = candles_[0]
-        init_candle.timeframe = self.timeframe
         if not init_candle.timestamp:
             return
 
-        start_time = round_down_timestamp(init_candle.timestamp, self.timeframe)
-        end_time = start_time + self.timeframe
+        self._slot_first_resampled(
+            init_candle, init_candle.timestamp.replace(microsecond=0)
+        )
 
-        if not on_timeframe(init_candle.timestamp, self.timeframe):
-            init_candle.set_resampled_timestamp(end_time)
-
-        for i, candle in enumerate(to_process[1:], start=1):
+        for i in range(1, len(to_process)):
+            candle = to_process[i]
             prev_candle = candles_[-1]
 
             if not candle.timestamp:
@@ -323,57 +391,104 @@ class CandleManager:
 
             if (
                 mode != CalcMode.INSERT
-                and candle.timeframe == self.timeframe
-                and prev_candle.timeframe == self.timeframe
+                and candle.timeframe == tf
+                and prev_candle.timeframe == tf
             ):
                 candles_.append(candle)
                 candles_.extend(to_process[i + 1 :])
                 break
 
-            next_end_time = end_time + self.timeframe
-            candle.timestamp = candle.timestamp.replace(microsecond=0)
-            candle.timeframe = self.timeframe
+            incoming_ts = candle.timestamp.replace(microsecond=0)
 
-            if (
-                start_time < candle.timestamp <= end_time
-                and prev_candle.timestamp == end_time
-            ) or (
-                start_time - self.timeframe < candle.timestamp <= start_time
-                and prev_candle.timestamp == start_time
-            ):
-                prev_candle.merge(candle)
-            elif start_time < candle.timestamp <= end_time:
-                candle.set_resampled_timestamp(end_time)
-                candles_.append(candle)
-            elif end_time < candle.timestamp <= next_end_time:
-                candle.set_resampled_timestamp(next_end_time)
-                candles_.append(candle)
-                start_time = end_time
-                end_time = next_end_time
-            elif start_time < candle.timestamp and on_timeframe(
-                candle.timestamp, self.timeframe
-            ):
-                start_time = round_down_timestamp(candle.timestamp, self.timeframe)
-                end_time = start_time + self.timeframe
-                candle.set_resampled_timestamp(start_time)
-                candles_.append(candle)
-            elif next_end_time < candle.timestamp:
-                start_time = round_down_timestamp(candle.timestamp, self.timeframe)
-                end_time = start_time + self.timeframe
-                candle.set_resampled_timestamp(end_time)
-                candles_.append(candle)
-            else:
-                # Shit's fucked yo
-                raise InvalidCandleOrder(
-                    f"Failed to resample_candles due to invalid candle order prev: [{prev_candle}] - current: [{candle}]",
-                )
+            if prev_candle.timeframe == tf:
+                step = self._apply_resample_step(prev_candle, candle, incoming_ts)
+                if step == "merge":
+                    continue
+                if step == "slot":
+                    candles_.append(candle)
+                    continue
+
+            raise InvalidCandleOrder(
+                f"Failed to resample_candles due to invalid candle order prev: [{prev_candle}] - current: [{candle}]",
+            )
 
         if self.timeframe_fill:
             candles_ = self._fill_timeframe_candles(
-                candles_, self.timeframe, start_index, end_index
+                candles_, tf, start_index, end_index
             )
 
-        self._candles[start_index:start_index] = candles_
+        self._candles.extend(candles_)
+
+    def _try_resample_append_inplace(self) -> bool:
+        """Fast path for a single appended candle: merge or slot without tail rebuild."""
+        candles = self._candles
+        tf = self.timeframe
+        if len(candles) < 1:
+            return False
+
+        incoming = candles[-1]
+        if not incoming.timestamp:
+            return False
+
+        incoming_ts = incoming.timestamp.replace(microsecond=0)
+
+        if len(candles) >= 2:
+            prev = candles[-2]
+            if incoming.timeframe == tf and prev.timeframe == tf:
+                return True
+
+            if prev.timeframe != tf:
+                return False
+
+            step = self._apply_resample_step(prev, incoming, incoming_ts)
+            if step == "merge":
+                candles.pop()
+            elif step is None:
+                return False
+            return True
+
+        if incoming.timeframe == tf:
+            return True
+
+        self._slot_first_resampled(incoming, incoming_ts)
+        return True
+
+    def _try_resample_multi_append(self, appended_count: int) -> bool:
+        """In-place resample when several candles were appended in one call."""
+        candles = self._candles
+        tf = self.timeframe
+        length = len(candles)
+
+        if length < appended_count + 1:
+            return False
+
+        prev_idx = length - appended_count - 1
+        prev = candles[prev_idx]
+        if prev.timeframe != tf:
+            return False
+
+        idx = prev_idx + 1
+        while idx < len(candles):
+            incoming = candles[idx]
+            if incoming.timeframe == tf:
+                idx += 1
+                prev = incoming
+                continue
+            if not incoming.timestamp:
+                return False
+
+            incoming_ts = incoming.timestamp.replace(microsecond=0)
+            step = self._apply_resample_step(prev, incoming, incoming_ts)
+            if step == "merge":
+                candles.pop(idx)
+                continue
+            if step == "slot":
+                prev = incoming
+                idx += 1
+                continue
+            return False
+
+        return True
 
     def _find_resample_index(self) -> int:
         """Optimisation method, to find where to start calculating the indicator from
