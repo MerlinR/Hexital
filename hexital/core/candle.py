@@ -324,6 +324,25 @@ class Candle:
             aggregation_factor=self.aggregation_factor,
         )
 
+    @property
+    def is_clean(self) -> bool:
+        """True when the candle has no readings, refs, or tag attached."""
+        return not (self.indicators or self.sub_indicators or self.refs or self.tag)
+
+    def admit_for_storage(
+        self, admitted: set[int] | None = None, *, force_copy: bool = False
+    ) -> Candle:
+        """Return a candle safe to store in a CandleManager."""
+        if force_copy or not self.is_clean:
+            return self.clean_copy()
+        if admitted is None:
+            return self
+        key = id(self)
+        if key in admitted:
+            return self.clean_copy()
+        admitted.add(key)
+        return self
+
     def set_resampled_timestamp(self, timestamp: datetime):
         if not self._start_timestamp:
             self._start_timestamp = self.timestamp

@@ -250,8 +250,9 @@ class Hexital:
             candles: The Candle or List of Candle's to prepend.
         """
         candles_ = parse_candles(candles)
+        admitted = set()
         for candle_manager in self._candle_managers:
-            candle_manager._prepend_parsed(candles_)
+            candle_manager._prepend_parsed(candles_, admitted=admitted)
         self.calculate()
 
     def append(self, candles: Candles):
@@ -261,8 +262,9 @@ class Hexital:
             candles: The Candle or List of Candle's to appended.
         """
         candles_ = parse_candles(candles)
+        admitted = set()
         for candle_manager in self._candle_managers:
-            candle_manager._append_parsed(candles_)
+            candle_manager._append_parsed(candles_, admitted=admitted)
 
         self.calculate()
 
@@ -273,8 +275,9 @@ class Hexital:
             candles: The Candle or List of Candle's to inserted.
         """
         candles_ = parse_candles(candles)
+        admitted = set()
         for candle_manager in self._candle_managers:
-            candle_manager._insert_parsed(candles_)
+            candle_manager._insert_parsed(candles_, admitted=admitted)
 
         self.calculate_index(index=0, end_index=-1)
 

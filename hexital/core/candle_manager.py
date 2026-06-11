@@ -115,7 +115,14 @@ class CandleManager:
     def prepend(self, candles: Candles):
         self._prepend_parsed(parse_candles(candles))
 
-    def _prepend_parsed(self, candles_: list[Candle]):
+    def _store_candle(self, candle: Candle, admitted: set[int] | None) -> Candle:
+        return candle.admit_for_storage(
+            admitted, force_copy=self.timeframe is not None
+        )
+
+    def _prepend_parsed(
+        self, candles_: list[Candle], admitted: set[int] | None = None
+    ):
         self.sort_candles(candles_)
 
         changed = False
@@ -123,7 +130,7 @@ class CandleManager:
             if not self._accepts_candle(candle):
                 continue
 
-            self._candles.insert(0, candle.clean_copy())
+            self._candles.insert(0, self._store_candle(candle, admitted))
             changed = True
 
         if changed:
@@ -132,7 +139,9 @@ class CandleManager:
     def append(self, candles: Candles):
         self._append_parsed(parse_candles(candles))
 
-    def _append_parsed(self, candles_: list[Candle]):
+    def _append_parsed(
+        self, candles_: list[Candle], admitted: set[int] | None = None
+    ):
         index = len(self._candles) - 1 if len(self._candles) > 0 else 0
 
         changed = False
@@ -140,7 +149,7 @@ class CandleManager:
             if not self._accepts_candle(candle):
                 continue
 
-            self._candles.append(candle.clean_copy())
+            self._candles.append(self._store_candle(candle, admitted))
             changed = True
 
         if changed:
@@ -149,7 +158,9 @@ class CandleManager:
     def insert(self, candles: Candles):
         self._insert_parsed(parse_candles(candles))
 
-    def _insert_parsed(self, candles_: list[Candle]):
+    def _insert_parsed(
+        self, candles_: list[Candle], admitted: set[int] | None = None
+    ):
         self.sort_candles(candles_)
 
         to_sort = False
@@ -163,7 +174,7 @@ class CandleManager:
             if last_timestamp and candle.timestamp and candle.timestamp < last_timestamp:
                 to_sort = True
 
-            self._candles.append(candle.clean_copy())
+            self._candles.append(self._store_candle(candle, admitted))
             changed = True
 
         if not changed:
