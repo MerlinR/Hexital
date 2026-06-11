@@ -34,8 +34,15 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added qol methods on `Indicator`
     - OHLCV properties: `open`, `high`, `low`, `close`, `volume`
     - Shorthand methods: `prev()`, `at()`, `src()`, `prev_src()`, `at_src()`
-    - Built-in indicators migrated to use `src()` / `prev_src()` / `at_src()`
 - Removed `Managed` and `NestedSource` from public `hexital` exports (use `add_state()`; import from `hexital.core.indicator` if needed)
+- Performance optimisations for appending
+- Stale forming-bar readings
+    - `Candle.merge()` marks readings stale instead of clearing indicator dicts
+    - Added `Candle.stale` property
+- Indicator improvements
+    - `Indicator.candle_manager` setter syncs child indicators to the same manager
+    - WMA uses O(1) incremental rolling after seed period
+    - Extracted `true_range()` helper on TR; ATR seed lookups pass explicit index to child
 ---
 
 ## 3.0.1
