@@ -177,9 +177,19 @@ class CandleManager:
     def sort_candles(self, candles: list[Candle] | None = None):
         """Sorts Candles in order of timestamp, accounts for collapsing"""
         if candles:
-            candles.sort(key=cmp_to_key(self._sort_comparison))
+            target = candles
         else:
-            self._candles.sort(key=cmp_to_key(self._sort_comparison))
+            target = self._candles
+
+        if not self.timeframe:
+            target.sort(
+                key=lambda c: (
+                    c.timestamp is None,
+                    c.timestamp.timestamp() if c.timestamp else 0.0,
+                )
+            )
+        else:
+            target.sort(key=cmp_to_key(self._sort_comparison))
 
     def _sort_comparison(self, candle_one: Candle, candle_two: Candle) -> int:
         """Sort's Candles in order but if timeframe exists, sorts with collapsing in mind.
