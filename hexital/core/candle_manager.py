@@ -103,6 +103,11 @@ class CandleManager:
         self.candlestick_conversion(mode, index)
         self.trim_candles()
 
+    def clear_stale_readings(self):
+        for candle in self._candles:
+            if candle.stale:
+                candle.stale = False
+
     def find_indicator(self, name: str) -> bool:
         return any(reading_by_candle(candle, name) for candle in reversed(self.candles))
 
