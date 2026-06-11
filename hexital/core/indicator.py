@@ -84,15 +84,13 @@ class Indicator(Generic[V], ABC):
         if self.candlestick is not None:
             self.candlestick = validate_candlesticktype(self.candlestick)
 
-        self._candle_mngr = CandleManager(
+        self.candle_manager = CandleManager(
             self.candles,
             self.candle_life,
             self._timeframe,
             self.timeframe_fill,
             self.candlestick,
         )
-
-        self.candles = self._candle_mngr.candles
 
         self._internal_generate_name()
 
@@ -129,14 +127,17 @@ class Indicator(Generic[V], ABC):
         """The Candle Manager which controls TimeFrame, Trimming and collapsing,
         this will overwrite the Manager as well as the candles"""
         self._candle_mngr = manager
-        self.candles = manager.candles
+
+        self.candles = self._candle_mngr.candles
         self.timeframe = (
-            timedelta_to_str(manager.timeframe) if manager.timeframe else None
+            timedelta_to_str(self._candle_mngr.timeframe) if self._candle_mngr.timeframe else None
         )
-        self._timeframe = manager.timeframe
-        self.timeframe_fill = manager.timeframe_fill
-        self.candle_life = manager.candle_life
-        self.candlestick = manager.candlestick
+        self._timeframe = self._candle_mngr.timeframe
+        self.timeframe_fill = self._candle_mngr.timeframe_fill
+        self.candle_life = self._candle_mngr.candle_life
+        self.candlestick = self._candle_mngr.candlestick
+        for indicator in self.children.values():
+            indicator.candle_manager = self._candle_mngr
 
     @property
     def open(self) -> float:
@@ -189,16 +190,6 @@ class Indicator(Generic[V], ABC):
             getattr(self, "source", "close"), index=index, default=default
         )
 
-    def _sync_from_manager(self):
-        """Sync indicator properties from candle manager (used after manager state changes)"""
-        self.timeframe = (
-            timedelta_to_str(self._candle_mngr.timeframe)
-            if self._candle_mngr.timeframe
-            else None
-        )
-        self._timeframe = self._candle_mngr.timeframe
-        for indicator in self.children.values():
-            indicator._sync_from_manager()
 
     @property
     def settings(self) -> dict:
@@ -262,7 +253,6 @@ class Indicator(Generic[V], ABC):
             candles: The Candle or List of Candle's to prepend.
         """
         self._candle_mngr.prepend(candles)
-        self._sync_from_manager()
         self.calculate()
 
     def append(self, candles: Candles):
@@ -272,7 +262,6 @@ class Indicator(Generic[V], ABC):
             candles: The Candle or List of Candle's to append.
         """
         self._candle_mngr.append(candles)
-        self._sync_from_manager()
         self.calculate()
 
     def insert(self, candles: Candles):
@@ -282,7 +271,6 @@ class Indicator(Generic[V], ABC):
             candles: The Candle or List of Candle's to prepend.
         """
         self._candle_mngr.insert(candles)
-        self._sync_from_manager()
         self.calculate_index(0, -1)
 
     @abstractmethod
