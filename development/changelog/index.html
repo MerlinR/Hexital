@@ -3558,10 +3558,21 @@
 <li>Added qol methods on <code>Indicator</code><ul>
 <li>OHLCV properties: <code>open</code>, <code>high</code>, <code>low</code>, <code>close</code>, <code>volume</code></li>
 <li>Shorthand methods: <code>prev()</code>, <code>at()</code>, <code>src()</code>, <code>prev_src()</code>, <code>at_src()</code></li>
-<li>Built-in indicators migrated to use <code>src()</code> / <code>prev_src()</code> / <code>at_src()</code></li>
 </ul>
 </li>
 <li>Removed <code>Managed</code> and <code>NestedSource</code> from public <code>hexital</code> exports (use <code>add_state()</code>; import from <code>hexital.core.indicator</code> if needed)</li>
+<li>Performance optimisations for appending</li>
+<li>Stale forming-bar readings<ul>
+<li><code>Candle.merge()</code> marks readings stale instead of clearing indicator dicts</li>
+<li>Added <code>Candle.stale</code> property</li>
+</ul>
+</li>
+<li>Indicator improvements<ul>
+<li><code>Indicator.candle_manager</code> setter syncs child indicators to the same manager</li>
+<li>WMA uses O(1) incremental rolling after seed period</li>
+<li>Extracted <code>true_range()</code> helper on TR; ATR seed lookups pass explicit index to child</li>
+</ul>
+</li>
 </ul>
 <hr />
 <h2 id="301">3.0.1</h2>
