@@ -15,10 +15,10 @@
         <link rel="canonical" href="https://MerlinR.github.io/Hexital/development/guides/custom-indicator/">
       
       
-        <link rel="prev" href="../candlesticks/">
+        <link rel="prev" href="../analysis-indepth/">
       
       
-        <link rel="next" href="../../indicator-catalogue/">
+        <link rel="next" href="../indicators-indepth/">
       
       
         
@@ -29,7 +29,7 @@
     
     
       
-        <title>Creating Indicator - Hexital</title>
+        <title>Custom Indicators - Hexital</title>
       
     
     
@@ -120,7 +120,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Creating Indicator
+              Custom Indicators
             
           </span>
         </div>
@@ -282,25 +282,6 @@
         </a>
       </li>
     
-  
-
-      
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
-      <a href="../../indicator-catalogue/" class="md-tabs__link">
-        
-  
-  
-    
-  
-  Indicator's
-
-      </a>
-    </li>
   
 
       
@@ -591,14 +572,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../indicators-indepth/" class="md-nav__link">
+      <a href="../hexital-indepth/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Indicators
+    Strategies (Hexital)
   
 
     
@@ -647,14 +628,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../hexital-indepth/" class="md-nav__link">
+      <a href="../analysis-indepth/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Hexital Strategy
+    Analysis
   
 
     
@@ -672,17 +653,175 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../analysis-indepth/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom Indicators
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
     
   
-    Indicator Analysis
+    Custom Indicators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#which-recipe-do-i-need" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Which recipe do I need?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recipe-a-simple-indicator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe A — Simple indicator
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recipe-b-stateful-indicator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe B — Stateful indicator
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recipe-c-composite-indicator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe C — Composite indicator
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recipe C — Composite indicator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#child-timing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Child timing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#amorph-functions-as-indicators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Amorph — functions as indicators
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-a-custom-indicator-in-hexital" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using a custom indicator in Hexital
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../indicators-indepth/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Indicators (advanced)
   
 
     
@@ -724,133 +863,9 @@
 
               
             
-              
-                
-  
-  
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Creating Indicator
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Creating Indicator
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#inherited" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Inherited
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#amorph" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Amorph
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-              
-            
           </ul>
         </nav>
       
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../indicator-catalogue/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Indicator's
-  
-
-    
-  </span>
-  
-  
-
-      </a>
     </li>
   
 
@@ -873,10 +888,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
             
   
   
@@ -894,8 +909,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1042,10 +1057,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
           
-          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
             
   
   
@@ -1063,8 +1078,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1120,10 +1135,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
         
           
-          <label class="md-nav__link" for="__nav_6_2" id="__nav_6_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
             
   
   
@@ -1141,8 +1156,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_2">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1170,7 +1185,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_2_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2_1" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1192,14 +1207,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_2_1" id="__nav_6_2_1_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_5_2_1" id="__nav_5_2_1_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_6_2_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_2_1">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_5_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2_1">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1227,7 +1242,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_2_1_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2_1_1" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1249,14 +1264,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_2_1_1" id="__nav_6_2_1_1_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_5_2_1_1" id="__nav_5_2_1_1_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_6_2_1_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_2_1_1">
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_5_2_1_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2_1_1">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1376,7 +1391,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_2_1_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2_1_2" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1398,14 +1413,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_2_1_2" id="__nav_6_2_1_2_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_5_2_1_2" id="__nav_5_2_1_2_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_6_2_1_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_2_1_2">
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_5_2_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2_1_2">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1469,7 +1484,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_2_1_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2_1_3" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1491,14 +1506,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_2_1_3" id="__nav_6_2_1_3_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_5_2_1_3" id="__nav_5_2_1_3_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_6_2_1_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_2_1_3">
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_5_2_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2_1_3">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1730,7 +1745,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_2_1_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2_1_5" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -1752,14 +1767,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_2_1_5" id="__nav_6_2_1_5_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_5_2_1_5" id="__nav_5_2_1_5_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_6_2_1_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_2_1_5">
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_5_2_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2_1_5">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2747,7 +2762,7 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_2_1_6" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2_1_6" >
         
           
           <div class="md-nav__link md-nav__container">
@@ -2769,14 +2784,14 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_6_2_1_6" id="__nav_6_2_1_6_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_5_2_1_6" id="__nav_5_2_1_6_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_6_2_1_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6_2_1_6">
+        <nav class="md-nav" data-md-level="4" aria-labelledby="__nav_5_2_1_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2_1_6">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -3003,10 +3018,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
         
           
-          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
             
   
   
@@ -3024,8 +3039,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_7">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -3179,10 +3194,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#inherited" class="md-nav__link">
+  <a href="#which-recipe-do-i-need" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Inherited
+        Which recipe do I need?
       
     </span>
   </a>
@@ -3190,10 +3205,71 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#amorph" class="md-nav__link">
+  <a href="#recipe-a-simple-indicator" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Amorph
+        Recipe A — Simple indicator
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recipe-b-stateful-indicator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe B — Stateful indicator
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recipe-c-composite-indicator" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recipe C — Composite indicator
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recipe C — Composite indicator">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#child-timing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Child timing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#amorph-functions-as-indicators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Amorph — functions as indicators
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-a-custom-indicator-in-hexital" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using a custom indicator in Hexital
       
     </span>
   </a>
@@ -3221,9 +3297,255 @@
 
 
 <h1 id="guide-creating-an-indicator">Guide: Creating an Indicator</h1>
-<p>TODO</p>
-<h2 id="inherited">Inherited</h2>
-<h2 id="amorph">Amorph</h2>
+<div class="admonition note">
+<p class="admonition-title">Advanced</p>
+<p>You do not need this page for basic usage. Start with <a href="../quick-start/">Quick Start</a> if you are new to Hexital.</p>
+</div>
+<p>All built-in indicators are dataclasses that subclass <a class="autorefs autorefs-internal" title="            Indicator
+
+
+  
+      dataclass
+  " href="../../reference/hexital/core/indicator/#hexital.core.indicator.Indicator">Indicator</a> and implement <code>_calculate_reading()</code>. Readings are stored on each <a class="autorefs autorefs-internal" title="            Candle" href="../../reference/hexital/core/candle/#hexital.core.candle.Candle">Candle</a> and updated incrementally on <code>append()</code>.</p>
+<hr />
+<h2 id="which-recipe-do-i-need">Which recipe do I need?</h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Need hidden state between candles?        → Recipe B (`add_state()`)
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Need other indicators as inputs?          → Recipe C (child indicators)
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Just math on candle fields?               → Recipe A (single method)
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>One-off pattern without a full class?     → Amorph
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Built-in example</th>
+<th>Child helpers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Simple</td>
+<td><a class="autorefs autorefs-internal" title="            SMA
+
+
+  
+      dataclass
+  " href="../../reference/hexital/indicators/sma/#hexital.indicators.sma.SMA">SMA</a></td>
+<td>—</td>
+</tr>
+<tr>
+<td>Stateful</td>
+<td><a class="autorefs autorefs-internal" title="            RSI
+
+
+  
+      dataclass
+  " href="../../reference/hexital/indicators/rsi/#hexital.indicators.rsi.RSI">RSI</a></td>
+<td><code>add_child_managed()</code></td>
+</tr>
+<tr>
+<td>Composite</td>
+<td><a class="autorefs autorefs-internal" title="            BBANDS
+
+
+  
+      dataclass
+  " href="../../reference/hexital/indicators/bbands/#hexital.indicators.bbands.BBANDS">BBANDS</a></td>
+<td><code>add_child()</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="recipe-a-simple-indicator">Recipe A — Simple indicator</h2>
+<p>Use when the reading depends only on candle fields and prior readings of <strong>this</strong> indicator — no hidden state, no sub-indicators.</p>
+<p>Based on <a class="autorefs autorefs-internal" title="            SMA
+
+
+  
+      dataclass
+  " href="../../reference/hexital/indicators/sma/#hexital.indicators.sma.SMA">SMA</a>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">Indicator</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="k">class</span><span class="w"> </span><span class="nc">MyAverage</span><span class="p">(</span><span class="n">Indicator</span><span class="p">[</span><span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]):</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="n">_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;MyAverage&quot;</span><span class="p">)</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="n">period</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="n">source</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;close&quot;</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_generate_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">period</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_reading</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">prev_exists</span><span class="p">():</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>            <span class="n">prev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prev_reading</span><span class="p">()</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>            <span class="n">old</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reading</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">index</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span><span class="p">)</span>
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>            <span class="n">new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reading</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span>
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>            <span class="k">if</span> <span class="n">prev</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">old</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">new</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>                <span class="k">return</span> <span class="n">prev</span> <span class="o">-</span> <span class="p">(</span><span class="n">old</span> <span class="o">-</span> <span class="n">new</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>            <span class="k">return</span> <span class="kc">None</span>
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reading_period</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">period</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">):</span>
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">candles_average</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">period</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">)</span>
+</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>        <span class="k">return</span> <span class="kc">None</span>
+</span></code></pre></div>
+<p>Useful inherited helpers inside <code>_calculate_reading()</code>:</p>
+<ul>
+<li><code>self.reading(source)</code> — value at the current index</li>
+<li><code>self.prev_reading(source)</code> — value at the previous index</li>
+<li><code>self.reading_period(n, source)</code> — enough history available?</li>
+<li><code>self.candles_average(n, source)</code> — bootstrap the first reading</li>
+</ul>
+<hr />
+<h2 id="recipe-b-stateful-indicator">Recipe B — Stateful indicator</h2>
+<p>Use when you need to <strong>remember values between candles</strong> that are not part of the public output — smoothed gains/losses, intermediate EMA inputs, etc.</p>
+<p>Based on <a class="autorefs autorefs-internal" title="            RSI
+
+
+  
+      dataclass
+  " href="../../reference/hexital/indicators/rsi/#hexital.indicators.rsi.RSI">RSI</a>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">Indicator</span><span class="p">,</span> <span class="n">State</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="k">class</span><span class="w"> </span><span class="nc">MyOscillator</span><span class="p">(</span><span class="n">Indicator</span><span class="p">[</span><span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]):</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="n">_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;MyOscillator&quot;</span><span class="p">)</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="n">period</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">14</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    <span class="n">source</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;close&quot;</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_generate_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">period</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_initialise</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_state</span><span class="p">()</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_reading</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>        <span class="n">gains</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>        <span class="n">losses</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>
+</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">prev_exists</span><span class="p">():</span>
+</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>            <span class="n">change</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prev_src</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">src</span><span class="p">()</span>
+</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>            <span class="n">change_gain</span> <span class="o">=</span> <span class="o">-</span><span class="n">change</span> <span class="k">if</span> <span class="n">change</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+</span><span id="__span-2-25"><a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>            <span class="n">change_loss</span> <span class="o">=</span> <span class="n">change</span> <span class="k">if</span> <span class="n">change</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+</span><span id="__span-2-26"><a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>
+</span><span id="__span-2-27"><a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>            <span class="n">gains</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-2-28"><a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prev</span><span class="p">(</span><span class="s2">&quot;gain&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="n">change_gain</span>
+</span><span id="__span-2-29"><a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>            <span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span>
+</span><span id="__span-2-30"><a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>
+</span><span id="__span-2-31"><a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>            <span class="n">losses</span> <span class="o">=</span> <span class="p">(</span>
+</span><span id="__span-2-32"><a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">prev</span><span class="p">(</span><span class="s2">&quot;loss&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="n">change_loss</span>
+</span><span id="__span-2-33"><a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>            <span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span>
+</span><span id="__span-2-34"><a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>
+</span><span id="__span-2-35"><a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_state</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">gain</span><span class="o">=</span><span class="n">gains</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="n">losses</span><span class="p">)</span>
+</span><span id="__span-2-36"><a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>
+</span><span id="__span-2-37"><a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>        <span class="k">if</span> <span class="n">gains</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">losses</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-2-38"><a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>            <span class="k">return</span> <span class="mf">100.0</span> <span class="o">-</span> <span class="p">(</span><span class="mf">100.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="p">(</span><span class="n">gains</span> <span class="o">/</span> <span class="n">losses</span><span class="p">)))</span>
+</span><span id="__span-2-39"><a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>
+</span><span id="__span-2-40"><a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>        <span class="k">return</span> <span class="kc">None</span>
+</span></code></pre></div>
+<ul>
+<li><code>add_state()</code> holds hidden state via <code>set()</code> / <code>update()</code> / <code>prev()</code></li>
+<li><code>src()</code> / <code>prev_src()</code> — shorthand for reading your configured <code>source</code> field</li>
+<li><code>close</code>, <code>open</code>, etc. — OHLCV properties; <code>prev("close")</code>, <code>at(-2, "high")</code> for indexed reads</li>
+<li><code>add_child_managed()</code> — child runs only when you invoke it (via <code>set_reading()</code> or <code>calculate_index()</code>)</li>
+</ul>
+<hr />
+<h2 id="recipe-c-composite-indicator">Recipe C — Composite indicator</h2>
+<p>Use when your indicator <strong>depends on other indicators</strong> (moving averages, standard deviation, ATR, etc.).</p>
+<p>Based on <a class="autorefs autorefs-internal" title="            BBANDS
+
+
+  
+      dataclass
+  " href="../../reference/hexital/indicators/bbands/#hexital.indicators.bbands.BBANDS">BBANDS</a>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">Indicator</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMA</span><span class="p">,</span> <span class="n">STDEV</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="k">class</span><span class="w"> </span><span class="nc">MyBands</span><span class="p">(</span><span class="n">Indicator</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]]):</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="n">_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;MyBands&quot;</span><span class="p">)</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    <span class="n">period</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>    <span class="n">source</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;close&quot;</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>    <span class="n">_std</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_generate_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">period</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_initialise</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">sub_stdev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">STDEV</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">period</span><span class="p">))</span>
+</span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">sub_sma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">SMA</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">period</span><span class="p">))</span>
+</span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>
+</span><span id="__span-3-21"><a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_reading</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
+</span><span id="__span-3-22"><a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sub_sma</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_stdev</span><span class="o">.</span><span class="n">exists</span><span class="p">()):</span>
+</span><span id="__span-3-23"><a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;mid&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;upper&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+</span><span id="__span-3-24"><a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>
+</span><span id="__span-3-25"><a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>        <span class="n">sma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_sma</span><span class="o">.</span><span class="n">reading</span><span class="p">()</span>
+</span><span id="__span-3-26"><a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a>        <span class="n">stdev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_stdev</span><span class="o">.</span><span class="n">reading</span><span class="p">()</span>
+</span><span id="__span-3-27"><a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a>
+</span><span id="__span-3-28"><a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a>        <span class="k">return</span> <span class="p">{</span>
+</span><span id="__span-3-29"><a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a>            <span class="s2">&quot;mid&quot;</span><span class="p">:</span> <span class="n">sma</span><span class="p">,</span>
+</span><span id="__span-3-30"><a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a>            <span class="s2">&quot;lower&quot;</span><span class="p">:</span> <span class="n">sma</span> <span class="o">-</span> <span class="p">(</span><span class="n">stdev</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_std</span><span class="p">),</span>
+</span><span id="__span-3-31"><a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a>            <span class="s2">&quot;upper&quot;</span><span class="p">:</span> <span class="n">sma</span> <span class="o">+</span> <span class="p">(</span><span class="n">stdev</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_std</span><span class="p">),</span>
+</span><span id="__span-3-32"><a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a>        <span class="p">}</span>
+</span></code></pre></div>
+<h3 id="child-timing">Child timing</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>When it runs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>add_child(...)</code></td>
+<td>Before parent's <code>_calculate_reading()</code> (default)</td>
+</tr>
+<tr>
+<td><code>add_child_after(...)</code></td>
+<td>After the parent's reading is stored</td>
+</tr>
+<tr>
+<td><code>add_child_managed(...)</code></td>
+<td>Only when you call it explicitly</td>
+</tr>
+</tbody>
+</table>
+<p>For full control, pass <code>when=</code> using <a class="autorefs autorefs-internal" title="            ChildWhen" href="../../reference/hexital/core/indicator/#hexital.core.indicator.ChildWhen">ChildWhen</a>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChildWhen</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="bp">self</span><span class="o">.</span><span class="n">sub_signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">EMA</span><span class="p">(</span><span class="o">...</span><span class="p">),</span> <span class="n">when</span><span class="o">=</span><span class="n">ChildWhen</span><span class="o">.</span><span class="n">MANUAL</span><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h2 id="amorph-functions-as-indicators">Amorph — functions as indicators</h2>
+<p>For one-off signals or pattern checks without writing a full class, use <a class="autorefs autorefs-internal" title="            Amorph" href="../../reference/hexital/indicators/amorph/#hexital.indicators.amorph.Amorph">Amorph</a>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">Amorph</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital.analysis.patterns</span><span class="w"> </span><span class="kn">import</span> <span class="n">doji</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">pattern</span> <span class="o">=</span> <span class="n">Amorph</span><span class="p">(</span><span class="n">analysis</span><span class="o">=</span><span class="n">doji</span><span class="p">)</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="n">pattern</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candles</span><span class="p">)</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="n">pattern</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
+</span></code></pre></div>
+<hr />
+<h2 id="using-a-custom-indicator-in-hexital">Using a custom indicator in Hexital</h2>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">Candle</span><span class="p">,</span> <span class="n">Hexital</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">my_indicators</span><span class="w"> </span><span class="kn">import</span> <span class="n">MyBands</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="n">strategy</span> <span class="o">=</span> <span class="n">Hexital</span><span class="p">(</span><span class="s2">&quot;demo&quot;</span><span class="p">,</span> <span class="n">candles</span><span class="p">,</span> <span class="p">[</span><span class="n">MyBands</span><span class="p">(</span><span class="n">period</span><span class="o">=</span><span class="mi">20</span><span class="p">)])</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="n">strategy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_candle</span><span class="p">)</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">strategy</span><span class="o">.</span><span class="n">reading</span><span class="p">(</span><span class="s2">&quot;MyBands_20&quot;</span><span class="p">))</span>
+</span></code></pre></div>
+<p>See also the <a href="../../features/#custom-indicators">Features — Custom Indicators</a> example.</p>
 
 
 
@@ -3244,7 +3566,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="December 19, 2024 19:41:24 UTC">December 19, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 9, 2026 13:30:00 UTC">June 9, 2026</span>
   </span>
 
     
@@ -3274,7 +3596,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../candlesticks/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Candlesticks">
+          <a href="../analysis-indepth/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Analysis">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3284,20 +3606,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Candlesticks
+                Analysis
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../indicator-catalogue/" class="md-footer__link md-footer__link--next" aria-label="Next: Indicator&#39;s">
+          <a href="../indicators-indepth/" class="md-footer__link md-footer__link--next" aria-label="Next: Indicators (advanced)">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Indicator's
+                Indicators (advanced)
               </div>
             </div>
             <div class="md-footer__button md-icon">
