@@ -58,9 +58,7 @@ class Hexital:
         self.timeframe_fill = timeframe_fill
         self.candle_life = candle_life
 
-        self.candlestick = (
-            validate_candlesticktype(candlestick) if candlestick else None
-        )
+        self.candlestick = validate_candlesticktype(candlestick) if candlestick else None
 
         manager = CandleManager(
             candles if isinstance(candles, list) else [],
@@ -287,12 +285,10 @@ class Hexital:
         """Calculates all the missing indicator readings."""
         if name is not None:
             if indicator := self._indicators.get(name):
-                indicator.calculate(_clear_stale=False)
-                self._clear_stale_readings()
+                indicator.calculate()
         else:
             for indicator in self._indicators.values():
-                indicator.calculate(_clear_stale=False)
-            self._clear_stale_readings()
+                indicator.calculate()
 
     def calculate_index(
         self, name: str | None = None, index: int = -1, end_index: int | None = None
@@ -304,11 +300,6 @@ class Hexital:
         else:
             for indicator in self._indicators.values():
                 indicator.calculate_index(index, end_index)
-        self._clear_stale_readings()
-
-    def _clear_stale_readings(self):
-        for manager in self._candle_managers:
-            manager.clear_stale_readings()
 
     def recalculate(self, source: Source | None = None):
         """Purge's all indicator reading's and re-calculates them all,
