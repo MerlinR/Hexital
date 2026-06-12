@@ -601,16 +601,3 @@ class TestCandleMerge:
             main_candle.timestamp == datetime(2023, 10, 3, 9, 0, 30)
             and main_candle.close == 12536.019
         )
-
-
-class TestMergeReadingsStale:
-    def test_merge_marks_stale_instead_of_clearing(self, merge_candles):
-        main_candle = merge_candles[0]
-        main_candle.indicators = {"EMA_10": 1.0}
-        main_candle.sub_indicators = {"RSI_14": 50.0}
-
-        main_candle.merge(merge_candles[1])
-
-        assert main_candle.indicators == {"EMA_10": 1.0}
-        assert main_candle.sub_indicators == {"RSI_14": 50.0}
-        assert main_candle._readings_stale is True

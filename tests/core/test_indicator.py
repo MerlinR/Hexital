@@ -388,6 +388,7 @@ class TestAddState:
         assert state.prev("value") == 10.0
         assert state.reading("value") == 20.0
         assert state.source("value").name == f"{state.managed.name}.value"
+        assert state.source("value") is state.source("value")
 
 
 class TestCandleTimeframeLabel:
@@ -439,27 +440,3 @@ class TestAuthorShortcuts:
         assert parent.src() == parent.close
         assert parent.prev_src() == minimal_candles[-2].close
         assert parent.at_src(-2) == minimal_candles[-2].close
-
-
-def test_stale_readings_recalc_on_forming_bar():
-    """Stale forming bars recalculate on calculate() without wiping readings first."""
-    seed = Candle(
-        17213, 2395, 7813, 3615, 19661,
-        timestamp=datetime(2023, 10, 3, 9, 10),
-        timeframe=timedelta(minutes=5),
-    )
-    seed.indicators = {"Fake_10_T5": 99.0}
-
-    indicator = FakeIndicator(candles=[seed], timeframe="t5")
-    indicator.name = "Fake_10_T5"
-
-    assert indicator._find_calc_index() == 1
-
-    indicator.candles[-1]._mark_readings_stale()
-    assert indicator.candles[-1].indicators["Fake_10_T5"] == 99.0
-    assert indicator._find_calc_index() == 0
-
-    indicator.calculate()
-
-    assert indicator.candles[-1].indicators["Fake_10_T5"] == 100.0
-    assert indicator.candles[-1]._readings_stale is False

@@ -130,9 +130,7 @@ class Indicator(Generic[V], ABC):
 
         self.candles = self._candle_mngr.candles
         self.timeframe = (
-            timedelta_to_str(self._candle_mngr.timeframe)
-            if self._candle_mngr.timeframe
-            else None
+            timedelta_to_str(self._candle_mngr.timeframe) if self._candle_mngr.timeframe else None
         )
         self._timeframe = self._candle_mngr.timeframe
         self.timeframe_fill = self._candle_mngr.timeframe_fill
@@ -161,7 +159,9 @@ class Indicator(Generic[V], ABC):
     def volume(self) -> int:
         return self.candles[self._active_index].volume
 
-    def prev(self, source: Source | None = None, default: T | None = None) -> V | T:
+    def prev(
+        self, source: Source | None = None, default: T | None = None
+    ) -> V | T:
         """Previous reading — shorthand for `prev_reading`."""
         return self.prev_reading(source, default)
 
@@ -182,11 +182,14 @@ class Indicator(Generic[V], ABC):
         """Previous reading for this indicator's configured ``source``."""
         return self.prev_reading(getattr(self, "source", "close"), default=default)
 
-    def at_src(self, index: int, default: T | None = None) -> V | T:
+    def at_src(
+        self, index: int, default: T | None = None
+    ) -> V | T:
         """Reading at ``index`` for this indicator's configured ``source``."""
         return self.reading(
             getattr(self, "source", "close"), index=index, default=default
         )
+
 
     @property
     def settings(self) -> dict:
@@ -288,7 +291,7 @@ class Indicator(Generic[V], ABC):
             self._initialise()
             self._initialised = True
 
-    def calculate(self, *, _clear_stale: bool = True):
+    def calculate(self):
         """Calculate the TA values, will calculate for all the Candles,
         where this indicator is missing"""
         self.check_initialised()
@@ -309,9 +312,6 @@ class Indicator(Generic[V], ABC):
             self._set_reading(reading, index)
             self._calculate_children(ChildWhen.AFTER, index)
 
-        if _clear_stale:
-            self._candle_mngr.clear_stale_readings()
-
     def _reading_dup(self, reading: Reading | V, candle: Candle) -> bool:
         """Optimisation method for 'calculate'.
         if calculating and not on latest Candle, check if reading match's a pre-existing reading.
@@ -330,13 +330,7 @@ class Indicator(Generic[V], ABC):
 
         return reading == cur_reading
 
-    def calculate_index(
-        self,
-        start_index: int,
-        end_index: int | None = None,
-        *,
-        _clear_stale: bool = True,
-    ):
+    def calculate_index(self, start_index: int, end_index: int | None = None):
         """Calculate the TA values, will calculate a index range the Candles, will re-calculate"""
         self.check_initialised()
 
@@ -356,9 +350,6 @@ class Indicator(Generic[V], ABC):
             self._set_reading(reading, index)
             self._calculate_children(ChildWhen.AFTER, index)
 
-        if _clear_stale:
-            self._candle_mngr.clear_stale_readings()
-
     def _find_calc_index(self) -> int:
         """Optimisation method, to find where to start calculating the indicator from
         Searches from newest to oldest to find the first candle without the indicator
@@ -370,12 +361,10 @@ class Indicator(Generic[V], ABC):
             return 0
 
         for index in range(len(self.candles) - 1, -1, -1):
-            candle = self.candles[index]
-            if self.name in candle.indicators or self.name in candle.sub_indicators:
-                if candle.stale:
-                    while index > 0 and self.candles[index - 1].stale:
-                        index -= 1
-                    return index
+            if (
+                self.name in self.candles[index].indicators
+                or self.name in self.candles[index].sub_indicators
+            ):
                 return index + 1
 
         return 0
@@ -624,11 +613,12 @@ class State:
     Dictionary keys map to fields stored on each candle's `sub_indicators`.
     """
 
-    __slots__ = ("_managed", "_parent")
+    __slots__ = ("_managed", "_parent", "_sources")
 
     def __init__(self, parent: Indicator, managed: Managed):
         self._parent = parent
         self._managed = managed
+        self._sources: dict[str, NestedSource] = {}
 
     @property
     def managed(self) -> Managed:
@@ -637,7 +627,9 @@ class State:
 
     def source(self, key: str) -> NestedSource:
         """Reference a state field as an indicator source."""
-        return NestedSource(self._managed, key)
+        if key not in self._sources:
+            self._sources[key] = NestedSource(self._managed, key)
+        return self._sources[key]
 
     def prev(self, key: str | None = None, default: T | None = None) -> Reading | T:
         """Previous reading for the whole state or a single field."""

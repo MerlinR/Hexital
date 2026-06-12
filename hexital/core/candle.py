@@ -27,7 +27,6 @@ class Candle:
     refs: dict[str, Sequence | None]
     _start_timestamp: datetime | None = None
     _end_timestamp: datetime | None = None
-    _readings_stale: bool = False
 
     def __init__(
         self,
@@ -47,9 +46,7 @@ class Candle:
         self.low = low
         self.close = close
         self.volume = volume
-        self.timeframe = (
-            convert_timeframe_to_timedelta(timeframe) if timeframe else None
-        )
+        self.timeframe = convert_timeframe_to_timedelta(timeframe) if timeframe else None
 
         self.tag = None
         self.aggregation_factor = (
@@ -66,25 +63,17 @@ class Candle:
         self.refs = {}
         self.indicators = indicators if indicators else {}
         self.sub_indicators = sub_indicators if sub_indicators else {}
-        self._readings_stale = False
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, Candle):
             return False
 
         for key, value in self.__dict__.items():
-            if key.startswith("_") and key not in [
-                "_start_timestamp",
-                "_end_timestamp",
-            ]:
+            if key.startswith("_") and key not in ["_start_timestamp", "_end_timestamp"]:
                 continue
             if key in ["_start_timestamp", "_end_timestamp", "timeframe"]:
                 other_value = getattr(other, key, None)
-                if (
-                    other_value is not None
-                    and value is not None
-                    and other_value != value
-                ):
+                if other_value is not None and value is not None and other_value != value:
                     return False
             elif getattr(other, key, None) != value:
                 return False
@@ -130,16 +119,6 @@ class Candle:
     @property
     def high_low(self) -> float:
         return abs(self.high - self.low)
-
-    @property
-    def stale(self) -> bool:
-        return self._readings_stale
-
-    @stale.setter
-    def stale(self, value: bool):
-        self._readings_stale = value
-        if value:
-            self._mark_readings_stale()
 
     def as_list(self, readings: bool = False) -> list:
         """
@@ -369,9 +348,9 @@ class Candle:
             self._start_timestamp = self.timestamp
         self.timestamp = timestamp
 
-    def _mark_readings_stale(self):
-        """OHLCV changed (e.g. merge); readings need recalc but may be reused until then."""
-        self._readings_stale = True
+    def reset_candle(self):
+        self.indicators = {}
+        self.sub_indicators = {}
         self.refs = {}
         self.tag = None
 
@@ -384,9 +363,8 @@ class Candle:
         attributes such as open, high, low, close, volume, and timestamps accordingly.
 
         **Note:**
-        - Merged bars are marked stale for recalculation; readings are not cleared until
-          indicators recalculate (see `_mark_readings_stale`).
-        - Any conversion refs or tag on the candle are cleared.
+        - Any calculated indicators will be wiped, as merging modifies the core candle values.
+        - Any conversion or derived values associated with the candle will also be removed.
 
         Args:
             candle (Candle): The `Candle` object to merge into the current candle.
@@ -397,13 +375,12 @@ class Candle:
             - Updates `high` and `low` based on the maximum and minimum values of the two candles.
             - Increases the `volume` by the volume of the merged candle.
             - Increments the `aggregation_factor` to account for the merged data.
-            - Marks readings stale so indicators recalculate on the next `calculate()`.
+            - Resets calculated indicators and cleans any derived values.
         """
         if self.timestamp is None or candle.timestamp is None:
             self.high = max(self.high, candle.high)
             self.low = min(self.low, candle.low)
             self.close = candle.close
-            self._mark_readings_stale()
             return
 
         if self.timeframe and (
@@ -442,4 +419,4 @@ class Candle:
         self.volume += candle.volume
         self.aggregation_factor += candle.aggregation_factor
 
-        self._mark_readings_stale()
+        self.reset_candle()
