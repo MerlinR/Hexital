@@ -60,6 +60,12 @@ default-groups = ["dev"]
 [tool.uv.sources]
 pandas-ta = { git = "https://github.com/MerlinR/Pandas-ta-fork.git#master" }
 
+[tool.coverage.run]
+source = ["hexital"]
+omit = ["tests/*", "benchmarks/*"]
+
+[tool.coverage.report]
+omit = ["tests/*", "benchmarks/*"]
 
 [tool.hatch.build]
 include = ["hexital/**", "./*"]
