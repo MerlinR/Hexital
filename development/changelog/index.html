@@ -2354,6 +2354,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../reference/hexital/indicators/squeeze/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> squeeze
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/hexital/indicators/squeeze_pro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> squeeze_pro
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../reference/hexital/indicators/stdev/" class="md-nav__link">
         
   
@@ -3562,10 +3618,16 @@
 </li>
 <li>Removed <code>Managed</code> and <code>NestedSource</code> from public <code>hexital</code> exports (use <code>add_state()</code>; import from <code>hexital.core.indicator</code> if needed)</li>
 <li>Performance optimisations for appending</li>
-<li>Indicator improvements<ul>
-<li><code>Indicator.candle_manager</code> setter syncs child indicators to the same manager</li>
+<li>Updated Test verification</li>
+<li>Added Indicators<ul>
+<li>Added Squeeze</li>
+<li>Added Squeeze Pro</li>
+</ul>
+</li>
+<li>Modified Indicators<ul>
+<li>KC can now be ran with EMA or SMA, and uses TR by default</li>
 <li>WMA uses O(1) incremental rolling after seed period</li>
-<li>Extracted <code>true_range()</code> helper on TR; ATR seed lookups pass explicit index to child</li>
+<li>BBANDS now takes optional Multiplier defaults 2.0</li>
 </ul>
 </li>
 </ul>
