@@ -36,10 +36,10 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Shorthand methods: `prev()`, `at()`, `src()`, `prev_src()`, `at_src()`
 - Removed `Managed` and `NestedSource` from public `hexital` exports (use `add_state()`; import from `hexital.core.indicator` if needed)
 - Performance optimisations for appending
-- Indicator improvements
-    - `Indicator.candle_manager` setter syncs child indicators to the same manager
+- Added Indicators
+- Modified Indicators
+    - KC can now be ran with EMA or SMA
     - WMA uses O(1) incremental rolling after seed period
-    - Extracted `true_range()` helper on TR; ATR seed lookups pass explicit index to child
 ---
 
 ## 3.0.1
