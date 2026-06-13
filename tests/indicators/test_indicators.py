@@ -321,6 +321,11 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.readings(), expected_wma)
 
+    def test_willr(self, candles, expected_willr):
+        test = indicators.WillR(candles=candles)
+        test.calculate()
+        assert self.verify(test.readings(), expected_willr)
+
     @pytest.mark.usefixtures("candles", "expected_zscore")
     def test_zscore(self, candles, expected_zscore):
         test = indicators.ZScore(candles=candles)

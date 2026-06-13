@@ -15,10 +15,27 @@ def load_json_candles() -> list[dict]:
     return json.load(csv_file)
 
 
-def save_json_result(data: list, filename: str, path: str | None = None):
+def save_as_json(data: list, filename: str, path: str | None = None):
     path = path if path is not None else PATH_INDICATOR
     with open(f"tests/data/{path}/{filename}.json", "w") as json_file:
         json.dump(data, json_file, indent=4, default=str)
+
+
+def save_structured_result(
+    df: pd.DataFrame,
+    filename: str,
+    columns: list[tuple[str, str]],
+    path: str | None = None,
+) -> None:
+    rounded_columns = [
+        [round_values(value) for value in df[column_name].tolist()]
+        for column_name, _ in columns
+    ]
+    data = [
+        {output_key: value for value, (_, output_key) in zip(row, columns)}
+        for row in zip(*rounded_columns)
+    ]
+    save_as_json(data, filename, path)
 
 
 def round_values(values: float | dict[str, float]) -> float | dict[str, float]:
@@ -104,6 +121,11 @@ def generate_indicators():
             {"kind": "squeeze"},
             {"kind": "squeeze_pro"},
             {"kind": "zscore"},
+            {"kind": "cci"},
+            {"kind": "willr"},
+            {"kind": "ppo"},
+            {"kind": "psar"},
+            {"kind": "ichimoku"},
         ],
     )
 
@@ -112,163 +134,160 @@ def generate_indicators():
 
     print_new(df)
 
-    save_json_result([round_values(value) for value in df["RMA_10"].tolist()], "RMA")
-    save_json_result([round_values(value) for value in df["RMA_20"].tolist()], "RMA_20")
-    save_json_result([round_values(value) for value in df["TRUERANGE_1"].tolist()], "TR")
-    save_json_result([round_values(value) for value in df["EMA_10"].tolist()], "EMA")
-    save_json_result([round_values(value) for value in df["SMA_10"].tolist()], "SMA")
-    save_json_result([round_values(value) for value in df["SMA_3"].tolist()], "SMA_3")
-    save_json_result([round_values(value) for value in df["RSI_14"].tolist()], "RSI")
-    save_json_result([round_values(value) for value in df["ATRr_14"].tolist()], "ATR")
-    save_json_result([round_values(value) for value in df["WMA_10"].tolist()], "WMA")
-    save_json_result([round_values(value) for value in df["VWMA_10"].tolist()], "VWMA")
-    save_json_result([round_values(value) for value in df["VWAP_D"].tolist()], "VWAP")
-    save_json_result([round_values(value) for value in df["VWAP_1H"].tolist()], "VWAP_H1")
-    save_json_result([round_values(value) for value in df["OBV"].tolist()], "OBV")
-    save_json_result([round_values(value) for value in df["HL2"].tolist()], "HL2")
-    save_json_result([round_values(value) for value in df["HLC3"].tolist()], "HLC")
-    save_json_result([round_values(value) for value in df["ROC_10"].tolist()], "ROC")
-    save_json_result([round_values(value) for value in df["ATRr_20"].tolist()], "ATR_20")
-    save_json_result([round_values(value) for value in df["HMA_10"].tolist()], "HMA")
-    save_json_result([round_values(value) for value in df["STDEV_30"].tolist()], "STDEV")
-    save_json_result(
-        [round_values(value) for value in df["TSI_13_25_13"].tolist()], "TSI"
-    )
-    save_json_result([round_values(value) for value in df["CMO_14"].tolist()], "CMO")
-    save_json_result([round_values(value) for value in df["MFI_14"].tolist()], "MFI")
-    save_json_result(
-        [round_values(value) for value in df["MIDPOINT_2"].tolist()], "MIDPOINT"
-    )
-    save_json_result([round_values(value) for value in df["JMA_7_0"].tolist()], "JMA")
-    save_json_result(
+    save_as_json([round_values(value) for value in df["RMA_10"].tolist()], "RMA")
+    save_as_json([round_values(value) for value in df["RMA_20"].tolist()], "RMA_20")
+    save_as_json([round_values(value) for value in df["TRUERANGE_1"].tolist()], "TR")
+    save_as_json([round_values(value) for value in df["EMA_10"].tolist()], "EMA")
+    save_as_json([round_values(value) for value in df["SMA_10"].tolist()], "SMA")
+    save_as_json([round_values(value) for value in df["SMA_3"].tolist()], "SMA_3")
+    save_as_json([round_values(value) for value in df["RSI_14"].tolist()], "RSI")
+    save_as_json([round_values(value) for value in df["ATRr_14"].tolist()], "ATR")
+    save_as_json([round_values(value) for value in df["WMA_10"].tolist()], "WMA")
+    save_as_json([round_values(value) for value in df["VWMA_10"].tolist()], "VWMA")
+    save_as_json([round_values(value) for value in df["VWAP_D"].tolist()], "VWAP")
+    save_as_json([round_values(value) for value in df["VWAP_1H"].tolist()], "VWAP_H1")
+    save_as_json([round_values(value) for value in df["OBV"].tolist()], "OBV")
+    save_as_json([round_values(value) for value in df["HL2"].tolist()], "HL2")
+    save_as_json([round_values(value) for value in df["HLC3"].tolist()], "HLC")
+    save_as_json([round_values(value) for value in df["ROC_10"].tolist()], "ROC")
+    save_as_json([round_values(value) for value in df["ATRr_20"].tolist()], "ATR_20")
+    save_as_json([round_values(value) for value in df["HMA_10"].tolist()], "HMA")
+    save_as_json([round_values(value) for value in df["STDEV_30"].tolist()], "STDEV")
+    save_as_json([round_values(value) for value in df["TSI_13_25_13"].tolist()], "TSI")
+    save_as_json([round_values(value) for value in df["CMO_14"].tolist()], "CMO")
+    save_as_json([round_values(value) for value in df["MFI_14"].tolist()], "MFI")
+    save_as_json([round_values(value) for value in df["MIDPOINT_2"].tolist()], "MIDPOINT")
+    save_as_json([round_values(value) for value in df["JMA_7_0"].tolist()], "JMA")
+    save_as_json(
         [round_values(value) for value in df["JMA_10_80.0"].tolist()], "JMA_extra"
     )
-    save_json_result([round_values(value) for value in df["RVI_14"].tolist()], "RVI")
-    save_json_result([round_values(value) for value in df["ZS_30"].tolist()], "ZSCORE")
+    save_as_json([round_values(value) for value in df["RVI_14"].tolist()], "RVI")
+    save_as_json([round_values(value) for value in df["ZS_30"].tolist()], "ZSCORE")
+    save_as_json([round_values(value) for value in df["CCI_14_0.015"].tolist()], "CCI")
+    save_as_json([round_values(value) for value in df["WILLR_14"].tolist()], "WILLR")
 
-    kc_data = []
-    for kc in zip(
-        [round_values(value) for value in df["KCLe_20_2"].tolist()],
-        [round_values(value) for value in df["KCBe_20_2"].tolist()],
-        [round_values(value) for value in df["KCUe_20_2"].tolist()],
-    ):
-        kc_data.append({"lower": kc[0], "band": kc[1], "upper": kc[2]})
-    save_json_result(kc_data, "KC")
-
-    stoch_data = []
-    for stoch in zip(
-        [round_values(value) for value in df["STOCHk_14_3_3"].tolist()],
-        [round_values(value) for value in df["STOCHd_14_3_3"].tolist()],
-    ):
-        stoch_data.append({"k": stoch[0], "d": stoch[1]})
-    save_json_result(stoch_data, "STOCH")
-
-    macd_data = []
-    for macd in zip(
-        [round_values(value) for value in df["MACD_12_26_9"].tolist()],
-        [round_values(value) for value in df["MACDs_12_26_9"].tolist()],
-        [round_values(value) for value in df["MACDh_12_26_9"].tolist()],
-    ):
-        macd_data.append({"MACD": macd[0], "signal": macd[1], "histogram": macd[2]})
-    save_json_result(macd_data, "MACD")
-
-    supertrend_data = []
-    for trend in zip(
-        [round_values(value) for value in df["SUPERT_7_3.0"].tolist()],
-        [round_values(value) for value in df["SUPERTd_7_3.0"].tolist()],
-        [round_values(value) for value in df["SUPERTl_7_3.0"].tolist()],
-        [round_values(value) for value in df["SUPERTs_7_3.0"].tolist()],
-    ):
-        supertrend_data.append(
-            {
-                "trend": trend[0],
-                "direction": trend[1],
-                "long": trend[2],
-                "short": trend[3],
-            }
-        )
-    save_json_result(supertrend_data, "SUPERTREND")
-
-    adx_data = []
-    for adx_row in zip(
-        [round_values(value) for value in df["ADX_14"].tolist()],
-        [round_values(value) for value in df["DMP_14"].tolist()],
-        [round_values(value) for value in df["DMN_14"].tolist()],
-    ):
-        adx_data.append({"ADX": adx_row[0], "DM_Plus": adx_row[1], "DM_Neg": adx_row[2]})
-    save_json_result(adx_data, "ADX")
-
-    bbands_data = []
-    for bbands_row in zip(
-        [round_values(value) for value in df["BBL_5_2.0"].tolist()],
-        [round_values(value) for value in df["BBM_5_2.0"].tolist()],
-        [round_values(value) for value in df["BBU_5_2.0"].tolist()],
-    ):
-        bbands_data.append(
-            {
-                "BBL": bbands_row[0],
-                "BBM": bbands_row[1],
-                "BBU": bbands_row[2],
-            }
-        )
-    save_json_result(bbands_data, "BBANDS")
-
-    aroon_data = []
-    for aroon_row in zip(
-        [round_values(value) for value in df["AROONU_14"].tolist()],
-        [round_values(value) for value in df["AROOND_14"].tolist()],
-        [round_values(value) for value in df["AROONOSC_14"].tolist()],
-    ):
-        aroon_data.append(
-            {"AROONU": aroon_row[0], "AROOND": aroon_row[1], "AROONOSC": aroon_row[2]}
-        )
-    save_json_result(aroon_data, "AROON")
-
-    donchian_data = []
-    for donchian_row in zip(
-        [round_values(value) for value in df["DCL_20_20"].tolist()],
-        [round_values(value) for value in df["DCM_20_20"].tolist()],
-        [round_values(value) for value in df["DCU_20_20"].tolist()],
-    ):
-        donchian_data.append(
-            {"DCL": donchian_row[0], "DCM": donchian_row[1], "DCU": donchian_row[2]}
-        )
-    save_json_result(donchian_data, "DONCHIAN")
-
-    squeeze_data = []
-    for squeeze_row in zip(
-        [round_values(value) for value in df["SQZ_20_2.0_20_1.5"].tolist()],
-        [round_values(value) for value in df["SQZ_ON"].tolist()],
-        [round_values(value) for value in df["SQZ_OFF"].tolist()],
-    ):
-        squeeze_data.append(
-            {
-                "SQZ": squeeze_row[0],
-                "ON": squeeze_row[1],
-                "OFF": squeeze_row[2],
-            }
-        )
-    save_json_result(squeeze_data, "SQUEEZE")
-
-    squeeze_pro_data = []
-    for squeeze_row in zip(
-        [round_values(value) for value in df["SQZPRO_20_2.0_20_2_1.5_1"].tolist()],
-        [round_values(value) for value in df["SQZPRO_ON_WIDE"].tolist()],
-        [round_values(value) for value in df["SQZPRO_ON_NORMAL"].tolist()],
-        [round_values(value) for value in df["SQZPRO_ON_NARROW"].tolist()],
-        [round_values(value) for value in df["SQZPRO_OFF"].tolist()],
-    ):
-        squeeze_pro_data.append(
-            {
-                "SQZ": squeeze_row[0],
-                "WIDE": squeeze_row[1],
-                "NORMAL": squeeze_row[2],
-                "NARROW": squeeze_row[3],
-                "OFF": squeeze_row[4],
-            }
-        )
-
-    save_json_result(squeeze_pro_data, "SQUEEZE_PRO")
+    save_structured_result(
+        df,
+        "KC",
+        [
+            ("KCLe_20_2", "lower"),
+            ("KCBe_20_2", "band"),
+            ("KCUe_20_2", "upper"),
+        ],
+    )
+    save_structured_result(
+        df,
+        "STOCH",
+        [
+            ("STOCHk_14_3_3", "k"),
+            ("STOCHd_14_3_3", "d"),
+        ],
+    )
+    save_structured_result(
+        df,
+        "MACD",
+        [
+            ("MACD_12_26_9", "MACD"),
+            ("MACDs_12_26_9", "signal"),
+            ("MACDh_12_26_9", "histogram"),
+        ],
+    )
+    save_structured_result(
+        df,
+        "SUPERTREND",
+        [
+            ("SUPERT_7_3.0", "trend"),
+            ("SUPERTd_7_3.0", "direction"),
+            ("SUPERTl_7_3.0", "long"),
+            ("SUPERTs_7_3.0", "short"),
+        ],
+    )
+    save_structured_result(
+        df,
+        "ADX",
+        [
+            ("ADX_14", "ADX"),
+            ("DMP_14", "DM_Plus"),
+            ("DMN_14", "DM_Neg"),
+        ],
+    )
+    save_structured_result(
+        df,
+        "BBANDS",
+        [
+            ("BBL_5_2.0", "BBL"),
+            ("BBM_5_2.0", "BBM"),
+            ("BBU_5_2.0", "BBU"),
+        ],
+    )
+    save_structured_result(
+        df,
+        "AROON",
+        [
+            ("AROONU_14", "AROONU"),
+            ("AROOND_14", "AROOND"),
+            ("AROONOSC_14", "AROONOSC"),
+        ],
+    )
+    save_structured_result(
+        df,
+        "DONCHIAN",
+        [
+            ("DCL_20_20", "DCL"),
+            ("DCM_20_20", "DCM"),
+            ("DCU_20_20", "DCU"),
+        ],
+    )
+    save_structured_result(
+        df,
+        "SQUEEZE",
+        [
+            ("SQZ_20_2.0_20_1.5", "SQZ"),
+            ("SQZ_ON", "ON"),
+            ("SQZ_OFF", "OFF"),
+        ],
+    )
+    save_structured_result(
+        df,
+        "SQUEEZE_PRO",
+        [
+            ("SQZPRO_20_2.0_20_2_1.5_1", "SQZ"),
+            ("SQZPRO_ON_WIDE", "Wide"),
+            ("SQZPRO_ON_NORMAL", "Normal"),
+            ("SQZPRO_ON_NARROW", "Narrow"),
+            ("SQZPRO_OFF", "OFF"),
+        ],
+    )
+    save_structured_result(
+        df,
+        "PPO",
+        [
+            ("PPO_12_26_9", "PPO"),
+            ("PPOh_12_26_9", "Histogram"),
+            ("PPOs_12_26_9", "Signal"),
+        ],
+    )
+    save_structured_result(
+        df,
+        "PSAR",
+        [
+            ("PSARl_0.02_0.2", "Long"),
+            ("PSARs_0.02_0.2", "Short"),
+            ("PSARaf_0.02_0.2", "Acceleration"),
+            ("PSARr_0.02_0.2", "Reversal"),
+        ],
+    )
+    save_structured_result(
+        df,
+        "ICHIMOKU",
+        [
+            ("ISA_9", "Lead_A"),
+            ("ISB_26", "Lead_B"),
+            ("ITS_9", "Conversion"),
+            ("IKS_26", "Base"),
+            ("ICS_26", "Span"),
+        ],
+    )
 
 
 def generate_indicators_timeframe(frame: str):
@@ -290,15 +309,9 @@ def generate_indicators_timeframe(frame: str):
 
     print_new(df)
     frame = frame.replace("min", "T")
-    save_json_result(
-        [round_values(value) for value in df["EMA_10"].tolist()], f"EMA_{frame}"
-    )
-    save_json_result(
-        [round_values(value) for value in df["SMA_10"].tolist()], f"SMA_{frame}"
-    )
-    save_json_result(
-        [round_values(value) for value in df["OBV"].tolist()], f"OBV_{frame}"
-    )
+    save_as_json([round_values(value) for value in df["EMA_10"].tolist()], f"EMA_{frame}")
+    save_as_json([round_values(value) for value in df["SMA_10"].tolist()], f"SMA_{frame}")
+    save_as_json([round_values(value) for value in df["OBV"].tolist()], f"OBV_{frame}")
 
 
 def generate_patterns():
@@ -317,16 +330,16 @@ def generate_patterns():
 
     print_new(df)
 
-    save_json_result(
+    save_as_json(
         [bool(value) for value in df["CDL_DOJI_10_0.1"].tolist()], "DOJI", PATH_PATTERN
     )
-    save_json_result(
+    save_as_json(
         [bool(value) for value in df["CDL_DOJISTAR"].tolist()], "DOJISTAR", PATH_PATTERN
     )
-    save_json_result(
+    save_as_json(
         [bool(value) for value in df["CDL_HAMMER"].tolist()], "HAMMER", PATH_PATTERN
     )
-    save_json_result(
+    save_as_json(
         [bool(value) for value in df["CDL_INVERTEDHAMMER"].tolist()],
         "INVERTEDHAMMER",
         PATH_PATTERN,
@@ -353,7 +366,7 @@ def generate_heikin_candles():
         inplace=True,
     )
 
-    save_json_result(df.to_dict("records"), "test_candles_heikin_ashi", PATH_CANDLES)
+    save_as_json(df.to_dict("records"), "test_candles_heikin_ashi", PATH_CANDLES)
     return df
 
 
@@ -364,9 +377,33 @@ def generate_heikin_candles_ema():
 
     df.ta.strategy(MyStrategy)
     df = df.astype(object).replace(np.nan, None)
-    save_json_result(
+    save_as_json(
         [round_values(value) for value in df["EMA_10"].tolist()], "HEIKINASHI_EMA"
     )
+
+
+def generate_z_candles():
+    print("Generating Z Candles")
+    df = pd.DataFrame.from_dict(load_json_candles())
+
+    dfha = ta.cdl_z(df["open"], df["high"], df["low"], df["close"])
+    df = pd.merge(df, dfha, right_index=True, left_index=True)
+    df = df.astype(object).replace(np.nan, None)
+    print_new(df)
+
+    df.drop(columns=["open", "high", "low", "close"], axis=1, inplace=True)
+    df.rename(
+        columns={
+            "open_Z_30_1": "open",
+            "high_Z_30_1": "high",
+            "low_Z_30_1": "low",
+            "close_Z_30_1": "close",
+        },
+        inplace=True,
+    )
+
+    save_as_json(df.to_dict("records"), "test_candles_z", PATH_CANDLES)
+    return df
 
 
 def generate_timeframe_candles(frame: str):
@@ -382,7 +419,7 @@ def generate_timeframe_candles(frame: str):
         row["timestamp"] = row["timestamp"].to_pydatetime().isoformat(timespec="seconds")
         output.append(row)
 
-    save_json_result(output, f"test_candles_{frame.replace('min', 'T')}", PATH_CANDLES)
+    save_as_json(output, f"test_candles_{frame.replace('min', 'T')}", PATH_CANDLES)
 
 
 if __name__ == "__main__":
@@ -394,3 +431,4 @@ if __name__ == "__main__":
     generate_timeframe_candles("10min")
     generate_heikin_candles()
     generate_heikin_candles_ema()
+    generate_z_candles()

@@ -38,6 +38,7 @@ from .indicators import (
     TSI,
     VWAP,
     VWMA,
+    WillR,
     WMA,
 )
 from .utils.timeframe import TimeFrame
@@ -84,6 +85,7 @@ __all__ = [
     "TimeFrame",
     "VWAP",
     "VWMA",
+    "WillR",
     "WMA",
     "analysis",
     "exceptions",

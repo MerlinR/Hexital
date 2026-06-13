@@ -33,6 +33,7 @@ from .tr import TR
 from .tsi import TSI
 from .vwap import VWAP
 from .vwma import VWMA
+from .willr import WillR
 from .wma import WMA
 from .zscore import ZScore
 
@@ -72,6 +73,7 @@ __all__ = [
     "TSI",
     "VWAP",
     "VWMA",
+    "WillR",
     "WMA",
     "ZScore",
 ]

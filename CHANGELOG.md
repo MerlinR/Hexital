@@ -43,6 +43,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added Indicators
     - Added Squeeze (SQ)
     - Added Squeeze Pro (SQPRO)
+    - Added WillR
     - Added ZScore (ZS)
 - Modified Indicators
     - KC can now be ran with EMA or SMA, and uses TR by default
