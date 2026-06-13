@@ -3,6 +3,7 @@ from .amorph import Amorph
 from .aroon import AROON
 from .atr import ATR
 from .bbands import BBANDS
+from .cci import CCI
 from .cmo import CMO
 from .counter import Counter
 from .donchian import Donchian
@@ -43,6 +44,7 @@ __all__ = [
     "AROON",
     "ATR",
     "BBANDS",
+    "CCI",
     "CMO",
     "Counter",
     "Donchian",

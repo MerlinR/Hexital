@@ -41,9 +41,10 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added `Timeframe` argument to helper generating Candle methods for easier setting from existing data
 
 - Added Indicators
+    - Added CCI (CCI)
     - Added Squeeze (SQ)
     - Added Squeeze Pro (SQPRO)
-    - Added WillR
+    - Added WillR (WillR)
     - Added ZScore (ZS)
 - Modified Indicators
     - KC can now be ran with EMA or SMA, and uses TR by default
