@@ -320,3 +320,9 @@ class TestIndicators(IndicatorTestBase):
         test = indicators.WMA(candles=candles)
         test.calculate()
         assert self.verify(test.readings(), expected_wma)
+
+    @pytest.mark.usefixtures("candles", "expected_zscore")
+    def test_zscore(self, candles, expected_zscore):
+        test = indicators.ZScore(candles=candles)
+        test.calculate()
+        assert self.verify(test.readings(), expected_zscore)

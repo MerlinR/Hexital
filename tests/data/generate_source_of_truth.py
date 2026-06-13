@@ -103,6 +103,7 @@ def generate_indicators():
             {"kind": "rvi"},
             {"kind": "squeeze"},
             {"kind": "squeeze_pro"},
+            {"kind": "zscore"},
         ],
     )
 
@@ -143,6 +144,7 @@ def generate_indicators():
         [round_values(value) for value in df["JMA_10_80.0"].tolist()], "JMA_extra"
     )
     save_json_result([round_values(value) for value in df["RVI_14"].tolist()], "RVI")
+    save_json_result([round_values(value) for value in df["ZS_30"].tolist()], "ZSCORE")
 
     kc_data = []
     for kc in zip(

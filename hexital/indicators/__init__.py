@@ -34,6 +34,7 @@ from .tsi import TSI
 from .vwap import VWAP
 from .vwma import VWMA
 from .wma import WMA
+from .zscore import ZScore
 
 __all__ = [
     "ADX",
@@ -72,4 +73,5 @@ __all__ = [
     "VWAP",
     "VWMA",
     "WMA",
+    "ZScore",
 ]

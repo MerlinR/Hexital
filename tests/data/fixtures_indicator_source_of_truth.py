@@ -258,6 +258,12 @@ def fixture_expected_vwma():
     return json.load(csv_files)
 
 
+@pytest.fixture(name="expected_zscore")
+def fixture_expected_zscore():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/ZSCORE.json")
+    return json.load(csv_files)
+
+
 # Hex Indicator
 
 
