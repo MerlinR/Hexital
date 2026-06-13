@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 
-from ..exceptions import InvalidIndicator
 from ..core.indicator import Indicator, Source
-from .atr import ATR
+from ..exceptions import InvalidIndicator
 from .ema import EMA
 from .sma import SMA
+from .tr import TR
 
 
 @dataclass(kw_only=True)
@@ -26,6 +26,7 @@ class KC(Indicator[dict[str, float | None]]):
         multiplier (float): A positive float to multiply the bands. Defaults to 2.0
         mamode (str): Center line average type. One of `"ema"` or `"sma"`.
             Defaults to `"ema"`
+        tr (bool): Use true range for the channel width. Defaults to `True`
     """
 
     _name: str = field(init=False, default="KC")
@@ -33,6 +34,7 @@ class KC(Indicator[dict[str, float | None]]):
     source: Source = "close"
     multiplier: float = 2.0
     mamode: str = "ema"
+    tr: bool = True
 
     def _generate_name(self) -> str:
         name = f"{self._name}_{self.period}_{self.multiplier}"
@@ -48,22 +50,57 @@ class KC(Indicator[dict[str, float | None]]):
             )
 
     def _initialise(self):
-        self.sub_atr = self.add_child(ATR(period=self.period))
+        self._range_state = self.add_state(name=f"{self.name}_range")
+
         average_indicator: EMA | SMA
         if self.mamode == "sma":
-            average_indicator = SMA(source=self.source, period=self.period)
+            average_indicator = SMA(
+                name=f"{self.name}_basis",
+                source=self.source,
+                period=self.period,
+            )
         else:
-            average_indicator = EMA(source=self.source, period=self.period)
+            average_indicator = EMA(
+                name=f"{self.name}_basis",
+                source=self.source,
+                period=self.period,
+            )
         self.sub_ma = self.add_child(average_indicator)
 
-    def _calculate_reading(self, index: int) -> dict[str, float | None]:
-        atr_ = self.sub_atr.reading()
-        ma_ = self.sub_ma.reading()
+        if self.tr:
+            self.sub_tr = self.add_child(TR(name=f"{self.name}_tr"))
 
-        if atr_ is None:
+        range_average_indicator: EMA | SMA
+        if self.mamode == "sma":
+            range_average_indicator = SMA(
+                name=f"{self.name}_range_ma",
+                source=self._range_state.managed,
+                period=self.period,
+            )
+        else:
+            range_average_indicator = EMA(
+                name=f"{self.name}_range_ma",
+                source=self._range_state.managed,
+                period=self.period,
+            )
+        self.sub_range_ma = self.add_child_managed(range_average_indicator)
+
+    def _calculate_reading(self, index: int) -> dict[str, float | None]:
+        ma_ = self.sub_ma.reading()
+        if self.tr:
+            range_ = self.sub_tr.reading()
+        else:
+            range_ = self.high - self.low
+
+        self._range_state.set(range_)
+        self.sub_range_ma.calculate_index(index)
+
+        range_ma = self.sub_range_ma.reading()
+
+        if ma_ is None or range_ma is None:
             return {"lower": None, "band": ma_, "upper": None}
 
-        lower = ma_ - (self.multiplier * atr_)
-        upper = ma_ + (self.multiplier * atr_)
+        lower = ma_ - (self.multiplier * range_ma)
+        upper = ma_ + (self.multiplier * range_ma)
 
         return {"lower": lower, "band": ma_, "upper": upper}
