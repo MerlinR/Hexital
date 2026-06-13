@@ -37,6 +37,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Removed `Managed` and `NestedSource` from public `hexital` exports (use `add_state()`; import from `hexital.core.indicator` if needed)
 - Performance optimisations for appending
 - Added Indicators
+    - Added Squeeze
 - Modified Indicators
     - KC can now be ran with EMA or SMA, and uses TR by default
     - WMA uses O(1) incremental rolling after seed period

@@ -101,6 +101,8 @@ def generate_indicators():
             {"kind": "jma"},
             {"kind": "jma", "length": 10, "phase": 80.0},
             {"kind": "rvi"},
+            {"kind": "squeeze"},
+            {"kind": "squeeze_pro"},
         ],
     )
 
@@ -230,6 +232,21 @@ def generate_indicators():
             {"DCL": donchian_row[0], "DCM": donchian_row[1], "DCU": donchian_row[2]}
         )
     save_json_result(donchian_data, "DONCHIAN")
+
+    squeeze_data = []
+    for squeeze_row in zip(
+        [round_values(value) for value in df["SQZ_20_2.0_20_1.5"].tolist()],
+        [round_values(value) for value in df["SQZ_ON"].tolist()],
+        [round_values(value) for value in df["SQZ_OFF"].tolist()],
+    ):
+        squeeze_data.append(
+            {
+                "SQZ": squeeze_row[0],
+                "ON": squeeze_row[1],
+                "OFF": squeeze_row[2],
+            }
+        )
+    save_json_result(squeeze_data, "SQUEEZE")
 
 
 def generate_indicators_timeframe(frame: str):
