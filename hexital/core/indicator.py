@@ -654,17 +654,17 @@ class State:
             return self._managed.exists()
         return self._parent.exists(self.source(key))
 
-    def set(self, reading: Reading) -> None:
-        """Replace the stored state for the current candle."""
-        self._managed.set_reading(reading)  # type: ignore
+    def set(self, reading: Reading, index: int | None = None) -> None:
+        """Replace the stored state for the current or given candle."""
+        self._managed.set_reading(reading, index=index)  # type: ignore
 
-    def update(self, **values: Reading) -> None:
-        """Merge fields into dict state, or replace when no prior dict exists."""
-        current = self._managed.reading()
+    def update(self, index: int | None = None, **values: Reading) -> None:
+        """Merge fields into dict state for the current or given candle."""
+        current = self._parent.reading(self._managed, index=index, default={})
         if isinstance(current, dict):
-            self._managed.set_reading({**current, **values})  # type: ignore
+            self._managed.set_reading({**current, **values}, index=index)  # type: ignore
         else:
-            self._managed.set_reading(values)  # type: ignore
+            self._managed.set_reading(values, index=index)  # type: ignore
 
 
 class NestedSource:
