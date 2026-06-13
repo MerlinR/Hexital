@@ -5,7 +5,6 @@ from datetime import datetime, timedelta
 from typing import Any
 
 from ..utils.timeframe import (
-    TimeFrame,
     TimeFramesSource,
     convert_timeframe_to_timedelta,
 )
@@ -176,7 +175,11 @@ class Candle:
         return cdl
 
     @classmethod
-    def from_dict(cls, candle: dict[str, Any]) -> Candle:
+    def from_dict(
+        cls,
+        candle: dict[str, Any],
+        timeframe: TimeFramesSource | None = None,
+    ) -> Candle:
         """
         Create a `Candle` object from a dictionary representation.
 
@@ -190,6 +193,8 @@ class Candle:
 
         Args:
             candle (Dict[str, Any]): A dictionary containing the candle data.
+            timeframe: Optional fallback timeframe used when the dictionary does
+                not contain a timeframe field.
 
         Returns:
             Candle: A `Candle` object initialized with the provided dictionary data.
@@ -203,6 +208,8 @@ class Candle:
         if timestamp and not isinstance(timestamp[0], (datetime, str)):
             raise TypeError("Timestamp must be native python Datetime object")
 
+        candle_timeframe = candle.get("timeframe", candle.get("Timeframe", timeframe))
+
         return cls(
             candle.get("open", candle.get("Open", 0.0)),
             candle.get("high", candle.get("High", 0.0)),
@@ -212,11 +219,15 @@ class Candle:
             indicators=candle.get("indicators", {}),
             sub_indicators=candle.get("sub_indicators", {}),
             timestamp=timestamp[0] if timestamp else None,
-            timeframe=candle.get("timeframe", candle.get("Timeframe")),
+            timeframe=candle_timeframe,
         )
 
     @classmethod
-    def from_dicts(cls, candles: Sequence[dict[str, Any]]) -> list[Candle]:
+    def from_dicts(
+        cls,
+        candles: Sequence[dict[str, Any]],
+        timeframe: TimeFramesSource | None = None,
+    ) -> list[Candle]:
         """
         Create's a list of `Candle` object's from a list of dictionary representation.
 
@@ -231,14 +242,20 @@ class Candle:
 
         Args:
             candles (List[Dict[str, Any]]): A dictionary containing the candle data.
+            timeframe: Optional fallback timeframe used when an item does not
+                contain a timeframe field.
 
         Returns:
             List[Candle]: A list of `Candle` object's.
         """
-        return [cls.from_dict(candle) for candle in candles]
+        return [cls.from_dict(candle, timeframe=timeframe) for candle in candles]
 
     @classmethod
-    def from_list(cls, candle: list) -> Candle:
+    def from_list(
+        cls,
+        candle: list,
+        timeframe: TimeFramesSource | None = None,
+    ) -> Candle:
         """
         Create a `Candle` object from a list representation.
 
@@ -253,13 +270,15 @@ class Candle:
 
         Args:
             candle (list): A list containing the candle data.
+            timeframe: Optional fallback timeframe used when the list does not
+                contain a timeframe value.
 
         Returns:
             Candle: A `Candle` object initialized with the data from the list.
         """
         candle = list(candle)
         timestamp = None
-        timeframe = None
+        candle_timeframe = timeframe
         indicators = {}
         sub_indicators = {}
 
@@ -267,8 +286,8 @@ class Candle:
             isinstance(candle[0], (str, datetime)) or candle[0] is None
         ):
             timestamp = candle.pop(0)
-        if len(candle) > 5 and isinstance(candle[-1], (str, int, TimeFrame, timedelta)):
-            timeframe = candle.pop(-1)
+        if len(candle) > 5 and isinstance(candle[-1], TimeFramesSource):
+            candle_timeframe = candle.pop(-1)
         if (
             len(candle) > 5
             and isinstance(candle[-1], dict)
@@ -286,11 +305,15 @@ class Candle:
             indicators=indicators,
             sub_indicators=sub_indicators,
             timestamp=timestamp,
-            timeframe=timeframe,
+            timeframe=candle_timeframe,
         )
 
     @classmethod
-    def from_lists(cls, candles: list[list]) -> list[Candle]:
+    def from_lists(
+        cls,
+        candles: list[list],
+        timeframe: TimeFramesSource | None = None,
+    ) -> list[Candle]:
         """
         Create a list of `Candle` object's from a list of list representation.
 
@@ -305,11 +328,13 @@ class Candle:
 
         Args:
             candles (List[list]): A list of list's containing the candle data.
+            timeframe: Optional fallback timeframe used when an item does not
+                contain a timeframe value.
 
         Returns:
             List[Candle]: A list of `Candle` object's.
         """
-        return [cls.from_list(candle) for candle in candles]
+        return [cls.from_list(candle, timeframe=timeframe) for candle in candles]
 
     def clean_copy(self) -> Candle:
         """Create a clean copy with OHLCV data but without indicators, refs, or tag."""

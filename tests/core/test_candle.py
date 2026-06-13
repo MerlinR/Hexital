@@ -278,6 +278,17 @@ class TestDictConv:
             timeframe="T5",
         )
 
+    def test_candle_from_dict_timeframe_fallback(self, candle_dict_datetime):
+        assert Candle.from_dict(candle_dict_datetime, timeframe="T5") == Candle(
+            open=12331.69043,
+            high=12542.540039,
+            low=12202.410156,
+            close=12536.019531,
+            volume=4918240000,
+            timestamp=datetime(2023, 8, 30),
+            timeframe="T5",
+        )
+
     def test_candle_from_dicts(self, candle_dict):
         assert Candle.from_dicts(candle_dict) == [
             Candle(
@@ -295,6 +306,28 @@ class TestDictConv:
                 close=12563.759766,
                 volume=4547280000,
                 timestamp=datetime(2023, 8, 30),
+            ),
+        ]
+
+    def test_candle_from_dicts_timeframe_fallback(self, candle_dict):
+        assert Candle.from_dicts(candle_dict, timeframe="T5") == [
+            Candle(
+                open=12331.69043,
+                high=12542.540039,
+                low=12202.410156,
+                close=12536.019531,
+                volume=4918240000,
+                timestamp=datetime(2023, 8, 30),
+                timeframe="T5",
+            ),
+            Candle(
+                open=12511.459961,
+                high=12645.830078,
+                low=12460.990234,
+                close=12563.759766,
+                volume=4547280000,
+                timestamp=datetime(2023, 8, 30),
+                timeframe="T5",
             ),
         ]
 
@@ -442,6 +475,17 @@ class TestListConv:
             timeframe=timedelta(minutes=5),
         )
 
+    def test_candle_from_list_timeframe_fallback(self, candle_list):
+        assert Candle.from_list(candle_list[0], timeframe="T5") == Candle(
+            open=12331.69043,
+            high=12542.540039,
+            low=12202.410156,
+            close=12536.019531,
+            volume=4918240000,
+            timestamp=datetime(2023, 10, 3, 9, 0),
+            timeframe=timedelta(minutes=5),
+        )
+
     def test_candle_from_lists(self, candle_list):
         assert Candle.from_lists(candle_list) == [
             Candle(
@@ -459,6 +503,28 @@ class TestListConv:
                 close=12563.759766,
                 volume=4547280000,
                 timestamp=datetime(2023, 10, 3, 9, 5),
+            ),
+        ]
+
+    def test_candle_from_lists_timeframe_fallback(self, candle_list):
+        assert Candle.from_lists(candle_list, timeframe="T5") == [
+            Candle(
+                open=12331.69043,
+                high=12542.540039,
+                low=12202.410156,
+                close=12536.019531,
+                volume=4918240000,
+                timestamp=datetime(2023, 10, 3, 9, 0),
+                timeframe=timedelta(minutes=5),
+            ),
+            Candle(
+                open=12511.459961,
+                high=12645.830078,
+                low=12460.990234,
+                close=12563.759766,
+                volume=4547280000,
+                timestamp=datetime(2023, 10, 3, 9, 5),
+                timeframe=timedelta(minutes=5),
             ),
         ]
 

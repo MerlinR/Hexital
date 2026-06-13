@@ -37,6 +37,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Removed `Managed` and `NestedSource` from public `hexital` exports (use `add_state()`; import from `hexital.core.indicator` if needed)
 - Performance optimisations for appending
 - Updated Test verification
+- Added `Timeframe` argument to helper generating Candle methods for easier setting from existing data
 - Added Indicators
     - Added Squeeze
     - Added Squeeze Pro
