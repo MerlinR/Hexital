@@ -34,6 +34,8 @@ from .indicators import (
     RSI,
     RVI,
     SMA,
+    Squeeze,
+    SqueezePro,
     STDEV,
     STDEVT,
     STOCH,
@@ -44,6 +46,7 @@ from .indicators import (
     VWMA,
     WillR,
     WMA,
+    ZScore,
 )
 from .utils.timeframe import TimeFrame
 
@@ -83,6 +86,8 @@ __all__ = [
     "RSI",
     "RVI",
     "SMA",
+    "Squeeze",
+    "SqueezePro",
     "STDEV",
     "STDEVT",
     "STOCH",
@@ -95,6 +100,7 @@ __all__ = [
     "VWMA",
     "WillR",
     "WMA",
+    "ZScore",
     "analysis",
     "exceptions",
     "indicators",
