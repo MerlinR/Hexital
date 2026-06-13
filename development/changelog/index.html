@@ -3611,7 +3611,10 @@
 <p><em>Release Date: X</em></p>
 <ul>
 <li>Support python 3.14</li>
-<li>Major Typing update, some method clean up and optimisation</li>
+<li>
+<p>Non-backward compatible changes:</p>
+<ul>
+<li>Removed <code>Managed</code> and <code>NestedSource</code> from public <code>hexital</code> exports (use <code>add_state()</code>; import from <code>hexital.core.indicator</code> if needed)</li>
 <li>Separated candle timeframe metadata from resampling<ul>
 <li><code>candle.timeframe</code> is metadata only — it does not configure managers or indicator naming</li>
 <li>Resampling runs only when <code>indicator.timeframe=</code> or <code>hexital.timeframe=</code> is set</li>
@@ -3625,33 +3628,38 @@
 <li>Added <code>ChildWhen</code> with <code>BEFORE</code>, <code>AFTER</code>, and <code>MANUAL</code> members; exported from <code>hexital</code></li>
 <li>Added convenience methods <code>add_child_after()</code> and <code>add_child_managed()</code></li>
 <li><code>add_child()</code> accepts <code>ChildWhen</code> or a string value; invalid values raise <code>InvalidIndicator</code></li>
-<li>Non-backward compatible changes:<ul>
+</ul>
+</li>
 <li>Removed <code>add_sub_indicator()</code> and <code>add_managed_indicator()</code> — use <code>add_child()</code> instead</li>
 <li>Removed <code>sub_indicators</code> and <code>managed_indicators</code> dicts on <code>Indicator</code> — use <code>children</code> instead</li>
 <li>Removed <code>prior_calc</code> property and <code>IndicatorMode</code> enum</li>
 </ul>
 </li>
-</ul>
-</li>
-<li>Added <code>State</code> helper for indicator state<ul>
+<li>
+<p>Added <code>State</code> helper for indicator state</p>
+<ul>
 <li>Added <code>Indicator.add_state()</code> to register state backed by a managed child</li>
 <li><code>State</code> provides <code>prev()</code>, <code>reading()</code>, <code>set()</code>, <code>update()</code>, and <code>source()</code> — replacing manual <code>Managed</code> + <code>NestedSource</code></li>
 <li>Exported <code>State</code> from <code>hexital</code>; built-in stateful indicators migrated to use it</li>
 </ul>
 </li>
-<li>Added qol methods on <code>Indicator</code><ul>
+<li>Added QOL methods on <code>Indicator</code><ul>
 <li>OHLCV properties: <code>open</code>, <code>high</code>, <code>low</code>, <code>close</code>, <code>volume</code></li>
 <li>Shorthand methods: <code>prev()</code>, <code>at()</code>, <code>src()</code>, <code>prev_src()</code>, <code>at_src()</code></li>
 </ul>
 </li>
-<li>Removed <code>Managed</code> and <code>NestedSource</code> from public <code>hexital</code> exports (use <code>add_state()</code>; import from <code>hexital.core.indicator</code> if needed)</li>
+<li>Major Typing update, some method clean up and optimisation</li>
 <li>Performance optimisations for appending</li>
 <li>Updated Test verification</li>
-<li>Added <code>Timeframe</code> argument to helper generating Candle methods for easier setting from existing data</li>
-<li>Added Indicators<ul>
-<li>Added Squeeze</li>
-<li>Added Squeeze Pro</li>
-<li>Added ZScore</li>
+<li>
+<p>Added <code>Timeframe</code> argument to helper generating Candle methods for easier setting from existing data</p>
+</li>
+<li>
+<p>Added Indicators</p>
+<ul>
+<li>Added Squeeze (SQ)</li>
+<li>Added Squeeze Pro (SQPRO)</li>
+<li>Added ZScore (ZS)</li>
 </ul>
 </li>
 <li>Modified Indicators<ul>
