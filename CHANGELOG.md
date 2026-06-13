@@ -11,37 +11,39 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 *Release Date: X*
 
 - Support python 3.14
-- Major Typing update, some method clean up and optimisation
-- Separated candle timeframe metadata from resampling
-    - `candle.timeframe` is metadata only — it does not configure managers or indicator naming
-    - Resampling runs only when `indicator.timeframe=` or `hexital.timeframe=` is set
-    - Removed `timeframe=` from `append` / `prepend` / `insert`; label candles at source instead
-    - Managers accept candles whose label is equal to or finer than the manager transform
-- Timeframe default has changed from str CONST "default" TimeFrame DEFAULT = "N"
-- Reworked child indicator API
-    - Added `add_child(indicator, ...)` as the single entry point for attaching child indicators
-    - Added `ChildWhen` with `BEFORE`, `AFTER`, and `MANUAL` members; exported from `hexital`
-    - Added convenience methods `add_child_after()` and `add_child_managed()`
-    - `add_child()` accepts `ChildWhen` or a string value; invalid values raise `InvalidIndicator`
-    - Non-backward compatible changes:
-        - Removed `add_sub_indicator()` and `add_managed_indicator()` — use `add_child()` instead
-        - Removed `sub_indicators` and `managed_indicators` dicts on `Indicator` — use `children` instead
-        - Removed `prior_calc` property and `IndicatorMode` enum
+- Non-backward compatible changes:
+    - Removed `Managed` and `NestedSource` from public `hexital` exports (use `add_state()`; import from `hexital.core.indicator` if needed)
+    - Separated candle timeframe metadata from resampling
+        - `candle.timeframe` is metadata only — it does not configure managers or indicator naming
+        - Resampling runs only when `indicator.timeframe=` or `hexital.timeframe=` is set
+        - Removed `timeframe=` from `append` / `prepend` / `insert`; label candles at source instead
+        - Managers accept candles whose label is equal to or finer than the manager transform
+    - Timeframe default has changed from str CONST "default" TimeFrame DEFAULT = "N"
+    - Reworked child indicator API
+        - Added `add_child(indicator, ...)` as the single entry point for attaching child indicators
+        - Added `ChildWhen` with `BEFORE`, `AFTER`, and `MANUAL` members; exported from `hexital`
+        - Added convenience methods `add_child_after()` and `add_child_managed()`
+        - `add_child()` accepts `ChildWhen` or a string value; invalid values raise `InvalidIndicator`
+    - Removed `add_sub_indicator()` and `add_managed_indicator()` — use `add_child()` instead
+    - Removed `sub_indicators` and `managed_indicators` dicts on `Indicator` — use `children` instead
+    - Removed `prior_calc` property and `IndicatorMode` enum
+
 - Added `State` helper for indicator state
     - Added `Indicator.add_state()` to register state backed by a managed child
     - `State` provides `prev()`, `reading()`, `set()`, `update()`, and `source()` — replacing manual `Managed` + `NestedSource`
     - Exported `State` from `hexital`; built-in stateful indicators migrated to use it
-- Added qol methods on `Indicator`
+- Added QOL methods on `Indicator`
     - OHLCV properties: `open`, `high`, `low`, `close`, `volume`
     - Shorthand methods: `prev()`, `at()`, `src()`, `prev_src()`, `at_src()`
-- Removed `Managed` and `NestedSource` from public `hexital` exports (use `add_state()`; import from `hexital.core.indicator` if needed)
+- Major Typing update, some method clean up and optimisation
 - Performance optimisations for appending
 - Updated Test verification
 - Added `Timeframe` argument to helper generating Candle methods for easier setting from existing data
+
 - Added Indicators
-    - Added Squeeze
-    - Added Squeeze Pro
-    - Added ZScore
+    - Added Squeeze (SQ)
+    - Added Squeeze Pro (SQPRO)
+    - Added ZScore (ZS)
 - Modified Indicators
     - KC can now be ran with EMA or SMA, and uses TR by default
     - WMA uses O(1) incremental rolling after seed period
