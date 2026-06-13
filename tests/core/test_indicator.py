@@ -5,9 +5,8 @@ import pytest
 from hexital import Candle
 from hexital.analysis.patterns import doji
 from hexital.candlesticks.heikinashi import HeikinAshi
-from hexital.core.indicator import ChildWhen, Indicator, Managed, State
-from hexital.exceptions import InvalidIndicator
-from hexital.exceptions import InvalidCandlestickType
+from hexital.core.indicator import ChildWhen, Indicator, Managed
+from hexital.exceptions import InvalidCandlestickType, InvalidIndicator
 from hexital.indicators.amorph import Amorph
 from hexital.utils import timeframe
 
@@ -29,14 +28,12 @@ class FakeIndicator(Indicator):
         return 100.0
 
 
-@pytest.mark.usefixtures("minimal_candles")
 def test_calculate(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     test.calculate()
     assert minimal_candles[-1].indicators.get("Fake_10")
 
 
-@pytest.mark.usefixtures("minimal_candles")
 def test_name_default(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     test.calculate()
@@ -44,7 +41,6 @@ def test_name_default(minimal_candles: list[Candle]):
     assert test.name == "Fake_10"
 
 
-@pytest.mark.usefixtures("minimal_candles")
 def test_name_default_timeframe_inherit(minimal_candles: list[Candle]):
     test = FakeIndicator(timeframe=timeframe.TimeFrame.MINUTE)
     test.append(minimal_candles)
@@ -53,7 +49,6 @@ def test_name_default_timeframe_inherit(minimal_candles: list[Candle]):
     assert test.name == "Fake_10_T1"
 
 
-@pytest.mark.usefixtures("minimal_candles_untimeframed")
 def test_unlabeled_candles_skipped_by_resample_manager(
     minimal_candles_untimeframed: list[Candle],
 ):
@@ -63,28 +58,24 @@ def test_unlabeled_candles_skipped_by_resample_manager(
     assert len(test.candles) == 0
 
 
-@pytest.mark.usefixtures("minimal_candles")
 def test_name_override(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles, name="FUCK")
     test.calculate()
     assert test.name == "FUCK"
 
 
-@pytest.mark.usefixtures("minimal_candles")
 def test_name_timeframe(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles, timeframe="t5")
     test.calculate()
     assert test.name == "Fake_10_T5"
 
 
-@pytest.mark.usefixtures("minimal_candles")
 def test_name_timeframe_override(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles, name="FUCK", timeframe="t5")
     test.calculate()
     assert test.name == "FUCK"
 
 
-@pytest.mark.usefixtures("minimal_candles")
 def test_read(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     assert test.reading() is None
@@ -92,7 +83,6 @@ def test_read(minimal_candles: list[Candle]):
     assert test.reading() == 100.0
 
 
-@pytest.mark.usefixtures("minimal_candles")
 def test_set_reading(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     test.calculate()
@@ -101,7 +91,6 @@ def test_set_reading(minimal_candles: list[Candle]):
     assert test.reading() == 420
 
 
-@pytest.mark.usefixtures("minimal_candles")
 def test_set_reading_indexed(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     test.calculate()
@@ -110,7 +99,6 @@ def test_set_reading_indexed(minimal_candles: list[Candle]):
     assert test.prev_reading() == 420
 
 
-@pytest.mark.usefixtures("minimal_candles")
 def test_reading_period(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     assert test.reading_period(10) is False
@@ -172,7 +160,6 @@ class TestSettings:
         }
 
 
-@pytest.mark.usefixtures("minimal_candles")
 def test_purge(minimal_candles: list[Candle]):
     test = FakeIndicator(candles=minimal_candles)
     assert test.exists() is False
@@ -182,7 +169,6 @@ def test_purge(minimal_candles: list[Candle]):
     assert test.exists() is False
 
 
-@pytest.mark.usefixtures("minimal_candles")
 def test_candle_timerange(minimal_candles):
     test = FakeIndicator(candles=[], candle_life=timedelta(minutes=1))
 
@@ -214,7 +200,6 @@ def test_candle_timerange(minimal_candles):
     ]
 
 
-@pytest.mark.usefixtures("minimal_candles")
 def test_reading_as_list_exp(minimal_candles: list[Candle]):
     test_indicator = FakeIndicator(candles=minimal_candles)
     assert test_indicator.readings("ATR") == [
@@ -241,7 +226,6 @@ def test_reading_as_list_exp(minimal_candles: list[Candle]):
     ]
 
 
-@pytest.mark.usefixtures("minimal_candles")
 def test_reading_as_list_partial(minimal_candles: list[Candle]):
     test_indicator = FakeIndicator(candles=minimal_candles)
     assert test_indicator.readings("MinTR") == [
@@ -268,7 +252,6 @@ def test_reading_as_list_partial(minimal_candles: list[Candle]):
     ]
 
 
-@pytest.mark.usefixtures("minimal_candles")
 def test_reading_as_list_no_indicator(minimal_candles: list[Candle]):
     test_indicator = FakeIndicator(candles=minimal_candles)
     assert test_indicator.readings("FUCK") == [None] * 20
@@ -301,7 +284,6 @@ class _ChildIndicator(Indicator[float | None]):
 
 
 class TestAddChild:
-    @pytest.mark.usefixtures("minimal_candles")
     def test_add_child_before(self, minimal_candles: list[Candle]):
         parent = FakeIndicator(candles=minimal_candles)
         child = parent.add_child(_ChildIndicator(value=10.0))
@@ -311,7 +293,6 @@ class TestAddChild:
         assert child._when == ChildWhen.BEFORE
         assert child.reading() == 10.0 + (len(minimal_candles) - 1)
 
-    @pytest.mark.usefixtures("minimal_candles")
     def test_add_child_after(self, minimal_candles: list[Candle]):
         parent = FakeIndicator(candles=minimal_candles)
         child = parent.add_child_after(_ChildIndicator(value=5.0))
@@ -320,7 +301,6 @@ class TestAddChild:
         assert child._when == ChildWhen.AFTER
         assert child.reading() == 5.0 + (len(minimal_candles) - 1)
 
-    @pytest.mark.usefixtures("minimal_candles")
     def test_add_child_managed(self, minimal_candles: list[Candle]):
         parent = FakeIndicator(candles=minimal_candles)
         state = parent.add_child_managed(Managed())
@@ -332,13 +312,11 @@ class TestAddChild:
         state.set_reading({"x": 1})
         assert state.reading() == {"x": 1}
 
-    @pytest.mark.usefixtures("minimal_candles")
     def test_add_child_accepts_string_when(self, minimal_candles: list[Candle]):
         parent = FakeIndicator(candles=minimal_candles)
         child = parent.add_child(_ChildIndicator(), when="after")
         assert child._when == ChildWhen.AFTER
 
-    @pytest.mark.usefixtures("minimal_candles")
     def test_add_child_invalid_when(self, minimal_candles: list[Candle]):
         parent = FakeIndicator(candles=minimal_candles)
         with pytest.raises(InvalidIndicator, match="Invalid child when"):
@@ -346,7 +324,6 @@ class TestAddChild:
 
 
 class TestAddState:
-    @pytest.mark.usefixtures("minimal_candles")
     def test_add_state_registers_managed_child(self, minimal_candles: list[Candle]):
         parent = FakeIndicator(candles=minimal_candles)
         state = parent.add_state()
@@ -356,7 +333,6 @@ class TestAddState:
         assert state.managed._when == ChildWhen.MANUAL
         assert parent.children[state.managed.name] is state.managed
 
-    @pytest.mark.usefixtures("minimal_candles")
     def test_add_state_custom_name(self, minimal_candles: list[Candle]):
         parent = FakeIndicator(candles=minimal_candles)
         state = parent.add_state(name=f"{parent.name}_macd")
@@ -364,7 +340,6 @@ class TestAddState:
 
         assert state.managed.name == f"{parent.name}_macd"
 
-    @pytest.mark.usefixtures("minimal_candles")
     def test_state_set_and_update(self, minimal_candles: list[Candle]):
         parent = FakeIndicator(candles=minimal_candles)
         state = parent.add_state()
@@ -376,7 +351,6 @@ class TestAddState:
         state.update(gain=3.0)
         assert state.reading() == {"gain": 3.0, "loss": 2.0}
 
-    @pytest.mark.usefixtures("minimal_candles")
     def test_state_set_and_update_indexed(self, minimal_candles: list[Candle]):
         parent = FakeIndicator(candles=minimal_candles)
         state = parent.add_state()
@@ -387,7 +361,6 @@ class TestAddState:
 
         assert parent.reading(state.managed, index=-2) == {"gain": 1.0, "loss": 2.0}
 
-    @pytest.mark.usefixtures("minimal_candles")
     def test_state_prev_and_source(self, minimal_candles: list[Candle]):
         parent = FakeIndicator(candles=minimal_candles)
         state = parent.add_state()
@@ -403,8 +376,9 @@ class TestAddState:
 
 
 class TestCandleTimeframeLabel:
-    @pytest.mark.usefixtures("minimal_candles")
-    def test_labeled_candles_do_not_enable_resampling(self, minimal_candles: list[Candle]):
+    def test_labeled_candles_do_not_enable_resampling(
+        self, minimal_candles: list[Candle]
+    ):
         indicator = FakeIndicator(candles=minimal_candles)
         indicator.calculate()
 
@@ -412,7 +386,6 @@ class TestCandleTimeframeLabel:
         assert indicator.name == "Fake_10"
         assert len(indicator.candles) == len(minimal_candles)
 
-    @pytest.mark.usefixtures("minimal_candles_untimeframed")
     def test_explicit_indicator_timeframe_resamples(
         self, minimal_candles_untimeframed: list[Candle]
     ):
@@ -426,7 +399,6 @@ class TestCandleTimeframeLabel:
 
 
 class TestAuthorShortcuts:
-    @pytest.mark.usefixtures("minimal_candles")
     def test_ohlcv_properties(self, minimal_candles: list[Candle]):
         parent = FakeIndicator(candles=minimal_candles)
         parent.calculate()
@@ -435,7 +407,6 @@ class TestAuthorShortcuts:
         assert parent.open == minimal_candles[-1].open
         assert parent.at(-2, "high") == minimal_candles[-2].high
 
-    @pytest.mark.usefixtures("minimal_candles")
     def test_prev_alias(self, minimal_candles: list[Candle]):
         parent = FakeIndicator(candles=minimal_candles)
         parent.calculate()
@@ -443,7 +414,6 @@ class TestAuthorShortcuts:
         assert parent.prev() == 100.0
         assert parent.prev("close") == minimal_candles[-2].close
 
-    @pytest.mark.usefixtures("minimal_candles")
     def test_src_shortcuts(self, minimal_candles: list[Candle]):
         parent = FakeIndicator(candles=minimal_candles, source="close")
         parent.calculate()

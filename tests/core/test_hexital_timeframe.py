@@ -7,7 +7,6 @@ from hexital.indicators import EMA, OBV, SMA
 from hexital.utils.timeframe import NullTimeFrame
 
 
-@pytest.mark.usefixtures("candles", "expected_ema", "expected_sma_t10")
 def test_hextial_multi_timeframes(candles, expected_ema, expected_sma_t10):
     strategy = Hexital("Test Strategy", candles, [EMA(), SMA(timeframe="t10")])
     strategy.calculate()
@@ -15,7 +14,6 @@ def test_hextial_multi_timeframes(candles, expected_ema, expected_sma_t10):
     assert pytest.approx(strategy.reading_as_list("SMA_10_T10")) == expected_sma_t10
 
 
-@pytest.mark.usefixtures("candles", "expected_ema", "expected_sma_t10")
 def test_hextial_multi_timeframes_append(candles, expected_ema, expected_sma_t10):
     strategy = Hexital("Test Strategy", candles[:251], [EMA(), SMA(timeframe="t10")])
     strategy.calculate()
@@ -32,9 +30,6 @@ def test_hextial_multi_timeframes_append(candles, expected_ema, expected_sma_t10
     assert pytest.approx(strategy.reading_as_list("SMA_10_T10")) == expected_sma_t10
 
 
-@pytest.mark.usefixtures(
-    "candles", "expected_ema", "expected_sma_t10", "expected_obv_t10"
-)
 def test_hextial_multi_timeframes_shared_candles(
     candles, expected_ema, expected_sma_t10, expected_obv_t10
 ):
@@ -63,7 +58,6 @@ def test_hextial_multi_timeframes_shared_candles(
     )
 
 
-@pytest.mark.usefixtures("candles")
 def test_hextial_multi_timeframes_get_candles(candles):
     strategy = Hexital(
         "Test Strategy",
@@ -82,14 +76,12 @@ def test_hextial_multi_timeframes_get_candles(candles):
     ) and strategy.candles(candles_name)[-1].indicators.get("OBV_T10")
 
 
-@pytest.mark.usefixtures("candles", "expected_sma_t10")
 def test_hextial_multi_timeframe_reading(candles, expected_sma_t10):
     strategy = Hexital("Test Strategy", candles, [EMA(), SMA(timeframe="t10")])
     strategy.calculate()
     assert pytest.approx(strategy.reading("SMA_10_T10")) == expected_sma_t10[-1]
 
 
-@pytest.mark.usefixtures("candles", "expected_ema", "expected_sma_t5")
 def test_hextial_multi_timeframes_lifespan(candles, expected_ema, expected_sma_t5):
     strategy = Hexital(
         "Test Strategy",
@@ -108,7 +100,6 @@ def test_hextial_multi_timeframes_lifespan(candles, expected_ema, expected_sma_t
     )
 
 
-@pytest.mark.usefixtures("candles")
 def test_hextial_multi_timeframes_candlesticks(candles):
     strategy = Hexital(
         "Test Strategy", candles, [EMA(timeframe="t5", candlestick=HeikinAshi())]

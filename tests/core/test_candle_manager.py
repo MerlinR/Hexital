@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 
-import pytest
 from hexital import Candle
 from hexital.core.candle_manager import CandleManager
 from hexital.utils.common import CalcMode
@@ -8,7 +7,6 @@ from test_candlestick import FakeType
 
 
 class TestCandleAppend:
-    @pytest.mark.usefixtures("minimal_candles")
     def test_append(self, minimal_candles):
         manager = CandleManager()
         new_candle = minimal_candles[-1]
@@ -25,7 +23,6 @@ class TestCandleAppend:
 
         assert manager.candles == [expected]
 
-    @pytest.mark.usefixtures("minimal_candles")
     def test_append_with_aggregation(self, minimal_candles):
         manager = CandleManager()
         new_candle = minimal_candles.pop()
@@ -656,7 +653,6 @@ class TestCandleInsert:
             ),
         ]
 
-    @pytest.mark.usefixtures("candles")
     def test_insert_mix(self, candles):
         manager = CandleManager([])
 
@@ -874,7 +870,6 @@ class TestMergingCandlesTimeFrame:
         manager = CandleManager([], timeframe=timedelta(minutes=10))
         assert manager.candles == []
 
-    @pytest.mark.usefixtures("candles", "candles_T5")
     def test_resample_candles_first(
         self, candles: list[Candle], candles_T5: list[Candle]
     ):
@@ -882,29 +877,24 @@ class TestMergingCandlesTimeFrame:
 
         assert manager.candles[0] == candles_T5[0]
 
-    @pytest.mark.usefixtures("candles", "candles_T5")
     def test_resample_candles_second(
         self, candles: list[Candle], candles_T5: list[Candle]
     ):
         manager = CandleManager(candles, timeframe=timedelta(minutes=5))
         assert manager.candles[1] == candles_T5[1]
 
-    @pytest.mark.usefixtures("candles", "candles_T5")
     def test_resample_candles_last(self, candles: list[Candle], candles_T5: list[Candle]):
         manager = CandleManager(candles, timeframe=timedelta(minutes=5))
         assert manager.candles[-1] == candles_T5[-1]
 
-    @pytest.mark.usefixtures("candles", "candles_T5")
     def test_resample_candles_t5(self, candles: list[Candle], candles_T5: list[Candle]):
         manager = CandleManager(candles, timeframe=timedelta(minutes=5))
         assert manager.candles == candles_T5
 
-    @pytest.mark.usefixtures("candles", "candles_T10")
     def test_resample_candles_t10(self, candles: list[Candle], candles_T10: list[Candle]):
         manager = CandleManager(candles, timeframe=timedelta(minutes=10))
         assert manager.candles == candles_T10
 
-    @pytest.mark.usefixtures("candles", "candles_T5")
     def test_resample_candles_t5_appended_mini(
         self, candles: list[Candle], candles_T5: list[Candle]
     ):
@@ -924,7 +914,6 @@ class TestMergingCandlesTimeFrame:
 
         assert manager.candles == expected
 
-    @pytest.mark.usefixtures("candles", "candles_T5")
     def test_resample_candles_t5_appended_gap_mini(
         self, candles: list[Candle], candles_T5: list[Candle]
     ):
@@ -943,7 +932,6 @@ class TestMergingCandlesTimeFrame:
 
         assert manager.candles == expected
 
-    @pytest.mark.usefixtures("candles", "candles_T5")
     def test_resample_candles_t5_appended(
         self, candles: list[Candle], candles_T5: list[Candle]
     ):
@@ -953,7 +941,6 @@ class TestMergingCandlesTimeFrame:
 
         assert manager.candles == candles_T5
 
-    @pytest.mark.usefixtures("candles", "candles_T10")
     def test_resample_candles_t10_appended(
         self, candles: list[Candle], candles_T10: list[Candle]
     ):
@@ -963,7 +950,6 @@ class TestMergingCandlesTimeFrame:
 
         assert manager.candles == candles_T10
 
-    @pytest.mark.usefixtures("candles", "candles_T5")
     def test_resample_candles_t5_multiple_resample(
         self, candles: list[Candle], candles_T5: list[Candle]
     ):
@@ -976,7 +962,6 @@ class TestMergingCandlesTimeFrame:
         manager.resample_candles(CalcMode.INSERT)
         assert manager.candles == candles_T5
 
-    @pytest.mark.usefixtures("candles", "candles_T5")
     def test_resample_candles_t5_mixed_neat(
         self, candles: list[Candle], candles_T5: list[Candle]
     ):
@@ -986,7 +971,6 @@ class TestMergingCandlesTimeFrame:
         manager.append(candles[10:])
         assert manager.candles == candles_T5
 
-    @pytest.mark.usefixtures("candles", "candles_T5")
     def test_resample_candles_t5_mixed_messy(
         self, candles: list[Candle], candles_T5: list[Candle]
     ):
@@ -994,7 +978,6 @@ class TestMergingCandlesTimeFrame:
         manager.append(candles[7:])
         assert manager.candles == candles_T5
 
-    @pytest.mark.usefixtures("candles", "candles_T5")
     def test_resample_candles_t5_missing_section(
         self, candles: list[Candle], candles_T5: list[Candle]
     ):
@@ -1002,7 +985,6 @@ class TestMergingCandlesTimeFrame:
         manager = CandleManager(cut_candles, timeframe=timedelta(minutes=5))
         assert manager.candles == [candles_T5[0], candles_T5[-1]]
 
-    @pytest.mark.usefixtures("candles", "candles_T5")
     def test_resample_candles_t5_missing_section_two(
         self, candles: list[Candle], candles_T5: list[Candle]
     ):
@@ -1010,7 +992,6 @@ class TestMergingCandlesTimeFrame:
         manager = CandleManager(cut_candles, timeframe=timedelta(minutes=5))
         assert manager.candles == [candles_T5[0], candles_T5[2]]
 
-    @pytest.mark.usefixtures("candles", "candles_T5")
     def test_resample_candles_t5_missing_section_three(
         self, candles: list[Candle], candles_T5: list[Candle]
     ):
@@ -1027,7 +1008,6 @@ class TestMergingCandlesTimeFrame:
 
         assert manager.candles == expected
 
-    @pytest.mark.usefixtures("candles", "candles_T5")
     def test_resample_candles_t5_missing_section_messy(self):
         data_input = [
             Candle(
@@ -1085,7 +1065,6 @@ class TestMergingCandlesTimeFrame:
         manager = CandleManager(data_input, timeframe=timedelta(minutes=5))
         assert manager.candles == expected
 
-    @pytest.mark.usefixtures("candles", "candles_T5")
     def test_resample_candles_t5_missing_section_messy_append(self):
         data_input = [
             Candle(
@@ -1149,7 +1128,6 @@ class TestMergingCandlesTimeFrame:
         assert manager.candles == expected
 
 
-@pytest.mark.usefixtures("candles", "candles_T5")
 def test_resample_candles_t5_missing_section_fill(candles_T5: list[Candle]):
     cut_candles = [candles_T5[0]] + [candles_T5[2]]
 
@@ -1175,7 +1153,6 @@ def test_resample_candles_t5_missing_section_fill(candles_T5: list[Candle]):
     ]
 
 
-@pytest.mark.usefixtures("candles", "candles_T5")
 def test_resample_candles_t5_missing_section_fill_all(candles_T5: list[Candle]):
     cut_candles = [candles_T5[0]] + [candles_T5[-1]]
 
@@ -1201,7 +1178,6 @@ def test_resample_candles_t5_missing_section_fill_all(candles_T5: list[Candle]):
     assert manager.candles == [candles_T5[0]] + filler_candles + [candles_T5[-1]]
 
 
-@pytest.mark.usefixtures("candles", "candles_T5")
 def test_resample_candles_t5_missing_section_fill_all_extra(
     candles: list[Candle], candles_T5: list[Candle]
 ):
@@ -1228,7 +1204,6 @@ def test_resample_candles_t5_missing_section_fill_all_extra(
 
 
 class TestCandleConversion:
-    @pytest.mark.usefixtures("minimal_candles", "candles_candlesticks_T5_expected")
     def test_candlestick_timeframe(
         self,
         minimal_candles: list[Candle],
@@ -1240,7 +1215,6 @@ class TestCandleConversion:
 
         assert manager.candles == candles_candlesticks_T5_expected
 
-    @pytest.mark.usefixtures("minimal_candles", "candles_candlesticks_T5_expected")
     def test_candlestick_timeframe_multi_convert(
         self,
         minimal_candles: list[Candle],
@@ -1254,7 +1228,6 @@ class TestCandleConversion:
 
         assert manager.candles == candles_candlesticks_T5_expected
 
-    @pytest.mark.usefixtures("minimal_candles", "candles_candlesticks_T5_expected")
     def test_candlestick_timeframe_resample_messy(
         self,
         minimal_candles: list[Candle],

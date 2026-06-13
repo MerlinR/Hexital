@@ -23,13 +23,11 @@ def fake_pattern(candles: list[Candle], index=-1):
 
 
 class TestIndicatorPattern:
-    @pytest.mark.usefixtures("candles", "expected_ema")
     def test_hextial_single(self, candles, expected_ema):
         strategy = Hexital("Test Stratergy", candles, [EMA()])
         strategy.calculate()
         assert pytest.approx(strategy.reading_as_list("EMA_10")) == expected_ema
 
-    @pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
     def test_hextial_multi(self, candles, expected_ema, expected_sma):
         strategy = Hexital("Test Stratergy", candles, [EMA(), SMA()])
         strategy.calculate()
@@ -38,13 +36,11 @@ class TestIndicatorPattern:
             and pytest.approx(strategy.reading_as_list("SMA_10")) == expected_sma
         )
 
-    @pytest.mark.usefixtures("candles", "expected_sma")
     def test_hextial_dict(self, candles, expected_sma):
         strategy = Hexital("Test Stratergy", candles, [{"indicator": "SMA"}])
         strategy.calculate()
         assert pytest.approx(strategy.reading_as_list("SMA_10")) == expected_sma
 
-    @pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
     def test_hextial_mixed(self, candles, expected_ema, expected_sma):
         strategy = Hexital("Test Stratergy", candles, [EMA(), {"indicator": "SMA"}])
         strategy.calculate()
@@ -53,29 +49,24 @@ class TestIndicatorPattern:
             and pytest.approx(strategy.reading_as_list("SMA_10")) == expected_sma
         )
 
-    @pytest.mark.usefixtures("candles")
     def test_hextial_dict_diff_name(self, candles):
         strategy = Hexital("Test Stratergy", candles, [{"indicator": "STDEV"}])
         assert strategy.indicator("STDEV_30")
 
-    @pytest.mark.usefixtures("candles")
     def test_hextial_dict_arguments(self, candles):
         strategy = Hexital(
             "Test Stratergy", candles, [{"indicator": "SMA", "period": 20}]
         )
         assert strategy.indicator("SMA_20")
 
-    @pytest.mark.usefixtures("candles")
     def test_hextial_dict_invalid(self, candles):
         with pytest.raises(InvalidIndicator):
             Hexital("Test Stratergy", candles, [{"indicator": "FUCK"}])
 
-    @pytest.mark.usefixtures("candles")
     def test_hextial_dict_invalid_missing(self, candles):
         with pytest.raises(InvalidAnalysis):
             Hexital("Test Stratergy", candles, [{"period": 10}])
 
-    @pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
     def test_hextial_dict_append(self, candles, expected_ema, expected_sma):
         strategy = Hexital("Test Stratergy", candles, [EMA()])
         strategy.add_indicator({"indicator": "SMA"})
@@ -85,19 +76,16 @@ class TestIndicatorPattern:
             and pytest.approx(strategy.reading_as_list("SMA_10")) == expected_sma
         )
 
-    @pytest.mark.usefixtures("candles")
     def test_hextial_dict_analysis_pattern(self, candles):
         strategy = Hexital("Test Stratergy", candles, [{"analysis": "doji"}])
         strategy.calculate()
         assert strategy.reading("doji") is not None
 
-    @pytest.mark.usefixtures("candles")
     def test_hextial_dict_movement(self, candles):
         strategy = Hexital("Test Stratergy", candles, [{"analysis": "positive"}])
         strategy.calculate()
         assert strategy.reading("positive") is not None
 
-    @pytest.mark.usefixtures("candles")
     def test_hextial_dict_analysis_custom(self, candles):
         strategy = Hexital("Test Stratergy", candles, [{"analysis": fake_pattern}])
         strategy.calculate()
@@ -105,7 +93,6 @@ class TestIndicatorPattern:
 
 
 class TestAppend:
-    @pytest.mark.usefixtures("candles")
     def test_append_timeframes(self, candles):
         strategy = Hexital("Test Stratergy", [])
         strategy.add_indicator([EMA(), EMA(timeframe="T5")])
@@ -116,35 +103,30 @@ class TestAppend:
 
 
 class TestGetCandles:
-    @pytest.mark.usefixtures("candles")
     def test_default(self, candles):
         strategy = Hexital("Test Stratergy", [])
         strategy.add_indicator([RMA(), EMA(timeframe="T5")])
         strategy.append(candles)
         assert "RMA_10" in strategy.candles()[-1].indicators
 
-    @pytest.mark.usefixtures("candles")
     def test_default_specific(self, candles):
         strategy = Hexital("Test Stratergy", [])
         strategy.add_indicator([RMA(), EMA(timeframe="T5")])
         strategy.append(candles)
         assert "RMA_10" in strategy.candles()[-1].indicators
 
-    @pytest.mark.usefixtures("candles")
     def test_by_indicator(self, candles):
         strategy = Hexital("Test Stratergy", [])
         strategy.add_indicator([RMA(), EMA(timeframe="T5")])
         strategy.append(candles)
         assert "RMA_10" in strategy.candles("RMA_10")[-1].indicators
 
-    @pytest.mark.usefixtures("candles")
     def test_by_timeframe(self, candles):
         strategy = Hexital("Test Stratergy", [])
         strategy.add_indicator([RMA(), EMA(timeframe="T5")])
         strategy.append(candles)
         assert "EMA_10_T5" in strategy.candles("T5")[-1].indicators
 
-    @pytest.mark.usefixtures("candles")
     def test_by_timeframe_timedelta(self, candles):
         strategy = Hexital("Test Stratergy", [])
         strategy.add_indicator([RMA(), EMA(timeframe="T5")])
@@ -152,7 +134,6 @@ class TestGetCandles:
         assert "EMA_10_T5" in strategy.candles(timedelta(minutes=5))[-1].indicators
 
 
-@pytest.mark.usefixtures("candles", "expected_ema")
 def test_hextial_single(candles, expected_ema):
     strategy = Hexital("Test Stratergy", candles)
     strategy.add_indicator(EMA())
@@ -160,7 +141,6 @@ def test_hextial_single(candles, expected_ema):
     assert pytest.approx(strategy.reading_as_list("EMA_10")) == expected_ema
 
 
-@pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
 def test_hextial_multi(candles, expected_ema, expected_sma):
     strategy = Hexital("Test Stratergy", candles, [EMA(), SMA()])
     strategy.calculate()
@@ -170,21 +150,18 @@ def test_hextial_multi(candles, expected_ema, expected_sma):
     )
 
 
-@pytest.mark.usefixtures("candles", "expected_sma")
 def test_hextial_reading(candles, expected_sma):
     strategy = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
     strategy.calculate()
     assert pytest.approx(strategy.reading("SMA_10")) == expected_sma[-1]
 
 
-@pytest.mark.usefixtures("candles", "expected_sma")
 def test_hextial_prev_reading(candles, expected_sma):
     strategy = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
     strategy.calculate()
     assert pytest.approx(strategy.prev_reading("SMA_10")) == expected_sma[-2]
 
 
-@pytest.mark.usefixtures("candles")
 def test_hextial_has_reading(candles):
     strategy = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
     assert strategy.exists("SMA_10") is False
@@ -193,27 +170,23 @@ def test_hextial_has_reading(candles):
     assert strategy.exists("SMA_10")
 
 
-@pytest.mark.usefixtures("candles")
 def test_hextial_has_reading_exists_no_values(candles):
     strategy = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
     assert strategy.exists("SMA_10") is False
 
 
-@pytest.mark.usefixtures("candles")
 def test_hextial_has_reading_missing(candles):
     strategy = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
     strategy.calculate()
     assert strategy.exists("EMA") is False
 
 
-@pytest.mark.usefixtures("candles")
 def test_hextial_indicator_selection(candles):
     strategy = Hexital("Test Stratergy", candles, [{"indicator": "SMA", "period": 10}])
     strategy.calculate()
     assert isinstance(strategy.indicator("SMA_10"), Indicator)
 
 
-@pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
 def test_hextial_readings(candles, expected_ema, expected_sma):
     strategy = Hexital("Test Stratergy", candles, [EMA(), SMA()])
     strategy.calculate()
@@ -222,7 +195,6 @@ def test_hextial_readings(candles, expected_ema, expected_sma):
     assert pytest.approx(results["EMA_10"]) == expected_ema
 
 
-@pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
 def test_hextial_purge(candles, expected_ema, expected_sma):
     strategy = Hexital("Test Stratergy", candles, [EMA(), {"indicator": "SMA"}])
     strategy.calculate()
@@ -233,7 +205,6 @@ def test_hextial_purge(candles, expected_ema, expected_sma):
     assert not strategy.exists("SMA_10") and strategy.exists("EMA_10")
 
 
-@pytest.mark.usefixtures("candles", "expected_ema", "expected_sma")
 def test_hextial_remove_indicator(candles, expected_ema, expected_sma):
     strategy = Hexital("Test Stratergy", candles, [EMA(), {"indicator": "SMA"}])
     strategy.calculate()
@@ -245,7 +216,6 @@ def test_hextial_remove_indicator(candles, expected_ema, expected_sma):
     assert not strategy.indicator("SMA_10")
 
 
-@pytest.mark.usefixtures("candles")
 def test_hextial_get_candles(candles):
     strategy = Hexital("Test Stratergy", candles, [EMA()])
     strategy.calculate()
@@ -253,7 +223,6 @@ def test_hextial_get_candles(candles):
     assert strategy.candles()[-1].indicators.get("EMA_10")
 
 
-@pytest.mark.usefixtures("minimal_candles")
 def test_hextial_timerange(minimal_candles):
     strategy = Hexital("Test Stratergy", [], candle_life=timedelta(minutes=1))
 
@@ -279,7 +248,6 @@ def test_hextial_timerange(minimal_candles):
     ]
 
 
-@pytest.mark.usefixtures("candles", "expected_ema")
 def test_append_hexital_calc(candles, expected_ema):
     strategy = Hexital("Test Stratergy", [], [{"indicator": "EMA"}])
     for candle in candles:
@@ -289,7 +257,6 @@ def test_append_hexital_calc(candles, expected_ema):
     assert pytest.approx(strategy.indicator("EMA_10").readings()) == expected_ema
 
 
-@pytest.mark.usefixtures("candles", "expected_rsi")
 def test_append_hexital_calc_sub_indicators(candles, expected_rsi):
     strategy = Hexital("Test Stratergy", [], [{"indicator": "RSI", "period": 14}])
 
@@ -300,7 +267,6 @@ def test_append_hexital_calc_sub_indicators(candles, expected_rsi):
 
 
 class TestHexitalCandleManagerInheritance:
-    @pytest.mark.usefixtures("candles")
     def test_hexital_inheritance(self, candles):
         strategy = Hexital(
             "Test Stratergy", candles, [EMA()], candle_life=timedelta(hours=1)
@@ -309,7 +275,6 @@ class TestHexitalCandleManagerInheritance:
         assert strategy.candle_life == timedelta(hours=1)
         assert strategy.indicator("EMA_10").candle_life == timedelta(hours=1)
 
-    @pytest.mark.usefixtures("candles")
     def test_hexital_inheritance_multi(self, candles):
         strategy = Hexital(
             "Test Stratergy",
@@ -324,7 +289,6 @@ class TestHexitalCandleManagerInheritance:
         assert strategy.indicator("EMA_10").timeframe == "T10"
         assert strategy.indicator("EMA_10").candle_life == timedelta(hours=1)
 
-    @pytest.mark.usefixtures("candles")
     def test_hexital_inheritance_overriden(self, candles):
         strategy = Hexital(
             "Test Stratergy",
@@ -336,7 +300,6 @@ class TestHexitalCandleManagerInheritance:
         assert strategy.candle_life == timedelta(hours=1)
         assert strategy.indicator("EMA_10").candle_life == timedelta(hours=1)
 
-    @pytest.mark.usefixtures("candles")
     def test_hexital_inheritance_overriden_multi(self, candles):
         strategy = Hexital(
             "Test Stratergy",
@@ -353,7 +316,6 @@ class TestHexitalCandleManagerInheritance:
 
 
 class TestChain:
-    @pytest.mark.usefixtures("candles")
     def test_hextial_movement(self, candles):
         strategy = Hexital(
             "Test Stratergy",
@@ -365,38 +327,32 @@ class TestChain:
 
 
 class TestCandlestickType:
-    @pytest.mark.usefixtures("candles")
     def test_hextial_candlestick_type(self, candles):
         strategy = Hexital("Test Stratergy", candles, [EMA()], candlestick=HeikinAshi())
         assert isinstance(strategy.candlestick, HeikinAshi)
 
-    @pytest.mark.usefixtures("candles")
     def test_hextial_candlestick_type_str(self, candles):
         strategy = Hexital("Test Stratergy", candles, [EMA()], candlestick="HA")
         assert isinstance(strategy.candlestick, HeikinAshi)
 
-    @pytest.mark.usefixtures("candles")
     def test_hextial_candlestick_type_error(self, candles):
         with pytest.raises(InvalidCandlestickType):
             Hexital("Test Stratergy", candles, [EMA()], candlestick="FUCK")
 
 
 class TestFindCandles:
-    @pytest.mark.usefixtures("candles")
     def test_find_simple(self, candles):
         strategy = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA")])
         strategy.calculate()
 
         assert strategy.find_candle_pairing("EMA")
 
-    @pytest.mark.usefixtures("candles")
     def test_find_missing(self, candles):
         strategy = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA")])
         strategy.calculate()
 
         assert strategy.find_candle_pairing("MMA") == ([], [])
 
-    @pytest.mark.usefixtures("candles")
     def test_find_multi_simple(self, candles):
         strategy = Hexital(
             "Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")]
@@ -411,7 +367,6 @@ class TestFindCandles:
             and reading_by_candle(found_candles[0][-1], "SMA") is not None
         )
 
-    @pytest.mark.usefixtures("candles")
     def test_find_multi_defaults_simple(self, candles):
         strategy = Hexital(
             "Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")]
@@ -428,7 +383,6 @@ class TestFindCandles:
         )
         assert found_candles[0][-1].timeframe == timedelta(seconds=60)
 
-    @pytest.mark.usefixtures("candles")
     def test_find_rev_multi_defaults_simple(self, candles):
         strategy = Hexital(
             "Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")]
@@ -444,7 +398,6 @@ class TestFindCandles:
         )
         assert found_candles[0][-1].timeframe == timedelta(seconds=60)
 
-    @pytest.mark.usefixtures("candles")
     def test_find_multi_timeframes(self, candles):
         strategy = Hexital(
             "Test Stratergy",
@@ -461,7 +414,6 @@ class TestFindCandles:
             and reading_by_candle(found_candles[0][-1], "SMA") is not None
         )
 
-    @pytest.mark.usefixtures("candles")
     def test_find_multi_defaults_timeframes(self, candles):
         strategy = Hexital(
             "Test Stratergy",
@@ -481,7 +433,6 @@ class TestFindCandles:
 
         assert found_candles[0][-1].timeframe == timedelta(seconds=300)
 
-    @pytest.mark.usefixtures("candles")
     def test_find_multi_mixed_timeframes(self, candles):
         strategy = Hexital(
             "Test Stratergy",
@@ -500,7 +451,6 @@ class TestFindCandles:
             and found_candles[0][-1].timeframe == timedelta(seconds=300)
         )
 
-    @pytest.mark.usefixtures("candles")
     def test_find_multi_rev_mixed_timeframes(self, candles):
         strategy = Hexital(
             "Test Stratergy",
@@ -519,7 +469,6 @@ class TestFindCandles:
             and found_candles[0][-1].timeframe == timedelta(minutes=5)
         )
 
-    @pytest.mark.usefixtures("candles")
     def test_find_candles_multi_timeframes(self, candles):
         strategy = Hexital(
             "Test Stratergy",

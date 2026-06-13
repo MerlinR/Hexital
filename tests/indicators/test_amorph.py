@@ -1,4 +1,3 @@
-import pytest
 from hexital import Candle, movement, patterns
 from hexital.indicators import Amorph
 
@@ -7,28 +6,24 @@ def fake_pattern(candles: list[Candle], index=-1):
     return 1
 
 
-@pytest.mark.usefixtures("candles")
 def test_method_amorph(candles):
     test = Amorph(analysis=patterns.doji, candles=candles)
     test.calculate()
     assert test.reading() is not None
 
 
-@pytest.mark.usefixtures("candles_untimeframed")
 def test_amorph_multi_arguments(candles_untimeframed):
     test = Amorph(analysis=patterns.doji, candles=candles_untimeframed, lookback=20)
     test.calculate()
     assert test.name == "doji"
 
 
-@pytest.mark.usefixtures("candles")
 def test_amorph_dict_arguments(candles):
     test = Amorph(analysis=patterns.doji, candles=candles, args={"lookback": 20})
     test.calculate()
     assert test.name == "doji"
 
 
-@pytest.mark.usefixtures("candles")
 def test_amorph_merged_aguments(candles):
     test = Amorph(
         analysis=patterns.doji,
@@ -40,21 +35,18 @@ def test_amorph_merged_aguments(candles):
     assert test.name == "MERGED_ARGS"
 
 
-@pytest.mark.usefixtures("candles")
 def test_movement_amorph(candles):
     test = Amorph(analysis=movement.positive, candles=candles)
     test.calculate()
     assert test.reading("positive") is not None
 
 
-@pytest.mark.usefixtures("candles")
 def test_movement_amorph_args(candles):
     test = Amorph(analysis=movement.positive, candles=candles, name="boobies")
     test.calculate()
     assert test.reading("boobies") is not None
 
 
-@pytest.mark.usefixtures("candles_untimeframed")
 def test_movement_amorph_kawgs(candles_untimeframed):
     test = Amorph(
         analysis=movement.above,
@@ -66,7 +58,6 @@ def test_movement_amorph_kawgs(candles_untimeframed):
     assert test.reading("above") is not None
 
 
-@pytest.mark.usefixtures("candles")
 def test_amorph_custom(candles):
     test = Amorph(analysis=fake_pattern, candles=candles)
     test.calculate()
