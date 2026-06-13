@@ -370,7 +370,7 @@ class Indicator(Generic[V], ABC):
         return 0
 
     def _set_reading(self, reading: V, index: int | None = None):
-        index = index if index else self._active_index
+        index = self._active_index if index is None else index
 
         if self._when is not None:
             self.candles[index].sub_indicators[self.name] = reading  # type: ignore
