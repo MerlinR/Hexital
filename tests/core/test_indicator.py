@@ -377,6 +377,17 @@ class TestAddState:
         assert state.reading() == {"gain": 3.0, "loss": 2.0}
 
     @pytest.mark.usefixtures("minimal_candles")
+    def test_state_set_and_update_indexed(self, minimal_candles: list[Candle]):
+        parent = FakeIndicator(candles=minimal_candles)
+        state = parent.add_state()
+        parent.calculate()
+
+        state.set({"gain": 1.0}, index=-2)
+        state.update(-2, loss=2.0)
+
+        assert parent.reading(state.managed, index=-2) == {"gain": 1.0, "loss": 2.0}
+
+    @pytest.mark.usefixtures("minimal_candles")
     def test_state_prev_and_source(self, minimal_candles: list[Candle]):
         parent = FakeIndicator(candles=minimal_candles)
         state = parent.add_state()
