@@ -12,18 +12,18 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Configure Git Credentials
         run: |
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: 3.x
       - name: Install uv
-        uses: astral-sh/setup-uv@v4
+        uses: astral-sh/setup-uv@v8
         with:
           enable-cache: true
       - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV 
@@ -39,4 +39,3 @@ jobs:
           uv run mike delete latest
           uv run mike deploy --push --update-aliases $(cat pyproject.toml | grep version | cut -d '"' -f2) latest
           uv run mike set-default --push latest
-
