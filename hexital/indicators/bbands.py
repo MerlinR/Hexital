@@ -26,7 +26,7 @@ class BBANDS(Indicator[dict[str, float | None]]):
     _name: str = field(init=False, default="BBANDS")
     period: int = 5
     source: Source = "close"
-    _std: float = field(init=False, default=2.0)
+    std: float = 2.0
 
     def _generate_name(self) -> str:
         return f"{self._name}_{self.period}"
@@ -44,8 +44,8 @@ class BBANDS(Indicator[dict[str, float | None]]):
 
             bbands = {
                 "BBM": sma,
-                "BBL": sma - (stdev * self._std),
-                "BBU": sma + (stdev * self._std),
+                "BBL": sma - (stdev * self.std),
+                "BBU": sma + (stdev * self.std),
             }
 
         return bbands

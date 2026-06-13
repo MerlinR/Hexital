@@ -40,6 +40,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Modified Indicators
     - KC can now be ran with EMA or SMA
     - WMA uses O(1) incremental rolling after seed period
+    - BBANDS now takes optional Multiplier defaults 2.0
 ---
 
 ## 3.0.1
