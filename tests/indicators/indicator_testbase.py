@@ -86,22 +86,33 @@ class IndicatorTestBase:
         value_a: dict[str, int | float | bool | None],
         value_b: dict[str, int | float | bool | None],
     ) -> bool:
-        fields = [field for field in value_a if field in value_b]
-        fields = [field for field in value_b if field in fields]
+        if not value_b.keys() <= value_a.keys():
+            return False
 
-        for field in fields:
+        for field in value_b:
             res = value_a[field]
             exp = value_b[field]
+
             if res is None or exp is None:
                 if (res is None and exp == 0) or res == 0 and exp is None:
                     continue
                 if res != exp:
                     return False
-            elif isinstance(res, bool):
+
+                continue
+
+            if isinstance(res, bool) or isinstance(exp, bool):
+                if not isinstance(res, bool) or not isinstance(exp, bool):
+                    return False
                 if res != exp:
                     return False
-            elif isinstance(res, (float, int)) and isinstance(exp, (float, int)):
+                continue
+
+            if isinstance(res, (float, int)) and isinstance(exp, (float, int)):
                 if not math.isclose(res, exp, rel_tol=MATH_REF):
                     return False
+                continue
+
+            return False
 
         return True

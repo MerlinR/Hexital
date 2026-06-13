@@ -36,6 +36,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Shorthand methods: `prev()`, `at()`, `src()`, `prev_src()`, `at_src()`
 - Removed `Managed` and `NestedSource` from public `hexital` exports (use `add_state()`; import from `hexital.core.indicator` if needed)
 - Performance optimisations for appending
+- Updated Test verification
 - Added Indicators
     - Added Squeeze
     - Added Squeeze Pro
