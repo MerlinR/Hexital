@@ -26,12 +26,10 @@ truth:
 	uv sync --group truth
 	uv run python tests/data/generate_source_of_truth.py 
 
-
 speed_test:
 	@echo "Running Speed tests"
 	uv sync --group speed_tests
-	uv run python tests/extra/speed_tests/run_speed_tests.py 
-
+	uv run python benchmarks/speed_tests/run_speed_tests.py 
 
 new-test-candles:
 	@echo "Generating New Source data"
@@ -48,9 +46,8 @@ test-all:
 	uv run coverage report -m
 
 profile:
-	uv run python3 tests/extra/profiling/profile_tests.py
+	uv run python3 benchmarks/profiling/profile_tests.py
 	uv run snakeviz prof/
-
 
 docs:
 	@echo "Generating Docs"

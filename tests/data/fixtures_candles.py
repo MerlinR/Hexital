@@ -9,8 +9,8 @@ PATH_EXTRA = "tests/data/source_of_truth/candles/"
 
 
 def load_json_candles(name: str, path: str) -> list[dict]:
-    csv_file = open(f"{path}{name}.json")
-    raw_candles = json.load(csv_file)
+    with open(f"{path}{name}.json") as candle_file:
+        raw_candles = json.load(candle_file)
     for candle in raw_candles:
         candle["timestamp"] = datetime.strptime(candle["timestamp"], "%Y-%m-%dT%H:%M:%S")
     return raw_candles

@@ -1,4 +1,4 @@
-from random import randrange
+from random import Random
 
 import pytest
 from hexital import exceptions, indicators
@@ -67,8 +67,10 @@ class TestIndicators(IndicatorTestBase):
 
     def test_ema_insert(self, candles, expected_ema):
         test = indicators.EMA(candles=[])
-        while candles:
-            test.insert(candles.pop(randrange(len(candles))))
+        remaining = candles.copy()
+        rng = Random(0)
+        while remaining:
+            test.insert(remaining.pop(rng.randrange(len(remaining))))
 
         assert self.verify(test.readings(), expected_ema)
 

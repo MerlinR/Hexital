@@ -7,7 +7,7 @@ import pandas as pd
 import pandas_ta as ta
 from hexital import Candle, Hexital
 
-PATH = "tests/extra/speed_tests/"
+PATH = "benchmarks/speed_tests/"
 
 
 def generate_random_candles(count: int) -> list:
