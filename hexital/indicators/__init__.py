@@ -12,6 +12,7 @@ from .highest_lowest import HL
 from .hla import HLA
 from .hlca import HLCA
 from .hma import HMA
+from .ichimoku import Ichimoku
 from .jma import JMA
 from .kc import KC
 from .macd import MACD
@@ -53,6 +54,7 @@ __all__ = [
     "HLA",
     "HLCA",
     "HMA",
+    "Ichimoku",
     "JMA",
     "KC",
     "MACD",

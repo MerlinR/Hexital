@@ -114,6 +114,12 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.readings(), expected_hma)
 
+    @pytest.mark.usefixtures("candles", "expected_ichimoku")
+    def test_ichimoku(self, candles, expected_ichimoku):
+        test = indicators.Ichimoku(candles=candles)
+        test.calculate()
+        assert self.verify(test.readings(), expected_ichimoku)
+
     @pytest.mark.usefixtures("candles", "expected_jma")
     def test_jma(self, candles, expected_jma):
         test = indicators.JMA(candles=candles)
