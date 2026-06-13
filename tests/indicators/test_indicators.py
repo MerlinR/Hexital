@@ -156,6 +156,18 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.readings(), expected_midpoint)
 
+    @pytest.mark.usefixtures("candles", "expected_ppo")
+    def test_ppo(self, candles, expected_ppo):
+        test = indicators.PPO(candles=candles)
+        test.calculate()
+        assert self.verify(test.readings(), expected_ppo)
+
+    @pytest.mark.usefixtures("candles", "expected_psar")
+    def test_psar(self, candles, expected_psar):
+        test = indicators.PSAR(candles=candles)
+        test.calculate()
+        assert self.verify(test.readings(), expected_psar)
+
     @pytest.mark.usefixtures("candles", "expected_obv")
     def test_obv(self, candles, expected_obv):
         test = indicators.OBV(candles=candles)

@@ -1,0 +1,3002 @@
+[
+    {
+        "Long": null,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14854.1,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14854.1,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14853.398,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14851.6622,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14850.0652,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14848.596,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14847.2443,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14845.3199,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14843.5879,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14841.7053,
+        "Acceleration": 0.14,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14839.5346,
+        "Acceleration": 0.16,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14836.9211,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14834.2533,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14832.0657,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    },
+    {
+        "Long": 14822.1,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14822.306,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14822.9778,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14823.9511,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14825.187,
+        "Short": null,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": 14826.9783,
+        "Short": null,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": 14828.5905,
+        "Short": null,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14843.1,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14842.816,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14842.5377,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14842.2649,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14841.9976,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14841.7357,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14841.479,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14841.2274,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14840.9808,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14840.4096,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14839.8612,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14839.3348,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14838.3007,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14836.9326,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14835.1794,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14833.6014,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14832.1813,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14830.4795,
+        "Acceleration": 0.14,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14828.5924,
+        "Acceleration": 0.14,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14826.9695,
+        "Acceleration": 0.16,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14824.9263,
+        "Acceleration": 0.16,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14823.2101,
+        "Acceleration": 0.16,
+        "Reversal": 0
+    },
+    {
+        "Long": 14814.2,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14814.2,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14814.688,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14815.1565,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14815.6062,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14816.038,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14816.8277,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14818.0175,
+        "Short": null,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": 14819.6857,
+        "Short": null,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": 14821.1872,
+        "Short": null,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": 14823.0487,
+        "Short": null,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": 14824.6869,
+        "Short": null,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14836.7,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14836.446,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14836.1971,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14835.9531,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14835.7141,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14824.0,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14824.292,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14824.5782,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14825.155,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14826.0277,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14826.8481,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14827.9082,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14828.8836,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14829.7809,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14840.1,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14839.872,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14839.6486,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14839.1106,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14838.324,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14837.1301,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14835.6771,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14834.0478,
+        "Acceleration": 0.14,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14832.3611,
+        "Acceleration": 0.16,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14830.4633,
+        "Acceleration": 0.16,
+        "Reversal": 0
+    },
+    {
+        "Long": 14820.5,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14820.7,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14821.216,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14822.007,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14823.0145,
+        "Short": null,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": 14824.383,
+        "Short": null,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": 14826.1611,
+        "Short": null,
+        "Acceleration": 0.14,
+        "Reversal": 0
+    },
+    {
+        "Long": 14828.0285,
+        "Short": null,
+        "Acceleration": 0.16,
+        "Reversal": 0
+    },
+    {
+        "Long": 14829.896,
+        "Short": null,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    },
+    {
+        "Long": 14832.2367,
+        "Short": null,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": 14835.0693,
+        "Short": null,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": 14837.3355,
+        "Short": null,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": 14839.1484,
+        "Short": null,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": 14839.2,
+        "Short": null,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": 14842.0,
+        "Short": null,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14853.2,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14852.94,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14852.2584,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14851.1449,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14849.7333,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14847.85,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14844.832,
+        "Acceleration": 0.14,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14841.5095,
+        "Acceleration": 0.16,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14838.084,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14834.1989,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14831.0131,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14828.4007,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14826.2586,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14824.502,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14823.0617,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14821.9,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14820.3,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": 14813.5,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14819.4,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14819.4,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14819.28,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14819.1624,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14818.9039,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14818.4717,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14817.6099,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14816.8171,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14815.6954,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14814.4,
+        "Acceleration": 0.14,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14812.65,
+        "Acceleration": 0.14,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14811.145,
+        "Acceleration": 0.14,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14809.8507,
+        "Acceleration": 0.16,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14808.3866,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14806.733,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14803.8864,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14803.2,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14799.66,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14795.548,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14791.8584,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14788.7667,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14786.2934,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14783.9347,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14781.9478,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14779.5582,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14777.6266,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": 14769.9,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14770.052,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14779.7,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14779.7,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14778.716,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14777.047,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14774.8993,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14772.9233,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14771.1055,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14769.433,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14769.0,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14750.2,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14750.58,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14750.9524,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14751.3174,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14751.675,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14752.0255,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14752.2,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14752.2,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14752.54,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14752.8732,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14753.1997,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14753.5197,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14769.2,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14768.796,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14768.4001,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14767.3801,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14766.4009,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14764.9128,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14762.7518,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14759.9866,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14756.4122,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14753.2668,
+        "Acceleration": 0.14,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14749.9674,
+        "Acceleration": 0.14,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14747.13,
+        "Acceleration": 0.14,
+        "Reversal": 0
+    },
+    {
+        "Long": 14729.7,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14730.006,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14730.6338,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14731.6697,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14732.6436,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14733.8721,
+        "Short": null,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": 14735.4349,
+        "Short": null,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14749.7,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14749.7,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14748.996,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14748.3202,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14747.233,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14745.6063,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14744.1098,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14742.3588,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14740.3238,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": 14725.4,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14725.766,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14726.1247,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14726.4762,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14743.7,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14743.296,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14742.3802,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14741.501,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14740.6569,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14739.8466,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14739.0688,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14720.4,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14720.796,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14721.1841,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14721.9927,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14722.769,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14724.3129,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14726.3198,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14728.1663,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14729.865,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14749.4,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14749.006,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14748.6199,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14748.2415,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14747.3798,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14745.809,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14743.1923,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14740.0931,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14737.3038,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14734.7934,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14732.5341,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14728.234,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14724.4499,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14721.1199,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": 14696.7,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14697.164,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14697.6187,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14698.0643,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14698.5011,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14698.929,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14699.3485,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14699.7595,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14719.9,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14719.492,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14718.4083,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14717.368,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14716.3693,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14715.4105,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14714.4901,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14713.6065,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14712.7582,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14692.4,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14692.846,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14693.8962,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14695.7924,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14698.481,
+        "Short": null,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": 14701.7029,
+        "Short": null,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": 14705.2186,
+        "Short": null,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": 14708.3123,
+        "Short": null,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14731.0,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14730.53,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14730.0694,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14729.618,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14729.1757,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14728.1286,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14726.3929,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14724.7613,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14723.2277,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14721.786,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14720.4308,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14719.157,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14717.9596,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14716.834,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14699.2,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14699.566,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14699.9247,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14700.7477,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14702.0828,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14703.9562,
+        "Short": null,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": 14708.5806,
+        "Short": null,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": 14712.7425,
+        "Short": null,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": 14716.4883,
+        "Short": null,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": 14719.1,
+        "Short": null,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": 14723.36,
+        "Short": null,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": 14727.1088,
+        "Short": null,
+        "Acceleration": 0.14,
+        "Reversal": 0
+    },
+    {
+        "Long": 14731.3636,
+        "Short": null,
+        "Acceleration": 0.16,
+        "Reversal": 0
+    },
+    {
+        "Long": 14736.0094,
+        "Short": null,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    },
+    {
+        "Long": 14742.0197,
+        "Short": null,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    },
+    {
+        "Long": 14746.9482,
+        "Short": null,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14769.4,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14769.022,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14767.8891,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14740.7,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14741.28,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14741.8484,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14769.7,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14769.086,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14738.0,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14738.0,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14740.104,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14743.8178,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14747.3087,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14750.5902,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14755.359,
+        "Short": null,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": 14761.6731,
+        "Short": null,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": 14767.3558,
+        "Short": null,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": 14772.4702,
+        "Short": null,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": 14777.0732,
+        "Short": null,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14818.5,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14816.764,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14815.0627,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14810.9002,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14804.5462,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14795.9985,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14785.3387,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14773.322,
+        "Acceleration": 0.14,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14760.2849,
+        "Acceleration": 0.16,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14745.8393,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14731.8103,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14718.3682,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": 14664.6,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14665.496,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14709.4,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14708.526,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14705.273,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14702.15,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14696.981,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14692.1222,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14687.5548,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14683.2616,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14679.2259,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14675.4323,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14671.8664,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14668.5144,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14665.3635,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14662.4017,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14659.6176,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14657.0006,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14654.5405,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14652.2281,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14650.0544,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14616.0,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14616.83,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14617.6434,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14619.4737,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14621.2307,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14663.4,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14662.572,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14660.7411,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14658.0747,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14655.5682,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14653.2121,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14650.9974,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14648.9155,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14646.9586,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14645.3,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14641.45,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14637.985,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14634.8665,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14632.0598,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14628.5127,
+        "Acceleration": 0.14,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14624.5769,
+        "Acceleration": 0.16,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14620.6286,
+        "Acceleration": 0.16,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14617.312,
+        "Acceleration": 0.16,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14617.3,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14617.3,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14613.25,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14610.9,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14610.9,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14606.94,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14605.8,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14605.8,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14600.44,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14598.3,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14598.3,
+        "Acceleration": 0.2,
+        "Reversal": 0
+    },
+    {
+        "Long": 14578.1,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14578.1,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14578.976,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14580.3154,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14601.3,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14600.86,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14600.4288,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14600.0062,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14579.3,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14579.706,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14580.1039,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14580.9317,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14581.7265,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14582.4894,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14584.224,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14585.8546,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14611.4,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14610.892,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14609.7923,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14608.7366,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14607.7232,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14606.0538,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14604.4845,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14579.9,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14580.37,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14603.4,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14602.824,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14601.603,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14599.7009,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14597.9128,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14596.232,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14593.7655,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14591.4962,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14565.4,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14565.892,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14567.0843,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14568.2289,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14569.3278,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14570.3827,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14571.3954,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14572.3676,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14573.3009,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14574.1968,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14595.7,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14595.282,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14594.4507,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14593.0137,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14591.6629,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14589.6498,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14587.2348,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14585.0614,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14582.462,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": 14563.4,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14563.878,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14564.3464,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14565.7926,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14568.037,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14571.0181,
+        "Short": null,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": 14574.7963,
+        "Short": null,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": 14578.1966,
+        "Short": null,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": 14581.977,
+        "Short": null,
+        "Acceleration": 0.14,
+        "Reversal": 0
+    },
+    {
+        "Long": 14586.1663,
+        "Short": null,
+        "Acceleration": 0.14,
+        "Reversal": 0
+    },
+    {
+        "Long": 14589.769,
+        "Short": null,
+        "Acceleration": 0.14,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14611.9,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14611.506,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14611.1199,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14610.7415,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14610.3707,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14610.0072,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14609.6511,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14592.2,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14592.842,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14593.4712,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14594.0877,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14594.692,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14595.2841,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14595.8645,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14596.4332,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14596.9905,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14597.5367,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14598.072,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": 14598.5965,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14599.8007,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14600.9566,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14602.0664,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14603.1317,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14604.1544,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14605.1363,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14628.7,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14628.182,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14627.0947,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14626.0509,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14625.0489,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14601.0,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14601.498,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14602.5981,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14603.6542,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14604.668,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14629.0,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14628.526,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14628.0615,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14627.6063,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14627.1601,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14626.7229,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14626.2945,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14625.8746,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14625.4631,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14625.0598,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14624.6646,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14623.778,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14602.5,
+        "Short": null,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": 14602.978,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14603.9389,
+        "Short": null,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": 14604.8613,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14606.6696,
+        "Short": null,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": 14608.3695,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14610.7639,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14612.9668,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14614.9935,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": 14616.858,
+        "Short": null,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14638.3,
+        "Acceleration": 0.02,
+        "Reversal": 1
+    },
+    {
+        "Long": null,
+        "Short": 14637.752,
+        "Acceleration": 0.02,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14637.215,
+        "Acceleration": 0.04,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14635.9504,
+        "Acceleration": 0.06,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14634.0993,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14631.0994,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14628.3394,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14625.8003,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14623.4643,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14621.3151,
+        "Acceleration": 0.08,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14619.3379,
+        "Acceleration": 0.1,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14616.9841,
+        "Acceleration": 0.12,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14613.782,
+        "Acceleration": 0.14,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14609.9345,
+        "Acceleration": 0.16,
+        "Reversal": 0
+    },
+    {
+        "Long": null,
+        "Short": 14604.841,
+        "Acceleration": 0.18,
+        "Reversal": 0
+    }
+]

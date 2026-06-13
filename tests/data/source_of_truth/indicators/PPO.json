@@ -1,0 +1,2502 @@
+[
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": null,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": 0.0032,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": 0.0083,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": 0.0127,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": 0.0137,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": 0.0115,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": 0.0095,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": 0.0031,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": -0.0006,
+        "Histogram": null,
+        "Signal": null
+    },
+    {
+        "PPO": -0.0053,
+        "Histogram": -0.0116,
+        "Signal": 0.0062
+    },
+    {
+        "PPO": -0.0074,
+        "Histogram": -0.0109,
+        "Signal": 0.0035
+    },
+    {
+        "PPO": -0.0097,
+        "Histogram": -0.0106,
+        "Signal": 0.0009
+    },
+    {
+        "PPO": -0.0143,
+        "Histogram": -0.0121,
+        "Signal": -0.0022
+    },
+    {
+        "PPO": -0.0213,
+        "Histogram": -0.0153,
+        "Signal": -0.006
+    },
+    {
+        "PPO": -0.0252,
+        "Histogram": -0.0154,
+        "Signal": -0.0098
+    },
+    {
+        "PPO": -0.0328,
+        "Histogram": -0.0184,
+        "Signal": -0.0144
+    },
+    {
+        "PPO": -0.0394,
+        "Histogram": -0.0199,
+        "Signal": -0.0194
+    },
+    {
+        "PPO": -0.0459,
+        "Histogram": -0.0212,
+        "Signal": -0.0247
+    },
+    {
+        "PPO": -0.0491,
+        "Histogram": -0.0195,
+        "Signal": -0.0296
+    },
+    {
+        "PPO": -0.0493,
+        "Histogram": -0.0157,
+        "Signal": -0.0335
+    },
+    {
+        "PPO": -0.0498,
+        "Histogram": -0.013,
+        "Signal": -0.0368
+    },
+    {
+        "PPO": -0.0459,
+        "Histogram": -0.0073,
+        "Signal": -0.0386
+    },
+    {
+        "PPO": -0.0428,
+        "Histogram": -0.0034,
+        "Signal": -0.0395
+    },
+    {
+        "PPO": -0.0393,
+        "Histogram": 0.0001,
+        "Signal": -0.0394
+    },
+    {
+        "PPO": -0.0378,
+        "Histogram": 0.0013,
+        "Signal": -0.0391
+    },
+    {
+        "PPO": -0.0335,
+        "Histogram": 0.0045,
+        "Signal": -0.038
+    },
+    {
+        "PPO": -0.0269,
+        "Histogram": 0.0089,
+        "Signal": -0.0358
+    },
+    {
+        "PPO": -0.0183,
+        "Histogram": 0.014,
+        "Signal": -0.0323
+    },
+    {
+        "PPO": -0.0106,
+        "Histogram": 0.0174,
+        "Signal": -0.0279
+    },
+    {
+        "PPO": 0.0013,
+        "Histogram": 0.0234,
+        "Signal": -0.0221
+    },
+    {
+        "PPO": 0.011,
+        "Histogram": 0.0264,
+        "Signal": -0.0155
+    },
+    {
+        "PPO": 0.018,
+        "Histogram": 0.0268,
+        "Signal": -0.0088
+    },
+    {
+        "PPO": 0.022,
+        "Histogram": 0.0246,
+        "Signal": -0.0026
+    },
+    {
+        "PPO": 0.0256,
+        "Histogram": 0.0226,
+        "Signal": 0.003
+    },
+    {
+        "PPO": 0.0311,
+        "Histogram": 0.0224,
+        "Signal": 0.0086
+    },
+    {
+        "PPO": 0.0341,
+        "Histogram": 0.0204,
+        "Signal": 0.0137
+    },
+    {
+        "PPO": 0.0369,
+        "Histogram": 0.0185,
+        "Signal": 0.0184
+    },
+    {
+        "PPO": 0.0386,
+        "Histogram": 0.0162,
+        "Signal": 0.0224
+    },
+    {
+        "PPO": 0.0383,
+        "Histogram": 0.0127,
+        "Signal": 0.0256
+    },
+    {
+        "PPO": 0.036,
+        "Histogram": 0.0083,
+        "Signal": 0.0277
+    },
+    {
+        "PPO": 0.0335,
+        "Histogram": 0.0047,
+        "Signal": 0.0288
+    },
+    {
+        "PPO": 0.0299,
+        "Histogram": 0.0009,
+        "Signal": 0.029
+    },
+    {
+        "PPO": 0.0309,
+        "Histogram": 0.0015,
+        "Signal": 0.0294
+    },
+    {
+        "PPO": 0.0299,
+        "Histogram": 0.0004,
+        "Signal": 0.0295
+    },
+    {
+        "PPO": 0.0303,
+        "Histogram": 0.0006,
+        "Signal": 0.0297
+    },
+    {
+        "PPO": 0.0317,
+        "Histogram": 0.0016,
+        "Signal": 0.0301
+    },
+    {
+        "PPO": 0.0322,
+        "Histogram": 0.0017,
+        "Signal": 0.0305
+    },
+    {
+        "PPO": 0.0294,
+        "Histogram": -0.0008,
+        "Signal": 0.0303
+    },
+    {
+        "PPO": 0.0255,
+        "Histogram": -0.0038,
+        "Signal": 0.0293
+    },
+    {
+        "PPO": 0.0179,
+        "Histogram": -0.0092,
+        "Signal": 0.027
+    },
+    {
+        "PPO": 0.009,
+        "Histogram": -0.0145,
+        "Signal": 0.0234
+    },
+    {
+        "PPO": 0.0034,
+        "Histogram": -0.016,
+        "Signal": 0.0194
+    },
+    {
+        "PPO": -0.0034,
+        "Histogram": -0.0183,
+        "Signal": 0.0149
+    },
+    {
+        "PPO": -0.0088,
+        "Histogram": -0.0189,
+        "Signal": 0.0101
+    },
+    {
+        "PPO": -0.0153,
+        "Histogram": -0.0204,
+        "Signal": 0.005
+    },
+    {
+        "PPO": -0.0196,
+        "Histogram": -0.0197,
+        "Signal": 0.0001
+    },
+    {
+        "PPO": -0.0238,
+        "Histogram": -0.0192,
+        "Signal": -0.0047
+    },
+    {
+        "PPO": -0.0271,
+        "Histogram": -0.018,
+        "Signal": -0.0092
+    },
+    {
+        "PPO": -0.0281,
+        "Histogram": -0.0152,
+        "Signal": -0.013
+    },
+    {
+        "PPO": -0.0283,
+        "Histogram": -0.0122,
+        "Signal": -0.016
+    },
+    {
+        "PPO": -0.0259,
+        "Histogram": -0.0079,
+        "Signal": -0.018
+    },
+    {
+        "PPO": -0.0216,
+        "Histogram": -0.0029,
+        "Signal": -0.0187
+    },
+    {
+        "PPO": -0.0154,
+        "Histogram": 0.0026,
+        "Signal": -0.0181
+    },
+    {
+        "PPO": -0.0072,
+        "Histogram": 0.0087,
+        "Signal": -0.0159
+    },
+    {
+        "PPO": 0.0027,
+        "Histogram": 0.0149,
+        "Signal": -0.0122
+    },
+    {
+        "PPO": 0.0126,
+        "Histogram": 0.0198,
+        "Signal": -0.0072
+    },
+    {
+        "PPO": 0.0229,
+        "Histogram": 0.0241,
+        "Signal": -0.0012
+    },
+    {
+        "PPO": 0.0322,
+        "Histogram": 0.0267,
+        "Signal": 0.0055
+    },
+    {
+        "PPO": 0.0407,
+        "Histogram": 0.0282,
+        "Signal": 0.0125
+    },
+    {
+        "PPO": 0.0472,
+        "Histogram": 0.0277,
+        "Signal": 0.0195
+    },
+    {
+        "PPO": 0.0532,
+        "Histogram": 0.027,
+        "Signal": 0.0262
+    },
+    {
+        "PPO": 0.0568,
+        "Histogram": 0.0245,
+        "Signal": 0.0323
+    },
+    {
+        "PPO": 0.0558,
+        "Histogram": 0.0188,
+        "Signal": 0.037
+    },
+    {
+        "PPO": 0.0516,
+        "Histogram": 0.0117,
+        "Signal": 0.0399
+    },
+    {
+        "PPO": 0.0478,
+        "Histogram": 0.0063,
+        "Signal": 0.0415
+    },
+    {
+        "PPO": 0.0425,
+        "Histogram": 0.0008,
+        "Signal": 0.0417
+    },
+    {
+        "PPO": 0.0315,
+        "Histogram": -0.0081,
+        "Signal": 0.0397
+    },
+    {
+        "PPO": 0.0194,
+        "Histogram": -0.0162,
+        "Signal": 0.0356
+    },
+    {
+        "PPO": 0.0081,
+        "Histogram": -0.022,
+        "Signal": 0.0301
+    },
+    {
+        "PPO": -0.0049,
+        "Histogram": -0.028,
+        "Signal": 0.0231
+    },
+    {
+        "PPO": -0.0215,
+        "Histogram": -0.0357,
+        "Signal": 0.0142
+    },
+    {
+        "PPO": -0.0369,
+        "Histogram": -0.0409,
+        "Signal": 0.004
+    },
+    {
+        "PPO": -0.0477,
+        "Histogram": -0.0413,
+        "Signal": -0.0064
+    },
+    {
+        "PPO": -0.0562,
+        "Histogram": -0.0399,
+        "Signal": -0.0163
+    },
+    {
+        "PPO": -0.0642,
+        "Histogram": -0.0383,
+        "Signal": -0.0259
+    },
+    {
+        "PPO": -0.0703,
+        "Histogram": -0.0355,
+        "Signal": -0.0348
+    },
+    {
+        "PPO": -0.0768,
+        "Histogram": -0.0336,
+        "Signal": -0.0432
+    },
+    {
+        "PPO": -0.08,
+        "Histogram": -0.0295,
+        "Signal": -0.0505
+    },
+    {
+        "PPO": -0.078,
+        "Histogram": -0.022,
+        "Signal": -0.056
+    },
+    {
+        "PPO": -0.0758,
+        "Histogram": -0.0158,
+        "Signal": -0.06
+    },
+    {
+        "PPO": -0.0713,
+        "Histogram": -0.0091,
+        "Signal": -0.0623
+    },
+    {
+        "PPO": -0.0656,
+        "Histogram": -0.0026,
+        "Signal": -0.0629
+    },
+    {
+        "PPO": -0.0627,
+        "Histogram": 0.0002,
+        "Signal": -0.0629
+    },
+    {
+        "PPO": -0.0599,
+        "Histogram": 0.0024,
+        "Signal": -0.0623
+    },
+    {
+        "PPO": -0.0555,
+        "Histogram": 0.0054,
+        "Signal": -0.0609
+    },
+    {
+        "PPO": -0.0519,
+        "Histogram": 0.0073,
+        "Signal": -0.0591
+    },
+    {
+        "PPO": -0.0484,
+        "Histogram": 0.0086,
+        "Signal": -0.057
+    },
+    {
+        "PPO": -0.0439,
+        "Histogram": 0.0104,
+        "Signal": -0.0544
+    },
+    {
+        "PPO": -0.0406,
+        "Histogram": 0.011,
+        "Signal": -0.0516
+    },
+    {
+        "PPO": -0.039,
+        "Histogram": 0.0101,
+        "Signal": -0.0491
+    },
+    {
+        "PPO": -0.0382,
+        "Histogram": 0.0087,
+        "Signal": -0.0469
+    },
+    {
+        "PPO": -0.0381,
+        "Histogram": 0.0071,
+        "Signal": -0.0452
+    },
+    {
+        "PPO": -0.04,
+        "Histogram": 0.0042,
+        "Signal": -0.0441
+    },
+    {
+        "PPO": -0.0447,
+        "Histogram": -0.0005,
+        "Signal": -0.0442
+    },
+    {
+        "PPO": -0.05,
+        "Histogram": -0.0046,
+        "Signal": -0.0454
+    },
+    {
+        "PPO": -0.0553,
+        "Histogram": -0.008,
+        "Signal": -0.0474
+    },
+    {
+        "PPO": -0.0614,
+        "Histogram": -0.0112,
+        "Signal": -0.0502
+    },
+    {
+        "PPO": -0.0669,
+        "Histogram": -0.0134,
+        "Signal": -0.0535
+    },
+    {
+        "PPO": -0.0727,
+        "Histogram": -0.0154,
+        "Signal": -0.0574
+    },
+    {
+        "PPO": -0.077,
+        "Histogram": -0.0157,
+        "Signal": -0.0613
+    },
+    {
+        "PPO": -0.0814,
+        "Histogram": -0.0161,
+        "Signal": -0.0653
+    },
+    {
+        "PPO": -0.0873,
+        "Histogram": -0.0176,
+        "Signal": -0.0697
+    },
+    {
+        "PPO": -0.0946,
+        "Histogram": -0.0199,
+        "Signal": -0.0747
+    },
+    {
+        "PPO": -0.0992,
+        "Histogram": -0.0196,
+        "Signal": -0.0796
+    },
+    {
+        "PPO": -0.1043,
+        "Histogram": -0.0197,
+        "Signal": -0.0845
+    },
+    {
+        "PPO": -0.1039,
+        "Histogram": -0.0155,
+        "Signal": -0.0884
+    },
+    {
+        "PPO": -0.1016,
+        "Histogram": -0.0106,
+        "Signal": -0.091
+    },
+    {
+        "PPO": -0.1001,
+        "Histogram": -0.0073,
+        "Signal": -0.0929
+    },
+    {
+        "PPO": -0.0984,
+        "Histogram": -0.0044,
+        "Signal": -0.094
+    },
+    {
+        "PPO": -0.0988,
+        "Histogram": -0.0039,
+        "Signal": -0.0949
+    },
+    {
+        "PPO": -0.098,
+        "Histogram": -0.0025,
+        "Signal": -0.0955
+    },
+    {
+        "PPO": -0.0972,
+        "Histogram": -0.0013,
+        "Signal": -0.0959
+    },
+    {
+        "PPO": -0.0938,
+        "Histogram": 0.0017,
+        "Signal": -0.0955
+    },
+    {
+        "PPO": -0.0901,
+        "Histogram": 0.0043,
+        "Signal": -0.0944
+    },
+    {
+        "PPO": -0.0826,
+        "Histogram": 0.0094,
+        "Signal": -0.092
+    },
+    {
+        "PPO": -0.0781,
+        "Histogram": 0.0111,
+        "Signal": -0.0893
+    },
+    {
+        "PPO": -0.072,
+        "Histogram": 0.0138,
+        "Signal": -0.0858
+    },
+    {
+        "PPO": -0.069,
+        "Histogram": 0.0135,
+        "Signal": -0.0824
+    },
+    {
+        "PPO": -0.0655,
+        "Histogram": 0.0135,
+        "Signal": -0.0791
+    },
+    {
+        "PPO": -0.0631,
+        "Histogram": 0.0128,
+        "Signal": -0.0759
+    },
+    {
+        "PPO": -0.0557,
+        "Histogram": 0.0161,
+        "Signal": -0.0718
+    },
+    {
+        "PPO": -0.0455,
+        "Histogram": 0.0211,
+        "Signal": -0.0666
+    },
+    {
+        "PPO": -0.0388,
+        "Histogram": 0.0222,
+        "Signal": -0.061
+    },
+    {
+        "PPO": -0.0314,
+        "Histogram": 0.0237,
+        "Signal": -0.0551
+    },
+    {
+        "PPO": -0.0273,
+        "Histogram": 0.0223,
+        "Signal": -0.0495
+    },
+    {
+        "PPO": -0.0237,
+        "Histogram": 0.0207,
+        "Signal": -0.0444
+    },
+    {
+        "PPO": -0.0228,
+        "Histogram": 0.0172,
+        "Signal": -0.0401
+    },
+    {
+        "PPO": -0.0223,
+        "Histogram": 0.0142,
+        "Signal": -0.0365
+    },
+    {
+        "PPO": -0.0263,
+        "Histogram": 0.0081,
+        "Signal": -0.0345
+    },
+    {
+        "PPO": -0.0259,
+        "Histogram": 0.0068,
+        "Signal": -0.0328
+    },
+    {
+        "PPO": -0.027,
+        "Histogram": 0.0046,
+        "Signal": -0.0316
+    },
+    {
+        "PPO": -0.027,
+        "Histogram": 0.0037,
+        "Signal": -0.0307
+    },
+    {
+        "PPO": -0.0256,
+        "Histogram": 0.0041,
+        "Signal": -0.0297
+    },
+    {
+        "PPO": -0.0255,
+        "Histogram": 0.0033,
+        "Signal": -0.0288
+    },
+    {
+        "PPO": -0.0314,
+        "Histogram": -0.0021,
+        "Signal": -0.0294
+    },
+    {
+        "PPO": -0.0397,
+        "Histogram": -0.0083,
+        "Signal": -0.0314
+    },
+    {
+        "PPO": -0.0472,
+        "Histogram": -0.0126,
+        "Signal": -0.0346
+    },
+    {
+        "PPO": -0.0551,
+        "Histogram": -0.0164,
+        "Signal": -0.0387
+    },
+    {
+        "PPO": -0.0629,
+        "Histogram": -0.0194,
+        "Signal": -0.0435
+    },
+    {
+        "PPO": -0.0661,
+        "Histogram": -0.0181,
+        "Signal": -0.0481
+    },
+    {
+        "PPO": -0.0652,
+        "Histogram": -0.0137,
+        "Signal": -0.0515
+    },
+    {
+        "PPO": -0.0638,
+        "Histogram": -0.0098,
+        "Signal": -0.0539
+    },
+    {
+        "PPO": -0.0582,
+        "Histogram": -0.0034,
+        "Signal": -0.0548
+    },
+    {
+        "PPO": -0.056,
+        "Histogram": -0.0009,
+        "Signal": -0.055
+    },
+    {
+        "PPO": -0.0492,
+        "Histogram": 0.0047,
+        "Signal": -0.0539
+    },
+    {
+        "PPO": -0.0406,
+        "Histogram": 0.0106,
+        "Signal": -0.0512
+    },
+    {
+        "PPO": -0.0346,
+        "Histogram": 0.0133,
+        "Signal": -0.0479
+    },
+    {
+        "PPO": -0.0312,
+        "Histogram": 0.0133,
+        "Signal": -0.0446
+    },
+    {
+        "PPO": -0.0235,
+        "Histogram": 0.0168,
+        "Signal": -0.0403
+    },
+    {
+        "PPO": -0.0161,
+        "Histogram": 0.0194,
+        "Signal": -0.0355
+    },
+    {
+        "PPO": -0.014,
+        "Histogram": 0.0172,
+        "Signal": -0.0312
+    },
+    {
+        "PPO": -0.0146,
+        "Histogram": 0.0133,
+        "Signal": -0.0279
+    },
+    {
+        "PPO": -0.0145,
+        "Histogram": 0.0107,
+        "Signal": -0.0252
+    },
+    {
+        "PPO": -0.017,
+        "Histogram": 0.0066,
+        "Signal": -0.0236
+    },
+    {
+        "PPO": -0.0192,
+        "Histogram": 0.0035,
+        "Signal": -0.0227
+    },
+    {
+        "PPO": -0.0195,
+        "Histogram": 0.0026,
+        "Signal": -0.022
+    },
+    {
+        "PPO": -0.0223,
+        "Histogram": -0.0002,
+        "Signal": -0.0221
+    },
+    {
+        "PPO": -0.0263,
+        "Histogram": -0.0034,
+        "Signal": -0.0229
+    },
+    {
+        "PPO": -0.0257,
+        "Histogram": -0.0022,
+        "Signal": -0.0235
+    },
+    {
+        "PPO": -0.0242,
+        "Histogram": -0.0005,
+        "Signal": -0.0236
+    },
+    {
+        "PPO": -0.0286,
+        "Histogram": -0.004,
+        "Signal": -0.0246
+    },
+    {
+        "PPO": -0.031,
+        "Histogram": -0.0051,
+        "Signal": -0.0259
+    },
+    {
+        "PPO": -0.0316,
+        "Histogram": -0.0046,
+        "Signal": -0.027
+    },
+    {
+        "PPO": -0.0303,
+        "Histogram": -0.0026,
+        "Signal": -0.0277
+    },
+    {
+        "PPO": -0.0265,
+        "Histogram": 0.001,
+        "Signal": -0.0275
+    },
+    {
+        "PPO": -0.0198,
+        "Histogram": 0.0061,
+        "Signal": -0.0259
+    },
+    {
+        "PPO": -0.0171,
+        "Histogram": 0.0071,
+        "Signal": -0.0241
+    },
+    {
+        "PPO": -0.0149,
+        "Histogram": 0.0074,
+        "Signal": -0.0223
+    },
+    {
+        "PPO": -0.013,
+        "Histogram": 0.0074,
+        "Signal": -0.0205
+    },
+    {
+        "PPO": -0.0093,
+        "Histogram": 0.0089,
+        "Signal": -0.0182
+    },
+    {
+        "PPO": -0.0078,
+        "Histogram": 0.0083,
+        "Signal": -0.0161
+    },
+    {
+        "PPO": 0.0013,
+        "Histogram": 0.0139,
+        "Signal": -0.0127
+    },
+    {
+        "PPO": 0.0127,
+        "Histogram": 0.0203,
+        "Signal": -0.0076
+    },
+    {
+        "PPO": 0.019,
+        "Histogram": 0.0213,
+        "Signal": -0.0023
+    },
+    {
+        "PPO": 0.024,
+        "Histogram": 0.021,
+        "Signal": 0.003
+    },
+    {
+        "PPO": 0.0255,
+        "Histogram": 0.018,
+        "Signal": 0.0075
+    },
+    {
+        "PPO": 0.0268,
+        "Histogram": 0.0155,
+        "Signal": 0.0113
+    },
+    {
+        "PPO": 0.0245,
+        "Histogram": 0.0105,
+        "Signal": 0.014
+    },
+    {
+        "PPO": 0.0208,
+        "Histogram": 0.0054,
+        "Signal": 0.0153
+    },
+    {
+        "PPO": 0.0143,
+        "Histogram": -0.0008,
+        "Signal": 0.0151
+    },
+    {
+        "PPO": 0.0101,
+        "Histogram": -0.0041,
+        "Signal": 0.0141
+    },
+    {
+        "PPO": 0.0024,
+        "Histogram": -0.0094,
+        "Signal": 0.0118
+    },
+    {
+        "PPO": -0.0052,
+        "Histogram": -0.0136,
+        "Signal": 0.0084
+    },
+    {
+        "PPO": -0.0166,
+        "Histogram": -0.02,
+        "Signal": 0.0034
+    },
+    {
+        "PPO": -0.0289,
+        "Histogram": -0.0259,
+        "Signal": -0.0031
+    },
+    {
+        "PPO": -0.0401,
+        "Histogram": -0.0296,
+        "Signal": -0.0105
+    },
+    {
+        "PPO": -0.0539,
+        "Histogram": -0.0347,
+        "Signal": -0.0192
+    },
+    {
+        "PPO": -0.0638,
+        "Histogram": -0.0357,
+        "Signal": -0.0281
+    },
+    {
+        "PPO": -0.0725,
+        "Histogram": -0.0355,
+        "Signal": -0.037
+    },
+    {
+        "PPO": -0.0781,
+        "Histogram": -0.0329,
+        "Signal": -0.0452
+    },
+    {
+        "PPO": -0.0865,
+        "Histogram": -0.033,
+        "Signal": -0.0535
+    },
+    {
+        "PPO": -0.0877,
+        "Histogram": -0.0274,
+        "Signal": -0.0603
+    },
+    {
+        "PPO": -0.0888,
+        "Histogram": -0.0228,
+        "Signal": -0.066
+    },
+    {
+        "PPO": -0.0856,
+        "Histogram": -0.0157,
+        "Signal": -0.0699
+    },
+    {
+        "PPO": -0.0845,
+        "Histogram": -0.0116,
+        "Signal": -0.0728
+    },
+    {
+        "PPO": -0.0856,
+        "Histogram": -0.0102,
+        "Signal": -0.0754
+    },
+    {
+        "PPO": -0.081,
+        "Histogram": -0.0045,
+        "Signal": -0.0765
+    },
+    {
+        "PPO": -0.0751,
+        "Histogram": 0.0011,
+        "Signal": -0.0762
+    },
+    {
+        "PPO": -0.0626,
+        "Histogram": 0.0109,
+        "Signal": -0.0735
+    },
+    {
+        "PPO": -0.0548,
+        "Histogram": 0.015,
+        "Signal": -0.0698
+    },
+    {
+        "PPO": -0.0501,
+        "Histogram": 0.0157,
+        "Signal": -0.0658
+    },
+    {
+        "PPO": -0.0525,
+        "Histogram": 0.0107,
+        "Signal": -0.0632
+    },
+    {
+        "PPO": -0.0517,
+        "Histogram": 0.0092,
+        "Signal": -0.0609
+    },
+    {
+        "PPO": -0.0522,
+        "Histogram": 0.0069,
+        "Signal": -0.0591
+    },
+    {
+        "PPO": -0.0449,
+        "Histogram": 0.0114,
+        "Signal": -0.0563
+    },
+    {
+        "PPO": -0.0392,
+        "Histogram": 0.0137,
+        "Signal": -0.0529
+    },
+    {
+        "PPO": -0.0318,
+        "Histogram": 0.0169,
+        "Signal": -0.0486
+    },
+    {
+        "PPO": -0.0249,
+        "Histogram": 0.019,
+        "Signal": -0.0439
+    },
+    {
+        "PPO": -0.0186,
+        "Histogram": 0.0203,
+        "Signal": -0.0388
+    },
+    {
+        "PPO": -0.007,
+        "Histogram": 0.0254,
+        "Signal": -0.0325
+    },
+    {
+        "PPO": 0.0044,
+        "Histogram": 0.0295,
+        "Signal": -0.0251
+    },
+    {
+        "PPO": 0.0169,
+        "Histogram": 0.0336,
+        "Signal": -0.0167
+    },
+    {
+        "PPO": 0.0247,
+        "Histogram": 0.0331,
+        "Signal": -0.0084
+    },
+    {
+        "PPO": 0.0334,
+        "Histogram": 0.0335,
+        "Signal": -0.0
+    },
+    {
+        "PPO": 0.043,
+        "Histogram": 0.0345,
+        "Signal": 0.0086
+    },
+    {
+        "PPO": 0.0522,
+        "Histogram": 0.0349,
+        "Signal": 0.0173
+    },
+    {
+        "PPO": 0.055,
+        "Histogram": 0.0302,
+        "Signal": 0.0248
+    },
+    {
+        "PPO": 0.0589,
+        "Histogram": 0.0273,
+        "Signal": 0.0317
+    },
+    {
+        "PPO": 0.058,
+        "Histogram": 0.021,
+        "Signal": 0.0369
+    },
+    {
+        "PPO": 0.0528,
+        "Histogram": 0.0127,
+        "Signal": 0.0401
+    },
+    {
+        "PPO": 0.0451,
+        "Histogram": 0.004,
+        "Signal": 0.0411
+    },
+    {
+        "PPO": 0.0334,
+        "Histogram": -0.0061,
+        "Signal": 0.0396
+    },
+    {
+        "PPO": 0.0221,
+        "Histogram": -0.0139,
+        "Signal": 0.0361
+    },
+    {
+        "PPO": 0.0089,
+        "Histogram": -0.0218,
+        "Signal": 0.0306
+    },
+    {
+        "PPO": -0.0008,
+        "Histogram": -0.0252,
+        "Signal": 0.0243
+    },
+    {
+        "PPO": -0.0097,
+        "Histogram": -0.0272,
+        "Signal": 0.0175
+    },
+    {
+        "PPO": -0.0175,
+        "Histogram": -0.028,
+        "Signal": 0.0105
+    },
+    {
+        "PPO": -0.02,
+        "Histogram": -0.0244,
+        "Signal": 0.0044
+    },
+    {
+        "PPO": -0.0264,
+        "Histogram": -0.0246,
+        "Signal": -0.0017
+    },
+    {
+        "PPO": -0.0292,
+        "Histogram": -0.0219,
+        "Signal": -0.0072
+    },
+    {
+        "PPO": -0.0277,
+        "Histogram": -0.0164,
+        "Signal": -0.0113
+    },
+    {
+        "PPO": -0.0225,
+        "Histogram": -0.009,
+        "Signal": -0.0136
+    },
+    {
+        "PPO": -0.0171,
+        "Histogram": -0.0028,
+        "Signal": -0.0143
+    },
+    {
+        "PPO": -0.0095,
+        "Histogram": 0.0038,
+        "Signal": -0.0133
+    },
+    {
+        "PPO": 0.0036,
+        "Histogram": 0.0135,
+        "Signal": -0.0099
+    },
+    {
+        "PPO": 0.0123,
+        "Histogram": 0.0178,
+        "Signal": -0.0055
+    },
+    {
+        "PPO": 0.025,
+        "Histogram": 0.0244,
+        "Signal": 0.0006
+    },
+    {
+        "PPO": 0.0399,
+        "Histogram": 0.0315,
+        "Signal": 0.0085
+    },
+    {
+        "PPO": 0.0558,
+        "Histogram": 0.0379,
+        "Signal": 0.0179
+    },
+    {
+        "PPO": 0.0687,
+        "Histogram": 0.0406,
+        "Signal": 0.0281
+    },
+    {
+        "PPO": 0.0851,
+        "Histogram": 0.0456,
+        "Signal": 0.0395
+    },
+    {
+        "PPO": 0.0968,
+        "Histogram": 0.0458,
+        "Signal": 0.0509
+    },
+    {
+        "PPO": 0.1091,
+        "Histogram": 0.0466,
+        "Signal": 0.0626
+    },
+    {
+        "PPO": 0.1168,
+        "Histogram": 0.0434,
+        "Signal": 0.0734
+    },
+    {
+        "PPO": 0.1268,
+        "Histogram": 0.0427,
+        "Signal": 0.0841
+    },
+    {
+        "PPO": 0.1291,
+        "Histogram": 0.036,
+        "Signal": 0.0931
+    },
+    {
+        "PPO": 0.1203,
+        "Histogram": 0.0218,
+        "Signal": 0.0986
+    },
+    {
+        "PPO": 0.1237,
+        "Histogram": 0.0202,
+        "Signal": 0.1036
+    },
+    {
+        "PPO": 0.1183,
+        "Histogram": 0.0118,
+        "Signal": 0.1065
+    },
+    {
+        "PPO": 0.1148,
+        "Histogram": 0.0066,
+        "Signal": 0.1082
+    },
+    {
+        "PPO": 0.1032,
+        "Histogram": -0.004,
+        "Signal": 0.1072
+    },
+    {
+        "PPO": 0.0945,
+        "Histogram": -0.0102,
+        "Signal": 0.1046
+    },
+    {
+        "PPO": 0.0851,
+        "Histogram": -0.0156,
+        "Signal": 0.1007
+    },
+    {
+        "PPO": 0.0777,
+        "Histogram": -0.0184,
+        "Signal": 0.0961
+    },
+    {
+        "PPO": 0.0735,
+        "Histogram": -0.0181,
+        "Signal": 0.0916
+    },
+    {
+        "PPO": 0.0799,
+        "Histogram": -0.0094,
+        "Signal": 0.0893
+    },
+    {
+        "PPO": 0.0763,
+        "Histogram": -0.0104,
+        "Signal": 0.0867
+    },
+    {
+        "PPO": 0.0826,
+        "Histogram": -0.0033,
+        "Signal": 0.0859
+    },
+    {
+        "PPO": 0.096,
+        "Histogram": 0.0081,
+        "Signal": 0.0879
+    },
+    {
+        "PPO": 0.1057,
+        "Histogram": 0.0142,
+        "Signal": 0.0915
+    },
+    {
+        "PPO": 0.119,
+        "Histogram": 0.022,
+        "Signal": 0.097
+    },
+    {
+        "PPO": 0.1249,
+        "Histogram": 0.0224,
+        "Signal": 0.1026
+    },
+    {
+        "PPO": 0.141,
+        "Histogram": 0.0307,
+        "Signal": 0.1102
+    },
+    {
+        "PPO": 0.1571,
+        "Histogram": 0.0375,
+        "Signal": 0.1196
+    },
+    {
+        "PPO": 0.1538,
+        "Histogram": 0.0273,
+        "Signal": 0.1265
+    },
+    {
+        "PPO": 0.1386,
+        "Histogram": 0.0097,
+        "Signal": 0.1289
+    },
+    {
+        "PPO": 0.1086,
+        "Histogram": -0.0162,
+        "Signal": 0.1248
+    },
+    {
+        "PPO": 0.0709,
+        "Histogram": -0.0431,
+        "Signal": 0.114
+    },
+    {
+        "PPO": 0.0336,
+        "Histogram": -0.0644,
+        "Signal": 0.098
+    },
+    {
+        "PPO": -0.0104,
+        "Histogram": -0.0867,
+        "Signal": 0.0763
+    },
+    {
+        "PPO": -0.0594,
+        "Histogram": -0.1085,
+        "Signal": 0.0492
+    },
+    {
+        "PPO": -0.1131,
+        "Histogram": -0.1298,
+        "Signal": 0.0167
+    },
+    {
+        "PPO": -0.1714,
+        "Histogram": -0.1505,
+        "Signal": -0.0209
+    },
+    {
+        "PPO": -0.2254,
+        "Histogram": -0.1636,
+        "Signal": -0.0618
+    },
+    {
+        "PPO": -0.2762,
+        "Histogram": -0.1715,
+        "Signal": -0.1047
+    },
+    {
+        "PPO": -0.3166,
+        "Histogram": -0.1695,
+        "Signal": -0.1471
+    },
+    {
+        "PPO": -0.3319,
+        "Histogram": -0.1479,
+        "Signal": -0.184
+    },
+    {
+        "PPO": -0.357,
+        "Histogram": -0.1383,
+        "Signal": -0.2186
+    },
+    {
+        "PPO": -0.363,
+        "Histogram": -0.1155,
+        "Signal": -0.2475
+    },
+    {
+        "PPO": -0.3689,
+        "Histogram": -0.0971,
+        "Signal": -0.2718
+    },
+    {
+        "PPO": -0.3661,
+        "Histogram": -0.0755,
+        "Signal": -0.2906
+    },
+    {
+        "PPO": -0.3626,
+        "Histogram": -0.0576,
+        "Signal": -0.305
+    },
+    {
+        "PPO": -0.3519,
+        "Histogram": -0.0375,
+        "Signal": -0.3144
+    },
+    {
+        "PPO": -0.3367,
+        "Histogram": -0.0179,
+        "Signal": -0.3189
+    },
+    {
+        "PPO": -0.3115,
+        "Histogram": 0.0059,
+        "Signal": -0.3174
+    },
+    {
+        "PPO": -0.2813,
+        "Histogram": 0.0289,
+        "Signal": -0.3102
+    },
+    {
+        "PPO": -0.2576,
+        "Histogram": 0.042,
+        "Signal": -0.2997
+    },
+    {
+        "PPO": -0.2491,
+        "Histogram": 0.0405,
+        "Signal": -0.2895
+    },
+    {
+        "PPO": -0.239,
+        "Histogram": 0.0404,
+        "Signal": -0.2794
+    },
+    {
+        "PPO": -0.2218,
+        "Histogram": 0.0461,
+        "Signal": -0.2679
+    },
+    {
+        "PPO": -0.208,
+        "Histogram": 0.0479,
+        "Signal": -0.2559
+    },
+    {
+        "PPO": -0.1765,
+        "Histogram": 0.0635,
+        "Signal": -0.24
+    },
+    {
+        "PPO": -0.1541,
+        "Histogram": 0.0688,
+        "Signal": -0.2229
+    },
+    {
+        "PPO": -0.1294,
+        "Histogram": 0.0748,
+        "Signal": -0.2042
+    },
+    {
+        "PPO": -0.1135,
+        "Histogram": 0.0725,
+        "Signal": -0.186
+    },
+    {
+        "PPO": -0.0955,
+        "Histogram": 0.0724,
+        "Signal": -0.1679
+    },
+    {
+        "PPO": -0.0845,
+        "Histogram": 0.0668,
+        "Signal": -0.1512
+    },
+    {
+        "PPO": -0.075,
+        "Histogram": 0.0609,
+        "Signal": -0.136
+    },
+    {
+        "PPO": -0.064,
+        "Histogram": 0.0576,
+        "Signal": -0.1216
+    },
+    {
+        "PPO": -0.046,
+        "Histogram": 0.0605,
+        "Signal": -0.1065
+    },
+    {
+        "PPO": -0.027,
+        "Histogram": 0.0635,
+        "Signal": -0.0906
+    },
+    {
+        "PPO": -0.0135,
+        "Histogram": 0.0617,
+        "Signal": -0.0752
+    },
+    {
+        "PPO": -0.008,
+        "Histogram": 0.0537,
+        "Signal": -0.0617
+    },
+    {
+        "PPO": -0.0027,
+        "Histogram": 0.0473,
+        "Signal": -0.0499
+    },
+    {
+        "PPO": 0.0072,
+        "Histogram": 0.0457,
+        "Signal": -0.0385
+    },
+    {
+        "PPO": 0.0132,
+        "Histogram": 0.0414,
+        "Signal": -0.0281
+    },
+    {
+        "PPO": 0.0097,
+        "Histogram": 0.0303,
+        "Signal": -0.0206
+    },
+    {
+        "PPO": 0.0094,
+        "Histogram": 0.024,
+        "Signal": -0.0146
+    },
+    {
+        "PPO": 0.0124,
+        "Histogram": 0.0216,
+        "Signal": -0.0092
+    },
+    {
+        "PPO": 0.0033,
+        "Histogram": 0.0099,
+        "Signal": -0.0067
+    },
+    {
+        "PPO": -0.0076,
+        "Histogram": -0.0007,
+        "Signal": -0.0069
+    },
+    {
+        "PPO": -0.0221,
+        "Histogram": -0.0122,
+        "Signal": -0.0099
+    },
+    {
+        "PPO": -0.037,
+        "Histogram": -0.0217,
+        "Signal": -0.0153
+    },
+    {
+        "PPO": -0.0482,
+        "Histogram": -0.0263,
+        "Signal": -0.0219
+    },
+    {
+        "PPO": -0.0513,
+        "Histogram": -0.0235,
+        "Signal": -0.0278
+    },
+    {
+        "PPO": -0.0499,
+        "Histogram": -0.0177,
+        "Signal": -0.0322
+    },
+    {
+        "PPO": -0.0579,
+        "Histogram": -0.0206,
+        "Signal": -0.0373
+    },
+    {
+        "PPO": -0.0691,
+        "Histogram": -0.0254,
+        "Signal": -0.0437
+    },
+    {
+        "PPO": -0.0738,
+        "Histogram": -0.024,
+        "Signal": -0.0497
+    },
+    {
+        "PPO": -0.0895,
+        "Histogram": -0.0318,
+        "Signal": -0.0577
+    },
+    {
+        "PPO": -0.1031,
+        "Histogram": -0.0364,
+        "Signal": -0.0668
+    },
+    {
+        "PPO": -0.111,
+        "Histogram": -0.0354,
+        "Signal": -0.0756
+    },
+    {
+        "PPO": -0.1098,
+        "Histogram": -0.0274,
+        "Signal": -0.0825
+    },
+    {
+        "PPO": -0.1056,
+        "Histogram": -0.0185,
+        "Signal": -0.0871
+    },
+    {
+        "PPO": -0.0994,
+        "Histogram": -0.0098,
+        "Signal": -0.0895
+    },
+    {
+        "PPO": -0.0958,
+        "Histogram": -0.005,
+        "Signal": -0.0908
+    },
+    {
+        "PPO": -0.0986,
+        "Histogram": -0.0063,
+        "Signal": -0.0924
+    },
+    {
+        "PPO": -0.0938,
+        "Histogram": -0.0011,
+        "Signal": -0.0926
+    },
+    {
+        "PPO": -0.0923,
+        "Histogram": 0.0003,
+        "Signal": -0.0926
+    },
+    {
+        "PPO": -0.0965,
+        "Histogram": -0.0031,
+        "Signal": -0.0933
+    },
+    {
+        "PPO": -0.0969,
+        "Histogram": -0.0028,
+        "Signal": -0.094
+    },
+    {
+        "PPO": -0.088,
+        "Histogram": 0.0049,
+        "Signal": -0.0928
+    },
+    {
+        "PPO": -0.0833,
+        "Histogram": 0.0076,
+        "Signal": -0.0909
+    },
+    {
+        "PPO": -0.0785,
+        "Histogram": 0.0099,
+        "Signal": -0.0884
+    },
+    {
+        "PPO": -0.0706,
+        "Histogram": 0.0143,
+        "Signal": -0.0849
+    },
+    {
+        "PPO": -0.0674,
+        "Histogram": 0.014,
+        "Signal": -0.0814
+    },
+    {
+        "PPO": -0.0665,
+        "Histogram": 0.0119,
+        "Signal": -0.0784
+    },
+    {
+        "PPO": -0.0635,
+        "Histogram": 0.0119,
+        "Signal": -0.0754
+    },
+    {
+        "PPO": -0.0521,
+        "Histogram": 0.0187,
+        "Signal": -0.0708
+    },
+    {
+        "PPO": -0.0415,
+        "Histogram": 0.0234,
+        "Signal": -0.0649
+    },
+    {
+        "PPO": -0.0298,
+        "Histogram": 0.0281,
+        "Signal": -0.0579
+    },
+    {
+        "PPO": -0.0249,
+        "Histogram": 0.0264,
+        "Signal": -0.0513
+    },
+    {
+        "PPO": -0.0181,
+        "Histogram": 0.0265,
+        "Signal": -0.0447
+    },
+    {
+        "PPO": -0.0143,
+        "Histogram": 0.0243,
+        "Signal": -0.0386
+    },
+    {
+        "PPO": -0.0092,
+        "Histogram": 0.0235,
+        "Signal": -0.0327
+    },
+    {
+        "PPO": 0.0006,
+        "Histogram": 0.0266,
+        "Signal": -0.026
+    },
+    {
+        "PPO": 0.0086,
+        "Histogram": 0.0277,
+        "Signal": -0.0191
+    },
+    {
+        "PPO": 0.0144,
+        "Histogram": 0.0268,
+        "Signal": -0.0124
+    },
+    {
+        "PPO": 0.0184,
+        "Histogram": 0.0246,
+        "Signal": -0.0062
+    },
+    {
+        "PPO": 0.0221,
+        "Histogram": 0.0227,
+        "Signal": -0.0006
+    },
+    {
+        "PPO": 0.0208,
+        "Histogram": 0.0171,
+        "Signal": 0.0037
+    },
+    {
+        "PPO": 0.0164,
+        "Histogram": 0.0102,
+        "Signal": 0.0062
+    },
+    {
+        "PPO": 0.0115,
+        "Histogram": 0.0042,
+        "Signal": 0.0073
+    },
+    {
+        "PPO": 0.0109,
+        "Histogram": 0.0029,
+        "Signal": 0.008
+    },
+    {
+        "PPO": 0.0126,
+        "Histogram": 0.0037,
+        "Signal": 0.0089
+    },
+    {
+        "PPO": 0.0072,
+        "Histogram": -0.0014,
+        "Signal": 0.0086
+    },
+    {
+        "PPO": -0.0063,
+        "Histogram": -0.0119,
+        "Signal": 0.0056
+    },
+    {
+        "PPO": -0.018,
+        "Histogram": -0.0189,
+        "Signal": 0.0009
+    },
+    {
+        "PPO": -0.0258,
+        "Histogram": -0.0213,
+        "Signal": -0.0044
+    },
+    {
+        "PPO": -0.03,
+        "Histogram": -0.0204,
+        "Signal": -0.0095
+    },
+    {
+        "PPO": -0.0387,
+        "Histogram": -0.0233,
+        "Signal": -0.0154
+    },
+    {
+        "PPO": -0.0453,
+        "Histogram": -0.0239,
+        "Signal": -0.0214
+    },
+    {
+        "PPO": -0.0478,
+        "Histogram": -0.0211,
+        "Signal": -0.0266
+    },
+    {
+        "PPO": -0.0495,
+        "Histogram": -0.0182,
+        "Signal": -0.0312
+    },
+    {
+        "PPO": -0.0521,
+        "Histogram": -0.0167,
+        "Signal": -0.0354
+    },
+    {
+        "PPO": -0.0512,
+        "Histogram": -0.0126,
+        "Signal": -0.0385
+    },
+    {
+        "PPO": -0.0568,
+        "Histogram": -0.0146,
+        "Signal": -0.0422
+    },
+    {
+        "PPO": -0.0558,
+        "Histogram": -0.0109,
+        "Signal": -0.0449
+    },
+    {
+        "PPO": -0.0505,
+        "Histogram": -0.0045,
+        "Signal": -0.046
+    },
+    {
+        "PPO": -0.0396,
+        "Histogram": 0.0052,
+        "Signal": -0.0448
+    },
+    {
+        "PPO": -0.0269,
+        "Histogram": 0.0143,
+        "Signal": -0.0412
+    },
+    {
+        "PPO": -0.015,
+        "Histogram": 0.021,
+        "Signal": -0.0359
+    },
+    {
+        "PPO": -0.0083,
+        "Histogram": 0.0221,
+        "Signal": -0.0304
+    },
+    {
+        "PPO": -0.0,
+        "Histogram": 0.0243,
+        "Signal": -0.0243
+    },
+    {
+        "PPO": 0.011,
+        "Histogram": 0.0283,
+        "Signal": -0.0173
+    },
+    {
+        "PPO": 0.0122,
+        "Histogram": 0.0236,
+        "Signal": -0.0114
+    },
+    {
+        "PPO": 0.0106,
+        "Histogram": 0.0176,
+        "Signal": -0.007
+    },
+    {
+        "PPO": 0.0048,
+        "Histogram": 0.0094,
+        "Signal": -0.0046
+    },
+    {
+        "PPO": 0.0022,
+        "Histogram": 0.0055,
+        "Signal": -0.0032
+    },
+    {
+        "PPO": -0.0027,
+        "Histogram": 0.0005,
+        "Signal": -0.0031
+    },
+    {
+        "PPO": -0.0024,
+        "Histogram": 0.0006,
+        "Signal": -0.003
+    },
+    {
+        "PPO": -0.0103,
+        "Histogram": -0.0058,
+        "Signal": -0.0044
+    },
+    {
+        "PPO": -0.0168,
+        "Histogram": -0.0099,
+        "Signal": -0.0069
+    },
+    {
+        "PPO": -0.0192,
+        "Histogram": -0.0098,
+        "Signal": -0.0094
+    },
+    {
+        "PPO": -0.0187,
+        "Histogram": -0.0075,
+        "Signal": -0.0112
+    },
+    {
+        "PPO": -0.0152,
+        "Histogram": -0.0032,
+        "Signal": -0.012
+    },
+    {
+        "PPO": -0.0144,
+        "Histogram": -0.0019,
+        "Signal": -0.0125
+    },
+    {
+        "PPO": -0.011,
+        "Histogram": 0.0012,
+        "Signal": -0.0122
+    },
+    {
+        "PPO": -0.0055,
+        "Histogram": 0.0054,
+        "Signal": -0.0108
+    },
+    {
+        "PPO": 0.0054,
+        "Histogram": 0.013,
+        "Signal": -0.0076
+    },
+    {
+        "PPO": 0.0233,
+        "Histogram": 0.0248,
+        "Signal": -0.0014
+    },
+    {
+        "PPO": 0.0391,
+        "Histogram": 0.0324,
+        "Signal": 0.0067
+    },
+    {
+        "PPO": 0.0484,
+        "Histogram": 0.0333,
+        "Signal": 0.015
+    },
+    {
+        "PPO": 0.0646,
+        "Histogram": 0.0397,
+        "Signal": 0.0249
+    },
+    {
+        "PPO": 0.0742,
+        "Histogram": 0.0394,
+        "Signal": 0.0348
+    },
+    {
+        "PPO": 0.0805,
+        "Histogram": 0.0366,
+        "Signal": 0.0439
+    },
+    {
+        "PPO": 0.0872,
+        "Histogram": 0.0346,
+        "Signal": 0.0526
+    },
+    {
+        "PPO": 0.0844,
+        "Histogram": 0.0255,
+        "Signal": 0.0589
+    },
+    {
+        "PPO": 0.0812,
+        "Histogram": 0.0178,
+        "Signal": 0.0634
+    },
+    {
+        "PPO": 0.0791,
+        "Histogram": 0.0126,
+        "Signal": 0.0666
+    },
+    {
+        "PPO": 0.0747,
+        "Histogram": 0.0065,
+        "Signal": 0.0682
+    },
+    {
+        "PPO": 0.0725,
+        "Histogram": 0.0035,
+        "Signal": 0.069
+    },
+    {
+        "PPO": 0.0653,
+        "Histogram": -0.003,
+        "Signal": 0.0683
+    },
+    {
+        "PPO": 0.0582,
+        "Histogram": -0.0081,
+        "Signal": 0.0663
+    },
+    {
+        "PPO": 0.0536,
+        "Histogram": -0.0101,
+        "Signal": 0.0637
+    },
+    {
+        "PPO": 0.0509,
+        "Histogram": -0.0103,
+        "Signal": 0.0612
+    },
+    {
+        "PPO": 0.0483,
+        "Histogram": -0.0103,
+        "Signal": 0.0586
+    },
+    {
+        "PPO": 0.0442,
+        "Histogram": -0.0115,
+        "Signal": 0.0557
+    },
+    {
+        "PPO": 0.0401,
+        "Histogram": -0.0125,
+        "Signal": 0.0526
+    },
+    {
+        "PPO": 0.0392,
+        "Histogram": -0.0107,
+        "Signal": 0.0499
+    },
+    {
+        "PPO": 0.0359,
+        "Histogram": -0.0112,
+        "Signal": 0.0471
+    },
+    {
+        "PPO": 0.0362,
+        "Histogram": -0.0088,
+        "Signal": 0.0449
+    },
+    {
+        "PPO": 0.037,
+        "Histogram": -0.0063,
+        "Signal": 0.0434
+    },
+    {
+        "PPO": 0.0326,
+        "Histogram": -0.0086,
+        "Signal": 0.0412
+    },
+    {
+        "PPO": 0.0347,
+        "Histogram": -0.0052,
+        "Signal": 0.0399
+    },
+    {
+        "PPO": 0.0334,
+        "Histogram": -0.0052,
+        "Signal": 0.0386
+    },
+    {
+        "PPO": 0.0332,
+        "Histogram": -0.0043,
+        "Signal": 0.0375
+    },
+    {
+        "PPO": 0.0351,
+        "Histogram": -0.002,
+        "Signal": 0.037
+    },
+    {
+        "PPO": 0.0379,
+        "Histogram": 0.0007,
+        "Signal": 0.0372
+    },
+    {
+        "PPO": 0.0321,
+        "Histogram": -0.0041,
+        "Signal": 0.0362
+    },
+    {
+        "PPO": 0.025,
+        "Histogram": -0.009,
+        "Signal": 0.034
+    },
+    {
+        "PPO": 0.0255,
+        "Histogram": -0.0068,
+        "Signal": 0.0323
+    },
+    {
+        "PPO": 0.0243,
+        "Histogram": -0.0064,
+        "Signal": 0.0307
+    },
+    {
+        "PPO": 0.0203,
+        "Histogram": -0.0083,
+        "Signal": 0.0286
+    },
+    {
+        "PPO": 0.0197,
+        "Histogram": -0.0072,
+        "Signal": 0.0268
+    },
+    {
+        "PPO": 0.0168,
+        "Histogram": -0.008,
+        "Signal": 0.0248
+    },
+    {
+        "PPO": 0.0115,
+        "Histogram": -0.0106,
+        "Signal": 0.0222
+    },
+    {
+        "PPO": 0.0079,
+        "Histogram": -0.0114,
+        "Signal": 0.0193
+    },
+    {
+        "PPO": 0.0016,
+        "Histogram": -0.0142,
+        "Signal": 0.0158
+    },
+    {
+        "PPO": -0.0005,
+        "Histogram": -0.013,
+        "Signal": 0.0125
+    },
+    {
+        "PPO": 0.001,
+        "Histogram": -0.0092,
+        "Signal": 0.0102
+    },
+    {
+        "PPO": 0.0057,
+        "Histogram": -0.0036,
+        "Signal": 0.0093
+    },
+    {
+        "PPO": 0.0071,
+        "Histogram": -0.0017,
+        "Signal": 0.0089
+    },
+    {
+        "PPO": 0.0069,
+        "Histogram": -0.0016,
+        "Signal": 0.0085
+    },
+    {
+        "PPO": 0.0072,
+        "Histogram": -0.001,
+        "Signal": 0.0082
+    },
+    {
+        "PPO": 0.006,
+        "Histogram": -0.0018,
+        "Signal": 0.0078
+    },
+    {
+        "PPO": -0.0016,
+        "Histogram": -0.0075,
+        "Signal": 0.0059
+    },
+    {
+        "PPO": -0.0078,
+        "Histogram": -0.011,
+        "Signal": 0.0032
+    },
+    {
+        "PPO": -0.0092,
+        "Histogram": -0.0099,
+        "Signal": 0.0007
+    },
+    {
+        "PPO": -0.0089,
+        "Histogram": -0.0077,
+        "Signal": -0.0012
+    },
+    {
+        "PPO": -0.0038,
+        "Histogram": -0.0021,
+        "Signal": -0.0017
+    },
+    {
+        "PPO": 0.0022,
+        "Histogram": 0.0031,
+        "Signal": -0.001
+    },
+    {
+        "PPO": 0.0054,
+        "Histogram": 0.0051,
+        "Signal": 0.0003
+    },
+    {
+        "PPO": 0.0067,
+        "Histogram": 0.0051,
+        "Signal": 0.0016
+    },
+    {
+        "PPO": 0.0106,
+        "Histogram": 0.0072,
+        "Signal": 0.0034
+    },
+    {
+        "PPO": 0.0113,
+        "Histogram": 0.0064,
+        "Signal": 0.005
+    },
+    {
+        "PPO": 0.0086,
+        "Histogram": 0.0029,
+        "Signal": 0.0057
+    },
+    {
+        "PPO": 0.009,
+        "Histogram": 0.0026,
+        "Signal": 0.0064
+    },
+    {
+        "PPO": 0.0156,
+        "Histogram": 0.0074,
+        "Signal": 0.0082
+    },
+    {
+        "PPO": 0.0228,
+        "Histogram": 0.0117,
+        "Signal": 0.0111
+    },
+    {
+        "PPO": 0.0318,
+        "Histogram": 0.0165,
+        "Signal": 0.0153
+    },
+    {
+        "PPO": 0.0373,
+        "Histogram": 0.0176,
+        "Signal": 0.0197
+    },
+    {
+        "PPO": 0.04,
+        "Histogram": 0.0163,
+        "Signal": 0.0237
+    },
+    {
+        "PPO": 0.0312,
+        "Histogram": 0.006,
+        "Signal": 0.0252
+    },
+    {
+        "PPO": 0.025,
+        "Histogram": -0.0002,
+        "Signal": 0.0252
+    },
+    {
+        "PPO": 0.0201,
+        "Histogram": -0.0041,
+        "Signal": 0.0242
+    },
+    {
+        "PPO": 0.0067,
+        "Histogram": -0.014,
+        "Signal": 0.0207
+    },
+    {
+        "PPO": -0.0061,
+        "Histogram": -0.0214,
+        "Signal": 0.0153
+    },
+    {
+        "PPO": -0.0168,
+        "Histogram": -0.0257,
+        "Signal": 0.0089
+    },
+    {
+        "PPO": -0.0278,
+        "Histogram": -0.0293,
+        "Signal": 0.0016
+    },
+    {
+        "PPO": -0.0378,
+        "Histogram": -0.0315,
+        "Signal": -0.0063
+    },
+    {
+        "PPO": -0.0511,
+        "Histogram": -0.0359,
+        "Signal": -0.0153
+    },
+    {
+        "PPO": -0.0654,
+        "Histogram": -0.0401,
+        "Signal": -0.0253
+    },
+    {
+        "PPO": -0.0733,
+        "Histogram": -0.0384,
+        "Signal": -0.0349
+    },
+    {
+        "PPO": -0.0847,
+        "Histogram": -0.0399,
+        "Signal": -0.0449
+    },
+    {
+        "PPO": -0.0935,
+        "Histogram": -0.0389,
+        "Signal": -0.0546
+    }
+]
