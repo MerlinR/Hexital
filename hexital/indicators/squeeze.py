@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
-from ..exceptions import InvalidIndicator
 from ..core.indicator import Indicator
+from ..exceptions import InvalidIndicator
 from .bbands import BBANDS
 from .ema import EMA
 from .kc import KC
@@ -109,15 +109,11 @@ class Squeeze(Indicator[dict[str, float | int | None]]):
         kc_lower = kc["lower"]
         kc_upper = kc["upper"]
 
-        if (
-            bb_lower is None
-            or bb_upper is None
-            or kc_lower is None
-            or kc_upper is None
-        ):
+        if bb_lower is None or bb_upper is None or kc_lower is None or kc_upper is None:
             return {"SQZ": smoothed_momentum, "ON": 0, "OFF": 0}
 
-        squeeze_on = int(bb_lower > kc_lower and bb_upper < kc_upper)
-        squeeze_off = int(bb_lower < kc_lower and bb_upper > kc_upper)
-
-        return {"SQZ": smoothed_momentum, "ON": squeeze_on, "OFF": squeeze_off}
+        return {
+            "SQZ": smoothed_momentum,
+            "ON": int(bb_lower > kc_lower and bb_upper < kc_upper),
+            "OFF": int(bb_lower < kc_lower and bb_upper > kc_upper),
+        }

@@ -198,6 +198,12 @@ def fixture_expected_squeeze():
     return json.load(csv_files)
 
 
+@pytest.fixture(name="expected_squeeze_pro")
+def fixture_expected_squeeze_pro():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/SQUEEZE_PRO.json")
+    return json.load(csv_files)
+
+
 @pytest.fixture(name="expected_stdev")
 def fixture_expected_stdev():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/STDEV.json")

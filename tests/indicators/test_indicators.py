@@ -237,7 +237,14 @@ class TestIndicators(IndicatorTestBase):
         test = indicators.Squeeze(candles=candles)
         test.calculate()
 
-        assert self.verify(test.readings(), expected_squeeze, verbose=True)
+        assert self.verify(test.readings(), expected_squeeze)
+
+    @pytest.mark.usefixtures("candles", "expected_squeeze_pro")
+    def test_squeeze_pro(self, candles, expected_squeeze_pro):
+        test = indicators.SqueezePro(candles=candles)
+        test.calculate()
+
+        assert self.verify(test.readings(), expected_squeeze_pro)
 
     @pytest.mark.usefixtures("candles", "expected_stdev")
     def test_stdev(self, candles, expected_stdev):

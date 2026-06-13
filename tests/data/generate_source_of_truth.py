@@ -248,6 +248,26 @@ def generate_indicators():
         )
     save_json_result(squeeze_data, "SQUEEZE")
 
+    squeeze_pro_data = []
+    for squeeze_row in zip(
+        [round_values(value) for value in df["SQZPRO_20_2.0_20_2_1.5_1"].tolist()],
+        [round_values(value) for value in df["SQZPRO_ON_WIDE"].tolist()],
+        [round_values(value) for value in df["SQZPRO_ON_NORMAL"].tolist()],
+        [round_values(value) for value in df["SQZPRO_ON_NARROW"].tolist()],
+        [round_values(value) for value in df["SQZPRO_OFF"].tolist()],
+    ):
+        squeeze_pro_data.append(
+            {
+                "SQZ": squeeze_row[0],
+                "WIDE": squeeze_row[1],
+                "NORMAL": squeeze_row[2],
+                "NARROW": squeeze_row[3],
+                "OFF": squeeze_row[4],
+            }
+        )
+
+    save_json_result(squeeze_pro_data, "SQUEEZE_PRO")
+
 
 def generate_indicators_timeframe(frame: str):
     print(f"Generating Indicators with timeframe: {frame}")

@@ -24,6 +24,7 @@ from .rsi import RSI
 from .rvi import RVI
 from .sma import SMA
 from .squeeze import Squeeze
+from .squeeze_pro import SqueezePro
 from .stdev import STDEV
 from .stdevthres import STDEVT
 from .stoch import STOCH
@@ -61,6 +62,7 @@ __all__ = [
     "RVI",
     "SMA",
     "Squeeze",
+    "SqueezePro",
     "STDEV",
     "STDEVT",
     "STOCH",
