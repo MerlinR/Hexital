@@ -15,7 +15,7 @@ class SqueezePro(Indicator[dict[str, float | int | None]]):
     Squeeze Pro extends the classic squeeze by comparing Bollinger Bands against
     three Keltner Channel widths while keeping the same momentum oscillator.
 
-    Output type: `Dict["SQZ": float, "WIDE": int, "NORMAL": int, "NARROW": int, "OFF": int]`
+    Output type: `Dict["SQZ": float, "Wide": int, "Normal": int, "Narrow": int, "OFF": int]`
     """
 
     _name: str = field(init=False, default="SQPRO")
@@ -120,7 +120,7 @@ class SqueezePro(Indicator[dict[str, float | int | None]]):
         kc_narrow = self.sub_kc_narrow.reading()
 
         if bbands is None or kc_wide is None or kc_normal is None or kc_narrow is None:
-            return {"SQZ": momentum, "WIDE": 0, "NORMAL": 0, "NARROW": 0, "OFF": 0}
+            return {"SQZ": momentum, "Wide": 0, "Normal": 0, "Narrow": 0, "OFF": 0}
 
         bb_lower = bbands["BBL"]
         bb_upper = bbands["BBU"]
@@ -141,12 +141,12 @@ class SqueezePro(Indicator[dict[str, float | int | None]]):
             or narrow_lower is None
             or narrow_upper is None
         ):
-            return {"SQZ": momentum, "WIDE": 0, "NORMAL": 0, "NARROW": 0, "OFF": 0}
+            return {"SQZ": momentum, "Wide": 0, "Normal": 0, "Narrow": 0, "OFF": 0}
 
         return {
             "SQZ": momentum,
-            "WIDE": int(bb_lower > wide_lower and bb_upper < wide_upper),
-            "NORMAL": int(bb_lower > normal_lower and bb_upper < normal_upper),
-            "NARROW": int(bb_lower > narrow_lower and bb_upper < narrow_upper),
+            "Wide": int(bb_lower > wide_lower and bb_upper < wide_upper),
+            "Normal": int(bb_lower > normal_lower and bb_upper < normal_upper),
+            "Narrow": int(bb_lower > narrow_lower and bb_upper < narrow_upper),
             "OFF": int(bb_lower < wide_lower and bb_upper > wide_upper),
         }
