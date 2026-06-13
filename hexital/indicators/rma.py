@@ -36,8 +36,7 @@ class RMA(Indicator[float | None]):
     def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists():
             return float(
-                (self._alpha * self.src())
-                + ((1.0 - self._alpha) * self.prev_reading())
+                (self._alpha * self.src()) + ((1.0 - self._alpha) * self.prev_reading())
             )
 
         if self.reading_period(self.period, self.source):

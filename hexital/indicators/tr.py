@@ -28,8 +28,6 @@ class TR(Indicator[float | None]):
     def _calculate_reading(self, index: int) -> float | None:
         if index > 0:
             candle = self.candles[index]
-            return true_range(
-                candle.high, candle.low, self.candles[index - 1].close
-            )
+            return true_range(candle.high, candle.low, self.candles[index - 1].close)
 
         return None

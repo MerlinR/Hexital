@@ -31,9 +31,7 @@ class HMA(Indicator[float | None]):
         return f"{self._name}_{self.period}"
 
     def _initialise(self):
-        self.sub_wma = self.add_child(
-            WMA(source=self.source, period=self.period)
-        )
+        self.sub_wma = self.add_child(WMA(source=self.source, period=self.period))
         self.sub_wmah = self.add_child(
             WMA(source=self.source, period=int(self.period / 2))
         )

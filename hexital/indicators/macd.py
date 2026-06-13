@@ -41,12 +41,8 @@ class MACD(Indicator[dict[str, float | None]]):
     def _initialise(self):
         self._macd = self.add_state(name=f"{self.name}_macd")
 
-        self.sub_emaf = self.add_child(
-            EMA(source=self.source, period=self.fast_period)
-        )
-        self.sub_emas = self.add_child(
-            EMA(source=self.source, period=self.slow_period)
-        )
+        self.sub_emaf = self.add_child(EMA(source=self.source, period=self.fast_period))
+        self.sub_emas = self.add_child(EMA(source=self.source, period=self.slow_period))
         self.sub_signal = self.add_child_managed(
             EMA(source=self._macd.managed, period=self.signal_period),
         )

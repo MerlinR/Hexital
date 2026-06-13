@@ -167,11 +167,7 @@ class CandleManager:
             if not self._accepts_candle(candle):
                 continue
 
-            if (
-                last_timestamp
-                and candle.timestamp
-                and candle.timestamp < last_timestamp
-            ):
+            if last_timestamp and candle.timestamp and candle.timestamp < last_timestamp:
                 to_sort = True
 
             self._candles.append(self._store_candle(candle, admitted))
@@ -271,9 +267,7 @@ class CandleManager:
             if mode == CalcMode.APPEND and appended_count >= 1:
                 if appended_count == 1 and self._try_resample_append_inplace():
                     return
-                if appended_count > 1 and self._try_resample_multi_append(
-                    appended_count
-                ):
+                if appended_count > 1 and self._try_resample_multi_append(appended_count):
                     return
 
         if mode == CalcMode.INSERT:
@@ -413,9 +407,7 @@ class CandleManager:
             )
 
         if self.timeframe_fill:
-            candles_ = self._fill_timeframe_candles(
-                candles_, tf, start_index, end_index
-            )
+            candles_ = self._fill_timeframe_candles(candles_, tf, start_index, end_index)
 
         self._candles.extend(candles_)
 

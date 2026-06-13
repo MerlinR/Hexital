@@ -130,7 +130,9 @@ class Indicator(Generic[V], ABC):
 
         self.candles = self._candle_mngr.candles
         self.timeframe = (
-            timedelta_to_str(self._candle_mngr.timeframe) if self._candle_mngr.timeframe else None
+            timedelta_to_str(self._candle_mngr.timeframe)
+            if self._candle_mngr.timeframe
+            else None
         )
         self._timeframe = self._candle_mngr.timeframe
         self.timeframe_fill = self._candle_mngr.timeframe_fill
@@ -159,9 +161,7 @@ class Indicator(Generic[V], ABC):
     def volume(self) -> int:
         return self.candles[self._active_index].volume
 
-    def prev(
-        self, source: Source | None = None, default: T | None = None
-    ) -> V | T:
+    def prev(self, source: Source | None = None, default: T | None = None) -> V | T:
         """Previous reading — shorthand for `prev_reading`."""
         return self.prev_reading(source, default)
 
@@ -182,14 +182,11 @@ class Indicator(Generic[V], ABC):
         """Previous reading for this indicator's configured ``source``."""
         return self.prev_reading(getattr(self, "source", "close"), default=default)
 
-    def at_src(
-        self, index: int, default: T | None = None
-    ) -> V | T:
+    def at_src(self, index: int, default: T | None = None) -> V | T:
         """Reading at ``index`` for this indicator's configured ``source``."""
         return self.reading(
             getattr(self, "source", "close"), index=index, default=default
         )
-
 
     @property
     def settings(self) -> dict:
@@ -427,9 +424,7 @@ class Indicator(Generic[V], ABC):
         managed = Managed(name=name) if name else Managed()
         return State(self, self.add_child_managed(managed))
 
-    def _find_reading(
-        self, source: Source | None = None, index: int | None = None
-    ) -> V:
+    def _find_reading(self, source: Source | None = None, index: int | None = None) -> V:
         if not self.candles:
             return None
 

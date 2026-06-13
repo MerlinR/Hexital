@@ -38,9 +38,7 @@ class STDEV(Indicator[float | None]):
             return None
 
         popped_reading = 0.0
-        if self.prev_exists() or self.reading_period(
-            self.period + 1, self.source, index
-        ):
+        if self.prev_exists() or self.reading_period(self.period + 1, self.source, index):
             popped = self.at_src(index - self.period)
             if popped is not None:
                 popped_reading = popped

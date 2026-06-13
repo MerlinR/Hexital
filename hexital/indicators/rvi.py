@@ -34,9 +34,7 @@ class RVI(Indicator[float | None]):
     def _initialise(self):
         self._state = self.add_state()
 
-        self.sub_stdev = self.add_child(
-            STDEV(source=self.source, period=self.period)
-        )
+        self.sub_stdev = self.add_child(STDEV(source=self.source, period=self.period))
         self.sub_pos = self.add_child_managed(
             EMA(
                 period=self.period,

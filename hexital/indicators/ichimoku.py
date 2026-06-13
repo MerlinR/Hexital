@@ -85,5 +85,7 @@ class Ichimoku(Indicator[dict[str, float | None]]):
             "Lead_B": self.reading(self._shifted.source("lead_b")),
             "Conversion": conversion,
             "Base": base,
-            "Span": self.reading(self._shifted.source("span")) if self.include_chikou else None,
+            "Span": self.reading(self._shifted.source("span"))
+            if self.include_chikou
+            else None,
         }

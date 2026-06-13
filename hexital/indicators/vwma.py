@@ -41,7 +41,9 @@ class VWMA(Indicator[float | None]):
             if price_volume_sum is None or volume_sum is None:
                 return None
 
-            price_volume_sum = price_volume_sum - (old_candle.close * old_candle.volume) + price_volume
+            price_volume_sum = (
+                price_volume_sum - (old_candle.close * old_candle.volume) + price_volume
+            )
             volume_sum = volume_sum - old_candle.volume + self.volume
 
             self._state.set(

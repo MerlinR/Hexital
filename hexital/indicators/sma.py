@@ -29,7 +29,7 @@ class SMA(Indicator[float | None]):
 
     def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists():
-            prev = self.prev_reading()
+            prev = self.prev()
             old = self.at_src(index - self.period)
             new = self.src()
             if prev is not None and old is not None and new is not None:
