@@ -10,5 +10,5 @@ class TestIndicators(IndicatorTestBase):
         )
         strategy.calculate()
         assert self.verify(
-            strategy.indicators["EMA_10"].readings(), expected_heikinashi_ema
+            strategy.indicators["EMA_10"].series(), expected_heikinashi_ema
         )

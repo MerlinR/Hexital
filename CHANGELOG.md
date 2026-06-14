@@ -13,6 +13,10 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Support python 3.14
 - Non-backward compatible changes:
     - Removed `Managed` and `NestedSource` from public `hexital` exports (use `add_state()`; import from `hexital.core.indicator` if needed)
+    - Renamed series retrieval methods
+        - `Indicator.readings()` -> `Indicator.series()` for one indicator's values across candles
+        - `Hexital.reading_as_list()` -> `Hexital.series()` for one named indicator series
+        - `Hexital.readings()` -> `Hexital.all_series()` for all indicator series in the strategy
     - Separated candle timeframe metadata from resampling
         - `candle.timeframe` is metadata only — it does not configure managers or indicator naming
         - Resampling runs only when `indicator.timeframe=` or `hexital.timeframe=` is set
@@ -37,6 +41,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Shorthand methods: `prev()`, `at()`, `src()`, `prev_src()`, `at_src()`
 - Major Typing update, some method clean up and optimisation
 - Performance optimisations for appending
+- Made `Candle.__eq__()` symmetric while preserving lenient comparison
 - Updated Test verification
 - Added `Timeframe` argument to helper generating Candle methods for easier setting from existing data
 

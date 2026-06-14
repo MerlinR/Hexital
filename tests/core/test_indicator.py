@@ -202,7 +202,7 @@ def test_candle_timerange(minimal_candles):
 
 def test_reading_as_list_exp(minimal_candles: list[Candle]):
     test_indicator = FakeIndicator(candles=minimal_candles)
-    assert test_indicator.readings("ATR") == [
+    assert test_indicator.series("ATR") == [
         100,
         200,
         300,
@@ -228,7 +228,7 @@ def test_reading_as_list_exp(minimal_candles: list[Candle]):
 
 def test_reading_as_list_partial(minimal_candles: list[Candle]):
     test_indicator = FakeIndicator(candles=minimal_candles)
-    assert test_indicator.readings("MinTR") == [
+    assert test_indicator.series("MinTR") == [
         None,
         None,
         None,
@@ -254,7 +254,7 @@ def test_reading_as_list_partial(minimal_candles: list[Candle]):
 
 def test_reading_as_list_no_indicator(minimal_candles: list[Candle]):
     test_indicator = FakeIndicator(candles=minimal_candles)
-    assert test_indicator.readings("FUCK") == [None] * 20
+    assert test_indicator.series("FUCK") == [None] * 20
 
 
 class TestCandlestickType:

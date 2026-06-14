@@ -192,13 +192,13 @@ class Hexital:
 
         return None
 
-    def _find_readings(self, source: Source) -> list[Reading]:
+    def _find_series(self, source: Source) -> list[Reading]:
         if isinstance(source, (Indicator, NestedSource)):
-            return source.readings()
+            return source.series()
 
         primary_name = source.split(".")[0]
         if self._indicators.get(primary_name):
-            return self._indicators[primary_name].readings(source)
+            return self._indicators[primary_name].series(source)
 
         return []
 
@@ -211,16 +211,14 @@ class Hexital:
     def prev_reading(self, source: Source) -> Reading:
         return self._find_reading(source, -2)
 
-    def readings(self) -> dict[str, list[Reading]]:
+    def all_series(self) -> dict[str, list[Reading]]:
         """Returns a Dictionary of all the Indicators and there results in a list format."""
-        return {
-            name: indicator.readings() for name, indicator in self._indicators.items()
-        }
+        return {name: indicator.series() for name, indicator in self._indicators.items()}
 
-    def reading_as_list(self, source: Source) -> list[Reading]:
+    def series(self, source: Source) -> list[Reading]:
         """Find given indicator and returns the readings as a list
         Full Name of the indicator E.G `EMA_12` OR `MACD_12_26_9.MACD`"""
-        return self._find_readings(source)
+        return self._find_series(source)
 
     def add_indicator(
         self, indicator: Indicator | list[Indicator | dict[str, Any]] | dict[str, Any]

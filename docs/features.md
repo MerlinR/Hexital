@@ -266,7 +266,7 @@ strategy.prev_reading("EMA_mid")
 **All Readings:**
 
 ```python linenums="10"
-strategy.readings("Supertrend_7")
+strategy.series("Supertrend_7")
 ```
 
 ### Movement functions

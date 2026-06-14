@@ -223,7 +223,7 @@ class Indicator(Generic[V], ABC):
 
         return output
 
-    def readings(self, name: Source | None = None) -> list[Reading | V]:
+    def series(self, name: Source | None = None) -> list[Reading | V]:
         """
         Retrieve the indicator readings for within the candles as a list.
 
@@ -241,7 +241,7 @@ class Indicator(Generic[V], ABC):
                                        dictionaries (for complex indicators),
                                        or `None` if no reading is available.
         """
-        return self._find_readings(name)  # type: ignore
+        return self._find_series(name)  # type: ignore
 
     def prepend(self, candles: Candles):
         """Prepends a Candle or a chronological ordered list of Candle's to the front of the Indicator Candle's. This will only re-sample and re-calculate the new Candles, with minor overlap.
@@ -441,7 +441,7 @@ class Indicator(Generic[V], ABC):
             return reading_by_candle(self.candles[index], source)  # type: ignore
         return reading_by_candle(self.candles[index], source.name)  # type: ignore
 
-    def _find_readings(self, source: Source | None = None) -> list[Reading | V]:
+    def _find_series(self, source: Source | None = None) -> list[Reading | V]:
         if not self.candles:
             return []
 
@@ -452,7 +452,7 @@ class Indicator(Generic[V], ABC):
             name = source.name
             return [reading_by_candle(candle, name) for candle in self.candles]
         if isinstance(source, NestedSource):
-            return source.readings()  # type: ignore
+            return source.series()  # type: ignore
 
         return [reading_by_candle(candle, source) for candle in self.candles]
 
@@ -684,10 +684,10 @@ class NestedSource:
             return value.get(self.nested_name)  # type: ignore
         return value
 
-    def readings(self) -> list[Reading]:
+    def series(self) -> list[Reading]:
         return [
             v.get(self.nested_name) if isinstance(v, dict) else v
-            for v in self.indicator.readings()
+            for v in self.indicator.series()
         ]
 
     def __str__(self):

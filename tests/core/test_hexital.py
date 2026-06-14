@@ -26,27 +26,27 @@ class TestIndicatorPattern:
     def test_hextial_single(self, candles, expected_ema):
         strategy = Hexital("Test Stratergy", candles, [EMA()])
         strategy.calculate()
-        assert pytest.approx(strategy.reading_as_list("EMA_10")) == expected_ema
+        assert pytest.approx(strategy.series("EMA_10")) == expected_ema
 
     def test_hextial_multi(self, candles, expected_ema, expected_sma):
         strategy = Hexital("Test Stratergy", candles, [EMA(), SMA()])
         strategy.calculate()
         assert (
-            pytest.approx(strategy.reading_as_list("EMA_10")) == expected_ema
-            and pytest.approx(strategy.reading_as_list("SMA_10")) == expected_sma
+            pytest.approx(strategy.series("EMA_10")) == expected_ema
+            and pytest.approx(strategy.series("SMA_10")) == expected_sma
         )
 
     def test_hextial_dict(self, candles, expected_sma):
         strategy = Hexital("Test Stratergy", candles, [{"indicator": "SMA"}])
         strategy.calculate()
-        assert pytest.approx(strategy.reading_as_list("SMA_10")) == expected_sma
+        assert pytest.approx(strategy.series("SMA_10")) == expected_sma
 
     def test_hextial_mixed(self, candles, expected_ema, expected_sma):
         strategy = Hexital("Test Stratergy", candles, [EMA(), {"indicator": "SMA"}])
         strategy.calculate()
         assert (
-            pytest.approx(strategy.reading_as_list("EMA_10")) == expected_ema
-            and pytest.approx(strategy.reading_as_list("SMA_10")) == expected_sma
+            pytest.approx(strategy.series("EMA_10")) == expected_ema
+            and pytest.approx(strategy.series("SMA_10")) == expected_sma
         )
 
     def test_hextial_dict_diff_name(self, candles):
@@ -72,8 +72,8 @@ class TestIndicatorPattern:
         strategy.add_indicator({"indicator": "SMA"})
         strategy.calculate()
         assert (
-            pytest.approx(strategy.reading_as_list("EMA_10")) == expected_ema
-            and pytest.approx(strategy.reading_as_list("SMA_10")) == expected_sma
+            pytest.approx(strategy.series("EMA_10")) == expected_ema
+            and pytest.approx(strategy.series("SMA_10")) == expected_sma
         )
 
     def test_hextial_dict_analysis_pattern(self, candles):
@@ -138,21 +138,21 @@ def test_hextial_single(candles, expected_ema):
     strategy = Hexital("Test Stratergy", candles)
     strategy.add_indicator(EMA())
     strategy.calculate()
-    assert pytest.approx(strategy.reading_as_list("EMA_10")) == expected_ema
+    assert pytest.approx(strategy.series("EMA_10")) == expected_ema
 
 
 def test_hextial_accepts_sequence_candles(candles, expected_ema):
     strategy = Hexital("Test Stratergy", tuple(candles), [EMA()])
     strategy.calculate()
-    assert pytest.approx(strategy.reading_as_list("EMA_10")) == expected_ema
+    assert pytest.approx(strategy.series("EMA_10")) == expected_ema
 
 
 def test_hextial_multi(candles, expected_ema, expected_sma):
     strategy = Hexital("Test Stratergy", candles, [EMA(), SMA()])
     strategy.calculate()
     assert (
-        pytest.approx(strategy.reading_as_list("EMA_10")) == expected_ema
-        and pytest.approx(strategy.reading_as_list("SMA_10")) == expected_sma
+        pytest.approx(strategy.series("EMA_10")) == expected_ema
+        and pytest.approx(strategy.series("SMA_10")) == expected_sma
     )
 
 
@@ -196,7 +196,7 @@ def test_hextial_indicator_selection(candles):
 def test_hextial_readings(candles, expected_ema, expected_sma):
     strategy = Hexital("Test Stratergy", candles, [EMA(), SMA()])
     strategy.calculate()
-    results = strategy.readings()
+    results = strategy.all_series()
     assert pytest.approx(results["SMA_10"]) == expected_sma
     assert pytest.approx(results["EMA_10"]) == expected_ema
 
@@ -260,7 +260,7 @@ def test_append_hexital_calc(candles, expected_ema):
         strategy.append(candle)
         strategy.calculate()
 
-    assert pytest.approx(strategy.indicator("EMA_10").readings()) == expected_ema
+    assert pytest.approx(strategy.indicator("EMA_10").series()) == expected_ema
 
 
 def test_append_hexital_calc_sub_indicators(candles, expected_rsi):
@@ -269,7 +269,7 @@ def test_append_hexital_calc_sub_indicators(candles, expected_rsi):
     for candle in candles:
         strategy.append(candle)
         strategy.calculate()
-    assert pytest.approx(strategy.indicator("RSI_14").readings()) == expected_rsi
+    assert pytest.approx(strategy.indicator("RSI_14").series()) == expected_rsi
 
 
 class TestHexitalCandleManagerInheritance:

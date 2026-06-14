@@ -15,7 +15,7 @@ class TestHexPatterns(IndicatorTestBase):
         )
         strategy.calculate()
         assert self.verify(
-            strategy.indicator("COUNT_Supertrend_7-direction").readings(),
+            strategy.indicator("COUNT_Supertrend_7-direction").series(),
             expected_counter_bull,
         )
 
@@ -31,21 +31,21 @@ class TestHexPatterns(IndicatorTestBase):
         strategy.calculate()
 
         assert self.verify(
-            strategy.indicator("COUNT_Supertrend_7-direction").readings(),
+            strategy.indicator("COUNT_Supertrend_7-direction").series(),
             expected_counter_bear,
         )
 
     def test_highest_lowest(self, candles, expected_highestlowest):
         test = indicators.HL(candles=candles)
         test.calculate()
-        assert self.verify(test.readings(), expected_highestlowest)
+        assert self.verify(test.series(), expected_highestlowest)
 
     def test_stdevthres(self, candles, expected_stdevt):
         test = indicators.STDEVT(candles=candles)
         test.calculate()
-        assert self.verify(test.readings(), expected_stdevt)
+        assert self.verify(test.series(), expected_stdevt)
 
     def test_pivot_points(self, candles, expected_pivotpoints):
         test = indicators.PivotPoints(candles=candles)
         test.calculate()
-        assert self.verify(test.readings(), expected_pivotpoints)
+        assert self.verify(test.series(), expected_pivotpoints)
