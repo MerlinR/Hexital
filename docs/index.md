@@ -113,27 +113,27 @@ Named indicators keep stable keys (`WMA`). Unnamed indicators get generated name
 
 ### Indicators
 
-30+ incremental indicators for common strategies. Full reference: [indicator catalogue](indicator-catalogue.md).
+40+ incremental indicators for common strategies. Full reference: [indicator catalogue](indicator-catalogue.md).
 
-ADX · Aroon · ATR · Bollinger Bands · CMO · Counter · Donchian · EMA · HL / HLA / HLC / HLCA · HMA · JMA · Keltner Channel · MACD · MFI · Midpoint · OBV · Pivot Points · RMA · ROC · RSI · RVI · SMA · STDEV · STDEVT · Stochastic · SuperTrend · True Range · TSI · VWAP · VWMA · WMA
+`ADX` · `Amorph` · `AROON` · `ATR` · `BBANDS` · `CCI` · `CMO` · `Counter` · `Donchian` · `EMA` · `HL` / `HLA` / `HLCA` · `HMA` · `Ichimoku` · `JMA` · `KC` · `MACD` · `MFI` · `MOP` · `OBV` · `PPO` · `PSAR` · `PivotPoints` · `RMA` · `ROC` · `RSI` · `RVI` · `SMA` · `Squeeze` / `SqueezePro` · `STDEV` / `STDEVT` · `STOCH` · `Supertrend` · `TR` · `TSI` · `VWAP` · `VWMA` · `WillR` · `WMA` · `ZScore`
 
 ### Candlestick patterns
 
 Pattern detection on candle sequences — [full catalogue](candle-pattern-catalogue.md).
 
-Doji · Dojistar · Hammer · Inverted Hammer
+`doji` · `dojistar` · `hammer` · `inverted_hammer`
 
 ### Candlestick types
 
 Transform incoming candles before indicators run (e.g. Heikin-Ashi) — [catalogue](candlesticks-catalogue.md).
 
-Heikin-Ashi
+`HeikinAshi`
 
 ### Movements
 
 Pine Script–style helpers for indicator behaviour over time — [full catalogue](analysis-catalogue.md).
 
-`positive` / `negative` · `rising` / `falling` · `mean_rising` / `mean_falling` · `above` / `below` · `highest` / `lowest` · `highestbar` / `lowestbar` · `cross` / `crossover` / `crossunder` · `flipped`
+`positive` / `negative` · `rising` / `falling` · `mean_rising` / `mean_falling` · `highest` / `lowest` · `highestbar` / `lowestbar` · `cross` / `crossover` / `crossunder` · `value_range`
 
 ```python
 from hexital.analysis import cross, rising
@@ -160,6 +160,9 @@ Every built-in indicator is unit tested against [Pandas-TA](https://github.com/t
 Hexital only calculates missing readings on append (O(1) per update). Libraries built on pandas typically recompute or reshape the full frame on each append, which gets slower as history grows.
 
 In internal benchmarks, Hexital stays roughly flat as candle count increases during incremental updates, while Pandas-TA time grows with series length. For bulk calculation on large static datasets, Pandas-TA is often faster.
+
+![Chart of bulk calculations.](imgs/MACD_26_12_Bulk.png)
+![Chart of all calculations.](imgs/EMA_10.png)
 
 More detail and charts: [Features](features.md).
 

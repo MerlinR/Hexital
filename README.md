@@ -160,6 +160,8 @@ Every built-in indicator is unit tested against [Pandas-TA](https://github.com/t
 Hexital only calculates missing readings on append (O(1) per update). Libraries built on pandas typically recompute or reshape the full frame on each append, which gets slower as history grows.
 
 In internal benchmarks, Hexital stays roughly flat as candle count increases during incremental updates, while Pandas-TA time grows with series length. For bulk calculation on large static datasets, Pandas-TA is often faster.
+![Chart of bulk calculations.](benchmarks/speed_tests/MACD_26_12_Bulk.png)
+![Chart of all calculations.](benchmarks/speed_tests/EMA_10.png)
 
 More detail and charts: [Features](features.md).
 
