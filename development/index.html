@@ -3842,17 +3842,17 @@
 <hr />
 <h2 id="whats-included">What's included</h2>
 <h3 id="indicators">Indicators</h3>
-<p>30+ incremental indicators for common strategies. Full reference: <a href="indicator-catalogue/">indicator catalogue</a>.</p>
-<p>ADX · Aroon · ATR · Bollinger Bands · CMO · Counter · Donchian · EMA · HL / HLA / HLC / HLCA · HMA · JMA · Keltner Channel · MACD · MFI · Midpoint · OBV · Pivot Points · RMA · ROC · RSI · RVI · SMA · STDEV · STDEVT · Stochastic · SuperTrend · True Range · TSI · VWAP · VWMA · WMA</p>
+<p>40+ incremental indicators for common strategies. Full reference: <a href="indicator-catalogue/">indicator catalogue</a>.</p>
+<p><code>ADX</code> · <code>Amorph</code> · <code>AROON</code> · <code>ATR</code> · <code>BBANDS</code> · <code>CCI</code> · <code>CMO</code> · <code>Counter</code> · <code>Donchian</code> · <code>EMA</code> · <code>HL</code> / <code>HLA</code> / <code>HLCA</code> · <code>HMA</code> · <code>Ichimoku</code> · <code>JMA</code> · <code>KC</code> · <code>MACD</code> · <code>MFI</code> · <code>MOP</code> · <code>OBV</code> · <code>PPO</code> · <code>PSAR</code> · <code>PivotPoints</code> · <code>RMA</code> · <code>ROC</code> · <code>RSI</code> · <code>RVI</code> · <code>SMA</code> · <code>Squeeze</code> / <code>SqueezePro</code> · <code>STDEV</code> / <code>STDEVT</code> · <code>STOCH</code> · <code>Supertrend</code> · <code>TR</code> · <code>TSI</code> · <code>VWAP</code> · <code>VWMA</code> · <code>WillR</code> · <code>WMA</code> · <code>ZScore</code></p>
 <h3 id="candlestick-patterns">Candlestick patterns</h3>
 <p>Pattern detection on candle sequences — <a href="candle-pattern-catalogue/">full catalogue</a>.</p>
-<p>Doji · Dojistar · Hammer · Inverted Hammer</p>
+<p><code>doji</code> · <code>dojistar</code> · <code>hammer</code> · <code>inverted_hammer</code></p>
 <h3 id="candlestick-types">Candlestick types</h3>
 <p>Transform incoming candles before indicators run (e.g. Heikin-Ashi) — <a href="candlesticks-catalogue/">catalogue</a>.</p>
-<p>Heikin-Ashi</p>
+<p><code>HeikinAshi</code></p>
 <h3 id="movements">Movements</h3>
 <p>Pine Script–style helpers for indicator behaviour over time — <a href="analysis-catalogue/">full catalogue</a>.</p>
-<p><code>positive</code> / <code>negative</code> · <code>rising</code> / <code>falling</code> · <code>mean_rising</code> / <code>mean_falling</code> · <code>above</code> / <code>below</code> · <code>highest</code> / <code>lowest</code> · <code>highestbar</code> / <code>lowestbar</code> · <code>cross</code> / <code>crossover</code> / <code>crossunder</code> · <code>flipped</code></p>
+<p><code>positive</code> / <code>negative</code> · <code>rising</code> / <code>falling</code> · <code>mean_rising</code> / <code>mean_falling</code> · <code>highest</code> / <code>lowest</code> · <code>highestbar</code> / <code>lowestbar</code> · <code>cross</code> / <code>crossover</code> / <code>crossunder</code> · <code>value_range</code></p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross</span><span class="p">,</span> <span class="n">rising</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">rising</span><span class="p">(</span><span class="n">ema</span><span class="p">,</span> <span class="s2">&quot;EMA_3&quot;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
@@ -3883,6 +3883,8 @@
 </table>
 <p>Hexital only calculates missing readings on append (O(1) per update). Libraries built on pandas typically recompute or reshape the full frame on each append, which gets slower as history grows.</p>
 <p>In internal benchmarks, Hexital stays roughly flat as candle count increases during incremental updates, while Pandas-TA time grows with series length. For bulk calculation on large static datasets, Pandas-TA is often faster.</p>
+<p><img alt="Chart of bulk calculations." src="imgs/MACD_26_12_Bulk.png" />
+<img alt="Chart of all calculations." src="imgs/EMA_10.png" /></p>
 <p>More detail and charts: <a href="features/">Features</a>.</p>
 <hr />
 <h2 id="learn-more">Learn more</h2>
@@ -3914,7 +3916,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 9, 2026 14:10:26 UTC">June 9, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 14, 2026 09:49:13 UTC">June 14, 2026</span>
   </span>
 
     
