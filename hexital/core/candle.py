@@ -63,23 +63,28 @@ class Candle:
         self.indicators = indicators if indicators else {}
         self.sub_indicators = sub_indicators if sub_indicators else {}
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: object) -> bool:
         if not isinstance(other, Candle):
             return False
 
-        for key, value in self.__dict__.items():
-            if key.startswith("_") and key not in ["_start_timestamp", "_end_timestamp"]:
+        lenient_keys = {"_start_timestamp", "_end_timestamp", "timeframe"}
+        keys = set(self.__dict__) | set(other.__dict__)
+
+        for key in keys:
+            if key.startswith("_") and key not in lenient_keys:
                 continue
-            if key in ["_start_timestamp", "_end_timestamp", "timeframe"]:
-                other_value = getattr(other, key, None)
-                if other_value is not None and value is not None and other_value != value:
+
+            value = getattr(self, key, None)
+            other_value = getattr(other, key, None)
+
+            if key in lenient_keys:
+                if value is not None and other_value is not None and value != other_value:
                     return False
-            elif getattr(other, key, None) != value:
+                continue
+
+            if value != other_value:
                 return False
 
-        for key in other.__dict__:
-            if key not in self.__dict__ and not key.startswith("_"):
-                return False
         return True
 
     def __repr__(self) -> str:

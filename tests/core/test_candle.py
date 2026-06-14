@@ -61,6 +61,20 @@ class TestCoreCandle:
     def test_high_low(self, simple_candle):
         assert simple_candle.high_low == 50
 
+    def test_eq_is_symmetric_for_private_timestamps(self):
+        candle_a = Candle(100, 120, 70, 90, 1)
+        candle_b = Candle(100, 120, 70, 90, 1)
+
+        candle_a._start_timestamp = datetime(2023, 1, 1, 0, 0, 0)
+
+        assert (candle_a == candle_b) is (candle_b == candle_a)
+
+    def test_eq_is_symmetric_for_timeframe(self):
+        candle_a = Candle(100, 120, 70, 90, 1, timeframe="T5")
+        candle_b = Candle(100, 120, 70, 90, 1)
+
+        assert (candle_a == candle_b) is (candle_b == candle_a)
+
 
 @pytest.fixture(name="candle_dict")
 def fixture_candle_dict():
