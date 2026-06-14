@@ -141,6 +141,12 @@ def test_hextial_single(candles, expected_ema):
     assert pytest.approx(strategy.reading_as_list("EMA_10")) == expected_ema
 
 
+def test_hextial_accepts_sequence_candles(candles, expected_ema):
+    strategy = Hexital("Test Stratergy", tuple(candles), [EMA()])
+    strategy.calculate()
+    assert pytest.approx(strategy.reading_as_list("EMA_10")) == expected_ema
+
+
 def test_hextial_multi(candles, expected_ema, expected_sma):
     strategy = Hexital("Test Stratergy", candles, [EMA(), SMA()])
     strategy.calculate()

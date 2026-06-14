@@ -61,7 +61,7 @@ class Hexital:
         self.candlestick = validate_candlesticktype(candlestick) if candlestick else None
 
         manager = CandleManager(
-            candles if isinstance(candles, list) else [],
+            list(candles),
             candle_life=self.candle_life,
             timeframe=self._timeframe,
             timeframe_fill=self.timeframe_fill,
