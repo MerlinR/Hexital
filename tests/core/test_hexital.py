@@ -612,6 +612,23 @@ class TestHexitalSettings:
 
         assert strategy.settings == as_dict
 
+    def test_hexital_settings_round_trip(self):
+        original = Hexital(
+            "Round Trip Strategy",
+            [],
+            [
+                EMA(candles=[]),
+                {"indicator": "SMA", "period": 20, "name": "SMA_fast"},
+            ],
+            timeframe="T5",
+            candle_life=timedelta(minutes=60),
+        )
+
+        serialized = original.settings
+        rebuilt = Hexital(**serialized)
+
+        assert rebuilt.settings == serialized
+
 
 class TestIndicatorCollection:
     def test_collection(self, minimal_candles):

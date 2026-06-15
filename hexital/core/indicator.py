@@ -17,7 +17,7 @@ from ..utils.candles import (
     reading_count,
     reading_period,
 )
-from ..utils.candlesticks import validate_candlesticktype
+from ..utils.candlesticks import build_candlesticktype
 from ..utils.common import round_values
 from ..utils.indexing import absindex, valid_index
 from ..utils.timeframe import (
@@ -82,7 +82,7 @@ class Indicator(Generic[V], ABC):
         self.timeframe = timedelta_to_str(self._timeframe) if self._timeframe else None
 
         if self.candlestick is not None:
-            self.candlestick = validate_candlesticktype(self.candlestick)
+            self.candlestick = build_candlesticktype(self.candlestick)
 
         self.candle_manager = CandleManager(
             self.candles,

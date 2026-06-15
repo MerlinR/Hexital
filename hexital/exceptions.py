@@ -28,11 +28,23 @@ class InvalidConfiguration(Exception):
         super().__init__(message)
 
 
+class InvalidPlugin(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+
+
+class PluginConflict(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+
+
 __all__ = [
     "InvalidAnalysis",
     "InvalidCandleOrder",
     "InvalidCandlestickType",
     "InvalidConfiguration",
     "InvalidIndicator",
+    "InvalidPlugin",
     "InvalidTimeFrame",
+    "PluginConflict",
 ]

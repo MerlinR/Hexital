@@ -3,13 +3,13 @@ from __future__ import annotations
 from collections.abc import Sequence
 from copy import copy
 from datetime import timedelta
-from importlib import import_module
 from typing import Any, Generic, TypeVar
 
 from ..exceptions import InvalidAnalysis, InvalidIndicator
 from ..indicators.amorph import Amorph
+from ..plugin_manager import plugin_manager
 from ..utils.candles import Candles, parse_candles, reading_by_candle, reading_by_index
-from ..utils.candlesticks import validate_candlesticktype
+from ..utils.candlesticks import build_candlesticktype
 from ..utils.timeframe import (
     NullTimeFrame,
     TimeFramesSource,
@@ -58,7 +58,7 @@ class Hexital:
         self.timeframe_fill = timeframe_fill
         self.candle_life = candle_life
 
-        self.candlestick = validate_candlesticktype(candlestick) if candlestick else None
+        self.candlestick = build_candlesticktype(candlestick) if candlestick else None
 
         manager = CandleManager(
             list(candles),
@@ -379,9 +379,7 @@ class Hexital:
 
         if indicator.get("indicator"):
             indicator_name = indicator.pop("indicator")
-            indicator_class = getattr(
-                import_module("hexital.indicators"), indicator_name, None
-            )
+            indicator_class = plugin_manager.get_indicator_class(indicator_name)
 
             if indicator_class:
                 return indicator_class(**indicator)
@@ -391,9 +389,7 @@ class Hexital:
 
         if indicator.get("analysis") and isinstance(indicator.get("analysis"), str):
             analysis_name = indicator.pop("analysis")
-            analysis_class = getattr(
-                import_module("hexital.analysis"), analysis_name, None
-            )
+            analysis_class = plugin_manager.get_analysis(analysis_name)
 
             if not analysis_class:
                 raise InvalidAnalysis(
