@@ -3755,6 +3755,12 @@
 <p>Non-backward compatible changes:</p>
 <ul>
 <li>Removed <code>Managed</code> and <code>NestedSource</code> from public <code>hexital</code> exports (use <code>add_state()</code>; import from <code>hexital.core.indicator</code> if needed)</li>
+<li>Renamed series retrieval methods<ul>
+<li><code>Indicator.readings()</code> -&gt; <code>Indicator.series()</code> for one indicator's values across candles</li>
+<li><code>Hexital.reading_as_list()</code> -&gt; <code>Hexital.series()</code> for one named indicator series</li>
+<li><code>Hexital.readings()</code> -&gt; <code>Hexital.all_series()</code> for all indicator series in the strategy</li>
+</ul>
+</li>
 <li>Separated candle timeframe metadata from resampling<ul>
 <li><code>candle.timeframe</code> is metadata only — it does not configure managers or indicator naming</li>
 <li>Resampling runs only when <code>indicator.timeframe=</code> or <code>hexital.timeframe=</code> is set</li>
@@ -3790,6 +3796,7 @@
 </li>
 <li>Major Typing update, some method clean up and optimisation</li>
 <li>Performance optimisations for appending</li>
+<li>Made <code>Candle.__eq__()</code> symmetric while preserving lenient comparison</li>
 <li>Updated Test verification</li>
 <li>
 <p>Added <code>Timeframe</code> argument to helper generating Candle methods for easier setting from existing data</p>
