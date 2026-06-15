@@ -11,6 +11,8 @@ from .exceptions import InvalidPlugin, PluginConflict
 ENTRYPOINT_GROUP_INDICATORS = "hexital.indicators"
 ENTRYPOINT_GROUP_ANALYSIS = "hexital.analysis"
 ENTRYPOINT_GROUP_CANDLESTICKS = "hexital.candlesticks"
+ENTRYPOINT_TYPE_INDICATORS = "hexital.core.indicator"
+ENTRYPOINT_TYPE_CANDLESTICKTYPE = "hexital.core.candlestick_type"
 
 
 @dataclass
@@ -23,16 +25,18 @@ class PluginRegistry:
 class PluginManager:
     builtins: PluginRegistry
     plugins: PluginRegistry
-    _plugins_loaded: bool = False
-    _builtins_loaded: bool = False
+    plugins_loaded: bool
+    builtins_loaded: bool
 
     def __init__(self):
         self.builtins = PluginRegistry()
         self.plugins = PluginRegistry()
+        self.builtins_loaded = False
+        self.plugins_loaded = False
 
     def _build_indicator_registry(self) -> dict[str, type[Any]]:
-        indicators = import_module("hexital.indicators")
-        indicator_module = import_module("hexital.core.indicator")
+        indicators = import_module(ENTRYPOINT_GROUP_INDICATORS)
+        indicator_module = import_module(ENTRYPOINT_TYPE_INDICATORS)
         indicator_base = indicator_module.Indicator
         registry: dict[str, type[Any]] = {}
 
@@ -44,7 +48,7 @@ class PluginManager:
         return registry
 
     def _build_analysis_registry(self) -> dict[str, Callable[..., Any]]:
-        analysis = import_module("hexital.analysis")
+        analysis = import_module(ENTRYPOINT_GROUP_ANALYSIS)
         registry: dict[str, Callable[..., Any]] = {}
 
         for name in analysis.__all__:
@@ -55,8 +59,8 @@ class PluginManager:
         return registry
 
     def _build_candlestick_registry(self) -> dict[str, type[Any]]:
-        candlesticks = import_module("hexital.candlesticks")
-        candlestick_module = import_module("hexital.core.candlestick_type")
+        candlesticks = import_module(ENTRYPOINT_GROUP_CANDLESTICKS)
+        candlestick_module = import_module(ENTRYPOINT_TYPE_CANDLESTICKTYPE)
         candlestick_base = candlestick_module.CandlestickType
         registry: dict[str, type[Any]] = {}
 
@@ -72,13 +76,13 @@ class PluginManager:
         return registry
 
     def _ensure_builtins_loaded(self) -> None:
-        if self._builtins_loaded:
+        if self.builtins_loaded:
             return
 
         self.builtins.indicators = self._build_indicator_registry()
         self.builtins.analysis = self._build_analysis_registry()
         self.builtins.candlesticks = self._build_candlestick_registry()
-        self._builtins_loaded = True
+        self.builtins_loaded = True
 
     def _entry_points_for_group(self, group: str):
         return entry_points(group=group)
@@ -121,9 +125,6 @@ class PluginManager:
     ) -> None:
         self._ensure_builtins_loaded()
 
-        if not callable(analysis_method):
-            raise InvalidPlugin(f"Analysis plugin {name} must be callable")
-
         self._check_conflict(
             name,
             {**self.builtins.analysis, **self.plugins.analysis},
@@ -139,7 +140,7 @@ class PluginManager:
         allow_override: bool = False,
     ) -> None:
         self._ensure_builtins_loaded()
-        candlestick_module = import_module("hexital.core.candlestick_type")
+        candlestick_module = import_module(ENTRYPOINT_TYPE_CANDLESTICKTYPE)
         candlestick_base = candlestick_module.CandlestickType
 
         if not isinstance(candlestick_class, type) or not issubclass(
@@ -158,7 +159,7 @@ class PluginManager:
         self.plugins.candlesticks[name] = candlestick_class
 
     def load_installed_plugins(self, force: bool = False) -> PluginRegistry:
-        if self._plugins_loaded and not force:
+        if self.plugins_loaded and not force:
             return self.plugins
 
         if force:
@@ -175,14 +176,14 @@ class PluginManager:
         for ep in self._entry_points_for_group(ENTRYPOINT_GROUP_CANDLESTICKS):
             self.register_candlestick(ep.name, ep.load())
 
-        self._plugins_loaded = True
+        self.plugins_loaded = True
         return self.plugins
 
     def reset_plugins(self) -> None:
         self.plugins.indicators.clear()
         self.plugins.analysis.clear()
         self.plugins.candlesticks.clear()
-        self._plugins_loaded = False
+        self.plugins_loaded = False
 
     def indicator_registry(self) -> dict[str, type[Any]]:
         self._ensure_builtins_loaded()
