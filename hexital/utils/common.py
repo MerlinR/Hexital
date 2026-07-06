@@ -1,3 +1,5 @@
+from math import fabs
+from sys import float_info
 from enum import Enum, auto
 from typing import TypeVar, cast
 
@@ -27,3 +29,10 @@ def round_values(value: T, round_by: int | None = 4) -> T:
         return cast(T, d)
 
     return value
+
+
+def non_zero_range(value_a: float, value_b: float) -> float:
+    difference = fabs(value_a - value_b)
+    if difference == 0:
+        return float_info.epsilon
+    return difference

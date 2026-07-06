@@ -96,6 +96,11 @@ def fixture_expected_jma_extra():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/JMA_extra.json")
 
 
+@pytest.fixture(name="expected_kama")
+def fixture_expected_kama():
+    return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/KAMA.json")
+
+
 @pytest.fixture(name="expected_kc")
 def fixture_expected_kc():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/KC.json")

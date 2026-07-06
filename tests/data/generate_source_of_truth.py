@@ -118,6 +118,7 @@ def generate_indicators():
             {"kind": "midpoint"},
             {"kind": "jma"},
             {"kind": "jma", "length": 10, "phase": 80.0},
+            {"kind": "kama"},
             {"kind": "rvi"},
             {"kind": "squeeze"},
             {"kind": "squeeze_pro"},
@@ -163,6 +164,7 @@ def generate_indicators():
     save_as_json(
         [round_values(value) for value in df["JMA_10_80.0"].tolist()], "JMA_extra"
     )
+    save_as_json([round_values(value) for value in df["KAMA_10_2_30"].tolist()], "KAMA")
     save_as_json([round_values(value) for value in df["RVI_14"].tolist()], "RVI")
     save_as_json([round_values(value) for value in df["ZS_30"].tolist()], "ZSCORE")
     save_as_json([round_values(value) for value in df["CCI_14_0.015"].tolist()], "CCI")

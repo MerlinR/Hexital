@@ -114,6 +114,11 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.series(), expected_jma_extra, acceptable_diff=9)
 
+    def test_kama(self, candles, expected_kama):
+        test = indicators.KAMA(candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_kama)
+
     def test_kc(self, candles, expected_kc):
         test = indicators.KC(candles=candles)
         test.calculate()

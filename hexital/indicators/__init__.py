@@ -14,6 +14,7 @@ from .hlca import HLCA
 from .hma import HMA
 from .ichimoku import Ichimoku
 from .jma import JMA
+from .kama import KAMA
 from .kc import KC
 from .macd import MACD
 from .mfi import MFI
@@ -59,6 +60,7 @@ __all__ = [
     "HMA",
     "Ichimoku",
     "JMA",
+    "KAMA",
     "KC",
     "MACD",
     "MFI",
