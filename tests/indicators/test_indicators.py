@@ -287,6 +287,11 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.series(), expected_tsi)
 
+    def test_trix(self, candles, expected_trix):
+        test = indicators.TRIX(candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_trix)
+
     def test_uo(self, candles, expected_uo):
         test = indicators.UO(candles=candles)
         test.calculate()

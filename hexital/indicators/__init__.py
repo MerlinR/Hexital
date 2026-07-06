@@ -39,6 +39,7 @@ from .stoch import STOCH
 from .supertrend import Supertrend
 from .tema import TEMA
 from .tr import TR
+from .trix import TRIX
 from .tsi import TSI
 from .uo import UO
 from .vwap import VWAP
@@ -89,6 +90,7 @@ __all__ = [
     "Supertrend",
     "TEMA",
     "TR",
+    "TRIX",
     "TSI",
     "UO",
     "VWAP",

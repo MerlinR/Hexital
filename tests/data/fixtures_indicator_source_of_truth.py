@@ -241,6 +241,11 @@ def fixture_expected_tr():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/TR.json")
 
 
+@pytest.fixture(name="expected_trix")
+def fixture_expected_trix():
+    return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/TRIX.json")
+
+
 @pytest.fixture(name="expected_tsi")
 def fixture_expected_tsi():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/TSI.json")

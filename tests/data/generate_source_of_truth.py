@@ -111,6 +111,7 @@ def generate_indicators():
             {"kind": "adx"},
             {"kind": "hma"},
             {"kind": "stdev"},
+            {"kind": "trix"},
             {"kind": "tsi"},
             {"kind": "uo"},
             {"kind": "bbands"},
@@ -161,6 +162,14 @@ def generate_indicators():
     save_as_json([round_values(value) for value in df["ATRr_20"].tolist()], "ATR_20")
     save_as_json([round_values(value) for value in df["HMA_10"].tolist()], "HMA")
     save_as_json([round_values(value) for value in df["STDEV_30"].tolist()], "STDEV")
+    save_structured_result(
+        df,
+        "TRIX",
+        [
+            ("TRIX_30_9", "TRIX"),
+            ("TRIXs_30_9", "signal"),
+        ],
+    )
     save_as_json([round_values(value) for value in df["TSI_13_25_13"].tolist()], "TSI")
     save_as_json([round_values(value) for value in df["UO_7_14_28"].tolist()], "UO")
     save_as_json([round_values(value) for value in df["BBB_5_2.0"].tolist()], "BANDWIDTH")
