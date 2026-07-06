@@ -3,10 +3,6 @@ from dataclasses import dataclass, field
 from ..core.indicator import Indicator
 
 
-def true_range(high: float, low: float, prev_close: float) -> float:
-    return max(high - low, abs(high - prev_close), abs(low - prev_close))
-
-
 @dataclass(kw_only=True)
 class TR(Indicator[float | None]):
     """True Range - TR
@@ -28,6 +24,11 @@ class TR(Indicator[float | None]):
     def _calculate_reading(self, index: int) -> float | None:
         if index > 0:
             candle = self.candles[index]
-            return true_range(candle.high, candle.low, self.candles[index - 1].close)
+
+            return max(
+                candle.high - candle.low,
+                abs(candle.high - self.candles[index - 1].close),
+                abs(candle.low - self.candles[index - 1].close),
+            )
 
         return None

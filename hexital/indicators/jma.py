@@ -61,19 +61,21 @@ class JMA(Indicator[float | None]):
         price = self.src()
         uband = self._state.prev("uband", price)
         lband = self._state.prev("lband", price)
-        vsums = self._state.prev("vsums", 0.0)
         ma_one = self._state.prev("ma_one", price)
-        ma_two = self._state.prev("ma_two", 0.0)
         det_one = self._state.prev("det_one", 0.0)
         det_two = self._state.prev("det_two", 0.0)
 
-        if not uband or not lband or not price:
+        if price is None or uband is None or lband is None:
             return None
+
+        prev_jma = self.prev_reading(default=price)
 
         # Price Volatility
         del1 = price - uband
         del2 = price - lband
-        volty = max(abs(del1), abs(del2)) if abs(del1) != abs(del2) else 0.0
+        abs_del1 = abs(del1)
+        abs_del2 = abs(del2)
+        volty = max(abs_del1, abs_del2) if abs_del1 != abs_del2 else 0.0
         self._state.update(volty=volty)
 
         # Relative Price Volatility
@@ -81,16 +83,14 @@ class JMA(Indicator[float | None]):
         self._state.update(vsums=vsums, volty=volty)
 
         avg_volty = self.candles_average(65, self._state.source("vsums"))
-        d_volty = 0 if avg_volty == 0 else volty / avg_volty
+        d_volty = 0.0 if avg_volty in (None, 0) else volty / avg_volty
         r_volt = max(1.0, min(pow(self._length_1, 1 / self._power_1), d_volty))
 
         # Jurik Volatility Bands
-        power_2 = pow(r_volt, self._power_1)
-        kv = pow(self._bet, math.sqrt(power_2))
+        power = pow(r_volt, self._power_1)
+        kv = pow(self._bet, math.sqrt(power))
         uband = price if (del1 > 0) else price - (kv * del1)
         lband = price if (del2 < 0) else price - (kv * del2)
-
-        power = pow(r_volt, self._power_1)
         alpha = pow(self._beta, power)
 
         # Stage One
@@ -98,13 +98,15 @@ class JMA(Indicator[float | None]):
 
         # Stage Two
         det_one = ((price - ma_one) * (1 - self._beta)) + (self._beta * det_one)
-        ma_two = ma_one + self._phase_ratio * det_one
+        ma_two = ma_one + (self._phase_ratio * det_one)
 
         # Stage Three
-        det_two = (
-            (ma_two - self.prev_reading(default=price)) * (1 - alpha) * (1 - alpha)
-        ) + (alpha * alpha * det_two)
-        jma = self.prev_reading(default=price) + det_two
+        one_minus_alpha = 1 - alpha
+        alpha_sq = alpha * alpha
+        det_two = ((ma_two - prev_jma) * one_minus_alpha * one_minus_alpha) + (
+            alpha_sq * det_two
+        )
+        jma = prev_jma + det_two
 
         self._state.set(
             {

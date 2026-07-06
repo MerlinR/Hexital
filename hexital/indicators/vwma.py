@@ -31,32 +31,8 @@ class VWMA(Indicator[float | None]):
         self._state = self.add_state()
 
     def _calculate_reading(self, index: int) -> float | None:
-        price_volume = self.close * self.volume
-
-        if self.prev_exists():
-            old_candle = self.candles[index - self.period]
-            price_volume_sum = self._state.prev("price_volume_sum")
-            volume_sum = self._state.prev("volume_sum")
-
-            if price_volume_sum is None or volume_sum is None:
-                return None
-
-            price_volume_sum = (
-                price_volume_sum - (old_candle.close * old_candle.volume) + price_volume
-            )
-            volume_sum = volume_sum - old_candle.volume + self.volume
-
-            self._state.set(
-                {
-                    "price_volume_sum": price_volume_sum,
-                    "volume_sum": volume_sum,
-                }
-            )
-
-            if volume_sum == 0:
-                return None
-
-            return price_volume_sum / volume_sum
+        if (prev_vwma := self.prev_reading()) is not None:
+            return self._calculate_from_prev(index, prev_vwma)
 
         if self.reading_period(self.period, "close"):
             candles = self.candles[index - self.period + 1 : index + 1]
@@ -76,3 +52,29 @@ class VWMA(Indicator[float | None]):
             return price_volume_sum / volume_sum
 
         return None
+
+    def _calculate_from_prev(self, index: int, prev_vwma: float | None) -> float | None:
+        price_volume = self.close * self.volume
+        old_candle = self.candles[index - self.period]
+        price_volume_sum = self._state.prev("price_volume_sum")
+        volume_sum = self._state.prev("volume_sum")
+
+        if price_volume_sum is None or volume_sum is None:
+            return None
+
+        price_volume_sum = (
+            price_volume_sum - (old_candle.close * old_candle.volume) + price_volume
+        )
+        volume_sum = volume_sum - old_candle.volume + self.volume
+
+        self._state.set(
+            {
+                "price_volume_sum": price_volume_sum,
+                "volume_sum": volume_sum,
+            }
+        )
+
+        if volume_sum == 0:
+            return None
+
+        return price_volume_sum / volume_sum
