@@ -6,6 +6,7 @@ from .core.indicator import ChildWhen, Indicator, State
 from .core.indicator_collection import IndicatorCollection
 from .indicators import (
     ADX,
+    AO,
     Amorph,
     AROON,
     ATR,
@@ -66,6 +67,7 @@ from .utils.timeframe import TimeFrame
 
 __all__ = [
     "ADX",
+    "AO",
     "Amorph",
     "AROON",
     "ATR",

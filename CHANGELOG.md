@@ -46,6 +46,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added `Timeframe` argument to helper generating Candle methods for easier setting from existing data
 
 - Added Indicators
+    - Added AO
     - Added BandWidth
     - Added CCI (CCI)
     - Added ChandelierExit

@@ -16,6 +16,11 @@ def fixture_expected_adx():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/ADX.json")
 
 
+@pytest.fixture(name="expected_ao")
+def fixture_expected_ao():
+    return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/AO.json")
+
+
 @pytest.fixture(name="expected_atr")
 def fixture_expected_atr():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/ATR.json")

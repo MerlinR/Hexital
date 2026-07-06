@@ -115,6 +115,7 @@ def generate_indicators():
             {"kind": "ema"},
             {"kind": "macd"},
             {"kind": "rsi"},
+            {"kind": "ao"},
             {"kind": "linreg"},
             {"kind": "linreg", "slope": True},
             {"kind": "atr"},
@@ -175,6 +176,7 @@ def generate_indicators():
     save_as_json([round_values(value) for value in df["SMA_10"].tolist()], "SMA")
     save_as_json([round_values(value) for value in df["SMA_3"].tolist()], "SMA_3")
     save_as_json([round_values(value) for value in df["RSI_14"].tolist()], "RSI")
+    save_as_json([round_values(value) for value in df["AO_5_34"].tolist()], "AO")
     save_as_json(
         [round_values(value) for value in df["LR_14"].tolist()],
         "LINEARREGRESSION",

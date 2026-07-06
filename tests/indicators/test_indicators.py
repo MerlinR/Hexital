@@ -13,6 +13,11 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.series(), expected_adx, amount=390)
 
+    def test_ao(self, candles, expected_ao):
+        test = indicators.AO(candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_ao)
+
     def test_atr(self, candles, expected_atr):
         test = indicators.ATR(candles=candles)
         test.calculate()
