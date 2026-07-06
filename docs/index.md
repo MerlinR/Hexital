@@ -7,8 +7,8 @@
 [![Downloads](https://static.pepy.tech/badge/hexital)](https://pepy.tech/project/hexital)
 [![Downloads](https://static.pepy.tech/badge/hexital/month)](https://pepy.tech/project/hexital)
 ![GitHub Repo stars](https://img.shields.io/github/stars/MerlinR/Hexital?style=flat)
-[![Unit Tests - Master](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml/badge.svg?branch=master)](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml)
-[![Unit Tests - Dev](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml/badge.svg?branch=development)](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml)
+[![Unit Tests - master](https://img.shields.io/github/actions/workflow/status/MerlinR/Hexital/unit_test.yaml?branch=master&label=Unit%20Tests%20-%20master)](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml?query=branch%3Amaster)
+[![Unit Tests - development](https://img.shields.io/github/actions/workflow/status/MerlinR/Hexital/unit_test.yaml?branch=development&label=Unit%20Tests%20-%20development)](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml?query=branch%3Adevelopment)
 [![license](https://img.shields.io/github/license/merlinr/hexital)]()
 
 **Source Code**: [https://github.com/MerlinR/Hexital](https://github.com/MerlinR/Hexital)
