@@ -43,6 +43,11 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.series(), expected_cci)
 
+    def test_dema(self, candles, expected_dema):
+        test = indicators.DEMA(candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_dema)
+
     def test_donchian(self, candles, expected_donchian):
         test = indicators.Donchian(candles=candles)
         test.calculate()

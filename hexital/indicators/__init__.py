@@ -6,6 +6,7 @@ from .bbands import BBANDS
 from .cci import CCI
 from .cmo import CMO
 from .counter import Counter
+from .dema import DEMA
 from .donchian import Donchian
 from .ema import EMA
 from .highest_lowest import HL
@@ -52,6 +53,7 @@ __all__ = [
     "CCI",
     "CMO",
     "Counter",
+    "DEMA",
     "Donchian",
     "EMA",
     "HL",

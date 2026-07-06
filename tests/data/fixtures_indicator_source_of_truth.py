@@ -46,6 +46,11 @@ def fixture_expected_cmo():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/CMO.json")
 
 
+@pytest.fixture(name="expected_dema")
+def fixture_expected_dema():
+    return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/DEMA.json")
+
+
 @pytest.fixture(name="expected_donchian")
 def fixture_expected_donchian():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/DONCHIAN.json")

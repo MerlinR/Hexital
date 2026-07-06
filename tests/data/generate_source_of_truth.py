@@ -89,6 +89,7 @@ def generate_indicators():
             {"kind": "rma", "length": 20},
             {"kind": "sma"},
             {"kind": "sma", "length": 3},
+            {"kind": "dema"},
             {"kind": "ema"},
             {"kind": "macd"},
             {"kind": "rsi"},
@@ -139,6 +140,7 @@ def generate_indicators():
     save_as_json([round_values(value) for value in df["RMA_10"].tolist()], "RMA")
     save_as_json([round_values(value) for value in df["RMA_20"].tolist()], "RMA_20")
     save_as_json([round_values(value) for value in df["TRUERANGE_1"].tolist()], "TR")
+    save_as_json([round_values(value) for value in df["DEMA_10"].tolist()], "DEMA")
     save_as_json([round_values(value) for value in df["EMA_10"].tolist()], "EMA")
     save_as_json([round_values(value) for value in df["SMA_10"].tolist()], "SMA")
     save_as_json([round_values(value) for value in df["SMA_3"].tolist()], "SMA_3")
