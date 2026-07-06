@@ -144,6 +144,11 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.series(), expected_kc)
 
+    def test_linear_regression(self, candles, expected_linear_regression):
+        test = indicators.LinearRegression(candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_linear_regression)
+
     def test_macd(self, candles, expected_macd):
         test = indicators.MACD(candles=candles)
         test.calculate()
@@ -220,6 +225,16 @@ class TestIndicators(IndicatorTestBase):
         test = indicators.RVI(candles=candles)
         test.calculate()
         assert self.verify(test.series(), expected_rvi)
+
+    def test_regression_slope(self, candles, expected_regression_slope):
+        test = indicators.RegressionSlope(candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_regression_slope)
+
+    def test_regression_channel(self, candles, expected_regression_channel):
+        test = indicators.RegressionChannel(candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_regression_channel)
 
     def test_vortex(self, candles, expected_vortex):
         test = indicators.Vortex(candles=candles)

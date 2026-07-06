@@ -10,6 +10,28 @@ PATH_CANDLES = "source_of_truth/candles"
 PATH_DATA = "."
 
 
+def regression_channel(values: list[float], std: float = 2.0) -> tuple[float, float, float]:
+    period = len(values)
+    x_sum = 0.5 * period * (period + 1)
+    x2_sum = x_sum * (2 * period + 1) / 3
+    divisor = period * x2_sum - x_sum * x_sum
+
+    y_sum = sum(values)
+    xy_sum = sum(x * y for x, y in enumerate(values, start=1))
+
+    slope = (period * xy_sum - x_sum * y_sum) / divisor
+    intercept = (y_sum * x2_sum - x_sum * xy_sum) / divisor
+    mid = (slope * (period - 1)) + intercept
+
+    residual_sum = 0.0
+    for x, y in enumerate(values, start=1):
+        fitted = (slope * x) + intercept
+        residual_sum += (y - fitted) ** 2
+
+    band = ((residual_sum / period) ** 0.5) * std
+    return mid - band, mid, mid + band
+
+
 def load_json_candles() -> list[dict]:
     csv_file = open("tests/data/test_candles.json")
     return json.load(csv_file)
@@ -93,6 +115,8 @@ def generate_indicators():
             {"kind": "ema"},
             {"kind": "macd"},
             {"kind": "rsi"},
+            {"kind": "linreg"},
+            {"kind": "linreg", "slope": True},
             {"kind": "atr"},
             {"kind": "natr"},
             {"kind": "atr", "length": 20},
@@ -150,6 +174,14 @@ def generate_indicators():
     save_as_json([round_values(value) for value in df["SMA_10"].tolist()], "SMA")
     save_as_json([round_values(value) for value in df["SMA_3"].tolist()], "SMA_3")
     save_as_json([round_values(value) for value in df["RSI_14"].tolist()], "RSI")
+    save_as_json(
+        [round_values(value) for value in df["LR_14"].tolist()],
+        "LINEARREGRESSION",
+    )
+    save_as_json(
+        [round_values(value) for value in df["LRm_14"].tolist()],
+        "REGRESSIONSLOPE",
+    )
     save_as_json([round_values(value) for value in df["ATRr_14"].tolist()], "ATR")
     save_as_json([round_values(value) for value in df["NATR_14"].tolist()], "NATR")
     save_as_json([round_values(value) for value in df["TEMA_10"].tolist()], "TEMA")
@@ -184,6 +216,24 @@ def generate_indicators():
     )
     save_as_json([round_values(value) for value in df["KAMA_10_2_30"].tolist()], "KAMA")
     save_as_json([round_values(value) for value in df["RVI_14"].tolist()], "RVI")
+    regression_channel_data = []
+    closes = df["close"].tolist()
+    for index in range(len(closes)):
+        if index < 13:
+            regression_channel_data.append(
+                {"lower": None, "mid": None, "upper": None}
+            )
+            continue
+
+        lower, mid, upper = regression_channel(closes[index - 13 : index + 1])
+        regression_channel_data.append(
+            {
+                "lower": round_values(lower),
+                "mid": round_values(mid),
+                "upper": round_values(upper),
+            }
+        )
+    save_as_json(regression_channel_data, "REGRESSIONCHANNEL")
     save_structured_result(
         df,
         "VORTEX",

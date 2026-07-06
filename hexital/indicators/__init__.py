@@ -20,6 +20,7 @@ from .ichimoku import Ichimoku
 from .jma import JMA
 from .kama import KAMA
 from .kc import KC
+from .linear_regression import LinearRegression
 from .macd import MACD
 from .mfi import MFI
 from .midpoint import MOP
@@ -28,6 +29,8 @@ from .obv import OBV
 from .PPO import PPO
 from .PSAR import PSAR
 from .pivot_points import PivotPoints
+from .regression_channel import RegressionChannel
+from .regression_slope import RegressionSlope
 from .rma import RMA
 from .roc import ROC
 from .rsi import RSI
@@ -74,6 +77,7 @@ __all__ = [
     "JMA",
     "KAMA",
     "KC",
+    "LinearRegression",
     "MACD",
     "MFI",
     "MOP",
@@ -82,6 +86,8 @@ __all__ = [
     "PPO",
     "PSAR",
     "PivotPoints",
+    "RegressionChannel",
+    "RegressionSlope",
     "RMA",
     "ROC",
     "RSI",

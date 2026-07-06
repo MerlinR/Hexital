@@ -52,9 +52,12 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Added CKSP
     - Added DEMA
     - Added KAMA
+    - Added Linear Regression
     - Added NATR
     - Added PPO
     - Added PSAR
+    - Added Regression Channel
+    - Added Regression Slope
     - Added Squeeze (SQ)
     - Added Squeeze Pro (SQPRO)
     - Added TEMA

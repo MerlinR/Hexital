@@ -166,6 +166,11 @@ def fixture_expected_ppo():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/PPO.json")
 
 
+@pytest.fixture(name="expected_linear_regression")
+def fixture_expected_linear_regression():
+    return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/LINEARREGRESSION.json")
+
+
 @pytest.fixture(name="expected_psar")
 def fixture_expected_psar():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/PSAR.json")
@@ -194,6 +199,16 @@ def fixture_expected_rsi():
 @pytest.fixture(name="expected_rvi")
 def fixture_expected_rvi():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/RVI.json")
+
+
+@pytest.fixture(name="expected_regression_slope")
+def fixture_expected_regression_slope():
+    return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/REGRESSIONSLOPE.json")
+
+
+@pytest.fixture(name="expected_regression_channel")
+def fixture_expected_regression_channel():
+    return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/REGRESSIONCHANNEL.json")
 
 
 @pytest.fixture(name="expected_vortex")
