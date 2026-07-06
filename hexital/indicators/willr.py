@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from ..analysis.utils import highest, lowest
+from ..analysis import movement
 from ..core.indicator import Indicator, Source
 
 
@@ -30,8 +30,8 @@ class WillR(Indicator[float | None]):
         if not self.reading_period(self.period, "high", index):
             return None
 
-        highest_high = highest(self.candles, "high", self.period, index)
-        lowest_low = lowest(self.candles, "low", self.period, index)
+        highest_high = movement.highest(self.candles, "high", self.period, index)
+        lowest_low = movement.lowest(self.candles, "low", self.period, index)
         reading = self.src()
 
         if highest_high is None or lowest_low is None or reading is None:

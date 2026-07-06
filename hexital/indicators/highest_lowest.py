@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from ..analysis.utils import highest, lowest
+from ..analysis import movement
 from ..core.indicator import Indicator
 
 
@@ -24,6 +24,6 @@ class HL(Indicator[dict[str, float | None]]):
 
     def _calculate_reading(self, index: int) -> dict[str, float | None]:
         return {
-            "low": lowest(self.candles, "low", self.period, index),
-            "high": highest(self.candles, "high", self.period, index),
+            "low": movement.lowest(self.candles, "low", self.period, index),
+            "high": movement.highest(self.candles, "high", self.period, index),
         }

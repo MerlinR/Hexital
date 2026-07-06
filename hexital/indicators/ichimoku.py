@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from ..analysis.utils import highest, lowest
+from ..analysis import movement
 from ..core.indicator import Indicator
 
 
@@ -42,8 +42,8 @@ class Ichimoku(Indicator[dict[str, float | None]]):
         if not self.reading_period(period, "high", index):
             return None
 
-        high_ = highest(self.candles, "high", period, index)
-        low_ = lowest(self.candles, "low", period, index)
+        high_ = movement.highest(self.candles, "high", period, index)
+        low_ = movement.lowest(self.candles, "low", period, index)
 
         if high_ is None or low_ is None:
             return None

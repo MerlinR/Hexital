@@ -285,6 +285,71 @@ class TestValueRange:
         assert movement.value_range(indicator_candles_partial, "SMA_10") is None
 
 
+class TestBarsSince:
+    def test_bars_since_bool(self, indicator_candles):
+        assert movement.bars_since(indicator_candles, "rising") == 1
+
+    def test_bars_since_scalar(self, indicator_candles):
+        assert movement.bars_since(indicator_candles, "dir", -1) == 3
+
+    def test_bars_since_missing(self):
+        assert movement.bars_since([], "close") is None
+
+
+class TestValueWhen:
+    def test_value_when_latest_match(self, indicator_candles):
+        assert movement.value_when(indicator_candles, "rising", "close") == 115
+
+    def test_value_when_occurrence(self, indicator_candles):
+        assert movement.value_when(indicator_candles, "rising", "close", True, 1) == 130
+
+    def test_value_when_missing(self, indicator_candles):
+        assert movement.value_when(indicator_candles, "rising", "close", True, 10) is None
+
+
+class TestChange:
+    def test_change(self, indicator_candles):
+        assert movement.change(indicator_candles, "close") == 5
+
+    def test_change_length(self, indicator_candles):
+        assert movement.change(indicator_candles, "close", 2) == -10
+
+    def test_change_missing(self):
+        assert movement.change([], "close") is None
+
+
+class TestPercentChange:
+    def test_percent_change(self, indicator_candles):
+        assert movement.percent_change(indicator_candles, "close") == pytest.approx(
+            4.3478260869565215
+        )
+
+    def test_percent_change_missing(self):
+        assert movement.percent_change([], "close") is None
+
+
+class TestRisingCount:
+    def test_rising_count(self, rising_candles):
+        assert movement.rising_count(rising_candles, "close") == 4
+
+    def test_rising_count_partial(self, indicator_candles):
+        assert movement.rising_count(indicator_candles, "EMA_10") == 2
+
+    def test_rising_count_missing(self):
+        assert movement.rising_count([], "close") == 0
+
+
+class TestFallingCount:
+    def test_falling_count(self, fallling_candles):
+        assert movement.falling_count(fallling_candles, "close") == 4
+
+    def test_falling_count_breaks_immediately(self, indicator_candles):
+        assert movement.falling_count(indicator_candles, "close") == 0
+
+    def test_falling_count_missing(self):
+        assert movement.falling_count([], "close") == 0
+
+
 class TestRising:
     def test_basic_rising(self, rising_candles):
         assert movement.rising(rising_candles, "close") is True

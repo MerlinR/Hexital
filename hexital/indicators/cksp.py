@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from ..analysis.utils import highest, lowest
+from ..analysis import movement
 from ..core.indicator import Indicator
 from .atr import ATR
 from .tr import TR
@@ -49,8 +49,8 @@ class CKSP(Indicator[dict[str, float | None]]):
         if atr_ is None:
             return {"long": None, "short": None}
 
-        high_ = highest(self.candles, "high", self.p, index)
-        low_ = lowest(self.candles, "low", self.p, index)
+        high_ = movement.highest(self.candles, "high", self.p, index)
+        low_ = movement.lowest(self.candles, "low", self.p, index)
         if high_ is None or low_ is None:
             return {"long": None, "short": None}
 

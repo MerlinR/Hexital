@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from ..analysis.utils import highest, lowest
+from ..analysis import movement
 from ..core.indicator import Indicator, Source
 
 
@@ -33,7 +33,7 @@ class MOP(Indicator[float | None]):
     def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists() or self.reading_period(self.period, self.source, index):
             return (
-                lowest(self.candles, self.source, self.period, index)
-                + highest(self.candles, self.source, self.period, index)
+                movement.lowest(self.candles, self.source, self.period, index)
+                + movement.highest(self.candles, self.source, self.period, index)
             ) * 0.5
         return None

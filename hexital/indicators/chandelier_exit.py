@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from ..analysis.utils import highest, lowest
+from ..analysis import movement
 from ..core.indicator import Indicator
 from .atr import ATR
 
@@ -37,8 +37,8 @@ class ChandelierExit(Indicator[dict[str, float | None]]):
         if atr_ is None:
             return {"long": None, "short": None}
 
-        high_ = highest(self.candles, "high", self.period, index)
-        low_ = lowest(self.candles, "low", self.period, index)
+        high_ = movement.highest(self.candles, "high", self.period, index)
+        low_ = movement.lowest(self.candles, "low", self.period, index)
         if high_ is None or low_ is None:
             return {"long": None, "short": None}
 

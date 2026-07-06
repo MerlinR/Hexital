@@ -4,11 +4,21 @@ from ..core.indicator import Indicator
 from ..utils.candles import (
     Candle,
     get_readings_period,
-    reading_by_candle,
     reading_by_index,
 )
 from ..utils.indexing import absindex, valid_index
 from ..utils.timeframe import within_timeframe
+
+
+def _scalar_reading(
+    candle_set: list[Candle],
+    indicator: str,
+    index: int,
+) -> float | int | None:
+    reading = reading_by_index(candle_set, indicator, index)
+    if isinstance(reading, dict) or reading is None:
+        return None
+    return reading
 
 
 def _retrieve_candles(
@@ -272,6 +282,242 @@ def value_range(
     return abs(min(readings) - max(readings))
 
 
+def bars_since(
+    candles: Indicator | Hexital | list[Candle],
+    indicator: str,
+    value: float | int | bool = True,
+    index: int = -1,
+) -> int | None:
+    """Bars Since Analysis
+
+    Returns how many bars ago the given `indicator` last matched `value`.
+    A return value of `0` means the current bar matches. If no match exists,
+    returns `None`.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The indicator series to scan.
+        value (float | int | bool, optional): The value to match against. Defaults to `True`.
+        index (int, optional): The index to start the backward scan from.
+            Defaults to -1 (latest candle).
+
+    Returns:
+        int | None: The number of bars since the most recent matching value,
+        or `None` if no matching value exists.
+    """
+    candle_set = _retrieve_candles(candles, indicator)
+    if not isinstance(candle_set, list) or not candle_set:
+        return None
+
+    idx = absindex(index, len(candle_set))
+
+    for offset, candle_idx in enumerate(range(idx, -1, -1)):
+        if reading_by_index(candle_set, indicator, candle_idx) == value:
+            return offset
+
+    return None
+
+
+def value_when(
+    candles: Indicator | Hexital | list[Candle],
+    condition_indicator: str,
+    indicator: str,
+    value: float | int | bool = True,
+    occurrence: int = 0,
+    index: int = -1,
+) -> float | dict | None:
+    """Value When Analysis
+
+    Returns the `indicator` reading from the nth most recent bar where
+    `condition_indicator` matched `value`. `occurrence=0` means the latest match.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        condition_indicator (str): The indicator series used as the condition.
+        indicator (str): The indicator reading to return when the condition matches.
+        value (float | int | bool, optional): The value the condition indicator must equal.
+            Defaults to `True`.
+        occurrence (int, optional): Which matching occurrence to return, where `0` is the
+            latest match. Defaults to 0.
+        index (int, optional): The index to start the backward scan from.
+            Defaults to -1 (latest candle).
+
+    Returns:
+        float | dict | None: The reading of `indicator` at the requested matching occurrence,
+        or `None` if no such match exists.
+    """
+    candle_set = _retrieve_candles(candles, condition_indicator)
+    if not isinstance(candle_set, list) or not candle_set or occurrence < 0:
+        return None
+
+    idx = absindex(index, len(candle_set))
+    found = 0
+
+    for candle_idx in range(idx, -1, -1):
+        if reading_by_index(candle_set, condition_indicator, candle_idx) != value:
+            continue
+
+        if found == occurrence:
+            return reading_by_index(candle_set, indicator, candle_idx)
+
+        found += 1
+
+    return None
+
+
+def change(
+    candles: Indicator | Hexital | list[Candle],
+    indicator: str,
+    length: int = 1,
+    index: int = -1,
+) -> float | int | None:
+    """Change Analysis
+
+    Returns the difference between the current reading and the reading
+    `length` bars back.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The indicator series to compare.
+        length (int, optional): How many bars back to compare against. Defaults to 1.
+        index (int, optional): The index to evaluate from. Defaults to -1 (latest candle).
+
+    Returns:
+        float | int | None: The current reading minus the reading `length` bars back,
+        or `None` if there is insufficient valid data.
+    """
+    candle_set = _retrieve_candles(candles, indicator)
+    if not isinstance(candle_set, list) or not candle_set or length < 1:
+        return None
+
+    idx = absindex(index, len(candle_set))
+    current = _scalar_reading(candle_set, indicator, idx)
+    previous = _scalar_reading(candle_set, indicator, idx - length)
+
+    if current is None or previous is None:
+        return None
+
+    return current - previous
+
+
+def percent_change(
+    candles: Indicator | Hexital | list[Candle],
+    indicator: str,
+    length: int = 1,
+    index: int = -1,
+) -> float | None:
+    """Percent Change Analysis
+
+    Returns the percentage change between the current reading and the reading
+    `length` bars back.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The indicator series to compare.
+        length (int, optional): How many bars back to compare against. Defaults to 1.
+        index (int, optional): The index to evaluate from. Defaults to -1 (latest candle).
+
+    Returns:
+        float | None: The percentage change from the reading `length` bars back to the
+        current reading, or `None` if there is insufficient valid data or the prior value is zero.
+    """
+    delta = change(candles, indicator, length, index)
+    if delta is None:
+        return None
+
+    candle_set = _retrieve_candles(candles, indicator)
+    if not isinstance(candle_set, list) or not candle_set:
+        return None
+
+    idx = absindex(index, len(candle_set))
+    previous = _scalar_reading(candle_set, indicator, idx - length)
+
+    if previous in (None, 0):
+        return None
+
+    return (delta / previous) * 100
+
+
+def rising_count(
+    candles: Indicator | Hexital | list[Candle],
+    indicator: str,
+    length: int = 100,
+    index: int = -1,
+) -> int:
+    """Rising Count Analysis
+
+    Counts consecutive rising bars ending at `index`, up to `length`
+    comparisons back.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The indicator series to evaluate.
+        length (int, optional): Maximum number of backward comparisons to check.
+            Defaults to 100.
+        index (int, optional): The index to evaluate from. Defaults to -1 (latest candle).
+
+    Returns:
+        int: The number of consecutive rising comparisons ending at `index`.
+    """
+    candle_set = _retrieve_candles(candles, indicator)
+    if not isinstance(candle_set, list) or not candle_set or length < 1:
+        return 0
+
+    idx = absindex(index, len(candle_set))
+    count = 0
+
+    for candle_idx in range(idx, idx - length, -1):
+        current = _scalar_reading(candle_set, indicator, candle_idx)
+        previous = _scalar_reading(candle_set, indicator, candle_idx - 1)
+
+        if current is None or previous is None or current <= previous:
+            break
+
+        count += 1
+
+    return count
+
+
+def falling_count(
+    candles: Indicator | Hexital | list[Candle],
+    indicator: str,
+    length: int = 100,
+    index: int = -1,
+) -> int:
+    """Falling Count Analysis
+
+    Counts consecutive falling bars ending at `index`, up to `length`
+    comparisons back.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The indicator series to evaluate.
+        length (int, optional): Maximum number of backward comparisons to check.
+            Defaults to 100.
+        index (int, optional): The index to evaluate from. Defaults to -1 (latest candle).
+
+    Returns:
+        int: The number of consecutive falling comparisons ending at `index`.
+    """
+    candle_set = _retrieve_candles(candles, indicator)
+    if not isinstance(candle_set, list) or not candle_set or length < 1:
+        return 0
+
+    idx = absindex(index, len(candle_set))
+    count = 0
+
+    for candle_idx in range(idx, idx - length, -1):
+        current = _scalar_reading(candle_set, indicator, candle_idx)
+        previous = _scalar_reading(candle_set, indicator, candle_idx - 1)
+
+        if current is None or previous is None or current >= previous:
+            break
+
+        count += 1
+
+    return count
+
+
 def rising(
     candles: Indicator | Hexital | list[Candle],
     indicator: str,
@@ -304,8 +550,8 @@ def rising(
 
     idx = absindex(index, len(candle_set))
 
-    latest_reading = reading_by_candle(candle_set[idx], indicator)
-    if latest_reading is None or isinstance(latest_reading, dict):
+    latest_reading = _scalar_reading(candle_set, indicator, idx)
+    if latest_reading is None:
         return False
 
     readings = get_readings_period(candle_set, indicator, length, idx)
@@ -347,8 +593,8 @@ def falling(
 
     idx = absindex(index, len(candle_set))
 
-    latest_reading = reading_by_candle(candle_set[idx], indicator)
-    if latest_reading is None or isinstance(latest_reading, dict):
+    latest_reading = _scalar_reading(candle_set, indicator, idx)
+    if latest_reading is None:
         return False
 
     readings = get_readings_period(candle_set, indicator, length, idx)
@@ -390,8 +636,8 @@ def mean_rising(
 
     idx = absindex(index, len(candle_set))
 
-    latest_reading = reading_by_candle(candle_set[idx], indicator)
-    if latest_reading is None or isinstance(latest_reading, dict):
+    latest_reading = _scalar_reading(candle_set, indicator, idx)
+    if latest_reading is None:
         return False
 
     readings = get_readings_period(candle_set, indicator, length, idx)
@@ -432,8 +678,8 @@ def mean_falling(
 
     idx = absindex(index, len(candle_set))
 
-    latest_reading = reading_by_candle(candle_set[idx], indicator)
-    if latest_reading is None or isinstance(latest_reading, dict):
+    latest_reading = _scalar_reading(candle_set, indicator, idx)
+    if latest_reading is None:
         return False
 
     readings = get_readings_period(candle_set, indicator, length, idx)
@@ -528,8 +774,8 @@ def highestbar(
     distance = 0
 
     for offset, candle_idx in enumerate(range(idx, idx - length, -1)):
-        current = reading_by_index(candle_set, indicator, candle_idx)
-        if not isinstance(current, (float, int)):
+        current = _scalar_reading(candle_set, indicator, candle_idx)
+        if current is None:
             continue
 
         if high is None or high < current:
@@ -570,8 +816,8 @@ def lowestbar(
     distance = 0
 
     for offset, candle_idx in enumerate(range(idx, idx - length, -1)):
-        current = reading_by_index(candle_set, indicator, candle_idx)
-        if not isinstance(current, (float, int)):
+        current = _scalar_reading(candle_set, indicator, candle_idx)
+        if current is None:
             continue
 
         if low is None or low > current:
