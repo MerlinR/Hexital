@@ -153,6 +153,10 @@
          <lastmod>2026-07-06</lastmod>
     </url>
     <url>
+         <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/ao/</loc>
+         <lastmod>2026-07-06</lastmod>
+    </url>
+    <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/aroon/</loc>
          <lastmod>2026-07-06</lastmod>
     </url>
@@ -181,7 +185,15 @@
          <lastmod>2026-07-06</lastmod>
     </url>
     <url>
+         <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/cmf/</loc>
+         <lastmod>2026-07-06</lastmod>
+    </url>
+    <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/cmo/</loc>
+         <lastmod>2026-07-06</lastmod>
+    </url>
+    <url>
+         <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/coppock/</loc>
          <lastmod>2026-07-06</lastmod>
     </url>
     <url>
@@ -198,6 +210,10 @@
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/ema/</loc>
+         <lastmod>2026-07-06</lastmod>
+    </url>
+    <url>
+         <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/fisher/</loc>
          <lastmod>2026-07-06</lastmod>
     </url>
     <url>
@@ -233,6 +249,14 @@
          <lastmod>2026-07-06</lastmod>
     </url>
     <url>
+         <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/kst/</loc>
+         <lastmod>2026-07-06</lastmod>
+    </url>
+    <url>
+         <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/linear_regression/</loc>
+         <lastmod>2026-07-06</lastmod>
+    </url>
+    <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/macd/</loc>
          <lastmod>2026-07-06</lastmod>
     </url>
@@ -254,6 +278,14 @@
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/pivot_points/</loc>
+         <lastmod>2026-07-06</lastmod>
+    </url>
+    <url>
+         <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/regression_channel/</loc>
+         <lastmod>2026-07-06</lastmod>
+    </url>
+    <url>
+         <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/indicators/regression_slope/</loc>
          <lastmod>2026-07-06</lastmod>
     </url>
     <url>
