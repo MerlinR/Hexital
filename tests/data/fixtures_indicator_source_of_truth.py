@@ -101,6 +101,11 @@ def fixture_expected_ema_t10():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/EMA_10T.json")
 
 
+@pytest.fixture(name="expected_fisher")
+def fixture_expected_fisher():
+    return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/FISHER.json")
+
+
 @pytest.fixture(name="expected_highlowaverage")
 def fixture_expected_highlowaverage():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/HL2.json")
@@ -139,6 +144,11 @@ def fixture_expected_kama():
 @pytest.fixture(name="expected_kc")
 def fixture_expected_kc():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/KC.json")
+
+
+@pytest.fixture(name="expected_kst")
+def fixture_expected_kst():
+    return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/KST.json")
 
 
 @pytest.fixture(name="expected_macd")

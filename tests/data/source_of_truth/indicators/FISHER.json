@@ -1,0 +1,2002 @@
+[
+    {
+        "FISHERT": null,
+        "signal": null
+    },
+    {
+        "FISHERT": null,
+        "signal": null
+    },
+    {
+        "FISHERT": null,
+        "signal": null
+    },
+    {
+        "FISHERT": null,
+        "signal": null
+    },
+    {
+        "FISHERT": null,
+        "signal": null
+    },
+    {
+        "FISHERT": null,
+        "signal": null
+    },
+    {
+        "FISHERT": null,
+        "signal": null
+    },
+    {
+        "FISHERT": null,
+        "signal": null
+    },
+    {
+        "FISHERT": 0.0,
+        "signal": null
+    },
+    {
+        "FISHERT": -0.2958,
+        "signal": 0.0
+    },
+    {
+        "FISHERT": -0.7248,
+        "signal": -0.2958
+    },
+    {
+        "FISHERT": -1.1891,
+        "signal": -0.7248
+    },
+    {
+        "FISHERT": -1.6522,
+        "signal": -1.1891
+    },
+    {
+        "FISHERT": -1.9599,
+        "signal": -1.6522
+    },
+    {
+        "FISHERT": -1.7886,
+        "signal": -1.9599
+    },
+    {
+        "FISHERT": -1.013,
+        "signal": -1.7886
+    },
+    {
+        "FISHERT": -0.2502,
+        "signal": -1.013
+    },
+    {
+        "FISHERT": 0.4217,
+        "signal": -0.2502
+    },
+    {
+        "FISHERT": 1.0102,
+        "signal": 0.4217
+    },
+    {
+        "FISHERT": 1.5371,
+        "signal": 1.0102
+    },
+    {
+        "FISHERT": 1.8556,
+        "signal": 1.5371
+    },
+    {
+        "FISHERT": 1.6991,
+        "signal": 1.8556
+    },
+    {
+        "FISHERT": 1.2125,
+        "signal": 1.6991
+    },
+    {
+        "FISHERT": 0.509,
+        "signal": 1.2125
+    },
+    {
+        "FISHERT": -0.0374,
+        "signal": 0.509
+    },
+    {
+        "FISHERT": -0.3862,
+        "signal": -0.0374
+    },
+    {
+        "FISHERT": -0.6793,
+        "signal": -0.3862
+    },
+    {
+        "FISHERT": -0.8637,
+        "signal": -0.6793
+    },
+    {
+        "FISHERT": -0.7004,
+        "signal": -0.8637
+    },
+    {
+        "FISHERT": -0.5177,
+        "signal": -0.7004
+    },
+    {
+        "FISHERT": -0.7164,
+        "signal": -0.5177
+    },
+    {
+        "FISHERT": -1.0781,
+        "signal": -0.7164
+    },
+    {
+        "FISHERT": -1.2793,
+        "signal": -1.0781
+    },
+    {
+        "FISHERT": -1.6164,
+        "signal": -1.2793
+    },
+    {
+        "FISHERT": -2.008,
+        "signal": -1.6164
+    },
+    {
+        "FISHERT": -2.4188,
+        "signal": -2.008
+    },
+    {
+        "FISHERT": -2.7748,
+        "signal": -2.4188
+    },
+    {
+        "FISHERT": -2.8489,
+        "signal": -2.7748
+    },
+    {
+        "FISHERT": -3.0949,
+        "signal": -2.8489
+    },
+    {
+        "FISHERT": -3.424,
+        "signal": -3.0949
+    },
+    {
+        "FISHERT": -3.1039,
+        "signal": -3.424
+    },
+    {
+        "FISHERT": -3.1542,
+        "signal": -3.1039
+    },
+    {
+        "FISHERT": -3.3862,
+        "signal": -3.1542
+    },
+    {
+        "FISHERT": -3.3685,
+        "signal": -3.3862
+    },
+    {
+        "FISHERT": -2.1932,
+        "signal": -3.3685
+    },
+    {
+        "FISHERT": -1.081,
+        "signal": -2.1932
+    },
+    {
+        "FISHERT": -0.5904,
+        "signal": -1.081
+    },
+    {
+        "FISHERT": -0.3566,
+        "signal": -0.5904
+    },
+    {
+        "FISHERT": -0.0656,
+        "signal": -0.3566
+    },
+    {
+        "FISHERT": 0.3971,
+        "signal": -0.0656
+    },
+    {
+        "FISHERT": 0.8941,
+        "signal": 0.3971
+    },
+    {
+        "FISHERT": 1.3822,
+        "signal": 0.8941
+    },
+    {
+        "FISHERT": 1.8513,
+        "signal": 1.3822
+    },
+    {
+        "FISHERT": 2.3021,
+        "signal": 1.8513
+    },
+    {
+        "FISHERT": 2.2023,
+        "signal": 2.3021
+    },
+    {
+        "FISHERT": 1.7376,
+        "signal": 2.2023
+    },
+    {
+        "FISHERT": 1.1598,
+        "signal": 1.7376
+    },
+    {
+        "FISHERT": 0.5562,
+        "signal": 1.1598
+    },
+    {
+        "FISHERT": -0.0826,
+        "signal": 0.5562
+    },
+    {
+        "FISHERT": -0.4589,
+        "signal": -0.0826
+    },
+    {
+        "FISHERT": -0.4315,
+        "signal": -0.4589
+    },
+    {
+        "FISHERT": -0.0653,
+        "signal": -0.4315
+    },
+    {
+        "FISHERT": 0.4273,
+        "signal": -0.0653
+    },
+    {
+        "FISHERT": 0.9265,
+        "signal": 0.4273
+    },
+    {
+        "FISHERT": 1.4144,
+        "signal": 0.9265
+    },
+    {
+        "FISHERT": 1.8827,
+        "signal": 1.4144
+    },
+    {
+        "FISHERT": 2.3326,
+        "signal": 1.8827
+    },
+    {
+        "FISHERT": 2.4703,
+        "signal": 2.3326
+    },
+    {
+        "FISHERT": 2.2464,
+        "signal": 2.4703
+    },
+    {
+        "FISHERT": 2.0254,
+        "signal": 2.2464
+    },
+    {
+        "FISHERT": 1.1645,
+        "signal": 2.0254
+    },
+    {
+        "FISHERT": 0.349,
+        "signal": 1.1645
+    },
+    {
+        "FISHERT": -0.353,
+        "signal": 0.349
+    },
+    {
+        "FISHERT": -0.9586,
+        "signal": -0.353
+    },
+    {
+        "FISHERT": -1.4951,
+        "signal": -0.9586
+    },
+    {
+        "FISHERT": -1.9847,
+        "signal": -1.4951
+    },
+    {
+        "FISHERT": -2.3668,
+        "signal": -1.9847
+    },
+    {
+        "FISHERT": -2.7686,
+        "signal": -2.3668
+    },
+    {
+        "FISHERT": -3.1766,
+        "signal": -2.7686
+    },
+    {
+        "FISHERT": -3.2797,
+        "signal": -3.1766
+    },
+    {
+        "FISHERT": -1.9624,
+        "signal": -3.2797
+    },
+    {
+        "FISHERT": -0.8595,
+        "signal": -1.9624
+    },
+    {
+        "FISHERT": 0.0072,
+        "signal": -0.8595
+    },
+    {
+        "FISHERT": 0.7053,
+        "signal": 0.0072
+    },
+    {
+        "FISHERT": 1.2936,
+        "signal": 0.7053
+    },
+    {
+        "FISHERT": 1.8125,
+        "signal": 1.2936
+    },
+    {
+        "FISHERT": 2.2879,
+        "signal": 1.8125
+    },
+    {
+        "FISHERT": 2.7362,
+        "signal": 2.2879
+    },
+    {
+        "FISHERT": 3.1674,
+        "signal": 2.7362
+    },
+    {
+        "FISHERT": 3.5877,
+        "signal": 3.1674
+    },
+    {
+        "FISHERT": 3.0808,
+        "signal": 3.5877
+    },
+    {
+        "FISHERT": 2.5051,
+        "signal": 3.0808
+    },
+    {
+        "FISHERT": 2.4408,
+        "signal": 2.5051
+    },
+    {
+        "FISHERT": 2.624,
+        "signal": 2.4408
+    },
+    {
+        "FISHERT": 2.3121,
+        "signal": 2.624
+    },
+    {
+        "FISHERT": 1.6105,
+        "signal": 2.3121
+    },
+    {
+        "FISHERT": 0.7604,
+        "signal": 1.6105
+    },
+    {
+        "FISHERT": 0.0032,
+        "signal": 0.7604
+    },
+    {
+        "FISHERT": -0.6477,
+        "signal": 0.0032
+    },
+    {
+        "FISHERT": -1.2166,
+        "signal": -0.6477
+    },
+    {
+        "FISHERT": -1.7282,
+        "signal": -1.2166
+    },
+    {
+        "FISHERT": -2.2015,
+        "signal": -1.7282
+    },
+    {
+        "FISHERT": -2.6496,
+        "signal": -2.2015
+    },
+    {
+        "FISHERT": -3.0813,
+        "signal": -2.6496
+    },
+    {
+        "FISHERT": -3.0996,
+        "signal": -3.0813
+    },
+    {
+        "FISHERT": -2.7838,
+        "signal": -3.0996
+    },
+    {
+        "FISHERT": -2.5193,
+        "signal": -2.7838
+    },
+    {
+        "FISHERT": -2.3245,
+        "signal": -2.5193
+    },
+    {
+        "FISHERT": -2.3161,
+        "signal": -2.3245
+    },
+    {
+        "FISHERT": -2.5283,
+        "signal": -2.3161
+    },
+    {
+        "FISHERT": -2.6761,
+        "signal": -2.5283
+    },
+    {
+        "FISHERT": -2.96,
+        "signal": -2.6761
+    },
+    {
+        "FISHERT": -2.4665,
+        "signal": -2.96
+    },
+    {
+        "FISHERT": -2.4086,
+        "signal": -2.4665
+    },
+    {
+        "FISHERT": -2.2712,
+        "signal": -2.4086
+    },
+    {
+        "FISHERT": -2.3387,
+        "signal": -2.2712
+    },
+    {
+        "FISHERT": -2.5873,
+        "signal": -2.3387
+    },
+    {
+        "FISHERT": -2.9215,
+        "signal": -2.5873
+    },
+    {
+        "FISHERT": -3.2951,
+        "signal": -2.9215
+    },
+    {
+        "FISHERT": -2.8075,
+        "signal": -3.2951
+    },
+    {
+        "FISHERT": -2.7799,
+        "signal": -2.8075
+    },
+    {
+        "FISHERT": -2.9767,
+        "signal": -2.7799
+    },
+    {
+        "FISHERT": -3.2822,
+        "signal": -2.9767
+    },
+    {
+        "FISHERT": -3.4987,
+        "signal": -3.2822
+    },
+    {
+        "FISHERT": -3.4349,
+        "signal": -3.4987
+    },
+    {
+        "FISHERT": -3.6088,
+        "signal": -3.4349
+    },
+    {
+        "FISHERT": -3.8998,
+        "signal": -3.6088
+    },
+    {
+        "FISHERT": -4.248,
+        "signal": -3.8998
+    },
+    {
+        "FISHERT": -4.624,
+        "signal": -4.248
+    },
+    {
+        "FISHERT": -6.1122,
+        "signal": -4.624
+    },
+    {
+        "FISHERT": -6.8563,
+        "signal": -6.1122
+    },
+    {
+        "FISHERT": -7.2284,
+        "signal": -6.8563
+    },
+    {
+        "FISHERT": -5.7364,
+        "signal": -7.2284
+    },
+    {
+        "FISHERT": -5.0588,
+        "signal": -5.7364
+    },
+    {
+        "FISHERT": -4.9223,
+        "signal": -5.0588
+    },
+    {
+        "FISHERT": -5.0557,
+        "signal": -4.9223
+    },
+    {
+        "FISHERT": -6.328,
+        "signal": -5.0557
+    },
+    {
+        "FISHERT": -5.5505,
+        "signal": -6.328
+    },
+    {
+        "FISHERT": -4.5113,
+        "signal": -5.5505
+    },
+    {
+        "FISHERT": -3.2786,
+        "signal": -4.5113
+    },
+    {
+        "FISHERT": -2.3032,
+        "signal": -3.2786
+    },
+    {
+        "FISHERT": -2.0576,
+        "signal": -2.3032
+    },
+    {
+        "FISHERT": -2.1613,
+        "signal": -2.0576
+    },
+    {
+        "FISHERT": -2.4302,
+        "signal": -2.1613
+    },
+    {
+        "FISHERT": -2.7759,
+        "signal": -2.4302
+    },
+    {
+        "FISHERT": -2.9579,
+        "signal": -2.7759
+    },
+    {
+        "FISHERT": -2.858,
+        "signal": -2.9579
+    },
+    {
+        "FISHERT": -2.4442,
+        "signal": -2.858
+    },
+    {
+        "FISHERT": -1.8242,
+        "signal": -2.4442
+    },
+    {
+        "FISHERT": -1.2671,
+        "signal": -1.8242
+    },
+    {
+        "FISHERT": -0.5315,
+        "signal": -1.2671
+    },
+    {
+        "FISHERT": 0.0386,
+        "signal": -0.5315
+    },
+    {
+        "FISHERT": 0.3177,
+        "signal": 0.0386
+    },
+    {
+        "FISHERT": 0.3936,
+        "signal": 0.3177
+    },
+    {
+        "FISHERT": 0.0891,
+        "signal": 0.3936
+    },
+    {
+        "FISHERT": -0.3813,
+        "signal": 0.0891
+    },
+    {
+        "FISHERT": -0.7179,
+        "signal": -0.3813
+    },
+    {
+        "FISHERT": -0.8464,
+        "signal": -0.7179
+    },
+    {
+        "FISHERT": -0.895,
+        "signal": -0.8464
+    },
+    {
+        "FISHERT": -0.9579,
+        "signal": -0.895
+    },
+    {
+        "FISHERT": -0.5604,
+        "signal": -0.9579
+    },
+    {
+        "FISHERT": -0.1764,
+        "signal": -0.5604
+    },
+    {
+        "FISHERT": -0.3551,
+        "signal": -0.1764
+    },
+    {
+        "FISHERT": -0.7331,
+        "signal": -0.3551
+    },
+    {
+        "FISHERT": -1.1739,
+        "signal": -0.7331
+    },
+    {
+        "FISHERT": -1.3128,
+        "signal": -1.1739
+    },
+    {
+        "FISHERT": -1.6197,
+        "signal": -1.3128
+    },
+    {
+        "FISHERT": -1.9968,
+        "signal": -1.6197
+    },
+    {
+        "FISHERT": -2.4008,
+        "signal": -1.9968
+    },
+    {
+        "FISHERT": -2.8129,
+        "signal": -2.4008
+    },
+    {
+        "FISHERT": -3.2257,
+        "signal": -2.8129
+    },
+    {
+        "FISHERT": -3.6367,
+        "signal": -3.2257
+    },
+    {
+        "FISHERT": -3.0119,
+        "signal": -3.6367
+    },
+    {
+        "FISHERT": -2.1939,
+        "signal": -3.0119
+    },
+    {
+        "FISHERT": -1.2646,
+        "signal": -2.1939
+    },
+    {
+        "FISHERT": -0.4191,
+        "signal": -1.2646
+    },
+    {
+        "FISHERT": 0.3014,
+        "signal": -0.4191
+    },
+    {
+        "FISHERT": 0.918,
+        "signal": 0.3014
+    },
+    {
+        "FISHERT": 1.3687,
+        "signal": 0.918
+    },
+    {
+        "FISHERT": 1.8204,
+        "signal": 1.3687
+    },
+    {
+        "FISHERT": 1.8362,
+        "signal": 1.8204
+    },
+    {
+        "FISHERT": 1.0777,
+        "signal": 1.8362
+    },
+    {
+        "FISHERT": 0.311,
+        "signal": 1.0777
+    },
+    {
+        "FISHERT": -0.322,
+        "signal": 0.311
+    },
+    {
+        "FISHERT": -0.8985,
+        "signal": -0.322
+    },
+    {
+        "FISHERT": -1.4234,
+        "signal": -0.8985
+    },
+    {
+        "FISHERT": -1.7087,
+        "signal": -1.4234
+    },
+    {
+        "FISHERT": -2.0736,
+        "signal": -1.7087
+    },
+    {
+        "FISHERT": -2.0766,
+        "signal": -2.0736
+    },
+    {
+        "FISHERT": -1.2436,
+        "signal": -2.0766
+    },
+    {
+        "FISHERT": -0.4249,
+        "signal": -1.2436
+    },
+    {
+        "FISHERT": 0.0271,
+        "signal": -0.4249
+    },
+    {
+        "FISHERT": 0.3472,
+        "signal": 0.0271
+    },
+    {
+        "FISHERT": 0.4943,
+        "signal": 0.3472
+    },
+    {
+        "FISHERT": 0.1243,
+        "signal": 0.4943
+    },
+    {
+        "FISHERT": -0.3758,
+        "signal": 0.1243
+    },
+    {
+        "FISHERT": -0.7409,
+        "signal": -0.3758
+    },
+    {
+        "FISHERT": -0.7989,
+        "signal": -0.7409
+    },
+    {
+        "FISHERT": -0.6866,
+        "signal": -0.7989
+    },
+    {
+        "FISHERT": -0.4798,
+        "signal": -0.6866
+    },
+    {
+        "FISHERT": -0.0389,
+        "signal": -0.4798
+    },
+    {
+        "FISHERT": 0.4815,
+        "signal": -0.0389
+    },
+    {
+        "FISHERT": 0.7762,
+        "signal": 0.4815
+    },
+    {
+        "FISHERT": 1.1282,
+        "signal": 0.7762
+    },
+    {
+        "FISHERT": 1.5406,
+        "signal": 1.1282
+    },
+    {
+        "FISHERT": 1.9699,
+        "signal": 1.5406
+    },
+    {
+        "FISHERT": 2.3996,
+        "signal": 1.9699
+    },
+    {
+        "FISHERT": 2.3941,
+        "signal": 2.3996
+    },
+    {
+        "FISHERT": 1.5669,
+        "signal": 2.3941
+    },
+    {
+        "FISHERT": 0.6903,
+        "signal": 1.5669
+    },
+    {
+        "FISHERT": -0.0693,
+        "signal": 0.6903
+    },
+    {
+        "FISHERT": -0.6039,
+        "signal": -0.0693
+    },
+    {
+        "FISHERT": -1.0514,
+        "signal": -0.6039
+    },
+    {
+        "FISHERT": -1.4591,
+        "signal": -1.0514
+    },
+    {
+        "FISHERT": -1.888,
+        "signal": -1.4591
+    },
+    {
+        "FISHERT": -2.3187,
+        "signal": -1.888
+    },
+    {
+        "FISHERT": -2.7448,
+        "signal": -2.3187
+    },
+    {
+        "FISHERT": -2.4753,
+        "signal": -2.7448
+    },
+    {
+        "FISHERT": -2.2154,
+        "signal": -2.4753
+    },
+    {
+        "FISHERT": -2.3085,
+        "signal": -2.2154
+    },
+    {
+        "FISHERT": -2.5701,
+        "signal": -2.3085
+    },
+    {
+        "FISHERT": -2.9107,
+        "signal": -2.5701
+    },
+    {
+        "FISHERT": -2.9759,
+        "signal": -2.9107
+    },
+    {
+        "FISHERT": -2.103,
+        "signal": -2.9759
+    },
+    {
+        "FISHERT": -1.2695,
+        "signal": -2.103
+    },
+    {
+        "FISHERT": -0.6861,
+        "signal": -1.2695
+    },
+    {
+        "FISHERT": -0.3997,
+        "signal": -0.6861
+    },
+    {
+        "FISHERT": -0.4584,
+        "signal": -0.3997
+    },
+    {
+        "FISHERT": -0.7434,
+        "signal": -0.4584
+    },
+    {
+        "FISHERT": -1.142,
+        "signal": -0.7434
+    },
+    {
+        "FISHERT": -1.5756,
+        "signal": -1.142
+    },
+    {
+        "FISHERT": -2.0143,
+        "signal": -1.5756
+    },
+    {
+        "FISHERT": -2.4479,
+        "signal": -2.0143
+    },
+    {
+        "FISHERT": -2.8741,
+        "signal": -2.4479
+    },
+    {
+        "FISHERT": -2.6023,
+        "signal": -2.8741
+    },
+    {
+        "FISHERT": -2.3417,
+        "signal": -2.6023
+    },
+    {
+        "FISHERT": -2.3136,
+        "signal": -2.3417
+    },
+    {
+        "FISHERT": -2.5163,
+        "signal": -2.3136
+    },
+    {
+        "FISHERT": -1.8025,
+        "signal": -2.5163
+    },
+    {
+        "FISHERT": -0.9037,
+        "signal": -1.8025
+    },
+    {
+        "FISHERT": -0.1109,
+        "signal": -0.9037
+    },
+    {
+        "FISHERT": 0.5629,
+        "signal": -0.1109
+    },
+    {
+        "FISHERT": 1.1458,
+        "signal": 0.5629
+    },
+    {
+        "FISHERT": 1.666,
+        "signal": 1.1458
+    },
+    {
+        "FISHERT": 2.1445,
+        "signal": 1.666
+    },
+    {
+        "FISHERT": 2.5958,
+        "signal": 2.1445
+    },
+    {
+        "FISHERT": 3.0295,
+        "signal": 2.5958
+    },
+    {
+        "FISHERT": 2.5264,
+        "signal": 3.0295
+    },
+    {
+        "FISHERT": 1.8746,
+        "signal": 2.5264
+    },
+    {
+        "FISHERT": 1.0667,
+        "signal": 1.8746
+    },
+    {
+        "FISHERT": 0.2845,
+        "signal": 1.0667
+    },
+    {
+        "FISHERT": -0.3206,
+        "signal": 0.2845
+    },
+    {
+        "FISHERT": -0.8848,
+        "signal": -0.3206
+    },
+    {
+        "FISHERT": -1.4044,
+        "signal": -0.8848
+    },
+    {
+        "FISHERT": -1.888,
+        "signal": -1.4044
+    },
+    {
+        "FISHERT": -1.6953,
+        "signal": -1.888
+    },
+    {
+        "FISHERT": -1.5021,
+        "signal": -1.6953
+    },
+    {
+        "FISHERT": -1.0459,
+        "signal": -1.5021
+    },
+    {
+        "FISHERT": -0.4255,
+        "signal": -1.0459
+    },
+    {
+        "FISHERT": 0.1114,
+        "signal": -0.4255
+    },
+    {
+        "FISHERT": 0.3282,
+        "signal": 0.1114
+    },
+    {
+        "FISHERT": 0.4293,
+        "signal": 0.3282
+    },
+    {
+        "FISHERT": 0.4452,
+        "signal": 0.4293
+    },
+    {
+        "FISHERT": 0.6205,
+        "signal": 0.4452
+    },
+    {
+        "FISHERT": 0.9778,
+        "signal": 0.6205
+    },
+    {
+        "FISHERT": 1.3983,
+        "signal": 0.9778
+    },
+    {
+        "FISHERT": 1.8349,
+        "signal": 1.3983
+    },
+    {
+        "FISHERT": 2.2701,
+        "signal": 1.8349
+    },
+    {
+        "FISHERT": 2.6989,
+        "signal": 2.2701
+    },
+    {
+        "FISHERT": 2.6566,
+        "signal": 2.6989
+    },
+    {
+        "FISHERT": 2.3743,
+        "signal": 2.6566
+    },
+    {
+        "FISHERT": 2.4533,
+        "signal": 2.3743
+    },
+    {
+        "FISHERT": 2.5305,
+        "signal": 2.4533
+    },
+    {
+        "FISHERT": 2.4824,
+        "signal": 2.5305
+    },
+    {
+        "FISHERT": 2.6729,
+        "signal": 2.4824
+    },
+    {
+        "FISHERT": 2.9777,
+        "signal": 2.6729
+    },
+    {
+        "FISHERT": 3.3365,
+        "signal": 2.9777
+    },
+    {
+        "FISHERT": 2.8923,
+        "signal": 3.3365
+    },
+    {
+        "FISHERT": 2.4431,
+        "signal": 2.8923
+    },
+    {
+        "FISHERT": 1.9465,
+        "signal": 2.4431
+    },
+    {
+        "FISHERT": 1.1562,
+        "signal": 1.9465
+    },
+    {
+        "FISHERT": 0.5445,
+        "signal": 1.1562
+    },
+    {
+        "FISHERT": 0.5031,
+        "signal": 0.5445
+    },
+    {
+        "FISHERT": 0.4121,
+        "signal": 0.5031
+    },
+    {
+        "FISHERT": 0.2289,
+        "signal": 0.4121
+    },
+    {
+        "FISHERT": -0.2113,
+        "signal": 0.2289
+    },
+    {
+        "FISHERT": -0.5768,
+        "signal": -0.2113
+    },
+    {
+        "FISHERT": -0.2526,
+        "signal": -0.5768
+    },
+    {
+        "FISHERT": 0.2437,
+        "signal": -0.2526
+    },
+    {
+        "FISHERT": 0.7651,
+        "signal": 0.2437
+    },
+    {
+        "FISHERT": 1.2697,
+        "signal": 0.7651
+    },
+    {
+        "FISHERT": 1.699,
+        "signal": 1.2697
+    },
+    {
+        "FISHERT": 2.1331,
+        "signal": 1.699
+    },
+    {
+        "FISHERT": 2.5629,
+        "signal": 2.1331
+    },
+    {
+        "FISHERT": 2.8518,
+        "signal": 2.5629
+    },
+    {
+        "FISHERT": 2.5156,
+        "signal": 2.8518
+    },
+    {
+        "FISHERT": 1.8834,
+        "signal": 2.5156
+    },
+    {
+        "FISHERT": 1.1492,
+        "signal": 1.8834
+    },
+    {
+        "FISHERT": 0.3792,
+        "signal": 1.1492
+    },
+    {
+        "FISHERT": -0.3068,
+        "signal": 0.3792
+    },
+    {
+        "FISHERT": -0.9077,
+        "signal": -0.3068
+    },
+    {
+        "FISHERT": -1.4436,
+        "signal": -0.9077
+    },
+    {
+        "FISHERT": -1.9341,
+        "signal": -1.4436
+    },
+    {
+        "FISHERT": -2.394,
+        "signal": -1.9341
+    },
+    {
+        "FISHERT": -2.8336,
+        "signal": -2.394
+    },
+    {
+        "FISHERT": -3.2598,
+        "signal": -2.8336
+    },
+    {
+        "FISHERT": -3.6773,
+        "signal": -3.2598
+    },
+    {
+        "FISHERT": -4.089,
+        "signal": -3.6773
+    },
+    {
+        "FISHERT": -4.497,
+        "signal": -4.089
+    },
+    {
+        "FISHERT": -3.3548,
+        "signal": -4.497
+    },
+    {
+        "FISHERT": -2.0682,
+        "signal": -3.3548
+    },
+    {
+        "FISHERT": -1.2458,
+        "signal": -2.0682
+    },
+    {
+        "FISHERT": -1.0159,
+        "signal": -1.2458
+    },
+    {
+        "FISHERT": -1.1712,
+        "signal": -1.0159
+    },
+    {
+        "FISHERT": -1.4911,
+        "signal": -1.1712
+    },
+    {
+        "FISHERT": -1.8775,
+        "signal": -1.4911
+    },
+    {
+        "FISHERT": -2.1306,
+        "signal": -1.8775
+    },
+    {
+        "FISHERT": -2.2426,
+        "signal": -2.1306
+    },
+    {
+        "FISHERT": -2.2965,
+        "signal": -2.2426
+    },
+    {
+        "FISHERT": -1.9765,
+        "signal": -2.2965
+    },
+    {
+        "FISHERT": -1.6143,
+        "signal": -1.9765
+    },
+    {
+        "FISHERT": -1.1733,
+        "signal": -1.6143
+    },
+    {
+        "FISHERT": -1.048,
+        "signal": -1.1733
+    },
+    {
+        "FISHERT": -0.8727,
+        "signal": -1.048
+    },
+    {
+        "FISHERT": -0.3306,
+        "signal": -0.8727
+    },
+    {
+        "FISHERT": 0.2469,
+        "signal": -0.3306
+    },
+    {
+        "FISHERT": 0.2214,
+        "signal": 0.2469
+    },
+    {
+        "FISHERT": -0.0445,
+        "signal": 0.2214
+    },
+    {
+        "FISHERT": -0.486,
+        "signal": -0.0445
+    },
+    {
+        "FISHERT": -0.6199,
+        "signal": -0.486
+    },
+    {
+        "FISHERT": -0.6335,
+        "signal": -0.6199
+    },
+    {
+        "FISHERT": -0.1957,
+        "signal": -0.6335
+    },
+    {
+        "FISHERT": 0.1714,
+        "signal": -0.1957
+    },
+    {
+        "FISHERT": 0.6432,
+        "signal": 0.1714
+    },
+    {
+        "FISHERT": 1.0774,
+        "signal": 0.6432
+    },
+    {
+        "FISHERT": 1.1871,
+        "signal": 1.0774
+    },
+    {
+        "FISHERT": 0.7698,
+        "signal": 1.1871
+    },
+    {
+        "FISHERT": 0.1685,
+        "signal": 0.7698
+    },
+    {
+        "FISHERT": -0.3807,
+        "signal": 0.1685
+    },
+    {
+        "FISHERT": -0.5669,
+        "signal": -0.3807
+    },
+    {
+        "FISHERT": -0.5539,
+        "signal": -0.5669
+    },
+    {
+        "FISHERT": -0.5498,
+        "signal": -0.5539
+    },
+    {
+        "FISHERT": -0.3659,
+        "signal": -0.5498
+    },
+    {
+        "FISHERT": -0.1304,
+        "signal": -0.3659
+    },
+    {
+        "FISHERT": -0.3691,
+        "signal": -0.1304
+    },
+    {
+        "FISHERT": -0.7713,
+        "signal": -0.3691
+    },
+    {
+        "FISHERT": -1.2148,
+        "signal": -0.7713
+    },
+    {
+        "FISHERT": -1.5519,
+        "signal": -1.2148
+    },
+    {
+        "FISHERT": -1.7446,
+        "signal": -1.5519
+    },
+    {
+        "FISHERT": -2.0644,
+        "signal": -1.7446
+    },
+    {
+        "FISHERT": -2.4395,
+        "signal": -2.0644
+    },
+    {
+        "FISHERT": -2.7432,
+        "signal": -2.4395
+    },
+    {
+        "FISHERT": -2.3324,
+        "signal": -2.7432
+    },
+    {
+        "FISHERT": -1.8209,
+        "signal": -2.3324
+    },
+    {
+        "FISHERT": -1.808,
+        "signal": -1.8209
+    },
+    {
+        "FISHERT": -1.789,
+        "signal": -1.808
+    },
+    {
+        "FISHERT": -1.6455,
+        "signal": -1.789
+    },
+    {
+        "FISHERT": -1.5817,
+        "signal": -1.6455
+    },
+    {
+        "FISHERT": -1.785,
+        "signal": -1.5817
+    },
+    {
+        "FISHERT": -1.7603,
+        "signal": -1.785
+    },
+    {
+        "FISHERT": -1.9765,
+        "signal": -1.7603
+    },
+    {
+        "FISHERT": -2.3029,
+        "signal": -1.9765
+    },
+    {
+        "FISHERT": -2.0792,
+        "signal": -2.3029
+    },
+    {
+        "FISHERT": -1.9202,
+        "signal": -2.0792
+    },
+    {
+        "FISHERT": -2.0588,
+        "signal": -1.9202
+    },
+    {
+        "FISHERT": -1.9175,
+        "signal": -2.0588
+    },
+    {
+        "FISHERT": -1.3902,
+        "signal": -1.9175
+    },
+    {
+        "FISHERT": -0.9269,
+        "signal": -1.3902
+    },
+    {
+        "FISHERT": -0.5403,
+        "signal": -0.9269
+    },
+    {
+        "FISHERT": -0.6719,
+        "signal": -0.5403
+    },
+    {
+        "FISHERT": -0.7,
+        "signal": -0.6719
+    },
+    {
+        "FISHERT": -0.7343,
+        "signal": -0.7
+    },
+    {
+        "FISHERT": -0.5724,
+        "signal": -0.7343
+    },
+    {
+        "FISHERT": -0.1153,
+        "signal": -0.5724
+    },
+    {
+        "FISHERT": 0.4188,
+        "signal": -0.1153
+    },
+    {
+        "FISHERT": 0.7426,
+        "signal": 0.4188
+    },
+    {
+        "FISHERT": 0.8572,
+        "signal": 0.7426
+    },
+    {
+        "FISHERT": 0.9886,
+        "signal": 0.8572
+    },
+    {
+        "FISHERT": 1.3057,
+        "signal": 0.9886
+    },
+    {
+        "FISHERT": 1.5692,
+        "signal": 1.3057
+    },
+    {
+        "FISHERT": 1.8325,
+        "signal": 1.5692
+    },
+    {
+        "FISHERT": 1.2359,
+        "signal": 1.8325
+    },
+    {
+        "FISHERT": 0.4945,
+        "signal": 1.2359
+    },
+    {
+        "FISHERT": -0.1021,
+        "signal": 0.4945
+    },
+    {
+        "FISHERT": -0.6765,
+        "signal": -0.1021
+    },
+    {
+        "FISHERT": -1.2092,
+        "signal": -0.6765
+    },
+    {
+        "FISHERT": -1.2821,
+        "signal": -1.2092
+    },
+    {
+        "FISHERT": -0.955,
+        "signal": -1.2821
+    },
+    {
+        "FISHERT": -0.648,
+        "signal": -0.955
+    },
+    {
+        "FISHERT": -0.1587,
+        "signal": -0.648
+    },
+    {
+        "FISHERT": -0.3033,
+        "signal": -0.1587
+    },
+    {
+        "FISHERT": -0.6715,
+        "signal": -0.3033
+    },
+    {
+        "FISHERT": -1.111,
+        "signal": -0.6715
+    },
+    {
+        "FISHERT": -1.5648,
+        "signal": -1.111
+    },
+    {
+        "FISHERT": -1.9733,
+        "signal": -1.5648
+    },
+    {
+        "FISHERT": -2.3928,
+        "signal": -1.9733
+    },
+    {
+        "FISHERT": -2.8125,
+        "signal": -2.3928
+    },
+    {
+        "FISHERT": -2.5702,
+        "signal": -2.8125
+    },
+    {
+        "FISHERT": -1.5097,
+        "signal": -2.5702
+    },
+    {
+        "FISHERT": -0.5709,
+        "signal": -1.5097
+    },
+    {
+        "FISHERT": 0.0008,
+        "signal": -0.5709
+    },
+    {
+        "FISHERT": 0.4453,
+        "signal": 0.0008
+    },
+    {
+        "FISHERT": 0.7386,
+        "signal": 0.4453
+    },
+    {
+        "FISHERT": 0.8961,
+        "signal": 0.7386
+    },
+    {
+        "FISHERT": 1.1528,
+        "signal": 0.8961
+    },
+    {
+        "FISHERT": 1.2071,
+        "signal": 1.1528
+    },
+    {
+        "FISHERT": 0.6478,
+        "signal": 1.2071
+    },
+    {
+        "FISHERT": 0.0139,
+        "signal": 0.6478
+    },
+    {
+        "FISHERT": -0.404,
+        "signal": 0.0139
+    },
+    {
+        "FISHERT": -0.6809,
+        "signal": -0.404
+    },
+    {
+        "FISHERT": -1.0792,
+        "signal": -0.6809
+    },
+    {
+        "FISHERT": -1.3483,
+        "signal": -1.0792
+    },
+    {
+        "FISHERT": -1.7147,
+        "signal": -1.3483
+    },
+    {
+        "FISHERT": -2.1184,
+        "signal": -1.7147
+    },
+    {
+        "FISHERT": -1.9851,
+        "signal": -2.1184
+    },
+    {
+        "FISHERT": -2.018,
+        "signal": -1.9851
+    },
+    {
+        "FISHERT": -2.081,
+        "signal": -2.018
+    },
+    {
+        "FISHERT": -1.3175,
+        "signal": -2.081
+    },
+    {
+        "FISHERT": -0.5086,
+        "signal": -1.3175
+    },
+    {
+        "FISHERT": 0.2054,
+        "signal": -0.5086
+    },
+    {
+        "FISHERT": 0.8245,
+        "signal": 0.2054
+    },
+    {
+        "FISHERT": 1.3718,
+        "signal": 0.8245
+    },
+    {
+        "FISHERT": 1.8693,
+        "signal": 1.3718
+    },
+    {
+        "FISHERT": 2.3335,
+        "signal": 1.8693
+    },
+    {
+        "FISHERT": 2.7759,
+        "signal": 2.3335
+    },
+    {
+        "FISHERT": 3.2038,
+        "signal": 2.7759
+    },
+    {
+        "FISHERT": 2.942,
+        "signal": 3.2038
+    },
+    {
+        "FISHERT": 2.0472,
+        "signal": 2.942
+    },
+    {
+        "FISHERT": 1.0419,
+        "signal": 2.0472
+    },
+    {
+        "FISHERT": 0.2965,
+        "signal": 1.0419
+    },
+    {
+        "FISHERT": -0.0954,
+        "signal": 0.2965
+    },
+    {
+        "FISHERT": -0.312,
+        "signal": -0.0954
+    },
+    {
+        "FISHERT": -0.3565,
+        "signal": -0.312
+    },
+    {
+        "FISHERT": -0.1654,
+        "signal": -0.3565
+    },
+    {
+        "FISHERT": 0.1427,
+        "signal": -0.1654
+    },
+    {
+        "FISHERT": 0.5923,
+        "signal": 0.1427
+    },
+    {
+        "FISHERT": 0.9529,
+        "signal": 0.5923
+    },
+    {
+        "FISHERT": 1.1086,
+        "signal": 0.9529
+    },
+    {
+        "FISHERT": 1.3107,
+        "signal": 1.1086
+    },
+    {
+        "FISHERT": 1.2883,
+        "signal": 1.3107
+    },
+    {
+        "FISHERT": 0.7994,
+        "signal": 1.2883
+    },
+    {
+        "FISHERT": 0.3289,
+        "signal": 0.7994
+    },
+    {
+        "FISHERT": 0.2806,
+        "signal": 0.3289
+    },
+    {
+        "FISHERT": 0.1682,
+        "signal": 0.2806
+    },
+    {
+        "FISHERT": 0.1617,
+        "signal": 0.1682
+    },
+    {
+        "FISHERT": 0.3586,
+        "signal": 0.1617
+    },
+    {
+        "FISHERT": 0.744,
+        "signal": 0.3586
+    },
+    {
+        "FISHERT": 1.0482,
+        "signal": 0.744
+    },
+    {
+        "FISHERT": 1.4415,
+        "signal": 1.0482
+    },
+    {
+        "FISHERT": 1.599,
+        "signal": 1.4415
+    },
+    {
+        "FISHERT": 1.5957,
+        "signal": 1.599
+    },
+    {
+        "FISHERT": 1.4633,
+        "signal": 1.5957
+    },
+    {
+        "FISHERT": 1.1346,
+        "signal": 1.4633
+    },
+    {
+        "FISHERT": 0.4934,
+        "signal": 1.1346
+    },
+    {
+        "FISHERT": -0.1527,
+        "signal": 0.4934
+    },
+    {
+        "FISHERT": -0.3743,
+        "signal": -0.1527
+    },
+    {
+        "FISHERT": -0.2847,
+        "signal": -0.3743
+    },
+    {
+        "FISHERT": -0.0481,
+        "signal": -0.2847
+    },
+    {
+        "FISHERT": 0.3913,
+        "signal": -0.0481
+    },
+    {
+        "FISHERT": 0.8784,
+        "signal": 0.3913
+    },
+    {
+        "FISHERT": 1.0481,
+        "signal": 0.8784
+    },
+    {
+        "FISHERT": 0.8449,
+        "signal": 1.0481
+    },
+    {
+        "FISHERT": 0.4477,
+        "signal": 0.8449
+    },
+    {
+        "FISHERT": -0.0979,
+        "signal": 0.4477
+    },
+    {
+        "FISHERT": -0.4085,
+        "signal": -0.0979
+    },
+    {
+        "FISHERT": -0.6943,
+        "signal": -0.4085
+    },
+    {
+        "FISHERT": -0.8351,
+        "signal": -0.6943
+    },
+    {
+        "FISHERT": -0.7525,
+        "signal": -0.8351
+    },
+    {
+        "FISHERT": -0.4355,
+        "signal": -0.7525
+    },
+    {
+        "FISHERT": 0.0813,
+        "signal": -0.4355
+    },
+    {
+        "FISHERT": 0.2863,
+        "signal": 0.0813
+    },
+    {
+        "FISHERT": -0.0271,
+        "signal": 0.2863
+    },
+    {
+        "FISHERT": -0.3447,
+        "signal": -0.0271
+    },
+    {
+        "FISHERT": -0.7823,
+        "signal": -0.3447
+    },
+    {
+        "FISHERT": -0.9463,
+        "signal": -0.7823
+    },
+    {
+        "FISHERT": -0.6173,
+        "signal": -0.9463
+    },
+    {
+        "FISHERT": -0.0701,
+        "signal": -0.6173
+    },
+    {
+        "FISHERT": 0.2224,
+        "signal": -0.0701
+    },
+    {
+        "FISHERT": 0.6588,
+        "signal": 0.2224
+    },
+    {
+        "FISHERT": 1.1296,
+        "signal": 0.6588
+    },
+    {
+        "FISHERT": 1.5975,
+        "signal": 1.1296
+    },
+    {
+        "FISHERT": 1.7043,
+        "signal": 1.5975
+    },
+    {
+        "FISHERT": 1.6996,
+        "signal": 1.7043
+    },
+    {
+        "FISHERT": 1.664,
+        "signal": 1.6996
+    },
+    {
+        "FISHERT": 1.5234,
+        "signal": 1.664
+    },
+    {
+        "FISHERT": 0.8845,
+        "signal": 1.5234
+    },
+    {
+        "FISHERT": 0.1888,
+        "signal": 0.8845
+    },
+    {
+        "FISHERT": -0.4499,
+        "signal": 0.1888
+    },
+    {
+        "FISHERT": -1.0222,
+        "signal": -0.4499
+    },
+    {
+        "FISHERT": -1.541,
+        "signal": -1.0222
+    },
+    {
+        "FISHERT": -2.0212,
+        "signal": -1.541
+    },
+    {
+        "FISHERT": -2.1954,
+        "signal": -2.0212
+    },
+    {
+        "FISHERT": -2.0586,
+        "signal": -2.1954
+    },
+    {
+        "FISHERT": -1.9028,
+        "signal": -2.0586
+    },
+    {
+        "FISHERT": -2.053,
+        "signal": -1.9028
+    },
+    {
+        "FISHERT": -2.3463,
+        "signal": -2.053
+    },
+    {
+        "FISHERT": -2.7048,
+        "signal": -2.3463
+    },
+    {
+        "FISHERT": -3.092,
+        "signal": -2.7048
+    },
+    {
+        "FISHERT": -3.4909,
+        "signal": -3.092
+    },
+    {
+        "FISHERT": -3.8939,
+        "signal": -3.4909
+    }
+]

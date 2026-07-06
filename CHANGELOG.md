@@ -53,8 +53,10 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Added CKSP
     - Added CMF
     - Added DEMA
+    - Added Fisher
     - Added COPC
     - Added KAMA
+    - Added KST
     - Added Linear Regression
     - Added NATR
     - Added PPO

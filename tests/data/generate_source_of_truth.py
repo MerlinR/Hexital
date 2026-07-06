@@ -116,6 +116,8 @@ def generate_indicators():
             {"kind": "macd"},
             {"kind": "rsi"},
             {"kind": "ao"},
+            {"kind": "fisher"},
+            {"kind": "kst"},
             {"kind": "linreg"},
             {"kind": "linreg", "slope": True},
             {"kind": "atr"},
@@ -178,6 +180,22 @@ def generate_indicators():
     save_as_json([round_values(value) for value in df["SMA_3"].tolist()], "SMA_3")
     save_as_json([round_values(value) for value in df["RSI_14"].tolist()], "RSI")
     save_as_json([round_values(value) for value in df["AO_5_34"].tolist()], "AO")
+    save_structured_result(
+        df,
+        "FISHER",
+        [
+            ("FISHERT_9_1", "FISHERT"),
+            ("FISHERTs_9_1", "signal"),
+        ],
+    )
+    save_structured_result(
+        df,
+        "KST",
+        [
+            ("KST_10_15_20_30_10_10_10_15", "KST"),
+            ("KSTs_9", "signal"),
+        ],
+    )
     save_as_json(
         [round_values(value) for value in df["LR_14"].tolist()],
         "LINEARREGRESSION",

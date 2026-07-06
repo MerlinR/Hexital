@@ -119,6 +119,11 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.series(), expected_ema_t10)
 
+    def test_fisher(self, candles, expected_fisher):
+        test = indicators.Fisher(candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_fisher)
+
     def test_highlowaverage(self, candles, expected_highlowaverage):
         test = indicators.HLA(candles=candles)
         test.calculate()
@@ -158,6 +163,11 @@ class TestIndicators(IndicatorTestBase):
         test = indicators.KC(candles=candles)
         test.calculate()
         assert self.verify(test.series(), expected_kc)
+
+    def test_kst(self, candles, expected_kst):
+        test = indicators.KST(candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_kst)
 
     def test_linear_regression(self, candles, expected_linear_regression):
         test = indicators.LinearRegression(candles=candles)

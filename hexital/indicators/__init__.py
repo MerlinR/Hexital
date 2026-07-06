@@ -15,6 +15,7 @@ from .counter import Counter
 from .dema import DEMA
 from .donchian import Donchian
 from .ema import EMA
+from .fisher import Fisher
 from .highest_lowest import HL
 from .hla import HLA
 from .hlca import HLCA
@@ -23,6 +24,7 @@ from .ichimoku import Ichimoku
 from .jma import JMA
 from .kama import KAMA
 from .kc import KC
+from .kst import KST
 from .linear_regression import LinearRegression
 from .macd import MACD
 from .mfi import MFI
@@ -75,6 +77,7 @@ __all__ = [
     "DEMA",
     "Donchian",
     "EMA",
+    "Fisher",
     "HL",
     "HLA",
     "HLCA",
@@ -83,6 +86,7 @@ __all__ = [
     "JMA",
     "KAMA",
     "KC",
+    "KST",
     "LinearRegression",
     "MACD",
     "MFI",
