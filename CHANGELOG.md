@@ -49,6 +49,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Added BandWidth
     - Added CCI (CCI)
     - Added ChandelierExit
+    - Added CKSP
     - Added DEMA
     - Added KAMA
     - Added NATR

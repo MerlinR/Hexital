@@ -116,6 +116,7 @@ def generate_indicators():
             {"kind": "uo"},
             {"kind": "bbands"},
             {"kind": "aroon"},
+            {"kind": "cksp"},
             {"kind": "donchian"},
             {"kind": "cmo"},
             {"kind": "mfi"},
@@ -199,6 +200,14 @@ def generate_indicators():
         [
             ("long", "long"),
             ("short", "short"),
+        ],
+    )
+    save_structured_result(
+        df,
+        "CKSP",
+        [
+            ("CKSPl_10_3_20", "long"),
+            ("CKSPs_10_3_20", "short"),
         ],
     )
 

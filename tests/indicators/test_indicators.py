@@ -43,6 +43,11 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.series(), expected_chandelier_exit)
 
+    def test_cksp(self, candles, expected_cksp):
+        test = indicators.CKSP(candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_cksp)
+
     def test_cmo(self, candles, expected_cmo):
         test = indicators.CMO(candles=candles)
         test.calculate()

@@ -51,6 +51,11 @@ def fixture_expected_chandelier_exit():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/CHANDELIEREXIT.json")
 
 
+@pytest.fixture(name="expected_cksp")
+def fixture_expected_cksp():
+    return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/CKSP.json")
+
+
 @pytest.fixture(name="expected_cmo")
 def fixture_expected_cmo():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/CMO.json")

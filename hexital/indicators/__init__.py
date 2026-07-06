@@ -6,6 +6,7 @@ from .bandwidth import BandWidth
 from .bbands import BBANDS
 from .cci import CCI
 from .chandelier_exit import ChandelierExit
+from .cksp import CKSP
 from .cmo import CMO
 from .counter import Counter
 from .dema import DEMA
@@ -58,6 +59,7 @@ __all__ = [
     "BBANDS",
     "CCI",
     "ChandelierExit",
+    "CKSP",
     "CMO",
     "Counter",
     "DEMA",
