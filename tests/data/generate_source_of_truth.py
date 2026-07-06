@@ -143,6 +143,7 @@ def generate_indicators():
             {"kind": "aroon"},
             {"kind": "cksp"},
             {"kind": "cmf"},
+            {"kind": "coppock"},
             {"kind": "donchian"},
             {"kind": "cmo"},
             {"kind": "mfi"},
@@ -212,6 +213,10 @@ def generate_indicators():
     save_as_json([round_values(value) for value in df["BBB_5_2.0"].tolist()], "BANDWIDTH")
     save_as_json([round_values(value) for value in df["CMF_20"].tolist()], "CMF")
     save_as_json([round_values(value) for value in df["CMO_14"].tolist()], "CMO")
+    save_as_json(
+        [round_values(value) for value in df["COPC_11_14_10"].tolist()],
+        "COPPOCK",
+    )
     save_as_json([round_values(value) for value in df["MFI_14"].tolist()], "MFI")
     save_as_json([round_values(value) for value in df["MIDPOINT_2"].tolist()], "MIDPOINT")
     save_as_json([round_values(value) for value in df["JMA_7_0"].tolist()], "JMA")

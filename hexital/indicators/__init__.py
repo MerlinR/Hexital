@@ -10,6 +10,7 @@ from .chandelier_exit import ChandelierExit
 from .cksp import CKSP
 from .cmf import CMF
 from .cmo import CMO
+from .coppock import COPC
 from .counter import Counter
 from .dema import DEMA
 from .donchian import Donchian
@@ -69,6 +70,7 @@ __all__ = [
     "CKSP",
     "CMF",
     "CMO",
+    "COPC",
     "Counter",
     "DEMA",
     "Donchian",

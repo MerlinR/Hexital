@@ -63,6 +63,11 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.series(), expected_cmo)
 
+    def test_copc(self, candles, expected_copc):
+        test = indicators.COPC(candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_copc)
+
     def test_cci(self, candles, expected_cci):
         test = indicators.CCI(candles=candles)
         test.calculate()

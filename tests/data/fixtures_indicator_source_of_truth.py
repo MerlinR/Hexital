@@ -71,6 +71,11 @@ def fixture_expected_cmo():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/CMO.json")
 
 
+@pytest.fixture(name="expected_copc")
+def fixture_expected_copc():
+    return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/COPPOCK.json")
+
+
 @pytest.fixture(name="expected_dema")
 def fixture_expected_dema():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/DEMA.json")
