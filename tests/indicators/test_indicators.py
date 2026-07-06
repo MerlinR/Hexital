@@ -277,6 +277,11 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.series(), expected_tr)
 
+    def test_tema(self, candles, expected_tema):
+        test = indicators.TEMA(candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_tema)
+
     def test_tsi(self, candles, expected_tsi):
         test = indicators.TSI(candles=candles)
         test.calculate()

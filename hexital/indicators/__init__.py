@@ -37,6 +37,7 @@ from .stdev import STDEV
 from .stdevthres import STDEVT
 from .stoch import STOCH
 from .supertrend import Supertrend
+from .tema import TEMA
 from .tr import TR
 from .tsi import TSI
 from .uo import UO
@@ -86,6 +87,7 @@ __all__ = [
     "STDEVT",
     "STOCH",
     "Supertrend",
+    "TEMA",
     "TR",
     "TSI",
     "UO",

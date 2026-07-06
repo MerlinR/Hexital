@@ -231,6 +231,11 @@ def fixture_expected_supertrend():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/SUPERTREND.json")
 
 
+@pytest.fixture(name="expected_tema")
+def fixture_expected_tema():
+    return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/TEMA.json")
+
+
 @pytest.fixture(name="expected_tr")
 def fixture_expected_tr():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/TR.json")
