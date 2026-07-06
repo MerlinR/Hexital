@@ -38,6 +38,7 @@ from .stoch import STOCH
 from .supertrend import Supertrend
 from .tr import TR
 from .tsi import TSI
+from .uo import UO
 from .vwap import VWAP
 from .vwma import VWMA
 from .willr import WillR
@@ -85,6 +86,7 @@ __all__ = [
     "Supertrend",
     "TR",
     "TSI",
+    "UO",
     "VWAP",
     "VWMA",
     "WillR",

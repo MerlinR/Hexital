@@ -277,6 +277,11 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.series(), expected_tsi)
 
+    def test_uo(self, candles, expected_uo):
+        test = indicators.UO(candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_uo)
+
     def test_vwap(self, candles, expected_vwap):
         test = indicators.VWAP(candles=candles)
         test.calculate()

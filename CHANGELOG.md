@@ -54,6 +54,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Added PSAR
     - Added Squeeze (SQ)
     - Added Squeeze Pro (SQPRO)
+    - Added Ultimate Oscillator (UO)
     - Added WillR (WillR)
     - Added ZScore (ZS)
 - Modified Indicators

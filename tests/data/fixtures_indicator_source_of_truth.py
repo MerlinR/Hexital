@@ -236,6 +236,11 @@ def fixture_expected_tsi():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/TSI.json")
 
 
+@pytest.fixture(name="expected_uo")
+def fixture_expected_uo():
+    return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/UO.json")
+
+
 @pytest.fixture(name="expected_willr")
 def fixture_expected_willr():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/WILLR.json")
