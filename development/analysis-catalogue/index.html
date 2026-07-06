@@ -3829,6 +3829,36 @@
 <td style="text-align: left;"><strong>Value Range Analysis</strong><br><br> Calculates the difference between the minimum and maximum values for the given <code>indicator</code> within a specified range of candles. Includes the latest candle by default. If the specified length exceeds the available candles, it will evaluate all candles.</td>
 </tr>
 <tr>
+<td style="text-align: left;"><strong>Bars Since</strong></td>
+<td style="text-align: left;"><em><a href="../reference/hexital/analysis/movement/#hexital.analysis.movement.bars_since">bars_since</a></em></td>
+<td style="text-align: left;"><strong>Bars Since Analysis</strong><br><br> Returns how many bars ago the given <code>indicator</code> last matched <code>value</code>. A return value of <code>0</code> means the current bar matches. If no match exists, returns <code>None</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Value When</strong></td>
+<td style="text-align: left;"><em><a href="../reference/hexital/analysis/movement/#hexital.analysis.movement.value_when">value_when</a></em></td>
+<td style="text-align: left;"><strong>Value When Analysis</strong><br><br> Returns the <code>indicator</code> reading from the nth most recent bar where <code>condition_indicator</code> matched <code>value</code>. <code>occurrence=0</code> means the latest match.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Change</strong></td>
+<td style="text-align: left;"><em><a href="../reference/hexital/analysis/movement/#hexital.analysis.movement.change">change</a></em></td>
+<td style="text-align: left;"><strong>Change Analysis</strong><br><br> Returns the difference between the current reading and the reading <code>length</code> bars back.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Percent Change</strong></td>
+<td style="text-align: left;"><em><a href="../reference/hexital/analysis/movement/#hexital.analysis.movement.percent_change">percent_change</a></em></td>
+<td style="text-align: left;"><strong>Percent Change Analysis</strong><br><br> Returns the percentage change between the current reading and the reading <code>length</code> bars back.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Rising Count</strong></td>
+<td style="text-align: left;"><em><a href="../reference/hexital/analysis/movement/#hexital.analysis.movement.rising_count">rising_count</a></em></td>
+<td style="text-align: left;"><strong>Rising Count Analysis</strong><br><br> Counts consecutive rising bars ending at <code>index</code>, up to <code>length</code> comparisons back.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Falling Count</strong></td>
+<td style="text-align: left;"><em><a href="../reference/hexital/analysis/movement/#hexital.analysis.movement.falling_count">falling_count</a></em></td>
+<td style="text-align: left;"><strong>Falling Count Analysis</strong><br><br> Counts consecutive falling bars ending at <code>index</code>, up to <code>length</code> comparisons back.</td>
+</tr>
+<tr>
 <td style="text-align: left;"><strong>Rising</strong></td>
 <td style="text-align: left;"><em><a href="../reference/hexital/analysis/movement/#hexital.analysis.movement.rising">rising</a></em></td>
 <td style="text-align: left;"><strong>Rising Analysis</strong><br><br> Determines whether the <code>indicator</code> consistently rises across a specified range of candles. By default, it checks if the current indicator value is greater than the previous one.</td>
@@ -3910,7 +3940,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 6, 2026 13:55:32 UTC">July 6, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 6, 2026 14:12:41 UTC">July 6, 2026</span>
   </span>
 
     
