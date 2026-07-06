@@ -134,6 +134,11 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.series(), expected_midpoint)
 
+    def test_natr(self, candles, expected_natr):
+        test = indicators.NATR(candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_natr)
+
     def test_ppo(self, candles, expected_ppo):
         test = indicators.PPO(candles=candles)
         test.calculate()

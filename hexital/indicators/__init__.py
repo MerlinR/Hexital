@@ -18,6 +18,7 @@ from .kc import KC
 from .macd import MACD
 from .mfi import MFI
 from .midpoint import MOP
+from .natr import NATR
 from .obv import OBV
 from .PPO import PPO
 from .PSAR import PSAR
@@ -62,6 +63,7 @@ __all__ = [
     "MACD",
     "MFI",
     "MOP",
+    "NATR",
     "OBV",
     "PPO",
     "PSAR",

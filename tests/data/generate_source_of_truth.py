@@ -93,6 +93,7 @@ def generate_indicators():
             {"kind": "macd"},
             {"kind": "rsi"},
             {"kind": "atr"},
+            {"kind": "natr"},
             {"kind": "atr", "length": 20},
             {"kind": "stoch"},
             {"kind": "supertrend"},
@@ -142,6 +143,7 @@ def generate_indicators():
     save_as_json([round_values(value) for value in df["SMA_3"].tolist()], "SMA_3")
     save_as_json([round_values(value) for value in df["RSI_14"].tolist()], "RSI")
     save_as_json([round_values(value) for value in df["ATRr_14"].tolist()], "ATR")
+    save_as_json([round_values(value) for value in df["NATR_14"].tolist()], "NATR")
     save_as_json([round_values(value) for value in df["WMA_10"].tolist()], "WMA")
     save_as_json([round_values(value) for value in df["VWMA_10"].tolist()], "VWMA")
     save_as_json([round_values(value) for value in df["VWAP_D"].tolist()], "VWAP")

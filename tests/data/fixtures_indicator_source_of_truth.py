@@ -116,6 +116,11 @@ def fixture_expected_midpoint():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/MIDPOINT.json")
 
 
+@pytest.fixture(name="expected_natr")
+def fixture_expected_natr():
+    return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/NATR.json")
+
+
 @pytest.fixture(name="expected_obv")
 def fixture_expected_OBV():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/OBV.json")
