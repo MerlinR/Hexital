@@ -50,6 +50,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Added CCI (CCI)
     - Added ChandelierExit
     - Added CKSP
+    - Added CMF
     - Added DEMA
     - Added KAMA
     - Added Linear Regression

@@ -56,6 +56,11 @@ def fixture_expected_cksp():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/CKSP.json")
 
 
+@pytest.fixture(name="expected_cmf")
+def fixture_expected_cmf():
+    return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/CMF.json")
+
+
 @pytest.fixture(name="expected_cmo")
 def fixture_expected_cmo():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/CMO.json")

@@ -7,6 +7,7 @@ from .bbands import BBANDS
 from .cci import CCI
 from .chandelier_exit import ChandelierExit
 from .cksp import CKSP
+from .cmf import CMF
 from .cmo import CMO
 from .counter import Counter
 from .dema import DEMA
@@ -64,6 +65,7 @@ __all__ = [
     "CCI",
     "ChandelierExit",
     "CKSP",
+    "CMF",
     "CMO",
     "Counter",
     "DEMA",

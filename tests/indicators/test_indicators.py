@@ -48,6 +48,11 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.series(), expected_cksp)
 
+    def test_cmf(self, candles, expected_cmf):
+        test = indicators.CMF(candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_cmf)
+
     def test_cmo(self, candles, expected_cmo):
         test = indicators.CMO(candles=candles)
         test.calculate()
