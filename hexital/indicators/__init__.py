@@ -44,6 +44,7 @@ from .tr import TR
 from .trix import TRIX
 from .tsi import TSI
 from .uo import UO
+from .vortex import Vortex
 from .vwap import VWAP
 from .vwma import VWMA
 from .willr import WillR
@@ -97,6 +98,7 @@ __all__ = [
     "TRIX",
     "TSI",
     "UO",
+    "Vortex",
     "VWAP",
     "VWMA",
     "WillR",

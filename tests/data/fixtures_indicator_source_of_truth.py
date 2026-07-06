@@ -196,6 +196,11 @@ def fixture_expected_rvi():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/RVI.json")
 
 
+@pytest.fixture(name="expected_vortex")
+def fixture_expected_vortex():
+    return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/VORTEX.json")
+
+
 @pytest.fixture(name="expected_sma")
 def fixture_expected_sma():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/SMA.json")

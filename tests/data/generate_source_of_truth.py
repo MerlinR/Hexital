@@ -133,6 +133,7 @@ def generate_indicators():
             {"kind": "ppo"},
             {"kind": "psar"},
             {"kind": "ichimoku"},
+            {"kind": "vortex"},
         ],
     )
 
@@ -183,6 +184,14 @@ def generate_indicators():
     )
     save_as_json([round_values(value) for value in df["KAMA_10_2_30"].tolist()], "KAMA")
     save_as_json([round_values(value) for value in df["RVI_14"].tolist()], "RVI")
+    save_structured_result(
+        df,
+        "VORTEX",
+        [
+            ("VTXP_14", "VTXP"),
+            ("VTXM_14", "VTXM"),
+        ],
+    )
     save_as_json([round_values(value) for value in df["ZS_30"].tolist()], "ZSCORE")
     save_as_json([round_values(value) for value in df["CCI_14_0.015"].tolist()], "CCI")
     save_as_json([round_values(value) for value in df["WILLR_14"].tolist()], "WILLR")

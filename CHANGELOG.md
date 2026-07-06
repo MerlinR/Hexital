@@ -60,6 +60,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Added TEMA
     - Added TRIX
     - Added Ultimate Oscillator (UO)
+    - Added Vortex
     - Added WillR (WillR)
     - Added ZScore (ZS)
 - Modified Indicators

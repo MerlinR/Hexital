@@ -221,6 +221,11 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.series(), expected_rvi)
 
+    def test_vortex(self, candles, expected_vortex):
+        test = indicators.Vortex(candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_vortex)
+
     def test_append_rsi(self, candles, expected_rsi):
         test = indicators.RSI(candles=[])
         for candle in candles:
