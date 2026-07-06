@@ -36,6 +36,11 @@ def fixture_expected_bbands():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/BBANDS.json")
 
 
+@pytest.fixture(name="expected_bandwidth")
+def fixture_expected_bandwidth():
+    return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/BANDWIDTH.json")
+
+
 @pytest.fixture(name="expected_cci")
 def fixture_expected_cci():
     return load_fixture(f"{SOURCE_OF_TRUTH_PATH}/CCI.json")

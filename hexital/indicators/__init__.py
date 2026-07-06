@@ -2,6 +2,7 @@ from .adx import ADX
 from .amorph import Amorph
 from .aroon import AROON
 from .atr import ATR
+from .bandwidth import BandWidth
 from .bbands import BBANDS
 from .cci import CCI
 from .cmo import CMO
@@ -50,6 +51,7 @@ __all__ = [
     "Amorph",
     "AROON",
     "ATR",
+    "BandWidth",
     "BBANDS",
     "CCI",
     "CMO",

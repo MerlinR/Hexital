@@ -33,6 +33,11 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.series(), expected_bbands)
 
+    def test_bandwidth(self, candles, expected_bandwidth):
+        test = indicators.BandWidth(candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_bandwidth)
+
     def test_cmo(self, candles, expected_cmo):
         test = indicators.CMO(candles=candles)
         test.calculate()
