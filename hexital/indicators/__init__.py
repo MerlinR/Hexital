@@ -5,6 +5,7 @@ from .atr import ATR
 from .bandwidth import BandWidth
 from .bbands import BBANDS
 from .cci import CCI
+from .chandelier_exit import ChandelierExit
 from .cmo import CMO
 from .counter import Counter
 from .dema import DEMA
@@ -56,6 +57,7 @@ __all__ = [
     "BandWidth",
     "BBANDS",
     "CCI",
+    "ChandelierExit",
     "CMO",
     "Counter",
     "DEMA",

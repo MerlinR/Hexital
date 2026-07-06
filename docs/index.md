@@ -115,7 +115,7 @@ Named indicators keep stable keys (`WMA`). Unnamed indicators get generated name
 
 40+ incremental indicators for common strategies. Full reference: [indicator catalogue](indicator-catalogue.md).
 
-`ADX` · `Amorph` · `AROON` · `ATR` · `BBANDS` / `BandWidth` · `CCI` · `CMO` · `Counter` · `DEMA` · `Donchian` · `EMA` · `HL` / `HLA` / `HLCA` · `HMA` · `Ichimoku` · `JMA` · `KAMA` · `KC` · `MACD` · `MFI` · `MOP` · `NATR` · `OBV` · `PPO` · `PSAR` · `PivotPoints` · `RMA` · `ROC` · `RSI` · `RVI` · `SMA` · `Squeeze` / `SqueezePro` · `STDEV` / `STDEVT` · `STOCH` · `Supertrend` · `TEMA` · `TR` · `TRIX` · `TSI` · `UO` · `VWAP` · `VWMA` · `WillR` · `WMA` · `ZScore`
+`ADX` · `Amorph` · `AROON` · `ATR` · `BBANDS` / `BandWidth` · `CCI` · `ChandelierExit` · `CMO` · `Counter` · `DEMA` · `Donchian` · `EMA` · `HL` / `HLA` / `HLCA` · `HMA` · `Ichimoku` · `JMA` · `KAMA` · `KC` · `MACD` · `MFI` · `MOP` · `NATR` · `OBV` · `PPO` · `PSAR` · `PivotPoints` · `RMA` · `ROC` · `RSI` · `RVI` · `SMA` · `Squeeze` / `SqueezePro` · `STDEV` / `STDEVT` · `STOCH` · `Supertrend` · `TEMA` · `TR` · `TRIX` · `TSI` · `UO` · `VWAP` · `VWMA` · `WillR` · `WMA` · `ZScore`
 
 ### Candlestick patterns
 

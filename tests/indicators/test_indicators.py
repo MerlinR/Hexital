@@ -38,6 +38,11 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.series(), expected_bandwidth)
 
+    def test_chandelier_exit(self, candles, expected_chandelier_exit):
+        test = indicators.ChandelierExit(candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_chandelier_exit)
+
     def test_cmo(self, candles, expected_cmo):
         test = indicators.CMO(candles=candles)
         test.calculate()

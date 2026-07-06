@@ -185,6 +185,22 @@ def generate_indicators():
     save_as_json([round_values(value) for value in df["ZS_30"].tolist()], "ZSCORE")
     save_as_json([round_values(value) for value in df["CCI_14_0.015"].tolist()], "CCI")
     save_as_json([round_values(value) for value in df["WILLR_14"].tolist()], "WILLR")
+    chandelier_atr = ta.atr(df["high"], df["low"], df["close"], length=22)
+    chandelier_df = pd.DataFrame(
+        {
+            "long": df["high"].rolling(22).max() - (3.0 * chandelier_atr),
+            "short": df["low"].rolling(22).min() + (3.0 * chandelier_atr),
+        }
+    )
+    chandelier_df = chandelier_df.astype(object).replace(np.nan, None)
+    save_structured_result(
+        chandelier_df,
+        "CHANDELIEREXIT",
+        [
+            ("long", "long"),
+            ("short", "short"),
+        ],
+    )
 
     save_structured_result(
         df,
