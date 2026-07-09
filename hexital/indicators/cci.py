@@ -30,7 +30,7 @@ class CCI(Indicator[float | None]):
     scaling: float = 0.015
 
     def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}_{self.scaling}"
+        return f"{self._name}_{self.period}_{self.scaling}{self.source_label()}"
 
     def _initialise(self):
         self.sub_hlca = self.add_child(HLCA(name=f"{self.name}_hlca"))

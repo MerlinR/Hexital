@@ -26,7 +26,7 @@ class RegressionChannel(Indicator[dict[str, float | None]]):
     std: float = 2.0
 
     def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}_{self.std}"
+        return f"{self._name}_{self.period}_{self.std}{self.source_label()}"
 
     def _calculate_reading(self, index: int) -> dict[str, float | None]:
         if not self.reading_period(self.period, self.source, index):

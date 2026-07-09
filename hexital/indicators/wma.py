@@ -28,9 +28,6 @@ class WMA(Indicator[float | None]):
     source: Source = "close"
     _denom: float = field(init=False, default=0)
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
-
     def _validate_fields(self):
         self._denom = (self.period * (self.period + 1)) / 2
 

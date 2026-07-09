@@ -26,9 +26,6 @@ class AROON(Indicator[dict[str, float | None]]):
     _name: str = field(init=False, default="AROON")
     period: int = 14
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
-
     def _calculate_reading(self, index: int) -> dict[str, float | None]:
         aroon: dict[str, float | None] = {
             "AROONU": None,

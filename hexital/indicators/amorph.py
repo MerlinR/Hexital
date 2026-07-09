@@ -39,13 +39,17 @@ class Amorph(Indicator):
     def settings(self) -> dict:
         """Returns a dict format of how this indicator can be generated"""
         output = {"analysis": self.analysis_name}
+        if self._analysis_kwargs:
+            output["args"] = copy(self._analysis_kwargs)
 
         for name, value in self.__dict__.items():
-            if name in ["analysis_name", "candles"]:
+            if name in ["analysis_name", "candles", "children", "fingerprint"] or name.startswith(
+                "_"
+            ):
                 continue
             if name == "timeframe_fill" and self.timeframe is None:
                 continue
-            if not name.startswith("_") and value:
+            if value:
                 output[name] = copy(value)
 
         return output

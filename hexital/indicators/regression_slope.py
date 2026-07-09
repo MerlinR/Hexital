@@ -25,9 +25,6 @@ class RegressionSlope(Indicator[float | None]):
     period: int = 14
     source: Source = "close"
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
-
     def _calculate_reading(self, index: int) -> float | None:
         if not self.reading_period(self.period, self.source, index):
             return None

@@ -152,9 +152,10 @@ class TestSettings:
         assert test.settings == as_dict
 
     def test_settings_analysis(self):
-        test = Amorph(analysis=doji)
+        test = Amorph(analysis=doji, lookback=20)
         assert test.settings == {
             "analysis": "doji",
+            "args": {"lookback": 20},
             "name": "doji",
             "rounding": 4,
         }
@@ -420,4 +421,48 @@ class TestAuthorShortcuts:
 
         assert parent.src() == parent.close
         assert parent.prev_src() == minimal_candles[-2].close
-        assert parent.at_src(-2) == minimal_candles[-2].close
+
+
+class TestIndicatorNaming:
+    def test_default_generate_name(self):
+        from hexital.indicators.sma import SMA
+
+        assert SMA(period=10).name == "SMA_10"
+
+    def test_default_generate_name_includes_source(self):
+        from hexital.indicators.ema import EMA
+
+        assert EMA(period=10, source="close").name == "EMA_10"
+
+    def test_default_generate_name_includes_non_ohlc_source(self):
+        from hexital.indicators.hlca import HLCA
+        from hexital.indicators.sma import SMA
+
+        hlca = HLCA()
+        assert SMA(period=10, source=hlca).name == "SMA_10_HLCA"
+
+    def test_generate_fingerprint_is_stable(self):
+        from hexital.indicators.sma import SMA
+
+        first = SMA(period=10)
+        second = SMA(period=10)
+        assert first.fingerprint == second.fingerprint
+        assert len(first.fingerprint) == 64
+
+    def test_generate_fingerprint_differs_by_period(self):
+        from hexital.indicators.sma import SMA
+
+        assert SMA(period=10).fingerprint != SMA(period=20).fingerprint
+
+    def test_generate_fingerprint_differs_by_when(self, minimal_candles: list[Candle]):
+        from hexital.indicators.ema import EMA
+
+        parent = FakeIndicator(candles=minimal_candles)
+        before = parent.add_child(EMA(period=5))
+        after = parent.add_child_after(EMA(period=5))
+        assert before.fingerprint != after.fingerprint
+
+    def test_explicit_name_override_keeps_custom_fingerprint(self):
+        indicator = FakeIndicator(candles=[], name="CUSTOM")
+        assert indicator.name == "CUSTOM"
+        assert indicator.fingerprint

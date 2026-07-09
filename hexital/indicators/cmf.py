@@ -23,9 +23,6 @@ class CMF(Indicator[float | None]):
     _name: str = field(init=False, default="CMF")
     period: int = 20
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
-
     def _initialise(self):
         self._state = self.add_state()
 

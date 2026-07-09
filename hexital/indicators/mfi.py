@@ -25,9 +25,6 @@ class MFI(Indicator[float | None]):
     period: int = 14
     source: Source = "close"
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
-
     def _initialise(self):
         self.sub_hlca = self.add_child(HLCA())
         self._state = self.add_state()

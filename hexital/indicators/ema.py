@@ -29,7 +29,7 @@ class EMA(Indicator[float | None]):
     _alpha: float = field(init=False, default=0)
 
     def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
+        return f"{self._name}_{self.period}{self.source_label()}"
 
     def _validate_fields(self):
         self._alpha = float(self.smoothing / (self.period + 1.0))

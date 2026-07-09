@@ -32,7 +32,7 @@ class MACD(Indicator[dict[str, float | None]]):
     signal_period: int = 9
 
     def _generate_name(self) -> str:
-        return f"{self._name}_{self.fast_period}_{self.slow_period}_{self.signal_period}"
+        return f"{self._name}_{self.fast_period}_{self.slow_period}_{self.signal_period}{self.source_label()}"
 
     def _validate_fields(self):
         if self.slow_period < self.fast_period:

@@ -586,6 +586,7 @@ class TestHexitalSettings:
                     "source": "close",
                     "period": 10,
                     "smoothing": 2.0,
+                    "candle_life": "H1",
                 }
             ],
         }
@@ -605,6 +606,7 @@ class TestHexitalSettings:
                     "source": "close",
                     "period": 10,
                     "smoothing": 2.0,
+                    "candle_life": "H1",
                 }
             ],
         }

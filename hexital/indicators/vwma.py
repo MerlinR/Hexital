@@ -24,9 +24,6 @@ class VWMA(Indicator[float | None]):
     _name: str = field(init=False, default="VWMA")
     period: int = 10
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
-
     def _initialise(self):
         self._state = self.add_state()
 

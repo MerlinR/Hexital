@@ -18,9 +18,6 @@ class TR(Indicator[float | None]):
 
     _name: str = field(init=False, default="TR")
 
-    def _generate_name(self) -> str:
-        return self._name
-
     def _calculate_reading(self, index: int) -> float | None:
         if index > 0:
             candle = self.candles[index]

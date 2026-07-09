@@ -28,9 +28,6 @@ class RVI(Indicator[float | None]):
     source: Source = "close"
     _scalar: float = field(init=False, default=100.0)
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
-
     def _initialise(self):
         self._state = self.add_state()
 

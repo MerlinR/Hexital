@@ -1,4 +1,5 @@
 from hexital import Candle, movement, patterns
+from hexital.core.hexital import Hexital
 from hexital.indicators import Amorph
 
 
@@ -62,3 +63,46 @@ def test_amorph_custom(candles):
     test = Amorph(analysis=fake_pattern, candles=candles)
     test.calculate()
     assert test.reading("fake_pattern") is not None
+
+
+def test_amorph_settings_roundtrip(candles):
+    original = Amorph(analysis=patterns.doji, candles=candles, lookback=20)
+    original.calculate()
+
+    rebuilt = Hexital("x", candles, [])._build_indicator(original.settings)
+    rebuilt.candles = candles
+    rebuilt.calculate()
+
+    assert rebuilt.name == original.name
+    assert rebuilt._analysis_kwargs == original._analysis_kwargs
+    assert rebuilt.series() == original.series()
+
+
+def test_amorph_settings_roundtrip_via_hexital(candles):
+    strategy = Hexital("Test Strategy", candles, [Amorph(analysis=patterns.doji, lookback=20)])
+    strategy.calculate()
+
+    as_dict = strategy.settings
+    as_dict["candles"] = candles
+    rebuilt = Hexital(**as_dict)
+    rebuilt.calculate()
+
+    assert rebuilt.indicator_settings == strategy.indicator_settings
+    assert rebuilt.series("doji") == strategy.series("doji")
+
+
+def test_amorph_settings_roundtrip_movement(candles_untimeframed):
+    original = Amorph(
+        analysis=movement.above,
+        candles=candles_untimeframed,
+        indicator="open",
+        indicator_cmp="low",
+    )
+    original.calculate()
+
+    rebuilt = Hexital("x", candles_untimeframed, [])._build_indicator(original.settings)
+    rebuilt.candles = candles_untimeframed
+    rebuilt.calculate()
+
+    assert rebuilt._analysis_kwargs == original._analysis_kwargs
+    assert rebuilt.series() == original.series()

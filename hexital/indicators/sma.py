@@ -24,9 +24,6 @@ class SMA(Indicator[float | None]):
     period: int = 10
     source: Source = "close"
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
-
     def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists():
             prev = self.prev()

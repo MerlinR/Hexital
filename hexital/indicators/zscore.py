@@ -28,9 +28,6 @@ class ZScore(Indicator[float | None]):
     source: Source = "close"
     std: float = 1.0
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
-
     def _initialise(self):
         self.sub_sma = self.add_child(SMA(source=self.source, period=self.period))
         self.sub_stdev = self.add_child(STDEV(source=self.source, period=self.period))

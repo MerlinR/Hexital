@@ -26,9 +26,6 @@ class TEMA(Indicator[float | None]):
     period: int = 10
     source: Source = "close"
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
-
     def _initialise(self):
         self.sub_ema = self.add_child(EMA(source=self.source, period=self.period))
         self.sub_ema2 = self.sub_ema.add_child_after(

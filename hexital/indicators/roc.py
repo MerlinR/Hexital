@@ -28,9 +28,6 @@ class ROC(Indicator[float | None]):
     period: int = 10
     source: Source = "close"
 
-    def _generate_name(self) -> str:
-        return f"{self._name}"
-
     def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists() or self.reading_period(self.period + 1, self.source):
             period_n_back = self.at_src(index - self.period)

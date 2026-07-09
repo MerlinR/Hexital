@@ -19,9 +19,6 @@ class HL(Indicator[dict[str, float | None]]):
     _name: str = field(init=False, default="HL")
     period: int = 100
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
-
     def _calculate_reading(self, index: int) -> dict[str, float | None]:
         return {
             "low": movement.lowest(self.candles, "low", self.period, index),

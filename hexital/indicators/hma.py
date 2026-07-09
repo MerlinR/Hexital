@@ -27,9 +27,6 @@ class HMA(Indicator[float | None]):
     period: int = 10
     source: Source = "close"
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
-
     def _initialise(self):
         self.sub_wma = self.add_child(WMA(source=self.source, period=self.period))
         self.sub_wmah = self.add_child(

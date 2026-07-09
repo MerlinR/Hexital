@@ -28,8 +28,6 @@ class Supertrend(Indicator[dict[str, float | int | None]]):
     source: Source = "close"
     multiplier: float = 3.0
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
 
     def _initialise(self):
         self.sub_atr = self.add_child(ATR(period=self.period))

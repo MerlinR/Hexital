@@ -27,9 +27,6 @@ class STDEVT(Indicator[float | None]):
     source: Source = "close"
     multiplier: float = 2.0
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
-
     def _initialise(self):
         self.sub_stdev = self.add_child(
             STDEV(

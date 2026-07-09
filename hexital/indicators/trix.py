@@ -32,7 +32,7 @@ class TRIX(Indicator[dict[str, float | None]]):
     source: Source = "close"
 
     def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}_{self.signal_period}"
+        return f"{self._name}_{self.period}_{self.signal_period}{self.source_label()}"
 
     def _initialise(self):
         self._trix = self.add_state(name=f"{self.name}_trix")

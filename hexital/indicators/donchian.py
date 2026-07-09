@@ -25,9 +25,6 @@ class Donchian(Indicator[dict[str, float | None]]):
     _name: str = field(init=False, default="DONCHIAN")
     period: int = 20
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
-
     def _calculate_reading(self, index: int) -> dict[str, float | None]:
         donchian: dict[str, float | None] = {"DCL": None, "DCM": None, "DCU": None}
 

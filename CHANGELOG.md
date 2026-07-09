@@ -12,6 +12,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 - Support python 3.14
 - Non-backward compatible changes:
+    - Altered the vast majority of Indicators Generated naming.
     - Removed `Managed` and `NestedSource` from public `hexital` exports (use `add_state()`; import from `hexital.core.indicator` if needed)
     - Renamed series retrieval methods
         - `Indicator.readings()` -> `Indicator.series()` for one indicator's values across candles
@@ -44,6 +45,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Made `Candle.__eq__()` symmetric while preserving lenient comparison
 - Updated Test verification
 - Added `Timeframe` argument to helper generating Candle methods for easier setting from existing data
+- Added fingerprint to Indicators, a hash of indicator settings for duplication detection
 
 - Added Indicators
     - Added AO

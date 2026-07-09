@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import hashlib
+import json
 from abc import ABC, abstractmethod
 from copy import copy
-from dataclasses import dataclass, field
+from dataclasses import MISSING, dataclass, field
 from datetime import timedelta
 from enum import Enum
-from typing import Generic, TypeAlias, TypeVar
+from typing import Any, Generic, TypeAlias, TypeVar
 
 from ..exceptions import InvalidIndicator
 from ..utils.candles import (
@@ -58,6 +60,7 @@ def _normalize_when(when: ChildWhen | str) -> ChildWhen:
 class Indicator(Generic[V], ABC):
     candles: list[Candle] = field(default_factory=list)
     name: str = ""
+    fingerprint: str = field(init=False, default="")
     timeframe: TimeFramesSource | None = None
     timeframe_fill: bool = False
     candle_life: timedelta | None = None
@@ -97,6 +100,12 @@ class Indicator(Generic[V], ABC):
     def __repr__(self) -> str:
         return self.name
 
+    def _initialise(self):
+        return
+
+    def _validate_fields(self):
+        return
+
     def _internal_generate_name(self):
         if self.name:
             name = self.name
@@ -107,15 +116,53 @@ class Indicator(Generic[V], ABC):
                 name += f"_{self._candle_mngr.name}"
 
         self.name = name.replace(".", "-")
-
-    def _initialise(self):
-        return
-
-    def _validate_fields(self):
-        return
+        self._refresh_fingerprint()
 
     def _generate_name(self) -> str:
-        return self._name
+        parts = [self._name if self._name else type(self).__name__]
+        period = getattr(self, "period", None)
+        if isinstance(period, int):
+            parts.append(str(period))
+        return "_".join(parts) + self.source_label()
+
+    def _default_source(self) -> Any:
+        field_info = type(self).__dataclass_fields__.get("source")
+        if field_info is None:
+            return "close"
+        if field_info.default is not MISSING:
+            return field_info.default
+        if field_info.default_factory is not MISSING:
+            return field_info.default_factory()
+        return "close"
+
+    def source_label(self, for_name: bool = True) -> str:
+        if not hasattr(self, "source"):
+            return ""
+        label = ""
+
+        if isinstance(self.source, str):
+            if self.source == self._default_source():
+                label = None if for_name else self.source
+            else:
+                label = self.source
+        elif isinstance(self.source, Indicator):
+            label = self.source.name
+        elif isinstance(self.source, NestedSource):
+            label = self.source.source_name
+
+        if label is None:
+            return ""
+        return f"_{label}" if for_name else label
+
+    def _generate_fingerprint(self) -> str:
+        material = dict(self.settings)
+        if self._when is not None:
+            material["when"] = self._when.value
+        payload = json.dumps(material, sort_keys=True, separators=(",", ":"))
+        return hashlib.sha256(payload.encode()).hexdigest()
+
+    def _refresh_fingerprint(self) -> None:
+        self.fingerprint = self._generate_fingerprint()
 
     @property
     def candle_manager(self) -> CandleManager:
@@ -206,10 +253,10 @@ class Indicator(Generic[V], ABC):
                 - `indicator` (str): The name of the indicator.
                 - Additional keys correspond to other configuration attributes of the indicator.
         """
-        output = {}
+        output: dict[str, Any] = {}
 
         for name, value in self.__dict__.items():
-            if name in ["candles", "children"]:
+            if name in ["candles", "children", "fingerprint"] or name.startswith("_"):
                 continue
             if name == "timeframe_fill" and self._timeframe is None:
                 continue
@@ -218,7 +265,11 @@ class Indicator(Generic[V], ABC):
                 output[name] = value.acronym if value.acronym else value.name
             elif name == "timeframe" and self._candle_mngr.timeframe is not None:
                 output[name] = timedelta_to_str(self._candle_mngr.timeframe)
-            elif not name.startswith("_") and value is not None:
+            elif name == "source":
+                output[name] = self.source_label(for_name=False).replace("_", "")
+            elif isinstance(value, timedelta):
+                output[name] = timedelta_to_str(value)
+            elif value is not None:
                 output[name] = copy(value)
 
         return output
@@ -408,6 +459,7 @@ class Indicator(Generic[V], ABC):
         indicator._when = when
         indicator.candle_manager = self._candle_mngr
         indicator.rounding = None
+        indicator._refresh_fingerprint()
         self.children[indicator.name] = indicator
         return indicator
 
@@ -424,7 +476,9 @@ class Indicator(Generic[V], ABC):
         managed = Managed(name=name) if name else Managed()
         return State(self, self.add_child_managed(managed))
 
-    def _find_reading(self, source: Source | None = None, index: int | None = None) -> V:
+    def _find_reading(
+        self, source: Source | None = None, index: int | None = None
+    ) -> V:
         if not self.candles:
             return None
 
@@ -677,6 +731,10 @@ class NestedSource:
     @property
     def name(self):
         return f"{self.indicator.name}.{self.nested_name}"
+    
+    @property   
+    def source_name(self):
+        return self.name.replace(".", "-")
 
     def reading(self, index: int | None = None) -> Reading:  # type: ignore
         value = self.indicator.reading(index=index)

@@ -27,9 +27,6 @@ class MOP(Indicator[float | None]):
     period: int = 2
     source: Source = "close"
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
-
     def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists() or self.reading_period(self.period, self.source, index):
             return (

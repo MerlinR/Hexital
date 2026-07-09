@@ -37,10 +37,8 @@ class KC(Indicator[dict[str, float | None]]):
     tr: bool = True
 
     def _generate_name(self) -> str:
-        name = f"{self._name}_{self.period}_{self.multiplier}"
-        if self.mamode != "ema":
-            name += f"_{self.mamode}"
-        return name
+        return f"{self._name}_{self.period}_{self.mamode}_{self.multiplier}{self.source_label()}"
+
 
     def _validate_fields(self):
         self.mamode = self.mamode.lower()

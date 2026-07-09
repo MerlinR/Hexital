@@ -391,9 +391,12 @@ class Hexital:
 
         if indicator.get("analysis") and isinstance(indicator.get("analysis"), str):
             analysis_name = indicator.pop("analysis")
-            analysis_class = getattr(
-                import_module("hexital.analysis"), analysis_name, None
-            )
+            analysis_module = import_module("hexital.analysis")
+            analysis_class = getattr(analysis_module, analysis_name, None)
+
+            if not analysis_class:
+                movement_module = import_module("hexital.analysis.movement")
+                analysis_class = getattr(movement_module, analysis_name, None)
 
             if not analysis_class:
                 raise InvalidAnalysis(

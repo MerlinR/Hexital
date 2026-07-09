@@ -23,9 +23,6 @@ class NATR(Indicator[float | None]):
     _name: str = field(init=False, default="NATR")
     period: int = 14
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
-
     def _initialise(self):
         self.sub_atr = self.add_child(ATR(period=self.period))
 

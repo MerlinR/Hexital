@@ -24,9 +24,6 @@ class RSI(Indicator[float | None]):
     period: int = 14
     source: Source = "close"
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
-
     def _initialise(self):
         self._state = self.add_state()
 

@@ -27,9 +27,6 @@ class RMA(Indicator[float | None]):
     source: Source = "close"
     _alpha: float = field(init=False, default=0)
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
-
     def _validate_fields(self):
         self._alpha = float(1.0 / self.period)
 

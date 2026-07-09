@@ -40,7 +40,7 @@ class STOCH(Indicator[dict[str, float | None]]):
     source: Source = "close"
 
     def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
+        return f"{self._name}_{self.period}_{self.slow_period}_{self.smoothing_k}{self.source_label()}"
 
     def _initialise(self):
         self._state = self.add_state()

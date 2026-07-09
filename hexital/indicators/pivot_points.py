@@ -21,9 +21,6 @@ class PivotPoints(Indicator[dict[str, float | None]]):
 
     _name: str = field(init=False, default="PP")
 
-    def _generate_name(self) -> str:
-        return f"{self._name}"
-
     def _calculate_reading(self, index: int) -> dict[str, float | None]:
         pivot_points: dict[str, float | None] = {
             "S1": None,
