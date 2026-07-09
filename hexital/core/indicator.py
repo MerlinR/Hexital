@@ -31,6 +31,7 @@ from . import Reading
 from .candle import Candle
 from .candle_manager import CandleManager
 from .candlestick_type import CandlestickType
+from .constants import NESTED_DELI, join_nested_name
 
 T = TypeVar("T")
 V = TypeVar("V")
@@ -115,7 +116,7 @@ class Indicator(Generic[V], ABC):
             if self._candle_mngr.timeframe:
                 name += f"_{self._candle_mngr.name}"
 
-        self.name = name.replace(".", "-")
+        self.name = name.replace(NESTED_DELI, "-")
         self._refresh_fingerprint()
 
     def _generate_name(self) -> str:
@@ -730,11 +731,11 @@ class NestedSource:
 
     @property
     def name(self):
-        return f"{self.indicator.name}.{self.nested_name}"
-    
-    @property   
+        return join_nested_name(self.indicator.name, self.nested_name)
+
+    @property
     def source_name(self):
-        return self.name.replace(".", "-")
+        return self.name.replace(NESTED_DELI, "-")
 
     def reading(self, index: int | None = None) -> Reading:  # type: ignore
         value = self.indicator.reading(index=index)
@@ -749,7 +750,7 @@ class NestedSource:
         ]
 
     def __str__(self):
-        return f"{self.indicator.name}.{self.nested_name}"
+        return join_nested_name(self.indicator.name, self.nested_name)
 
 
 Source: TypeAlias = str | Indicator | NestedSource

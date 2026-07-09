@@ -2,6 +2,7 @@ from collections.abc import Sequence
 from datetime import datetime
 from typing import Any, TypeAlias, cast
 
+from ..core.constants import split_nested_name
 from ..core.candle import Candle
 from .indexing import absindex, valid_index
 
@@ -42,11 +43,13 @@ def reading_by_index(
 
 
 def reading_by_candle(candle: Candle, name: str) -> float | dict | None:
-    """Simple method to get a reading from the given indicator from a candle
-    Uses '.' to find nested reading, E.G 'MACD_12_26_9.MACD"""
+    """Simple method to get a reading from the given indicator from a candle.
 
-    if "." in name:
-        main_name, nested_name = name.split(".")
+    Uses `~hexital.core.constants.NESTED_DELI` to find nested readings,
+    e.g. ``MACD_12_26_9{sep}MACD``.
+    """
+    main_name, nested_name = split_nested_name(name)
+    if nested_name is not None:
         if (reading := candle.indicators.get(main_name)) is not None:
             return reading.get(nested_name) if isinstance(reading, dict) else reading
 

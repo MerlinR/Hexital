@@ -21,6 +21,7 @@ from . import Reading
 from .candle import Candle
 from .candle_manager import CandleManager
 from .candlestick_type import CandlestickType
+from .constants import get_main_name
 from .indicator import Indicator, NestedSource, Source
 from .indicator_collection import IndicatorCollection
 
@@ -172,7 +173,7 @@ class Hexital:
             return source
         if isinstance(source, NestedSource):
             return source.indicator
-        if indicator := self._indicators.get(source.split(".")[0]):
+        if indicator := self._indicators.get(get_main_name(source)):
             return indicator
 
         return None
@@ -196,7 +197,7 @@ class Hexital:
         if isinstance(source, (Indicator, NestedSource)):
             return source.series()
 
-        primary_name = source.split(".")[0]
+        primary_name = get_main_name(source)
         if self._indicators.get(primary_name):
             return self._indicators[primary_name].series(source)
 
@@ -204,7 +205,8 @@ class Hexital:
 
     def reading(self, source: Source, index: int = -1) -> Reading:
         """Attempts to retrieve a reading with a given Indicator name.
-        `name` can use '.' to find nested reading, E.G `MACD_12_26_9.MACD`
+        `name` can use `~hexital.core.constants.NESTED_DELI` to find a nested
+        reading, e.g. ``MACD_12_26_9.MACD``
         """
         return self._find_reading(source, index)
 
