@@ -32,8 +32,8 @@ class UO(Indicator[float | None]):
     medium_w: float = 2.0
     slow_w: float = 1.0
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.fast}_{self.medium}_{self.slow}"
+    def _name_parts(self) -> list[str]:
+        return ["fast", "medium", "slow"]
 
     def _initialise(self):
         self._state = self.add_state()

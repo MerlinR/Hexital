@@ -27,8 +27,8 @@ class PPO(Indicator[dict[str, float | None]]):
     slow_period: int = 26
     signal_period: int = 9
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.fast_period}_{self.slow_period}_{self.signal_period}{self.source_label()}"
+    def _name_parts(self) -> list[str]:
+        return ["fast_period", "slow_period", "signal_period", "source"]
 
     def _validate_fields(self):
         if self.slow_period < self.fast_period:

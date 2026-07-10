@@ -10,7 +10,7 @@ class TestHexPatterns(IndicatorTestBase):
             candles,
             [
                 indicators.Supertrend(),
-                indicators.Counter(source="Supertrend_7.direction"),
+                indicators.Counter(source="Supertrend_7:direction"),
             ],
         )
         strategy.calculate()
@@ -25,7 +25,7 @@ class TestHexPatterns(IndicatorTestBase):
             candles,
             [
                 indicators.Supertrend(),
-                indicators.Counter(source="Supertrend_7.direction", count_value=-1),
+                indicators.Counter(source="Supertrend_7:direction", count_value=-1),
             ],
         )
         strategy.calculate()

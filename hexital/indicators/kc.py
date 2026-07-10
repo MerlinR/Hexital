@@ -36,9 +36,8 @@ class KC(Indicator[dict[str, float | None]]):
     mamode: str = "ema"
     tr: bool = True
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}_{self.mamode}_{self.multiplier}{self.source_label()}"
-
+    def _name_parts(self) -> list[str]:
+        return ["period", "mamode", "multiplier", "source"]
 
     def _validate_fields(self):
         self.mamode = self.mamode.lower()

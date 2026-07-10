@@ -105,7 +105,7 @@ print(strategy.reading("EMA_3"))  # 7319.8776
 print(strategy.reading("WMA"))    # 8934.9722
 ```
 
-Named indicators keep stable keys (`WMA`). Unnamed indicators get generated names from type and settings (`EMA_3` = EMA with period 3).
+Named indicators keep stable keys (`WMA`). Unnamed indicators get generated names from type and settings (`EMA_3` = EMA with period 3). Nested dict fields use `:` at lookup time (e.g. `MACD_12_26_9:signal`).
 
 ---
 

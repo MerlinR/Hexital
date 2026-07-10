@@ -23,9 +23,6 @@ class Counter(Indicator[int]):
     source: Source
     count_value: Any = True
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{str(self.source)}"
-
     def _calculate_reading(self, index: int) -> int:
         count = self.prev_reading(default=0)
         reading = self.src(default=count)

@@ -22,8 +22,8 @@ class Fisher(Indicator[dict[str, float | None]]):
     period: int = 9
     signal_period: int = 1
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}_{self.signal_period}"
+    def _name_parts(self) -> list[str]:
+        return ["period", "signal_period"]
 
     def _initialise(self):
         self._state = self.add_state()

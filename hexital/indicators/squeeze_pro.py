@@ -29,11 +29,15 @@ class SqueezePro(Indicator[dict[str, float | int | None]]):
     mom_smooth: int = 6
     mamode: str = "sma"
 
-    def _generate_name(self) -> str:
-        return (
-            f"{self._name}_{self.bb_length}_{self.bb_std}_{self.kc_length}_"
-            f"{self.kc_scalar_wide}_{self.kc_scalar_normal}_{self.kc_scalar_narrow}"
-        )
+    def _name_parts(self) -> list[str]:
+        return [
+            "bb_length",
+            "bb_std",
+            "kc_length",
+            "kc_scalar_wide",
+            "kc_scalar_normal",
+            "kc_scalar_narrow",
+        ]
 
     def _validate_fields(self):
         self.mamode = self.mamode.lower()

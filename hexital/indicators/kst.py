@@ -29,11 +29,18 @@ class KST(Indicator[dict[str, float | None]]):
     sma4: int = 15
     signal_period: int = 9
 
-    def _generate_name(self) -> str:
-        return (
-            f"{self._name}_{self.roc1}_{self.roc2}_{self.roc3}_{self.roc4}_"
-            f"{self.sma1}_{self.sma2}_{self.sma3}_{self.sma4}_{self.signal_period}"
-        )
+    def _name_parts(self) -> list[str]:
+        return [
+            "roc1",
+            "roc2",
+            "roc3",
+            "roc4",
+            "sma1",
+            "sma2",
+            "sma3",
+            "sma4",
+            "signal_period",
+        ]
 
     def _initialise(self):
         self._state = self.add_state()

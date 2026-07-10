@@ -32,8 +32,8 @@ class KAMA(Indicator[float | None]):
     _fast_alpha: float = field(init=False, default=0.0)
     _slow_alpha: float = field(init=False, default=0.0)
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}_{self.fast}_{self.slow}{self.source_label()}"
+    def _name_parts(self) -> list[str]:
+        return ["period", "fast", "slow", "source"]
 
     def _validate_fields(self):
         self._fast_alpha = 2.0 / (self.fast + 1.0)

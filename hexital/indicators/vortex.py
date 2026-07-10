@@ -25,8 +25,8 @@ class Vortex(Indicator[dict[str, float | None]]):
     period: int = 14
     drift: int = 1
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}_{self.drift}"
+    def _name_parts(self) -> list[str]:
+        return ["period", "drift"]
 
     def _initialise(self):
         self.sub_tr = self.add_child(TR())

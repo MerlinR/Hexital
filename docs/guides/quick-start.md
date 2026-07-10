@@ -39,7 +39,7 @@ print(ema.reading())
 ```
 
 !!! tip "Indicator names"
-    If you omit `name`, Hexital generates one from the indicator type and settings — e.g. `EMA_3` for `EMA(period=3)`. Use that name when reading nested results or using analysis helpers.
+    If you omit `name`, Hexital generates one from the indicator type and settings — e.g. `EMA_3` for `EMA(period=3)`. Use that name with `reading()`, `series()`, and analysis helpers. For nested dict outputs, use `:` — e.g. `MACD_12_26_9:signal`.
 
 ---
 

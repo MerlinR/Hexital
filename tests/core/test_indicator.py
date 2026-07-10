@@ -13,16 +13,9 @@ from hexital.utils import timeframe
 
 @dataclass(kw_only=True)
 class FakeIndicator(Indicator):
-    candles: list[Candle] = field(default_factory=list)
     _name: str = field(init=False, default="Fake")
-    name_suffix: str | None = None
-    rounding: int | None = 4
-
     period: int = 10
     source: str = "close"
-
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         return 100.0
@@ -372,7 +365,7 @@ class TestAddState:
 
         assert state.prev("value") == 10.0
         assert state.reading("value") == 20.0
-        assert state.source("value").name == f"{state.managed.name}.value"
+        assert state.source("value").name == f"{state.managed.name}:value"
         assert state.source("value") is state.source("value")
 
 

@@ -27,8 +27,8 @@ class BandWidth(Indicator[float | None]):
     source: Source = "close"
     std: float = 2.0
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}_{self.std}{self.source_label()}"
+    def _name_parts(self) -> list[str]:
+        return ["period", "std", "source"]
 
     def _initialise(self):
         self.sub_bbands = self.add_child(

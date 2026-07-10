@@ -12,7 +12,11 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 - Support python 3.14
 - Non-backward compatible changes:
+    - Nested naming delimiter changed `.`  is replaced with `:`
     - Altered the vast majority of Indicators Generated naming.
+        - Indicator names are built centrally in `Indicator._generate_name()` from `_name_parts()`
+        - Indicators with extra parameters `_name_parts()` instead of `_generate_name()`
+        - Default `_name_parts()` is `period` and `source` (when those fields exist on the indicator)
     - Removed `Managed` and `NestedSource` from public `hexital` exports (use `add_state()`; import from `hexital.core.indicator` if needed)
     - Renamed series retrieval methods
         - `Indicator.readings()` -> `Indicator.series()` for one indicator's values across candles

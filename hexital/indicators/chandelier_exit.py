@@ -26,8 +26,8 @@ class ChandelierExit(Indicator[dict[str, float | None]]):
     period: int = 22
     multiplier: float = 3.0
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}_{self.multiplier}"
+    def _name_parts(self) -> list[str]:
+        return ["period", "multiplier"]
 
     def _initialise(self):
         self.sub_atr = self.add_child(ATR(period=self.period))

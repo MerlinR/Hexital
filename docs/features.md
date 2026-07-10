@@ -45,9 +45,6 @@ from hexital import EMA
 class HighLowAverageSmoothed(Indicator):
     _name: str = field(init=False, default="HLASmooth")
 
-    def _generate_name(self) -> str:
-        return f"{self._name}"
-
     def _initialise(self):
         self._raw = self.add_state(name="HLAS_raw")
         self.ema_smooth = self.add_child_managed(
@@ -130,7 +127,7 @@ The `timeframe` transform exists on all [Indicators][hexital.core.indicator.Indi
 
 ## Hexital
 
-he [Hexital][hexital.core.hexital.Hexital] class is a foundational component of the library, designed to simplify and enhance the process of managing multiple indicators within a single, unified interface. It serves as a central hub, offering a streamlined way to configure, calculate, and analyse multiple indicators simultaneously, making it an essential tool for developing robust and scalable trading strategies.
+The [Hexital][hexital.core.hexital.Hexital] class is a foundational component of the library, designed to simplify and enhance the process of managing multiple indicators within a single, unified interface. It serves as a central hub, offering a streamlined way to configure, calculate, and analyse multiple indicators simultaneously, making it an essential tool for developing robust and scalable trading strategies.
 
 One of Hexital’s key strengths is its ability to pass global configuration options to all the indicators it manages. This ensures consistency and reduces redundancy when working with large numbers of indicators or custom configurations. Additionally, the `Hexital` class allows for seamless integration of multiple timeframes, candlestick types, and chained indicators, making it highly versatile for a variety of trading use cases.
 
@@ -267,6 +264,7 @@ strategy.prev_reading("EMA_mid")
 
 ```python linenums="10"
 strategy.series("Supertrend_7")
+strategy.all_series()  # every indicator as a dict of name -> list
 ```
 
 ### Movement functions

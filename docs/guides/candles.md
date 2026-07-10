@@ -180,4 +180,15 @@ strategy.append(candle)  # passthrough manager + T5 resample manager
 
 Indicator values live on each candle under `candle.indicators`. Child and internal values use `candle.sub_indicators`. This makes candles serialisable and lets you resume incremental calculation after a restart.
 
+### Nested readings
+
+Dict outputs (e.g. MACD, BBANDS) are read with `:` between the indicator name and the field:
+
+```python
+strategy.reading("MACD_12_26_9:signal")
+strategy.reading("NATR:nested")  # if the dict key is "nested"
+```
+
+This matches [NESTED_DELI][hexital.core.constants.NESTED_DELI] (`:`). Generated indicator names never contain `:` — it is replaced with `-` in the name string itself.
+
 See [Design](../about/design.md) for the rationale.

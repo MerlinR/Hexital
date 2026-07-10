@@ -32,8 +32,8 @@ class VWAP(Indicator[float]):
     _name: str = field(init=False, default="VWAP")
     anchor: str | TimeFrame | timedelta | int | None = "D"
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{timedelta_to_str(self.anchor)}"
+    def _name_parts(self) -> list[str]:
+        return ["anchor"]
 
     def _validate_fields(self):
         if not validate_timeframe(self.anchor):

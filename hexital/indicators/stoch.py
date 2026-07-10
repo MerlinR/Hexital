@@ -39,8 +39,8 @@ class STOCH(Indicator[dict[str, float | None]]):
     smoothing_k: int = 3
     source: Source = "close"
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}_{self.slow_period}_{self.smoothing_k}{self.source_label()}"
+    def _name_parts(self) -> list[str]:
+        return ["period", "slow_period", "smoothing_k", "source"]
 
     def _initialise(self):
         self._state = self.add_state()

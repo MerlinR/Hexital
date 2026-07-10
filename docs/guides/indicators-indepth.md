@@ -3,6 +3,57 @@
 !!! note "Advanced"
     You do not need this page for basic usage. Start with [Quick Start](quick-start.md) if you are new to Hexital.
 
-TODO
+---
+
+## Generated names
+
+Unnamed indicators get a name from type + configuration. The base [Indicator][hexital.core.indicator.Indicator] builds this in `_generate_name()` using `_name_parts()`.
+
+**Defaults**
+
+- `_name_parts()` returns `period` and `source` when those fields exist
+- Default `source` (usually `"close"`) is **not** included in the name
+- A resample transform suffix is appended when `timeframe=` is set (e.g. `EMA_10_T5`)
+
+**Examples**
+
+| Construction | Generated name |
+|--------------|----------------|
+| `SMA(period=10)` | `SMA_10` |
+| `EMA(period=3)` | `EMA_3` |
+| `MACD()` | `MACD_12_26_9` |
+| `EMA(period=10, timeframe="T5")` | `EMA_10_T5` |
+| `SMA(period=10, source=hlca)` | `SMA_10_HLCA` |
+
+Indicators with extra parameters override `_name_parts()` — see [Custom indicators](custom-indicator.md#generated-names).
+
+### Nested dict outputs
+
+Multi-value indicators store a dict on each candle. Read one field with `:`:
+
+```python
+macd = MACD(candles=candles)
+macd.calculate()
+print(macd.reading("MACD"))           # full dict on latest candle
+print(strategy.reading("MACD_12_26_9:signal"))
+```
+
+### Series
+
+| Old (removed) | Current |
+|---------------|---------|
+| `indicator.readings()` | `indicator.series()` |
+| `hexital.reading_as_list(name)` | `hexital.series(name)` |
+| `hexital.readings()` | `hexital.all_series()` |
+
+---
 
 ## Chaining
+
+Hexital allows you to chain indicators together seamlessly. In a chain, the output of one indicator can serve as the input for another, enabling automated, indefinite chaining of calculations.
+
+This feature provides significant flexibility for creating custom indicators. For example, you can use an EMA to smooth the output of another indicator or incorporate indicators within other indicators to enhance their calculations.
+
+A practical example is the calculation of the [Stochastic Oscillator (STOCH)][hexital.indicators.stoch.STOCH]. The `k` value of STOCH is used as the input for an SMA to compute the `d` value. Internally, this is implemented as the STOCH indicator chaining the SMA indicator, using its own `k` value as the input source.
+
+See also [Features — Indicator chaining](../features.md#indicator-chaining).

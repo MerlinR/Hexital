@@ -27,8 +27,8 @@ class TSI(Indicator[float | None]):
     smooth_period: int = 0
     source: Source = "close"
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}_{self.smooth_period}{self.source_label()}"
+    def _name_parts(self) -> list[str]:
+        return ["period", "smooth_period", "source"]
 
     def _validate_fields(self):
         if self.smooth_period == 0:

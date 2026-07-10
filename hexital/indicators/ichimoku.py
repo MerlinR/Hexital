@@ -32,8 +32,8 @@ class Ichimoku(Indicator[dict[str, float | None]]):
     include_chikou: bool = True
     offset: int = 0
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.tenkan}_{self.kijun}_{self.senkou}"
+    def _name_parts(self) -> list[str]:
+        return ["tenkan", "kijun", "senkou"]
 
     def _initialise(self):
         self._shifted = self.add_state(name=f"{self.name}_shifted")

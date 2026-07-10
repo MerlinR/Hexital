@@ -35,8 +35,8 @@ class JMA(Indicator[float | None]):
     _power_1: float = field(init=False, default=0)
     _bet: float = field(init=False, default=0)
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}_{self.phase}{self.source_label()}"
+    def _name_parts(self) -> list[str]:
+        return ["period", "phase", "source"]
 
     def _initialise(self):
         self._state = self.add_state()

@@ -96,7 +96,7 @@ class Indicator(Generic[V], ABC):
             self.candlestick,
         )
 
-        self._internal_generate_name()
+        self._generate_name()
 
     def __repr__(self) -> str:
         return self.name
@@ -107,53 +107,61 @@ class Indicator(Generic[V], ABC):
     def _validate_fields(self):
         return
 
-    def _internal_generate_name(self):
+    def _generate_name(self):
         if self.name:
             name = self.name
         else:
             self._generated_name = True
-            name = self._generate_name()
+            parts = [self._name if self._name else type(self).__name__]
+            for field_name in self._name_parts():
+                value = getattr(self, field_name)
+                if field_name == "source":
+                    if not self._default_part(field_name, value):
+                        parts.append(self.source_label())
+                else:
+                    parts.append(self._format_name_part(field_name, value))
+            name = "_".join(parts)
             if self._candle_mngr.timeframe:
                 name += f"_{self._candle_mngr.name}"
 
         self.name = name.replace(NESTED_DELI, "-")
         self._refresh_fingerprint()
 
-    def _generate_name(self) -> str:
-        parts = [self._name if self._name else type(self).__name__]
-        period = getattr(self, "period", None)
-        if isinstance(period, int):
-            parts.append(str(period))
-        return "_".join(parts) + self.source_label()
+    def _name_parts(self) -> list[str]:
+        parts = []
+        for field_name in ("period", "source"):
+            if field_name in type(self).__dataclass_fields__:
+                parts.append(field_name)
+        return parts
 
-    def _default_source(self) -> Any:
-        field_info = type(self).__dataclass_fields__.get("source")
+    def _format_name_part(self, field_name: str, value: Any) -> str:
+        if isinstance(value, timedelta):
+            return timedelta_to_str(value)
+        return str(value)
+
+    def _default_part(self, part: str, value: Any) -> bool:
+        if value is None:
+            return False
+        field_info = type(self).__dataclass_fields__.get(part)
         if field_info is None:
-            return "close"
+            return False
         if field_info.default is not MISSING:
-            return field_info.default
+            return value == field_info.default
         if field_info.default_factory is not MISSING:
-            return field_info.default_factory()
-        return "close"
+            return value == field_info.default_factory()
+        return False
 
-    def source_label(self, for_name: bool = True) -> str:
+    def source_label(self) -> str | None:
         if not hasattr(self, "source"):
-            return ""
-        label = ""
-
+            return None
         if isinstance(self.source, str):
-            if self.source == self._default_source():
-                label = None if for_name else self.source
-            else:
-                label = self.source
-        elif isinstance(self.source, Indicator):
-            label = self.source.name
-        elif isinstance(self.source, NestedSource):
-            label = self.source.source_name
+            return self.source
+        if isinstance(self.source, Indicator):
+            return self.source.name
+        if isinstance(self.source, NestedSource):
+            return self.source.source_name
 
-        if label is None:
-            return ""
-        return f"_{label}" if for_name else label
+        return None
 
     def _generate_fingerprint(self) -> str:
         material = dict(self.settings)
@@ -267,7 +275,8 @@ class Indicator(Generic[V], ABC):
             elif name == "timeframe" and self._candle_mngr.timeframe is not None:
                 output[name] = timedelta_to_str(self._candle_mngr.timeframe)
             elif name == "source":
-                output[name] = self.source_label(for_name=False).replace("_", "")
+                if label := self.source_label():
+                    output[name] = label
             elif isinstance(value, timedelta):
                 output[name] = timedelta_to_str(value)
             elif value is not None:
@@ -637,8 +646,6 @@ class Managed(Indicator):
     _when: ChildWhen | None = field(init=False, default=ChildWhen.MANUAL)
     _active_index: int = field(default=0)
 
-    def _generate_name(self) -> str:
-        return self._name
 
     def _calculate_reading(self, index: int) -> Reading: ...
 

@@ -28,8 +28,8 @@ class ADX(Indicator[dict[str, float | None]]):
     period_signal: int = 0
     multiplier: float = 100.0
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}_{self.period_signal}"
+    def _name_parts(self) -> list[str]:
+        return ["period", "period_signal"]
 
     def _validate_fields(self):
         if self.period_signal == 0:

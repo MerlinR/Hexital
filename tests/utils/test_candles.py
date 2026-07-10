@@ -10,7 +10,7 @@ from hexital.utils.candles import (
     reading_count,
     reading_period,
 )
-
+from hexital.core.constants import NESTED_DELI
 
 class TestReadByIndex:
     def test_basic(self, minimal_candles: list[Candle]):
@@ -32,7 +32,7 @@ class TestReadByIndex:
         assert reading_by_index(minimal_candles, "NATR") == {"nested": 2001}
 
     def test_inner_nested_indicator(self, minimal_candles: list[Candle]):
-        assert reading_by_index(minimal_candles, "NATR.nested") == 2001
+        assert reading_by_index(minimal_candles, f"NATR{NESTED_DELI}nested") == 2001
 
     def test_indicator_indexed(self, minimal_candles: list[Candle]):
         assert reading_by_index(minimal_candles, "ATR", index=5) == 600
@@ -41,7 +41,7 @@ class TestReadByIndex:
         assert reading_by_index(minimal_candles, "NATR", index=5) == {"nested": 601}
 
     def test_inner_nested_indicator_indexed(self, minimal_candles: list[Candle]):
-        assert reading_by_index(minimal_candles, "NATR.nested", index=5) == 601
+        assert reading_by_index(minimal_candles, f"NATR{NESTED_DELI}nested", index=5) == 601
 
     def test_subindicator(self, minimal_candles: list[Candle]):
         assert reading_by_index(minimal_candles, "SATR") == 2010
@@ -50,7 +50,7 @@ class TestReadByIndex:
         assert reading_by_index(minimal_candles, "SSATR") == {"nested": 2011}
 
     def test_inner_nested_subindicator(self, minimal_candles: list[Candle]):
-        assert reading_by_index(minimal_candles, "SSATR.nested") == 2011
+        assert reading_by_index(minimal_candles, f"SSATR{NESTED_DELI}nested") == 2011
 
     def test_subindicator_indexed(self, minimal_candles: list[Candle]):
         assert reading_by_index(minimal_candles, "SATR", index=5) == 610
@@ -59,7 +59,7 @@ class TestReadByIndex:
         assert reading_by_index(minimal_candles, "SSATR", index=5) == {"nested": 611}
 
     def test_inner_nested_subindicator_indexed(self, minimal_candles: list[Candle]):
-        assert reading_by_index(minimal_candles, "SSATR.nested", index=5) == 611
+        assert reading_by_index(minimal_candles, f"SSATR{NESTED_DELI}nested", index=5) == 611
 
 
 class TestParseCandles:
@@ -228,15 +228,15 @@ def test_reading_period_over_indexed(minimal_candles: list[Candle]):
 
 
 def test_reading_period_over_none(minimal_candles: list[Candle]):
-    assert reading_period(minimal_candles, "NoneATR", 6, 5) is True
+    assert reading_period(minimal_candles, "ATR", 6, 5) is True
 
 
 def test_reading_period_over_none_nested(minimal_candles: list[Candle]):
-    assert reading_period(minimal_candles, "NoneATR.nested", 6, 5) is False
+    assert reading_period(minimal_candles, "NoneATR:nested", 6, 5) is False
 
 
 def test_reading_period_over_none_nested_two(minimal_candles: list[Candle]):
-    assert reading_period(minimal_candles, "NoneATR.nested", 5, 5) is True
+    assert reading_period(minimal_candles, "NoneATR:nested", 5, 5) is True
 
 
 def test_candle_sum_reg_close(minimal_candles):

@@ -31,8 +31,8 @@ class TRIX(Indicator[dict[str, float | None]]):
     scalar: float = 100.0
     source: Source = "close"
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}_{self.signal_period}{self.source_label()}"
+    def _name_parts(self) -> list[str]:
+        return ["period", "signal_period", "source"]
 
     def _initialise(self):
         self._trix = self.add_state(name=f"{self.name}_trix")

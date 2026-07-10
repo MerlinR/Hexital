@@ -1,4 +1,4 @@
-NESTED_DELI = "."
+NESTED_DELI = ":"
 
 
 def split_nested_name(name: str) -> tuple[str, str | None]:

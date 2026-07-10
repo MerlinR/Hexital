@@ -206,7 +206,7 @@ class Hexital:
     def reading(self, source: Source, index: int = -1) -> Reading:
         """Attempts to retrieve a reading with a given Indicator name.
         `name` can use `~hexital.core.constants.NESTED_DELI` to find a nested
-        reading, e.g. ``MACD_12_26_9.MACD``
+        reading, e.g. ``MACD_12_26_9:signal``
         """
         return self._find_reading(source, index)
 
@@ -219,7 +219,7 @@ class Hexital:
 
     def series(self, source: Source) -> list[Reading]:
         """Find given indicator and returns the readings as a list
-        Full Name of the indicator E.G `EMA_12` OR `MACD_12_26_9.MACD`"""
+        Full Name of the indicator E.G `EMA_12` OR `MACD_12_26_9:signal`"""
         return self._find_series(source)
 
     def add_indicator(

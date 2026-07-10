@@ -28,8 +28,8 @@ class COPC(Indicator[float | None]):
     fast: int = 11
     slow: int = 14
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.fast}_{self.slow}_{self.period}"
+    def _name_parts(self) -> list[str]:
+        return ["fast", "slow", "period"]
 
     def _validate_fields(self):
         if self.slow < self.fast:

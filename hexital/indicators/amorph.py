@@ -1,6 +1,7 @@
 from collections.abc import Callable
 from copy import copy
 
+from ..core.constants import NESTED_DELI
 from ..core.indicator import Indicator
 
 
@@ -64,10 +65,20 @@ class Amorph(Indicator):
 
         return analysis_args, kwargs
 
-    def _generate_name(self) -> str:
-        name = self.analysis_name
-        period = self._analysis_kwargs.get("period")
-        return f"{name}_{period}" if period else name
+    def _generate_name(self):
+        if self.name:
+            name = self.name
+        else:
+            self._generated_name = True
+            parts = [self.analysis_name]
+            if period := self._analysis_kwargs.get("period"):
+                parts.append(str(period))
+            name = "_".join(parts)
+            if self._candle_mngr.timeframe:
+                name += f"_{self._candle_mngr.name}"
+
+        self.name = name.replace(NESTED_DELI, "-")
+        self._refresh_fingerprint()
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         return self._analysis_method(

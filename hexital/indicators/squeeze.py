@@ -40,8 +40,8 @@ class Squeeze(Indicator[dict[str, float | int | None]]):
     mamode: str = "sma"
     period: int | None = None
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.bb_length}_{self.kc_length}_{self.mamode}_{self.mom_length}_{self.mom_smooth}"
+    def _name_parts(self) -> list[str]:
+        return ["bb_length", "kc_length", "mamode", "mom_length", "mom_smooth"]
 
     def _validate_fields(self):
         if self.period is not None:

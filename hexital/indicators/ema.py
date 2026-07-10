@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Any
 
 from ..core.indicator import Indicator, Source
 
@@ -27,9 +28,6 @@ class EMA(Indicator[float | None]):
     source: Source = "close"
     smoothing: float = 2.0
     _alpha: float = field(init=False, default=0)
-
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}{self.source_label()}"
 
     def _validate_fields(self):
         self._alpha = float(self.smoothing / (self.period + 1.0))

@@ -25,8 +25,8 @@ class AO(Indicator[float | None]):
     fast: int = 5
     slow: int = 34
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.fast}_{self.slow}"
+    def _name_parts(self) -> list[str]:
+        return ["fast", "slow"]
 
     def _validate_fields(self):
         if self.slow < self.fast:

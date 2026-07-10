@@ -28,9 +28,6 @@ class BBANDS(Indicator[dict[str, float | None]]):
     source: Source = "close"
     std: float = 2.0
 
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}{self.source_label()}"
-
     def _initialise(self):
         self.sub_stdev = self.add_child(STDEV(source=self.source, period=self.period))
         self.sub_sma = self.add_child(SMA(source=self.source, period=self.period))

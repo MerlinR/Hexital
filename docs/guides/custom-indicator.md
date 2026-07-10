@@ -24,6 +24,28 @@ One-off pattern without a full class?     → Amorph
 
 ---
 
+## Generated names
+
+Hexital builds `indicator.name` automatically in `_generate_name()` from `_name_parts()`. You normally **do not** override `_generate_name()`.
+
+| Behaviour | Detail |
+|-----------|--------|
+| Default parts | `period` and `source`, when those fields exist on the indicator |
+| Default `source` | Omitted from the name (e.g. `"close"` → `SMA_10`, not `SMA_10_close`) |
+| Extra parameters | Override `_name_parts()` to list the dataclass fields to include |
+| Nested outputs | Read with `:` — e.g. `strategy.reading("MACD_12_26_9:signal")` |
+| `:` in names | Replaced with `-` in generated indicator names (nested paths still use `:` at lookup time) |
+| `fingerprint` | Stable hash of `settings` (+ `when` for children) for duplicate detection |
+
+```python
+def _name_parts(self) -> list[str]:
+    return ["period", "multiplier", "source"]
+```
+
+Override `_format_name_part()` on `Indicator` only when a field needs special formatting (e.g. `timedelta` anchors on VWAP).
+
+---
+
 ## Recipe A — Simple indicator
 
 Use when the reading depends only on candle fields and prior readings of **this** indicator — no hidden state, no sub-indicators.
@@ -41,9 +63,6 @@ class MyAverage(Indicator[float | None]):
     _name: str = field(init=False, default="MyAverage")
     period: int = 10
     source: str = "close"
-
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
 
     def _calculate_reading(self, index: int) -> float | None:
         if self.prev_exists():
@@ -86,9 +105,6 @@ class MyOscillator(Indicator[float | None]):
     _name: str = field(init=False, default="MyOscillator")
     period: int = 14
     source: str = "close"
-
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
 
     def _initialise(self):
         self._state = self.add_state()
@@ -144,9 +160,6 @@ class MyBands(Indicator[dict[str, float | None]]):
     period: int = 5
     source: str = "close"
     _std: float = field(init=False, default=2.0)
-
-    def _generate_name(self) -> str:
-        return f"{self._name}_{self.period}"
 
     def _initialise(self):
         self.sub_stdev = self.add_child(STDEV(source=self.source, period=self.period))

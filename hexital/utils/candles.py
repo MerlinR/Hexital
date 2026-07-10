@@ -46,7 +46,7 @@ def reading_by_candle(candle: Candle, name: str) -> float | dict | None:
     """Simple method to get a reading from the given indicator from a candle.
 
     Uses `~hexital.core.constants.NESTED_DELI` to find nested readings,
-    e.g. ``MACD_12_26_9{sep}MACD``.
+    e.g. ``MACD_12_26_9:signal``.
     """
     main_name, nested_name = split_nested_name(name)
     if nested_name is not None:
