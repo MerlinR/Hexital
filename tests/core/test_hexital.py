@@ -501,6 +501,36 @@ class TestFindCandles:
         assert found_candles[1][-1].timeframe == timedelta(seconds=300)
 
 
+class TestSharedChildIndicators:
+    def test_hexital_shares_ema_between_composites(self, candles):
+        from hexital.indicators.dema import DEMA
+        from hexital.indicators.tema import TEMA
+
+        strategy = Hexital("Test Strategy", candles, [DEMA(period=10), TEMA(period=10)])
+        strategy.calculate()
+
+        dema = strategy.indicator("DEMA_10")
+        tema = strategy.indicator("TEMA_10")
+
+        assert dema is not None and tema is not None
+        assert dema.sub_ema is tema.sub_ema
+        assert dema.reading() is not None
+        assert tema.reading() is not None
+
+    def test_hexital_purge_keeps_shared_child_for_sibling(self, candles):
+        from hexital.indicators.dema import DEMA
+        from hexital.indicators.tema import TEMA
+
+        strategy = Hexital("Test Strategy", candles, [DEMA(period=10), TEMA(period=10)])
+        strategy.calculate()
+
+        shared_ema = strategy.indicator("DEMA_10").sub_ema
+        strategy.purge("DEMA_10")
+
+        assert shared_ema.exists()
+        assert strategy.indicator("TEMA_10").reading() is not None
+
+
 class TestMultiTimeframesNames:
     def test_timeframe_default(self, candles_untimeframed):
         strategy = Hexital("Test Strategy", candles_untimeframed)

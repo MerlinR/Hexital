@@ -554,7 +554,7 @@ class CandleManager:
             self.candlestick.transform(mode, index)
 
     def purge(self, indicator: str | set[str]):
-        """Remove this indicator value from all Candles"""
+        """Remove indicator readings from all candles."""
         if isinstance(indicator, str):
             indicator = {indicator}
 

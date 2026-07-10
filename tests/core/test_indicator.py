@@ -270,8 +270,9 @@ class _ChildIndicator(Indicator[float | None]):
     _name: str = field(init=False, default="Child")
     value: float = 0.0
 
-    def _generate_name(self) -> str:
-        return self._name
+    def _generate_name(self):
+        self.name = self._name
+        self._refresh_fingerprint()
 
     def _calculate_reading(self, index: int) -> float | None:
         return self.value + index
@@ -284,8 +285,66 @@ class TestAddChild:
         parent.calculate()
 
         assert child.name in parent.children
+        assert child.name == "Child"
         assert child._when == ChildWhen.BEFORE
         assert child.reading() == 10.0 + (len(minimal_candles) - 1)
+
+    def test_add_child_dedup_returns_existing(self, minimal_candles: list[Candle]):
+        from hexital.indicators.ema import EMA
+
+        parent = FakeIndicator(candles=minimal_candles)
+        first = parent.add_child(EMA(period=5))
+        second = parent.add_child(EMA(period=5))
+
+        assert first is second
+        assert first.name == "EMA_5"
+        assert len(parent.children) == 1
+
+    def test_add_child_shares_across_parents(self, minimal_candles: list[Candle]):
+        from hexital.core.candle_manager import CandleManager
+        from hexital.indicators.ema import EMA
+
+        manager = CandleManager(minimal_candles)
+        parent_a = FakeIndicator(candles=minimal_candles)
+        parent_a.candle_manager = manager
+        parent_b = FakeIndicator(candles=minimal_candles)
+        parent_b.candle_manager = manager
+
+        ema_a = parent_a.add_child(EMA(period=10))
+        ema_b = parent_b.add_child(EMA(period=10))
+
+        assert ema_a is ema_b
+        assert len(parent_a.children) == len(parent_b.children) == 1
+
+    def test_double_add_child_releases_on_purge(self, minimal_candles: list[Candle]):
+        from hexital.indicators.ema import EMA
+
+        parent = FakeIndicator(candles=minimal_candles)
+        first = parent.add_child(EMA(period=10))
+        second = parent.add_child(EMA(period=10))
+        parent.calculate()
+
+        assert first is second
+        parent.purge()
+        assert not first.exists()
+
+    def test_purge_one_parent_keeps_shared_child(self, minimal_candles: list[Candle]):
+        from hexital.core.candle_manager import CandleManager
+        from hexital.indicators.ema import EMA
+
+        manager = CandleManager(minimal_candles)
+        parent_a = FakeIndicator(candles=minimal_candles, name="ParentA")
+        parent_a.candle_manager = manager
+        parent_b = FakeIndicator(candles=minimal_candles, name="ParentB")
+        parent_b.candle_manager = manager
+
+        ema = parent_a.add_child(EMA(period=10))
+        parent_b.add_child(EMA(period=10))
+        parent_a.calculate()
+
+        assert ema.exists()
+        parent_a.purge()
+        assert ema.exists()
 
     def test_add_child_after(self, minimal_candles: list[Candle]):
         parent = FakeIndicator(candles=minimal_candles)
@@ -315,7 +374,6 @@ class TestAddChild:
         parent = FakeIndicator(candles=minimal_candles)
         with pytest.raises(InvalidIndicator, match="Invalid child when"):
             parent.add_child(_ChildIndicator(), when="invalid")
-
 
 class TestAddState:
     def test_add_state_registers_managed_child(self, minimal_candles: list[Candle]):

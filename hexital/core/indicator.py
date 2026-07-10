@@ -31,6 +31,7 @@ from . import Reading
 from .candle import Candle
 from .candle_manager import CandleManager
 from .candlestick_type import CandlestickType
+from .child_registry import ChildRegistry, child_registry_for
 from .constants import NESTED_DELI, join_nested_name
 
 T = TypeVar("T")
@@ -76,6 +77,7 @@ class Indicator(Generic[V], ABC):
     _name: str = field(init=False, default="")
     _timeframe: timedelta | None = field(init=False)
     _candle_mngr: CandleManager = field(init=False)
+    _child_registry: ChildRegistry = field(init=False)
 
     _initialised: bool = field(init=False, default=False)
 
@@ -185,6 +187,7 @@ class Indicator(Generic[V], ABC):
         """The Candle Manager which controls TimeFrame, Trimming and collapsing,
         this will overwrite the Manager as well as the candles"""
         self._candle_mngr = manager
+        self._child_registry = child_registry_for(manager)
 
         self.candles = self._candle_mngr.candles
         self.timeframe = (
@@ -449,14 +452,6 @@ class Indicator(Generic[V], ABC):
         indicator.name = name
         indicator._generated_name = False
 
-    def _bind_child(self, indicator: Indicator, when: ChildWhen) -> Indicator:
-        indicator._when = when
-        indicator.candle_manager = self._candle_mngr
-        indicator.rounding = None
-        indicator._refresh_fingerprint()
-        self.children[indicator.name] = indicator
-        return indicator
-
     def add_child(
         self,
         indicator: Indicator,
@@ -472,9 +467,13 @@ class Indicator(Generic[V], ABC):
                 :attr:`ChildWhen.MANUAL` is only calculated when explicitly invoked
                 (e.g. via `Managed.set_reading` or `calculate_index`).
         """
-        when = _normalize_when(when)
-        self._prefix_generated_name(indicator, f"{self.name}-{indicator.name}")
-        return self._bind_child(indicator, when)
+        indicator._when = _normalize_when(when)
+        indicator.candle_manager = self._candle_mngr
+        indicator.rounding = None
+        indicator._refresh_fingerprint()
+        child = self._child_registry.attach(indicator, self.fingerprint)
+        self.children[child.name] = child
+        return child
 
     def add_child_after(self, indicator: Indicator) -> Indicator:
         """Register a child calculated after the parent's reading is stored."""
@@ -629,7 +628,8 @@ class Indicator(Generic[V], ABC):
 
     def purge(self):
         """Remove this indicator value from all Candles"""
-        self._candle_mngr.purge({self.name} | self.children.keys())
+        names = {self.name, *self._child_registry.release_parent(self.fingerprint)}
+        self._candle_mngr.purge(names)
 
     def recalculate(self):
         """Re-calculate this indicator value for all Candles"""
