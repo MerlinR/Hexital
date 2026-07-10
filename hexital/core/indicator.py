@@ -107,24 +107,26 @@ class Indicator(Generic[V], ABC):
     def _validate_fields(self):
         return
 
-    def _generate_name(self):
-        if self.name:
-            name = self.name
-        else:
-            self._generated_name = True
-            parts = [self._name if self._name else type(self).__name__]
-            for field_name in self._name_parts():
-                value = getattr(self, field_name)
-                if field_name == "source":
-                    if not self._default_part(field_name, value):
-                        parts.append(self.source_label())
-                else:
-                    parts.append(self._format_name_part(field_name, value))
-            name = "_".join(parts)
-            if self._candle_mngr.timeframe:
-                name += f"_{self._candle_mngr.name}"
+    def _build_name(self) -> str:
+        parts = [self._name if self._name else type(self).__name__]
+        for field_name in self._name_parts():
+            value = getattr(self, field_name)
+            if field_name == "source":
+                if not self._default_part(field_name, value):
+                    parts.append(self.source_label())
+            else:
+                parts.append(self._format_name_part(field_name, value))
+        name = "_".join(parts)
+        if self._candle_mngr.timeframe:
+            name += f"_{self._candle_mngr.name}"
+        return name.replace(NESTED_DELI, "-")
 
-        self.name = name.replace(NESTED_DELI, "-")
+    def _generate_name(self):
+        if not self.name:
+            self._generated_name = True
+            self.name = self._build_name()
+        else:
+            self.name = self.name.replace(NESTED_DELI, "-")
         self._refresh_fingerprint()
 
     def _name_parts(self) -> list[str]:
@@ -441,6 +443,20 @@ class Indicator(Generic[V], ABC):
             if indicator._when == ChildWhen.MANUAL and isinstance(indicator, Managed):
                 indicator.set_active_index(index)
 
+    def _prefix_generated_name(self, indicator: Indicator, name: str) -> None:
+        if not indicator._generated_name:
+            return
+        indicator.name = name
+        indicator._generated_name = False
+
+    def _bind_child(self, indicator: Indicator, when: ChildWhen) -> Indicator:
+        indicator._when = when
+        indicator.candle_manager = self._candle_mngr
+        indicator.rounding = None
+        indicator._refresh_fingerprint()
+        self.children[indicator.name] = indicator
+        return indicator
+
     def add_child(
         self,
         indicator: Indicator,
@@ -457,21 +473,8 @@ class Indicator(Generic[V], ABC):
                 (e.g. via `Managed.set_reading` or `calculate_index`).
         """
         when = _normalize_when(when)
-
-        if when == ChildWhen.MANUAL:
-            if indicator.name == MANAGED_NAME:
-                indicator.name = f"{self.name}_data"
-            elif indicator._generated_name:
-                indicator.name = f"{self.name}-{indicator.name}"
-        elif indicator._generated_name:
-            indicator.name = f"{self.name}-{indicator.name}"
-
-        indicator._when = when
-        indicator.candle_manager = self._candle_mngr
-        indicator.rounding = None
-        indicator._refresh_fingerprint()
-        self.children[indicator.name] = indicator
-        return indicator
+        self._prefix_generated_name(indicator, f"{self.name}-{indicator.name}")
+        return self._bind_child(indicator, when)
 
     def add_child_after(self, indicator: Indicator) -> Indicator:
         """Register a child calculated after the parent's reading is stored."""
@@ -479,12 +482,15 @@ class Indicator(Generic[V], ABC):
 
     def add_child_managed(self, indicator: Indicator) -> Indicator:
         """Register a child calculated only when explicitly invoked."""
+        if isinstance(indicator, Managed):
+            self._prefix_generated_name(indicator, f"{self.name}_data")
         return self.add_child(indicator, when=ChildWhen.MANUAL)
 
     def add_state(self, name: str | None = None) -> State:
         """Register hidden state storage for incremental calculations."""
-        managed = Managed(name=name) if name else Managed()
-        return State(self, self.add_child_managed(managed))
+        state_name = name if name is not None else f"{self.name}_data"
+        managed = Managed(name=state_name)
+        return State(self, self.add_child(managed, when=ChildWhen.MANUAL))
 
     def _find_reading(
         self, source: Source | None = None, index: int | None = None
@@ -631,9 +637,6 @@ class Indicator(Generic[V], ABC):
         self.calculate()
 
 
-MANAGED_NAME = "MAN"
-
-
 @dataclass(kw_only=True)
 class Managed(Indicator):
     """Managed
@@ -642,10 +645,7 @@ class Managed(Indicator):
 
     """
 
-    _name: str = field(init=False, default=MANAGED_NAME)
     _when: ChildWhen | None = field(init=False, default=ChildWhen.MANUAL)
-    _active_index: int = field(default=0)
-
 
     def _calculate_reading(self, index: int) -> Reading: ...
 

@@ -65,19 +65,21 @@ class Amorph(Indicator):
 
         return analysis_args, kwargs
 
-    def _generate_name(self):
-        if self.name:
-            name = self.name
-        else:
-            self._generated_name = True
-            parts = [self.analysis_name]
-            if period := self._analysis_kwargs.get("period"):
-                parts.append(str(period))
-            name = "_".join(parts)
-            if self._candle_mngr.timeframe:
-                name += f"_{self._candle_mngr.name}"
+    def _build_name(self) -> str:
+        parts = [self.analysis_name]
+        if period := self._analysis_kwargs.get("period"):
+            parts.append(str(period))
+        name = "_".join(parts)
+        if self._candle_mngr.timeframe:
+            name += f"_{self._candle_mngr.name}"
+        return name.replace(NESTED_DELI, "-")
 
-        self.name = name.replace(NESTED_DELI, "-")
+    def _generate_name(self):
+        if not self.name:
+            self._generated_name = True
+            self.name = self._build_name()
+        else:
+            self.name = self.name.replace(NESTED_DELI, "-")
         self._refresh_fingerprint()
 
     def _calculate_reading(self, index: int) -> float | dict | None:
