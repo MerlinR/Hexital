@@ -744,6 +744,45 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#generated-names" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generated names
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Generated names">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nested-dict-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nested dict outputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#series" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Series
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#chaining" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1522,6 +1561,62 @@
     
   
     <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> candlestick_type
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/hexital/core/child_registry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> child_registry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/hexital/core/constants/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> constants
   
 
     
@@ -3850,6 +3945,45 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#generated-names" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generated names
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Generated names">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nested-dict-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Nested dict outputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#series" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Series
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#chaining" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3885,8 +4019,93 @@
 <p class="admonition-title">Advanced</p>
 <p>You do not need this page for basic usage. Start with <a href="../quick-start/">Quick Start</a> if you are new to Hexital.</p>
 </div>
-<p>TODO</p>
+<hr />
+<h2 id="generated-names">Generated names</h2>
+<p>Unnamed indicators get a name from type + configuration. The base <a class="autorefs autorefs-internal" title="            Indicator
+
+
+  
+      dataclass
+  " href="../../reference/hexital/core/indicator/#hexital.core.indicator.Indicator">Indicator</a> builds this in <code>_generate_name()</code> using <code>_name_parts()</code>.</p>
+<p><strong>Defaults</strong></p>
+<ul>
+<li><code>_name_parts()</code> returns <code>period</code> and <code>source</code> when those fields exist</li>
+<li>Default <code>source</code> (usually <code>"close"</code>) is <strong>not</strong> included in the name</li>
+<li>A resample transform suffix is appended when <code>timeframe=</code> is set (e.g. <code>EMA_10_T5</code>)</li>
+</ul>
+<p><strong>Examples</strong></p>
+<table>
+<thead>
+<tr>
+<th>Construction</th>
+<th>Generated name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SMA(period=10)</code></td>
+<td><code>SMA_10</code></td>
+</tr>
+<tr>
+<td><code>EMA(period=3)</code></td>
+<td><code>EMA_3</code></td>
+</tr>
+<tr>
+<td><code>MACD()</code></td>
+<td><code>MACD_12_26_9</code></td>
+</tr>
+<tr>
+<td><code>EMA(period=10, timeframe="T5")</code></td>
+<td><code>EMA_10_T5</code></td>
+</tr>
+<tr>
+<td><code>SMA(period=10, source=hlca)</code></td>
+<td><code>SMA_10_HLCA</code></td>
+</tr>
+</tbody>
+</table>
+<p>Indicators with extra parameters override <code>_name_parts()</code> — see <a href="../custom-indicator/#generated-names">Custom indicators</a>.</p>
+<h3 id="nested-dict-outputs">Nested dict outputs</h3>
+<p>Multi-value indicators store a dict on each candle. Read one field with <code>:</code>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">macd</span> <span class="o">=</span> <span class="n">MACD</span><span class="p">(</span><span class="n">candles</span><span class="o">=</span><span class="n">candles</span><span class="p">)</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">macd</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nb">print</span><span class="p">(</span><span class="n">macd</span><span class="o">.</span><span class="n">reading</span><span class="p">(</span><span class="s2">&quot;MACD&quot;</span><span class="p">))</span>           <span class="c1"># full dict on latest candle</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nb">print</span><span class="p">(</span><span class="n">strategy</span><span class="o">.</span><span class="n">reading</span><span class="p">(</span><span class="s2">&quot;MACD_12_26_9:signal&quot;</span><span class="p">))</span>
+</span></code></pre></div>
+<h3 id="series">Series</h3>
+<table>
+<thead>
+<tr>
+<th>Old (removed)</th>
+<th>Current</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>indicator.readings()</code></td>
+<td><code>indicator.series()</code></td>
+</tr>
+<tr>
+<td><code>hexital.reading_as_list(name)</code></td>
+<td><code>hexital.series(name)</code></td>
+</tr>
+<tr>
+<td><code>hexital.readings()</code></td>
+<td><code>hexital.all_series()</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
 <h2 id="chaining">Chaining</h2>
+<p>Hexital allows you to chain indicators together seamlessly. In a chain, the output of one indicator can serve as the input for another, enabling automated, indefinite chaining of calculations.</p>
+<p>This feature provides significant flexibility for creating custom indicators. For example, you can use an EMA to smooth the output of another indicator or incorporate indicators within other indicators to enhance their calculations.</p>
+<p>A practical example is the calculation of the <a class="autorefs autorefs-internal" title="            STOCH
+
+
+  
+      dataclass
+  " href="../../reference/hexital/indicators/stoch/#hexital.indicators.stoch.STOCH">Stochastic Oscillator (STOCH)</a>. The <code>k</code> value of STOCH is used as the input for an SMA to compute the <code>d</code> value. Internally, this is implemented as the STOCH indicator chaining the SMA indicator, using its own <code>k</code> value as the input source.</p>
+<p>See also <a href="../../features/#indicator-chaining">Features — Indicator chaining</a>.</p>
 
 
 
@@ -3907,7 +4126,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 9, 2026 11:20:18 UTC">June 9, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 10, 2026 09:23:46 UTC">July 10, 2026</span>
   </span>
 
     

@@ -1479,6 +1479,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/hexital/core/child_registry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> child_registry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/hexital/core/constants/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> constants
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/hexital/core/hexital/" class="md-nav__link">
         
   
@@ -3999,6 +4055,7 @@
 <p>Additionally, this approach supports caching candles. If the application is restarted, the cached candles, combined with the Hexital configuration, can seamlessly restore both the candles and their indicator values, enabling incremental calculations to resume immediately.</p>
 <h3 id="timeframe-labels-vs-transforms">Timeframe labels vs transforms</h3>
 <p><code>candle.timeframe</code> is stored on each bar as metadata (what resolution the row represents). Resampling is configured separately via <code>indicator.timeframe=</code> or <code>hexital.timeframe=</code>. Managers route appended candles by label: a resampling manager accepts bars labelled at its transform size or finer. See <a href="../../guides/candles/#timeframes">Candles</a> for usage.</p>
+<p>Indicator names are generated from <code>_name_parts()</code> on each indicator class. Each indicator exposes a <code>fingerprint</code> hash of its settings for duplicate detection.</p>
 <h2 id="future-plans">Future Plans</h2>
 <p>Hexital is currently in <code>Beta</code>. The focus during this phase is to avoid altering core frameworks and instead prioritise making the library more robust and user-friendly. The current implementation of indicators and patterns is straightforward, allowing for easy expansion. However, the addition of new indicators will slow down temporarily to concentrate on enhancing robustness, ease of use, standardization, and error handling.</p>
 <h3 id="plans">Plans</h3>
@@ -4048,7 +4105,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 9, 2026 14:10:26 UTC">June 9, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 10, 2026 09:23:46 UTC">July 10, 2026</span>
   </span>
 
     

@@ -1477,6 +1477,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../reference/hexital/core/child_registry/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> child_registry
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/hexital/core/constants/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> constants
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../reference/hexital/core/hexital/" class="md-nav__link">
         
   
@@ -4258,6 +4314,13 @@
 <li>
 <p>Non-backward compatible changes:</p>
 <ul>
+<li>Nested naming delimiter changed <code>.</code>  is replaced with <code>:</code></li>
+<li>Altered the vast majority of Indicators Generated naming.<ul>
+<li>Indicator names are built centrally in <code>Indicator._generate_name()</code> from <code>_name_parts()</code></li>
+<li>Indicators with extra parameters <code>_name_parts()</code> instead of <code>_generate_name()</code></li>
+<li>Default <code>_name_parts()</code> is <code>period</code> and <code>source</code> (when those fields exist on the indicator)</li>
+</ul>
+</li>
 <li>Removed <code>Managed</code> and <code>NestedSource</code> from public <code>hexital</code> exports (use <code>add_state()</code>; import from <code>hexital.core.indicator</code> if needed)</li>
 <li>Renamed series retrieval methods<ul>
 <li><code>Indicator.readings()</code> -&gt; <code>Indicator.series()</code> for one indicator's values across candles</li>
@@ -4302,8 +4365,9 @@
 <li>Performance optimisations for appending</li>
 <li>Made <code>Candle.__eq__()</code> symmetric while preserving lenient comparison</li>
 <li>Updated Test verification</li>
+<li>Added <code>Timeframe</code> argument to helper generating Candle methods for easier setting from existing data</li>
 <li>
-<p>Added <code>Timeframe</code> argument to helper generating Candle methods for easier setting from existing data</p>
+<p>Added fingerprint to Indicators, a hash of indicator settings for duplication detection</p>
 </li>
 <li>
 <p>Added Indicators</p>
