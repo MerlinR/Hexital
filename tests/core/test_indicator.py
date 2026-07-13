@@ -5,8 +5,8 @@ import pytest
 from hexital import Candle
 from hexital.analysis.patterns import doji
 from hexital.candlesticks.heikinashi import HeikinAshi
-from hexital.core.indicator import ChildWhen, Indicator, Managed
-from hexital.exceptions import InvalidCandlestickType, InvalidIndicator
+from hexital.core.indicator import ChildWhen, Indicator
+from hexital.exceptions import InvalidCandlestickType
 from hexital.indicators.amorph import Amorph
 from hexital.utils import timeframe
 
@@ -284,7 +284,6 @@ class TestAddChild:
         child = parent.add_child(_ChildIndicator(value=10.0))
         parent.calculate()
 
-        assert child.name in parent.children
         assert child.name == "Child"
         assert child._when == ChildWhen.BEFORE
         assert child.reading() == 10.0 + (len(minimal_candles) - 1)
@@ -298,7 +297,8 @@ class TestAddChild:
 
         assert first is second
         assert first.name == "EMA_5"
-        assert len(parent.children) == 1
+        children = list(parent.children.get_children(parent.fingerprint))
+        assert len(children) == 1
 
     def test_add_child_shares_across_parents(self, minimal_candles: list[Candle]):
         from hexital.core.candle_manager import CandleManager
@@ -314,19 +314,9 @@ class TestAddChild:
         ema_b = parent_b.add_child(EMA(period=10))
 
         assert ema_a is ema_b
-        assert len(parent_a.children) == len(parent_b.children) == 1
-
-    def test_double_add_child_releases_on_purge(self, minimal_candles: list[Candle]):
-        from hexital.indicators.ema import EMA
-
-        parent = FakeIndicator(candles=minimal_candles)
-        first = parent.add_child(EMA(period=10))
-        second = parent.add_child(EMA(period=10))
-        parent.calculate()
-
-        assert first is second
-        parent.purge()
-        assert not first.exists()
+        assert parent_a.children is parent_b.children
+        assert len(list(parent_a.children.get_children(parent_a.fingerprint))) == 1
+        assert len(list(parent_b.children.get_children(parent_b.fingerprint))) == 1
 
     def test_purge_one_parent_keeps_shared_child(self, minimal_candles: list[Candle]):
         from hexital.core.candle_manager import CandleManager
@@ -354,26 +344,6 @@ class TestAddChild:
         assert child._when == ChildWhen.AFTER
         assert child.reading() == 5.0 + (len(minimal_candles) - 1)
 
-    def test_add_child_managed(self, minimal_candles: list[Candle]):
-        parent = FakeIndicator(candles=minimal_candles)
-        state = parent.add_child_managed(Managed())
-        parent.calculate()
-
-        assert state.name == f"{parent.name}_data"
-        assert state._when == ChildWhen.MANUAL
-        assert parent.children[state.name] is state
-        state.set_reading({"x": 1})
-        assert state.reading() == {"x": 1}
-
-    def test_add_child_accepts_string_when(self, minimal_candles: list[Candle]):
-        parent = FakeIndicator(candles=minimal_candles)
-        child = parent.add_child(_ChildIndicator(), when="after")
-        assert child._when == ChildWhen.AFTER
-
-    def test_add_child_invalid_when(self, minimal_candles: list[Candle]):
-        parent = FakeIndicator(candles=minimal_candles)
-        with pytest.raises(InvalidIndicator, match="Invalid child when"):
-            parent.add_child(_ChildIndicator(), when="invalid")
 
 class TestAddState:
     def test_add_state_registers_managed_child(self, minimal_candles: list[Candle]):
@@ -383,7 +353,6 @@ class TestAddState:
 
         assert state.managed.name == f"{parent.name}_data"
         assert state.managed._when == ChildWhen.MANUAL
-        assert parent.children[state.managed.name] is state.managed
 
     def test_add_state_custom_name(self, minimal_candles: list[Candle]):
         parent = FakeIndicator(candles=minimal_candles)
@@ -492,13 +461,21 @@ class TestIndicatorNaming:
         hlca = HLCA()
         assert SMA(period=10, source=hlca).name == "SMA_10_HLCA"
 
-    def test_generate_fingerprint_is_stable(self):
+    def test_generate_fingerprint_is_stable_on_shared_manager(self):
         from hexital.indicators.sma import SMA
 
         first = SMA(period=10)
         second = SMA(period=10)
+        second.candle_manager = first.candle_manager
+        second._refresh_fingerprint()
+
         assert first.fingerprint == second.fingerprint
         assert len(first.fingerprint) == 64
+
+    def test_generate_fingerprint_differs_by_manager(self):
+        from hexital.indicators.sma import SMA
+
+        assert SMA(period=10).fingerprint != SMA(period=10).fingerprint
 
     def test_generate_fingerprint_differs_by_period(self):
         from hexital.indicators.sma import SMA

@@ -31,8 +31,8 @@ from . import Reading
 from .candle import Candle
 from .candle_manager import CandleManager
 from .candlestick_type import CandlestickType
-from .child_registry import ChildRegistry, child_registry_for
 from .constants import NESTED_DELI, join_nested_name
+from .indicator_registry import IndicatorRegistry, indicator_registry
 
 T = TypeVar("T")
 V = TypeVar("V")
@@ -69,7 +69,7 @@ class Indicator(Generic[V], ABC):
     candlestick: CandlestickType | str | None = None
     rounding: int | None = 4
 
-    children: dict[str, Indicator] = field(init=False, default_factory=dict)
+    children: IndicatorRegistry = field(init=False, repr=False)
     _when: ChildWhen | None = field(init=False, default=None)
     _generated_name: bool = field(init=False, default=False)
     _active_index: int = field(init=False, default=0)
@@ -77,8 +77,6 @@ class Indicator(Generic[V], ABC):
     _name: str = field(init=False, default="")
     _timeframe: timedelta | None = field(init=False)
     _candle_mngr: CandleManager = field(init=False)
-    _child_registry: ChildRegistry = field(init=False)
-
     _initialised: bool = field(init=False, default=False)
 
     def __post_init__(self):
@@ -171,6 +169,7 @@ class Indicator(Generic[V], ABC):
         material = dict(self.settings)
         if self._when is not None:
             material["when"] = self._when.value
+        material["manager"] = id(self._candle_mngr)
         payload = json.dumps(material, sort_keys=True, separators=(",", ":"))
         return hashlib.sha256(payload.encode()).hexdigest()
 
@@ -187,8 +186,7 @@ class Indicator(Generic[V], ABC):
         """The Candle Manager which controls TimeFrame, Trimming and collapsing,
         this will overwrite the Manager as well as the candles"""
         self._candle_mngr = manager
-        self._child_registry = child_registry_for(manager)
-
+        self.children = indicator_registry
         self.candles = self._candle_mngr.candles
         self.timeframe = (
             timedelta_to_str(self._candle_mngr.timeframe)
@@ -199,9 +197,7 @@ class Indicator(Generic[V], ABC):
         self.timeframe_fill = self._candle_mngr.timeframe_fill
         self.candle_life = self._candle_mngr.candle_life
         self.candlestick = self._candle_mngr.candlestick
-        for indicator in self.children.values():
-            indicator.candle_manager = self._candle_mngr
-
+        
     @property
     def open(self) -> float:
         return self.candles[self._active_index].open
@@ -345,7 +341,7 @@ class Indicator(Generic[V], ABC):
         index: int,
         end_index: int | None = None,
     ):
-        for indicator in self.children.values():
+        for indicator in self.children.get_children(self.fingerprint):
             if indicator._when == when:
                 indicator.calculate_index(index, end_index)
 
@@ -442,7 +438,7 @@ class Indicator(Generic[V], ABC):
 
     def _set_active_index(self, index: int):
         self._active_index = index
-        for indicator in self.children.values():
+        for indicator in self.children.get_children(self.fingerprint):
             if indicator._when == ChildWhen.MANUAL and isinstance(indicator, Managed):
                 indicator.set_active_index(index)
 
@@ -471,8 +467,7 @@ class Indicator(Generic[V], ABC):
         indicator.candle_manager = self._candle_mngr
         indicator.rounding = None
         indicator._refresh_fingerprint()
-        child = self._child_registry.attach(indicator, self.fingerprint)
-        self.children[child.name] = child
+        child = self.children.attach(indicator, self.fingerprint)
         return child
 
     def add_child_after(self, indicator: Indicator) -> Indicator:
@@ -491,9 +486,7 @@ class Indicator(Generic[V], ABC):
         managed = Managed(name=state_name)
         return State(self, self.add_child(managed, when=ChildWhen.MANUAL))
 
-    def _find_reading(
-        self, source: Source | None = None, index: int | None = None
-    ) -> V:
+    def _find_reading(self, source: Source | None = None, index: int | None = None) -> V:
         if not self.candles:
             return None
 
@@ -628,7 +621,7 @@ class Indicator(Generic[V], ABC):
 
     def purge(self):
         """Remove this indicator value from all Candles"""
-        names = {self.name, *self._child_registry.release_parent(self.fingerprint)}
+        names = {self.name, *self.children.release_parent(self.fingerprint)}
         self._candle_mngr.purge(names)
 
     def recalculate(self):
