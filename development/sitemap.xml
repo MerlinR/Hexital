@@ -121,10 +121,6 @@
          <lastmod>2026-07-13</lastmod>
     </url>
     <url>
-         <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/core/child_registry/</loc>
-         <lastmod>2026-07-13</lastmod>
-    </url>
-    <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/core/constants/</loc>
          <lastmod>2026-07-13</lastmod>
     </url>
@@ -138,6 +134,10 @@
     </url>
     <url>
          <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/core/indicator_collection/</loc>
+         <lastmod>2026-07-13</lastmod>
+    </url>
+    <url>
+         <loc>https://MerlinR.github.io/Hexital/development/reference/hexital/core/indicator_registry/</loc>
          <lastmod>2026-07-13</lastmod>
     </url>
     <url>
