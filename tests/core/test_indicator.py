@@ -433,29 +433,3 @@ class TestIndicatorNaming:
 
         hlca = HLCA()
         assert SMA(period=10, source=hlca).name == "SMA_10_HLCA"
-
-    def test_generate_fingerprint_is_stable(self):
-        from hexital.indicators.sma import SMA
-
-        first = SMA(period=10)
-        second = SMA(period=10)
-        assert first.fingerprint == second.fingerprint
-        assert len(first.fingerprint) == 64
-
-    def test_generate_fingerprint_differs_by_period(self):
-        from hexital.indicators.sma import SMA
-
-        assert SMA(period=10).fingerprint != SMA(period=20).fingerprint
-
-    def test_generate_fingerprint_differs_by_when(self, minimal_candles: list[Candle]):
-        from hexital.indicators.ema import EMA
-
-        parent = FakeIndicator(candles=minimal_candles)
-        before = parent.add_child(EMA(period=5))
-        after = parent.add_child_after(EMA(period=5))
-        assert before.fingerprint != after.fingerprint
-
-    def test_explicit_name_override_keeps_custom_fingerprint(self):
-        indicator = FakeIndicator(candles=[], name="CUSTOM")
-        assert indicator.name == "CUSTOM"
-        assert indicator.fingerprint

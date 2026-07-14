@@ -658,7 +658,7 @@ class TestRetrieveCandles:
 
     def test_retrieve_candles_hexital_single(self, multi_candles):
         candles = movement._retrieve_candles(multi_candles, "EMA")
-        assert isinstance(candles, tuple) and len(candles[0]) > 0 and len(candles[1]) == 0
+        assert isinstance(candles, list) and len(candles) > 0
 
     def test_retrieve_candles_hexital_multi(self, multi_candles):
         candles = movement._retrieve_candles(multi_candles, "EMA", "SUPERTREND")

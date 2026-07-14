@@ -33,7 +33,10 @@ def _retrieve_candles(
     if isinstance(obj, Hexital) and not indicator and not indicator_cmp:
         return obj.candles()
     if isinstance(obj, Hexital) and indicator:
-        return obj.find_candle_pairing(indicator, indicator_cmp)
+        pairing = obj.find_candle_pairing(indicator, indicator_cmp)
+        if not indicator_cmp:
+            return pairing[0]
+        return pairing
 
     return []
 

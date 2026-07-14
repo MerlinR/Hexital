@@ -12,7 +12,7 @@ Additionally, this approach supports caching candles. If the application is rest
 
 `candle.timeframe` is stored on each bar as metadata (what resolution the row represents). Resampling is configured separately via `indicator.timeframe=` or `hexital.timeframe=`. Managers route appended candles by label: a resampling manager accepts bars labelled at its transform size or finer. See [Candles](../guides/candles.md#timeframes) for usage.
 
-Indicator names are generated from `_name_parts()` on each indicator class. Each indicator exposes a `fingerprint` hash of its settings for duplicate detection.
+Indicator names are generated from `_name_parts()` on each indicator class.
 
 
 ## Future Plans

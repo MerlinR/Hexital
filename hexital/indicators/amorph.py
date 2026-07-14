@@ -44,7 +44,7 @@ class Amorph(Indicator):
             output["args"] = copy(self._analysis_kwargs)
 
         for name, value in self.__dict__.items():
-            if name in ["analysis_name", "candles", "children", "fingerprint"] or name.startswith(
+            if name in ["analysis_name", "candles", "children"] or name.startswith(
                 "_"
             ):
                 continue
@@ -80,7 +80,6 @@ class Amorph(Indicator):
             self.name = self._build_name()
         else:
             self.name = self.name.replace(NESTED_DELI, "-")
-        self._refresh_fingerprint()
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         return self._analysis_method(

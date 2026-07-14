@@ -35,7 +35,6 @@ Hexital builds `indicator.name` automatically in `_generate_name()` from `_name_
 | Extra parameters | Override `_name_parts()` to list the dataclass fields to include |
 | Nested outputs | Read with `:` — e.g. `strategy.reading("MACD_12_26_9:signal")` |
 | `:` in names | Replaced with `-` in generated indicator names (nested paths still use `:` at lookup time) |
-| `fingerprint` | Stable hash of `settings` (+ `when` for children) for duplicate detection |
 
 ```python
 def _name_parts(self) -> list[str]:

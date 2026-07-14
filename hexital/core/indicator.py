@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import hashlib
-import json
 from abc import ABC, abstractmethod
 from copy import copy
 from dataclasses import MISSING, dataclass, field
@@ -61,7 +59,6 @@ def _normalize_when(when: ChildWhen | str) -> ChildWhen:
 class Indicator(Generic[V], ABC):
     candles: list[Candle] = field(default_factory=list)
     name: str = ""
-    fingerprint: str = field(init=False, default="")
     timeframe: TimeFramesSource | None = None
     timeframe_fill: bool = False
     candle_life: timedelta | None = None
@@ -127,7 +124,6 @@ class Indicator(Generic[V], ABC):
             self.name = self._build_name()
         else:
             self.name = self.name.replace(NESTED_DELI, "-")
-        self._refresh_fingerprint()
 
     def _name_parts(self) -> list[str]:
         parts = []
@@ -164,16 +160,6 @@ class Indicator(Generic[V], ABC):
             return self.source.source_name
 
         return None
-
-    def _generate_fingerprint(self) -> str:
-        material = dict(self.settings)
-        if self._when is not None:
-            material["when"] = self._when.value
-        payload = json.dumps(material, sort_keys=True, separators=(",", ":"))
-        return hashlib.sha256(payload.encode()).hexdigest()
-
-    def _refresh_fingerprint(self) -> None:
-        self.fingerprint = self._generate_fingerprint()
 
     @property
     def candle_manager(self) -> CandleManager:
@@ -267,7 +253,7 @@ class Indicator(Generic[V], ABC):
         output: dict[str, Any] = {}
 
         for name, value in self.__dict__.items():
-            if name in ["candles", "children", "fingerprint"] or name.startswith("_"):
+            if name in ["candles", "children"] or name.startswith("_"):
                 continue
             if name == "timeframe_fill" and self._timeframe is None:
                 continue
@@ -453,7 +439,6 @@ class Indicator(Generic[V], ABC):
         indicator._when = when
         indicator.candle_manager = self._candle_mngr
         indicator.rounding = None
-        indicator._refresh_fingerprint()
         self.children[indicator.name] = indicator
         return indicator
 
