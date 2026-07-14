@@ -4,11 +4,9 @@ from abc import ABC, abstractmethod
 from copy import copy
 from dataclasses import MISSING, dataclass, field
 from datetime import timedelta
-from enum import Enum
 from typing import Any, Generic, TypeAlias, TypeVar
 
-from ..exceptions import InvalidIndicator
-from ..utils.candles import (
+from ...utils.candles import (
     Candles,
     candles_average,
     candles_sum,
@@ -17,42 +15,23 @@ from ..utils.candles import (
     reading_count,
     reading_period,
 )
-from ..utils.candlesticks import validate_candlesticktype
-from ..utils.common import round_values
-from ..utils.indexing import absindex, valid_index
-from ..utils.timeframe import (
+from ...utils.candlesticks import validate_candlesticktype
+from ...utils.common import round_values
+from ...utils.indexing import absindex, valid_index
+from ...utils.timeframe import (
     TimeFramesSource,
     convert_timeframe_to_timedelta,
     timedelta_to_str,
 )
-from . import Reading
-from .candle import Candle
-from .candle_manager import CandleManager
-from .candlestick_type import CandlestickType
-from .constants import NESTED_DELI, join_nested_name
+from .. import Reading
+from ..candle import Candle
+from ..candle_manager import CandleManager
+from ..candlestick_type import CandlestickType
+from ..constants import NESTED_DELI
+from .child_when import ChildWhen, _normalize_when
 
 T = TypeVar("T")
 V = TypeVar("V")
-
-
-class ChildWhen(str, Enum):
-    """When a child indicator is calculated relative to its parent."""
-
-    BEFORE = "before"
-    AFTER = "after"
-    MANUAL = "manual"
-
-
-def _normalize_when(when: ChildWhen | str) -> ChildWhen:
-    if isinstance(when, ChildWhen):
-        return when
-    try:
-        return ChildWhen(when)
-    except ValueError as exc:
-        raise InvalidIndicator(
-            f"Invalid child when {when!r}; expected one of "
-            f"{', '.join(member.value for member in ChildWhen)}"
-        ) from exc
 
 
 @dataclass(kw_only=True)
@@ -622,127 +601,7 @@ class Indicator(Generic[V], ABC):
         self.calculate()
 
 
-@dataclass(kw_only=True)
-class Managed(Indicator):
-    """Managed
-
-    Empty Indicator thats manually controlled and the reading manually set.
-
-    """
-
-    _when: ChildWhen | None = field(init=False, default=ChildWhen.MANUAL)
-
-    def _calculate_reading(self, index: int) -> Reading: ...
-
-    def set_reading(self, reading: Reading, index: int | None = None):  # type: ignore
-        if index is None:
-            index = self._active_index
-        else:
-            self.set_active_index(index)
-
-        self._calculate_children(ChildWhen.BEFORE, index)
-        self._set_reading(reading, index)  # type: ignore
-        self._calculate_children(ChildWhen.AFTER, index)
-
-    def set_active_index(self, index: int):
-        self._active_index = index
-
-
-class State:
-    """Internal state backed by a managed child indicator.
-
-    Use via `Indicator.add_state()` rather than constructing directly.
-    Dictionary keys map to fields stored on each candle's `sub_indicators`.
-    """
-
-    __slots__ = ("_managed", "_parent", "_sources")
-
-    def __init__(self, parent: Indicator, managed: Managed):
-        self._parent = parent
-        self._managed = managed
-        self._sources: dict[str, NestedSource] = {}
-
-    @property
-    def managed(self) -> Managed:
-        """Underlying managed child, e.g. as an EMA `source`."""
-        return self._managed
-
-    def source(self, key: str) -> NestedSource:
-        """Reference a state field as an indicator source."""
-        if key not in self._sources:
-            self._sources[key] = NestedSource(self._managed, key)
-        return self._sources[key]
-
-    def prev(self, key: str | None = None, default: T | None = None) -> Reading | T:
-        """Previous reading for the whole state or a single field."""
-        if key is None:
-            return self._parent.prev_reading(self._managed, default)  # type: ignore
-        return self._parent.prev_reading(self.source(key), default)  # type: ignore
-
-    def reading(self, key: str | None = None, default: T | None = None) -> Reading | T:
-        """Current reading for the whole state or a single field."""
-        if key is None:
-            value = self._managed.reading()
-            return value if value is not None else default  # type: ignore
-        return self._parent.reading(self.source(key), default=default)  # type: ignore
-
-    def prev_exists(self, key: str | None = None) -> bool:
-        if key is None:
-            return self._parent.prev_exists(self._managed)
-        return self._parent.prev_exists(self.source(key))
-
-    def exists(self, key: str | None = None) -> bool:
-        if key is None:
-            return self._managed.exists()
-        return self._parent.exists(self.source(key))
-
-    def set(self, reading: Reading, index: int | None = None) -> None:
-        """Replace the stored state for the current or given candle."""
-        self._managed.set_reading(reading, index=index)  # type: ignore
-
-    def update(self, index: int | None = None, **values: Reading) -> None:
-        """Merge fields into dict state for the current or given candle."""
-        current = self._parent.reading(self._managed, index=index, default={})
-        if isinstance(current, dict):
-            self._managed.set_reading({**current, **values}, index=index)  # type: ignore
-        else:
-            self._managed.set_reading(values, index=index)  # type: ignore
-
-
-class NestedSource:
-    indicator: Indicator
-    nested_name: str
-
-    def __init__(self, indicator: Indicator, nested_name: str):
-        self.indicator = indicator
-        self.nested_name = nested_name
-
-    @property
-    def candles(self):
-        return self.indicator.candles
-
-    @property
-    def name(self):
-        return join_nested_name(self.indicator.name, self.nested_name)
-
-    @property
-    def source_name(self):
-        return self.name.replace(NESTED_DELI, "-")
-
-    def reading(self, index: int | None = None) -> Reading:  # type: ignore
-        value = self.indicator.reading(index=index)
-        if isinstance(value, dict):
-            return value.get(self.nested_name)  # type: ignore
-        return value
-
-    def series(self) -> list[Reading]:
-        return [
-            v.get(self.nested_name) if isinstance(v, dict) else v
-            for v in self.indicator.series()
-        ]
-
-    def __str__(self):
-        return join_nested_name(self.indicator.name, self.nested_name)
-
+from .managed import Managed, State
+from .sources import NestedSource
 
 Source: TypeAlias = str | Indicator | NestedSource
