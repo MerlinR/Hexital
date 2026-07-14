@@ -24,7 +24,7 @@ from .candlestick_type import CandlestickType
 from .constants import get_main_name
 from .indicator import Indicator, NestedSource, Source
 from .indicator_collection import IndicatorCollection
-from .indicator_registry import indicator_registry
+from .indicator_registry import IndicatorRegistry
 
 T = TypeVar("T", bound=IndicatorCollection)
 
@@ -37,7 +37,7 @@ class Hexital:
     candlestick: CandlestickType | None = None
 
     _candle_managers: list[CandleManager]
-    _root_fingerprint: str
+    _registry: IndicatorRegistry
     _timeframe: timedelta | None
 
     def __init__(
@@ -70,7 +70,7 @@ class Hexital:
             candlestick=self.candlestick,
         )
         self._candle_managers = [manager]
-        self._root_fingerprint = f"hexital:{id(self)}"
+        self._registry = IndicatorRegistry()
 
         if indicators:
             if isinstance(indicators, IndicatorCollection):
@@ -93,7 +93,7 @@ class Hexital:
         }
 
     def _iter_top_level_indicators(self):
-        yield from indicator_registry.get_children(self._root_fingerprint)
+        yield from self._registry.get_children(self)
 
     def indicator(self, name: str) -> Indicator | None:
         """Searches hexital's indicator's and Returns the Indicator object itself."""
@@ -246,7 +246,7 @@ class Hexital:
             return
 
         indicator.purge()
-        indicator_registry.dettach(self._root_fingerprint, indicator.fingerprint)
+        self._registry.dettach(self, indicator.fingerprint)
 
     def prepend(self, candles: Candles):
         """Prepends a Candle or a chronological ordered list of Candle's to the front of the Hexital Candle's. This will only re-sample and re-calculate the new Candles, with minor overlap.
@@ -380,7 +380,7 @@ class Hexital:
                 indicator.candle_manager = manager
 
         for indicator in valid_indicators.values():
-            indicator_registry.attach(indicator, self._root_fingerprint)
+            self._registry.attach(indicator, self)
 
         return valid_indicators
 

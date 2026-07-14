@@ -472,10 +472,10 @@ class TestIndicatorNaming:
         assert first.fingerprint == second.fingerprint
         assert len(first.fingerprint) == 64
 
-    def test_generate_fingerprint_differs_by_manager(self):
+    def test_generate_fingerprint_same_config_same_hash(self):
         from hexital.indicators.sma import SMA
 
-        assert SMA(period=10).fingerprint != SMA(period=10).fingerprint
+        assert SMA(period=10).fingerprint == SMA(period=10).fingerprint
 
     def test_generate_fingerprint_differs_by_period(self):
         from hexital.indicators.sma import SMA

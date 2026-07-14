@@ -32,7 +32,7 @@ from .candle import Candle
 from .candle_manager import CandleManager
 from .candlestick_type import CandlestickType
 from .constants import NESTED_DELI, join_nested_name
-from .indicator_registry import IndicatorRegistry, indicator_registry
+from .indicator_registry import IndicatorRegistry, registry
 
 T = TypeVar("T")
 V = TypeVar("V")
@@ -169,7 +169,6 @@ class Indicator(Generic[V], ABC):
         material = dict(self.settings)
         if self._when is not None:
             material["when"] = self._when.value
-        material["manager"] = id(self._candle_mngr)
         payload = json.dumps(material, sort_keys=True, separators=(",", ":"))
         return hashlib.sha256(payload.encode()).hexdigest()
 
@@ -186,7 +185,7 @@ class Indicator(Generic[V], ABC):
         """The Candle Manager which controls TimeFrame, Trimming and collapsing,
         this will overwrite the Manager as well as the candles"""
         self._candle_mngr = manager
-        self.children = indicator_registry
+        self.children = registry(manager)
         self.candles = self._candle_mngr.candles
         self.timeframe = (
             timedelta_to_str(self._candle_mngr.timeframe)
@@ -467,8 +466,7 @@ class Indicator(Generic[V], ABC):
         indicator.candle_manager = self._candle_mngr
         indicator.rounding = None
         indicator._refresh_fingerprint()
-        child = self.children.attach(indicator, self.fingerprint)
-        return child
+        return self.children.attach(indicator, self.fingerprint)
 
     def add_child_after(self, indicator: Indicator) -> Indicator:
         """Register a child calculated after the parent's reading is stored."""
