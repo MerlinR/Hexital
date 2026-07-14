@@ -41,19 +41,37 @@ class IndicatorRegistry:
         purge_names: set[str] = set()
 
         for child_fingerprint in child_fingerprints:
-            parents = self._parents.get(child_fingerprint)
-            if not parents or parent_fingerprint not in parents:
-                continue
-
-            parents.discard(parent_fingerprint)
-            if parents:
-                continue
-
-            self._parents.pop(child_fingerprint, None)
-            if indicator := self.indicators.pop(child_fingerprint, None):
-                purge_names.add(indicator.name)
+            purge_names.update(
+                self._release_child_link(parent_fingerprint, child_fingerprint)
+            )
 
         return purge_names
+
+    def dettach(self, parent_fingerprint: str, child_fingerprint: str) -> set[str]:
+        """Remove one parent-child link; return indicator names safe to purge."""
+        refs = self.indicator_references.get(parent_fingerprint)
+        if refs and child_fingerprint in refs:
+            refs.remove(child_fingerprint)
+            if not refs:
+                self.indicator_references.pop(parent_fingerprint, None)
+
+        return self._release_child_link(parent_fingerprint, child_fingerprint)
+
+    def _release_child_link(
+        self, parent_fingerprint: str, child_fingerprint: str
+    ) -> set[str]:
+        parents = self._parents.get(child_fingerprint)
+        if not parents or parent_fingerprint not in parents:
+            return set()
+
+        parents.discard(parent_fingerprint)
+        if parents:
+            return set()
+
+        self._parents.pop(child_fingerprint, None)
+        if indicator := self.indicators.pop(child_fingerprint, None):
+            return {indicator.name}
+        return set()
 
     def __contains__(self, fingerprint: str) -> bool:
         return fingerprint in self.indicators

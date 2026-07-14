@@ -24,6 +24,7 @@ from .candlestick_type import CandlestickType
 from .constants import get_main_name
 from .indicator import Indicator, NestedSource, Source
 from .indicator_collection import IndicatorCollection
+from .indicator_registry import indicator_registry
 
 T = TypeVar("T", bound=IndicatorCollection)
 
@@ -36,7 +37,7 @@ class Hexital:
     candlestick: CandlestickType | None = None
 
     _candle_managers: list[CandleManager]
-    _indicators: dict[str, Indicator]
+    _root_fingerprint: str
     _timeframe: timedelta | None
 
     def __init__(
@@ -69,13 +70,13 @@ class Hexital:
             candlestick=self.candlestick,
         )
         self._candle_managers = [manager]
+        self._root_fingerprint = f"hexital:{id(self)}"
 
-        if not indicators:
-            self._indicators = {}
-        elif isinstance(indicators, IndicatorCollection):
-            self._indicators = self._validate_indicators(indicators.collection_list())
-        else:
-            self._indicators = self._validate_indicators(indicators)
+        if indicators:
+            if isinstance(indicators, IndicatorCollection):
+                self._validate_indicators(indicators.collection_list())
+            else:
+                self._validate_indicators(indicators)
 
     @property
     def timeframe(self) -> str | None:
@@ -87,11 +88,16 @@ class Hexital:
 
     @property
     def indicators(self) -> dict[str, Indicator]:
-        return self._indicators
+        return {
+            indicator.name: indicator for indicator in self._iter_top_level_indicators()
+        }
+
+    def _iter_top_level_indicators(self):
+        yield from indicator_registry.get_children(self._root_fingerprint)
 
     def indicator(self, name: str) -> Indicator | None:
         """Searches hexital's indicator's and Returns the Indicator object itself."""
-        return self._indicators.get(name)
+        return self.indicators.get(name)
 
     def exists(self, name: str) -> bool:
         """Checks if the given Indicator has a valid reading in latest Candle"""
@@ -153,7 +159,7 @@ class Hexital:
         """Simply get's a list of all the Indicators within Hexital strategy"""
         settings = []
 
-        for indicator in self._indicators.values():
+        for indicator in self._iter_top_level_indicators():
             conf = {}
             if isinstance(indicator, Indicator) and not isinstance(indicator, Amorph):
                 conf.update(
@@ -173,7 +179,7 @@ class Hexital:
             return source
         if isinstance(source, NestedSource):
             return source.indicator
-        if indicator := self._indicators.get(get_main_name(source)):
+        if indicator := self.indicators.get(get_main_name(source)):
             return indicator
 
         return None
@@ -198,8 +204,8 @@ class Hexital:
             return source.series()
 
         primary_name = get_main_name(source)
-        if self._indicators.get(primary_name):
-            return self._indicators[primary_name].series(source)
+        if indicator := self.indicators.get(primary_name):
+            return indicator.series(source)
 
         return []
 
@@ -215,7 +221,7 @@ class Hexital:
 
     def all_series(self) -> dict[str, list[Reading]]:
         """Returns a Dictionary of all the Indicators and there results in a list format."""
-        return {name: indicator.series() for name, indicator in self._indicators.items()}
+        return {name: indicator.series() for name, indicator in self.indicators.items()}
 
     def series(self, source: Source) -> list[Reading]:
         """Find given indicator and returns the readings as a list
@@ -231,8 +237,7 @@ class Hexital:
         Does not automatically calculates readings."""
         indicators = indicator if isinstance(indicator, list) else [indicator]
 
-        for name, valid_indicator in self._validate_indicators(indicators).items():
-            self._indicators[name] = valid_indicator
+        self._validate_indicators(indicators)
 
     def remove_indicator(self, source: Source):
         """Removes an indicator from running within hexital"""
@@ -241,7 +246,7 @@ class Hexital:
             return
 
         indicator.purge()
-        self._indicators.pop(indicator.name)
+        indicator_registry.dettach(self._root_fingerprint, indicator.fingerprint)
 
     def prepend(self, candles: Candles):
         """Prepends a Candle or a chronological ordered list of Candle's to the front of the Hexital Candle's. This will only re-sample and re-calculate the new Candles, with minor overlap.
@@ -284,10 +289,10 @@ class Hexital:
     def calculate(self, name: str | None = None):
         """Calculates all the missing indicator readings."""
         if name is not None:
-            if indicator := self._indicators.get(name):
+            if indicator := self.indicators.get(name):
                 indicator.calculate()
         else:
-            for indicator in self._indicators.values():
+            for indicator in self._iter_top_level_indicators():
                 indicator.calculate()
 
     def calculate_index(
@@ -295,17 +300,17 @@ class Hexital:
     ):
         """Calculate specific index for all or specific indicator readings."""
         if name is not None:
-            if indicator := self._indicators.get(name):
+            if indicator := self.indicators.get(name):
                 indicator.calculate_index(index, end_index)
         else:
-            for indicator in self._indicators.values():
+            for indicator in self._iter_top_level_indicators():
                 indicator.calculate_index(index, end_index)
 
     def recalculate(self, source: Source | None = None):
         """Purge's all indicator reading's and re-calculates them all,
         ideal for changing an indicator parameters midway."""
         if not source:
-            for indicator in self._indicators.values():
+            for indicator in self._iter_top_level_indicators():
                 indicator.purge()
                 indicator.calculate()
         elif indicator := self._find_indicator(source):
@@ -316,7 +321,7 @@ class Hexital:
         """Takes Indicator name and removes all readings for said indicator.
         Indicator name must be exact"""
         if not source:
-            for indicator in self._indicators.values():
+            for indicator in self._iter_top_level_indicators():
                 indicator.purge()
         elif indicator := self._find_indicator(source):
             indicator.purge()
@@ -373,6 +378,9 @@ class Hexital:
                 manager.append(self._candle_managers[0].candles)
                 self._candle_managers.append(manager)
                 indicator.candle_manager = manager
+
+        for indicator in valid_indicators.values():
+            indicator_registry.attach(indicator, self._root_fingerprint)
 
         return valid_indicators
 
