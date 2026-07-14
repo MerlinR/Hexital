@@ -59,7 +59,9 @@ class Hexital:
         self.timeframe_fill = timeframe_fill
         self.candle_life = candle_life
 
-        self.candlestick = validate_candlesticktype(candlestick) if candlestick else None
+        self.candlestick = (
+            validate_candlesticktype(candlestick) if candlestick else None
+        )
 
         manager = CandleManager(
             list(candles),
@@ -70,12 +72,11 @@ class Hexital:
         )
         self._candle_managers = [manager]
 
-        if not indicators:
-            self._indicators = {}
-        elif isinstance(indicators, IndicatorCollection):
-            self._indicators = self._validate_indicators(indicators.collection_list())
+        self._indicators = {}
+        if isinstance(indicators, IndicatorCollection):
+            self._validate_indicators(indicators.collection_list())
         else:
-            self._indicators = self._validate_indicators(indicators)
+            self._validate_indicators(indicators)
 
     @property
     def timeframe(self) -> str | None:
@@ -215,7 +216,9 @@ class Hexital:
 
     def all_series(self) -> dict[str, list[Reading]]:
         """Returns a Dictionary of all the Indicators and there results in a list format."""
-        return {name: indicator.series() for name, indicator in self._indicators.items()}
+        return {
+            name: indicator.series() for name, indicator in self._indicators.items()
+        }
 
     def series(self, source: Source) -> list[Reading]:
         """Find given indicator and returns the readings as a list
@@ -231,8 +234,7 @@ class Hexital:
         Does not automatically calculates readings."""
         indicators = indicator if isinstance(indicator, list) else [indicator]
 
-        for name, valid_indicator in self._validate_indicators(indicators).items():
-            self._indicators[name] = valid_indicator
+        self._validate_indicators(indicators)
 
     def remove_indicator(self, source: Source):
         """Removes an indicator from running within hexital"""
@@ -321,28 +323,20 @@ class Hexital:
         elif indicator := self._find_indicator(source):
             indicator.purge()
 
-    def _validate_indicators(
-        self, indicators: Sequence[dict | Indicator]
-    ) -> dict[str, Indicator]:
+    def _validate_indicators(self, indicators: Sequence[dict | Indicator]):
         if not indicators:
-            return {}
+            return
 
-        valid_indicators: dict[str, Indicator] = {}
-
-        for indicator in indicators:
-            if isinstance(indicator, Indicator):
-                valid_indicators[indicator.name] = indicator
-                continue
-
-            if not isinstance(indicator, dict):
+        for item in indicators:
+            if isinstance(item, Indicator):
+                indicator = item
+            elif isinstance(item, dict):
+                indicator = self._build_indicator(item)
+            else:
                 raise InvalidIndicator(
-                    f"Indicator type invalid 'indicator' must be a dict or Indicator type: {indicator}"
+                    f"Indicator type invalid 'indicator' must be a dict or Indicator type: {item}"
                 )
 
-            new_indicator = self._build_indicator(indicator)
-            valid_indicators[new_indicator.name] = new_indicator
-
-        for indicator in valid_indicators.values():
             if existing := next(
                 (
                     m
@@ -374,7 +368,7 @@ class Hexital:
                 self._candle_managers.append(manager)
                 indicator.candle_manager = manager
 
-        return valid_indicators
+            self._indicators[indicator.name] = indicator
 
     def _build_indicator(self, raw_indicator: dict) -> Indicator:
         indicator = copy(raw_indicator)
