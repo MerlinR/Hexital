@@ -131,9 +131,9 @@ The [Hexital][hexital.core.hexital.Hexital] class is a foundational component of
 
 One of Hexital’s key strengths is its ability to pass global configuration options to all the indicators it manages. This ensures consistency and reduces redundancy when working with large numbers of indicators or custom configurations. Additionally, the `Hexital` class allows for seamless integration of multiple timeframes, candlestick types, and chained indicators, making it highly versatile for a variety of trading use cases.
 
-Beyond configuration, Hexital provides direct access to all indicator readings, enabling you to query the latest values, historical data, and trends with minimal effort. Whether you are working with simple moving averages or complex custom indicators, the Hexital class unifies their management and processing, ensuring your strategy remains organized and efficient.
+Beyond configuration, Hexital provides a unified reading API — `reading()`, `series()`, `all_series()` — so you query any top-level indicator by name without hunting through indicator objects. For typed object access, use [HexitalCol](guides/hexital-indepth.md#indicatorcollection) with [indicator_field()](guides/hexital-indepth.md#indicatorcollection).
 
-It also supports the incremental calculation. Each appended candle triggers the calculation of the latest Candle across all associated indicators, ensuring your strategy remains up-to-date with the latest market data. This feature is particularly useful for live trading scenarios, where timely calculations are critical.
+It also supports incremental calculation. Each appended candle triggers the calculation of the latest candle across all associated indicators, ensuring your strategy remains up-to-date with the latest market data. This feature is particularly useful for live trading scenarios, where timely calculations are critical.
 
 **Example:**
 

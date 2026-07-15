@@ -178,7 +178,36 @@ strategy.append(candle)  # passthrough manager + T5 resample manager
 
 ## Readings on candles
 
-Indicator values live on each candle under `candle.indicators`. Child and internal values use `candle.sub_indicators`. This makes candles serialisable and lets you resume incremental calculation after a restart.
+Each [Candle][hexital.core.candle.Candle] stores calculated values in two dicts:
+
+| Dict | Contents |
+|------|----------|
+| `candle.indicators` | Top-level strategy indicators — what you added to `Hexital` or run standalone |
+| `candle.sub_indicators` | Child and internal indicators — building blocks attached via `add_child()` |
+
+When you export or persist candles, both dicts are included:
+
+```python
+candle.as_dict(readings=True)
+# {"open": ..., "indicators": {"SMA_10": 1.23}, "sub_indicators": {"EMA_10": 1.21}, ...}
+```
+
+That split tells you **what is strategy-facing** vs **what is internal** without inferring from names alone.
+
+Lookup helpers ([reading_by_candle][hexital.utils.candles.reading_by_candle], `strategy.reading()`) search both dicts transparently. Use the dict keys directly when serialising or inspecting raw candle data.
+
+### Shared readings by name
+
+Readings are keyed by **generated indicator name**, not by Python object identity. Two indicators with the same config write to the same slot — e.g. DEMA and TEMA both use `sub_indicators["EMA_10"]` when their child EMAs share settings.
+
+| Benefit | Tradeoff |
+|---------|----------|
+| Same config → calculate once, reuse everywhere | `purge()` on one composite clears a slot another may share until recalc |
+| Simple storage and export | Two separate child objects can share one candle slot |
+
+This is intentional memoisation, not accidental collision. Identical generated names mean identical configuration.
+
+A top-level `EMA(10)` writes to `indicators["EMA_10"]`. The same EMA as a child of DEMA writes to `sub_indicators["EMA_10"]` — same name, different buckets. Lookups check `indicators` first, then `sub_indicators`.
 
 ### Nested readings
 
@@ -191,4 +220,4 @@ strategy.reading("NATR:nested")  # if the dict key is "nested"
 
 This matches [NESTED_DELI][hexital.core.constants.NESTED_DELI] (`:`). Generated indicator names never contain `:` — it is replaced with `-` in the name string itself.
 
-See [Design](../about/design.md) for the rationale.
+See [Design](../about/design.md) for the full rationale.

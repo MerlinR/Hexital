@@ -66,6 +66,9 @@ For every input format (lists, timestamps, Pandas, and more), see the [Candles g
 | Goal | Guide |
 |------|-------|
 | Run several indicators on one candle stream | [Hexital strategies](hexital-indepth.md) |
+| Typed indicator access (`HexitalCol`) | [Hexital strategies](hexital-indepth.md#indicatorcollection) |
+| Save and restore strategy config | [Hexital strategies](hexital-indepth.md#saving-and-restoring-a-strategy) |
 | Trim memory, timestamps, timeframes | [Candles](candles.md) |
+| Export candles with readings | [Candles](candles.md#readings-on-candles) |
 | Crossovers, rising/falling checks | [Analysis](analysis-indepth.md) |
 | Write your own indicator | [Custom indicators](custom-indicator.md) |
