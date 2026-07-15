@@ -7,7 +7,7 @@ from hexital.analysis.patterns import doji
 from hexital.candlesticks.heikinashi import HeikinAshi
 from hexital.core.hexital import HexitalCol
 from hexital.core.indicator import Indicator
-from hexital.core.indicator_collection import IndicatorCollection
+from hexital.core.indicator_collection import IndicatorCollection, indicator_field
 from hexital.exceptions import (
     InvalidAnalysis,
     InvalidCandlestickType,
@@ -654,7 +654,7 @@ class TestIndicatorCollection:
     def test_collection(self, minimal_candles):
         @dataclass
         class customCol(IndicatorCollection):
-            fake: Indicator = field(default_factory=FakeIndicator)
+            fake: Indicator = indicator_field(default_factory=FakeIndicator)
 
         collection = customCol()
         strategy = Hexital("collection", minimal_candles, collection)
@@ -665,9 +665,34 @@ class TestIndicatorCollection:
     def test_collectionRef(self, minimal_candles):
         @dataclass
         class customCol(IndicatorCollection):
-            fake: Indicator = field(default_factory=FakeIndicator)
+            fake: Indicator = indicator_field(default_factory=FakeIndicator)
 
         strategy = HexitalCol("collection", minimal_candles, customCol())
 
         assert strategy.collection.fake
         assert strategy.collection.fake.reading is not None
+
+    def test_collection_explicit_indicators(self, minimal_candles):
+        fake = FakeIndicator()
+        collection = IndicatorCollection(fake)
+        strategy = Hexital("collection", minimal_candles, collection)
+
+        assert strategy.indicator("Fake_10") is fake
+        assert collection.collection_list() == (fake,)
+
+    def test_collection_ignores_unmarked_fields(self, minimal_candles):
+        @dataclass
+        class customCol(IndicatorCollection):
+            fake: Indicator = indicator_field(default_factory=FakeIndicator)
+            label: str = "my strategy"
+
+        collection = customCol()
+        assert list(collection.collection_list()) == [collection.fake]
+
+    def test_collection_requires_indicator_field(self, minimal_candles):
+        @dataclass
+        class customCol(IndicatorCollection):
+            fake: Indicator = field(default_factory=FakeIndicator)
+
+        with pytest.raises(TypeError, match="indicator_field"):
+            customCol().collection_list()

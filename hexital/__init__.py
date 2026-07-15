@@ -3,7 +3,7 @@ from .analysis import movement, patterns
 from .core.candle import Candle
 from .core.hexital import Hexital, HexitalCol
 from .core.indicator import ChildWhen, Indicator, State
-from .core.indicator_collection import IndicatorCollection
+from .core.indicator_collection import IndicatorCollection, indicator_field
 from .indicators import (
     ADX,
     AO,
@@ -98,6 +98,7 @@ __all__ = [
     "HexitalCol",
     "Indicator",
     "IndicatorCollection",
+    "indicator_field",
     "JMA",
     "KAMA",
     "KC",
