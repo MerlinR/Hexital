@@ -163,6 +163,27 @@ def test_purge(minimal_candles: list[Candle]):
     assert test.exists() is False
 
 
+def test_purge_nested_children(minimal_candles: list[Candle]):
+    from hexital.indicators.dema import DEMA
+
+    dema = DEMA(candles=minimal_candles)
+    dema.calculate()
+
+    names = dema._purge_names()
+    assert dema.sub_ema2.name in names
+    assert len(names) > len(dema.children) + 1
+
+    candle = minimal_candles[-1]
+    for name in names:
+        assert name in candle.indicators or name in candle.sub_indicators
+
+    dema.purge()
+
+    for name in names:
+        assert name not in candle.indicators
+        assert name not in candle.sub_indicators
+
+
 def test_candle_timerange(minimal_candles):
     test = FakeIndicator(candles=[], candle_life=timedelta(minutes=1))
 

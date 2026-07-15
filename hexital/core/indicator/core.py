@@ -591,9 +591,14 @@ class Indicator(Generic[V], ABC):
             include_latest,
         )
 
+    def _purge_names(self) -> set[str]:
+        names = {self.name}
+        for child in self.children.values():
+            names.update(child._purge_names())
+        return names
+
     def purge(self):
-        """Remove this indicator value from all Candles"""
-        self._candle_mngr.purge({self.name} | self.children.keys())
+        self._candle_mngr.purge(self._purge_names())
 
     def recalculate(self):
         """Re-calculate this indicator value for all Candles"""
