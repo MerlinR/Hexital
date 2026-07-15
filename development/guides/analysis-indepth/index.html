@@ -637,6 +637,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Analysis
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -653,6 +671,69 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#basic-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic usage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#candle-streams-for-comparisons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Candle streams for comparisons
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#patterns-and-amorph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Patterns and Amorph
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#further-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Further reading
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -3705,6 +3786,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/hexital/utils/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/hexital/utils/timeframe/" class="md-nav__link">
         
   
@@ -3972,6 +4081,58 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#basic-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Basic usage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#candle-streams-for-comparisons" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Candle streams for comparisons
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#patterns-and-amorph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Patterns and Amorph
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#further-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Further reading
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -3995,7 +4156,89 @@
 <p class="admonition-title">Advanced</p>
 <p>You do not need this page for basic usage. Start with <a href="../quick-start/">Quick Start</a> if you are new to Hexital.</p>
 </div>
-<p>TODO</p>
+<p>Hexital's <a class="autorefs autorefs-internal" title="            analysis" href="../../reference/hexital/analysis/#hexital.analysis">analysis</a> module provides Pine Script–style helpers: crossovers, rising/falling checks, highest/lowest over a window, and more. Full catalogue: <a href="../../analysis-catalogue/">analysis catalogue</a>.</p>
+<p>Analysis functions accept three kinds of data source:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>When to use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>list[Candle]</code></td>
+<td>You already have candles with readings attached</td>
+</tr>
+<tr>
+<td><code>Indicator</code></td>
+<td>One indicator's candle stream</td>
+</tr>
+<tr>
+<td><code>Hexital</code></td>
+<td>Strategy with named indicators — pass indicator names as strings</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="basic-usage">Basic usage</h2>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">EMA</span><span class="p">,</span> <span class="n">WMA</span><span class="p">,</span> <span class="n">Hexital</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross</span><span class="p">,</span> <span class="n">rising</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">strategy</span> <span class="o">=</span> <span class="n">Hexital</span><span class="p">(</span><span class="s2">&quot;Demo&quot;</span><span class="p">,</span> <span class="n">candles</span><span class="p">,</span> <span class="p">[</span><span class="n">EMA</span><span class="p">(</span><span class="n">period</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span> <span class="n">WMA</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;WMA&quot;</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">8</span><span class="p">)])</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">strategy</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">rising</span><span class="p">(</span><span class="n">strategy</span><span class="p">,</span> <span class="s2">&quot;EMA_3&quot;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>       <span class="c1"># True if EMA rose over last 8 bars</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">cross</span><span class="p">(</span><span class="n">strategy</span><span class="p">,</span> <span class="s2">&quot;EMA_3&quot;</span><span class="p">,</span> <span class="s2">&quot;WMA&quot;</span><span class="p">)</span>           <span class="c1"># True if EMA crossed WMA recently</span>
+</span></code></pre></div>
+<p>With a single indicator:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">ema</span> <span class="o">=</span> <span class="n">EMA</span><span class="p">(</span><span class="n">candles</span><span class="o">=</span><span class="n">candles</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">ema</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">rising</span><span class="p">(</span><span class="n">ema</span><span class="p">,</span> <span class="s2">&quot;EMA_10&quot;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</span></code></pre></div>
+<p>With raw candles (readings must already be on the candles):</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">above</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">above</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="s2">&quot;EMA_10&quot;</span><span class="p">,</span> <span class="s2">&quot;SMA_20&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<hr />
+<h2 id="candle-streams-for-comparisons">Candle streams for comparisons</h2>
+<p>When comparing two series on a <a class="autorefs autorefs-internal" title="            Hexital" href="../../reference/hexital/core/hexital/#hexital.core.hexital.Hexital">Hexital</a> strategy, movement functions need to know which candle stream each name lives on.</p>
+<p><strong>Same stream</strong> — both indicators on one manager (e.g. EMA vs SMA on 1-minute data):</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital.analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">above</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">above</span><span class="p">(</span><span class="n">strategy</span><span class="p">,</span> <span class="s2">&quot;EMA_10&quot;</span><span class="p">,</span> <span class="s2">&quot;SMA_20&quot;</span><span class="p">)</span>   <span class="c1"># one stream, both names</span>
+</span></code></pre></div>
+<p><strong>Different timeframes</strong> — pass both names; Hexital resolves streams via <a class="autorefs autorefs-internal" title="            candle_pair" href="../../reference/hexital/core/hexital/#hexital.core.hexital.Hexital.candle_pair">candle_pair()</a> and aligns bars by timestamp:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">strategy</span> <span class="o">=</span> <span class="n">Hexital</span><span class="p">(</span><span class="s2">&quot;MTF&quot;</span><span class="p">,</span> <span class="n">candles</span><span class="p">,</span> <span class="p">[</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="n">EMA</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;EMA&quot;</span><span class="p">),</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    <span class="n">EMA</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;EMA_T5&quot;</span><span class="p">,</span> <span class="n">timeframe</span><span class="o">=</span><span class="s2">&quot;T5&quot;</span><span class="p">),</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="p">])</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">strategy</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="n">above</span><span class="p">(</span><span class="n">strategy</span><span class="p">,</span> <span class="s2">&quot;EMA&quot;</span><span class="p">,</span> <span class="s2">&quot;EMA_T5&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p><strong>Indicator vs OHLCV</strong> — compare an indicator to <code>high</code>, <code>low</code>, <code>close</code>, etc. on the indicator's stream:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">above</span><span class="p">(</span><span class="n">strategy</span><span class="p">,</span> <span class="s2">&quot;EMA_10&quot;</span><span class="p">,</span> <span class="s2">&quot;high&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<p>You can also resolve streams explicitly:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">stream</span> <span class="o">=</span> <span class="n">strategy</span><span class="o">.</span><span class="n">candles_for</span><span class="p">(</span><span class="s2">&quot;EMA_10&quot;</span><span class="p">)</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">pair</span> <span class="o">=</span> <span class="n">strategy</span><span class="o">.</span><span class="n">candle_pair</span><span class="p">(</span><span class="s2">&quot;EMA&quot;</span><span class="p">,</span> <span class="s2">&quot;EMA_T5&quot;</span><span class="p">)</span>   <span class="c1"># (ema_candles, ema_t5_candles)</span>
+</span></code></pre></div>
+<p>Movement functions that take two indicator names (<code>above</code>, <code>below</code>, <code>cross</code>, <code>crossover</code>, <code>crossunder</code>, etc.) use this resolution automatically when the first argument is a <code>Hexital</code> instance.</p>
+<p>Single-series functions (<code>rising</code>, <code>bars_since</code>, <code>highest</code>, etc.) take one indicator name and use <a class="autorefs autorefs-internal" title="            candles_for" href="../../reference/hexital/core/hexital/#hexital.core.hexital.Hexital.candles_for">candles_for()</a> when given a <code>Hexital</code> instance.</p>
+<hr />
+<h2 id="patterns-and-amorph">Patterns and Amorph</h2>
+<p>Pattern functions live in <a class="autorefs autorefs-internal" title="            patterns" href="../../reference/hexital/analysis/patterns/#hexital.analysis.patterns">hexital.analysis.patterns</a>. They operate on candle sequences directly.</p>
+<p>For one-off logic that should run on every append, use <a class="autorefs autorefs-internal" title="            Amorph" href="../../reference/hexital/indicators/amorph/#hexital.indicators.amorph.Amorph">Amorph</a> — a top-level indicator that wraps a callable. See <a href="../custom-indicator/#amorph">Custom indicators</a>.</p>
+<hr />
+<h2 id="further-reading">Further reading</h2>
+<ul>
+<li><a href="../../analysis-catalogue/">Analysis catalogue</a> — every function and signature</li>
+<li><a href="../hexital-indepth/">Hexital strategies</a> — <code>candles_for</code>, <code>candle_pair</code>, multi-timeframe setup</li>
+<li><a href="../candles/">Candles</a> — timeframe labels and resampling</li>
+</ul>
 
 
 
@@ -4016,7 +4259,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="June 9, 2026 11:20:18 UTC">June 9, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 15, 2026 11:05:54 UTC">July 15, 2026</span>
   </span>
 
     

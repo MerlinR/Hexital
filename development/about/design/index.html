@@ -3690,6 +3690,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../reference/hexital/utils/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../reference/hexital/utils/timeframe/" class="md-nav__link">
         
   
@@ -3904,10 +3932,54 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#readings-live-on-candles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Readings live on candles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shared-storage-by-name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shared storage by name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hexital-as-the-strategy-facade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hexital as the strategy facade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#timeframe-labels-vs-transforms" class="md-nav__link">
     <span class="md-ellipsis">
       
         Timeframe labels vs transforms
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explicit-over-implicit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Explicit over implicit
       
     </span>
   </a>
@@ -4095,10 +4167,54 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#readings-live-on-candles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Readings live on candles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shared-storage-by-name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shared storage by name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hexital-as-the-strategy-facade" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hexital as the strategy facade
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#timeframe-labels-vs-transforms" class="md-nav__link">
     <span class="md-ellipsis">
       
         Timeframe labels vs transforms
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#explicit-over-implicit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Explicit over implicit
       
     </span>
   </a>
@@ -4172,11 +4288,32 @@
 <h1 id="design-and-future-plans">Design And Future Plans</h1>
 <h2 id="design">Design</h2>
 <p>Hexital is designed with usability and ease of use in mind, making it simple to add new candles and automatically generate indicators while identifying patterns or trends. Inspired by <a href="https://github.com/twopirllc/pandas-ta">Pandas-TA&nbsp;⧉</a>, Hexital allows you to create an object configured with indicators across multiple timeframes. By appending a new candle, all updated indicator values are ready for immediate use in your trading strategy.</p>
-<p>A unique aspect of Hexital is that results are stored directly within the candles, rather than within indicator objects. This design ensures that even if you clear your Hexital instance or indicators, the candles retain their indicator readings. This makes it easy to export and save candles to a database for reuse elsewhere.</p>
+<h3 id="readings-live-on-candles">Readings live on candles</h3>
+<p>A unique aspect of Hexital is that results are stored directly within the candles, rather than only inside indicator objects. This design ensures that even if you clear your Hexital instance or indicators, the candles retain their indicator readings. This makes it easy to export and save candles to a database for reuse elsewhere.</p>
 <p>Additionally, this approach supports caching candles. If the application is restarted, the cached candles, combined with the Hexital configuration, can seamlessly restore both the candles and their indicator values, enabling incremental calculations to resume immediately.</p>
+<p>Each candle holds two reading dicts:</p>
+<ul>
+<li><strong><code>indicators</code></strong> — top-level strategy outputs (what you registered on <code>Hexital</code>)</li>
+<li><strong><code>sub_indicators</code></strong> — child and internal values (composite building blocks)</li>
+</ul>
+<p>When you export candles, that split is preserved so consumers can tell strategy-facing readings from internals. See <a href="../../guides/candles/#readings-on-candles">Candles</a>.</p>
+<h3 id="shared-storage-by-name">Shared storage by name</h3>
+<p>Readings are keyed by generated indicator name. Identical configuration produces the same name and therefore the same candle slot — so DEMA and TEMA can share an <code>EMA_10</code> child without a central registry. This is deliberate memoisation: same settings should yield the same result in one place.</p>
+<p>Purging or removing one composite may clear a slot another indicator still references until the next <code>calculate()</code>. That tradeoff keeps storage and sharing simple.</p>
+<h3 id="hexital-as-the-strategy-facade">Hexital as the strategy facade</h3>
+<p><a class="autorefs autorefs-internal" title="            Hexital" href="../../reference/hexital/core/hexital/#hexital.core.hexital.Hexital">Hexital</a> orchestrates candles, managers, and top-level indicators. <strong><code>strategy.reading("EMA_10")</code></strong> is the intended way to query a strategy — one entry point for names, nested fields, and multi-timeframe lookup.</p>
+<p>Indicator objects remain available (<code>strategy.indicator("EMA_10")</code>, <code>HexitalCol.collection.ema</code>) for authors who need direct access. The strategy-level reading API is not a thin wrapper to remove; it is how most strategy code should read values.</p>
 <h3 id="timeframe-labels-vs-transforms">Timeframe labels vs transforms</h3>
 <p><code>candle.timeframe</code> is stored on each bar as metadata (what resolution the row represents). Resampling is configured separately via <code>indicator.timeframe=</code> or <code>hexital.timeframe=</code>. Managers route appended candles by label: a resampling manager accepts bars labelled at its transform size or finer. See <a href="../../guides/candles/#timeframes">Candles</a> for usage.</p>
 <p>Indicator names are generated from <code>_name_parts()</code> on each indicator class.</p>
+<h3 id="explicit-over-implicit">Explicit over implicit</h3>
+<p>Recent API choices favour clear contracts over runtime guessing:</p>
+<ul>
+<li><strong><code>indicator_field()</code></strong> — marks which <code>IndicatorCollection</code> fields belong to the strategy</li>
+<li><strong><code>candles_for()</code> / <code>candle_pair()</code></strong> — explicit candle streams for movement analysis</li>
+<li><strong><code>from_settings()</code></strong> — documented path to rebuild a strategy from saved config</li>
+</ul>
+<p>Dict-based indicator construction (<code>{"indicator": "SMA", "period": 10}</code>) is intentional for JSON persistence. See <a href="../../guides/hexital-indepth/#saving-and-restoring-a-strategy">Hexital strategies</a>.</p>
 <h2 id="future-plans">Future Plans</h2>
 <p>Hexital is currently in <code>Beta</code>. The focus during this phase is to avoid altering core frameworks and instead prioritise making the library more robust and user-friendly. The current implementation of indicators and patterns is straightforward, allowing for easy expansion. However, the addition of new indicators will slow down temporarily to concentrate on enhancing robustness, ease of use, standardization, and error handling.</p>
 <h3 id="plans">Plans</h3>
@@ -4226,7 +4363,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 14, 2026 14:53:34 UTC">July 14, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 15, 2026 11:05:54 UTC">July 15, 2026</span>
   </span>
 
     

@@ -3688,6 +3688,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../reference/hexital/utils/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../reference/hexital/utils/timeframe/" class="md-nav__link">
         
   
@@ -4467,11 +4495,21 @@
 <li>Removed <code>add_sub_indicator()</code> and <code>add_managed_indicator()</code> — use <code>add_child()</code> instead</li>
 <li>Removed <code>sub_indicators</code> and <code>managed_indicators</code> dicts on <code>Indicator</code> — use <code>children</code> instead</li>
 <li>Removed <code>prior_calc</code> property and <code>IndicatorMode</code> enum</li>
+<li>Removed <code>find_candle_pairing()</code> — use <code>candles_for()</code> and <code>candle_pair()</code> instead</li>
+<li><code>IndicatorCollection</code> now requires <code>indicator_field()</code> on dataclass fields or explicit indicators passed to <code>__init__</code></li>
 </ul>
 </li>
 <li>
-<p>Added <code>State</code> helper for indicator state</p>
+<p>Added explicit candle stream helpers on <code>Hexital</code></p>
 <ul>
+<li><code>candles_for(name)</code> returns the stream for an indicator, timeframe, or OHLCV field</li>
+<li><code>candle_pair(indicator, indicator_cmp)</code> returns two streams for movement comparison</li>
+</ul>
+</li>
+<li>Added <code>indicator_field()</code> for explicit <code>IndicatorCollection</code> registration</li>
+<li>Fixed <code>purge()</code> to recursively clear nested child indicator readings</li>
+<li>Added <code>Hexital.from_settings()</code> to reconstruct a strategy from a settings dictionary</li>
+<li>Added <code>State</code> helper for indicator state<ul>
 <li>Added <code>Indicator.add_state()</code> to register state backed by a managed child</li>
 <li><code>State</code> provides <code>prev()</code>, <code>reading()</code>, <code>set()</code>, <code>update()</code>, and <code>source()</code> — replacing manual <code>Managed</code> + <code>NestedSource</code></li>
 <li>Exported <code>State</code> from <code>hexital</code>; built-in stateful indicators migrated to use it</li>

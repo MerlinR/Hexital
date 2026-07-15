@@ -3489,17 +3489,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#hexital.indicators.tr.TR.purge" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;purge
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#hexital.indicators.tr.TR.reading" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4020,6 +4009,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../utils/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../utils/timeframe/" class="md-nav__link">
         
   
@@ -4481,17 +4498,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#hexital.indicators.tr.TR.purge" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;purge
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#hexital.indicators.tr.TR.reading" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4823,14 +4829,6 @@ possible gap scenarios.</p>
               <td>
                 <div class="doc-md-description">
                   <p>Previous reading for this indicator's configured <code>source</code>.</p>
-                </div>
-              </td>
-            </tr>
-            <tr class="doc-section-item">
-              <td><code><a class="autorefs autorefs-internal" title="            purge (hexital.indicators.tr.TR.purge)" href="#hexital.indicators.tr.TR.purge">purge</a></code></td>
-              <td>
-                <div class="doc-md-description">
-                  <p>Remove this indicator value from all Candles</p>
                 </div>
               </td>
             </tr>
@@ -5738,35 +5736,6 @@ where this indicator is missing</p>
 <div class="doc doc-object doc-function">
 
 
-<h4 id="hexital.indicators.tr.TR.purge" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">purge</span>
-
-
-</h4>
-<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">purge</span><span class="p">()</span>
-</span></code></pre></div>
-
-    <div class="doc doc-contents ">
-
-        <p>Remove this indicator value from all Candles</p>
-
-
-            <details class="mkdocstrings-source">
-              <summary>Source code in <code>hexital/core/indicator/core.py</code></summary>
-              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-594">594</a></span>
-<span class="normal"><a href="#__codelineno-0-595">595</a></span>
-<span class="normal"><a href="#__codelineno-0-596">596</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-594"><a id="__codelineno-0-594" name="__codelineno-0-594"></a><span class="k">def</span><span class="w"> </span><span class="nf">purge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="__span-0-595"><a id="__codelineno-0-595" name="__codelineno-0-595"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove this indicator value from all Candles&quot;&quot;&quot;</span>
-</span><span id="__span-0-596"><a id="__codelineno-0-596" name="__codelineno-0-596"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_candle_mngr</span><span class="o">.</span><span class="n">purge</span><span class="p">({</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">}</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-</span></code></pre></div></td></tr></table></div>
-            </details>
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
 <h4 id="hexital.indicators.tr.TR.reading" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">reading</span>
 
@@ -5912,13 +5881,13 @@ It's true if exactly or more than. Period will be period -1</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>hexital/core/indicator/core.py</code></summary>
-              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-598">598</a></span>
-<span class="normal"><a href="#__codelineno-0-599">599</a></span>
-<span class="normal"><a href="#__codelineno-0-600">600</a></span>
-<span class="normal"><a href="#__codelineno-0-601">601</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-598"><a id="__codelineno-0-598" name="__codelineno-0-598"></a><span class="k">def</span><span class="w"> </span><span class="nf">recalculate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="__span-0-599"><a id="__codelineno-0-599" name="__codelineno-0-599"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Re-calculate this indicator value for all Candles&quot;&quot;&quot;</span>
-</span><span id="__span-0-600"><a id="__codelineno-0-600" name="__codelineno-0-600"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">purge</span><span class="p">()</span>
-</span><span id="__span-0-601"><a id="__codelineno-0-601" name="__codelineno-0-601"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
+              <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-603">603</a></span>
+<span class="normal"><a href="#__codelineno-0-604">604</a></span>
+<span class="normal"><a href="#__codelineno-0-605">605</a></span>
+<span class="normal"><a href="#__codelineno-0-606">606</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-603"><a id="__codelineno-0-603" name="__codelineno-0-603"></a><span class="k">def</span><span class="w"> </span><span class="nf">recalculate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-0-604"><a id="__codelineno-0-604" name="__codelineno-0-604"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Re-calculate this indicator value for all Candles&quot;&quot;&quot;</span>
+</span><span id="__span-0-605"><a id="__codelineno-0-605" name="__codelineno-0-605"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">purge</span><span class="p">()</span>
+</span><span id="__span-0-606"><a id="__codelineno-0-606" name="__codelineno-0-606"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -6112,7 +6081,7 @@ the indicator is used.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 15, 2026 07:37:05 UTC">July 15, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 15, 2026 11:07:03 UTC">July 15, 2026</span>
   </span>
 
     

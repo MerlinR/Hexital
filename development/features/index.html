@@ -3932,6 +3932,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../reference/hexital/utils/settings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    <code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> settings
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../reference/hexital/utils/timeframe/" class="md-nav__link">
         
   
@@ -4589,8 +4617,8 @@
 <h2 id="hexital">Hexital</h2>
 <p>The <a class="autorefs autorefs-internal" title="            Hexital" href="../reference/hexital/core/hexital/#hexital.core.hexital.Hexital">Hexital</a> class is a foundational component of the library, designed to simplify and enhance the process of managing multiple indicators within a single, unified interface. It serves as a central hub, offering a streamlined way to configure, calculate, and analyse multiple indicators simultaneously, making it an essential tool for developing robust and scalable trading strategies.</p>
 <p>One of Hexital’s key strengths is its ability to pass global configuration options to all the indicators it manages. This ensures consistency and reduces redundancy when working with large numbers of indicators or custom configurations. Additionally, the <code>Hexital</code> class allows for seamless integration of multiple timeframes, candlestick types, and chained indicators, making it highly versatile for a variety of trading use cases.</p>
-<p>Beyond configuration, Hexital provides direct access to all indicator readings, enabling you to query the latest values, historical data, and trends with minimal effort. Whether you are working with simple moving averages or complex custom indicators, the Hexital class unifies their management and processing, ensuring your strategy remains organized and efficient.</p>
-<p>It also supports the incremental calculation. Each appended candle triggers the calculation of the latest Candle across all associated indicators, ensuring your strategy remains up-to-date with the latest market data. This feature is particularly useful for live trading scenarios, where timely calculations are critical.</p>
+<p>Beyond configuration, Hexital provides a unified reading API — <code>reading()</code>, <code>series()</code>, <code>all_series()</code> — so you query any top-level indicator by name without hunting through indicator objects. For typed object access, use <a href="../guides/hexital-indepth/#indicatorcollection">HexitalCol</a> with <a href="../guides/hexital-indepth/#indicatorcollection">indicator_field()</a>.</p>
+<p>It also supports incremental calculation. Each appended candle triggers the calculation of the latest candle across all associated indicators, ensuring your strategy remains up-to-date with the latest market data. This feature is particularly useful for live trading scenarios, where timely calculations are critical.</p>
 <p><strong>Example:</strong></p>
 <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
@@ -4898,7 +4926,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 10, 2026 09:23:46 UTC">July 10, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 15, 2026 11:05:54 UTC">July 15, 2026</span>
   </span>
 
     
