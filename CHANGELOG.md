@@ -37,7 +37,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Removed `sub_indicators` and `managed_indicators` dicts on `Indicator` — use `children` instead
     - Removed `prior_calc` property and `IndicatorMode` enum
 
-- Fixed `purge()` to be recursive on child indicators
+- Fixed `purge()` to recursively clear nested child indicator readings
+- Added `Hexital.from_settings()` to reconstruct a strategy from a settings dictionary
 - Added `State` helper for indicator state
     - Added `Indicator.add_state()` to register state backed by a managed child
     - `State` provides `prev()`, `reading()`, `set()`, `update()`, and `source()` — replacing manual `Managed` + `NestedSource`

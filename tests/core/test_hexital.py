@@ -533,7 +533,7 @@ class TestHexitalSettings:
     def test_indicator_settings(self):
         strategy = Hexital("Test Strategy", [], [EMA(candles=[])])
 
-        assert strategy.indicator_settings == [
+        assert strategy.settings["indicators"] == [
             {
                 "indicator": "EMA",
                 "name": "EMA_10",
@@ -547,7 +547,7 @@ class TestHexitalSettings:
     def test_indicator_settings_with_amorph(self):
         strategy = Hexital("Test Strategy", [], [EMA(candles=[]), Amorph(analysis=doji)])
 
-        assert strategy.indicator_settings == [
+        assert strategy.settings["indicators"] == [
             {
                 "indicator": "EMA",
                 "name": "EMA_10",
@@ -613,6 +613,41 @@ class TestHexitalSettings:
         strategy = Hexital(**as_dict)
 
         assert strategy.settings == as_dict
+
+    def test_from_settings_roundtrip(self, candles):
+        original = Hexital(
+            "Test Strategy",
+            candles,
+            [EMA(candles=[]), SMA(period=20, candles=[])],
+            timeframe="T5",
+            candle_life=timedelta(hours=1),
+        )
+        original.calculate()
+
+        payload = {
+            "name": "Test Strategy",
+            "candle_life": "H1",
+            "timeframe": "T5",
+            "timeframe_fill": False,
+            "indicators": original.settings["indicators"],
+        }
+        rebuilt = Hexital.from_settings(payload, candles=candles)
+        rebuilt.calculate()
+
+        assert rebuilt.name == original.name
+        assert rebuilt.timeframe == original.timeframe
+        assert rebuilt.candle_life == original.candle_life
+        assert rebuilt.settings["indicators"] == original.settings["indicators"]
+        assert rebuilt.series("EMA_10") == original.series("EMA_10")
+
+    def test_from_settings_missing_name(self):
+        with pytest.raises(InvalidIndicator, match="missing required 'name'"):
+            Hexital.from_settings({"candles": []})
+
+    def test_add_indicator_invalid_kwargs(self, candles):
+        strategy = Hexital("Test Strategy", candles, [])
+        with pytest.raises(InvalidIndicator, match="Invalid settings for indicator 'SMA'"):
+            strategy.add_indicator({"indicator": "SMA", "bogus_field": 1})
 
 
 class TestIndicatorCollection:

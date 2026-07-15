@@ -10,6 +10,7 @@ from ..exceptions import InvalidAnalysis, InvalidIndicator
 from ..indicators.amorph import Amorph
 from ..utils.candles import Candles, parse_candles, reading_by_candle, reading_by_index
 from ..utils.candlesticks import validate_candlesticktype
+from ..utils.settings import decode_settings
 from ..utils.timeframe import (
     NullTimeFrame,
     TimeFramesSource,
@@ -140,7 +141,7 @@ class Hexital:
             output["timeframe"] = self.timeframe
             output["timeframe_fill"] = self.timeframe_fill
 
-        output["indicators"] = self.indicator_settings
+        output["indicators"] = self._indicator_settings
 
         for indicator in output["indicators"]:
             for k, v in output.items():
@@ -149,8 +150,30 @@ class Hexital:
 
         return output
 
+    @classmethod
+    def from_settings(
+        cls,
+        settings: dict[str, Any],
+        candles: Sequence[Candle] | None = None,
+    ) -> Hexital:
+        """Reconstruct a strategy from a settings dictionary."""
+        config = decode_settings(copy(settings))
+
+        try:
+            name = config.pop("name")
+        except KeyError as exc:
+            raise InvalidIndicator("Strategy settings missing required 'name'") from exc
+
+        if candles is None:
+            candles = config.pop("candles", [])
+        else:
+            config.pop("candles", None)
+
+        indicators = config.pop("indicators", None)
+        return cls(name, list(candles), indicators=indicators, **config)
+
     @property
-    def indicator_settings(self) -> list[dict]:
+    def _indicator_settings(self) -> list[dict]:
         """Simply get's a list of all the Indicators within Hexital strategy"""
         settings = []
 
@@ -331,7 +354,7 @@ class Hexital:
             if isinstance(item, Indicator):
                 indicator = item
             elif isinstance(item, dict):
-                indicator = self._build_indicator(item)
+                indicator = self._build_indicator_from_settings(item)
             else:
                 raise InvalidIndicator(
                     f"Indicator type invalid 'indicator' must be a dict or Indicator type: {item}"
@@ -370,7 +393,7 @@ class Hexital:
 
             self._indicators[indicator.name] = indicator
 
-    def _build_indicator(self, raw_indicator: dict) -> Indicator:
+    def _build_indicator_from_settings(self, raw_indicator: dict[str, Any]) -> Indicator:
         indicator = copy(raw_indicator)
 
         if indicator.get("indicator"):
@@ -379,11 +402,18 @@ class Hexital:
                 import_module("hexital.indicators"), indicator_name, None
             )
 
-            if indicator_class:
+            if not indicator_class:
+                raise InvalidIndicator(
+                    f"Indicator {indicator_name} does not exist. [{raw_indicator}]"
+                )
+
+            try:
                 return indicator_class(**indicator)
-            raise InvalidIndicator(
-                f"Indicator {indicator_name} does not exist. [{raw_indicator}]"
-            )
+            except TypeError as exc:
+                raise InvalidIndicator(
+                    f"Invalid settings for indicator {indicator_name!r}: {exc}. "
+                    f"Config: {raw_indicator}"
+                ) from exc
 
         if indicator.get("analysis") and isinstance(indicator.get("analysis"), str):
             analysis_name = indicator.pop("analysis")
@@ -396,14 +426,29 @@ class Hexital:
 
             if not analysis_class:
                 raise InvalidAnalysis(
-                    f"analysis {analysis_name} does not exist in patterns or movements. [{raw_indicator}]"
+                    f"analysis {analysis_name} does not exist in patterns or movements. "
+                    f"[{raw_indicator}]"
                 )
 
-            return Amorph(analysis=analysis_class, **indicator)
+            try:
+                return Amorph(analysis=analysis_class, **indicator)
+            except TypeError as exc:
+                raise InvalidAnalysis(
+                    f"Invalid settings for analysis {analysis_name!r}: {exc}. "
+                    f"Config: {raw_indicator}"
+                ) from exc
 
         if indicator.get("analysis") and callable(indicator.get("analysis")):
             method_name = indicator.pop("analysis")
-            return Amorph(analysis=method_name, **indicator)
+            try:
+                return Amorph(analysis=method_name, **indicator)
+            except TypeError as exc:
+                raise InvalidAnalysis(
+                    f"Invalid settings for analysis "
+                    f"{getattr(method_name, '__name__', method_name)!r}: {exc}. "
+                    f"Config: {raw_indicator}"
+                ) from exc
+
         raise InvalidAnalysis(
             f"Dict Indicator missing 'indicator' or 'analysis' name, not: {raw_indicator}"
         )

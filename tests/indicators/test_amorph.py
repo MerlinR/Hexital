@@ -69,7 +69,8 @@ def test_amorph_settings_roundtrip(candles):
     original = Amorph(analysis=patterns.doji, candles=candles, lookback=20)
     original.calculate()
 
-    rebuilt = Hexital("x", candles, [])._build_indicator(original.settings)
+    strategy = Hexital("x", candles, [original.settings])
+    rebuilt = strategy.indicator(original.name)
     rebuilt.candles = candles
     rebuilt.calculate()
 
@@ -87,7 +88,7 @@ def test_amorph_settings_roundtrip_via_hexital(candles):
     rebuilt = Hexital(**as_dict)
     rebuilt.calculate()
 
-    assert rebuilt.indicator_settings == strategy.indicator_settings
+    assert rebuilt.settings["indicators"] == strategy.settings["indicators"]
     assert rebuilt.series("doji") == strategy.series("doji")
 
 
@@ -100,7 +101,8 @@ def test_amorph_settings_roundtrip_movement(candles_untimeframed):
     )
     original.calculate()
 
-    rebuilt = Hexital("x", candles_untimeframed, [])._build_indicator(original.settings)
+    strategy = Hexital("x", candles_untimeframed, [original.settings])
+    rebuilt = strategy.indicator(original.name)
     rebuilt.candles = candles_untimeframed
     rebuilt.calculate()
 
