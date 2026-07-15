@@ -8,7 +8,7 @@ from typing import Any, Generic, TypeVar
 
 from ..exceptions import InvalidAnalysis, InvalidIndicator
 from ..indicators.amorph import Amorph
-from ..utils.candles import Candles, parse_candles, reading_by_candle, reading_by_index
+from ..utils.candles import Candles, parse_candles, reading_by_index
 from ..utils.candlesticks import validate_candlesticktype
 from ..utils.settings import decode_settings
 from ..utils.timeframe import (
@@ -393,7 +393,9 @@ class Hexital:
 
             self._indicators[indicator.name] = indicator
 
-    def _build_indicator_from_settings(self, raw_indicator: dict[str, Any]) -> Indicator:
+    def _build_indicator_from_settings(
+        self, raw_indicator: dict[str, Any]
+    ) -> Indicator:
         indicator = copy(raw_indicator)
 
         if indicator.get("indicator"):
@@ -453,36 +455,24 @@ class Hexital:
             f"Dict Indicator missing 'indicator' or 'analysis' name, not: {raw_indicator}"
         )
 
-    def find_candle_pairing(
-        self, indicator: str, indicator_cmp: str | None = None
+    def candles_for(self, name: str) -> list[Candle]:
+        """Return the candle stream for an indicator, timeframe, or OHLCV field."""
+        if name in ({"open", "high", "low", "close", "volume"}):
+            return self._candle_managers[0].candles
+        return self.candles(name)
+
+    def candle_pair(
+        self, indicator: str, indicator_cmp: str
     ) -> tuple[list[Candle], list[Candle]]:
-        reverted = False
+        """Return candle streams for comparing two series on this strategy."""
+        if indicator_cmp in ({"open", "high", "low", "close", "volume"}):
+            stream = self.candles_for(indicator)
+            return stream, stream
+        if indicator in ({"open", "high", "low", "close", "volume"}):
+            stream = self.candles_for(indicator_cmp)
+            return stream, stream
 
-        if indicator and not indicator_cmp:
-            return self.candles(indicator), []
-
-        if indicator_cmp and indicator in ["open", "high", "low", "close", "volume"]:
-            indicator, indicator_cmp = indicator_cmp, indicator
-            reverted = True
-
-        candles = self.candles(indicator)
-
-        if (
-            candles
-            and indicator_cmp
-            and reading_by_candle(candles[-1], indicator_cmp) is not None
-        ):
-            return candles, candles
-        if (
-            candles
-            and indicator_cmp
-            and reading_by_candle(candles[-1], indicator_cmp) is None
-        ):
-            if reverted:
-                return self.candles(indicator_cmp), candles
-            return candles, self.candles(indicator_cmp)
-
-        return [], []
+        return self.candles_for(indicator), self.candles_for(indicator_cmp)
 
 
 class HexitalCol(Generic[T], Hexital):

@@ -36,7 +36,11 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Removed `add_sub_indicator()` and `add_managed_indicator()` — use `add_child()` instead
     - Removed `sub_indicators` and `managed_indicators` dicts on `Indicator` — use `children` instead
     - Removed `prior_calc` property and `IndicatorMode` enum
+    - Removed `find_candle_pairing()` — use `candles_for()` and `candle_pair()` instead
 
+- Added explicit candle stream helpers on `Hexital`
+    - `candles_for(name)` returns the stream for an indicator, timeframe, or OHLCV field
+    - `candle_pair(indicator, indicator_cmp)` returns two streams for movement comparison
 - Fixed `purge()` to recursively clear nested child indicator readings
 - Added `Hexital.from_settings()` to reconstruct a strategy from a settings dictionary
 - Added `State` helper for indicator state

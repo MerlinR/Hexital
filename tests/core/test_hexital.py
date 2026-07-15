@@ -346,26 +346,26 @@ class TestCandlestickType:
             Hexital("Test Stratergy", candles, [EMA()], candlestick="FUCK")
 
 
-class TestFindCandles:
-    def test_find_simple(self, candles):
+class TestCandleStreams:
+    def test_candles_for_simple(self, candles):
         strategy = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA")])
         strategy.calculate()
 
-        assert strategy.find_candle_pairing("EMA")
+        assert strategy.candles_for("EMA")
 
-    def test_find_missing(self, candles):
+    def test_candles_for_missing(self, candles):
         strategy = Hexital("Test Stratergy", candles[:100], [EMA(name="EMA")])
         strategy.calculate()
 
-        assert strategy.find_candle_pairing("MMA") == ([], [])
+        assert strategy.candles_for("MMA") == []
 
-    def test_find_multi_simple(self, candles):
+    def test_candle_pair_multi_simple(self, candles):
         strategy = Hexital(
             "Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")]
         )
         strategy.calculate()
 
-        found_candles = strategy.find_candle_pairing("EMA", "SMA")
+        found_candles = strategy.candle_pair("EMA", "SMA")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -373,13 +373,13 @@ class TestFindCandles:
             and reading_by_candle(found_candles[0][-1], "SMA") is not None
         )
 
-    def test_find_multi_defaults_simple(self, candles):
+    def test_candle_pair_multi_defaults_simple(self, candles):
         strategy = Hexital(
             "Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")]
         )
         strategy.calculate()
 
-        found_candles = strategy.find_candle_pairing("EMA", "high")
+        found_candles = strategy.candle_pair("EMA", "high")
 
         assert found_candles[0] == found_candles[1]
 
@@ -389,13 +389,13 @@ class TestFindCandles:
         )
         assert found_candles[0][-1].timeframe == timedelta(seconds=60)
 
-    def test_find_rev_multi_defaults_simple(self, candles):
+    def test_candle_pair_rev_multi_defaults_simple(self, candles):
         strategy = Hexital(
             "Test Stratergy", candles[:100], [EMA(name="EMA"), SMA(name="SMA")]
         )
         strategy.calculate()
 
-        found_candles = strategy.find_candle_pairing("high", "EMA")
+        found_candles = strategy.candle_pair("high", "EMA")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -404,7 +404,7 @@ class TestFindCandles:
         )
         assert found_candles[0][-1].timeframe == timedelta(seconds=60)
 
-    def test_find_multi_timeframes(self, candles):
+    def test_candle_pair_multi_timeframes(self, candles):
         strategy = Hexital(
             "Test Stratergy",
             candles[:100],
@@ -412,7 +412,7 @@ class TestFindCandles:
         )
         strategy.calculate()
 
-        found_candles = strategy.find_candle_pairing("EMA", "SMA")
+        found_candles = strategy.candle_pair("EMA", "SMA")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -420,7 +420,7 @@ class TestFindCandles:
             and reading_by_candle(found_candles[0][-1], "SMA") is not None
         )
 
-    def test_find_multi_defaults_timeframes(self, candles):
+    def test_candle_pair_multi_defaults_timeframes(self, candles):
         strategy = Hexital(
             "Test Stratergy",
             candles[:100],
@@ -429,7 +429,7 @@ class TestFindCandles:
         )
         strategy.calculate()
 
-        found_candles = strategy.find_candle_pairing("EMA", "high")
+        found_candles = strategy.candle_pair("EMA", "high")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -439,7 +439,7 @@ class TestFindCandles:
 
         assert found_candles[0][-1].timeframe == timedelta(seconds=300)
 
-    def test_find_multi_mixed_timeframes(self, candles):
+    def test_candle_pair_multi_mixed_timeframes(self, candles):
         strategy = Hexital(
             "Test Stratergy",
             candles[:100],
@@ -447,7 +447,7 @@ class TestFindCandles:
         )
         strategy.calculate()
 
-        found_candles = strategy.find_candle_pairing("SMA", "high")
+        found_candles = strategy.candle_pair("SMA", "high")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -457,7 +457,7 @@ class TestFindCandles:
             and found_candles[0][-1].timeframe == timedelta(seconds=300)
         )
 
-    def test_find_multi_rev_mixed_timeframes(self, candles):
+    def test_candle_pair_multi_rev_mixed_timeframes(self, candles):
         strategy = Hexital(
             "Test Stratergy",
             candles[:100],
@@ -465,7 +465,7 @@ class TestFindCandles:
         )
         strategy.calculate()
 
-        found_candles = strategy.find_candle_pairing("high", "SMA")
+        found_candles = strategy.candle_pair("high", "SMA")
 
         assert found_candles[0] == found_candles[1]
         assert (
@@ -475,7 +475,7 @@ class TestFindCandles:
             and found_candles[0][-1].timeframe == timedelta(minutes=5)
         )
 
-    def test_find_candles_multi_timeframes(self, candles):
+    def test_candle_pair_different_timeframes(self, candles):
         strategy = Hexital(
             "Test Stratergy",
             candles,
@@ -483,7 +483,7 @@ class TestFindCandles:
         )
         strategy.calculate()
 
-        found_candles = strategy.find_candle_pairing("EMA", "EMA_T5")
+        found_candles = strategy.candle_pair("EMA", "EMA_T5")
 
         assert len(found_candles) == 2
         assert (
