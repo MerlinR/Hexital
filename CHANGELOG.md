@@ -6,9 +6,9 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ---
 
-## 4.X
+## 4.0.0
 
-*Release Date: X*
+*Release Date: 20/07/26*
 
 - Support python 3.14
 - Non-backward compatible changes:
