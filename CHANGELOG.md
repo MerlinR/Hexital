@@ -6,6 +6,14 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ---
 
+## 4.0.1
+
+*Release Date: 20/07/26*
+
+- Fix README docs links
+
+---
+
 ## 4.0.0
 
 *Release Date: 20/07/26*

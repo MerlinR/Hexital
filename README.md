@@ -11,6 +11,10 @@
 [![Unit Tests - development](https://img.shields.io/github/actions/workflow/status/MerlinR/Hexital/unit_test.yaml?branch=development&label=Unit%20Tests%20-%20development)](https://github.com/MerlinR/Hexital/actions/workflows/unit_test.yaml?query=branch%3Adevelopment)
 [![license](https://img.shields.io/github/license/merlinr/hexital)]()
 
+---
+
+**Documentation**: [https://merlinr.github.io/Hexital/](https://merlinr.github.io/Hexital/)
+
 **Source Code**: [https://github.com/MerlinR/Hexital](https://github.com/MerlinR/Hexital)
 
 ---
@@ -22,7 +26,7 @@ Hexital is a fast, zero-dependency Python library for technical analysis. It com
 * **Versatile** — indicators, patterns, candlestick transforms, analysis helpers
 * **Lightweight** — no pandas or numpy required at runtime
 
-> **Beta:** Breaking changes are still possible. See the [Release Notes](changelog.md).
+> **Beta:** Breaking changes are still possible. See the [Release Notes](https://merlinr.github.io/Hexital/latest/changelog/).
 
 ---
 
@@ -44,16 +48,16 @@ pip install git+https://github.com/merlinr/hexital.git@development
 
 | I want to… | Use | Guide |
 |------------|-----|-------|
-| Compute one indicator on a live feed | `EMA(...).append()` | [Quick Start](guides/quick-start.md) |
-| Run several indicators on one candle stream | `Hexital(...)` | [Strategies](guides/hexital-indepth.md) |
-| Load candles from CSV, Pandas, timestamps | `Candle.from_dicts()` etc. | [Candles](guides/candles.md) |
-| Build 5m bars from 1m data | `timeframe=` on indicator + label on candles | [Candles](guides/candles.md) · [Features](features.md) |
-| Check crossovers, rising/falling | `hexital.analysis` | [Analysis](guides/analysis-indepth.md) |
-| Heikin-Ashi or other candle transforms | `candlestick=` | [Candlesticks](guides/candlesticks.md) |
-| Write my own indicator | subclass `Indicator` | [Custom indicators](guides/custom-indicator.md) |
-| Browse what's built in | catalogues | [Indicators](indicator-catalogue.md) · [Patterns](candle-pattern-catalogue.md) |
+| Compute one indicator on a live feed | `EMA(...).append()` | [Quick Start](https://merlinr.github.io/Hexital/latest/guides/quick-start/) |
+| Run several indicators on one candle stream | `Hexital(...)` | [Strategies](https://merlinr.github.io/Hexital/latest/guides/hexital-indepth/) |
+| Load candles from CSV, Pandas, timestamps | `Candle.from_dicts()` etc. | [Candles](https://merlinr.github.io/Hexital/latest/guides/candles/) |
+| Build 5m bars from 1m data | `timeframe=` on indicator + label on candles | [Candles](https://merlinr.github.io/Hexital/latest/guides/candles/) · [Features](https://merlinr.github.io/Hexital/latest/features/) |
+| Check crossovers, rising/falling | `hexital.analysis` | [Analysis](https://merlinr.github.io/Hexital/latest/guides/analysis-indepth/) |
+| Heikin-Ashi or other candle transforms | `candlestick=` | [Candlesticks](https://merlinr.github.io/Hexital/latest/guides/candlesticks/) |
+| Write my own indicator | subclass `Indicator` | [Custom indicators](https://merlinr.github.io/Hexital/latest/guides/custom-indicator/) |
+| Browse what's built in | catalogues | [Indicators](https://merlinr.github.io/Hexital/latest/indicator-catalogue/) · [Patterns](https://merlinr.github.io/Hexital/latest/candle-pattern-catalogue/) |
 
-**New here?** [Quick Start](guides/quick-start.md) walks through the examples below step by step.
+**New here?** [Quick Start](https://merlinr.github.io/Hexital/latest/guides/quick-start/) walks through the examples below step by step.
 
 ---
 
@@ -113,25 +117,25 @@ Named indicators keep stable keys (`WMA`). Unnamed indicators get generated name
 
 ### Indicators
 
-40+ incremental indicators for common strategies. Full reference: [indicator catalogue](indicator-catalogue.md).
+40+ incremental indicators for common strategies. Full reference: [indicator catalogue](https://merlinr.github.io/Hexital/latest/indicator-catalogue).
 
 `ADX` · `AO` · `Amorph` · `AROON` · `ATR` · `BBANDS` / `BandWidth` · `CCI` · `ChandelierExit` / `CKSP` · `CMF` · `CMO` · `COPC` · `Counter` · `DEMA` · `Donchian` · `EMA` · `Fisher` · `HL` / `HLA` / `HLCA` · `HMA` · `Ichimoku` · `JMA` · `KAMA` · `KC` · `KST` · `LinearRegression` / `RegressionSlope` / `RegressionChannel` · `MACD` · `MFI` · `MOP` · `NATR` · `OBV` · `PPO` · `PSAR` · `PivotPoints` · `RMA` · `ROC` · `RSI` · `RVI` · `SMA` · `Squeeze` / `SqueezePro` · `STDEV` / `STDEVT` · `STOCH` · `Supertrend` · `TEMA` · `TR` · `TRIX` · `TSI` · `UO` · `Vortex` · `VWAP` · `VWMA` · `WillR` · `WMA` · `ZScore`
 
 ### Candlestick patterns
 
-Pattern detection on candle sequences — [full catalogue](candle-pattern-catalogue.md).
+Pattern detection on candle sequences — [full catalogue](https://merlinr.github.io/Hexital/latest/candle-pattern-catalogue).
 
 `doji` · `dojistar` · `hammer` · `inverted_hammer`
 
 ### Candlestick types
 
-Transform incoming candles before indicators run (e.g. Heikin-Ashi) — [catalogue](candlesticks-catalogue.md).
+Transform incoming candles before indicators run (e.g. Heikin-Ashi) — [catalogue](https://merlinr.github.io/Hexital/latest/candlesticks-catalogue).
 
 `HeikinAshi`
 
 ### Movements
 
-Pine Script–style helpers for indicator behaviour over time — [full catalogue](analysis-catalogue.md).
+Pine Script–style helpers for indicator behaviour over time — [full catalogue](https://merlinr.github.io/Hexital/latest/analysis-catalogue).
 
 `positive` / `negative` · `rising` / `falling` · `mean_rising` / `mean_falling` · `highest` / `lowest` · `highestbar` / `lowestbar` · `cross` / `crossover` / `crossunder` · `value_range`
 
@@ -163,15 +167,15 @@ In internal benchmarks, Hexital stays roughly flat as candle count increases dur
 ![Chart of bulk calculations.](benchmarks/speed_tests/MACD_26_12_Bulk.png)
 ![Chart of all calculations.](benchmarks/speed_tests/EMA_10.png)
 
-More detail and charts: [Features](features.md).
+More detail and charts: [Features](https://merlinr.github.io/Hexital/latest/features).
 
 ---
 
 ## Learn more
 
-- [Features](features.md) — chaining, custom indicators, multi-timeframe, benchmarks
-- [API Reference](reference/index.md)
-- [Design & alternatives](about/design.md) — vs Pandas-TA and TALipp
+- [Features](https://merlinr.github.io/Hexital/latest/eatures) — chaining, custom indicators, multi-timeframe, benchmarks
+- [API Reference](https://merlinr.github.io/Hexital/latest/reference/index)
+- [Design & alternatives](https://merlinr.github.io/Hexital/latest/about/design) — vs Pandas-TA and TALipp
 
 ---
 
