@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-ProperDocs 1.6.7, mkdocs-material-9.7.7">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -4258,7 +4258,7 @@
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -4407,9 +4407,9 @@ n(10) previous candles' high-low range.</p>
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8"></a>    <span class="n">lookback</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Doji Pattern</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="sd">    A candle body is Doji when it&#39;s shorter than 10% of the average of the</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="sd">    n(10) previous candles&#39; high-low range.</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="w">    </span><span class="sd">"""Doji Pattern</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="sd">    A candle body is Doji when it's shorter than 10% of the average of the</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="sd">    n(10) previous candles' high-low range.</span>
 </span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14"></a>
 </span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15"></a><span class="sd">    Source: https://github.com/TA-Lib/ta-lib</span>
 </span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16"></a>
@@ -4420,7 +4420,7 @@ n(10) previous candles' high-low range.</p>
 </span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21"></a>
 </span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="sd">        bool: True if given Candle/Candle range is Doji</span>
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="sd">    """</span>
 </span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25"></a>    <span class="n">index_</span> <span class="o">=</span> <span class="n">absindex</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">candles</span><span class="p">))</span>
 </span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26"></a>
 </span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27"></a>    <span class="k">if</span> <span class="n">lookback</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -4517,7 +4517,7 @@ Args:
 </span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a>    <span class="n">lookback</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Dojistar Pattern</span>
+</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="w">    </span><span class="sd">"""Dojistar Pattern</span>
 </span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45"></a><span class="sd">    A Dojistar is either bearish or bullish, and is detected when we have a larger then average</span>
 </span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46"></a><span class="sd">    candle followed by a candle candle shorter than 10% of the average of the</span>
 </span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47"></a><span class="sd">    n(10) of the average and then the candle gaps up or down.</span>
@@ -4531,7 +4531,7 @@ Args:
 </span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55"></a>
 </span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57"></a><span class="sd">        bool: True if given Candle/Candle range is Doji star</span>
-</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58"></a><span class="sd">    """</span>
 </span><span id="__span-0-59"><a id="__codelineno-0-59" name="__codelineno-0-59"></a>    <span class="n">index_</span> <span class="o">=</span> <span class="n">absindex</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">candles</span><span class="p">))</span>
 </span><span id="__span-0-60"><a id="__codelineno-0-60" name="__codelineno-0-60"></a>
 </span><span id="__span-0-61"><a id="__codelineno-0-61" name="__codelineno-0-61"></a>    <span class="k">if</span> <span class="n">lookback</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -4624,8 +4624,8 @@ Args:
 </span><span id="__span-0-87"><a id="__codelineno-0-87" name="__codelineno-0-87"></a>    <span class="n">lookback</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-88"><a id="__codelineno-0-88" name="__codelineno-0-88"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-89"><a id="__codelineno-0-89" name="__codelineno-0-89"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="o">|</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="__span-0-90"><a id="__codelineno-0-90" name="__codelineno-0-90"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Hammer Pattern</span>
-</span><span id="__span-0-91"><a id="__codelineno-0-91" name="__codelineno-0-91"></a><span class="sd">    A Hammer is detected when the Candle&#39;s open and close values are considered shorter</span>
+</span><span id="__span-0-90"><a id="__codelineno-0-90" name="__codelineno-0-90"></a><span class="w">    </span><span class="sd">"""Hammer Pattern</span>
+</span><span id="__span-0-91"><a id="__codelineno-0-91" name="__codelineno-0-91"></a><span class="sd">    A Hammer is detected when the Candle's open and close values are considered shorter</span>
 </span><span id="__span-0-92"><a id="__codelineno-0-92" name="__codelineno-0-92"></a><span class="sd">    than 10% of the average of the n(10) candles. However the low is larger than the average.</span>
 </span><span id="__span-0-93"><a id="__codelineno-0-93" name="__codelineno-0-93"></a>
 </span><span id="__span-0-94"><a id="__codelineno-0-94" name="__codelineno-0-94"></a><span class="sd">    Source: https://github.com/TA-Lib/ta-lib</span>
@@ -4636,7 +4636,7 @@ Args:
 </span><span id="__span-0-99"><a id="__codelineno-0-99" name="__codelineno-0-99"></a>
 </span><span id="__span-0-100"><a id="__codelineno-0-100" name="__codelineno-0-100"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-101"><a id="__codelineno-0-101" name="__codelineno-0-101"></a><span class="sd">        bool: True if given Candle/Candle range is Hammer</span>
-</span><span id="__span-0-102"><a id="__codelineno-0-102" name="__codelineno-0-102"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-102"><a id="__codelineno-0-102" name="__codelineno-0-102"></a><span class="sd">    """</span>
 </span><span id="__span-0-103"><a id="__codelineno-0-103" name="__codelineno-0-103"></a>    <span class="n">index_</span> <span class="o">=</span> <span class="n">absindex</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">candles</span><span class="p">))</span>
 </span><span id="__span-0-104"><a id="__codelineno-0-104" name="__codelineno-0-104"></a>
 </span><span id="__span-0-105"><a id="__codelineno-0-105" name="__codelineno-0-105"></a>    <span class="k">if</span> <span class="n">lookback</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -4729,8 +4729,8 @@ Args:
 </span><span id="__span-0-127"><a id="__codelineno-0-127" name="__codelineno-0-127"></a>    <span class="n">lookback</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-128"><a id="__codelineno-0-128" name="__codelineno-0-128"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-129"><a id="__codelineno-0-129" name="__codelineno-0-129"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span> <span class="o">|</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="__span-0-130"><a id="__codelineno-0-130" name="__codelineno-0-130"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Inverted Hammer Pattern</span>
-</span><span id="__span-0-131"><a id="__codelineno-0-131" name="__codelineno-0-131"></a><span class="sd">    An Inverted Hammer is detected when the Candle&#39;s open and close values are considered shorter</span>
+</span><span id="__span-0-130"><a id="__codelineno-0-130" name="__codelineno-0-130"></a><span class="w">    </span><span class="sd">"""Inverted Hammer Pattern</span>
+</span><span id="__span-0-131"><a id="__codelineno-0-131" name="__codelineno-0-131"></a><span class="sd">    An Inverted Hammer is detected when the Candle's open and close values are considered shorter</span>
 </span><span id="__span-0-132"><a id="__codelineno-0-132" name="__codelineno-0-132"></a><span class="sd">    than 10% of the average of the n(10) candles. However the high is larger than the average.</span>
 </span><span id="__span-0-133"><a id="__codelineno-0-133" name="__codelineno-0-133"></a>
 </span><span id="__span-0-134"><a id="__codelineno-0-134" name="__codelineno-0-134"></a><span class="sd">    Source: https://github.com/TA-Lib/ta-lib</span>
@@ -4741,7 +4741,7 @@ Args:
 </span><span id="__span-0-139"><a id="__codelineno-0-139" name="__codelineno-0-139"></a>
 </span><span id="__span-0-140"><a id="__codelineno-0-140" name="__codelineno-0-140"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-141"><a id="__codelineno-0-141" name="__codelineno-0-141"></a><span class="sd">        bool: True if given Candle/Candle range is Inverted Hammer</span>
-</span><span id="__span-0-142"><a id="__codelineno-0-142" name="__codelineno-0-142"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-142"><a id="__codelineno-0-142" name="__codelineno-0-142"></a><span class="sd">    """</span>
 </span><span id="__span-0-143"><a id="__codelineno-0-143" name="__codelineno-0-143"></a>    <span class="n">index_</span> <span class="o">=</span> <span class="n">absindex</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">candles</span><span class="p">))</span>
 </span><span id="__span-0-144"><a id="__codelineno-0-144" name="__codelineno-0-144"></a>
 </span><span id="__span-0-145"><a id="__codelineno-0-145" name="__codelineno-0-145"></a>    <span class="k">if</span> <span class="n">lookback</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -4783,7 +4783,7 @@ Args:
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 20, 2026 19:41:33 UTC">July 20, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 22, 2026 12:02:49 UTC">August 22, 2026</span>
   </span>
 
     
@@ -4880,7 +4880,7 @@ Args:
       <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.footer"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": ["latest"], "provider": "mike"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

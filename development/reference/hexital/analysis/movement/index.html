@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-ProperDocs 1.6.7, mkdocs-material-9.7.7">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -4768,7 +4768,7 @@
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -4988,7 +4988,7 @@ If any candle within the specified range is above, it returns <code>True</code>.
 </span><span id="__span-0-111"><a id="__codelineno-0-111" name="__codelineno-0-111"></a>    <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
 </span><span id="__span-0-112"><a id="__codelineno-0-112" name="__codelineno-0-112"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-113"><a id="__codelineno-0-113" name="__codelineno-0-113"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="__span-0-114"><a id="__codelineno-0-114" name="__codelineno-0-114"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Above Analysis</span>
+</span><span id="__span-0-114"><a id="__codelineno-0-114" name="__codelineno-0-114"></a><span class="w">    </span><span class="sd">"""Above Analysis</span>
 </span><span id="__span-0-115"><a id="__codelineno-0-115" name="__codelineno-0-115"></a>
 </span><span id="__span-0-116"><a id="__codelineno-0-116" name="__codelineno-0-116"></a><span class="sd">    Checks whether the `indicator` reading is higher than the `indicator_cmp` reading.</span>
 </span><span id="__span-0-117"><a id="__codelineno-0-117" name="__codelineno-0-117"></a><span class="sd">    By default, it evaluates the latest candle but can also check `n` candles back.</span>
@@ -5003,7 +5003,7 @@ If any candle within the specified range is above, it returns <code>True</code>.
 </span><span id="__span-0-126"><a id="__codelineno-0-126" name="__codelineno-0-126"></a>
 </span><span id="__span-0-127"><a id="__codelineno-0-127" name="__codelineno-0-127"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-128"><a id="__codelineno-0-128" name="__codelineno-0-128"></a><span class="sd">        bool: `True` if `indicator` is above `indicator_cmp` within the specified range; otherwise `False`.</span>
-</span><span id="__span-0-129"><a id="__codelineno-0-129" name="__codelineno-0-129"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-129"><a id="__codelineno-0-129" name="__codelineno-0-129"></a><span class="sd">    """</span>
 </span><span id="__span-0-130"><a id="__codelineno-0-130" name="__codelineno-0-130"></a>    <span class="n">candles_</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">,</span> <span class="n">indicator_cmp</span><span class="p">)</span>
 </span><span id="__span-0-131"><a id="__codelineno-0-131" name="__codelineno-0-131"></a>
 </span><span id="__span-0-132"><a id="__codelineno-0-132" name="__codelineno-0-132"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candles_</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -5223,7 +5223,7 @@ Defaults to -1 (latest candle).</p>
 </span><span id="__span-0-290"><a id="__codelineno-0-290" name="__codelineno-0-290"></a>    <span class="n">value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 </span><span id="__span-0-291"><a id="__codelineno-0-291" name="__codelineno-0-291"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-292"><a id="__codelineno-0-292" name="__codelineno-0-292"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="__span-0-293"><a id="__codelineno-0-293" name="__codelineno-0-293"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Bars Since Analysis</span>
+</span><span id="__span-0-293"><a id="__codelineno-0-293" name="__codelineno-0-293"></a><span class="w">    </span><span class="sd">"""Bars Since Analysis</span>
 </span><span id="__span-0-294"><a id="__codelineno-0-294" name="__codelineno-0-294"></a>
 </span><span id="__span-0-295"><a id="__codelineno-0-295" name="__codelineno-0-295"></a><span class="sd">    Returns how many bars ago the given `indicator` last matched `value`.</span>
 </span><span id="__span-0-296"><a id="__codelineno-0-296" name="__codelineno-0-296"></a><span class="sd">    A return value of `0` means the current bar matches. If no match exists,</span>
@@ -5239,7 +5239,7 @@ Defaults to -1 (latest candle).</p>
 </span><span id="__span-0-306"><a id="__codelineno-0-306" name="__codelineno-0-306"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-307"><a id="__codelineno-0-307" name="__codelineno-0-307"></a><span class="sd">        int | None: The number of bars since the most recent matching value,</span>
 </span><span id="__span-0-308"><a id="__codelineno-0-308" name="__codelineno-0-308"></a><span class="sd">        or `None` if no matching value exists.</span>
-</span><span id="__span-0-309"><a id="__codelineno-0-309" name="__codelineno-0-309"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-309"><a id="__codelineno-0-309" name="__codelineno-0-309"></a><span class="sd">    """</span>
 </span><span id="__span-0-310"><a id="__codelineno-0-310" name="__codelineno-0-310"></a>    <span class="n">candle_set</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">)</span>
 </span><span id="__span-0-311"><a id="__codelineno-0-311" name="__codelineno-0-311"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candle_set</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">candle_set</span><span class="p">:</span>
 </span><span id="__span-0-312"><a id="__codelineno-0-312" name="__codelineno-0-312"></a>        <span class="k">return</span> <span class="kc">None</span>
@@ -5466,7 +5466,7 @@ If any candle within the specified range is below, it returns <code>True</code>.
 </span><span id="__span-0-184"><a id="__codelineno-0-184" name="__codelineno-0-184"></a>    <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
 </span><span id="__span-0-185"><a id="__codelineno-0-185" name="__codelineno-0-185"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-186"><a id="__codelineno-0-186" name="__codelineno-0-186"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="__span-0-187"><a id="__codelineno-0-187" name="__codelineno-0-187"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Below Analysis</span>
+</span><span id="__span-0-187"><a id="__codelineno-0-187" name="__codelineno-0-187"></a><span class="w">    </span><span class="sd">"""Below Analysis</span>
 </span><span id="__span-0-188"><a id="__codelineno-0-188" name="__codelineno-0-188"></a>
 </span><span id="__span-0-189"><a id="__codelineno-0-189" name="__codelineno-0-189"></a><span class="sd">    Checks whether the `indicator` reading is lower than the `indicator_cmp` reading.</span>
 </span><span id="__span-0-190"><a id="__codelineno-0-190" name="__codelineno-0-190"></a><span class="sd">    By default, it evaluates the latest candle but can also check `n` candles back.</span>
@@ -5481,7 +5481,7 @@ If any candle within the specified range is below, it returns <code>True</code>.
 </span><span id="__span-0-199"><a id="__codelineno-0-199" name="__codelineno-0-199"></a>
 </span><span id="__span-0-200"><a id="__codelineno-0-200" name="__codelineno-0-200"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-201"><a id="__codelineno-0-201" name="__codelineno-0-201"></a><span class="sd">        bool: `True` if `indicator` is below `indicator_cmp` within the specified range; otherwise `False`.</span>
-</span><span id="__span-0-202"><a id="__codelineno-0-202" name="__codelineno-0-202"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-202"><a id="__codelineno-0-202" name="__codelineno-0-202"></a><span class="sd">    """</span>
 </span><span id="__span-0-203"><a id="__codelineno-0-203" name="__codelineno-0-203"></a>    <span class="n">candles_</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">,</span> <span class="n">indicator_cmp</span><span class="p">)</span>
 </span><span id="__span-0-204"><a id="__codelineno-0-204" name="__codelineno-0-204"></a>
 </span><span id="__span-0-205"><a id="__codelineno-0-205" name="__codelineno-0-205"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candles_</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -5698,7 +5698,7 @@ If any candle within the specified range is below, it returns <code>True</code>.
 </span><span id="__span-0-373"><a id="__codelineno-0-373" name="__codelineno-0-373"></a>    <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-374"><a id="__codelineno-0-374" name="__codelineno-0-374"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-375"><a id="__codelineno-0-375" name="__codelineno-0-375"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="__span-0-376"><a id="__codelineno-0-376" name="__codelineno-0-376"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Change Analysis</span>
+</span><span id="__span-0-376"><a id="__codelineno-0-376" name="__codelineno-0-376"></a><span class="w">    </span><span class="sd">"""Change Analysis</span>
 </span><span id="__span-0-377"><a id="__codelineno-0-377" name="__codelineno-0-377"></a>
 </span><span id="__span-0-378"><a id="__codelineno-0-378" name="__codelineno-0-378"></a><span class="sd">    Returns the difference between the current reading and the reading</span>
 </span><span id="__span-0-379"><a id="__codelineno-0-379" name="__codelineno-0-379"></a><span class="sd">    `length` bars back.</span>
@@ -5712,7 +5712,7 @@ If any candle within the specified range is below, it returns <code>True</code>.
 </span><span id="__span-0-387"><a id="__codelineno-0-387" name="__codelineno-0-387"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-388"><a id="__codelineno-0-388" name="__codelineno-0-388"></a><span class="sd">        float | int | None: The current reading minus the reading `length` bars back,</span>
 </span><span id="__span-0-389"><a id="__codelineno-0-389" name="__codelineno-0-389"></a><span class="sd">        or `None` if there is insufficient valid data.</span>
-</span><span id="__span-0-390"><a id="__codelineno-0-390" name="__codelineno-0-390"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-390"><a id="__codelineno-0-390" name="__codelineno-0-390"></a><span class="sd">    """</span>
 </span><span id="__span-0-391"><a id="__codelineno-0-391" name="__codelineno-0-391"></a>    <span class="n">candle_set</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">)</span>
 </span><span id="__span-0-392"><a id="__codelineno-0-392" name="__codelineno-0-392"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candle_set</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">candle_set</span> <span class="ow">or</span> <span class="n">length</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
 </span><span id="__span-0-393"><a id="__codelineno-0-393" name="__codelineno-0-393"></a>        <span class="k">return</span> <span class="kc">None</span>
@@ -5936,7 +5936,7 @@ within a specified range of candles. The cross can occur in either direction.</p
 </span><span id="__span-0-836"><a id="__codelineno-0-836" name="__codelineno-0-836"></a>    <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-837"><a id="__codelineno-0-837" name="__codelineno-0-837"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-838"><a id="__codelineno-0-838" name="__codelineno-0-838"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="__span-0-839"><a id="__codelineno-0-839" name="__codelineno-0-839"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Cross Analysis</span>
+</span><span id="__span-0-839"><a id="__codelineno-0-839" name="__codelineno-0-839"></a><span class="w">    </span><span class="sd">"""Cross Analysis</span>
 </span><span id="__span-0-840"><a id="__codelineno-0-840" name="__codelineno-0-840"></a>
 </span><span id="__span-0-841"><a id="__codelineno-0-841" name="__codelineno-0-841"></a><span class="sd">    Determines whether the `indicator` reading has crossed the `indicator_cmp` reading</span>
 </span><span id="__span-0-842"><a id="__codelineno-0-842" name="__codelineno-0-842"></a><span class="sd">    within a specified range of candles. The cross can occur in either direction.</span>
@@ -5951,7 +5951,7 @@ within a specified range of candles. The cross can occur in either direction.</p
 </span><span id="__span-0-851"><a id="__codelineno-0-851" name="__codelineno-0-851"></a>
 </span><span id="__span-0-852"><a id="__codelineno-0-852" name="__codelineno-0-852"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-853"><a id="__codelineno-0-853" name="__codelineno-0-853"></a><span class="sd">        bool: `True` if `indicator` has crossed `indicator_cmp` within the specified range; otherwise `False`.</span>
-</span><span id="__span-0-854"><a id="__codelineno-0-854" name="__codelineno-0-854"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-854"><a id="__codelineno-0-854" name="__codelineno-0-854"></a><span class="sd">    """</span>
 </span><span id="__span-0-855"><a id="__codelineno-0-855" name="__codelineno-0-855"></a>    <span class="n">candles_</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">,</span> <span class="n">indicator_cmp</span><span class="p">)</span>
 </span><span id="__span-0-856"><a id="__codelineno-0-856" name="__codelineno-0-856"></a>
 </span><span id="__span-0-857"><a id="__codelineno-0-857" name="__codelineno-0-857"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candles_</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -6198,7 +6198,7 @@ If <code>length</code> exceeds the total number of candles, all available candle
 </span><span id="__span-0-910"><a id="__codelineno-0-910" name="__codelineno-0-910"></a>    <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-911"><a id="__codelineno-0-911" name="__codelineno-0-911"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-912"><a id="__codelineno-0-912" name="__codelineno-0-912"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="__span-0-913"><a id="__codelineno-0-913" name="__codelineno-0-913"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Crossover Analysis</span>
+</span><span id="__span-0-913"><a id="__codelineno-0-913" name="__codelineno-0-913"></a><span class="w">    </span><span class="sd">"""Crossover Analysis</span>
 </span><span id="__span-0-914"><a id="__codelineno-0-914" name="__codelineno-0-914"></a>
 </span><span id="__span-0-915"><a id="__codelineno-0-915" name="__codelineno-0-915"></a><span class="sd">    Determines whether the `indicator` reading has crossed over the `indicator_cmp` reading</span>
 </span><span id="__span-0-916"><a id="__codelineno-0-916" name="__codelineno-0-916"></a><span class="sd">    within a specified range of candles. A crossover occurs when `indicator` transitions from below</span>
@@ -6215,7 +6215,7 @@ If <code>length</code> exceeds the total number of candles, all available candle
 </span><span id="__span-0-927"><a id="__codelineno-0-927" name="__codelineno-0-927"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-928"><a id="__codelineno-0-928" name="__codelineno-0-928"></a><span class="sd">        bool: `True` if `indicator` has crossed over `indicator_cmp` within the specified range;</span>
 </span><span id="__span-0-929"><a id="__codelineno-0-929" name="__codelineno-0-929"></a><span class="sd">        otherwise `False`.</span>
-</span><span id="__span-0-930"><a id="__codelineno-0-930" name="__codelineno-0-930"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-930"><a id="__codelineno-0-930" name="__codelineno-0-930"></a><span class="sd">    """</span>
 </span><span id="__span-0-931"><a id="__codelineno-0-931" name="__codelineno-0-931"></a>    <span class="n">candles_</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">,</span> <span class="n">indicator_cmp</span><span class="p">)</span>
 </span><span id="__span-0-932"><a id="__codelineno-0-932" name="__codelineno-0-932"></a>
 </span><span id="__span-0-933"><a id="__codelineno-0-933" name="__codelineno-0-933"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candles_</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -6463,7 +6463,7 @@ If <code>length</code> exceeds the total number of candles, all available candle
 </span><span id="__span-0-985"><a id="__codelineno-0-985" name="__codelineno-0-985"></a>    <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-986"><a id="__codelineno-0-986" name="__codelineno-0-986"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-987"><a id="__codelineno-0-987" name="__codelineno-0-987"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="__span-0-988"><a id="__codelineno-0-988" name="__codelineno-0-988"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Crossunder Analysis</span>
+</span><span id="__span-0-988"><a id="__codelineno-0-988" name="__codelineno-0-988"></a><span class="w">    </span><span class="sd">"""Crossunder Analysis</span>
 </span><span id="__span-0-989"><a id="__codelineno-0-989" name="__codelineno-0-989"></a>
 </span><span id="__span-0-990"><a id="__codelineno-0-990" name="__codelineno-0-990"></a><span class="sd">    Determines whether the `indicator` reading has crossed under the `indicator_cmp` reading</span>
 </span><span id="__span-0-991"><a id="__codelineno-0-991" name="__codelineno-0-991"></a><span class="sd">    within a specified range of candles. A crossunder occurs when `indicator` transitions from above</span>
@@ -6480,7 +6480,7 @@ If <code>length</code> exceeds the total number of candles, all available candle
 </span><span id="__span-0-1002"><a id="__codelineno-0-1002" name="__codelineno-0-1002"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-1003"><a id="__codelineno-0-1003" name="__codelineno-0-1003"></a><span class="sd">        bool: `True` if `indicator` has crossed under `indicator_cmp` within the specified range;</span>
 </span><span id="__span-0-1004"><a id="__codelineno-0-1004" name="__codelineno-0-1004"></a><span class="sd">        otherwise `False`.</span>
-</span><span id="__span-0-1005"><a id="__codelineno-0-1005" name="__codelineno-0-1005"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-1005"><a id="__codelineno-0-1005" name="__codelineno-0-1005"></a><span class="sd">    """</span>
 </span><span id="__span-0-1006"><a id="__codelineno-0-1006" name="__codelineno-0-1006"></a>    <span class="n">candles_</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">,</span> <span class="n">indicator_cmp</span><span class="p">)</span>
 </span><span id="__span-0-1007"><a id="__codelineno-0-1007" name="__codelineno-0-1007"></a>
 </span><span id="__span-0-1008"><a id="__codelineno-0-1008" name="__codelineno-0-1008"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candles_</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -6693,7 +6693,7 @@ By default, it checks if the current indicator value is lower than the previous 
 </span><span id="__span-0-569"><a id="__codelineno-0-569" name="__codelineno-0-569"></a>    <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-570"><a id="__codelineno-0-570" name="__codelineno-0-570"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-571"><a id="__codelineno-0-571" name="__codelineno-0-571"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="__span-0-572"><a id="__codelineno-0-572" name="__codelineno-0-572"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Falling Analysis</span>
+</span><span id="__span-0-572"><a id="__codelineno-0-572" name="__codelineno-0-572"></a><span class="w">    </span><span class="sd">"""Falling Analysis</span>
 </span><span id="__span-0-573"><a id="__codelineno-0-573" name="__codelineno-0-573"></a>
 </span><span id="__span-0-574"><a id="__codelineno-0-574" name="__codelineno-0-574"></a><span class="sd">    Determines whether the `indicator` consistently falling across a specified range of candles.</span>
 </span><span id="__span-0-575"><a id="__codelineno-0-575" name="__codelineno-0-575"></a><span class="sd">    By default, it checks if the current indicator value is lower than the previous one.</span>
@@ -6707,7 +6707,7 @@ By default, it checks if the current indicator value is lower than the previous 
 </span><span id="__span-0-583"><a id="__codelineno-0-583" name="__codelineno-0-583"></a>
 </span><span id="__span-0-584"><a id="__codelineno-0-584" name="__codelineno-0-584"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-585"><a id="__codelineno-0-585" name="__codelineno-0-585"></a><span class="sd">        bool: `True` if the `indicator` is lower than each previous readings in the range; otherwise `False`.</span>
-</span><span id="__span-0-586"><a id="__codelineno-0-586" name="__codelineno-0-586"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-586"><a id="__codelineno-0-586" name="__codelineno-0-586"></a><span class="sd">    """</span>
 </span><span id="__span-0-587"><a id="__codelineno-0-587" name="__codelineno-0-587"></a>    <span class="n">candle_set</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">)</span>
 </span><span id="__span-0-588"><a id="__codelineno-0-588" name="__codelineno-0-588"></a>    <span class="k">if</span> <span class="p">(</span>
 </span><span id="__span-0-589"><a id="__codelineno-0-589" name="__codelineno-0-589"></a>        <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candle_set</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
@@ -6915,7 +6915,7 @@ Defaults to 100.</p>
 </span><span id="__span-0-486"><a id="__codelineno-0-486" name="__codelineno-0-486"></a>    <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
 </span><span id="__span-0-487"><a id="__codelineno-0-487" name="__codelineno-0-487"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-488"><a id="__codelineno-0-488" name="__codelineno-0-488"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="__span-0-489"><a id="__codelineno-0-489" name="__codelineno-0-489"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Falling Count Analysis</span>
+</span><span id="__span-0-489"><a id="__codelineno-0-489" name="__codelineno-0-489"></a><span class="w">    </span><span class="sd">"""Falling Count Analysis</span>
 </span><span id="__span-0-490"><a id="__codelineno-0-490" name="__codelineno-0-490"></a>
 </span><span id="__span-0-491"><a id="__codelineno-0-491" name="__codelineno-0-491"></a><span class="sd">    Counts consecutive falling bars ending at `index`, up to `length`</span>
 </span><span id="__span-0-492"><a id="__codelineno-0-492" name="__codelineno-0-492"></a><span class="sd">    comparisons back.</span>
@@ -6929,7 +6929,7 @@ Defaults to 100.</p>
 </span><span id="__span-0-500"><a id="__codelineno-0-500" name="__codelineno-0-500"></a>
 </span><span id="__span-0-501"><a id="__codelineno-0-501" name="__codelineno-0-501"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-502"><a id="__codelineno-0-502" name="__codelineno-0-502"></a><span class="sd">        int: The number of consecutive falling comparisons ending at `index`.</span>
-</span><span id="__span-0-503"><a id="__codelineno-0-503" name="__codelineno-0-503"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-503"><a id="__codelineno-0-503" name="__codelineno-0-503"></a><span class="sd">    """</span>
 </span><span id="__span-0-504"><a id="__codelineno-0-504" name="__codelineno-0-504"></a>    <span class="n">candle_set</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">)</span>
 </span><span id="__span-0-505"><a id="__codelineno-0-505" name="__codelineno-0-505"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candle_set</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">candle_set</span> <span class="ow">or</span> <span class="n">length</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
 </span><span id="__span-0-506"><a id="__codelineno-0-506" name="__codelineno-0-506"></a>        <span class="k">return</span> <span class="mi">0</span>
@@ -7130,9 +7130,9 @@ If <code>length</code> exceeds the total number of candles, all available candle
 </span><span id="__span-0-1059"><a id="__codelineno-0-1059" name="__codelineno-0-1059"></a>    <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-1060"><a id="__codelineno-0-1060" name="__codelineno-0-1060"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-1061"><a id="__codelineno-0-1061" name="__codelineno-0-1061"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="__span-0-1062"><a id="__codelineno-0-1062" name="__codelineno-0-1062"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Flipped Reading Analysis</span>
+</span><span id="__span-0-1062"><a id="__codelineno-0-1062" name="__codelineno-0-1062"></a><span class="w">    </span><span class="sd">"""Flipped Reading Analysis</span>
 </span><span id="__span-0-1063"><a id="__codelineno-0-1063" name="__codelineno-0-1063"></a>
-</span><span id="__span-0-1064"><a id="__codelineno-0-1064" name="__codelineno-0-1064"></a><span class="sd">    Determines whether the `indicator` has &quot;flipped&quot; its value, meaning the current reading is different</span>
+</span><span id="__span-0-1064"><a id="__codelineno-0-1064" name="__codelineno-0-1064"></a><span class="sd">    Determines whether the `indicator` has "flipped" its value, meaning the current reading is different</span>
 </span><span id="__span-0-1065"><a id="__codelineno-0-1065" name="__codelineno-0-1065"></a><span class="sd">    from its previous reading, and within the last `length` candles, the indicator was above its previous reading.</span>
 </span><span id="__span-0-1066"><a id="__codelineno-0-1066" name="__codelineno-0-1066"></a>
 </span><span id="__span-0-1067"><a id="__codelineno-0-1067" name="__codelineno-0-1067"></a><span class="sd">    Args:</span>
@@ -7144,7 +7144,7 @@ If <code>length</code> exceeds the total number of candles, all available candle
 </span><span id="__span-0-1073"><a id="__codelineno-0-1073" name="__codelineno-0-1073"></a>
 </span><span id="__span-0-1074"><a id="__codelineno-0-1074" name="__codelineno-0-1074"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-1075"><a id="__codelineno-0-1075" name="__codelineno-0-1075"></a><span class="sd">        bool: `True` if the indicator has flipped (current value differs from previous); otherwise `False`.</span>
-</span><span id="__span-0-1076"><a id="__codelineno-0-1076" name="__codelineno-0-1076"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-1076"><a id="__codelineno-0-1076" name="__codelineno-0-1076"></a><span class="sd">    """</span>
 </span><span id="__span-0-1077"><a id="__codelineno-0-1077" name="__codelineno-0-1077"></a>    <span class="n">candle_set</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">)</span>
 </span><span id="__span-0-1078"><a id="__codelineno-0-1078" name="__codelineno-0-1078"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candle_set</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">candle_set</span><span class="p">:</span>
 </span><span id="__span-0-1079"><a id="__codelineno-0-1079" name="__codelineno-0-1079"></a>        <span class="k">return</span> <span class="kc">False</span>
@@ -7341,7 +7341,7 @@ By default, includes the latest candle and evaluates up to the previous four can
 </span><span id="__span-0-697"><a id="__codelineno-0-697" name="__codelineno-0-697"></a>    <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
 </span><span id="__span-0-698"><a id="__codelineno-0-698" name="__codelineno-0-698"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-699"><a id="__codelineno-0-699" name="__codelineno-0-699"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="__span-0-700"><a id="__codelineno-0-700" name="__codelineno-0-700"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Highest Reading Analysis</span>
+</span><span id="__span-0-700"><a id="__codelineno-0-700" name="__codelineno-0-700"></a><span class="w">    </span><span class="sd">"""Highest Reading Analysis</span>
 </span><span id="__span-0-701"><a id="__codelineno-0-701" name="__codelineno-0-701"></a>
 </span><span id="__span-0-702"><a id="__codelineno-0-702" name="__codelineno-0-702"></a><span class="sd">    Determines the highest value of the specified `indicator` over a given number of candles.</span>
 </span><span id="__span-0-703"><a id="__codelineno-0-703" name="__codelineno-0-703"></a><span class="sd">    By default, includes the latest candle and evaluates up to the previous four candles.</span>
@@ -7355,7 +7355,7 @@ By default, includes the latest candle and evaluates up to the previous four can
 </span><span id="__span-0-711"><a id="__codelineno-0-711" name="__codelineno-0-711"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-712"><a id="__codelineno-0-712" name="__codelineno-0-712"></a><span class="sd">        float | None: The highest reading for the specified `indicator` within the range,</span>
 </span><span id="__span-0-713"><a id="__codelineno-0-713" name="__codelineno-0-713"></a><span class="sd">        or `None` if no valid readings are found.</span>
-</span><span id="__span-0-714"><a id="__codelineno-0-714" name="__codelineno-0-714"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-714"><a id="__codelineno-0-714" name="__codelineno-0-714"></a><span class="sd">    """</span>
 </span><span id="__span-0-715"><a id="__codelineno-0-715" name="__codelineno-0-715"></a>    <span class="n">candles_</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">)</span>
 </span><span id="__span-0-716"><a id="__codelineno-0-716" name="__codelineno-0-716"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candles_</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
 </span><span id="__span-0-717"><a id="__codelineno-0-717" name="__codelineno-0-717"></a>        <span class="k">return</span> <span class="kc">None</span>
@@ -7558,7 +7558,7 @@ within a given range. By default, includes the latest candle and evaluates up to
 </span><span id="__span-0-751"><a id="__codelineno-0-751" name="__codelineno-0-751"></a>    <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
 </span><span id="__span-0-752"><a id="__codelineno-0-752" name="__codelineno-0-752"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-753"><a id="__codelineno-0-753" name="__codelineno-0-753"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="__span-0-754"><a id="__codelineno-0-754" name="__codelineno-0-754"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Highest Bar Offset Analysis</span>
+</span><span id="__span-0-754"><a id="__codelineno-0-754" name="__codelineno-0-754"></a><span class="w">    </span><span class="sd">"""Highest Bar Offset Analysis</span>
 </span><span id="__span-0-755"><a id="__codelineno-0-755" name="__codelineno-0-755"></a>
 </span><span id="__span-0-756"><a id="__codelineno-0-756" name="__codelineno-0-756"></a><span class="sd">    Determines the offset (distance) to the candle with the highest reading of the specified `indicator`</span>
 </span><span id="__span-0-757"><a id="__codelineno-0-757" name="__codelineno-0-757"></a><span class="sd">    within a given range. By default, includes the latest candle and evaluates up to the previous four candles.</span>
@@ -7572,7 +7572,7 @@ within a given range. By default, includes the latest candle and evaluates up to
 </span><span id="__span-0-765"><a id="__codelineno-0-765" name="__codelineno-0-765"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-766"><a id="__codelineno-0-766" name="__codelineno-0-766"></a><span class="sd">        int | None: The offset to the candle with the highest reading, relative to the starting index,</span>
 </span><span id="__span-0-767"><a id="__codelineno-0-767" name="__codelineno-0-767"></a><span class="sd">        or `None` if no valid readings are found.</span>
-</span><span id="__span-0-768"><a id="__codelineno-0-768" name="__codelineno-0-768"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-768"><a id="__codelineno-0-768" name="__codelineno-0-768"></a><span class="sd">    """</span>
 </span><span id="__span-0-769"><a id="__codelineno-0-769" name="__codelineno-0-769"></a>    <span class="n">candle_set</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">)</span>
 </span><span id="__span-0-770"><a id="__codelineno-0-770" name="__codelineno-0-770"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candle_set</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">candle_set</span><span class="p">:</span>
 </span><span id="__span-0-771"><a id="__codelineno-0-771" name="__codelineno-0-771"></a>        <span class="k">return</span> <span class="kc">None</span>
@@ -7775,7 +7775,7 @@ By default, includes the latest candle and evaluates up to the previous four can
 </span><span id="__span-0-724"><a id="__codelineno-0-724" name="__codelineno-0-724"></a>    <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
 </span><span id="__span-0-725"><a id="__codelineno-0-725" name="__codelineno-0-725"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-726"><a id="__codelineno-0-726" name="__codelineno-0-726"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="__span-0-727"><a id="__codelineno-0-727" name="__codelineno-0-727"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Lowest Reading Analysis</span>
+</span><span id="__span-0-727"><a id="__codelineno-0-727" name="__codelineno-0-727"></a><span class="w">    </span><span class="sd">"""Lowest Reading Analysis</span>
 </span><span id="__span-0-728"><a id="__codelineno-0-728" name="__codelineno-0-728"></a>
 </span><span id="__span-0-729"><a id="__codelineno-0-729" name="__codelineno-0-729"></a><span class="sd">    Determines the lowest value of the specified `indicator` over a given number of candles.</span>
 </span><span id="__span-0-730"><a id="__codelineno-0-730" name="__codelineno-0-730"></a><span class="sd">    By default, includes the latest candle and evaluates up to the previous four candles.</span>
@@ -7789,7 +7789,7 @@ By default, includes the latest candle and evaluates up to the previous four can
 </span><span id="__span-0-738"><a id="__codelineno-0-738" name="__codelineno-0-738"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-739"><a id="__codelineno-0-739" name="__codelineno-0-739"></a><span class="sd">        float | None: The lowest reading for the specified `indicator` within the range,</span>
 </span><span id="__span-0-740"><a id="__codelineno-0-740" name="__codelineno-0-740"></a><span class="sd">        or `None` if no valid readings are found.</span>
-</span><span id="__span-0-741"><a id="__codelineno-0-741" name="__codelineno-0-741"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-741"><a id="__codelineno-0-741" name="__codelineno-0-741"></a><span class="sd">    """</span>
 </span><span id="__span-0-742"><a id="__codelineno-0-742" name="__codelineno-0-742"></a>    <span class="n">candles_</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">)</span>
 </span><span id="__span-0-743"><a id="__codelineno-0-743" name="__codelineno-0-743"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candles_</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
 </span><span id="__span-0-744"><a id="__codelineno-0-744" name="__codelineno-0-744"></a>        <span class="k">return</span> <span class="kc">None</span>
@@ -7992,7 +7992,7 @@ within a given range. By default, includes the latest candle and evaluates up to
 </span><span id="__span-0-793"><a id="__codelineno-0-793" name="__codelineno-0-793"></a>    <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
 </span><span id="__span-0-794"><a id="__codelineno-0-794" name="__codelineno-0-794"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-795"><a id="__codelineno-0-795" name="__codelineno-0-795"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="__span-0-796"><a id="__codelineno-0-796" name="__codelineno-0-796"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Lowest Bar Offset Analysis</span>
+</span><span id="__span-0-796"><a id="__codelineno-0-796" name="__codelineno-0-796"></a><span class="w">    </span><span class="sd">"""Lowest Bar Offset Analysis</span>
 </span><span id="__span-0-797"><a id="__codelineno-0-797" name="__codelineno-0-797"></a>
 </span><span id="__span-0-798"><a id="__codelineno-0-798" name="__codelineno-0-798"></a><span class="sd">    Determines the offset (distance) to the candle with the lowest reading of the specified `indicator`</span>
 </span><span id="__span-0-799"><a id="__codelineno-0-799" name="__codelineno-0-799"></a><span class="sd">    within a given range. By default, includes the latest candle and evaluates up to the previous four candles.</span>
@@ -8006,7 +8006,7 @@ within a given range. By default, includes the latest candle and evaluates up to
 </span><span id="__span-0-807"><a id="__codelineno-0-807" name="__codelineno-0-807"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-808"><a id="__codelineno-0-808" name="__codelineno-0-808"></a><span class="sd">        int | None: The offset to the candle with the lowest reading, relative to the starting index,</span>
 </span><span id="__span-0-809"><a id="__codelineno-0-809" name="__codelineno-0-809"></a><span class="sd">        or `None` if no valid readings are found.</span>
-</span><span id="__span-0-810"><a id="__codelineno-0-810" name="__codelineno-0-810"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-810"><a id="__codelineno-0-810" name="__codelineno-0-810"></a><span class="sd">    """</span>
 </span><span id="__span-0-811"><a id="__codelineno-0-811" name="__codelineno-0-811"></a>    <span class="n">candle_set</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">)</span>
 </span><span id="__span-0-812"><a id="__codelineno-0-812" name="__codelineno-0-812"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candle_set</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">candle_set</span><span class="p">:</span>
 </span><span id="__span-0-813"><a id="__codelineno-0-813" name="__codelineno-0-813"></a>        <span class="k">return</span> <span class="kc">None</span>
@@ -8214,7 +8214,7 @@ By default, it checks if the current indicator value is lower than the average o
 </span><span id="__span-0-655"><a id="__codelineno-0-655" name="__codelineno-0-655"></a>    <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
 </span><span id="__span-0-656"><a id="__codelineno-0-656" name="__codelineno-0-656"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-657"><a id="__codelineno-0-657" name="__codelineno-0-657"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="__span-0-658"><a id="__codelineno-0-658" name="__codelineno-0-658"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Mean Falling Analysis</span>
+</span><span id="__span-0-658"><a id="__codelineno-0-658" name="__codelineno-0-658"></a><span class="w">    </span><span class="sd">"""Mean Falling Analysis</span>
 </span><span id="__span-0-659"><a id="__codelineno-0-659" name="__codelineno-0-659"></a>
 </span><span id="__span-0-660"><a id="__codelineno-0-660" name="__codelineno-0-660"></a><span class="sd">    Evaluates whether the `indicator` is, on average, falling across a specified range of candles.</span>
 </span><span id="__span-0-661"><a id="__codelineno-0-661" name="__codelineno-0-661"></a><span class="sd">    By default, it checks if the current indicator value is lower than the average of the previous four readings.</span>
@@ -8227,7 +8227,7 @@ By default, it checks if the current indicator value is lower than the average o
 </span><span id="__span-0-668"><a id="__codelineno-0-668" name="__codelineno-0-668"></a>
 </span><span id="__span-0-669"><a id="__codelineno-0-669" name="__codelineno-0-669"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-670"><a id="__codelineno-0-670" name="__codelineno-0-670"></a><span class="sd">        bool: `True` if the `indicator` is lower than the average of the specified `n` readings; otherwise `False`.</span>
-</span><span id="__span-0-671"><a id="__codelineno-0-671" name="__codelineno-0-671"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-671"><a id="__codelineno-0-671" name="__codelineno-0-671"></a><span class="sd">    """</span>
 </span><span id="__span-0-672"><a id="__codelineno-0-672" name="__codelineno-0-672"></a>    <span class="n">candle_set</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">)</span>
 </span><span id="__span-0-673"><a id="__codelineno-0-673" name="__codelineno-0-673"></a>    <span class="k">if</span> <span class="p">(</span>
 </span><span id="__span-0-674"><a id="__codelineno-0-674" name="__codelineno-0-674"></a>        <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candle_set</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
@@ -8437,7 +8437,7 @@ By default, it checks if the current indicator value is higher than the average 
 </span><span id="__span-0-612"><a id="__codelineno-0-612" name="__codelineno-0-612"></a>    <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
 </span><span id="__span-0-613"><a id="__codelineno-0-613" name="__codelineno-0-613"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-614"><a id="__codelineno-0-614" name="__codelineno-0-614"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="__span-0-615"><a id="__codelineno-0-615" name="__codelineno-0-615"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Mean Rising Analysis</span>
+</span><span id="__span-0-615"><a id="__codelineno-0-615" name="__codelineno-0-615"></a><span class="w">    </span><span class="sd">"""Mean Rising Analysis</span>
 </span><span id="__span-0-616"><a id="__codelineno-0-616" name="__codelineno-0-616"></a>
 </span><span id="__span-0-617"><a id="__codelineno-0-617" name="__codelineno-0-617"></a><span class="sd">    Evaluates whether the `indicator` is, on average, rising across a specified range of candles.</span>
 </span><span id="__span-0-618"><a id="__codelineno-0-618" name="__codelineno-0-618"></a><span class="sd">    By default, it checks if the current indicator value is higher than the average of the previous four readings.</span>
@@ -8450,7 +8450,7 @@ By default, it checks if the current indicator value is higher than the average 
 </span><span id="__span-0-625"><a id="__codelineno-0-625" name="__codelineno-0-625"></a>
 </span><span id="__span-0-626"><a id="__codelineno-0-626" name="__codelineno-0-626"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-627"><a id="__codelineno-0-627" name="__codelineno-0-627"></a><span class="sd">        bool: `True` if the `indicator` is higher than the average of the specified `n` readings; otherwise `False`.</span>
-</span><span id="__span-0-628"><a id="__codelineno-0-628" name="__codelineno-0-628"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-628"><a id="__codelineno-0-628" name="__codelineno-0-628"></a><span class="sd">    """</span>
 </span><span id="__span-0-629"><a id="__codelineno-0-629" name="__codelineno-0-629"></a>
 </span><span id="__span-0-630"><a id="__codelineno-0-630" name="__codelineno-0-630"></a>    <span class="n">candle_set</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">)</span>
 </span><span id="__span-0-631"><a id="__codelineno-0-631" name="__codelineno-0-631"></a>    <span class="k">if</span> <span class="p">(</span>
@@ -8666,7 +8666,7 @@ By default, it checks if the current indicator value is higher than the average 
 </span><span id="__span-0-408"><a id="__codelineno-0-408" name="__codelineno-0-408"></a>    <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-409"><a id="__codelineno-0-409" name="__codelineno-0-409"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-410"><a id="__codelineno-0-410" name="__codelineno-0-410"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="__span-0-411"><a id="__codelineno-0-411" name="__codelineno-0-411"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Percent Change Analysis</span>
+</span><span id="__span-0-411"><a id="__codelineno-0-411" name="__codelineno-0-411"></a><span class="w">    </span><span class="sd">"""Percent Change Analysis</span>
 </span><span id="__span-0-412"><a id="__codelineno-0-412" name="__codelineno-0-412"></a>
 </span><span id="__span-0-413"><a id="__codelineno-0-413" name="__codelineno-0-413"></a><span class="sd">    Returns the percentage change between the current reading and the reading</span>
 </span><span id="__span-0-414"><a id="__codelineno-0-414" name="__codelineno-0-414"></a><span class="sd">    `length` bars back.</span>
@@ -8680,7 +8680,7 @@ By default, it checks if the current indicator value is higher than the average 
 </span><span id="__span-0-422"><a id="__codelineno-0-422" name="__codelineno-0-422"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-423"><a id="__codelineno-0-423" name="__codelineno-0-423"></a><span class="sd">        float | None: The percentage change from the reading `length` bars back to the</span>
 </span><span id="__span-0-424"><a id="__codelineno-0-424" name="__codelineno-0-424"></a><span class="sd">        current reading, or `None` if there is insufficient valid data or the prior value is zero.</span>
-</span><span id="__span-0-425"><a id="__codelineno-0-425" name="__codelineno-0-425"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-425"><a id="__codelineno-0-425" name="__codelineno-0-425"></a><span class="sd">    """</span>
 </span><span id="__span-0-426"><a id="__codelineno-0-426" name="__codelineno-0-426"></a>    <span class="n">delta</span> <span class="o">=</span> <span class="n">change</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
 </span><span id="__span-0-427"><a id="__codelineno-0-427" name="__codelineno-0-427"></a>    <span class="k">if</span> <span class="n">delta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="__span-0-428"><a id="__codelineno-0-428" name="__codelineno-0-428"></a>        <span class="k">return</span> <span class="kc">None</span>
@@ -8886,7 +8886,7 @@ By default, it checks if the current indicator value is greater than the previou
 </span><span id="__span-0-526"><a id="__codelineno-0-526" name="__codelineno-0-526"></a>    <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-527"><a id="__codelineno-0-527" name="__codelineno-0-527"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-528"><a id="__codelineno-0-528" name="__codelineno-0-528"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="__span-0-529"><a id="__codelineno-0-529" name="__codelineno-0-529"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Rising Analysis</span>
+</span><span id="__span-0-529"><a id="__codelineno-0-529" name="__codelineno-0-529"></a><span class="w">    </span><span class="sd">"""Rising Analysis</span>
 </span><span id="__span-0-530"><a id="__codelineno-0-530" name="__codelineno-0-530"></a>
 </span><span id="__span-0-531"><a id="__codelineno-0-531" name="__codelineno-0-531"></a><span class="sd">    Determines whether the `indicator` consistently rises across a specified range of candles.</span>
 </span><span id="__span-0-532"><a id="__codelineno-0-532" name="__codelineno-0-532"></a><span class="sd">    By default, it checks if the current indicator value is greater than the previous one.</span>
@@ -8900,7 +8900,7 @@ By default, it checks if the current indicator value is greater than the previou
 </span><span id="__span-0-540"><a id="__codelineno-0-540" name="__codelineno-0-540"></a>
 </span><span id="__span-0-541"><a id="__codelineno-0-541" name="__codelineno-0-541"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-542"><a id="__codelineno-0-542" name="__codelineno-0-542"></a><span class="sd">        bool: `True` if the `indicator` is greater than each previous readings in the range; otherwise `False`.</span>
-</span><span id="__span-0-543"><a id="__codelineno-0-543" name="__codelineno-0-543"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-543"><a id="__codelineno-0-543" name="__codelineno-0-543"></a><span class="sd">    """</span>
 </span><span id="__span-0-544"><a id="__codelineno-0-544" name="__codelineno-0-544"></a>    <span class="n">candle_set</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">)</span>
 </span><span id="__span-0-545"><a id="__codelineno-0-545" name="__codelineno-0-545"></a>    <span class="k">if</span> <span class="p">(</span>
 </span><span id="__span-0-546"><a id="__codelineno-0-546" name="__codelineno-0-546"></a>        <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candle_set</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
@@ -9108,7 +9108,7 @@ Defaults to 100.</p>
 </span><span id="__span-0-446"><a id="__codelineno-0-446" name="__codelineno-0-446"></a>    <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
 </span><span id="__span-0-447"><a id="__codelineno-0-447" name="__codelineno-0-447"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-448"><a id="__codelineno-0-448" name="__codelineno-0-448"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="__span-0-449"><a id="__codelineno-0-449" name="__codelineno-0-449"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Rising Count Analysis</span>
+</span><span id="__span-0-449"><a id="__codelineno-0-449" name="__codelineno-0-449"></a><span class="w">    </span><span class="sd">"""Rising Count Analysis</span>
 </span><span id="__span-0-450"><a id="__codelineno-0-450" name="__codelineno-0-450"></a>
 </span><span id="__span-0-451"><a id="__codelineno-0-451" name="__codelineno-0-451"></a><span class="sd">    Counts consecutive rising bars ending at `index`, up to `length`</span>
 </span><span id="__span-0-452"><a id="__codelineno-0-452" name="__codelineno-0-452"></a><span class="sd">    comparisons back.</span>
@@ -9122,7 +9122,7 @@ Defaults to 100.</p>
 </span><span id="__span-0-460"><a id="__codelineno-0-460" name="__codelineno-0-460"></a>
 </span><span id="__span-0-461"><a id="__codelineno-0-461" name="__codelineno-0-461"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-462"><a id="__codelineno-0-462" name="__codelineno-0-462"></a><span class="sd">        int: The number of consecutive rising comparisons ending at `index`.</span>
-</span><span id="__span-0-463"><a id="__codelineno-0-463" name="__codelineno-0-463"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-463"><a id="__codelineno-0-463" name="__codelineno-0-463"></a><span class="sd">    """</span>
 </span><span id="__span-0-464"><a id="__codelineno-0-464" name="__codelineno-0-464"></a>    <span class="n">candle_set</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">)</span>
 </span><span id="__span-0-465"><a id="__codelineno-0-465" name="__codelineno-0-465"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candle_set</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">candle_set</span> <span class="ow">or</span> <span class="n">length</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
 </span><span id="__span-0-466"><a id="__codelineno-0-466" name="__codelineno-0-466"></a>        <span class="k">return</span> <span class="mi">0</span>
@@ -9331,7 +9331,7 @@ length exceeds the available candles, it will evaluate all candles.</p>
 </span><span id="__span-0-256"><a id="__codelineno-0-256" name="__codelineno-0-256"></a>    <span class="n">length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
 </span><span id="__span-0-257"><a id="__codelineno-0-257" name="__codelineno-0-257"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-258"><a id="__codelineno-0-258" name="__codelineno-0-258"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="__span-0-259"><a id="__codelineno-0-259" name="__codelineno-0-259"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Value Range Analysis</span>
+</span><span id="__span-0-259"><a id="__codelineno-0-259" name="__codelineno-0-259"></a><span class="w">    </span><span class="sd">"""Value Range Analysis</span>
 </span><span id="__span-0-260"><a id="__codelineno-0-260" name="__codelineno-0-260"></a>
 </span><span id="__span-0-261"><a id="__codelineno-0-261" name="__codelineno-0-261"></a><span class="sd">    Calculates the difference between the minimum and maximum values for the given `indicator`</span>
 </span><span id="__span-0-262"><a id="__codelineno-0-262" name="__codelineno-0-262"></a><span class="sd">    within a specified range of candles. Includes the latest candle by default. If the specified</span>
@@ -9346,7 +9346,7 @@ length exceeds the available candles, it will evaluate all candles.</p>
 </span><span id="__span-0-271"><a id="__codelineno-0-271" name="__codelineno-0-271"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-272"><a id="__codelineno-0-272" name="__codelineno-0-272"></a><span class="sd">        float | None: The difference between the minimum and maximum indicator values in the range,</span>
 </span><span id="__span-0-273"><a id="__codelineno-0-273" name="__codelineno-0-273"></a><span class="sd">        or `None` if there are insufficient readings.</span>
-</span><span id="__span-0-274"><a id="__codelineno-0-274" name="__codelineno-0-274"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-274"><a id="__codelineno-0-274" name="__codelineno-0-274"></a><span class="sd">    """</span>
 </span><span id="__span-0-275"><a id="__codelineno-0-275" name="__codelineno-0-275"></a>    <span class="n">candle_set</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">indicator</span><span class="p">)</span>
 </span><span id="__span-0-276"><a id="__codelineno-0-276" name="__codelineno-0-276"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candle_set</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">candle_set</span><span class="p">:</span>
 </span><span id="__span-0-277"><a id="__codelineno-0-277" name="__codelineno-0-277"></a>        <span class="k">return</span> <span class="kc">None</span>
@@ -9599,7 +9599,7 @@ Defaults to -1 (latest candle).</p>
 </span><span id="__span-0-328"><a id="__codelineno-0-328" name="__codelineno-0-328"></a>    <span class="n">occurrence</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
 </span><span id="__span-0-329"><a id="__codelineno-0-329" name="__codelineno-0-329"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-330"><a id="__codelineno-0-330" name="__codelineno-0-330"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="__span-0-331"><a id="__codelineno-0-331" name="__codelineno-0-331"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Value When Analysis</span>
+</span><span id="__span-0-331"><a id="__codelineno-0-331" name="__codelineno-0-331"></a><span class="w">    </span><span class="sd">"""Value When Analysis</span>
 </span><span id="__span-0-332"><a id="__codelineno-0-332" name="__codelineno-0-332"></a>
 </span><span id="__span-0-333"><a id="__codelineno-0-333" name="__codelineno-0-333"></a><span class="sd">    Returns the `indicator` reading from the nth most recent bar where</span>
 </span><span id="__span-0-334"><a id="__codelineno-0-334" name="__codelineno-0-334"></a><span class="sd">    `condition_indicator` matched `value`. `occurrence=0` means the latest match.</span>
@@ -9618,7 +9618,7 @@ Defaults to -1 (latest candle).</p>
 </span><span id="__span-0-347"><a id="__codelineno-0-347" name="__codelineno-0-347"></a><span class="sd">    Returns:</span>
 </span><span id="__span-0-348"><a id="__codelineno-0-348" name="__codelineno-0-348"></a><span class="sd">        float | dict | None: The reading of `indicator` at the requested matching occurrence,</span>
 </span><span id="__span-0-349"><a id="__codelineno-0-349" name="__codelineno-0-349"></a><span class="sd">        or `None` if no such match exists.</span>
-</span><span id="__span-0-350"><a id="__codelineno-0-350" name="__codelineno-0-350"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-350"><a id="__codelineno-0-350" name="__codelineno-0-350"></a><span class="sd">    """</span>
 </span><span id="__span-0-351"><a id="__codelineno-0-351" name="__codelineno-0-351"></a>    <span class="n">candle_set</span> <span class="o">=</span> <span class="n">_retrieve_candles</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">condition_indicator</span><span class="p">)</span>
 </span><span id="__span-0-352"><a id="__codelineno-0-352" name="__codelineno-0-352"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candle_set</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">candle_set</span> <span class="ow">or</span> <span class="n">occurrence</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
 </span><span id="__span-0-353"><a id="__codelineno-0-353" name="__codelineno-0-353"></a>        <span class="k">return</span> <span class="kc">None</span>
@@ -9669,7 +9669,7 @@ Defaults to -1 (latest candle).</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 20, 2026 19:41:33 UTC">July 20, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 22, 2026 12:02:49 UTC">August 22, 2026</span>
   </span>
 
     
@@ -9766,7 +9766,7 @@ Defaults to -1 (latest candle).</p>
       <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.footer"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": ["latest"], "provider": "mike"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

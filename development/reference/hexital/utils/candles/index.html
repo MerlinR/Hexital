@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-ProperDocs 1.6.7, mkdocs-material-9.7.7">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -4348,7 +4348,7 @@
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -4401,8 +4401,8 @@ If not enough Candles, sum's what's available</p>
 </span><span id="__span-0-117"><a id="__codelineno-0-117" name="__codelineno-0-117"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-118"><a id="__codelineno-0-118" name="__codelineno-0-118"></a>    <span class="n">include_latest</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 </span><span id="__span-0-119"><a id="__codelineno-0-119" name="__codelineno-0-119"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="__span-0-120"><a id="__codelineno-0-120" name="__codelineno-0-120"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Averages period of `name` for `length` bars back.</span>
-</span><span id="__span-0-121"><a id="__codelineno-0-121" name="__codelineno-0-121"></a><span class="sd">    If not enough Candles, sum&#39;s what&#39;s available&quot;&quot;&quot;</span>
+</span><span id="__span-0-120"><a id="__codelineno-0-120" name="__codelineno-0-120"></a><span class="w">    </span><span class="sd">"""Averages period of `name` for `length` bars back.</span>
+</span><span id="__span-0-121"><a id="__codelineno-0-121" name="__codelineno-0-121"></a><span class="sd">    If not enough Candles, sum's what's available"""</span>
 </span><span id="__span-0-122"><a id="__codelineno-0-122" name="__codelineno-0-122"></a>    <span class="n">values</span> <span class="o">=</span> <span class="n">get_readings_period</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">include_latest</span><span class="p">)</span>
 </span><span id="__span-0-123"><a id="__codelineno-0-123" name="__codelineno-0-123"></a>    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="k">if</span> <span class="n">values</span> <span class="k">else</span> <span class="mi">0</span>
 </span></code></pre></div></td></tr></table></div>
@@ -4450,7 +4450,7 @@ If not enough Candles, sum's what's available</p>
 </span><span id="__span-0-106"><a id="__codelineno-0-106" name="__codelineno-0-106"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 </span><span id="__span-0-107"><a id="__codelineno-0-107" name="__codelineno-0-107"></a>    <span class="n">include_latest</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 </span><span id="__span-0-108"><a id="__codelineno-0-108" name="__codelineno-0-108"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-</span><span id="__span-0-109"><a id="__codelineno-0-109" name="__codelineno-0-109"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Sum of `name` for `length` bars back. If not enough Candles, sum&#39;s what&#39;s available&quot;&quot;&quot;</span>
+</span><span id="__span-0-109"><a id="__codelineno-0-109" name="__codelineno-0-109"></a><span class="w">    </span><span class="sd">"""Sum of `name` for `length` bars back. If not enough Candles, sum's what's available"""</span>
 </span><span id="__span-0-110"><a id="__codelineno-0-110" name="__codelineno-0-110"></a>    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">get_readings_period</span><span class="p">(</span><span class="n">candles</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">include_latest</span><span class="p">))</span>
 </span></code></pre></div></td></tr></table></div>
             </details>
@@ -4513,8 +4513,8 @@ Returns from newest at the back (same order)</p>
 </span><span id="__span-0-130"><a id="__codelineno-0-130" name="__codelineno-0-130"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
 </span><span id="__span-0-131"><a id="__codelineno-0-131" name="__codelineno-0-131"></a>    <span class="n">include_latest</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="__span-0-132"><a id="__codelineno-0-132" name="__codelineno-0-132"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">]:</span>
-</span><span id="__span-0-133"><a id="__codelineno-0-133" name="__codelineno-0-133"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Goes through from index-length to index and returns a list of values, removes dict&#39;s and None values, validates index, if out of range set to max (-1)</span>
-</span><span id="__span-0-134"><a id="__codelineno-0-134" name="__codelineno-0-134"></a><span class="sd">    Returns from newest at the back (same order)&quot;&quot;&quot;</span>
+</span><span id="__span-0-133"><a id="__codelineno-0-133" name="__codelineno-0-133"></a><span class="w">    </span><span class="sd">"""Goes through from index-length to index and returns a list of values, removes dict's and None values, validates index, if out of range set to max (-1)</span>
+</span><span id="__span-0-134"><a id="__codelineno-0-134" name="__codelineno-0-134"></a><span class="sd">    Returns from newest at the back (same order)"""</span>
 </span><span id="__span-0-135"><a id="__codelineno-0-135" name="__codelineno-0-135"></a>    <span class="n">index_</span> <span class="o">=</span> <span class="n">absindex</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">candles</span><span class="p">))</span>
 </span><span id="__span-0-136"><a id="__codelineno-0-136" name="__codelineno-0-136"></a>
 </span><span id="__span-0-137"><a id="__codelineno-0-137" name="__codelineno-0-137"></a>    <span class="n">to_index</span> <span class="o">=</span> <span class="n">index_</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">include_latest</span> <span class="k">else</span> <span class="n">index_</span>
@@ -4583,11 +4583,11 @@ e.g. <code>MACD_12_26_9:signal</code>.</p>
 <span class="normal"><a href="#__codelineno-0-69">69</a></span>
 <span class="normal"><a href="#__codelineno-0-70">70</a></span>
 <span class="normal"><a href="#__codelineno-0-71">71</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45"></a><span class="k">def</span><span class="w"> </span><span class="nf">reading_by_candle</span><span class="p">(</span><span class="n">candle</span><span class="p">:</span> <span class="n">Candle</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple method to get a reading from the given indicator from a candle.</span>
+</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46"></a><span class="w">    </span><span class="sd">"""Simple method to get a reading from the given indicator from a candle.</span>
 </span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47"></a>
 </span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48"></a><span class="sd">    Uses `~hexital.core.constants.NESTED_DELI` to find nested readings,</span>
 </span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49"></a><span class="sd">    e.g. ``MACD_12_26_9:signal``.</span>
-</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50"></a><span class="sd">    """</span>
 </span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51"></a>    <span class="n">main_name</span><span class="p">,</span> <span class="n">nested_name</span> <span class="o">=</span> <span class="n">split_nested_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 </span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52"></a>    <span class="k">if</span> <span class="n">nested_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53"></a>        <span class="k">if</span> <span class="p">(</span><span class="n">reading</span> <span class="o">:=</span> <span class="n">candle</span><span class="o">.</span><span class="n">indicators</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">main_name</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -4645,7 +4645,7 @@ e.g. <code>MACD_12_26_9:signal</code>.</p>
 <span class="normal"><a href="#__codelineno-0-42">42</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="k">def</span><span class="w"> </span><span class="nf">reading_by_index</span><span class="p">(</span>
 </span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36"></a>    <span class="n">candles</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Candle</span><span class="p">],</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 </span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">dict</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple method to get a reading from the given indicator from it&#39;s index&quot;&quot;&quot;</span>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="w">    </span><span class="sd">"""Simple method to get a reading from the given indicator from it's index"""</span>
 </span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_index</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">candles</span><span class="p">)):</span>
 </span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40"></a>        <span class="k">return</span> <span class="kc">None</span>
 </span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41"></a>
@@ -4685,7 +4685,7 @@ e.g. <code>MACD_12_26_9:signal</code>.</p>
 <span class="normal"><a href="#__codelineno-0-80">80</a></span>
 <span class="normal"><a href="#__codelineno-0-81">81</a></span>
 <span class="normal"><a href="#__codelineno-0-82">82</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-74"><a id="__codelineno-0-74" name="__codelineno-0-74"></a><span class="k">def</span><span class="w"> </span><span class="nf">reading_count</span><span class="p">(</span><span class="n">candles</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Candle</span><span class="p">],</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="__span-0-75"><a id="__codelineno-0-75" name="__codelineno-0-75"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns how many instance of the given indicator exist&quot;&quot;&quot;</span>
+</span><span id="__span-0-75"><a id="__codelineno-0-75" name="__codelineno-0-75"></a><span class="w">    </span><span class="sd">"""Returns how many instance of the given indicator exist"""</span>
 </span><span id="__span-0-76"><a id="__codelineno-0-76" name="__codelineno-0-76"></a>    <span class="n">index_</span> <span class="o">=</span> <span class="n">absindex</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">candles</span><span class="p">))</span>
 </span><span id="__span-0-77"><a id="__codelineno-0-77" name="__codelineno-0-77"></a>
 </span><span id="__span-0-78"><a id="__codelineno-0-78" name="__codelineno-0-78"></a>    <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">index_</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
@@ -4737,8 +4737,8 @@ It's true if exactly or more than. Includes index</p>
 <span class="normal"><a href="#__codelineno-0-99">99</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-85"><a id="__codelineno-0-85" name="__codelineno-0-85"></a><span class="k">def</span><span class="w"> </span><span class="nf">reading_period</span><span class="p">(</span>
 </span><span id="__span-0-86"><a id="__codelineno-0-86" name="__codelineno-0-86"></a>    <span class="n">candles</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Candle</span><span class="p">],</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">period</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="__span-0-87"><a id="__codelineno-0-87" name="__codelineno-0-87"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="__span-0-88"><a id="__codelineno-0-88" name="__codelineno-0-88"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Will return True if the given indicator goes back as far as amount,</span>
-</span><span id="__span-0-89"><a id="__codelineno-0-89" name="__codelineno-0-89"></a><span class="sd">    It&#39;s true if exactly or more than. Includes index&quot;&quot;&quot;</span>
+</span><span id="__span-0-88"><a id="__codelineno-0-88" name="__codelineno-0-88"></a><span class="w">    </span><span class="sd">"""Will return True if the given indicator goes back as far as amount,</span>
+</span><span id="__span-0-89"><a id="__codelineno-0-89" name="__codelineno-0-89"></a><span class="sd">    It's true if exactly or more than. Includes index"""</span>
 </span><span id="__span-0-90"><a id="__codelineno-0-90" name="__codelineno-0-90"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">candles</span><span class="p">:</span>
 </span><span id="__span-0-91"><a id="__codelineno-0-91" name="__codelineno-0-91"></a>        <span class="k">return</span> <span class="kc">False</span>
 </span><span id="__span-0-92"><a id="__codelineno-0-92" name="__codelineno-0-92"></a>
@@ -4782,7 +4782,7 @@ It's true if exactly or more than. Includes index</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 20, 2026 19:41:54 UTC">July 20, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 22, 2026 12:03:10 UTC">August 22, 2026</span>
   </span>
 
     
@@ -4879,7 +4879,7 @@ It's true if exactly or more than. Includes index</p>
       <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.footer"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": ["latest"], "provider": "mike"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>

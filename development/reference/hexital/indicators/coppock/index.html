@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../../../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-ProperDocs 1.6.7, mkdocs-material-9.7.7">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -4647,7 +4647,7 @@
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -4673,7 +4673,7 @@
 <div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">COPC</span><span class="p">(</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="o">*</span><span class="p">,</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">candles</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#list">list</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-internal" title="            Candle (hexital.core.candle.Candle)" href="../../core/candle/#hexital.core.candle.Candle">Candle</a></span><span class="p">]</span> <span class="o">=</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#list">list</a></span><span class="p">(),</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">name</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">name</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
 </span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">timeframe</span><span class="p">:</span> <span class="n"><span title="hexital.utils.timeframe.TimeFramesSource">TimeFramesSource</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">timeframe_fill</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">candle_life</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="datetime.timedelta" href="https://docs.python.org/3/library/datetime.html#datetime.timedelta">timedelta</a></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -5001,7 +5001,7 @@ series.</p>
 
 
 
-  <div class="doc doc-children">
+<div class="doc doc-children">
 
 
 
@@ -5198,18 +5198,18 @@ their values are properly formatted.</p>
 </span><span id="__span-0-426"><a id="__codelineno-0-426" name="__codelineno-0-426"></a>    <span class="n">indicator</span><span class="p">:</span> <span class="n">Indicator</span><span class="p">,</span>
 </span><span id="__span-0-427"><a id="__codelineno-0-427" name="__codelineno-0-427"></a>    <span class="n">when</span><span class="p">:</span> <span class="n">ChildWhen</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">ChildWhen</span><span class="o">.</span><span class="n">BEFORE</span><span class="p">,</span>
 </span><span id="__span-0-428"><a id="__codelineno-0-428" name="__codelineno-0-428"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Indicator</span><span class="p">:</span>
-</span><span id="__span-0-429"><a id="__codelineno-0-429" name="__codelineno-0-429"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Register a child indicator that shares this indicator&#39;s candles.</span>
+</span><span id="__span-0-429"><a id="__codelineno-0-429" name="__codelineno-0-429"></a><span class="w">    </span><span class="sd">"""Register a child indicator that shares this indicator's candles.</span>
 </span><span id="__span-0-430"><a id="__codelineno-0-430" name="__codelineno-0-430"></a>
 </span><span id="__span-0-431"><a id="__codelineno-0-431" name="__codelineno-0-431"></a><span class="sd">    Args:</span>
 </span><span id="__span-0-432"><a id="__codelineno-0-432" name="__codelineno-0-432"></a><span class="sd">        indicator: The child indicator to attach.</span>
 </span><span id="__span-0-433"><a id="__codelineno-0-433" name="__codelineno-0-433"></a><span class="sd">        when: When the child is calculated relative to the parent at each index.</span>
 </span><span id="__span-0-434"><a id="__codelineno-0-434" name="__codelineno-0-434"></a><span class="sd">            :attr:`ChildWhen.BEFORE` runs before `_calculate_reading`.</span>
-</span><span id="__span-0-435"><a id="__codelineno-0-435" name="__codelineno-0-435"></a><span class="sd">            :attr:`ChildWhen.AFTER` runs after the parent&#39;s reading is stored.</span>
+</span><span id="__span-0-435"><a id="__codelineno-0-435" name="__codelineno-0-435"></a><span class="sd">            :attr:`ChildWhen.AFTER` runs after the parent's reading is stored.</span>
 </span><span id="__span-0-436"><a id="__codelineno-0-436" name="__codelineno-0-436"></a><span class="sd">            :attr:`ChildWhen.MANUAL` is only calculated when explicitly invoked</span>
 </span><span id="__span-0-437"><a id="__codelineno-0-437" name="__codelineno-0-437"></a><span class="sd">            (e.g. via `Managed.set_reading` or `calculate_index`).</span>
-</span><span id="__span-0-438"><a id="__codelineno-0-438" name="__codelineno-0-438"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-438"><a id="__codelineno-0-438" name="__codelineno-0-438"></a><span class="sd">    """</span>
 </span><span id="__span-0-439"><a id="__codelineno-0-439" name="__codelineno-0-439"></a>    <span class="n">when</span> <span class="o">=</span> <span class="n">_normalize_when</span><span class="p">(</span><span class="n">when</span><span class="p">)</span>
-</span><span id="__span-0-440"><a id="__codelineno-0-440" name="__codelineno-0-440"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_prefix_generated_name</span><span class="p">(</span><span class="n">indicator</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">indicator</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-0-440"><a id="__codelineno-0-440" name="__codelineno-0-440"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_prefix_generated_name</span><span class="p">(</span><span class="n">indicator</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">indicator</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </span><span id="__span-0-441"><a id="__codelineno-0-441" name="__codelineno-0-441"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bind_child</span><span class="p">(</span><span class="n">indicator</span><span class="p">,</span> <span class="n">when</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
             </details>
@@ -5248,7 +5248,7 @@ their values are properly formatted.</p>
               <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-443">443</a></span>
 <span class="normal"><a href="#__codelineno-0-444">444</a></span>
 <span class="normal"><a href="#__codelineno-0-445">445</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-443"><a id="__codelineno-0-443" name="__codelineno-0-443"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_child_after</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indicator</span><span class="p">:</span> <span class="n">Indicator</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Indicator</span><span class="p">:</span>
-</span><span id="__span-0-444"><a id="__codelineno-0-444" name="__codelineno-0-444"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Register a child calculated after the parent&#39;s reading is stored.&quot;&quot;&quot;</span>
+</span><span id="__span-0-444"><a id="__codelineno-0-444" name="__codelineno-0-444"></a><span class="w">    </span><span class="sd">"""Register a child calculated after the parent's reading is stored."""</span>
 </span><span id="__span-0-445"><a id="__codelineno-0-445" name="__codelineno-0-445"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">indicator</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">ChildWhen</span><span class="o">.</span><span class="n">AFTER</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
             </details>
@@ -5289,9 +5289,9 @@ their values are properly formatted.</p>
 <span class="normal"><a href="#__codelineno-0-449">449</a></span>
 <span class="normal"><a href="#__codelineno-0-450">450</a></span>
 <span class="normal"><a href="#__codelineno-0-451">451</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-447"><a id="__codelineno-0-447" name="__codelineno-0-447"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_child_managed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indicator</span><span class="p">:</span> <span class="n">Indicator</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Indicator</span><span class="p">:</span>
-</span><span id="__span-0-448"><a id="__codelineno-0-448" name="__codelineno-0-448"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Register a child calculated only when explicitly invoked.&quot;&quot;&quot;</span>
+</span><span id="__span-0-448"><a id="__codelineno-0-448" name="__codelineno-0-448"></a><span class="w">    </span><span class="sd">"""Register a child calculated only when explicitly invoked."""</span>
 </span><span id="__span-0-449"><a id="__codelineno-0-449" name="__codelineno-0-449"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">indicator</span><span class="p">,</span> <span class="n">Managed</span><span class="p">):</span>
-</span><span id="__span-0-450"><a id="__codelineno-0-450" name="__codelineno-0-450"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_prefix_generated_name</span><span class="p">(</span><span class="n">indicator</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_data&quot;</span><span class="p">)</span>
+</span><span id="__span-0-450"><a id="__codelineno-0-450" name="__codelineno-0-450"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_prefix_generated_name</span><span class="p">(</span><span class="n">indicator</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_data"</span><span class="p">)</span>
 </span><span id="__span-0-451"><a id="__codelineno-0-451" name="__codelineno-0-451"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">indicator</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">ChildWhen</span><span class="o">.</span><span class="n">MANUAL</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
             </details>
@@ -5322,8 +5322,8 @@ their values are properly formatted.</p>
 <span class="normal"><a href="#__codelineno-0-455">455</a></span>
 <span class="normal"><a href="#__codelineno-0-456">456</a></span>
 <span class="normal"><a href="#__codelineno-0-457">457</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-453"><a id="__codelineno-0-453" name="__codelineno-0-453"></a><span class="k">def</span><span class="w"> </span><span class="nf">add_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
-</span><span id="__span-0-454"><a id="__codelineno-0-454" name="__codelineno-0-454"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Register hidden state storage for incremental calculations.&quot;&quot;&quot;</span>
-</span><span id="__span-0-455"><a id="__codelineno-0-455" name="__codelineno-0-455"></a>    <span class="n">state_name</span> <span class="o">=</span> <span class="n">name</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_data&quot;</span>
+</span><span id="__span-0-454"><a id="__codelineno-0-454" name="__codelineno-0-454"></a><span class="w">    </span><span class="sd">"""Register hidden state storage for incremental calculations."""</span>
+</span><span id="__span-0-455"><a id="__codelineno-0-455" name="__codelineno-0-455"></a>    <span class="n">state_name</span> <span class="o">=</span> <span class="n">name</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_data"</span>
 </span><span id="__span-0-456"><a id="__codelineno-0-456" name="__codelineno-0-456"></a>    <span class="n">managed</span> <span class="o">=</span> <span class="n">Managed</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">state_name</span><span class="p">)</span>
 </span><span id="__span-0-457"><a id="__codelineno-0-457" name="__codelineno-0-457"></a>    <span class="k">return</span> <span class="n">State</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">managed</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">ChildWhen</span><span class="o">.</span><span class="n">MANUAL</span><span class="p">))</span>
 </span></code></pre></div></td></tr></table></div>
@@ -5389,11 +5389,11 @@ their values are properly formatted.</p>
 <span class="normal"><a href="#__codelineno-0-288">288</a></span>
 <span class="normal"><a href="#__codelineno-0-289">289</a></span>
 <span class="normal"><a href="#__codelineno-0-290">290</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-283"><a id="__codelineno-0-283" name="__codelineno-0-283"></a><span class="k">def</span><span class="w"> </span><span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">candles</span><span class="p">:</span> <span class="n">Candles</span><span class="p">):</span>
-</span><span id="__span-0-284"><a id="__codelineno-0-284" name="__codelineno-0-284"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Appends a Candle or a chronological ordered list of Candle&#39;s to the end of the Indicator Candle&#39;s. This will only re-sample and re-calculate the new Candles, with minor overlap.</span>
+</span><span id="__span-0-284"><a id="__codelineno-0-284" name="__codelineno-0-284"></a><span class="w">    </span><span class="sd">"""Appends a Candle or a chronological ordered list of Candle's to the end of the Indicator Candle's. This will only re-sample and re-calculate the new Candles, with minor overlap.</span>
 </span><span id="__span-0-285"><a id="__codelineno-0-285" name="__codelineno-0-285"></a>
 </span><span id="__span-0-286"><a id="__codelineno-0-286" name="__codelineno-0-286"></a><span class="sd">    Args:</span>
-</span><span id="__span-0-287"><a id="__codelineno-0-287" name="__codelineno-0-287"></a><span class="sd">        candles: The Candle or List of Candle&#39;s to append.</span>
-</span><span id="__span-0-288"><a id="__codelineno-0-288" name="__codelineno-0-288"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-287"><a id="__codelineno-0-287" name="__codelineno-0-287"></a><span class="sd">        candles: The Candle or List of Candle's to append.</span>
+</span><span id="__span-0-288"><a id="__codelineno-0-288" name="__codelineno-0-288"></a><span class="sd">    """</span>
 </span><span id="__span-0-289"><a id="__codelineno-0-289" name="__codelineno-0-289"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_candle_mngr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candles</span><span class="p">)</span>
 </span><span id="__span-0-290"><a id="__codelineno-0-290" name="__codelineno-0-290"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
@@ -5435,7 +5435,7 @@ their values are properly formatted.</p>
 </span><span id="__span-0-194"><a id="__codelineno-0-194" name="__codelineno-0-194"></a>    <span class="n">source</span><span class="p">:</span> <span class="n">Source</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-195"><a id="__codelineno-0-195" name="__codelineno-0-195"></a>    <span class="n">default</span><span class="p">:</span> <span class="n">T</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-196"><a id="__codelineno-0-196" name="__codelineno-0-196"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">V</span> <span class="o">|</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="__span-0-197"><a id="__codelineno-0-197" name="__codelineno-0-197"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Reading at a specific candle index — shorthand for `reading`.&quot;&quot;&quot;</span>
+</span><span id="__span-0-197"><a id="__codelineno-0-197" name="__codelineno-0-197"></a><span class="w">    </span><span class="sd">"""Reading at a specific candle index — shorthand for `reading`."""</span>
 </span><span id="__span-0-198"><a id="__codelineno-0-198" name="__codelineno-0-198"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reading</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
             </details>
@@ -5466,9 +5466,9 @@ their values are properly formatted.</p>
 <span class="normal"><a href="#__codelineno-0-210">210</a></span>
 <span class="normal"><a href="#__codelineno-0-211">211</a></span>
 <span class="normal"><a href="#__codelineno-0-212">212</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-208"><a id="__codelineno-0-208" name="__codelineno-0-208"></a><span class="k">def</span><span class="w"> </span><span class="nf">at_src</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">T</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">V</span> <span class="o">|</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="__span-0-209"><a id="__codelineno-0-209" name="__codelineno-0-209"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Reading at ``index`` for this indicator&#39;s configured ``source``.&quot;&quot;&quot;</span>
+</span><span id="__span-0-209"><a id="__codelineno-0-209" name="__codelineno-0-209"></a><span class="w">    </span><span class="sd">"""Reading at ``index`` for this indicator's configured ``source``."""</span>
 </span><span id="__span-0-210"><a id="__codelineno-0-210" name="__codelineno-0-210"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reading</span><span class="p">(</span>
-</span><span id="__span-0-211"><a id="__codelineno-0-211" name="__codelineno-0-211"></a>        <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;close&quot;</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span>
+</span><span id="__span-0-211"><a id="__codelineno-0-211" name="__codelineno-0-211"></a>        <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"source"</span><span class="p">,</span> <span class="s2">"close"</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span>
 </span><span id="__span-0-212"><a id="__codelineno-0-212" name="__codelineno-0-212"></a>    <span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
             </details>
@@ -5515,8 +5515,8 @@ where this indicator is missing</p>
 <span class="normal"><a href="#__codelineno-0-336">336</a></span>
 <span class="normal"><a href="#__codelineno-0-337">337</a></span>
 <span class="normal"><a href="#__codelineno-0-338">338</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-319"><a id="__codelineno-0-319" name="__codelineno-0-319"></a><span class="k">def</span><span class="w"> </span><span class="nf">calculate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="__span-0-320"><a id="__codelineno-0-320" name="__codelineno-0-320"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the TA values, will calculate for all the Candles,</span>
-</span><span id="__span-0-321"><a id="__codelineno-0-321" name="__codelineno-0-321"></a><span class="sd">    where this indicator is missing&quot;&quot;&quot;</span>
+</span><span id="__span-0-320"><a id="__codelineno-0-320" name="__codelineno-0-320"></a><span class="w">    </span><span class="sd">"""Calculate the TA values, will calculate for all the Candles,</span>
+</span><span id="__span-0-321"><a id="__codelineno-0-321" name="__codelineno-0-321"></a><span class="sd">    where this indicator is missing"""</span>
 </span><span id="__span-0-322"><a id="__codelineno-0-322" name="__codelineno-0-322"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">check_initialised</span><span class="p">()</span>
 </span><span id="__span-0-323"><a id="__codelineno-0-323" name="__codelineno-0-323"></a>
 </span><span id="__span-0-324"><a id="__codelineno-0-324" name="__codelineno-0-324"></a>    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_find_calc_index</span><span class="p">(),</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">candles</span><span class="p">)):</span>
@@ -5577,7 +5577,7 @@ where this indicator is missing</p>
 <span class="normal"><a href="#__codelineno-0-374">374</a></span>
 <span class="normal"><a href="#__codelineno-0-375">375</a></span>
 <span class="normal"><a href="#__codelineno-0-376">376</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-358"><a id="__codelineno-0-358" name="__codelineno-0-358"></a><span class="k">def</span><span class="w"> </span><span class="nf">calculate_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-</span><span id="__span-0-359"><a id="__codelineno-0-359" name="__codelineno-0-359"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the TA values, will calculate a index range the Candles, will re-calculate&quot;&quot;&quot;</span>
+</span><span id="__span-0-359"><a id="__codelineno-0-359" name="__codelineno-0-359"></a><span class="w">    </span><span class="sd">"""Calculate the TA values, will calculate a index range the Candles, will re-calculate"""</span>
 </span><span id="__span-0-360"><a id="__codelineno-0-360" name="__codelineno-0-360"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">check_initialised</span><span class="p">()</span>
 </span><span id="__span-0-361"><a id="__codelineno-0-361" name="__codelineno-0-361"></a>
 </span><span id="__span-0-362"><a id="__codelineno-0-362" name="__codelineno-0-362"></a>    <span class="n">start_index</span> <span class="o">=</span> <span class="n">absindex</span><span class="p">(</span><span class="n">start_index</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">candles</span><span class="p">))</span>
@@ -5658,11 +5658,11 @@ where this indicator is missing</p>
 <span class="normal"><a href="#__codelineno-0-297">297</a></span>
 <span class="normal"><a href="#__codelineno-0-298">298</a></span>
 <span class="normal"><a href="#__codelineno-0-299">299</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-292"><a id="__codelineno-0-292" name="__codelineno-0-292"></a><span class="k">def</span><span class="w"> </span><span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">candles</span><span class="p">:</span> <span class="n">Candles</span><span class="p">):</span>
-</span><span id="__span-0-293"><a id="__codelineno-0-293" name="__codelineno-0-293"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;insert a Candle or a list of Candle&#39;s to the Indicator Candles. This accepts any order or placement. This will sort, re-sample and re-calculate all Candles.</span>
+</span><span id="__span-0-293"><a id="__codelineno-0-293" name="__codelineno-0-293"></a><span class="w">    </span><span class="sd">"""insert a Candle or a list of Candle's to the Indicator Candles. This accepts any order or placement. This will sort, re-sample and re-calculate all Candles.</span>
 </span><span id="__span-0-294"><a id="__codelineno-0-294" name="__codelineno-0-294"></a>
 </span><span id="__span-0-295"><a id="__codelineno-0-295" name="__codelineno-0-295"></a><span class="sd">    Args:</span>
-</span><span id="__span-0-296"><a id="__codelineno-0-296" name="__codelineno-0-296"></a><span class="sd">        candles: The Candle or List of Candle&#39;s to prepend.</span>
-</span><span id="__span-0-297"><a id="__codelineno-0-297" name="__codelineno-0-297"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-296"><a id="__codelineno-0-296" name="__codelineno-0-296"></a><span class="sd">        candles: The Candle or List of Candle's to prepend.</span>
+</span><span id="__span-0-297"><a id="__codelineno-0-297" name="__codelineno-0-297"></a><span class="sd">    """</span>
 </span><span id="__span-0-298"><a id="__codelineno-0-298" name="__codelineno-0-298"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_candle_mngr</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">candles</span><span class="p">)</span>
 </span><span id="__span-0-299"><a id="__codelineno-0-299" name="__codelineno-0-299"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">calculate_index</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
@@ -5728,11 +5728,11 @@ where this indicator is missing</p>
 <span class="normal"><a href="#__codelineno-0-279">279</a></span>
 <span class="normal"><a href="#__codelineno-0-280">280</a></span>
 <span class="normal"><a href="#__codelineno-0-281">281</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-274"><a id="__codelineno-0-274" name="__codelineno-0-274"></a><span class="k">def</span><span class="w"> </span><span class="nf">prepend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">candles</span><span class="p">:</span> <span class="n">Candles</span><span class="p">):</span>
-</span><span id="__span-0-275"><a id="__codelineno-0-275" name="__codelineno-0-275"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Prepends a Candle or a chronological ordered list of Candle&#39;s to the front of the Indicator Candle&#39;s. This will only re-sample and re-calculate the new Candles, with minor overlap.</span>
+</span><span id="__span-0-275"><a id="__codelineno-0-275" name="__codelineno-0-275"></a><span class="w">    </span><span class="sd">"""Prepends a Candle or a chronological ordered list of Candle's to the front of the Indicator Candle's. This will only re-sample and re-calculate the new Candles, with minor overlap.</span>
 </span><span id="__span-0-276"><a id="__codelineno-0-276" name="__codelineno-0-276"></a>
 </span><span id="__span-0-277"><a id="__codelineno-0-277" name="__codelineno-0-277"></a><span class="sd">    Args:</span>
-</span><span id="__span-0-278"><a id="__codelineno-0-278" name="__codelineno-0-278"></a><span class="sd">        candles: The Candle or List of Candle&#39;s to prepend.</span>
-</span><span id="__span-0-279"><a id="__codelineno-0-279" name="__codelineno-0-279"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-278"><a id="__codelineno-0-278" name="__codelineno-0-278"></a><span class="sd">        candles: The Candle or List of Candle's to prepend.</span>
+</span><span id="__span-0-279"><a id="__codelineno-0-279" name="__codelineno-0-279"></a><span class="sd">    """</span>
 </span><span id="__span-0-280"><a id="__codelineno-0-280" name="__codelineno-0-280"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_candle_mngr</span><span class="o">.</span><span class="n">prepend</span><span class="p">(</span><span class="n">candles</span><span class="p">)</span>
 </span><span id="__span-0-281"><a id="__codelineno-0-281" name="__codelineno-0-281"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
@@ -5762,7 +5762,7 @@ where this indicator is missing</p>
               <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-187">187</a></span>
 <span class="normal"><a href="#__codelineno-0-188">188</a></span>
 <span class="normal"><a href="#__codelineno-0-189">189</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-187"><a id="__codelineno-0-187" name="__codelineno-0-187"></a><span class="k">def</span><span class="w"> </span><span class="nf">prev</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="n">Source</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">T</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">V</span> <span class="o">|</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="__span-0-188"><a id="__codelineno-0-188" name="__codelineno-0-188"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Previous reading — shorthand for `prev_reading`.&quot;&quot;&quot;</span>
+</span><span id="__span-0-188"><a id="__codelineno-0-188" name="__codelineno-0-188"></a><span class="w">    </span><span class="sd">"""Previous reading — shorthand for `prev_reading`."""</span>
 </span><span id="__span-0-189"><a id="__codelineno-0-189" name="__codelineno-0-189"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prev_reading</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
             </details>
@@ -5791,8 +5791,8 @@ where this indicator is missing</p>
               <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-204">204</a></span>
 <span class="normal"><a href="#__codelineno-0-205">205</a></span>
 <span class="normal"><a href="#__codelineno-0-206">206</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-204"><a id="__codelineno-0-204" name="__codelineno-0-204"></a><span class="k">def</span><span class="w"> </span><span class="nf">prev_src</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">T</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">V</span> <span class="o">|</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="__span-0-205"><a id="__codelineno-0-205" name="__codelineno-0-205"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Previous reading for this indicator&#39;s configured ``source``.&quot;&quot;&quot;</span>
-</span><span id="__span-0-206"><a id="__codelineno-0-206" name="__codelineno-0-206"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prev_reading</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;close&quot;</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">)</span>
+</span><span id="__span-0-205"><a id="__codelineno-0-205" name="__codelineno-0-205"></a><span class="w">    </span><span class="sd">"""Previous reading for this indicator's configured ``source``."""</span>
+</span><span id="__span-0-206"><a id="__codelineno-0-206" name="__codelineno-0-206"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prev_reading</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"source"</span><span class="p">,</span> <span class="s2">"close"</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -5835,7 +5835,7 @@ where this indicator is missing</p>
 </span><span id="__span-0-525"><a id="__codelineno-0-525" name="__codelineno-0-525"></a>    <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-526"><a id="__codelineno-0-526" name="__codelineno-0-526"></a>    <span class="n">default</span><span class="p">:</span> <span class="n">T</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 </span><span id="__span-0-527"><a id="__codelineno-0-527" name="__codelineno-0-527"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">V</span> <span class="o">|</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="__span-0-528"><a id="__codelineno-0-528" name="__codelineno-0-528"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple method to get an indicator reading from the index&quot;&quot;&quot;</span>
+</span><span id="__span-0-528"><a id="__codelineno-0-528" name="__codelineno-0-528"></a><span class="w">    </span><span class="sd">"""Simple method to get an indicator reading from the index"""</span>
 </span><span id="__span-0-529"><a id="__codelineno-0-529" name="__codelineno-0-529"></a>    <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_reading</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
 </span><span id="__span-0-530"><a id="__codelineno-0-530" name="__codelineno-0-530"></a>    <span class="k">return</span> <span class="n">value</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">default</span>  <span class="c1"># type: ignore</span>
 </span></code></pre></div></td></tr></table></div>
@@ -5872,7 +5872,7 @@ where this indicator is missing</p>
 <span class="normal"><a href="#__codelineno-0-539">539</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-532"><a id="__codelineno-0-532" name="__codelineno-0-532"></a><span class="k">def</span><span class="w"> </span><span class="nf">reading_count</span><span class="p">(</span>
 </span><span id="__span-0-533"><a id="__codelineno-0-533" name="__codelineno-0-533"></a>    <span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="n">Source</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="__span-0-534"><a id="__codelineno-0-534" name="__codelineno-0-534"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-</span><span id="__span-0-535"><a id="__codelineno-0-535" name="__codelineno-0-535"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns how many instance of the given indicator exist&quot;&quot;&quot;</span>
+</span><span id="__span-0-535"><a id="__codelineno-0-535" name="__codelineno-0-535"></a><span class="w">    </span><span class="sd">"""Returns how many instance of the given indicator exist"""</span>
 </span><span id="__span-0-536"><a id="__codelineno-0-536" name="__codelineno-0-536"></a>    <span class="k">return</span> <span class="n">reading_count</span><span class="p">(</span>
 </span><span id="__span-0-537"><a id="__codelineno-0-537" name="__codelineno-0-537"></a>        <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_find_candles</span><span class="p">(</span><span class="n">source</span><span class="p">),</span>
 </span><span id="__span-0-538"><a id="__codelineno-0-538" name="__codelineno-0-538"></a>        <span class="n">index</span> <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_index</span><span class="p">,</span>
@@ -5916,8 +5916,8 @@ It's true if exactly or more than. Period will be period -1</p>
 <span class="normal"><a href="#__codelineno-0-550">550</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-541"><a id="__codelineno-0-541" name="__codelineno-0-541"></a><span class="k">def</span><span class="w"> </span><span class="nf">reading_period</span><span class="p">(</span>
 </span><span id="__span-0-542"><a id="__codelineno-0-542" name="__codelineno-0-542"></a>    <span class="bp">self</span><span class="p">,</span> <span class="n">period</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="n">Source</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 </span><span id="__span-0-543"><a id="__codelineno-0-543" name="__codelineno-0-543"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-</span><span id="__span-0-544"><a id="__codelineno-0-544" name="__codelineno-0-544"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Will return True if the given indicator goes back as far as amount,</span>
-</span><span id="__span-0-545"><a id="__codelineno-0-545" name="__codelineno-0-545"></a><span class="sd">    It&#39;s true if exactly or more than. Period will be period -1&quot;&quot;&quot;</span>
+</span><span id="__span-0-544"><a id="__codelineno-0-544" name="__codelineno-0-544"></a><span class="w">    </span><span class="sd">"""Will return True if the given indicator goes back as far as amount,</span>
+</span><span id="__span-0-545"><a id="__codelineno-0-545" name="__codelineno-0-545"></a><span class="sd">    It's true if exactly or more than. Period will be period -1"""</span>
 </span><span id="__span-0-546"><a id="__codelineno-0-546" name="__codelineno-0-546"></a>    <span class="k">return</span> <span class="n">reading_period</span><span class="p">(</span>
 </span><span id="__span-0-547"><a id="__codelineno-0-547" name="__codelineno-0-547"></a>        <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_find_candles</span><span class="p">(</span><span class="n">source</span><span class="p">),</span>
 </span><span id="__span-0-548"><a id="__codelineno-0-548" name="__codelineno-0-548"></a>        <span class="n">period</span><span class="p">,</span>
@@ -5951,7 +5951,7 @@ It's true if exactly or more than. Period will be period -1</p>
 <span class="normal"><a href="#__codelineno-0-604">604</a></span>
 <span class="normal"><a href="#__codelineno-0-605">605</a></span>
 <span class="normal"><a href="#__codelineno-0-606">606</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-603"><a id="__codelineno-0-603" name="__codelineno-0-603"></a><span class="k">def</span><span class="w"> </span><span class="nf">recalculate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="__span-0-604"><a id="__codelineno-0-604" name="__codelineno-0-604"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Re-calculate this indicator value for all Candles&quot;&quot;&quot;</span>
+</span><span id="__span-0-604"><a id="__codelineno-0-604" name="__codelineno-0-604"></a><span class="w">    </span><span class="sd">"""Re-calculate this indicator value for all Candles"""</span>
 </span><span id="__span-0-605"><a id="__codelineno-0-605" name="__codelineno-0-605"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">purge</span><span class="p">()</span>
 </span><span id="__span-0-606"><a id="__codelineno-0-606" name="__codelineno-0-606"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
@@ -6058,7 +6058,7 @@ the indicator is used.</p>
 <span class="normal"><a href="#__codelineno-0-270">270</a></span>
 <span class="normal"><a href="#__codelineno-0-271">271</a></span>
 <span class="normal"><a href="#__codelineno-0-272">272</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-254"><a id="__codelineno-0-254" name="__codelineno-0-254"></a><span class="k">def</span><span class="w"> </span><span class="nf">series</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Source</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Reading</span> <span class="o">|</span> <span class="n">V</span><span class="p">]:</span>
-</span><span id="__span-0-255"><a id="__codelineno-0-255" name="__codelineno-0-255"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="__span-0-255"><a id="__codelineno-0-255" name="__codelineno-0-255"></a><span class="w">    </span><span class="sd">"""</span>
 </span><span id="__span-0-256"><a id="__codelineno-0-256" name="__codelineno-0-256"></a><span class="sd">    Retrieve the indicator readings for within the candles as a list.</span>
 </span><span id="__span-0-257"><a id="__codelineno-0-257" name="__codelineno-0-257"></a>
 </span><span id="__span-0-258"><a id="__codelineno-0-258" name="__codelineno-0-258"></a><span class="sd">    This method collects the readings of a specified indicator for all candles</span>
@@ -6074,7 +6074,7 @@ the indicator is used.</p>
 </span><span id="__span-0-268"><a id="__codelineno-0-268" name="__codelineno-0-268"></a><span class="sd">                                   each candle. The values may be floats,</span>
 </span><span id="__span-0-269"><a id="__codelineno-0-269" name="__codelineno-0-269"></a><span class="sd">                                   dictionaries (for complex indicators),</span>
 </span><span id="__span-0-270"><a id="__codelineno-0-270" name="__codelineno-0-270"></a><span class="sd">                                   or `None` if no reading is available.</span>
-</span><span id="__span-0-271"><a id="__codelineno-0-271" name="__codelineno-0-271"></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-271"><a id="__codelineno-0-271" name="__codelineno-0-271"></a><span class="sd">    """</span>
 </span><span id="__span-0-272"><a id="__codelineno-0-272" name="__codelineno-0-272"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_series</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
 </span></code></pre></div></td></tr></table></div>
             </details>
@@ -6103,8 +6103,8 @@ the indicator is used.</p>
               <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-200">200</a></span>
 <span class="normal"><a href="#__codelineno-0-201">201</a></span>
 <span class="normal"><a href="#__codelineno-0-202">202</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-200"><a id="__codelineno-0-200" name="__codelineno-0-200"></a><span class="k">def</span><span class="w"> </span><span class="nf">src</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">T</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">V</span> <span class="o">|</span> <span class="n">T</span><span class="p">:</span>
-</span><span id="__span-0-201"><a id="__codelineno-0-201" name="__codelineno-0-201"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Current reading for this indicator&#39;s configured ``source``.&quot;&quot;&quot;</span>
-</span><span id="__span-0-202"><a id="__codelineno-0-202" name="__codelineno-0-202"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reading</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;close&quot;</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">)</span>
+</span><span id="__span-0-201"><a id="__codelineno-0-201" name="__codelineno-0-201"></a><span class="w">    </span><span class="sd">"""Current reading for this indicator's configured ``source``."""</span>
+</span><span id="__span-0-202"><a id="__codelineno-0-202" name="__codelineno-0-202"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reading</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"source"</span><span class="p">,</span> <span class="s2">"close"</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
             </details>
     </div>
@@ -6147,7 +6147,7 @@ the indicator is used.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 20, 2026 19:41:46 UTC">July 20, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 22, 2026 12:03:02 UTC">August 22, 2026</span>
   </span>
 
     
@@ -6244,7 +6244,7 @@ the indicator is used.</p>
       <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.footer"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"default": ["latest"], "provider": "mike"}}</script>
     
     
-      <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
