@@ -36,7 +36,7 @@ class ADX(Indicator[dict[str, float | None]]):
             self.period_signal = self.period
 
     def _minimum_candles(self) -> int:
-        return self.period * 2
+        return self.period + self.period_signal
 
     def _initialise(self):
         self.sub_atr = self.add_child(ATR(period=self.period))
