@@ -137,7 +137,7 @@ Beyond configuration, Hexital provides a unified reading API — `reading()`, `s
 
 It also supports incremental calculation. Each appended candle triggers the calculation of the latest candle across all associated indicators, ensuring your strategy remains up-to-date with the latest market data. This feature is particularly useful for live trading scenarios, where timely calculations are critical.
 
-[Hexital.minimum_candles()][hexital.core.hexital.Hexital.minimum_candles], [has_sufficient_candles()][hexital.core.hexital.Hexital.has_sufficient_candles], and [minimum_candles_by_indicator()][hexital.core.hexital.Hexital.minimum_candles_by_indicator] help you prefetch and validate history across one or more timeframes. See [Hexital in depth — History and readiness](guides/hexital-indepth.md#history-and-readiness).
+[Hexital.minimum_candles()][hexital.core.hexital.Hexital.minimum_candles], [has_sufficient_candles()][hexital.core.hexital.Hexital.has_sufficient_candles], [minimum_candles_by_indicator()][hexital.core.hexital.Hexital.minimum_candles_by_indicator], and [minimum_candles_by_timeframe()][hexital.core.hexital.Hexital.minimum_candles_by_timeframe] help you prefetch and validate history across one or more timeframes. See [Hexital in depth — History and readiness](guides/hexital-indepth.md#history-and-readiness).
 
 **Example:**
 

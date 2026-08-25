@@ -16,6 +16,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added ``Hexital.has_sufficient_candles(timeframe=None)`` — checks every indicator's ``is_ready``; pass a timeframe to limit the check to indicators on that series
 - Added ``Indicator.minimum_candles_by_indicator()`` — ``minimum_candles`` for each child indicator, keyed by name
 - Added ``Hexital.minimum_candles_by_indicator(indicator=None)`` — ``minimum_candles`` per registered indicator; pass an indicator to limit the result to that one
+- Added ``Hexital.minimum_candles_by_timeframe()`` — largest ``minimum_candles`` per candle series, keyed by timeframe label (e.g. ``{"DEFAULT": 15, "T10": 10}``)
 - Fixed **ADX** ``minimum_candles`` when ``period_signal`` differs from ``period`` (now ``period + period_signal``)
 
 ---

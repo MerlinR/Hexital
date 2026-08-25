@@ -193,6 +193,17 @@ strategy.minimum_candles_by_indicator(strategy.indicator("RSI_14"))
 # {"RSI_14": 15}
 ```
 
+### `minimum_candles_by_timeframe()`
+
+[Hexital.minimum_candles_by_timeframe()][hexital.core.hexital.Hexital.minimum_candles_by_timeframe] returns the largest `minimum_candles` on each candle series — a prefetch plan when the strategy spans multiple timeframes:
+
+```python
+strategy.minimum_candles_by_timeframe()
+# {"DEFAULT": 15, "T10": 10}
+```
+
+Keys match the labels passed to `minimum_candles(timeframe=...)` and `has_sufficient_candles(timeframe=...)`.
+
 ### Live-feed example
 
 ```python

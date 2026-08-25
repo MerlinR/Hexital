@@ -360,6 +360,21 @@ class Hexital:
             return {indicator.name: indicator.minimum_candles}
         return {}
 
+    def minimum_candles_by_timeframe(self) -> dict[str, int]:
+        """Largest ``minimum_candles`` per candle series, keyed by timeframe label."""
+        by_timeframe: dict[str, int] = {}
+        for indicator in self._indicators.values():
+            key = self._timeframe_label(indicator.candle_manager.timeframe)
+            by_timeframe[key] = max(
+                by_timeframe.get(key, 0), indicator.minimum_candles
+            )
+        return by_timeframe
+
+    def _timeframe_label(self, timeframe: timedelta | None) -> str:
+        if timeframe is None:
+            return NullTimeFrame.name
+        return timedelta_to_str(timeframe) or NullTimeFrame.name
+
     def _indicators_by_timeframe(
         self, timeframe: TimeFramesSource | None
     ) -> list[Indicator]:

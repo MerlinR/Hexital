@@ -733,6 +733,10 @@ class TestMinimumCandles:
         assert strategy.minimum_candles(timeframe="DEFAULT") == 15
         assert strategy.minimum_candles(timeframe="T10") == 10
         assert strategy.minimum_candles() == 15
+        assert strategy.minimum_candles_by_timeframe() == {
+            "DEFAULT": 15,
+            "T10": 10,
+        }
 
     def test_has_sufficient_candles_multi_timeframe(self, candles):
         strategy = Hexital(
@@ -764,3 +768,11 @@ class TestMinimumCandles:
         assert strategy.minimum_candles_by_indicator(ema) == {"EMA_10": 10}
         assert strategy.minimum_candles_by_indicator(rsi) == {"RSI_14": 15}
         assert strategy.minimum_candles_by_indicator(EMA(period=5)) == {}
+
+    def test_minimum_candles_by_timeframe_single_series(self, minimal_candles: list[Candle]):
+        strategy = Hexital(
+            name="test",
+            candles=minimal_candles,
+            indicators=[EMA(period=10), RSI(period=14)],
+        )
+        assert strategy.minimum_candles_by_timeframe() == {"DEFAULT": 15}
