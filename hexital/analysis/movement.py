@@ -784,6 +784,9 @@ def highestbar(
             high = current
             distance = offset
 
+    if high is None:
+        return None
+
     return distance
 
 
@@ -826,7 +829,17 @@ def lowestbar(
             low = current
             distance = offset
 
+    if low is None:
+        return None
+
     return distance
+
+
+def _cross_window(count: int, lookback: int, index: int) -> tuple[int, int]:
+    """Inclusive index range ``[start, end]`` for cross-family lookbacks."""
+    end = absindex(index, count)
+    start = max(0, end - lookback)
+    return start, end
 
 
 def cross(
@@ -855,21 +868,19 @@ def cross(
     candles_ = _retrieve_candles(candles, indicator, indicator_cmp)
 
     if isinstance(candles_, list):
-        idx = absindex(index, len(candles_)) + 1
-        length = idx - (length + 1)
-        return _cross(
-            candles_[length:idx], indicator, candles_[length:idx], indicator_cmp
-        )
+        start, end = _cross_window(len(candles_), length, index)
+        return _cross(candles_, indicator, candles_, indicator_cmp, start, end)
 
     if isinstance(candles_, tuple):
         candle_set = _timeframe_pair_candles(candles_)
-        idx = absindex(index, len(candle_set[0])) + 1
-        length = idx - (length + 1)
+        start, end = _cross_window(len(candle_set[0]), length, index)
         return _cross(
-            candle_set[0][length:idx],
+            candle_set[0],
             indicator,
-            candle_set[1][length:idx],
+            candle_set[1],
             indicator_cmp,
+            start,
+            end,
         )
 
     return False
@@ -880,15 +891,21 @@ def _cross(
     indicator: str,
     candles_two: list[Candle],
     indicator_cmp: str,
+    start: int = 0,
+    end: int | None = None,
 ) -> bool:
     if len(candles) != len(candles_two):
         return False
 
-    for i in range(len(candles) - 1, -1, -1):
+    end = len(candles) - 1 if end is None else end
+
+    for i in range(end, start - 1, -1):
         reading_one = reading_by_index(candles, indicator, i)
         reading_two = reading_by_index(candles_two, indicator_cmp, i)
-        prev_one = reading_by_index(candles, indicator, i - 1)
-        prev_two = reading_by_index(candles_two, indicator_cmp, i - 1)
+        prev_one = reading_by_index(candles, indicator, i - 1) if i > 0 else None
+        prev_two = (
+            reading_by_index(candles_two, indicator_cmp, i - 1) if i > 0 else None
+        )
 
         if not all(
             isinstance(r, (float, int))
@@ -931,22 +948,19 @@ def crossover(
     candles_ = _retrieve_candles(candles, indicator, indicator_cmp)
 
     if isinstance(candles_, list):
-        idx = absindex(index, len(candles_)) + 1
-        length = idx - (length + 1)
-        return _crossover(
-            candles_[length:idx], indicator, candles_[length:idx], indicator_cmp
-        )
+        start, end = _cross_window(len(candles_), length, index)
+        return _crossover(candles_, indicator, candles_, indicator_cmp, start, end)
 
     if isinstance(candles_, tuple):
         candle_set = _timeframe_pair_candles(candles_)
-        idx = absindex(index, len(candle_set[0])) + 1
-        length = idx - (length + 1)
-
+        start, end = _cross_window(len(candle_set[0]), length, index)
         return _crossover(
-            candle_set[0][length:idx],
+            candle_set[0],
             indicator,
-            candle_set[1][length:idx],
+            candle_set[1],
             indicator_cmp,
+            start,
+            end,
         )
 
     return False
@@ -957,15 +971,21 @@ def _crossover(
     indicator: str,
     candles_two: list[Candle],
     indicator_cmp: str,
+    start: int = 0,
+    end: int | None = None,
 ) -> bool:
     if len(candles) != len(candles_two):
         return False
 
-    for i in range(len(candles) - 1, -1, -1):
+    end = len(candles) - 1 if end is None else end
+
+    for i in range(end, start - 1, -1):
         reading_one = reading_by_index(candles, indicator, i)
         reading_two = reading_by_index(candles_two, indicator_cmp, i)
-        prev_one = reading_by_index(candles, indicator, i - 1)
-        prev_two = reading_by_index(candles_two, indicator_cmp, i - 1)
+        prev_one = reading_by_index(candles, indicator, i - 1) if i > 0 else None
+        prev_two = (
+            reading_by_index(candles_two, indicator_cmp, i - 1) if i > 0 else None
+        )
 
         if not all(
             isinstance(r, (float, int))
@@ -1006,22 +1026,19 @@ def crossunder(
     candles_ = _retrieve_candles(candles, indicator, indicator_cmp)
 
     if isinstance(candles_, list):
-        idx = absindex(index, len(candles_)) + 1
-        length = idx - (length + 1)
-        return _crossunder(
-            candles_[length:idx], indicator, candles_[length:idx], indicator_cmp
-        )
+        start, end = _cross_window(len(candles_), length, index)
+        return _crossunder(candles_, indicator, candles_, indicator_cmp, start, end)
 
     if isinstance(candles_, tuple):
         candle_set = _timeframe_pair_candles(candles_)
-        idx = absindex(index, len(candle_set[0])) + 1
-        length = idx - (length + 1)
-
+        start, end = _cross_window(len(candle_set[0]), length, index)
         return _crossunder(
-            candle_set[0][length:idx],
+            candle_set[0],
             indicator,
-            candle_set[1][length:idx],
+            candle_set[1],
             indicator_cmp,
+            start,
+            end,
         )
 
     return False
@@ -1032,15 +1049,21 @@ def _crossunder(
     indicator: str,
     candles_two: list[Candle],
     indicator_cmp: str,
+    start: int = 0,
+    end: int | None = None,
 ) -> bool:
     if len(candles) != len(candles_two):
         return False
 
-    for i in range(len(candles) - 1, -1, -1):
+    end = len(candles) - 1 if end is None else end
+
+    for i in range(end, start - 1, -1):
         reading_one = reading_by_index(candles, indicator, i)
         reading_two = reading_by_index(candles_two, indicator_cmp, i)
-        prev_one = reading_by_index(candles, indicator, i - 1)
-        prev_two = reading_by_index(candles_two, indicator_cmp, i - 1)
+        prev_one = reading_by_index(candles, indicator, i - 1) if i > 0 else None
+        prev_two = (
+            reading_by_index(candles_two, indicator_cmp, i - 1) if i > 0 else None
+        )
 
         if not all(
             isinstance(r, (float, int))

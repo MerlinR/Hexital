@@ -486,6 +486,20 @@ class TestHighestBar:
     def test_highestbar_missing(self):
         assert movement.highestbar([], "close") is None
 
+    def test_highestbar_all_none_readings(self):
+        candles = [
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"X": None},
+            )
+            for _ in range(5)
+        ]
+        assert movement.highestbar(candles, "X") is None
+
     def test_highestbar_partial(self, indicator_candles_partial):
         assert movement.highestbar(indicator_candles_partial, "EMA_10") == 0
 
@@ -505,6 +519,20 @@ class TestLowestBar:
 
     def test_lowestbars_missing(self):
         assert movement.lowestbar([], "open") is None
+
+    def test_lowestbars_all_none_readings(self):
+        candles = [
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"X": None},
+            )
+            for _ in range(5)
+        ]
+        assert movement.lowestbar(candles, "X") is None
 
     def test_lowestbars_partial(self, indicator_candles_partial):
         assert movement.lowestbar(indicator_candles_partial, "EMA_10") == 2
@@ -544,13 +572,40 @@ class TestCross:
     def test_cross_datatype_hexital_multi_long(self, multi_timeframe):
         assert movement.cross(multi_timeframe, "EMA", "EMA_T5", length=80) is True
 
+    def test_cross_window_uses_bar_before_window(self):
+        candles = [
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"a": 20, "b": 10},
+            ),
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"a": 5, "b": 15},
+            ),
+        ]
+        assert movement.cross(candles, "a", "b", length=1, index=0) is False
+        assert movement.cross(candles, "a", "b", length=1, index=1) is True
+        assert movement.crossover(candles, "a", "b", length=1, index=0) is False
+        assert movement.crossunder(candles, "a", "b", length=1, index=1) is True
+
 
 class TestCrossOver:
     def test_crossover(self, indicator_candles):
         assert movement.crossover(indicator_candles, "EMA_10", "close") is True
 
     def test_crossover_two(self, indicator_candles):
-        assert movement.crossover(indicator_candles, "EMA_10", "low") is False
+        assert (
+            movement.crossover(indicator_candles, "EMA_10", "low", length=1, index=1)
+            is False
+        )
 
     def test_crossover_no_candles(self):
         assert movement.crossover([], "EMA_10", "close") is False
@@ -591,7 +646,10 @@ class TestCrossUnder:
         assert movement.crossunder(indicator_candles, "close", "EMA_10") is True
 
     def test_crossunder_two(self, indicator_candles):
-        assert movement.crossunder(indicator_candles, "low", "EMA_10") is False
+        assert (
+            movement.crossunder(indicator_candles, "low", "EMA_10", length=1, index=1)
+            is False
+        )
 
     def test_crossunder_no_candles(self):
         assert movement.crossunder([], "close", "EMA_10") is False
