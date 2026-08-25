@@ -270,7 +270,7 @@ class CandleManager:
                 if appended_count > 1 and self._try_resample_multi_append(appended_count):
                     return
 
-        if mode == CalcMode.INSERT:
+        if mode in (CalcMode.INSERT, CalcMode.PREPEND):
             start_index = 0
         elif index is not None:
             start_index = index
@@ -384,7 +384,7 @@ class CandleManager:
                 return
 
             if (
-                mode != CalcMode.INSERT
+                mode not in (CalcMode.INSERT, CalcMode.PREPEND)
                 and candle.timeframe == tf
                 and prev_candle.timeframe == tf
             ):
