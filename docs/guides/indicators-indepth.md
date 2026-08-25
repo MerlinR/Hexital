@@ -48,6 +48,55 @@ print(strategy.reading("MACD_12_26_9:signal"))
 
 ---
 
+## History and readiness
+
+Before running `calculate()` — especially when prefetching from an exchange — you may need to know how many bars an indicator requires.
+
+### `minimum_candles`
+
+[Indicator.minimum_candles][hexital.core.indicator.Indicator.minimum_candles] is the **minimum bar count** before this indicator can produce a reading. The count is **1-based**: `15` means the **15th candle** is the first that may have a non-`None` value after `calculate()`.
+
+| Value | Meaning |
+|-------|---------|
+| `period` (default) | Indicators with a `period` field inherit `minimum_candles == period` |
+| `0` | Unknown — no `period` and no override (e.g. [Amorph][hexital.indicators.amorph.Amorph] without prefetch hints) |
+| Custom | Override `_minimum_candles()` when warm-up differs from `period` (see [Custom indicators](custom-indicator.md#minimum-candles)) |
+
+Composites aggregate over children — `minimum_candles` is the **maximum** of the indicator's own value and every child's `minimum_candles` (e.g. [MACD][hexital.indicators.macd.MACD], [BBANDS][hexital.indicators.bbands.BBANDS]).
+
+```python
+ema = EMA(period=10, candles=candles)
+ema.minimum_candles   # 10
+
+rsi = RSI(period=14, candles=candles)
+rsi.minimum_candles   # 15  (period + 1)
+```
+
+### `is_ready`
+
+[Indicator.is_ready][hexital.core.indicator.Indicator.is_ready] is `True` when loaded history meets `minimum_candles`:
+
+```python
+if ema.is_ready:
+    ema.calculate()
+```
+
+When `minimum_candles` is `0`, `is_ready` is `True` as long as there is at least one candle.
+
+### Child breakdown
+
+[Indicator.minimum_candles_by_indicator()][hexital.core.indicator.Indicator.minimum_candles_by_indicator] returns each **child** indicator's `minimum_candles`, keyed by name — useful when inspecting composite warm-up:
+
+```python
+macd = MACD(candles=candles)
+macd.minimum_candles_by_indicator()
+# e.g. {"MACD_12_26_9_fast": 12, "MACD_12_26_9_slow": 26, ...}
+```
+
+Strategy-level prefetch and multi-timeframe checks live on [Hexital](hexital-indepth.md#history-and-readiness).
+
+---
+
 ## Chaining
 
 Hexital allows you to chain indicators together seamlessly. In a chain, the output of one indicator can serve as the input for another, enabling automated, indefinite chaining of calculations.

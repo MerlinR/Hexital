@@ -14,6 +14,7 @@ Need hidden state between candles?        → Recipe B (`add_state()`)
 Need other indicators as inputs?          → Recipe C (child indicators)
 Just math on candle fields?               → Recipe A (single method)
 One-off pattern without a full class?     → Amorph
+Warm-up differs from `period`?            → [Minimum candles](#minimum-candles) (`_minimum_candles()`)
 ```
 
 | Pattern | Built-in example | Child helpers |
@@ -140,6 +141,59 @@ class MyOscillator(Indicator[float | None]):
 
 ---
 
+## Minimum candles
+
+Declare how many bars your indicator needs before it can produce a reading. Hexital uses this for exchange prefetch and readiness checks.
+
+### Default behaviour
+
+If your indicator has a `period` field, [Indicator][hexital.core.indicator.Indicator] defaults to `minimum_candles == period`. You do **not** need an override for a plain SMA-style indicator.
+
+Composites that use `add_child()` inherit aggregation automatically — `minimum_candles` becomes the max of your override (or default) and every child's `minimum_candles`.
+
+### When to override `_minimum_candles()`
+
+Override when warm-up differs from `period`:
+
+```python
+def _minimum_candles(self) -> int:
+    return self.period + 1   # e.g. RSI-style: first reading one bar after period window
+```
+
+Other common cases:
+
+| Case | Example | Override |
+|------|---------|----------|
+| Single-bar transform | HLA, HLCA | `return 1` |
+| Needs prior bar | TR, PivotPoints | `return 2` |
+| Composite formula | MACD, TEMA | Custom sum/product of child periods |
+| No history field | OBV, VWAP | Explicit constant |
+
+```python
+@dataclass(kw_only=True)
+class MyOscillator(Indicator[float | None]):
+    period: int = 14
+
+    def _minimum_candles(self) -> int:
+        return self.period + 1
+
+    def _calculate_reading(self, index: int) -> float | None:
+        ...
+```
+
+### Composites
+
+You usually **do not** override on composites — child `minimum_candles` values are aggregated. Override only when the parent's first valid reading lags behind children:
+
+```python
+def _minimum_candles(self) -> int:
+    return 0   # rely on max(child.minimum_candles ...)
+```
+
+Inspect children with `minimum_candles_by_indicator()` while developing.
+
+---
+
 ## Recipe C — Composite indicator
 
 Use when your indicator **depends on other indicators** (moving averages, standard deviation, ATR, etc.).
@@ -207,6 +261,23 @@ from hexital.analysis.patterns import doji
 pattern = Amorph(analysis=doji)
 pattern.append(candles)
 pattern.calculate()
+```
+
+### Prefetch hints on Amorph
+
+Amorph resolves `minimum_candles` from analysis kwargs:
+
+| Kwarg | Used for |
+|-------|----------|
+| `minimum_candles` | Explicit prefetch count (not forwarded to the analysis function) |
+| `period` | Warm-up when the wrapped function accepts `period` |
+| `lookback` | Window size; combined with `period` as `period + lookback - 1` when both are set |
+
+For [doji][hexital.analysis.patterns.doji] without kwargs, `minimum_candles` is `0` — pass `minimum_candles=11` (or wrap with a function that accepts `period`) when prefetching matters.
+
+```python
+Amorph(analysis=doji, minimum_candles=11)
+Amorph(analysis=doji, lookback=20, minimum_candles=30)
 ```
 
 ---

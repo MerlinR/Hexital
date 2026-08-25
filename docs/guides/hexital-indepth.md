@@ -155,6 +155,66 @@ Movement analysis uses these internally when you pass a `Hexital` instance and t
 
 ---
 
+## History and readiness
+
+Use these when prefetching exchange history or validating a strategy before `calculate()`.
+
+### `minimum_candles(timeframe=None)`
+
+[Hexital.minimum_candles()][hexital.core.hexital.Hexital.minimum_candles] returns the **largest** `minimum_candles` among indicators on a candle series. Counts are in **that series' bar units**.
+
+```python
+strategy.minimum_candles()                    # all indicators
+strategy.minimum_candles(timeframe="DEFAULT") # default stream only
+strategy.minimum_candles(timeframe="T10")     # 10-minute indicators only
+```
+
+!!! warning "Multi-timeframe strategies"
+    `minimum_candles()` without a `timeframe` takes the max across indicators, but each value may refer to a **different** bar size. For prefetch, pass the timeframe you are fetching — do not treat the unfiltered max as a single exchange request size.
+
+### `has_sufficient_candles(timeframe=None)`
+
+[Hexital.has_sufficient_candles()][hexital.core.hexital.Hexital.has_sufficient_candles] is `True` when every matching indicator's [is_ready][hexital.core.indicator.Indicator.is_ready] is `True` on its own stream:
+
+```python
+if strategy.has_sufficient_candles(timeframe="T10"):
+    strategy.calculate()
+```
+
+### `minimum_candles_by_indicator(indicator=None)`
+
+[Hexital.minimum_candles_by_indicator()][hexital.core.hexital.Hexital.minimum_candles_by_indicator] returns a name → count map for debugging prefetch:
+
+```python
+strategy.minimum_candles_by_indicator()
+# {"EMA_10": 10, "RSI_14": 15}
+
+strategy.minimum_candles_by_indicator(strategy.indicator("RSI_14"))
+# {"RSI_14": 15}
+```
+
+### Live-feed example
+
+```python
+from hexital import EMA, RSI, Candle, Hexital
+
+strategy = Hexital("live", [], [EMA(period=10), RSI(period=14)])
+
+# Prefetch default-stream bars (RSI drives the count: 15)
+need = strategy.minimum_candles(timeframe="DEFAULT")
+history = fetch_candles(count=need)
+
+for candle in history:
+    strategy.append(candle)
+
+if strategy.has_sufficient_candles():
+    strategy.calculate()
+```
+
+Per-indicator details and custom overrides: [Indicators — History and readiness](indicators-indepth.md#history-and-readiness), [Custom indicators — Minimum candles](custom-indicator.md#minimum-candles).
+
+---
+
 ## Global options
 
 Settings on `Hexital` are broadcast to indicators where not overridden:
