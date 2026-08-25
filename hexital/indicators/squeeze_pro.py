@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
 from ..core.indicator import Indicator
-from ..exceptions import InvalidIndicator
+from ..exceptions import InvalidIndicatorParameter
 from .bbands import BBANDS
 from .ema import EMA
 from .kc import KC
@@ -42,12 +42,12 @@ class SqueezePro(Indicator[dict[str, float | int | None]]):
     def _validate_fields(self):
         self.mamode = self.mamode.lower()
         if self.mamode not in {"sma", "ema"}:
-            raise InvalidIndicator(
+            raise InvalidIndicatorParameter(
                 f"Invalid mamode {self.mamode!r}; expected 'sma' or 'ema'"
             )
 
         if not (self.kc_scalar_wide > self.kc_scalar_normal > self.kc_scalar_narrow):
-            raise InvalidIndicator(
+            raise InvalidIndicatorParameter(
                 "kc_scalar_wide must be greater than kc_scalar_normal, "
                 "and kc_scalar_normal must be greater than kc_scalar_narrow"
             )

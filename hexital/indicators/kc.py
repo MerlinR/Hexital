@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
 from ..core.indicator import Indicator, Source
-from ..exceptions import InvalidIndicator
+from ..exceptions import InvalidIndicatorParameter
 from .ema import EMA
 from .sma import SMA
 from .tr import TR
@@ -42,7 +42,7 @@ class KC(Indicator[dict[str, float | None]]):
     def _validate_fields(self):
         self.mamode = self.mamode.lower()
         if self.mamode not in {"ema", "sma"}:
-            raise InvalidIndicator(
+            raise InvalidIndicatorParameter(
                 f"Invalid mamode {self.mamode!r}; expected 'ema' or 'sma'"
             )
 

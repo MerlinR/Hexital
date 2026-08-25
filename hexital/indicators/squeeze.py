@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 
 from ..core.indicator import Indicator
-from ..exceptions import InvalidIndicator
+from ..exceptions import InvalidIndicatorParameter
 from .bbands import BBANDS
 from .ema import EMA
 from .kc import KC
@@ -50,7 +50,7 @@ class Squeeze(Indicator[dict[str, float | int | None]]):
 
         self.mamode = self.mamode.lower()
         if self.mamode not in {"sma", "ema"}:
-            raise InvalidIndicator(
+            raise InvalidIndicatorParameter(
                 f"Invalid mamode {self.mamode!r}; expected 'sma' or 'ema'"
             )
 
