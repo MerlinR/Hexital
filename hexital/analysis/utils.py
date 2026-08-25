@@ -3,6 +3,12 @@ from ..utils.candles import get_readings_period
 from ..utils.indexing import absindex
 
 
+def lookback_range(index: int, lookback: int) -> range:
+    """Return candle indices from ``index - lookback + 1`` through ``index``."""
+    start = max(0, index - lookback + 1)
+    return range(start, index + 1)
+
+
 def highest(
     candles: list[Candle], name: str, length: int, index: int | None = None
 ) -> float | None:
@@ -71,7 +77,9 @@ def shadow_upper_avg(
     start_index = max(0, index - length)
     actual_length = index - start_index
 
-    return sum(candles[i].shadow_upper for i in range(start_index, index)) / actual_length
+    return (
+        sum(candles[i].shadow_upper for i in range(start_index, index)) / actual_length
+    )
 
 
 def shadow_lower_avg(
@@ -85,7 +93,9 @@ def shadow_lower_avg(
     start_index = max(0, index - length)
     actual_length = index - start_index
 
-    return sum(candles[i].shadow_lower for i in range(start_index, index)) / actual_length
+    return (
+        sum(candles[i].shadow_lower for i in range(start_index, index)) / actual_length
+    )
 
 
 def realbody_gapup(candle: Candle, candle_two: Candle) -> bool:
@@ -237,7 +247,9 @@ def candle_near(
     return _high_low_percentage(candles, index=index, length=length, percentage=0.2)
 
 
-def candle_far(candles: list[Candle], index: int | None = None, length: int = 5) -> float:
+def candle_far(
+    candles: list[Candle], index: int | None = None, length: int = 5
+) -> float:
     """when measuring distance between parts of candles or width of gaps
     far means ">= 60% of the average of the 5 previous candles' high-low range
 

@@ -27,3 +27,37 @@ def test_doji_candle(doji_candle):
 
 def test_doji_candle_lookback(doji_candle):
     assert patterns.doji(doji_candle, lookback=2) is True
+
+
+def test_doji_lookback_honours_index():
+    from datetime import datetime, timedelta
+
+    base = datetime(2026, 1, 1)
+    candles = []
+    for index in range(20):
+        if index == 18:
+            candles.append(
+                Candle(
+                    open=100,
+                    high=100.4,
+                    low=99.6,
+                    close=100.01,
+                    volume=1,
+                    timestamp=base + timedelta(minutes=index),
+                )
+            )
+        else:
+            candles.append(
+                Candle(
+                    open=100,
+                    high=120,
+                    low=80,
+                    close=110,
+                    volume=1,
+                    timestamp=base + timedelta(minutes=index),
+                )
+            )
+
+    assert patterns.doji(candles, index=18) is True
+    assert patterns.doji(candles, lookback=3, index=5) is False
+    assert patterns.doji(candles, lookback=3, index=18) is True

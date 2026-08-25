@@ -27,7 +27,7 @@ def doji(
     if lookback is None:
         return _doji(candles, index_)
 
-    return any(_doji(candles, i) for i in range(len(candles) - lookback, len(candles)))
+    return any(_doji(candles, i) for i in utils.lookback_range(index_, lookback))
 
 
 def _doji(candles: list[Candle], index: int):
@@ -61,9 +61,7 @@ def dojistar(
     if lookback is None:
         return _dojistar(candles, index_)
 
-    return any(
-        _dojistar(candles, i) for i in range(len(candles) - lookback, len(candles))
-    )
+    return any(_dojistar(candles, i) for i in utils.lookback_range(index_, lookback))
 
 
 def _dojistar(candles: list[Candle], index: int):
@@ -105,7 +103,7 @@ def hammer(
     if lookback is None:
         return _hammer(candles, index_)
 
-    return any(_hammer(candles, i) for i in range(len(candles) - lookback, len(candles)))
+    return any(_hammer(candles, i) for i in utils.lookback_range(index_, lookback))
 
 
 def _hammer(candles: list[Candle], index: int):
@@ -146,7 +144,7 @@ def inverted_hammer(
         return _inverted_hammer(candles, index_)
 
     return any(
-        _inverted_hammer(candles, i) for i in range(len(candles) - lookback, len(candles))
+        _inverted_hammer(candles, i) for i in utils.lookback_range(index_, lookback)
     )
 
 
