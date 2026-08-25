@@ -411,6 +411,7 @@ class Candle:
             self.high = max(self.high, candle.high)
             self.low = min(self.low, candle.low)
             self.close = candle.close
+            self.reset_candle()
             return
 
         if self.timeframe and (

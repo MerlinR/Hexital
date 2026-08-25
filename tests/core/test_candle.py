@@ -681,3 +681,21 @@ class TestCandleMerge:
             main_candle.timestamp == datetime(2023, 10, 3, 9, 0, 30)
             and main_candle.close == 12536.019
         )
+
+    def test_candle_merge_without_timestamp_clears_readings(self):
+        main_candle = Candle(
+            open=1,
+            high=2,
+            low=1,
+            close=2,
+            volume=1,
+            indicators={"EMA_10": 1.5},
+            sub_indicators={"EMA_10_data": {"sum": 10.0}},
+        )
+        incoming = Candle(open=1, high=3, low=1, close=3, volume=2, timestamp=None)
+
+        main_candle.merge(incoming)
+
+        assert main_candle.close == 3
+        assert main_candle.indicators == {}
+        assert main_candle.sub_indicators == {}
