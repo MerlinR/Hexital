@@ -6,9 +6,16 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ---
 
-## 4.0.2
+## 4.0.3
 
 *Release Date: TBD*
+
+
+---
+
+## 4.0.2
+
+*Release Date: 25/08/26*
 
 - Fixed division-by-zero crashes on flat or zero-denominator data in **STOCH**, **ADX**, **RSI**, and **CMO**
 - Fixed timeframe **prepend** resampling creating duplicate bars when merging finer candles into an existing resampled series
