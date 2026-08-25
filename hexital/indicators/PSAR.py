@@ -21,6 +21,8 @@ class PSAR(Indicator[dict[str, float | int | None]]):
     acc_factor: float = 0.02
     max_af: float = 0.2
 
+    def _minimum_candles(self) -> int:
+        return 2
 
     def _initialise(self):
         self._state = self.add_state(name=f"{self.name}_state")

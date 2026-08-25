@@ -35,6 +35,9 @@ class UO(Indicator[float | None]):
     def _name_parts(self) -> list[str]:
         return ["fast", "medium", "slow"]
 
+    def _minimum_candles(self) -> int:
+        return self.slow
+
     def _initialise(self):
         self._state = self.add_state()
 

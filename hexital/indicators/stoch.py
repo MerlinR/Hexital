@@ -42,6 +42,9 @@ class STOCH(Indicator[dict[str, float | None]]):
     def _name_parts(self) -> list[str]:
         return ["period", "slow_period", "smoothing_k", "source"]
 
+    def _minimum_candles(self) -> int:
+        return self.period + self.smoothing_k + self.slow_period - 2
+
     def _initialise(self):
         self._state = self.add_state()
         self.sub_k = self._state.managed.add_child_after(

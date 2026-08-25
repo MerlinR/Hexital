@@ -315,6 +315,16 @@ class Hexital:
             for indicator in self._indicators.values():
                 indicator.calculate()
 
+    @property
+    def required_candles(self) -> int:
+        """Minimum candle history to prefetch for all registered indicators.
+
+        Matches the largest ``minimum_candles`` across the strategy.
+        """
+        if not self._indicators:
+            return 0
+        return max(indicator.minimum_candles for indicator in self._indicators.values())
+
     def calculate_index(
         self, name: str | None = None, index: int = -1, end_index: int | None = None
     ):

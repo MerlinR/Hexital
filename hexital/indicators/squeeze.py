@@ -43,6 +43,9 @@ class Squeeze(Indicator[dict[str, float | int | None]]):
     def _name_parts(self) -> list[str]:
         return ["bb_length", "kc_length", "mamode", "mom_length", "mom_smooth"]
 
+    def _minimum_candles(self) -> int:
+        return max(self.bb_length, self.kc_length, self.mom_length + self.mom_smooth - 2)
+
     def _validate_fields(self):
         if self.period is not None:
             self.bb_length = self.period

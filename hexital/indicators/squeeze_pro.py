@@ -39,6 +39,9 @@ class SqueezePro(Indicator[dict[str, float | int | None]]):
             "kc_scalar_narrow",
         ]
 
+    def _minimum_candles(self) -> int:
+        return max(self.bb_length, self.kc_length, self.mom_length + self.mom_smooth - 2)
+
     def _validate_fields(self):
         self.mamode = self.mamode.lower()
         if self.mamode not in {"sma", "ema"}:

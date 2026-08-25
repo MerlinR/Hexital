@@ -81,6 +81,14 @@ class Amorph(Indicator):
         else:
             self.name = self.name.replace(NESTED_DELI, "-")
 
+    def _minimum_candles(self) -> int:
+        kwargs = self._analysis_kwargs
+        if "period" in kwargs:
+            return kwargs["period"]
+        if "lookback" in kwargs:
+            return kwargs["lookback"]
+        return super()._minimum_candles()
+
     def _calculate_reading(self, index: int) -> float | dict | None:
         return self._analysis_method(
             candles=self.candles, index=index, **self._analysis_kwargs

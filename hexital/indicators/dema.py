@@ -26,6 +26,9 @@ class DEMA(Indicator[float | None]):
     period: int = 10
     source: Source = "close"
 
+    def _minimum_candles(self) -> int:
+        return (self.period * 2) - 2
+
     def _initialise(self):
         self.sub_ema = self.add_child(EMA(source=self.source, period=self.period))
         self.sub_ema2 = self.sub_ema.add_child_after(

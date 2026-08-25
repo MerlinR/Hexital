@@ -18,6 +18,9 @@ class TR(Indicator[float | None]):
 
     _name: str = field(init=False, default="TR")
 
+    def _minimum_candles(self) -> int:
+        return 2
+
     def _calculate_reading(self, index: int) -> float | None:
         if index > 0:
             candle = self.candles[index]

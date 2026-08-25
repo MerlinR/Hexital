@@ -12,6 +12,9 @@ class HLCA(Indicator[float]):
 
     _name: str = field(init=False, default="HLCA")
 
+    def _minimum_candles(self) -> int:
+        return 1
+
     def _calculate_reading(self, index: int) -> float:
         candle = self.candles[index]
         return (candle.high + candle.low + candle.close) / 3

@@ -21,6 +21,9 @@ class PivotPoints(Indicator[dict[str, float | None]]):
 
     _name: str = field(init=False, default="PP")
 
+    def _minimum_candles(self) -> int:
+        return 2
+
     def _calculate_reading(self, index: int) -> dict[str, float | None]:
         pivot_points: dict[str, float | None] = {
             "S1": None,

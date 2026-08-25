@@ -34,6 +34,9 @@ class TRIX(Indicator[dict[str, float | None]]):
     def _name_parts(self) -> list[str]:
         return ["period", "signal_period", "source"]
 
+    def _minimum_candles(self) -> int:
+        return (self.period * 3 - 2) + self.signal_period - 1
+
     def _initialise(self):
         self._trix = self.add_state(name=f"{self.name}_trix")
 

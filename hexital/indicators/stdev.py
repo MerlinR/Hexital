@@ -26,6 +26,9 @@ class STDEV(Indicator[float | None]):
     period: int = 30
     source: Source = "close"
 
+    def _minimum_candles(self) -> int:
+        return self.period + 1
+
     def _initialise(self):
         self._state = self.add_state()
 

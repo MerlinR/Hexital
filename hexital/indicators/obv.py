@@ -19,6 +19,9 @@ class OBV(Indicator[float]):
 
     _name: str = field(init=False, default="OBV")
 
+    def _minimum_candles(self) -> int:
+        return 1
+
     def _calculate_reading(self, index: int) -> float:
         candle = self.candles[index]
 

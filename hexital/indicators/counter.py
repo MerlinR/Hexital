@@ -23,6 +23,9 @@ class Counter(Indicator[int]):
     source: Source
     count_value: Any = True
 
+    def _minimum_candles(self) -> int:
+        return 1
+
     def _calculate_reading(self, index: int) -> int:
         count = self.prev_reading(default=0)
         reading = self.src(default=count)

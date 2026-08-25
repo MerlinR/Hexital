@@ -316,6 +316,29 @@ class Indicator(Generic[V], ABC):
             self._initialise()
             self._initialised = True
 
+    @property
+    def minimum_candles(self) -> int:
+        """Minimum candle count before this indicator can produce a reading.
+
+        For example, ``15`` means the 15th candle is the first that may have a
+        non-``None`` reading after ``calculate()``. Returns ``0`` when unknown.
+        """
+        self.check_initialised()
+        return self._aggregate_minimum_candles()
+
+    def _aggregate_minimum_candles(self) -> int:
+        own = self._minimum_candles()
+        if not self.children:
+            return own
+        return max(own, *(child.minimum_candles for child in self.children.values()))
+
+    def _minimum_candles(self) -> int:
+        """Override to declare the minimum candle count before a reading exists."""
+        period = getattr(self, "period", None)
+        if period is not None:
+            return period
+        return 0
+
     def calculate(self):
         """Calculate the TA values, will calculate for all the Candles,
         where this indicator is missing"""

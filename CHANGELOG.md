@@ -6,10 +6,12 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ---
 
-## 4.0.3
+## 4.1.0
 
 *Release Date: TBD*
 
+- Added ``Indicator.minimum_candles`` — minimum candle count before a reading (e.g. ``15`` means the 15th candle)
+- Added ``Hexital.required_candles`` — largest ``minimum_candles`` across registered indicators, for exchange history prefetch
 
 ---
 

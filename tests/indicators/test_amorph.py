@@ -65,6 +65,16 @@ def test_amorph_custom(candles):
     assert test.reading("fake_pattern") is not None
 
 
+def test_amorph_minimum_candles_from_period(candles):
+    test = Amorph(analysis=fake_pattern, candles=candles, period=10)
+    assert test.minimum_candles == 10
+
+
+def test_amorph_minimum_candles_without_period(candles):
+    test = Amorph(analysis=patterns.doji, candles=candles)
+    assert test.minimum_candles == 0
+
+
 def test_amorph_settings_roundtrip(candles):
     original = Amorph(analysis=patterns.doji, candles=candles, lookback=20)
     original.calculate()

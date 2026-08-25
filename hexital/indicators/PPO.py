@@ -34,6 +34,9 @@ class PPO(Indicator[dict[str, float | None]]):
         if self.slow_period < self.fast_period:
             self.fast_period, self.slow_period = self.slow_period, self.fast_period
 
+    def _minimum_candles(self) -> int:
+        return self.slow_period + self.signal_period - 1
+
     def _initialise(self):
         self._ppo = self.add_state(name=f"{self.name}_ppo")
 

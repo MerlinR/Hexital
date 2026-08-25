@@ -35,6 +35,9 @@ class Ichimoku(Indicator[dict[str, float | None]]):
     def _name_parts(self) -> list[str]:
         return ["tenkan", "kijun", "senkou"]
 
+    def _minimum_candles(self) -> int:
+        return self.senkou
+
     def _initialise(self):
         self._shifted = self.add_state(name=f"{self.name}_shifted")
 

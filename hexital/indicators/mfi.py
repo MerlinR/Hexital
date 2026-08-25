@@ -25,6 +25,9 @@ class MFI(Indicator[float | None]):
     period: int = 14
     source: Source = "close"
 
+    def _minimum_candles(self) -> int:
+        return self.period + 1
+
     def _initialise(self):
         self.sub_hlca = self.add_child(HLCA())
         self._state = self.add_state()

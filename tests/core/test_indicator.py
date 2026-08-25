@@ -8,6 +8,9 @@ from hexital.candlesticks.heikinashi import HeikinAshi
 from hexital.core.indicator import ChildWhen, Indicator, Managed
 from hexital.exceptions import InvalidCandlestickType, InvalidIndicator
 from hexital.indicators.amorph import Amorph
+from hexital.indicators.ema import EMA
+from hexital.indicators.macd import MACD
+from hexital.indicators.rsi import RSI
 from hexital.utils import timeframe
 
 
@@ -16,6 +19,9 @@ class FakeIndicator(Indicator):
     _name: str = field(init=False, default="Fake")
     period: int = 10
     source: str = "close"
+
+    def _minimum_candles(self) -> int:
+        return self.period
 
     def _calculate_reading(self, index: int) -> float | dict | None:
         return 100.0
@@ -454,3 +460,48 @@ class TestIndicatorNaming:
 
         hlca = HLCA()
         assert SMA(period=10, source=hlca).name == "SMA_10_HLCA"
+
+
+class TestMinimumCandles:
+    def test_primitive_period(self):
+        assert EMA(period=10).minimum_candles == 10
+
+    def test_period_plus_one_indicators(self):
+        assert RSI(period=14).minimum_candles == 15
+
+    def test_composite_macd(self):
+        assert MACD(fast_period=12, slow_period=26, signal_period=9).minimum_candles == 34
+
+    def test_fake_indicator_period(self):
+        assert FakeIndicator(period=10).minimum_candles == 10
+
+    def test_reading_on_expected_candle(self):
+        base = datetime(2024, 1, 1, 9, 0)
+        candles = [
+            Candle(
+                open=10 + i,
+                high=11 + i,
+                low=9 + i,
+                close=10 + i,
+                volume=100,
+                timestamp=base + timedelta(minutes=i),
+            )
+            for i in range(15)
+        ]
+        ema = EMA(candles=candles, period=5)
+        ema.calculate()
+
+        assert ema.minimum_candles == 5
+        assert ema.series()[4] is not None
+        assert ema.series()[:4] == [None, None, None, None]
+
+
+def test_hexital_required_candles(minimal_candles: list[Candle]):
+    from hexital.core.hexital import Hexital
+
+    strategy = Hexital(
+        name="test",
+        candles=minimal_candles,
+        indicators=[EMA(period=10), RSI(period=14)],
+    )
+    assert strategy.required_candles == 15

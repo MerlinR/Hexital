@@ -44,6 +44,9 @@ class VWAP(Indicator[float]):
     def _initialise(self):
         self._state = self.add_state()
 
+    def _minimum_candles(self) -> int:
+        return 1
+
     def _calculate_reading(self, index: int) -> float:
         candle = self.candles[index]
         if not candle.timestamp:
