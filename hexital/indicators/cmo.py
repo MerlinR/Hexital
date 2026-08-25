@@ -58,6 +58,11 @@ class CMO(Indicator[float | None]):
 
         self._state.update(gain=gains, loss=losses)
 
-        if gains is not None and losses is not None:
-            return ((gains - losses) / (gains + losses)) * 100
-        return None
+        if gains is None or losses is None:
+            return None
+
+        momentum = gains + losses
+        if momentum == 0:
+            return 0.0
+
+        return ((gains - losses) / momentum) * 100

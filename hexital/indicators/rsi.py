@@ -55,7 +55,10 @@ class RSI(Indicator[float | None]):
 
         self._state.update(gain=gains, loss=losses)
 
-        if gains is not None and losses is not None:
-            return 100.0 - (100.0 / (1.0 + (gains / losses)))
+        if gains is None or losses is None:
+            return None
 
-        return None
+        if losses == 0:
+            return 100.0 if gains > 0 else None
+
+        return 100.0 - (100.0 / (1.0 + (gains / losses)))

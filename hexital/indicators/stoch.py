@@ -68,8 +68,17 @@ class STOCH(Indicator[dict[str, float | None]]):
 
         lowest = movement.lowest(self.candles, "low", self.period, index)
         highest = movement.highest(self.candles, "high", self.period, index)
+        reading = self.src()
 
-        stoch = ((self.src() - lowest) / (highest - lowest)) * 100
+        if (
+            lowest is None
+            or highest is None
+            or reading is None
+            or highest == lowest
+        ):
+            return {"stoch": None, "k": None, "d": None}
+
+        stoch = ((reading - lowest) / (highest - lowest)) * 100
 
         self._state.set({"stoch": stoch})
         k = self.sub_k.reading()

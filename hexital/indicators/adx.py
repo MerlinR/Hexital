@@ -79,9 +79,9 @@ class ADX(Indicator[dict[str, float | None]]):
 
         self._state.set({"positive": dm_plus, "negative": dm_neg})
 
-        atr_: float = self.sub_atr.reading()
+        atr_ = self.sub_atr.reading()
 
-        if atr_ is None or not self.sub_pos.exists():
+        if not atr_ or not self.sub_pos.exists():
             return {"ADX": None, "DM_Plus": None, "DM_Neg": None}
 
         mod = self.multiplier / atr_
@@ -89,11 +89,15 @@ class ADX(Indicator[dict[str, float | None]]):
         adx_positive = mod * self.sub_pos.reading()
         adx_negative = mod * self.sub_neg.reading()
 
-        dx = (
-            self.multiplier
-            * abs(adx_positive - adx_negative)
-            / (adx_positive + adx_negative)
-        )
+        di_sum = adx_positive + adx_negative
+        if di_sum == 0:
+            dx = 0.0
+        else:
+            dx = (
+                self.multiplier
+                * abs(adx_positive - adx_negative)
+                / di_sum
+            )
 
         self._state.set({"positive": dm_plus, "negative": dm_neg, "dx": dx})
         self.dx.calculate_index(index)

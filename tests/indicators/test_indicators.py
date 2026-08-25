@@ -1,7 +1,9 @@
+from datetime import datetime, timedelta
 from random import Random
 
 import pytest
-from hexital import exceptions, indicators
+
+from hexital import Candle, exceptions, indicators
 from hexital.utils.common import CalcMode
 
 from .indicator_testbase import IndicatorTestBase
@@ -392,3 +394,48 @@ class TestIndicators(IndicatorTestBase):
         test = indicators.ZScore(candles=candles)
         test.calculate()
         assert self.verify(test.series(), expected_zscore)
+
+
+class TestZeroGuardIndicators:
+    @pytest.fixture
+    def flat_candles(self):
+        base = datetime(2026, 1, 1)
+        return [
+            Candle(
+                open=100,
+                high=100,
+                low=100,
+                close=100,
+                volume=1,
+                timestamp=base + timedelta(minutes=index),
+            )
+            for index in range(30)
+        ]
+
+    def test_stoch_flat_range(self, flat_candles):
+        test = indicators.STOCH(candles=flat_candles)
+        test.calculate()
+        assert all(
+            reading.get("stoch") is None
+            for reading in test.series()
+            if reading is not None
+        )
+
+    def test_adx_flat_range(self, flat_candles):
+        test = indicators.ADX(candles=flat_candles)
+        test.calculate()
+        assert all(
+            reading.get("ADX") is None
+            for reading in test.series()
+            if reading is not None
+        )
+
+    def test_rsi_flat_range(self, flat_candles):
+        test = indicators.RSI(candles=flat_candles)
+        test.calculate()
+        assert test.series()[-1] is None
+
+    def test_cmo_flat_range(self, flat_candles):
+        test = indicators.CMO(candles=flat_candles)
+        test.calculate()
+        assert test.series()[-1] == 0.0
