@@ -394,22 +394,80 @@ A full list is [available](candlesticks-catalogue.md)
 
 ## Serialisation
 
-The design of Hexital allows for very easy serialisation, this is due to the way the readings are managed. Rather than indicator reading's being stored within the [Indicator][hexital.core.indicator.Indicator] or [Hexital][hexital.core.hexital.Hexital], they are stored within the [Candles][hexital.core.candle.Candle] themselves.
+Readings live on [Candle][hexital.core.candle.Candle] objects (`indicators` and `sub_indicators` dicts), not inside indicator instances. Persist the **candle list** to keep OHLCV and calculated values together. Persist **strategy config** separately via [settings](guides/hexital-indepth.md#saving-and-restoring-a-strategy).
 
-This means you can simply store the [Candles][hexital.core.candle.Candle] list elsewhere, such as DataBase, CSV or some cache. Which will keep all the readings and calculation data required by the [Indicator][hexital.core.indicator.Indicator] or [Hexital][hexital.core.hexital.Hexital] stored alongside the given [Candles][hexital.core.candle.Candle].
+### JSON (recommended)
 
-### Serialisation
+Best when you need nested indicator readings (MACD, BBANDS, etc.) round-trip intact.
 
-Below is a basic example of saving the Candle's alongside it's readings and calculation data. Whereby we simply save it into a CSV file.
+```python
+import json
 
-```python linenums="1"
-TODO
+from hexital import Candle, EMA, Hexital
+
+strategy = Hexital("demo", candles, [EMA(period=10)])
+strategy.calculate()
+
+# Save candles + readings
+records = [c.as_dict(readings=True) for c in strategy.candles()]
+with open("candles.json", "w") as f:
+    json.dump(records, f, default=str)
+
+# Restore — readings come back on each candle
+with open("candles.json") as f:
+    records = json.load(f)
+
+restored_candles = Candle.from_dicts(records)
+strategy = Hexital("demo", restored_candles, [EMA(period=10)])
+# Readings already on candles; call calculate() only if you need to fill gaps
+print(strategy.reading("EMA_10"))
 ```
 
-### Deserialisation
+Save strategy configuration the same way as [Hexital.settings](guides/hexital-indepth.md#saving-and-restoring-a-strategy) (indicator list, timeframes, `candle_life`, etc.) — that JSON does **not** include candle history.
 
-Deserialise is a simply process of reusing the given data to regenerate the Candle's.
+### CSV / database
 
-```python linenums="1"
-TODO
+Flat CSV suits OHLCV-only storage. Indicator readings are dicts — store them as a JSON column, or use JSON files instead.
+
+```python
+import json
+
+import pandas as pd
+
+from hexital import Candle
+
+records = [c.as_dict(readings=True) for c in candles]
+df = pd.DataFrame(records)
+
+# Serialize nested dict columns for CSV/SQL
+for col in ("indicators", "sub_indicators"):
+    if col in df.columns:
+        df[col] = df[col].apply(json.dumps)
+
+df.to_csv("candles.csv", index=False)
+
+# Load
+loaded = pd.read_csv("candles.csv")
+rows = loaded.to_dict("records")
+for row in rows:
+    for col in ("indicators", "sub_indicators"):
+        if col in row and isinstance(row[col], str):
+            row[col] = json.loads(row[col])
+
+candles = Candle.from_dicts(rows)
 ```
+
+For a database, the same pattern applies: one row per candle, JSON/JSONB columns for `indicators` and `sub_indicators`, native types for OHLCV and `timestamp`.
+
+### Deserialisation without recalculating
+
+If every bar already has readings attached, you can query immediately:
+
+```python
+strategy = Hexital("demo", Candle.from_dicts(records), [EMA(period=10)])
+print(strategy.reading("EMA_10"))  # from candle.indicators
+```
+
+Call `calculate()` when restoring partial history or after changing indicator parameters — it only fills missing slots.
+
+See [Readings on candles](guides/candles.md#readings-on-candles) for the `indicators` vs `sub_indicators` split.

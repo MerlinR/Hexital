@@ -43,6 +43,50 @@ print(ema.reading())
 
 ---
 
+## Live trading
+
+Hexital **does not fetch candles** — your exchange, websocket, or database layer delivers OHLCV. Hexital tells you **how much history you need**, accepts `append()` / `prepend()`, and keeps indicators incremental from there.
+
+Typical bootstrap:
+
+```python
+from hexital import EMA, RSI, Candle, Hexital
+
+strategy = Hexital("live", [], [EMA(period=10), RSI(period=14)])
+
+# 1. Your feed decides what to request (Hexital only advises bar counts)
+prefetch = strategy.minimum_candles_by_timeframe()
+# e.g. {"DEFAULT": 15}  → fetch 15 bars on your default stream
+
+history = fetch_from_your_exchange(count=prefetch["DEFAULT"])  # not Hexital
+
+# 2. Load history, then check readiness on Hexital's side
+for candle in history:
+    strategy.append(candle)
+
+if strategy.has_sufficient_candles():
+    strategy.calculate()
+
+# 3. Live loop — append recalculates automatically
+while True:
+    strategy.append(await next_candle_from_feed())
+    if strategy.exists("RSI_14"):  # valid latest reading
+        ...
+```
+
+| Step | Your code | Hexital |
+|------|-----------|---------|
+| How many bars to fetch? | Read `minimum_candles_by_timeframe()` | Per-series bar counts |
+| Enough loaded yet? | `has_sufficient_candles()` | Compares bar count to each indicator's `minimum_candles` |
+| First full calc | `calculate()` once after history | Fills missing readings |
+| Each new tick | `append(candle)` | Incremental update |
+
+Multi-timeframe strategies: fetch **each series separately** using the matching key from `minimum_candles_by_timeframe()` (e.g. `"DEFAULT"` vs `"T10"`). See [History and readiness](hexital-indepth.md#history-and-readiness).
+
+Persisting candles **with** indicator readings: [Serialisation](../features.md#serialisation) and [Readings on candles](candles.md#readings-on-candles).
+
+---
+
 ## Candles
 
 Every indicator works on [Candle][hexital.core.candle.Candle] objects. The minimum fields are `open`, `high`, `low`, `close`, and `volume`.
@@ -65,6 +109,7 @@ For every input format (lists, timestamps, Pandas, and more), see the [Candles g
 
 | Goal | Guide |
 |------|-------|
+| Live feed bootstrap (history + append) | [Live trading](#live-trading) above |
 | Run several indicators on one candle stream | [Hexital strategies](hexital-indepth.md) |
 | Typed indicator access (`HexitalCol`) | [Hexital strategies](hexital-indepth.md#indicatorcollection) |
 | Save and restore strategy config | [Hexital strategies](hexital-indepth.md#saving-and-restoring-a-strategy) |

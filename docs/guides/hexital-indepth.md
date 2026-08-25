@@ -206,14 +206,15 @@ Keys match the labels passed to `minimum_candles(timeframe=...)` and `has_suffic
 
 ### Live-feed example
 
+Hexital does not connect to an exchange — your feed fetches bars; Hexital validates and calculates:
+
 ```python
 from hexital import EMA, RSI, Candle, Hexital
 
 strategy = Hexital("live", [], [EMA(period=10), RSI(period=14)])
 
-# Prefetch default-stream bars (RSI drives the count: 15)
-need = strategy.minimum_candles(timeframe="DEFAULT")
-history = fetch_candles(count=need)
+prefetch = strategy.minimum_candles_by_timeframe()  # {"DEFAULT": 15}
+history = fetch_from_your_exchange(count=prefetch["DEFAULT"])
 
 for candle in history:
     strategy.append(candle)
@@ -221,6 +222,8 @@ for candle in history:
 if strategy.has_sufficient_candles():
     strategy.calculate()
 ```
+
+See [Quick Start — Live trading](quick-start.md#live-trading) for the full bootstrap loop.
 
 Per-indicator details and custom overrides: [Indicators — History and readiness](indicators-indepth.md#history-and-readiness), [Custom indicators — Minimum candles](custom-indicator.md#minimum-candles).
 

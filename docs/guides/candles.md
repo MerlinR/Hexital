@@ -91,7 +91,17 @@ Optional: `timestamp`, `timeframe` (bar-size label — see [Timeframes](#timefra
 
 === "From CSV"
 
-    [TODO](https://github.com/MerlinR/Hexital/issues/29)
+    OHLCV-only CSV:
+
+    ```python
+    import pandas as pd
+    from hexital import Candle
+
+    df = pd.read_csv("ohlcv.csv", parse_dates=["timestamp"])
+    candles = Candle.from_dicts(df.to_dict("records"))
+    ```
+
+    To persist **indicator readings** with candles, use JSON columns or a JSON file — see [Serialisation](../features.md#serialisation) and [Readings on candles](#readings-on-candles) below.
 
 ---
 
@@ -195,6 +205,18 @@ candle.as_dict(readings=True)
 That split tells you **what is strategy-facing** vs **what is internal** without inferring from names alone.
 
 Lookup helpers ([reading_by_candle][hexital.utils.candles.reading_by_candle], `strategy.reading()`) search both dicts transparently. Use the dict keys directly when serialising or inspecting raw candle data.
+
+Export and reload:
+
+```python
+# Export
+records = [c.as_dict(readings=True) for c in strategy.candles()]
+
+# Reload
+candles = Candle.from_dicts(records)
+```
+
+Full JSON/CSV/database examples: [Serialisation](../features.md#serialisation).
 
 ### Shared readings by name
 
