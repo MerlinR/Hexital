@@ -6,6 +6,18 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 ---
 
+## 4.0.2
+
+*Release Date: TBD*
+
+- Fixed division-by-zero crashes on flat or zero-denominator data in **STOCH**, **ADX**, **RSI**, and **CMO**
+- Fixed timeframe **prepend** resampling creating duplicate bars when merging finer candles into an existing resampled series
+- Fixed `Candle.merge()` leaving stale indicator readings when merging candles without timestamps
+- Added pattern **lookback** scans ignoring `index`; lookback now checks the window ending at the requested bar (`doji`, `dojistar`, `hammer`, `inverted_hammer`)
+- Added `InvalidIndicatorParameter` for invalid indicator constructor settings; **JMA**, **KC**, **Squeeze**, and **Squeeze Pro** now use it in `_validate_fields()`
+
+---
+
 ## 4.0.1
 
 *Release Date: 20/07/26*
