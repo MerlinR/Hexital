@@ -326,6 +326,14 @@ class Indicator(Generic[V], ABC):
         self.check_initialised()
         return self._aggregate_minimum_candles()
 
+    @property
+    def is_ready(self) -> bool:
+        """Whether loaded candle history meets ``minimum_candles``."""
+        minimum = self.minimum_candles
+        if minimum == 0:
+            return bool(self.candles)
+        return len(self.candles) >= minimum
+
     def _aggregate_minimum_candles(self) -> int:
         own = self._minimum_candles()
         if not self.children:

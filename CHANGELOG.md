@@ -11,7 +11,9 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 *Release Date: TBD*
 
 - Added ``Indicator.minimum_candles`` — minimum candle count before a reading (e.g. ``15`` means the 15th candle)
-- Added ``Hexital.required_candles`` — largest ``minimum_candles`` across registered indicators, for exchange history prefetch
+- Added ``Indicator.is_ready`` — whether loaded history meets ``minimum_candles``
+- Added ``Hexital.minimum_candles(timeframe=None)`` — largest ``minimum_candles`` among indicators on a series; pass a timeframe when the strategy uses multiple candle series
+- Added ``Hexital.has_sufficient_candles(timeframe=None)`` — checks every indicator's ``is_ready``; pass a timeframe to limit the check to indicators on that series
 
 ---
 

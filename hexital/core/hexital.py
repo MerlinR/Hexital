@@ -315,15 +315,51 @@ class Hexital:
             for indicator in self._indicators.values():
                 indicator.calculate()
 
-    @property
-    def required_candles(self) -> int:
-        """Minimum candle history to prefetch for all registered indicators.
+    def minimum_candles(
+        self, timeframe: TimeFramesSource | None = None
+    ) -> int:
+        """Largest ``minimum_candles`` among indicators on a candle series.
 
-        Matches the largest ``minimum_candles`` across the strategy.
+        With no ``timeframe``, considers every registered indicator. With a
+        ``timeframe``, only indicators on that series (e.g. ``"T10"``,
+        ``"DEFAULT"``). Counts are in that series' bar units — pair with
+        ``has_sufficient_candles(timeframe=...)`` to check readiness.
+        """
+        indicators = self._indicators_by_timeframe(timeframe)
+        if not indicators:
+            return 0
+        return max(indicator.minimum_candles for indicator in indicators)
+
+    def has_sufficient_candles(
+        self, timeframe: TimeFramesSource | None = None
+    ) -> bool:
+        """Whether registered indicators have enough bars on their candle series.
+
+        With no ``timeframe``, checks every registered indicator. With a
+        ``timeframe``, checks only indicators on that series (e.g. ``"T10"``,
+        ``"DEFAULT"``).
         """
         if not self._indicators:
-            return 0
-        return max(indicator.minimum_candles for indicator in self._indicators.values())
+            return len(self.candles(timeframe)) > 0
+
+        indicators = self._indicators_by_timeframe(timeframe)
+        if not indicators:
+            return False
+
+        return all(indicator.is_ready for indicator in indicators)
+
+    def _indicators_by_timeframe(
+        self, timeframe: TimeFramesSource | None
+    ) -> list[Indicator]:
+        if timeframe is None:
+            return list(self._indicators.values())
+
+        target = convert_timeframe_to_timedelta(timeframe)
+        return [
+            indicator
+            for indicator in self._indicators.values()
+            if indicator.candle_manager.timeframe == target
+        ]
 
     def calculate_index(
         self, name: str | None = None, index: int = -1, end_index: int | None = None
