@@ -348,6 +348,18 @@ class Hexital:
 
         return all(indicator.is_ready for indicator in indicators)
 
+    def minimum_candles_by_indicator(
+        self, indicator: Indicator | None = None
+    ) -> dict[str, int]:
+        """``minimum_candles`` per registered indicator, keyed by name."""
+        if indicator is None:
+            return {
+                ind.name: ind.minimum_candles for ind in self._indicators.values()
+            }
+        if indicator.name in self._indicators:
+            return {indicator.name: indicator.minimum_candles}
+        return {}
+
     def _indicators_by_timeframe(
         self, timeframe: TimeFramesSource | None
     ) -> list[Indicator]:

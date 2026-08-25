@@ -346,6 +346,9 @@ class Indicator(Generic[V], ABC):
         if period is not None:
             return period
         return 0
+    
+    def minimum_candles_by_indicator(self) -> dict[str, int]:
+        return {indicator.name: indicator.minimum_candles for indicator in self.children.values()}
 
     def calculate(self):
         """Calculate the TA values, will calculate for all the Candles,

@@ -6,7 +6,6 @@ import pytest
 from hexital import Candle
 from hexital.analysis.patterns import doji
 from hexital.candlesticks.heikinashi import HeikinAshi
-from hexital.core.hexital import Hexital
 from hexital.core.indicator import ChildWhen, Indicator, Managed
 from hexital.exceptions import InvalidCandlestickType, InvalidIndicator
 from hexital.indicators import SMA
@@ -511,51 +510,3 @@ class TestMinimumCandles:
 
         assert ema.is_ready is False
 
-
-def test_hexital_minimum_candles(minimal_candles: list[Candle]):
-    strategy = Hexital(
-        name="test",
-        candles=minimal_candles,
-        indicators=[EMA(period=10), RSI(period=14)],
-    )
-    assert strategy.minimum_candles() == 15
-    assert strategy.has_sufficient_candles() is True
-
-
-def test_hexital_has_sufficient_candles(minimal_candles: list[Candle]):
-    short_candles = minimal_candles[:10]
-    strategy = Hexital(
-        name="test",
-        candles=short_candles,
-        indicators=[EMA(period=10), RSI(period=14)],
-    )
-
-    assert strategy.minimum_candles() == 15
-    assert strategy.has_sufficient_candles() is False
-
-
-def test_hexital_minimum_candles_multi_timeframe(candles):
-    strategy = Hexital(
-        name="test",
-        candles=candles[:50],
-        indicators=[EMA(period=10), SMA(period=10, timeframe="T10"), RSI(period=14)],
-    )
-
-    assert strategy.minimum_candles(timeframe="DEFAULT") == 15
-    assert strategy.minimum_candles(timeframe="T10") == 10
-    assert strategy.minimum_candles() == 15
-
-
-def test_hexital_has_sufficient_candles_multi_timeframe(candles):
-    strategy = Hexital(
-        name="test",
-        candles=candles[:50],
-        indicators=[EMA(period=10), SMA(period=10, timeframe="T10")],
-    )
-
-    assert strategy.indicator("EMA_10").is_ready is True
-    assert strategy.indicator("SMA_10_T10").is_ready is False
-    assert strategy.has_sufficient_candles() is False
-    assert strategy.has_sufficient_candles(timeframe="DEFAULT") is True
-    assert strategy.has_sufficient_candles(timeframe="T10") is False
-    assert strategy.has_sufficient_candles(timeframe="T5") is False

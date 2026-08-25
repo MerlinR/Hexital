@@ -13,7 +13,7 @@ from hexital.exceptions import (
     InvalidCandlestickType,
     InvalidIndicator,
 )
-from hexital.indicators import EMA, RMA, SMA, Amorph
+from hexital.indicators import EMA, RMA, RSI, SMA, Amorph
 from hexital.utils.candles import reading_by_candle
 from tests.core.test_indicator import FakeIndicator
 
@@ -696,3 +696,71 @@ class TestIndicatorCollection:
 
         with pytest.raises(TypeError, match="indicator_field"):
             customCol().collection_list()
+
+
+class TestMinimumCandles:
+    def test_minimum_candles(self, minimal_candles: list[Candle]):
+        strategy = Hexital(
+            name="test",
+            candles=minimal_candles,
+            indicators=[EMA(period=10), RSI(period=14)],
+        )
+        assert strategy.minimum_candles() == 15
+        assert strategy.has_sufficient_candles() is True
+
+    def test_has_sufficient_candles(self, minimal_candles: list[Candle]):
+        short_candles = minimal_candles[:10]
+        strategy = Hexital(
+            name="test",
+            candles=short_candles,
+            indicators=[EMA(period=10), RSI(period=14)],
+        )
+
+        assert strategy.minimum_candles() == 15
+        assert strategy.has_sufficient_candles() is False
+
+    def test_minimum_candles_multi_timeframe(self, candles):
+        strategy = Hexital(
+            name="test",
+            candles=candles[:50],
+            indicators=[
+                EMA(period=10),
+                SMA(period=10, timeframe="T10"),
+                RSI(period=14),
+            ],
+        )
+
+        assert strategy.minimum_candles(timeframe="DEFAULT") == 15
+        assert strategy.minimum_candles(timeframe="T10") == 10
+        assert strategy.minimum_candles() == 15
+
+    def test_has_sufficient_candles_multi_timeframe(self, candles):
+        strategy = Hexital(
+            name="test",
+            candles=candles[:50],
+            indicators=[EMA(period=10), SMA(period=10, timeframe="T10")],
+        )
+
+        assert strategy.indicator("EMA_10").is_ready is True
+        assert strategy.indicator("SMA_10_T10").is_ready is False
+        assert strategy.has_sufficient_candles() is False
+        assert strategy.has_sufficient_candles(timeframe="DEFAULT") is True
+        assert strategy.has_sufficient_candles(timeframe="T10") is False
+        assert strategy.has_sufficient_candles(timeframe="T5") is False
+
+    def test_minimum_candles_by_indicator(self, minimal_candles: list[Candle]):
+        ema = EMA(period=10)
+        rsi = RSI(period=14)
+        strategy = Hexital(
+            name="test",
+            candles=minimal_candles,
+            indicators=[ema, rsi],
+        )
+
+        assert strategy.minimum_candles_by_indicator() == {
+            "EMA_10": 10,
+            "RSI_14": 15,
+        }
+        assert strategy.minimum_candles_by_indicator(ema) == {"EMA_10": 10}
+        assert strategy.minimum_candles_by_indicator(rsi) == {"RSI_14": 15}
+        assert strategy.minimum_candles_by_indicator(EMA(period=5)) == {}
