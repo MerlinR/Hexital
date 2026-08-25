@@ -1,31 +1,29 @@
 class InvalidIndicator(Exception):
-    def __init__(self, message):
-        super().__init__(message)
+    pass
+
+
+class InvalidIndicatorParameter(Exception):
+    pass
 
 
 class InvalidAnalysis(Exception):
-    def __init__(self, message):
-        super().__init__(message)
+    pass
 
 
 class InvalidTimeFrame(Exception):
-    def __init__(self, message):
-        super().__init__(message)
+    pass
 
 
 class InvalidCandleOrder(Exception):
-    def __init__(self, message):
-        super().__init__(message)
+    pass
 
 
 class InvalidCandlestickType(Exception):
-    def __init__(self, message):
-        super().__init__(message)
+    pass
 
 
 class InvalidConfiguration(Exception):
-    def __init__(self, message):
-        super().__init__(message)
+    pass
 
 
 __all__ = [
@@ -34,5 +32,6 @@ __all__ = [
     "InvalidCandlestickType",
     "InvalidConfiguration",
     "InvalidIndicator",
+    "InvalidIndicatorParameter",
     "InvalidTimeFrame",
 ]

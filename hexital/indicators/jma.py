@@ -2,6 +2,7 @@ import math
 from dataclasses import dataclass, field
 
 from ..core.indicator import Indicator, Source
+from ..exceptions import InvalidIndicatorParameter
 
 
 @dataclass(kw_only=True)
@@ -42,6 +43,11 @@ class JMA(Indicator[float | None]):
         self._state = self.add_state()
 
     def _validate_fields(self):
+        if self.period < 2:
+            raise InvalidIndicatorParameter(
+                f"Invalid period {self.period!r}; JMA requires period >= 2"
+            )
+
         if self.phase > 100:
             self.phase = 100.0
         elif self.phase < -100:

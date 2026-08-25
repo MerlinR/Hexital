@@ -156,6 +156,10 @@ class TestIndicators(IndicatorTestBase):
         test.calculate()
         assert self.verify(test.series(), expected_jma_extra, acceptable_diff=9)
 
+    def test_jma_period_must_be_at_least_two(self, candles):
+        with pytest.raises(exceptions.InvalidIndicatorParameter, match="period >= 2"):
+            indicators.JMA(candles=candles, period=1)
+
     def test_kama(self, candles, expected_kama):
         test = indicators.KAMA(candles=candles)
         test.calculate()
