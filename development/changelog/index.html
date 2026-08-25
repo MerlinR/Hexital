@@ -4003,6 +4003,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#402" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.0.2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#401" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4246,6 +4257,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#402" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.0.2
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#401" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4477,6 +4499,18 @@
 <h1 id="changelog">Changelog</h1>
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning&nbsp;⧉</a>.</p>
+<hr />
+<h2 id="402">4.0.2</h2>
+<p><em>Release Date: TBD</em></p>
+<ul>
+<li>Fixed division-by-zero crashes on flat or zero-denominator data in <strong>STOCH</strong>, <strong>ADX</strong>, <strong>RSI</strong>, and <strong>CMO</strong></li>
+<li>Fixed timeframe <strong>prepend</strong> resampling creating duplicate bars when merging finer candles into an existing resampled series</li>
+<li>Fixed pattern <strong>lookback</strong> ignoring <code>index</code>; lookback now checks the window ending at the requested bar (<code>doji</code>, <code>dojistar</code>, <code>hammer</code>, <code>inverted_hammer</code>)</li>
+<li>Fixed <code>Candle.merge()</code> leaving stale indicator readings when merging candles without timestamps</li>
+<li>Fixed <strong>highestbar</strong> / <strong>lowestbar</strong> returning offset <code>0</code> when all readings in the window are <code>None</code></li>
+<li>Fixed <strong>cross</strong> / <strong>crossover</strong> / <strong>crossunder</strong> using the wrong prior bar when evaluating a lookback window</li>
+<li>Added <code>InvalidIndicatorParameter</code> for invalid indicator constructor settings; <strong>JMA</strong>, <strong>KC</strong>, <strong>Squeeze</strong>, and <strong>Squeeze Pro</strong> now use it in <code>_validate_fields()</code></li>
+</ul>
 <hr />
 <h2 id="401">4.0.1</h2>
 <p><em>Release Date: 20/07/26</em></p>
