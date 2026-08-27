@@ -713,7 +713,7 @@ wheels = [
 
 [[package]]
 name = "hexital"
-version = "4.0.2"
+version = "4.1.0"
 source = { editable = "." }
 
 [package.dev-dependencies]
