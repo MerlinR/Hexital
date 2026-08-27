@@ -687,6 +687,183 @@ class TestCrossUnder:
         assert movement.crossunder(multi_timeframe, "EMA", "EMA_T5", length=80) is True
 
 
+class TestCrossoverLevel:
+    @pytest.fixture(name="level_candles")
+    def fixture_level_candles(self):
+        return [
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"rsi": 35},
+            ),
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"rsi": 25},
+            ),
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"rsi": 32},
+            ),
+        ]
+
+    def test_crossover_level(self, level_candles):
+        assert movement.crossover_level(level_candles, "rsi", 30, index=2) is True
+        assert movement.crossover_level(level_candles, "rsi", 30, index=1) is False
+
+    def test_crossover_level_no_candles(self):
+        assert movement.crossover_level([], "rsi", 30) is False
+
+    def test_crossover_level_window(self, level_candles):
+        assert movement.crossover_level(level_candles, "rsi", 30, length=2, index=2) is True
+        assert movement.crossover_level(level_candles, "rsi", 30, length=1, index=0) is False
+
+    def test_crossover_level_strict_above(self):
+        candles = [
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"rsi": 29},
+            ),
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"rsi": 30},
+            ),
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"rsi": 31},
+            ),
+        ]
+        assert movement.crossover_level(candles, "rsi", 30, index=1) is False
+        assert movement.crossover_level(candles, "rsi", 30, index=2) is True
+
+    def test_crossover_level_skips_none_readings(self):
+        candles = [
+            Candle(open=100, high=120, low=90, close=110, volume=10),
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"rsi": 25},
+            ),
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"rsi": 32},
+            ),
+        ]
+        assert movement.crossover_level(candles, "rsi", 30, index=2) is True
+
+    def test_crossover_level_datatype_indicator(self, gen_indicator_candles):
+        assert movement.crossover_level(gen_indicator_candles, "EMA", 0) is False
+
+    def test_crossover_level_datatype_hexital(self, hexital_candles):
+        assert movement.crossover_level(hexital_candles, "EMA", 0) is False
+
+
+class TestCrossunderLevel:
+    @pytest.fixture(name="level_candles")
+    def fixture_level_candles(self):
+        return [
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"rsi": 35},
+            ),
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"rsi": 25},
+            ),
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"rsi": 32},
+            ),
+        ]
+
+    def test_crossunder_level(self, level_candles):
+        assert movement.crossunder_level(level_candles, "rsi", 30, index=1) is True
+        assert movement.crossunder_level(level_candles, "rsi", 30, index=0) is False
+
+    def test_crossunder_level_no_candles(self):
+        assert movement.crossunder_level([], "rsi", 30) is False
+
+    def test_crossunder_level_window(self, level_candles):
+        assert movement.crossunder_level(level_candles, "rsi", 30, length=2, index=1) is True
+
+    def test_crossunder_level_strict_below(self):
+        candles = [
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"rsi": 31},
+            ),
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"rsi": 30},
+            ),
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"rsi": 29},
+            ),
+        ]
+        assert movement.crossunder_level(candles, "rsi", 30, index=1) is False
+        assert movement.crossunder_level(candles, "rsi", 30, index=2) is True
+
+    def test_crossunder_level_datatype_indicator(self, gen_indicator_candles):
+        assert movement.crossunder_level(gen_indicator_candles, "EMA", 0) is False
+
+    def test_crossunder_level_datatype_hexital(self, hexital_candles):
+        assert movement.crossunder_level(hexital_candles, "EMA", 0) is False
+
+
 class TestFlipped:
     def test_flipped(self, indicator_candles):
         assert movement.flipped(indicator_candles, "dir") is False

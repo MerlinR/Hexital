@@ -86,6 +86,15 @@ pair = strategy.candle_pair("EMA", "EMA_T5")   # (ema_candles, ema_t5_candles)
 
 Movement functions that take two indicator names (`above`, `below`, `cross`, `crossover`, `crossunder`, etc.) use this resolution automatically when the first argument is a `Hexital` instance.
 
+To cross a **fixed threshold** (e.g. RSI through 30), use [crossover_level()][hexital.analysis.movement.crossover_level] or [crossunder_level()][hexital.analysis.movement.crossunder_level]:
+
+```python
+from hexital.analysis import crossover_level, crossunder_level
+
+crossover_level(strategy, "RSI_14", 30)   # prev <= 30 and current > 30
+crossunder_level(strategy, "RSI_14", 70)  # prev >= 70 and current < 70
+```
+
 Single-series functions (`rising`, `bars_since`, `highest`, etc.) take one indicator name and use [candles_for()][hexital.core.hexital.Hexital.candles_for] when given a `Hexital` instance.
 
 ---

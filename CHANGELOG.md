@@ -4,11 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+
+## 4.X.X
+
+*Release Date: TBD*
+
+- Added ``crossover_level()`` and ``crossunder_level()`` to [hexital.analysis][hexital.analysis] for threshold crosses on a single series
+
 ---
 
 ## 4.1.0
 
-*Release Date: TBD*
+*Release Date: 27/08/26*
 
 - Added Feature to get minimum Candles required for Indicators and Hexital.
     - Added ``Indicator.minimum_candles`` — minimum candle count before a reading (e.g. ``15`` means the 15th candle)
@@ -18,6 +26,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
     - Added ``Hexital.has_sufficient_candles(timeframe=None)`` — checks every indicator's ``is_ready``; pass a timeframe to limit the check to indicators on that series
     - Added ``Hexital.minimum_candles_by_indicator(indicator=None)`` — ``minimum_candles`` per registered indicator; pass an indicator to limit the result to that one
     - Added ``Hexital.minimum_candles_by_timeframe()`` — largest ``minimum_candles`` per candle series, keyed by timeframe label (e.g. ``{"DEFAULT": 15, "T10": 10}``)
+
 
 ---
 

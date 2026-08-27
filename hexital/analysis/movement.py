@@ -1076,6 +1076,88 @@ def _crossunder(
     return False
 
 
+def crossover_level(
+    candles: Indicator | Hexital | list[Candle],
+    indicator: str,
+    level: float | int,
+    length: int = 1,
+    index: int = -1,
+) -> bool:
+    """Crossover Level Analysis
+
+    Determines whether the `indicator` reading crossed **up through** a fixed
+    `level` within a specified range of candles. A crossover occurs when the
+    reading transitions from at or below `level` to above `level`.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The indicator series to evaluate.
+        level (float | int): The threshold level to cross.
+        length (int, optional): The number of candles to include in the range. Defaults to 1.
+        index (int, optional): The index to start the evaluation. Defaults to -1 (latest candle).
+
+    Returns:
+        bool: `True` if the reading crossed up through `level` within the range; otherwise `False`.
+    """
+    candle_set = _retrieve_candles(candles, indicator)
+    if not isinstance(candle_set, list) or not candle_set:
+        return False
+
+    start, end = _cross_window(len(candle_set), length, index)
+
+    for i in range(end, start - 1, -1):
+        reading = _scalar_reading(candle_set, indicator, i)
+        previous = _scalar_reading(candle_set, indicator, i - 1) if i > 0 else None
+
+        if reading is None or previous is None:
+            continue
+        if reading > level and previous <= level:
+            return True
+
+    return False
+
+
+def crossunder_level(
+    candles: Indicator | Hexital | list[Candle],
+    indicator: str,
+    level: float | int,
+    length: int = 1,
+    index: int = -1,
+) -> bool:
+    """Crossunder Level Analysis
+
+    Determines whether the `indicator` reading crossed **down through** a fixed
+    `level` within a specified range of candles. A crossunder occurs when the
+    reading transitions from at or above `level` to below `level`.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The indicator series to evaluate.
+        level (float | int): The threshold level to cross.
+        length (int, optional): The number of candles to include in the range. Defaults to 1.
+        index (int, optional): The index to start the evaluation. Defaults to -1 (latest candle).
+
+    Returns:
+        bool: `True` if the reading crossed down through `level` within the range; otherwise `False`.
+    """
+    candle_set = _retrieve_candles(candles, indicator)
+    if not isinstance(candle_set, list) or not candle_set:
+        return False
+
+    start, end = _cross_window(len(candle_set), length, index)
+
+    for i in range(end, start - 1, -1):
+        reading = _scalar_reading(candle_set, indicator, i)
+        previous = _scalar_reading(candle_set, indicator, i - 1) if i > 0 else None
+
+        if reading is None or previous is None:
+            continue
+        if reading < level and previous >= level:
+            return True
+
+    return False
+
+
 def flipped(
     candles: Indicator | Hexital | list[Candle],
     indicator: str,

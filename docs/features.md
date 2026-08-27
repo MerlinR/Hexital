@@ -310,6 +310,13 @@ from hexital.analysis.movement import crossover
 crossover(strategy, "EMA_short", "Supertrend_7", length=8)
 ```
 
+**RSI crossed above 30:**
+
+```python linenums="12"
+from hexital.analysis import crossover_level
+crossover_level(strategy, "RSI_14", 30)
+```
+
 !!! info "Analysis over Timeframes"
     Note that analysis such as crossover will work correctly when using them across multiple TimeFrames.
 
