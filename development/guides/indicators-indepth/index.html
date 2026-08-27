@@ -783,6 +783,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#history-and-readiness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        History and readiness
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="History and readiness">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minimum_candles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        minimum_candles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is_ready" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        is_ready
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#child-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Child breakdown
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#chaining" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4133,6 +4183,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#history-and-readiness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        History and readiness
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="History and readiness">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minimum_candles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        minimum_candles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#is_ready" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        is_ready
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#child-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Child breakdown
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#chaining" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4245,6 +4345,73 @@
 </tbody>
 </table>
 <hr />
+<h2 id="history-and-readiness">History and readiness</h2>
+<p>Before running <code>calculate()</code> — especially when prefetching from an exchange — you may need to know how many bars an indicator requires.</p>
+<h3 id="minimum_candles"><code>minimum_candles</code></h3>
+<p><a class="autorefs autorefs-internal" title="            minimum_candles
+
+
+  
+      property
+  " href="../../reference/hexital/core/indicator/#hexital.core.indicator.Indicator.minimum_candles">Indicator.minimum_candles</a> is the <strong>minimum bar count</strong> before this indicator can produce a reading. The count is <strong>1-based</strong>: <code>15</code> means the <strong>15th candle</strong> is the first that may have a non-<code>None</code> value after <code>calculate()</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>period</code> (default)</td>
+<td>Indicators with a <code>period</code> field inherit <code>minimum_candles == period</code></td>
+</tr>
+<tr>
+<td><code>0</code></td>
+<td>Unknown — no <code>period</code> and no override (e.g. <a class="autorefs autorefs-internal" title="            Amorph" href="../../reference/hexital/indicators/amorph/#hexital.indicators.amorph.Amorph">Amorph</a> without prefetch hints)</td>
+</tr>
+<tr>
+<td>Custom</td>
+<td>Override <code>_minimum_candles()</code> when warm-up differs from <code>period</code> (see <a href="../custom-indicator/#minimum-candles">Custom indicators</a>)</td>
+</tr>
+</tbody>
+</table>
+<p>Composites aggregate over children — <code>minimum_candles</code> is the <strong>maximum</strong> of the indicator's own value and every child's <code>minimum_candles</code> (e.g. <a class="autorefs autorefs-internal" title="            MACD
+
+
+  
+      dataclass
+  " href="../../reference/hexital/indicators/macd/#hexital.indicators.macd.MACD">MACD</a>, <a class="autorefs autorefs-internal" title="            BBANDS
+
+
+  
+      dataclass
+  " href="../../reference/hexital/indicators/bbands/#hexital.indicators.bbands.BBANDS">BBANDS</a>).</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">ema</span> <span class="o">=</span> <span class="n">EMA</span><span class="p">(</span><span class="n">period</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">candles</span><span class="o">=</span><span class="n">candles</span><span class="p">)</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">ema</span><span class="o">.</span><span class="n">minimum_candles</span>   <span class="c1"># 10</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">rsi</span> <span class="o">=</span> <span class="n">RSI</span><span class="p">(</span><span class="n">period</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">candles</span><span class="o">=</span><span class="n">candles</span><span class="p">)</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">rsi</span><span class="o">.</span><span class="n">minimum_candles</span>   <span class="c1"># 15  (period + 1)</span>
+</span></code></pre></div>
+<h3 id="is_ready"><code>is_ready</code></h3>
+<p><a class="autorefs autorefs-internal" title="            is_ready
+
+
+  
+      property
+  " href="../../reference/hexital/core/indicator/#hexital.core.indicator.Indicator.is_ready">Indicator.is_ready</a> is <code>True</code> when loaded history meets <code>minimum_candles</code>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">if</span> <span class="n">ema</span><span class="o">.</span><span class="n">is_ready</span><span class="p">:</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="n">ema</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
+</span></code></pre></div>
+<p>When <code>minimum_candles</code> is <code>0</code>, <code>is_ready</code> is <code>True</code> as long as there is at least one candle.</p>
+<h3 id="child-breakdown">Child breakdown</h3>
+<p>[Indicator.minimum_candles_by_indicator()][hexital.core.indicator.Indicator.minimum_candles_by_indicator] returns each <strong>child</strong> indicator's <code>minimum_candles</code>, keyed by name — useful when inspecting composite warm-up:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">macd</span> <span class="o">=</span> <span class="n">MACD</span><span class="p">(</span><span class="n">candles</span><span class="o">=</span><span class="n">candles</span><span class="p">)</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">macd</span><span class="o">.</span><span class="n">minimum_candles_by_indicator</span><span class="p">()</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># e.g. {"MACD_12_26_9_fast": 12, "MACD_12_26_9_slow": 26, ...}</span>
+</span></code></pre></div>
+<p>Strategy-level prefetch and multi-timeframe checks live on <a href="../hexital-indepth/#history-and-readiness">Hexital</a>.</p>
+<hr />
 <h2 id="chaining">Chaining</h2>
 <p>Hexital allows you to chain indicators together seamlessly. In a chain, the output of one indicator can serve as the input for another, enabling automated, indefinite chaining of calculations.</p>
 <p>This feature provides significant flexibility for creating custom indicators. For example, you can use an EMA to smooth the output of another indicator or incorporate indicators within other indicators to enhance their calculations.</p>
@@ -4275,7 +4442,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 10, 2026 09:23:46 UTC">July 10, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 25, 2026 14:19:53 UTC">August 25, 2026</span>
   </span>
 
     

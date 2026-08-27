@@ -632,6 +632,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#live-trading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live trading
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#candles" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4122,6 +4133,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#live-trading" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live trading
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#candles" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4196,12 +4218,72 @@
 <p>If you omit <code>name</code>, Hexital generates one from the indicator type and settings — e.g. <code>EMA_3</code> for <code>EMA(period=3)</code>. Use that name with <code>reading()</code>, <code>series()</code>, and analysis helpers. For nested dict outputs, use <code>:</code> — e.g. <code>MACD_12_26_9:signal</code>.</p>
 </div>
 <hr />
+<h2 id="live-trading">Live trading</h2>
+<p>Hexital <strong>does not fetch candles</strong> — your exchange, websocket, or database layer delivers OHLCV. Hexital tells you <strong>how much history you need</strong>, accepts <code>append()</code> / <code>prepend()</code>, and keeps indicators incremental from there.</p>
+<p>Typical bootstrap:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">EMA</span><span class="p">,</span> <span class="n">RSI</span><span class="p">,</span> <span class="n">Candle</span><span class="p">,</span> <span class="n">Hexital</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">strategy</span> <span class="o">=</span> <span class="n">Hexital</span><span class="p">(</span><span class="s2">"live"</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="n">EMA</span><span class="p">(</span><span class="n">period</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span> <span class="n">RSI</span><span class="p">(</span><span class="n">period</span><span class="o">=</span><span class="mi">14</span><span class="p">)])</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># 1. Your feed decides what to request (Hexital only advises bar counts)</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">prefetch</span> <span class="o">=</span> <span class="n">strategy</span><span class="o">.</span><span class="n">minimum_candles_by_timeframe</span><span class="p">()</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># e.g. {"DEFAULT": 15}  → fetch 15 bars on your default stream</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="n">history</span> <span class="o">=</span> <span class="n">fetch_from_your_exchange</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="n">prefetch</span><span class="p">[</span><span class="s2">"DEFAULT"</span><span class="p">])</span>  <span class="c1"># not Hexital</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="c1"># 2. Load history, then check readiness on Hexital's side</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="k">for</span> <span class="n">candle</span> <span class="ow">in</span> <span class="n">history</span><span class="p">:</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    <span class="n">strategy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candle</span><span class="p">)</span>
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
+</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="k">if</span> <span class="n">strategy</span><span class="o">.</span><span class="n">has_sufficient_candles</span><span class="p">():</span>
+</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    <span class="n">strategy</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
+</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>
+</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="c1"># 3. Live loop — append recalculates automatically</span>
+</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>    <span class="n">strategy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="k">await</span> <span class="n">next_candle_from_feed</span><span class="p">())</span>
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>    <span class="k">if</span> <span class="n">strategy</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s2">"RSI_14"</span><span class="p">):</span>  <span class="c1"># valid latest reading</span>
+</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>        <span class="o">...</span>
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Your code</th>
+<th>Hexital</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>How many bars to fetch?</td>
+<td>Read <code>minimum_candles_by_timeframe()</code></td>
+<td>Per-series bar counts</td>
+</tr>
+<tr>
+<td>Enough loaded yet?</td>
+<td><code>has_sufficient_candles()</code></td>
+<td>Compares bar count to each indicator's <code>minimum_candles</code></td>
+</tr>
+<tr>
+<td>First full calc</td>
+<td><code>calculate()</code> once after history</td>
+<td>Fills missing readings</td>
+</tr>
+<tr>
+<td>Each new tick</td>
+<td><code>append(candle)</code></td>
+<td>Incremental update</td>
+</tr>
+</tbody>
+</table>
+<p>Multi-timeframe strategies: fetch <strong>each series separately</strong> using the matching key from <code>minimum_candles_by_timeframe()</code> (e.g. <code>"DEFAULT"</code> vs <code>"T10"</code>). See <a href="../hexital-indepth/#history-and-readiness">History and readiness</a>.</p>
+<p>Persisting candles <strong>with</strong> indicator readings: <a href="../../features/#serialisation">Serialisation</a> and <a href="../candles/#readings-on-candles">Readings on candles</a>.</p>
+<hr />
 <h2 id="candles">Candles</h2>
 <p>Every indicator works on <a class="autorefs autorefs-internal" title="            Candle" href="../../reference/hexital/core/candle/#hexital.core.candle.Candle">Candle</a> objects. The minimum fields are <code>open</code>, <code>high</code>, <code>low</code>, <code>close</code>, and <code>volume</code>.</p>
 <p>The quickest path for bulk data is usually a list of dicts:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">candles</span> <span class="o">=</span> <span class="n">Candle</span><span class="o">.</span><span class="n">from_dicts</span><span class="p">([</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    <span class="p">{</span><span class="s2">"open"</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">"high"</span><span class="p">:</span> <span class="mf">1.2</span><span class="p">,</span> <span class="s2">"low"</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span> <span class="s2">"close"</span><span class="p">:</span> <span class="mf">1.1</span><span class="p">,</span> <span class="s2">"volume"</span><span class="p">:</span> <span class="mi">1000</span><span class="p">},</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="p">])</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">candles</span> <span class="o">=</span> <span class="n">Candle</span><span class="o">.</span><span class="n">from_dicts</span><span class="p">([</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>    <span class="p">{</span><span class="s2">"open"</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s2">"high"</span><span class="p">:</span> <span class="mf">1.2</span><span class="p">,</span> <span class="s2">"low"</span><span class="p">:</span> <span class="mf">0.9</span><span class="p">,</span> <span class="s2">"close"</span><span class="p">:</span> <span class="mf">1.1</span><span class="p">,</span> <span class="s2">"volume"</span><span class="p">:</span> <span class="mi">1000</span><span class="p">},</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="p">])</span>
 </span></code></pre></div>
 <p>You can also pass dicts or lists directly to <code>append()</code> — Hexital converts them for you.</p>
 <p>For every input format (lists, timestamps, Pandas, and more), see the <a href="../candles/">Candles guide</a>.</p>
@@ -4215,6 +4297,10 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>Live feed bootstrap (history + append)</td>
+<td><a href="#live-trading">Live trading</a> above</td>
+</tr>
 <tr>
 <td>Run several indicators on one candle stream</td>
 <td><a href="../hexital-indepth/">Hexital strategies</a></td>
@@ -4265,7 +4351,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 15, 2026 11:05:54 UTC">July 15, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 25, 2026 15:58:56 UTC">August 25, 2026</span>
   </span>
 
     

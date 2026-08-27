@@ -690,10 +690,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#serialisation_1" class="md-nav__link">
+  <a href="#json-recommended" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Serialisation
+        JSON (recommended)
       
     </span>
   </a>
@@ -701,10 +701,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#deserialisation" class="md-nav__link">
+  <a href="#csv-database" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Deserialisation
+        CSV / database
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deserialisation-without-recalculating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deserialisation without recalculating
       
     </span>
   </a>
@@ -4402,10 +4413,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#serialisation_1" class="md-nav__link">
+  <a href="#json-recommended" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Serialisation
+        JSON (recommended)
       
     </span>
   </a>
@@ -4413,10 +4424,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#deserialisation" class="md-nav__link">
+  <a href="#csv-database" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Deserialisation
+        CSV / database
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deserialisation-without-recalculating" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deserialisation without recalculating
       
     </span>
   </a>
@@ -4460,6 +4482,17 @@
       dataclass
   " href="../reference/hexital/core/indicator/#hexital.core.indicator.Indicator">Indicator</a> class. They process data from a list of <a href="./#candle">Candles</a>; when a new candle is added, the indicator automatically updates with the latest calculated reading.</p>
 <p>Each indicator is highly configurable, featuring options tailored to its specific purpose as well as general settings to enhance usability. This flexibility allows traders to fine-tune indicators for their unique requirements. Additionally, Hexital’s efficient incremental processing ensures minimal performance overhead, even when handling large datasets.</p>
+<p>Indicators expose <a class="autorefs autorefs-internal" title="            minimum_candles
+
+
+  
+      property
+  " href="../reference/hexital/core/indicator/#hexital.core.indicator.Indicator.minimum_candles">minimum_candles</a> and <a class="autorefs autorefs-internal" title="            is_ready
+
+
+  
+      property
+  " href="../reference/hexital/core/indicator/#hexital.core.indicator.Indicator.is_ready">is_ready</a> so you know how much history to prefetch before the first valid reading. See <a href="../guides/indicators-indepth/#history-and-readiness">Indicators in depth — History and readiness</a>.</p>
 <p>For a comprehensive overview of available indicators, configuration options, and examples, check out the <a href="../guides/indicators-indepth/">in-depth guide.</a></p>
 <p>A full list is <a href="../indicator-catalogue/">available</a></p>
 <h3 id="indicator-chaining">Indicator Chaining</h3>
@@ -4619,6 +4652,7 @@
 <p>One of Hexital’s key strengths is its ability to pass global configuration options to all the indicators it manages. This ensures consistency and reduces redundancy when working with large numbers of indicators or custom configurations. Additionally, the <code>Hexital</code> class allows for seamless integration of multiple timeframes, candlestick types, and chained indicators, making it highly versatile for a variety of trading use cases.</p>
 <p>Beyond configuration, Hexital provides a unified reading API — <code>reading()</code>, <code>series()</code>, <code>all_series()</code> — so you query any top-level indicator by name without hunting through indicator objects. For typed object access, use <a href="../guides/hexital-indepth/#indicatorcollection">HexitalCol</a> with <a href="../guides/hexital-indepth/#indicatorcollection">indicator_field()</a>.</p>
 <p>It also supports incremental calculation. Each appended candle triggers the calculation of the latest candle across all associated indicators, ensuring your strategy remains up-to-date with the latest market data. This feature is particularly useful for live trading scenarios, where timely calculations are critical.</p>
+<p><a class="autorefs autorefs-internal" title="            minimum_candles" href="../reference/hexital/core/hexital/#hexital.core.hexital.Hexital.minimum_candles">Hexital.minimum_candles()</a>, <a class="autorefs autorefs-internal" title="            has_sufficient_candles" href="../reference/hexital/core/hexital/#hexital.core.hexital.Hexital.has_sufficient_candles">has_sufficient_candles()</a>, <a class="autorefs autorefs-internal" title="            minimum_candles_by_indicator" href="../reference/hexital/core/hexital/#hexital.core.hexital.Hexital.minimum_candles_by_indicator">minimum_candles_by_indicator()</a>, and <a class="autorefs autorefs-internal" title="            minimum_candles_by_timeframe" href="../reference/hexital/core/hexital/#hexital.core.hexital.Hexital.minimum_candles_by_timeframe">minimum_candles_by_timeframe()</a> help you prefetch and validate history across one or more timeframes. See <a href="../guides/hexital-indepth/#history-and-readiness">Hexital in depth — History and readiness</a>.</p>
 <p><strong>Example:</strong></p>
 <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
 <span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
@@ -4886,26 +4920,67 @@
 <p>A full list is <a href="../candlesticks-catalogue/">available</a></p>
 <hr />
 <h2 id="serialisation">Serialisation</h2>
-<p>The design of Hexital allows for very easy serialisation, this is due to the way the readings are managed. Rather than indicator reading's being stored within the <a class="autorefs autorefs-internal" title="            Indicator
-
-
-  
-      dataclass
-  " href="../reference/hexital/core/indicator/#hexital.core.indicator.Indicator">Indicator</a> or <a class="autorefs autorefs-internal" title="            Hexital" href="../reference/hexital/core/hexital/#hexital.core.hexital.Hexital">Hexital</a>, they are stored within the <a class="autorefs autorefs-internal" title="            Candle" href="../reference/hexital/core/candle/#hexital.core.candle.Candle">Candles</a> themselves.</p>
-<p>This means you can simply store the <a class="autorefs autorefs-internal" title="            Candle" href="../reference/hexital/core/candle/#hexital.core.candle.Candle">Candles</a> list elsewhere, such as DataBase, CSV or some cache. Which will keep all the readings and calculation data required by the <a class="autorefs autorefs-internal" title="            Indicator
-
-
-  
-      dataclass
-  " href="../reference/hexital/core/indicator/#hexital.core.indicator.Indicator">Indicator</a> or <a class="autorefs autorefs-internal" title="            Hexital" href="../reference/hexital/core/hexital/#hexital.core.hexital.Hexital">Hexital</a> stored alongside the given <a class="autorefs autorefs-internal" title="            Candle" href="../reference/hexital/core/candle/#hexital.core.candle.Candle">Candles</a>.</p>
-<h3 id="serialisation_1">Serialisation</h3>
-<p>Below is a basic example of saving the Candle's alongside it's readings and calculation data. Whereby we simply save it into a CSV file.</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-19-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1"></a><span class="n">TODO</span>
-</span></code></pre></div></td></tr></table></div>
-<h3 id="deserialisation">Deserialisation</h3>
-<p>Deserialise is a simply process of reusing the given data to regenerate the Candle's.</p>
-<div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-20-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1"></a><span class="n">TODO</span>
-</span></code></pre></div></td></tr></table></div>
+<p>Readings live on <a class="autorefs autorefs-internal" title="            Candle" href="../reference/hexital/core/candle/#hexital.core.candle.Candle">Candle</a> objects (<code>indicators</code> and <code>sub_indicators</code> dicts), not inside indicator instances. Persist the <strong>candle list</strong> to keep OHLCV and calculated values together. Persist <strong>strategy config</strong> separately via <a href="../guides/hexital-indepth/#saving-and-restoring-a-strategy">settings</a>.</p>
+<h3 id="json-recommended">JSON (recommended)</h3>
+<p>Best when you need nested indicator readings (MACD, BBANDS, etc.) round-trip intact.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">Candle</span><span class="p">,</span> <span class="n">EMA</span><span class="p">,</span> <span class="n">Hexital</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="n">strategy</span> <span class="o">=</span> <span class="n">Hexital</span><span class="p">(</span><span class="s2">"demo"</span><span class="p">,</span> <span class="n">candles</span><span class="p">,</span> <span class="p">[</span><span class="n">EMA</span><span class="p">(</span><span class="n">period</span><span class="o">=</span><span class="mi">10</span><span class="p">)])</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="n">strategy</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="c1"># Save candles + readings</span>
+</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="n">records</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">as_dict</span><span class="p">(</span><span class="n">readings</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">strategy</span><span class="o">.</span><span class="n">candles</span><span class="p">()]</span>
+</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"candles.json"</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span id="__span-19-11"><a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>    <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">records</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+</span><span id="__span-19-12"><a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a>
+</span><span id="__span-19-13"><a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="c1"># Restore — readings come back on each candle</span>
+</span><span id="__span-19-14"><a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"candles.json"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span><span id="__span-19-15"><a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a>    <span class="n">records</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</span><span id="__span-19-16"><a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a>
+</span><span id="__span-19-17"><a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a><span class="n">restored_candles</span> <span class="o">=</span> <span class="n">Candle</span><span class="o">.</span><span class="n">from_dicts</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
+</span><span id="__span-19-18"><a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a><span class="n">strategy</span> <span class="o">=</span> <span class="n">Hexital</span><span class="p">(</span><span class="s2">"demo"</span><span class="p">,</span> <span class="n">restored_candles</span><span class="p">,</span> <span class="p">[</span><span class="n">EMA</span><span class="p">(</span><span class="n">period</span><span class="o">=</span><span class="mi">10</span><span class="p">)])</span>
+</span><span id="__span-19-19"><a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a><span class="c1"># Readings already on candles; call calculate() only if you need to fill gaps</span>
+</span><span id="__span-19-20"><a id="__codelineno-19-20" name="__codelineno-19-20" href="#__codelineno-19-20"></a><span class="nb">print</span><span class="p">(</span><span class="n">strategy</span><span class="o">.</span><span class="n">reading</span><span class="p">(</span><span class="s2">"EMA_10"</span><span class="p">))</span>
+</span></code></pre></div>
+<p>Save strategy configuration the same way as <a href="../guides/hexital-indepth/#saving-and-restoring-a-strategy">Hexital.settings</a> (indicator list, timeframes, <code>candle_life</code>, etc.) — that JSON does <strong>not</strong> include candle history.</p>
+<h3 id="csv-database">CSV / database</h3>
+<p>Flat CSV suits OHLCV-only storage. Indicator readings are dicts — store them as a JSON column, or use JSON files instead.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">Candle</span>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="n">records</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">as_dict</span><span class="p">(</span><span class="n">readings</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">candles</span><span class="p">]</span>
+</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">records</span><span class="p">)</span>
+</span><span id="__span-20-9"><a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a>
+</span><span id="__span-20-10"><a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a><span class="c1"># Serialize nested dict columns for CSV/SQL</span>
+</span><span id="__span-20-11"><a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"indicators"</span><span class="p">,</span> <span class="s2">"sub_indicators"</span><span class="p">):</span>
+</span><span id="__span-20-12"><a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a>    <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+</span><span id="__span-20-13"><a id="__codelineno-20-13" name="__codelineno-20-13" href="#__codelineno-20-13"></a>        <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">)</span>
+</span><span id="__span-20-14"><a id="__codelineno-20-14" name="__codelineno-20-14" href="#__codelineno-20-14"></a>
+</span><span id="__span-20-15"><a id="__codelineno-20-15" name="__codelineno-20-15" href="#__codelineno-20-15"></a><span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"candles.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</span><span id="__span-20-16"><a id="__codelineno-20-16" name="__codelineno-20-16" href="#__codelineno-20-16"></a>
+</span><span id="__span-20-17"><a id="__codelineno-20-17" name="__codelineno-20-17" href="#__codelineno-20-17"></a><span class="c1"># Load</span>
+</span><span id="__span-20-18"><a id="__codelineno-20-18" name="__codelineno-20-18" href="#__codelineno-20-18"></a><span class="n">loaded</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"candles.csv"</span><span class="p">)</span>
+</span><span id="__span-20-19"><a id="__codelineno-20-19" name="__codelineno-20-19" href="#__codelineno-20-19"></a><span class="n">rows</span> <span class="o">=</span> <span class="n">loaded</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="s2">"records"</span><span class="p">)</span>
+</span><span id="__span-20-20"><a id="__codelineno-20-20" name="__codelineno-20-20" href="#__codelineno-20-20"></a><span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+</span><span id="__span-20-21"><a id="__codelineno-20-21" name="__codelineno-20-21" href="#__codelineno-20-21"></a>    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"indicators"</span><span class="p">,</span> <span class="s2">"sub_indicators"</span><span class="p">):</span>
+</span><span id="__span-20-22"><a id="__codelineno-20-22" name="__codelineno-20-22" href="#__codelineno-20-22"></a>        <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">row</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+</span><span id="__span-20-23"><a id="__codelineno-20-23" name="__codelineno-20-23" href="#__codelineno-20-23"></a>            <span class="n">row</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+</span><span id="__span-20-24"><a id="__codelineno-20-24" name="__codelineno-20-24" href="#__codelineno-20-24"></a>
+</span><span id="__span-20-25"><a id="__codelineno-20-25" name="__codelineno-20-25" href="#__codelineno-20-25"></a><span class="n">candles</span> <span class="o">=</span> <span class="n">Candle</span><span class="o">.</span><span class="n">from_dicts</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+</span></code></pre></div>
+<p>For a database, the same pattern applies: one row per candle, JSON/JSONB columns for <code>indicators</code> and <code>sub_indicators</code>, native types for OHLCV and <code>timestamp</code>.</p>
+<h3 id="deserialisation-without-recalculating">Deserialisation without recalculating</h3>
+<p>If every bar already has readings attached, you can query immediately:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="n">strategy</span> <span class="o">=</span> <span class="n">Hexital</span><span class="p">(</span><span class="s2">"demo"</span><span class="p">,</span> <span class="n">Candle</span><span class="o">.</span><span class="n">from_dicts</span><span class="p">(</span><span class="n">records</span><span class="p">),</span> <span class="p">[</span><span class="n">EMA</span><span class="p">(</span><span class="n">period</span><span class="o">=</span><span class="mi">10</span><span class="p">)])</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">strategy</span><span class="o">.</span><span class="n">reading</span><span class="p">(</span><span class="s2">"EMA_10"</span><span class="p">))</span>  <span class="c1"># from candle.indicators</span>
+</span></code></pre></div>
+<p>Call <code>calculate()</code> when restoring partial history or after changing indicator parameters — it only fills missing slots.</p>
+<p>See <a href="../guides/candles/#readings-on-candles">Readings on candles</a> for the <code>indicators</code> vs <code>sub_indicators</code> split.</p>
 
 
 
@@ -4926,7 +5001,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 15, 2026 11:05:54 UTC">July 15, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 25, 2026 15:58:56 UTC">August 25, 2026</span>
   </span>
 
     

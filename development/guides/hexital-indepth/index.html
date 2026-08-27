@@ -715,6 +715,78 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#history-and-readiness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        History and readiness
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="History and readiness">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minimum_candlestimeframenone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        minimum_candles(timeframe=None)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#has_sufficient_candlestimeframenone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        has_sufficient_candles(timeframe=None)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minimum_candles_by_indicatorindicatornone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        minimum_candles_by_indicator(indicator=None)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minimum_candles_by_timeframe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        minimum_candles_by_timeframe()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#live-feed-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live-feed example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#global-options" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4232,6 +4304,78 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#history-and-readiness" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        History and readiness
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="History and readiness">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minimum_candlestimeframenone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        minimum_candles(timeframe=None)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#has_sufficient_candlestimeframenone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        has_sufficient_candles(timeframe=None)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minimum_candles_by_indicatorindicatornone" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        minimum_candles_by_indicator(indicator=None)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#minimum_candles_by_timeframe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        minimum_candles_by_timeframe()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#live-feed-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Live-feed example
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#global-options" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4421,6 +4565,60 @@
 </tbody>
 </table>
 <hr />
+<h2 id="history-and-readiness">History and readiness</h2>
+<p>Use these when prefetching exchange history or validating a strategy before <code>calculate()</code>.</p>
+<h3 id="minimum_candlestimeframenone"><code>minimum_candles(timeframe=None)</code></h3>
+<p><a class="autorefs autorefs-internal" title="            minimum_candles" href="../../reference/hexital/core/hexital/#hexital.core.hexital.Hexital.minimum_candles">Hexital.minimum_candles()</a> returns the <strong>largest</strong> <code>minimum_candles</code> among indicators on a candle series. Counts are in <strong>that series' bar units</strong>.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">strategy</span><span class="o">.</span><span class="n">minimum_candles</span><span class="p">()</span>                    <span class="c1"># all indicators</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">strategy</span><span class="o">.</span><span class="n">minimum_candles</span><span class="p">(</span><span class="n">timeframe</span><span class="o">=</span><span class="s2">"DEFAULT"</span><span class="p">)</span> <span class="c1"># default stream only</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">strategy</span><span class="o">.</span><span class="n">minimum_candles</span><span class="p">(</span><span class="n">timeframe</span><span class="o">=</span><span class="s2">"T10"</span><span class="p">)</span>     <span class="c1"># 10-minute indicators only</span>
+</span></code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Multi-timeframe strategies</p>
+<p><code>minimum_candles()</code> without a <code>timeframe</code> takes the max across indicators, but each value may refer to a <strong>different</strong> bar size. For prefetch, pass the timeframe you are fetching — do not treat the unfiltered max as a single exchange request size.</p>
+</div>
+<h3 id="has_sufficient_candlestimeframenone"><code>has_sufficient_candles(timeframe=None)</code></h3>
+<p><a class="autorefs autorefs-internal" title="            has_sufficient_candles" href="../../reference/hexital/core/hexital/#hexital.core.hexital.Hexital.has_sufficient_candles">Hexital.has_sufficient_candles()</a> is <code>True</code> when every matching indicator's <a class="autorefs autorefs-internal" title="            is_ready
+
+
+  
+      property
+  " href="../../reference/hexital/core/indicator/#hexital.core.indicator.Indicator.is_ready">is_ready</a> is <code>True</code> on its own stream:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">if</span> <span class="n">strategy</span><span class="o">.</span><span class="n">has_sufficient_candles</span><span class="p">(</span><span class="n">timeframe</span><span class="o">=</span><span class="s2">"T10"</span><span class="p">):</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>    <span class="n">strategy</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
+</span></code></pre></div>
+<h3 id="minimum_candles_by_indicatorindicatornone"><code>minimum_candles_by_indicator(indicator=None)</code></h3>
+<p><a class="autorefs autorefs-internal" title="            minimum_candles_by_indicator" href="../../reference/hexital/core/hexital/#hexital.core.hexital.Hexital.minimum_candles_by_indicator">Hexital.minimum_candles_by_indicator()</a> returns a name → count map for debugging prefetch:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">strategy</span><span class="o">.</span><span class="n">minimum_candles_by_indicator</span><span class="p">()</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1"># {"EMA_10": 10, "RSI_14": 15}</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="n">strategy</span><span class="o">.</span><span class="n">minimum_candles_by_indicator</span><span class="p">(</span><span class="n">strategy</span><span class="o">.</span><span class="n">indicator</span><span class="p">(</span><span class="s2">"RSI_14"</span><span class="p">))</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="c1"># {"RSI_14": 15}</span>
+</span></code></pre></div>
+<h3 id="minimum_candles_by_timeframe"><code>minimum_candles_by_timeframe()</code></h3>
+<p><a class="autorefs autorefs-internal" title="            minimum_candles_by_timeframe" href="../../reference/hexital/core/hexital/#hexital.core.hexital.Hexital.minimum_candles_by_timeframe">Hexital.minimum_candles_by_timeframe()</a> returns the largest <code>minimum_candles</code> on each candle series — a prefetch plan when the strategy spans multiple timeframes:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">strategy</span><span class="o">.</span><span class="n">minimum_candles_by_timeframe</span><span class="p">()</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="c1"># {"DEFAULT": 15, "T10": 10}</span>
+</span></code></pre></div>
+<p>Keys match the labels passed to <code>minimum_candles(timeframe=...)</code> and <code>has_sufficient_candles(timeframe=...)</code>.</p>
+<h3 id="live-feed-example">Live-feed example</h3>
+<p>Hexital does not connect to an exchange — your feed fetches bars; Hexital validates and calculates:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">EMA</span><span class="p">,</span> <span class="n">RSI</span><span class="p">,</span> <span class="n">Candle</span><span class="p">,</span> <span class="n">Hexital</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="n">strategy</span> <span class="o">=</span> <span class="n">Hexital</span><span class="p">(</span><span class="s2">"live"</span><span class="p">,</span> <span class="p">[],</span> <span class="p">[</span><span class="n">EMA</span><span class="p">(</span><span class="n">period</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span> <span class="n">RSI</span><span class="p">(</span><span class="n">period</span><span class="o">=</span><span class="mi">14</span><span class="p">)])</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="n">prefetch</span> <span class="o">=</span> <span class="n">strategy</span><span class="o">.</span><span class="n">minimum_candles_by_timeframe</span><span class="p">()</span>  <span class="c1"># {"DEFAULT": 15}</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="n">history</span> <span class="o">=</span> <span class="n">fetch_from_your_exchange</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="n">prefetch</span><span class="p">[</span><span class="s2">"DEFAULT"</span><span class="p">])</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="k">for</span> <span class="n">candle</span> <span class="ow">in</span> <span class="n">history</span><span class="p">:</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>    <span class="n">strategy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candle</span><span class="p">)</span>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="k">if</span> <span class="n">strategy</span><span class="o">.</span><span class="n">has_sufficient_candles</span><span class="p">():</span>
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>    <span class="n">strategy</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
+</span></code></pre></div>
+<p>See <a href="../quick-start/#live-trading">Quick Start — Live trading</a> for the full bootstrap loop.</p>
+<p>Per-indicator details and custom overrides: <a href="../indicators-indepth/#history-and-readiness">Indicators — History and readiness</a>, <a href="../custom-indicator/#minimum-candles">Custom indicators — Minimum candles</a>.</p>
+<hr />
 <h2 id="global-options">Global options</h2>
 <p>Settings on <code>Hexital</code> are broadcast to indicators where not overridden:</p>
 <ul>
@@ -4456,7 +4654,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 15, 2026 11:05:54 UTC">July 15, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 25, 2026 15:58:56 UTC">August 25, 2026</span>
   </span>
 
     

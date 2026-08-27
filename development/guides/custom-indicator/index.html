@@ -760,6 +760,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#minimum-candles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minimum candles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Minimum candles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default-behaviour" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Default behaviour
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-override-_minimum_candles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to override _minimum_candles()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#composites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Composites
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#recipe-c-composite-indicator" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -795,6 +845,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Amorph — functions as indicators">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prefetch-hints-on-amorph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prefetch hints on Amorph
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -4182,6 +4249,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#minimum-candles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minimum candles
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Minimum candles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default-behaviour" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Default behaviour
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-to-override-_minimum_candles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to override _minimum_candles()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#composites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Composites
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#recipe-c-composite-indicator" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4217,6 +4334,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Amorph — functions as indicators">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prefetch-hints-on-amorph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prefetch hints on Amorph
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -4268,6 +4402,7 @@
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>Need other indicators as inputs?          → Recipe C (child indicators)
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>Just math on candle fields?               → Recipe A (single method)
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>One-off pattern without a full class?     → Amorph
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>Warm-up differs from `period`?            → [Minimum candles](#minimum-candles) (`_minimum_candles()`)
 </span></code></pre></div>
 <table>
 <thead>
@@ -4442,6 +4577,70 @@
 <li><code>add_child_managed()</code> — child runs only when you invoke it (via <code>set_reading()</code> or <code>calculate_index()</code>)</li>
 </ul>
 <hr />
+<h2 id="minimum-candles">Minimum candles</h2>
+<p>Declare how many bars your indicator needs before it can produce a reading. Hexital uses this for exchange prefetch and readiness checks.</p>
+<h3 id="default-behaviour">Default behaviour</h3>
+<p>If your indicator has a <code>period</code> field, <a class="autorefs autorefs-internal" title="            Indicator
+
+
+  
+      dataclass
+  " href="../../reference/hexital/core/indicator/#hexital.core.indicator.Indicator">Indicator</a> defaults to <code>minimum_candles == period</code>. You do <strong>not</strong> need an override for a plain SMA-style indicator.</p>
+<p>Composites that use <code>add_child()</code> inherit aggregation automatically — <code>minimum_candles</code> becomes the max of your override (or default) and every child's <code>minimum_candles</code>.</p>
+<h3 id="when-to-override-_minimum_candles">When to override <code>_minimum_candles()</code></h3>
+<p>Override when warm-up differs from <code>period</code>:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_minimum_candles</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">+</span> <span class="mi">1</span>   <span class="c1"># e.g. RSI-style: first reading one bar after period window</span>
+</span></code></pre></div>
+<p>Other common cases:</p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Example</th>
+<th>Override</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Single-bar transform</td>
+<td>HLA, HLCA</td>
+<td><code>return 1</code></td>
+</tr>
+<tr>
+<td>Needs prior bar</td>
+<td>TR, PivotPoints</td>
+<td><code>return 2</code></td>
+</tr>
+<tr>
+<td>Composite formula</td>
+<td>MACD, TEMA</td>
+<td>Custom sum/product of child periods</td>
+</tr>
+<tr>
+<td>No history field</td>
+<td>OBV, VWAP</td>
+<td>Explicit constant</td>
+</tr>
+</tbody>
+</table>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">class</span><span class="w"> </span><span class="nc">MyOscillator</span><span class="p">(</span><span class="n">Indicator</span><span class="p">[</span><span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]):</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="n">period</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">14</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_minimum_candles</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">period</span> <span class="o">+</span> <span class="mi">1</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_reading</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>        <span class="o">...</span>
+</span></code></pre></div>
+<h3 id="composites">Composites</h3>
+<p>You usually <strong>do not</strong> override on composites — child <code>minimum_candles</code> values are aggregated. Override only when the parent's first valid reading lags behind children:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">_minimum_candles</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>    <span class="k">return</span> <span class="mi">0</span>   <span class="c1"># rely on max(child.minimum_candles ...)</span>
+</span></code></pre></div>
+<p>Inspect children with <code>minimum_candles_by_indicator()</code> while developing.</p>
+<hr />
 <h2 id="recipe-c-composite-indicator">Recipe C — Composite indicator</h2>
 <p>Use when your indicator <strong>depends on other indicators</strong> (moving averages, standard deviation, ATR, etc.).</p>
 <p>Based on <a class="autorefs autorefs-internal" title="            BBANDS
@@ -4450,35 +4649,35 @@
   
       dataclass
   " href="../../reference/hexital/indicators/bbands/#hexital.indicators.bbands.BBANDS">BBANDS</a>:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">Indicator</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMA</span><span class="p">,</span> <span class="n">STDEV</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="k">class</span><span class="w"> </span><span class="nc">MyBands</span><span class="p">(</span><span class="n">Indicator</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]]):</span>
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    <span class="n">_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">"MyBands"</span><span class="p">)</span>
-</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    <span class="n">period</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>
-</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    <span class="n">source</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"close"</span>
-</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>    <span class="n">_std</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
-</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>
-</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_initialise</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">sub_stdev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">STDEV</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">period</span><span class="p">))</span>
-</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">sub_sma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">SMA</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">period</span><span class="p">))</span>
-</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>
-</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_reading</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
-</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sub_sma</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_stdev</span><span class="o">.</span><span class="n">exists</span><span class="p">()):</span>
-</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>            <span class="k">return</span> <span class="p">{</span><span class="s2">"lower"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"mid"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"upper"</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
-</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>
-</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>        <span class="n">sma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_sma</span><span class="o">.</span><span class="n">reading</span><span class="p">()</span>
-</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>        <span class="n">stdev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_stdev</span><span class="o">.</span><span class="n">reading</span><span class="p">()</span>
-</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>
-</span><span id="__span-4-25"><a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>        <span class="k">return</span> <span class="p">{</span>
-</span><span id="__span-4-26"><a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a>            <span class="s2">"mid"</span><span class="p">:</span> <span class="n">sma</span><span class="p">,</span>
-</span><span id="__span-4-27"><a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a>            <span class="s2">"lower"</span><span class="p">:</span> <span class="n">sma</span> <span class="o">-</span> <span class="p">(</span><span class="n">stdev</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_std</span><span class="p">),</span>
-</span><span id="__span-4-28"><a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a>            <span class="s2">"upper"</span><span class="p">:</span> <span class="n">sma</span> <span class="o">+</span> <span class="p">(</span><span class="n">stdev</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_std</span><span class="p">),</span>
-</span><span id="__span-4-29"><a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a>        <span class="p">}</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">Indicator</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">SMA</span><span class="p">,</span> <span class="n">STDEV</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="k">class</span><span class="w"> </span><span class="nc">MyBands</span><span class="p">(</span><span class="n">Indicator</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]]):</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>    <span class="n">_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">"MyBands"</span><span class="p">)</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>    <span class="n">period</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>    <span class="n">source</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"close"</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>    <span class="n">_std</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">init</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_initialise</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">sub_stdev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">STDEV</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">period</span><span class="p">))</span>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">sub_sma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">SMA</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">period</span><span class="p">))</span>
+</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>
+</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_reading</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
+</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sub_sma</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_stdev</span><span class="o">.</span><span class="n">exists</span><span class="p">()):</span>
+</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>            <span class="k">return</span> <span class="p">{</span><span class="s2">"lower"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"mid"</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"upper"</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>
+</span><span id="__span-7-22"><a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a>        <span class="n">sma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_sma</span><span class="o">.</span><span class="n">reading</span><span class="p">()</span>
+</span><span id="__span-7-23"><a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a>        <span class="n">stdev</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_stdev</span><span class="o">.</span><span class="n">reading</span><span class="p">()</span>
+</span><span id="__span-7-24"><a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a>
+</span><span id="__span-7-25"><a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a>        <span class="k">return</span> <span class="p">{</span>
+</span><span id="__span-7-26"><a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a>            <span class="s2">"mid"</span><span class="p">:</span> <span class="n">sma</span><span class="p">,</span>
+</span><span id="__span-7-27"><a id="__codelineno-7-27" name="__codelineno-7-27" href="#__codelineno-7-27"></a>            <span class="s2">"lower"</span><span class="p">:</span> <span class="n">sma</span> <span class="o">-</span> <span class="p">(</span><span class="n">stdev</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_std</span><span class="p">),</span>
+</span><span id="__span-7-28"><a id="__codelineno-7-28" name="__codelineno-7-28" href="#__codelineno-7-28"></a>            <span class="s2">"upper"</span><span class="p">:</span> <span class="n">sma</span> <span class="o">+</span> <span class="p">(</span><span class="n">stdev</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_std</span><span class="p">),</span>
+</span><span id="__span-7-29"><a id="__codelineno-7-29" name="__codelineno-7-29" href="#__codelineno-7-29"></a>        <span class="p">}</span>
 </span></code></pre></div>
 <h3 id="child-timing">Child timing</h3>
 <table>
@@ -4504,29 +4703,57 @@
 </tbody>
 </table>
 <p>For full control, pass <code>when=</code> using <a class="autorefs autorefs-internal" title="            ChildWhen" href="../../reference/hexital/core/indicator/#hexital.core.indicator.ChildWhen">ChildWhen</a>:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChildWhen</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="bp">self</span><span class="o">.</span><span class="n">sub_signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">EMA</span><span class="p">(</span><span class="o">...</span><span class="p">),</span> <span class="n">when</span><span class="o">=</span><span class="n">ChildWhen</span><span class="o">.</span><span class="n">MANUAL</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChildWhen</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="bp">self</span><span class="o">.</span><span class="n">sub_signal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">EMA</span><span class="p">(</span><span class="o">...</span><span class="p">),</span> <span class="n">when</span><span class="o">=</span><span class="n">ChildWhen</span><span class="o">.</span><span class="n">MANUAL</span><span class="p">)</span>
 </span></code></pre></div>
 <hr />
 <h2 id="amorph-functions-as-indicators">Amorph — functions as indicators</h2>
 <p>For one-off signals or pattern checks without writing a full class, use <a class="autorefs autorefs-internal" title="            Amorph" href="../../reference/hexital/indicators/amorph/#hexital.indicators.amorph.Amorph">Amorph</a>:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">Amorph</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital.analysis.patterns</span><span class="w"> </span><span class="kn">import</span> <span class="n">doji</span>
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
-</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="n">pattern</span> <span class="o">=</span> <span class="n">Amorph</span><span class="p">(</span><span class="n">analysis</span><span class="o">=</span><span class="n">doji</span><span class="p">)</span>
-</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="n">pattern</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candles</span><span class="p">)</span>
-</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="n">pattern</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">Amorph</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital.analysis.patterns</span><span class="w"> </span><span class="kn">import</span> <span class="n">doji</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">pattern</span> <span class="o">=</span> <span class="n">Amorph</span><span class="p">(</span><span class="n">analysis</span><span class="o">=</span><span class="n">doji</span><span class="p">)</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="n">pattern</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candles</span><span class="p">)</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="n">pattern</span><span class="o">.</span><span class="n">calculate</span><span class="p">()</span>
+</span></code></pre></div>
+<h3 id="prefetch-hints-on-amorph">Prefetch hints on Amorph</h3>
+<p>Amorph resolves <code>minimum_candles</code> from analysis kwargs:</p>
+<table>
+<thead>
+<tr>
+<th>Kwarg</th>
+<th>Used for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>minimum_candles</code></td>
+<td>Explicit prefetch count (not forwarded to the analysis function)</td>
+</tr>
+<tr>
+<td><code>period</code></td>
+<td>Warm-up when the wrapped function accepts <code>period</code></td>
+</tr>
+<tr>
+<td><code>lookback</code></td>
+<td>Window size; combined with <code>period</code> as <code>period + lookback - 1</code> when both are set</td>
+</tr>
+</tbody>
+</table>
+<p>For <a class="autorefs autorefs-internal" title="            doji" href="../../reference/hexital/analysis/patterns/#hexital.analysis.patterns.doji">doji</a> without kwargs, <code>minimum_candles</code> is <code>0</code> — pass <code>minimum_candles=11</code> (or wrap with a function that accepts <code>period</code>) when prefetching matters.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="n">Amorph</span><span class="p">(</span><span class="n">analysis</span><span class="o">=</span><span class="n">doji</span><span class="p">,</span> <span class="n">minimum_candles</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">Amorph</span><span class="p">(</span><span class="n">analysis</span><span class="o">=</span><span class="n">doji</span><span class="p">,</span> <span class="n">lookback</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">minimum_candles</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 </span></code></pre></div>
 <hr />
 <h2 id="using-a-custom-indicator-in-hexital">Using a custom indicator in Hexital</h2>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">Candle</span><span class="p">,</span> <span class="n">Hexital</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">my_indicators</span><span class="w"> </span><span class="kn">import</span> <span class="n">MyBands</span>
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="n">strategy</span> <span class="o">=</span> <span class="n">Hexital</span><span class="p">(</span><span class="s2">"demo"</span><span class="p">,</span> <span class="n">candles</span><span class="p">,</span> <span class="p">[</span><span class="n">MyBands</span><span class="p">(</span><span class="n">period</span><span class="o">=</span><span class="mi">20</span><span class="p">)])</span>
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="n">strategy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_candle</span><span class="p">)</span>
-</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">strategy</span><span class="o">.</span><span class="n">reading</span><span class="p">(</span><span class="s2">"MyBands_20"</span><span class="p">))</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">hexital</span><span class="w"> </span><span class="kn">import</span> <span class="n">Candle</span><span class="p">,</span> <span class="n">Hexital</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">my_indicators</span><span class="w"> </span><span class="kn">import</span> <span class="n">MyBands</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="n">strategy</span> <span class="o">=</span> <span class="n">Hexital</span><span class="p">(</span><span class="s2">"demo"</span><span class="p">,</span> <span class="n">candles</span><span class="p">,</span> <span class="p">[</span><span class="n">MyBands</span><span class="p">(</span><span class="n">period</span><span class="o">=</span><span class="mi">20</span><span class="p">)])</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="n">strategy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_candle</span><span class="p">)</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="nb">print</span><span class="p">(</span><span class="n">strategy</span><span class="o">.</span><span class="n">reading</span><span class="p">(</span><span class="s2">"MyBands_20"</span><span class="p">))</span>
 </span></code></pre></div>
 <p>See also the <a href="../../features/#custom-indicators">Features — Custom Indicators</a> example.</p>
 
@@ -4549,7 +4776,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="July 14, 2026 14:53:34 UTC">July 14, 2026</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 25, 2026 14:19:53 UTC">August 25, 2026</span>
   </span>
 
     

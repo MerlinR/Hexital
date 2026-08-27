@@ -4003,6 +4003,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#410" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1.0
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#402" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4257,6 +4268,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#410" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1.0
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#402" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4500,8 +4522,23 @@
 <p>All notable changes to this project will be documented in this file.</p>
 <p>The project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning&nbsp;⧉</a>.</p>
 <hr />
-<h2 id="402">4.0.2</h2>
+<h2 id="410">4.1.0</h2>
 <p><em>Release Date: TBD</em></p>
+<ul>
+<li>Added Feature to get minimum Candles required for Indicators and Hexital.<ul>
+<li>Added <code>Indicator.minimum_candles</code> — minimum candle count before a reading (e.g. <code>15</code> means the 15th candle)</li>
+<li>Added <code>Indicator.is_ready</code> — whether loaded history meets <code>minimum_candles</code></li>
+<li>Added <code>Indicator.minimum_candles_by_indicator()</code> — <code>minimum_candles</code> for each child indicator, keyed by name</li>
+<li>Added <code>Hexital.minimum_candles(timeframe=None)</code> — largest <code>minimum_candles</code> among indicators on a series; pass a timeframe when the strategy uses multiple candle series</li>
+<li>Added <code>Hexital.has_sufficient_candles(timeframe=None)</code> — checks every indicator's <code>is_ready</code>; pass a timeframe to limit the check to indicators on that series</li>
+<li>Added <code>Hexital.minimum_candles_by_indicator(indicator=None)</code> — <code>minimum_candles</code> per registered indicator; pass an indicator to limit the result to that one</li>
+<li>Added <code>Hexital.minimum_candles_by_timeframe()</code> — largest <code>minimum_candles</code> per candle series, keyed by timeframe label (e.g. <code>{"DEFAULT": 15, "T10": 10}</code>)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="402">4.0.2</h2>
+<p><em>Release Date: 25/08/26</em></p>
 <ul>
 <li>Fixed division-by-zero crashes on flat or zero-denominator data in <strong>STOCH</strong>, <strong>ADX</strong>, <strong>RSI</strong>, and <strong>CMO</strong></li>
 <li>Fixed timeframe <strong>prepend</strong> resampling creating duplicate bars when merging finer candles into an existing resampled series</li>
