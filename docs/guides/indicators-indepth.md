@@ -52,6 +52,9 @@ print(strategy.reading("MACD_12_26_9:signal"))
 
 Before running `calculate()` — especially when prefetching from an exchange — you may need to know how many bars an indicator requires.
 
+!!! tip "Full guide"
+    [History and readiness](history-and-readiness.md) covers strategy-level prefetch, live bootstrap, multi-timeframe plans, and `is_ready` vs `exists()`.
+
 ### `minimum_candles`
 
 [Indicator.minimum_candles][hexital.core.indicator.Indicator.minimum_candles] is the **minimum bar count** before this indicator can produce a reading. The count is **1-based**: `15` means the **15th candle** is the first that may have a non-`None` value after `calculate()`.
@@ -93,7 +96,7 @@ macd.minimum_candles_by_indicator()
 # e.g. {"MACD_12_26_9_fast": 12, "MACD_12_26_9_slow": 26, ...}
 ```
 
-Strategy-level prefetch and multi-timeframe checks live on [Hexital](hexital-indepth.md#history-and-readiness).
+Strategy-level prefetch and multi-timeframe checks: [History and readiness](history-and-readiness.md).
 
 ---
 

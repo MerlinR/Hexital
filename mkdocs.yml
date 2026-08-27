@@ -98,6 +98,7 @@ nav:
   - Features: features.md
   - Guides:
     - Quick Start: guides/quick-start.md
+    - History and readiness: guides/history-and-readiness.md
     - Strategies (Hexital): guides/hexital-indepth.md
     - Candles: guides/candles.md
     - Analysis: guides/analysis-indepth.md

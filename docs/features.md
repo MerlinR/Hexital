@@ -12,7 +12,7 @@ The core feature of Hexital is its technical analysis indicators, offering an ev
 
 Each indicator is highly configurable, featuring options tailored to its specific purpose as well as general settings to enhance usability. This flexibility allows traders to fine-tune indicators for their unique requirements. Additionally, Hexital’s efficient incremental processing ensures minimal performance overhead, even when handling large datasets.
 
-Indicators expose [minimum_candles][hexital.core.indicator.Indicator.minimum_candles] and [is_ready][hexital.core.indicator.Indicator.is_ready] so you know how much history to prefetch before the first valid reading. See [Indicators in depth — History and readiness](guides/indicators-indepth.md#history-and-readiness).
+Indicators expose [minimum_candles][hexital.core.indicator.Indicator.minimum_candles] and [is_ready][hexital.core.indicator.Indicator.is_ready] so you know how much history to prefetch before the first valid reading. See the [History and readiness guide](guides/history-and-readiness.md).
 
 For a comprehensive overview of available indicators, configuration options, and examples, check out the [in-depth guide.](guides/indicators-indepth.md)
 
@@ -137,7 +137,7 @@ Beyond configuration, Hexital provides a unified reading API — `reading()`, `s
 
 It also supports incremental calculation. Each appended candle triggers the calculation of the latest candle across all associated indicators, ensuring your strategy remains up-to-date with the latest market data. This feature is particularly useful for live trading scenarios, where timely calculations are critical.
 
-[Hexital.minimum_candles()][hexital.core.hexital.Hexital.minimum_candles], [has_sufficient_candles()][hexital.core.hexital.Hexital.has_sufficient_candles], [minimum_candles_by_indicator()][hexital.core.hexital.Hexital.minimum_candles_by_indicator], and [minimum_candles_by_timeframe()][hexital.core.hexital.Hexital.minimum_candles_by_timeframe] help you prefetch and validate history across one or more timeframes. See [Hexital in depth — History and readiness](guides/hexital-indepth.md#history-and-readiness).
+[Hexital.minimum_candles()][hexital.core.hexital.Hexital.minimum_candles], [has_sufficient_candles()][hexital.core.hexital.Hexital.has_sufficient_candles], [minimum_candles_by_indicator()][hexital.core.hexital.Hexital.minimum_candles_by_indicator], and [minimum_candles_by_timeframe()][hexital.core.hexital.Hexital.minimum_candles_by_timeframe] help you prefetch and validate history across one or more timeframes. See the [History and readiness guide](guides/history-and-readiness.md).
 
 **Example:**
 

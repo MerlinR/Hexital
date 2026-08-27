@@ -159,6 +159,9 @@ Movement analysis uses these internally when you pass a `Hexital` instance and t
 
 Use these when prefetching exchange history or validating a strategy before `calculate()`.
 
+!!! tip "Full guide"
+    See [History and readiness](history-and-readiness.md) for the complete workflow, multi-timeframe prefetch, common mistakes, and the distinction between **ready** (enough bars) and **calculated** (valid reading).
+
 ### `minimum_candles(timeframe=None)`
 
 [Hexital.minimum_candles()][hexital.core.hexital.Hexital.minimum_candles] returns the **largest** `minimum_candles` among indicators on a candle series. Counts are in **that series' bar units**.
@@ -225,7 +228,7 @@ if strategy.has_sufficient_candles():
 
 See [Quick Start — Live trading](quick-start.md#live-trading) for the full bootstrap loop.
 
-Per-indicator details and custom overrides: [Indicators — History and readiness](indicators-indepth.md#history-and-readiness), [Custom indicators — Minimum candles](custom-indicator.md#minimum-candles).
+Per-indicator details: [History and readiness](history-and-readiness.md), [Custom indicators — Minimum candles](custom-indicator.md#minimum-candles).
 
 ---
 

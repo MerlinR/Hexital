@@ -9,6 +9,8 @@ Required fields: `open`, `high`, `low`, `close`, `volume`.
 
 Optional: `timestamp`, `timeframe` (bar-size label — see [Timeframes](#timeframes) below).
 
+For **how many candles to load** before indicators are ready, see [History and readiness](history-and-readiness.md).
+
 ---
 
 ## Creating candles
@@ -183,6 +185,21 @@ candle = Candle.from_dict({
 })
 strategy.append(candle)  # passthrough manager + T5 resample manager
 ```
+
+### Prefetch and readiness
+
+Each indicator reads from its own [candle manager](hexital-indepth.md#multi-timeframes). Bar counts for warm-up are in **that series' units** — ten default-stream bars for a plain EMA, ten **5-minute** bars for `EMA(timeframe="T5")`, etc.
+
+| Goal | API |
+|------|-----|
+| How many bars to fetch per series? | `strategy.minimum_candles_by_timeframe()` |
+| Enough history loaded? | `strategy.has_sufficient_candles(timeframe=…)` |
+| Single indicator | `indicator.minimum_candles`, `indicator.is_ready` |
+
+!!! tip
+    Label candles with `timeframe` when you create or receive them. Hexital does **not** fetch history — your feed requests bar counts that `minimum_candles_by_timeframe()` advises.
+
+Full workflow, pitfalls, and live bootstrap: [History and readiness](history-and-readiness.md).
 
 ---
 

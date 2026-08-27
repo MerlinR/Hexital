@@ -81,7 +81,7 @@ while True:
 | First full calc | `calculate()` once after history | Fills missing readings |
 | Each new tick | `append(candle)` | Incremental update |
 
-Multi-timeframe strategies: fetch **each series separately** using the matching key from `minimum_candles_by_timeframe()` (e.g. `"DEFAULT"` vs `"T10"`). See [History and readiness](hexital-indepth.md#history-and-readiness).
+Multi-timeframe strategies: fetch **each series separately** using the matching key from `minimum_candles_by_timeframe()` (e.g. `"DEFAULT"` vs `"T10"`). See [History and readiness](history-and-readiness.md).
 
 Persisting candles **with** indicator readings: [Serialisation](../features.md#serialisation) and [Readings on candles](candles.md#readings-on-candles).
 
@@ -109,7 +109,7 @@ For every input format (lists, timestamps, Pandas, and more), see the [Candles g
 
 | Goal | Guide |
 |------|-------|
-| Live feed bootstrap (history + append) | [Live trading](#live-trading) above |
+| Live feed bootstrap (history + append) | [Live trading](#live-trading) · [History and readiness](history-and-readiness.md) |
 | Run several indicators on one candle stream | [Hexital strategies](hexital-indepth.md) |
 | Typed indicator access (`HexitalCol`) | [Hexital strategies](hexital-indepth.md#indicatorcollection) |
 | Save and restore strategy config | [Hexital strategies](hexital-indepth.md#saving-and-restoring-a-strategy) |
