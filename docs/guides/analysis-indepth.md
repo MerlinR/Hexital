@@ -89,13 +89,18 @@ Movement functions that take two indicator names (`above`, `below`, `cross`, `cr
 To cross a **fixed threshold** (e.g. RSI through 30), use [crossover_level()][hexital.analysis.movement.crossover_level] or [crossunder_level()][hexital.analysis.movement.crossunder_level]:
 
 ```python
-from hexital.analysis import crossover_level, crossunder_level
+from hexital.analysis import crossover_level, crossunder_level, between
 
 crossover_level(strategy, "RSI_14", 30)   # prev <= 30 and current > 30
 crossunder_level(strategy, "RSI_14", 70)  # prev >= 70 and current < 70
+between(strategy, "RSI_14", 30, 70)
 ```
 
+Inside a signal indicator's `_calculate_reading()`, use the scalar helpers from [hexital.analysis.signals][hexital.analysis.signals] (`crossed_above(rsi, prev_rsi, 30)`, etc.).
+
 Single-series functions (`rising`, `bars_since`, `highest`, etc.) take one indicator name and use [candles_for()][hexital.core.hexital.Hexital.candles_for] when given a `Hexital` instance.
+
+For reusable entry/exit rules as incremental indicators, see [Custom indicators — Signal indicator](custom-indicator.md#recipe-d--signal-indicator) and [hexital.analysis.signals][hexital.analysis.signals].
 
 ---
 

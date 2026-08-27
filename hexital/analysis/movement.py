@@ -8,6 +8,7 @@ from ..utils.candles import (
 )
 from ..utils.indexing import absindex, valid_index
 from ..utils.timeframe import within_timeframe
+from . import signals as signal_helpers
 
 
 def _scalar_reading(
@@ -1109,9 +1110,7 @@ def crossover_level(
         reading = _scalar_reading(candle_set, indicator, i)
         previous = _scalar_reading(candle_set, indicator, i - 1) if i > 0 else None
 
-        if reading is None or previous is None:
-            continue
-        if reading > level and previous <= level:
+        if signal_helpers.crossed_above(reading, previous, level):
             return True
 
     return False
@@ -1150,9 +1149,45 @@ def crossunder_level(
         reading = _scalar_reading(candle_set, indicator, i)
         previous = _scalar_reading(candle_set, indicator, i - 1) if i > 0 else None
 
-        if reading is None or previous is None:
-            continue
-        if reading < level and previous >= level:
+        if signal_helpers.crossed_below(reading, previous, level):
+            return True
+
+    return False
+
+
+def between(
+    candles: Indicator | Hexital | list[Candle],
+    indicator: str,
+    low: float | int,
+    high: float | int,
+    length: int = 1,
+    index: int = -1,
+) -> bool:
+    """Between Level Analysis
+
+    Determines whether the `indicator` reading falls within ``low`` and ``high``
+    inclusive at any bar in the specified range.
+
+    Args:
+        candles (Indicator | Hexital | List[Candle]): The data source containing the indicators.
+        indicator (str): The indicator series to evaluate.
+        low (float | int): Lower bound (inclusive).
+        high (float | int): Upper bound (inclusive).
+        length (int, optional): The number of candles to include in the range. Defaults to 1.
+        index (int, optional): The index to start the evaluation. Defaults to -1 (latest candle).
+
+    Returns:
+        bool: `True` if any reading in the range is between ``low`` and ``high``; otherwise `False`.
+    """
+    candle_set = _retrieve_candles(candles, indicator)
+    if not isinstance(candle_set, list) or not candle_set:
+        return False
+
+    start, end = _cross_window(len(candle_set), length, index)
+
+    for i in range(end, start - 1, -1):
+        reading = _scalar_reading(candle_set, indicator, i)
+        if signal_helpers.between_values(reading, low, high):
             return True
 
     return False

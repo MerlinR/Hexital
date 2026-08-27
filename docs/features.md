@@ -317,6 +317,10 @@ from hexital.analysis import crossover_level
 crossover_level(strategy, "RSI_14", 30)
 ```
 
+### Signal composition
+
+Build reusable entry/exit rules as [signal indicators](guides/custom-indicator.md#recipe-d--signal-indicator). Compose conditions with [hexital.analysis.signals][hexital.analysis.signals] (`edge`, `falling_edge`, `crossed_above`, `between`, `all_of`, `none_of`, etc.).
+
 !!! info "Analysis over Timeframes"
     Note that analysis such as crossover will work correctly when using them across multiple TimeFrames.
 

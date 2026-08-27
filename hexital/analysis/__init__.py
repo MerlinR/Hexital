@@ -1,5 +1,6 @@
 from .movement import (
     bars_since,
+    between,
     change,
     cross,
     crossover,
@@ -24,6 +25,18 @@ from .movement import (
     value_when,
 )
 from .patterns import doji, dojistar, hammer, inverted_hammer
+from .signals import (
+    all_of,
+    any_of,
+    between_values,
+    crossed_above,
+    crossed_below,
+    edge,
+    falling_edge,
+    level_edge,
+    level_falling_edge,
+    none_of,
+)
 
 __all__ = [
     "cross",
@@ -31,6 +44,10 @@ __all__ = [
     "crossover_level",
     "crossunder",
     "crossunder_level",
+    "between_values",
+    "crossed_above",
+    "crossed_below",
+    "between",
     "bars_since",
     "change",
     "falling",
@@ -53,4 +70,11 @@ __all__ = [
     "dojistar",
     "hammer",
     "inverted_hammer",
+    "all_of",
+    "any_of",
+    "edge",
+    "falling_edge",
+    "level_edge",
+    "level_falling_edge",
+    "none_of",
 ]

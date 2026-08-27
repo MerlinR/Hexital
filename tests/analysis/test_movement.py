@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
 import pytest
+
 from hexital import Hexital
 from hexital.analysis import movement
 from hexital.core.candle import Candle
@@ -161,7 +162,12 @@ def fixture_indicator_candles_partial():
         Candle(open=130, high=150, low=120, close=120, volume=10, indicators={}),
         Candle(open=120, high=140, low=110, close=120, volume=10, indicators={}),
         Candle(
-            open=110, high=150, low=120, close=130, volume=10, indicators={"EMA_10": 100}
+            open=110,
+            high=150,
+            low=120,
+            close=130,
+            volume=10,
+            indicators={"EMA_10": 100},
         ),
         Candle(
             open=150, high=120, low=90, close=115, volume=10, indicators={"EMA_10": 110}
@@ -304,7 +310,9 @@ class TestValueWhen:
         assert movement.value_when(indicator_candles, "rising", "close", True, 1) == 130
 
     def test_value_when_missing(self, indicator_candles):
-        assert movement.value_when(indicator_candles, "rising", "close", True, 10) is None
+        assert (
+            movement.value_when(indicator_candles, "rising", "close", True, 10) is None
+        )
 
 
 class TestChange:
@@ -612,23 +620,28 @@ class TestCrossOver:
 
     def test_crossover_partial(self, indicator_candles_partial):
         assert (
-            movement.crossover(indicator_candles_partial, "volume", "EMA_10", 5) is False
+            movement.crossover(indicator_candles_partial, "volume", "EMA_10", 5)
+            is False
         )
 
     def test_crossover_partial_missing(self, indicator_candles_partial):
         assert (
-            movement.crossover(indicator_candles_partial, "volume", "SMA_10", 5) is False
+            movement.crossover(indicator_candles_partial, "volume", "SMA_10", 5)
+            is False
         )
 
     def test_crossover_length(self, indicator_candles):
-        assert movement.crossover(indicator_candles, "EMA_10", "close", length=10) is True
+        assert (
+            movement.crossover(indicator_candles, "EMA_10", "close", length=10) is True
+        )
 
     def test_crossover_datatype_indicator(self, gen_indicator_candles):
         assert movement.crossover(gen_indicator_candles, "EMA", "close") is False
 
     def test_crossover_datatype_indicator_long(self, gen_indicator_candles):
         assert (
-            movement.crossover(gen_indicator_candles, "EMA", "close", length=200) is True
+            movement.crossover(gen_indicator_candles, "EMA", "close", length=200)
+            is True
         )
 
     def test_crossover_datatype_hexital(self, hexital_candles):
@@ -656,12 +669,14 @@ class TestCrossUnder:
 
     def test_crossunder_partial(self, indicator_candles_partial):
         assert (
-            movement.crossunder(indicator_candles_partial, "volume", "EMA_10", 5) is False
+            movement.crossunder(indicator_candles_partial, "volume", "EMA_10", 5)
+            is False
         )
 
     def test_crossunder_partial_missing(self, indicator_candles_partial):
         assert (
-            movement.crossunder(indicator_candles_partial, "volume", "SMA_10", 5) is False
+            movement.crossunder(indicator_candles_partial, "volume", "SMA_10", 5)
+            is False
         )
 
     def test_crossunder_length(self, indicator_candles):
@@ -674,7 +689,8 @@ class TestCrossUnder:
 
     def test_crossunder_datatype_indicator_long(self, gen_indicator_candles):
         assert (
-            movement.crossunder(gen_indicator_candles, "EMA", "close", length=200) is True
+            movement.crossunder(gen_indicator_candles, "EMA", "close", length=200)
+            is True
         )
 
     def test_crossunder_datatype_hexital(self, hexital_candles):
@@ -725,8 +741,14 @@ class TestCrossoverLevel:
         assert movement.crossover_level([], "rsi", 30) is False
 
     def test_crossover_level_window(self, level_candles):
-        assert movement.crossover_level(level_candles, "rsi", 30, length=2, index=2) is True
-        assert movement.crossover_level(level_candles, "rsi", 30, length=1, index=0) is False
+        assert (
+            movement.crossover_level(level_candles, "rsi", 30, length=2, index=2)
+            is True
+        )
+        assert (
+            movement.crossover_level(level_candles, "rsi", 30, length=1, index=0)
+            is False
+        )
 
     def test_crossover_level_strict_above(self):
         candles = [
@@ -825,7 +847,10 @@ class TestCrossunderLevel:
         assert movement.crossunder_level([], "rsi", 30) is False
 
     def test_crossunder_level_window(self, level_candles):
-        assert movement.crossunder_level(level_candles, "rsi", 30, length=2, index=1) is True
+        assert (
+            movement.crossunder_level(level_candles, "rsi", 30, length=2, index=1)
+            is True
+        )
 
     def test_crossunder_level_strict_below(self):
         candles = [
@@ -862,6 +887,66 @@ class TestCrossunderLevel:
 
     def test_crossunder_level_datatype_hexital(self, hexital_candles):
         assert movement.crossunder_level(hexital_candles, "EMA", 0) is False
+
+
+class TestBetween:
+    def test_between_at_index(self):
+        candles = [
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"rsi": 25},
+            ),
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"rsi": 35},
+            ),
+        ]
+        assert movement.between(candles, "rsi", 30, 40, index=1) is True
+        assert movement.between(candles, "rsi", 30, 40, index=0) is False
+
+    def test_between_no_candles(self):
+        assert movement.between([], "rsi", 30, 40) is False
+
+    def test_between_window(self):
+        candles = [
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"rsi": 20},
+            ),
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"rsi": 35},
+            ),
+            Candle(
+                open=100,
+                high=120,
+                low=90,
+                close=110,
+                volume=10,
+                indicators={"rsi": 25},
+            ),
+        ]
+        assert movement.between(candles, "rsi", 30, 40, length=3, index=2) is True
+        assert movement.between(candles, "rsi", 30, 40, length=1, index=0) is False
+
+    def test_between_datatype_hexital(self, hexital_candles):
+        assert movement.between(hexital_candles, "EMA", 0, 1_000_000) is True
 
 
 class TestFlipped:

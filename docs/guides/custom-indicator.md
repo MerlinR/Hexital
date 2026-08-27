@@ -12,6 +12,7 @@ All built-in indicators are dataclasses that subclass [Indicator][hexital.core.i
 ```
 Need hidden state between candles?        → Recipe B (`add_state()`)
 Need other indicators as inputs?          → Recipe C (child indicators)
+Combine conditions into a signal?         → Recipe D ([signal indicators](#recipe-d--signal-indicator))
 Just math on candle fields?               → Recipe A (single method)
 One-off pattern without a full class?     → Amorph
 Warm-up differs from `period`?            → [Minimum candles](#minimum-candles) (`_minimum_candles()`)
@@ -22,6 +23,7 @@ Warm-up differs from `period`?            → [Minimum candles](#minimum-candles
 | Simple | [SMA][hexital.indicators.sma.SMA] | — |
 | Stateful | [RSI][hexital.indicators.rsi.RSI] | `add_child_managed()` |
 | Composite | [BBANDS][hexital.indicators.bbands.BBANDS] | `add_child()` |
+| Signal | Custom entry/exit rules | `add_child()`, [hexital.analysis.signals][hexital.analysis.signals] |
 
 ---
 
@@ -145,6 +147,8 @@ class MyOscillator(Indicator[float | None]):
 
 Declare how many bars your indicator needs before it can produce a reading. Hexital uses this for exchange prefetch and readiness checks.
 
+See [History and readiness](history-and-readiness.md) for the full prefetch workflow, strategy helpers, and common mistakes.
+
 ### Default behaviour
 
 If your indicator has a `period` field, [Indicator][hexital.core.indicator.Indicator] defaults to `minimum_candles == period`. You do **not** need an override for a plain SMA-style indicator.
@@ -247,6 +251,102 @@ from hexital import ChildWhen
 
 self.sub_signal = self.add_child(EMA(...), when=ChildWhen.MANUAL)
 ```
+
+---
+
+## Recipe D — Signal indicator
+
+Use when you want a **stable, incremental signal** — entry/exit rules, alerts, or filters — composed from child indicators and [analysis][hexital.analysis] helpers. The signal is just another indicator: readings live on candles, append stays O(1), and the signal serialises with [Hexital.settings](hexital-indepth.md#saving-and-restoring-a-strategy).
+
+[hexital.analysis.signals][hexital.analysis.signals] provides small composition helpers:
+
+| Helper | Purpose |
+|--------|---------|
+| [edge()][hexital.analysis.signals.edge] | True when a condition turns on this bar |
+| [falling_edge()][hexital.analysis.signals.falling_edge] | True when a condition turns off this bar |
+| [level_edge()][hexital.analysis.signals.level_edge] | Same as `edge()` for level conditions |
+| [level_falling_edge()][hexital.analysis.signals.level_falling_edge] | Same as `falling_edge()` for level conditions |
+| [crossed_above()][hexital.analysis.signals.crossed_above] | Reading crossed up through a fixed level |
+| [crossed_below()][hexital.analysis.signals.crossed_below] | Reading crossed down through a fixed level |
+| [between()][hexital.analysis.signals.between] | Reading is within an inclusive range |
+| [all_of()][hexital.analysis.signals.all_of] | Every condition must be `True` |
+| [any_of()][hexital.analysis.signals.any_of] | At least one condition is `True` |
+| [none_of()][hexital.analysis.signals.none_of] | No condition is `True` |
+
+For crossing on historical windows, use [crossover_level()][hexital.analysis.movement.crossover_level] / [crossunder_level()][hexital.analysis.movement.crossunder_level]. For a single bar pair inside `_calculate_reading()`, use the scalar helpers in [hexital.analysis.signals][hexital.analysis.signals].
+
+```python
+from dataclasses import dataclass, field
+
+from hexital import EMA, Indicator, RSI
+from hexital.analysis.signals import all_of, crossed_above, level_edge, level_falling_edge
+
+
+@dataclass(kw_only=True)
+class RsiCrossAboveEma(Indicator[bool | None]):
+    _name: str = field(init=False, default="RsiCrossAboveEma")
+    rsi_period: int = 14
+    ema_period: int = 20
+    rsi_level: float = 30.0
+
+    def _initialise(self):
+        self.rsi = self.add_child(RSI(period=self.rsi_period))
+        self.ema = self.add_child(EMA(period=self.ema_period))
+
+    def _calculate_reading(self, index: int) -> bool | None:
+        rsi = self.rsi.reading()
+        ema = self.ema.reading()
+        prev_rsi = self.rsi.prev_reading()
+
+        if rsi is None or ema is None or prev_rsi is None:
+            return None
+
+        return all_of(
+            crossed_above(rsi, prev_rsi, self.rsi_level),
+            self.close > ema,
+        )
+
+
+@dataclass(kw_only=True)
+class RsiCrossSignal(Indicator[dict[str, bool | None]]):
+    """Expose both level (while true) and edge (on transition) readings."""
+    _name: str = field(init=False, default="RsiCrossSignal")
+    rsi_level: float = 30.0
+
+    def _initialise(self):
+        self.rsi = self.add_child(RSI(period=14))
+
+    def _calculate_reading(self, index: int) -> dict[str, bool | None]:
+        rsi = self.rsi.reading()
+        prev_rsi = self.rsi.prev_reading()
+
+        if rsi is None or prev_rsi is None:
+            return {"level": None, "edge": None}
+
+        level = rsi < self.rsi_level
+        prev = self.prev_reading(default={})
+        prev_level = prev.get("level") if isinstance(prev, dict) else None
+
+        return {
+            "level": level,
+            "edge": level_edge(level, prev_level),
+            "exit": level_falling_edge(level, prev_level),
+        }
+```
+
+Register on [Hexital][hexital.core.hexital.Hexital] like any indicator:
+
+```python
+strategy = Hexital("signals", candles, [RsiCrossAboveEma(), RsiCrossSignal()])
+strategy.calculate()
+
+if strategy.reading("RsiCrossAboveEma"):
+    ...
+if strategy.reading("RsiCrossSignal:edge"):
+    ...
+```
+
+**Bar-close semantics:** signals evaluate when a candle is appended. Only append closed bars from your feed if you want close-only entries.
 
 ---
 

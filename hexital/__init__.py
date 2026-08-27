@@ -1,5 +1,5 @@
 from . import analysis, exceptions, indicators
-from .analysis import movement, patterns
+from .analysis import movement, patterns, signals
 from .core.candle import Candle
 from .core.hexital import Hexital, HexitalCol
 from .core.indicator import ChildWhen, Indicator, State
@@ -143,4 +143,5 @@ __all__ = [
     "indicators",
     "movement",
     "patterns",
+    "signals",
 ]

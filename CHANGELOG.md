@@ -10,7 +10,8 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 *Release Date: TBD*
 
-- Added ``crossover_level()`` and ``crossunder_level()`` to [hexital.analysis][hexital.analysis] for threshold crosses on a single series
+- Added ``crossover_level()`` and ``crossunder_level()`` to [hexital.analysis.movement][hexital.analysis.movement] for threshold crosses on a candle stream; added ``between()`` for inclusive range checks
+- Added [hexital.analysis.signals][hexital.analysis.signals] — ``edge()``, ``falling_edge()``, ``level_edge()``, ``level_falling_edge()``, ``crossed_above()``, ``crossed_below()``, ``between()``, ``all_of()``, ``any_of()``, ``none_of()`` for composing signal indicators
 
 ---
 
