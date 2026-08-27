@@ -6,6 +6,7 @@ from .movement import (
     crossunder,
     falling,
     falling_count,
+    flipped,
     highest,
     highestbar,
     lowest,
@@ -17,8 +18,8 @@ from .movement import (
     positive,
     rising,
     rising_count,
-    value_when,
     value_range,
+    value_when,
 )
 from .patterns import doji, dojistar, hammer, inverted_hammer
 
@@ -30,6 +31,7 @@ __all__ = [
     "change",
     "falling",
     "falling_count",
+    "flipped",
     "highest",
     "highestbar",
     "lowest",
