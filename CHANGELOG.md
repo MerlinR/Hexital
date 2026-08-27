@@ -10,14 +10,14 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 
 *Release Date: TBD*
 
-- Added ``Indicator.minimum_candles`` — minimum candle count before a reading (e.g. ``15`` means the 15th candle)
-- Added ``Indicator.is_ready`` — whether loaded history meets ``minimum_candles``
-- Added ``Hexital.minimum_candles(timeframe=None)`` — largest ``minimum_candles`` among indicators on a series; pass a timeframe when the strategy uses multiple candle series
-- Added ``Hexital.has_sufficient_candles(timeframe=None)`` — checks every indicator's ``is_ready``; pass a timeframe to limit the check to indicators on that series
-- Added ``Indicator.minimum_candles_by_indicator()`` — ``minimum_candles`` for each child indicator, keyed by name
-- Added ``Hexital.minimum_candles_by_indicator(indicator=None)`` — ``minimum_candles`` per registered indicator; pass an indicator to limit the result to that one
-- Added ``Hexital.minimum_candles_by_timeframe()`` — largest ``minimum_candles`` per candle series, keyed by timeframe label (e.g. ``{"DEFAULT": 15, "T10": 10}``)
-- Fixed **ADX** ``minimum_candles`` when ``period_signal`` differs from ``period`` (now ``period + period_signal``)
+- Added Feature to get minimum Candles required for Indicators and Hexital.
+    - Added ``Indicator.minimum_candles`` — minimum candle count before a reading (e.g. ``15`` means the 15th candle)
+    - Added ``Indicator.is_ready`` — whether loaded history meets ``minimum_candles``
+    - Added ``Indicator.minimum_candles_by_indicator()`` — ``minimum_candles`` for each child indicator, keyed by name
+    - Added ``Hexital.minimum_candles(timeframe=None)`` — largest ``minimum_candles`` among indicators on a series; pass a timeframe when the strategy uses multiple candle series
+    - Added ``Hexital.has_sufficient_candles(timeframe=None)`` — checks every indicator's ``is_ready``; pass a timeframe to limit the check to indicators on that series
+    - Added ``Hexital.minimum_candles_by_indicator(indicator=None)`` — ``minimum_candles`` per registered indicator; pass an indicator to limit the result to that one
+    - Added ``Hexital.minimum_candles_by_timeframe()`` — largest ``minimum_candles`` per candle series, keyed by timeframe label (e.g. ``{"DEFAULT": 15, "T10": 10}``)
 
 ---
 
