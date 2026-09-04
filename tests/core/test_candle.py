@@ -43,6 +43,19 @@ class TestCoreCandle:
     def test_negative(self, simple_candle_positive):
         assert simple_candle_positive.negative is False
 
+    def test_white_body(self, simple_candle_positive):
+        assert simple_candle_positive.white_body
+
+    def test_black_body(self, simple_candle):
+        assert simple_candle.black_body
+
+    def test_doji_body_classification(self):
+        doji = Candle(100, 120, 80, 100, 1)
+        assert doji.positive is False
+        assert doji.negative is False
+        assert doji.white_body
+        assert doji.black_body is False
+
     def test_realbody(self, simple_candle_positive):
         assert simple_candle_positive.realbody == 10
 

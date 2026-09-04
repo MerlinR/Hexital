@@ -105,6 +105,14 @@ class Candle:
         return self.open > self.close
 
     @property
+    def white_body(self) -> bool:
+        return self.close >= self.open
+
+    @property
+    def black_body(self) -> bool:
+        return self.close < self.open
+
+    @property
     def realbody(self) -> float:
         return abs(self.open - self.close)
 

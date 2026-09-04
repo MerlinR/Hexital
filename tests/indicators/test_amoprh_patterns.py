@@ -23,3 +23,13 @@ class TestAmorphPatterns(IndicatorTestBase):
         test = indicators.Amorph(analysis=patterns.inverted_hammer, candles=candles)
         test.calculate()
         assert self.verify(test.series(), expected_inverted_hammer)
+
+    def test_bullish_engulfing(self, candles, expected_bullish_engulfing):
+        test = indicators.Amorph(analysis=patterns.bullish_engulfing, candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_bullish_engulfing)
+
+    def test_bearish_engulfing(self, candles, expected_bearish_engulfing):
+        test = indicators.Amorph(analysis=patterns.bearish_engulfing, candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_bearish_engulfing)

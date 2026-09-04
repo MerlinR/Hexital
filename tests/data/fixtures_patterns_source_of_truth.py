@@ -27,3 +27,15 @@ def fixture_expected_hammer():
 def fixture_expected_inverted_hammer():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/INVERTEDHAMMER.json")
     return json.load(csv_files)
+
+
+@pytest.fixture(name="expected_bullish_engulfing")
+def fixture_expected_bullish_engulfing():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/BULLISH_ENGULFING.json")
+    return json.load(csv_files)
+
+
+@pytest.fixture(name="expected_bearish_engulfing")
+def fixture_expected_bearish_engulfing():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/BEARISH_ENGULFING.json")
+    return json.load(csv_files)

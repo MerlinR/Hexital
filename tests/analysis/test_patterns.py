@@ -61,3 +61,52 @@ def test_doji_lookback_honours_index():
     assert patterns.doji(candles, index=18) is True
     assert patterns.doji(candles, lookback=3, index=5) is False
     assert patterns.doji(candles, lookback=3, index=18) is True
+
+
+@pytest.fixture(name="bullish_engulfing_candles")
+def fixture_bullish_engulfing_candles():
+    return [
+        Candle(open=100, high=105, low=95, close=102, volume=1),
+        Candle(open=110, high=112, low=98, close=100, volume=1),
+        Candle(open=99, high=115, low=98, close=111, volume=1),
+    ]
+
+
+@pytest.fixture(name="bearish_engulfing_candles")
+def fixture_bearish_engulfing_candles():
+    return [
+        Candle(open=100, high=105, low=95, close=98, volume=1),
+        Candle(open=100, high=112, low=99, close=110, volume=1),
+        Candle(open=111, high=113, low=89, close=90, volume=1),
+    ]
+
+
+def test_bullish_engulfing(bullish_engulfing_candles):
+    assert patterns.bullish_engulfing(bullish_engulfing_candles, index=0) is False
+    assert patterns.bullish_engulfing(bullish_engulfing_candles, index=1) is False
+    assert patterns.bullish_engulfing(bullish_engulfing_candles, index=2) is True
+    assert patterns.bearish_engulfing(bullish_engulfing_candles, index=2) is False
+
+
+def test_bullish_engulfing_lookback(bullish_engulfing_candles):
+    assert patterns.bullish_engulfing(bullish_engulfing_candles, lookback=2) is True
+    assert patterns.bullish_engulfing(bullish_engulfing_candles, lookback=1) is True
+
+
+def test_bearish_engulfing(bearish_engulfing_candles):
+    assert patterns.bearish_engulfing(bearish_engulfing_candles, index=0) is False
+    assert patterns.bearish_engulfing(bearish_engulfing_candles, index=1) is False
+    assert patterns.bearish_engulfing(bearish_engulfing_candles, index=2) is True
+    assert patterns.bullish_engulfing(bearish_engulfing_candles, index=2) is False
+
+
+def test_bearish_engulfing_lookback(bearish_engulfing_candles):
+    assert patterns.bearish_engulfing(bearish_engulfing_candles, lookback=2) is True
+
+
+def test_engulfing_requires_larger_body():
+    candles = [
+        Candle(open=110, high=112, low=98, close=100, volume=1),
+        Candle(open=100, high=105, low=99, close=104, volume=1),
+    ]
+    assert patterns.bullish_engulfing(candles, index=1) is False

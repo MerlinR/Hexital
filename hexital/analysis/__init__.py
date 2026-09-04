@@ -24,7 +24,14 @@ from .movement import (
     value_range,
     value_when,
 )
-from .patterns import doji, dojistar, hammer, inverted_hammer
+from .patterns import (
+    bearish_engulfing,
+    bullish_engulfing,
+    doji,
+    dojistar,
+    hammer,
+    inverted_hammer,
+)
 from .signals import (
     all_of,
     any_of,
@@ -70,6 +77,8 @@ __all__ = [
     "dojistar",
     "hammer",
     "inverted_hammer",
+    "bullish_engulfing",
+    "bearish_engulfing",
     "all_of",
     "any_of",
     "edge",
