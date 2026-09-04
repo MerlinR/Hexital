@@ -14,6 +14,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added analysis signals — ``edge()``, ``falling_edge()``, ``level_edge()``, ``level_falling_edge()``, ``crossed_above()``, ``crossed_below()``, ``between()``, ``all_of()``, ``any_of()``, ``none_of()`` for composing signal indicators
 - Added ``bullish_engulfing()`` and ``bearish_engulfing()`` candlestick pattern detection
 - Added ``bullish_harami()`` and ``bearish_harami()`` candlestick pattern detection
+- Added ``hanging_man()``, ``shooting_star()``, and ``spinning_top()`` candlestick pattern detection
 
 ---
 

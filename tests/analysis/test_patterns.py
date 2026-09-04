@@ -188,3 +188,47 @@ def test_harami_requires_strict_inside_body():
         Candle(open=112, high=118, low=110, close=116, volume=1),
     ]
     assert patterns.bullish_harami(candles, index=11) is False
+
+
+@pytest.fixture(name="pattern_warmup_candles")
+def fixture_pattern_warmup_candles():
+    return [
+        Candle(open=100, high=110, low=90, close=105, volume=1),
+        Candle(open=104, high=106, low=98, close=102, volume=1),
+        Candle(open=103, high=107, low=99, close=104, volume=1),
+        Candle(open=102, high=108, low=96, close=106, volume=1),
+        Candle(open=105, high=112, low=94, close=108, volume=1),
+        Candle(open=107, high=115, low=95, close=110, volume=1),
+        Candle(open=109, high=118, low=97, close=112, volume=1),
+        Candle(open=111, high=120, low=99, close=114, volume=1),
+        Candle(open=113, high=122, low=101, close=116, volume=1),
+        Candle(open=115, high=124, low=103, close=118, volume=1),
+    ]
+
+
+def test_hanging_man_requires_warmup(pattern_warmup_candles):
+    assert patterns.hanging_man(pattern_warmup_candles, index=9) is False
+
+
+def test_hanging_man_near_prior_high(pattern_warmup_candles):
+    candles = pattern_warmup_candles + [
+        Candle(open=123, high=125, low=118, close=124, volume=1),
+        Candle(open=124, high=124.5, low=110, close=123.5, volume=1),
+    ]
+    assert patterns.hanging_man(candles, index=11) is True
+
+
+def test_shooting_star_requires_gap_up(pattern_warmup_candles):
+    candles = pattern_warmup_candles + [
+        Candle(open=118, high=120, low=112, close=119, volume=1),
+        Candle(open=121, high=135, low=120.5, close=122, volume=1),
+    ]
+    assert patterns.shooting_star(candles, index=11) is True
+
+
+def test_spinning_top(pattern_warmup_candles):
+    candles = pattern_warmup_candles + [
+        Candle(open=120, high=135, low=105, close=121, volume=1),
+    ]
+    assert patterns.spinning_top(candles, index=10) is True
+    assert patterns.spinning_top(candles, lookback=1) is True

@@ -43,3 +43,18 @@ class TestAmorphPatterns(IndicatorTestBase):
         test = indicators.Amorph(analysis=patterns.bearish_harami, candles=candles)
         test.calculate()
         assert self.verify(test.series(), expected_bearish_harami)
+
+    def test_hanging_man(self, candles, expected_hanging_man):
+        test = indicators.Amorph(analysis=patterns.hanging_man, candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_hanging_man)
+
+    def test_shooting_star(self, candles, expected_shooting_star):
+        test = indicators.Amorph(analysis=patterns.shooting_star, candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_shooting_star)
+
+    def test_spinning_top(self, candles, expected_spinning_top):
+        test = indicators.Amorph(analysis=patterns.spinning_top, candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_spinning_top)

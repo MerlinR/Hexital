@@ -32,7 +32,10 @@ from .patterns import (
     doji,
     dojistar,
     hammer,
+    hanging_man,
     inverted_hammer,
+    shooting_star,
+    spinning_top,
 )
 from .signals import (
     all_of,
@@ -79,6 +82,9 @@ __all__ = [
     "dojistar",
     "hammer",
     "inverted_hammer",
+    "hanging_man",
+    "shooting_star",
+    "spinning_top",
     "bullish_engulfing",
     "bearish_engulfing",
     "bullish_harami",

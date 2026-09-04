@@ -51,3 +51,21 @@ def fixture_expected_bullish_harami():
 def fixture_expected_bearish_harami():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/BEARISH_HARAMI.json")
     return json.load(csv_files)
+
+
+@pytest.fixture(name="expected_hanging_man")
+def fixture_expected_hanging_man():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/HANGINGMAN.json")
+    return json.load(csv_files)
+
+
+@pytest.fixture(name="expected_shooting_star")
+def fixture_expected_shooting_star():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/SHOOTINGSTAR.json")
+    return json.load(csv_files)
+
+
+@pytest.fixture(name="expected_spinning_top")
+def fixture_expected_spinning_top():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/SPINNINGTOP.json")
+    return json.load(csv_files)
