@@ -59,6 +59,14 @@ class TestCoreCandle:
     def test_realbody(self, simple_candle_positive):
         assert simple_candle_positive.realbody == 10
 
+    def test_realbody_high(self, simple_candle_positive, simple_candle):
+        assert simple_candle_positive.realbody_high == 110
+        assert simple_candle.realbody_high == 100
+
+    def test_realbody_low(self, simple_candle_positive, simple_candle):
+        assert simple_candle_positive.realbody_low == 100
+        assert simple_candle.realbody_low == 90
+
     def test_shadow_upper(self, simple_candle_positive):
         assert simple_candle_positive.shadow_upper == 10
 

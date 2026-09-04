@@ -117,6 +117,14 @@ class Candle:
         return abs(self.open - self.close)
 
     @property
+    def realbody_high(self) -> float:
+        return max(self.open, self.close)
+
+    @property
+    def realbody_low(self) -> float:
+        return min(self.open, self.close)
+
+    @property
     def shadow_upper(self) -> float:
         if self.positive:
             return abs(self.high - self.close)

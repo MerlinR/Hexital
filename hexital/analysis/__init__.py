@@ -26,7 +26,9 @@ from .movement import (
 )
 from .patterns import (
     bearish_engulfing,
+    bearish_harami,
     bullish_engulfing,
+    bullish_harami,
     doji,
     dojistar,
     hammer,
@@ -79,6 +81,8 @@ __all__ = [
     "inverted_hammer",
     "bullish_engulfing",
     "bearish_engulfing",
+    "bullish_harami",
+    "bearish_harami",
     "all_of",
     "any_of",
     "edge",

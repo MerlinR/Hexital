@@ -456,6 +456,7 @@ def generate_patterns():
             "hammer",
             "invertedhammer",
             "engulfing",
+            "harami",
         ]
     )
     df = df.astype(object).replace(np.nan, None)
@@ -484,6 +485,16 @@ def generate_patterns():
     save_as_json(
         [value == -100 for value in df["CDL_ENGULFING"].tolist()],
         "BEARISH_ENGULFING",
+        PATH_PATTERN,
+    )
+    save_as_json(
+        [value == 100 for value in df["CDL_HARAMI"].tolist()],
+        "BULLISH_HARAMI",
+        PATH_PATTERN,
+    )
+    save_as_json(
+        [value == -100 for value in df["CDL_HARAMI"].tolist()],
+        "BEARISH_HARAMI",
         PATH_PATTERN,
     )
 

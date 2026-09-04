@@ -33,3 +33,13 @@ class TestAmorphPatterns(IndicatorTestBase):
         test = indicators.Amorph(analysis=patterns.bearish_engulfing, candles=candles)
         test.calculate()
         assert self.verify(test.series(), expected_bearish_engulfing)
+
+    def test_bullish_harami(self, candles, expected_bullish_harami):
+        test = indicators.Amorph(analysis=patterns.bullish_harami, candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_bullish_harami)
+
+    def test_bearish_harami(self, candles, expected_bearish_harami):
+        test = indicators.Amorph(analysis=patterns.bearish_harami, candles=candles)
+        test.calculate()
+        assert self.verify(test.series(), expected_bearish_harami)

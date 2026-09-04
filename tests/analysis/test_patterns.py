@@ -110,3 +110,81 @@ def test_engulfing_requires_larger_body():
         Candle(open=100, high=105, low=99, close=104, volume=1),
     ]
     assert patterns.bullish_engulfing(candles, index=1) is False
+
+
+@pytest.fixture(name="bullish_harami_candles")
+def fixture_bullish_harami_candles():
+    base = [
+        Candle(open=100, high=110, low=90, close=105, volume=1),
+        Candle(open=104, high=106, low=98, close=102, volume=1),
+        Candle(open=103, high=107, low=99, close=104, volume=1),
+        Candle(open=102, high=108, low=96, close=106, volume=1),
+        Candle(open=105, high=112, low=94, close=108, volume=1),
+        Candle(open=107, high=115, low=95, close=110, volume=1),
+        Candle(open=109, high=118, low=97, close=112, volume=1),
+        Candle(open=111, high=120, low=99, close=114, volume=1),
+        Candle(open=113, high=122, low=101, close=116, volume=1),
+        Candle(open=115, high=124, low=103, close=118, volume=1),
+    ]
+    return base + [
+        Candle(open=120, high=125, low=110, close=112, volume=1),
+        Candle(open=115, high=118, low=113, close=116, volume=1),
+    ]
+
+
+@pytest.fixture(name="bearish_harami_candles")
+def fixture_bearish_harami_candles():
+    base = [
+        Candle(open=100, high=110, low=90, close=105, volume=1),
+        Candle(open=104, high=106, low=98, close=102, volume=1),
+        Candle(open=103, high=107, low=99, close=104, volume=1),
+        Candle(open=102, high=108, low=96, close=106, volume=1),
+        Candle(open=105, high=112, low=94, close=108, volume=1),
+        Candle(open=107, high=115, low=95, close=110, volume=1),
+        Candle(open=109, high=118, low=97, close=112, volume=1),
+        Candle(open=111, high=120, low=99, close=114, volume=1),
+        Candle(open=113, high=122, low=101, close=116, volume=1),
+        Candle(open=115, high=124, low=103, close=118, volume=1),
+    ]
+    return base + [
+        Candle(open=110, high=125, low=105, close=120, volume=1),
+        Candle(open=118, high=119, low=112, close=116, volume=1),
+    ]
+
+
+def test_bullish_harami(bullish_harami_candles):
+    assert patterns.bullish_harami(bullish_harami_candles, index=10) is False
+    assert patterns.bullish_harami(bullish_harami_candles, index=11) is True
+    assert patterns.bearish_harami(bullish_harami_candles, index=11) is False
+
+
+def test_bullish_harami_lookback(bullish_harami_candles):
+    assert patterns.bullish_harami(bullish_harami_candles, lookback=2) is True
+
+
+def test_bearish_harami(bearish_harami_candles):
+    assert patterns.bearish_harami(bearish_harami_candles, index=10) is False
+    assert patterns.bearish_harami(bearish_harami_candles, index=11) is True
+    assert patterns.bullish_harami(bearish_harami_candles, index=11) is False
+
+
+def test_bearish_harami_lookback(bearish_harami_candles):
+    assert patterns.bearish_harami(bearish_harami_candles, lookback=2) is True
+
+
+def test_harami_requires_strict_inside_body():
+    candles = [
+        Candle(open=100, high=110, low=90, close=105, volume=1),
+        Candle(open=104, high=106, low=98, close=102, volume=1),
+        Candle(open=103, high=107, low=99, close=104, volume=1),
+        Candle(open=102, high=108, low=96, close=106, volume=1),
+        Candle(open=105, high=112, low=94, close=108, volume=1),
+        Candle(open=107, high=115, low=95, close=110, volume=1),
+        Candle(open=109, high=118, low=97, close=112, volume=1),
+        Candle(open=111, high=120, low=99, close=114, volume=1),
+        Candle(open=113, high=122, low=101, close=116, volume=1),
+        Candle(open=115, high=124, low=103, close=118, volume=1),
+        Candle(open=120, high=125, low=110, close=112, volume=1),
+        Candle(open=112, high=118, low=110, close=116, volume=1),
+    ]
+    assert patterns.bullish_harami(candles, index=11) is False

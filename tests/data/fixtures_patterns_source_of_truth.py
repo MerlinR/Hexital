@@ -39,3 +39,15 @@ def fixture_expected_bullish_engulfing():
 def fixture_expected_bearish_engulfing():
     csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/BEARISH_ENGULFING.json")
     return json.load(csv_files)
+
+
+@pytest.fixture(name="expected_bullish_harami")
+def fixture_expected_bullish_harami():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/BULLISH_HARAMI.json")
+    return json.load(csv_files)
+
+
+@pytest.fixture(name="expected_bearish_harami")
+def fixture_expected_bearish_harami():
+    csv_files = open(f"{SOURCE_OF_TRUTH_PATH}/BEARISH_HARAMI.json")
+    return json.load(csv_files)

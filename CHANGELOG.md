@@ -13,6 +13,7 @@ The project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html
 - Added ``crossover_level()`` and ``crossunder_level()`` to analysis movements for threshold crosses on a candle stream; added ``between()`` for inclusive range checks
 - Added analysis signals — ``edge()``, ``falling_edge()``, ``level_edge()``, ``level_falling_edge()``, ``crossed_above()``, ``crossed_below()``, ``between()``, ``all_of()``, ``any_of()``, ``none_of()`` for composing signal indicators
 - Added ``bullish_engulfing()`` and ``bearish_engulfing()`` candlestick pattern detection
+- Added ``bullish_harami()`` and ``bearish_harami()`` candlestick pattern detection
 
 ---
 

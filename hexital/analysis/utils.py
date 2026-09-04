@@ -105,7 +105,7 @@ def realbody_gapup(candle: Candle, candle_two: Candle) -> bool:
     (i.e., the lower of its open or close) is greater than the maximum value
     of the previous candle's real body (i.e., the higher of its open or close).
     """
-    return min(candle.open, candle.close) > max(candle_two.open, candle_two.close)
+    return candle.realbody_low > candle_two.realbody_high
 
 
 def realbody_gapdown(candle: Candle, candle_two: Candle) -> bool:
@@ -115,7 +115,7 @@ def realbody_gapdown(candle: Candle, candle_two: Candle) -> bool:
     (i.e., the higher of its open or close) is less than the minimum value
     of the previous candle's real body (i.e., the lower of its open or close).
     """
-    return max(candle.open, candle.close) < min(candle_two.open, candle_two.close)
+    return candle.realbody_high < candle_two.realbody_low
 
 
 def candle_gapup(candle: Candle, candle_two: Candle) -> bool:
